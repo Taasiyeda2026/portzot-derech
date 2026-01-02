@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>גלי את התחום שלך בהייטק | מסע פורצות דרך</title>
+    <title>שאלון זיהוי תחום הייטק מתאים</title>
+    <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,131 +13,80 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Varela Round', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
+            direction: rtl;
         }
 
         .container {
             max-width: 900px;
             margin: 0 auto;
-        }
-
-        .progress-bar {
             background: white;
-            height: 8px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 30px;
+            padding: 50px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
 
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-            width: 0%;
-            transition: width 0.5s ease;
-        }
-
-        .progress-text {
+        .station-header {
             text-align: center;
-            color: white;
-            font-size: 1.1em;
-            margin-bottom: 20px;
-            font-weight: 500;
-        }
-
-        .header {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            text-align: center;
+            margin-bottom: 40px;
         }
 
         .station-number {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 10px 30px;
-            border-radius: 50px;
-            font-size: 1.2em;
-            font-weight: bold;
-            margin-bottom: 20px;
+            
         }
 
-        h1 {
+        .station-title {
             font-size: 2.5em;
-            color: #2d3748;
+            color: #667eea;
             margin-bottom: 15px;
+            font-weight: bold;
         }
 
-        .subtitle {
-            font-size: 1.3em;
-            color: #718096;
+        .station-subtitle {
+            font-size: 1.2em;
+            color: #666;
             line-height: 1.6;
         }
 
-        .intro-box {
-            background: white;
+        .question-container {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             border-radius: 20px;
-            padding: 40px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-
-        .intro-text {
-            font-size: 1.2em;
-            line-height: 1.8;
-            color: #4a5568;
-            margin-bottom: 20px;
-        }
-
-        .intro-text strong {
-            color: #667eea;
-        }
-
-        .question-card {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             display: none;
         }
 
-        .question-card.active {
+        .question-container.active {
             display: block;
-            animation: fadeIn 0.5s ease-in;
+            animation: slideIn 0.5s ease;
         }
 
-        @keyframes fadeIn {
+        @keyframes slideIn {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateX(-30px);
             }
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateX(0);
             }
         }
 
         .question-number {
-            text-align: center;
-            color: #667eea;
-            font-weight: bold;
             font-size: 1.1em;
-            margin-bottom: 20px;
+            color: #764ba2;
+            margin-bottom: 15px;
+            font-weight: bold;
         }
 
         .question-text {
-            font-size: 1.6em;
-            color: #2d3748;
-            margin-bottom: 30px;
-            text-align: center;
-            font-weight: 600;
+            font-size: 1.4em;
+            color: #333;
+            margin-bottom: 25px;
+            line-height: 1.5;
         }
 
         .options {
@@ -146,88 +96,99 @@
         }
 
         .option {
-            background: #f7fafc;
-            padding: 20px 25px;
+            background: white;
+            padding: 20px;
             border-radius: 15px;
-            border: 3px solid transparent;
             cursor: pointer;
             transition: all 0.3s ease;
+            border: 3px solid transparent;
             font-size: 1.1em;
-            color: #4a5568;
-            display: flex;
-            align-items: center;
-            gap: 15px;
         }
 
         .option:hover {
-            background: #e6f2ff;
-            border-color: #667eea;
             transform: translateX(-5px);
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
         }
 
         .option.selected {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            border-color: #667eea;
-            font-weight: 600;
-        }
-
-        .option-icon {
-            font-size: 1.8em;
-            min-width: 40px;
-            text-align: center;
+            border-color: #764ba2;
         }
 
         .navigation {
             display: flex;
-            gap: 15px;
+            justify-content: space-between;
             margin-top: 30px;
+            gap: 15px;
         }
 
         .btn {
-            flex: 1;
-            padding: 18px 35px;
-            font-size: 1.2em;
+            padding: 15px 40px;
             border: none;
-            border-radius: 50px;
+            border-radius: 25px;
+            font-size: 1.1em;
             cursor: pointer;
-            font-weight: bold;
             transition: all 0.3s ease;
+            font-family: 'Varela Round', sans-serif;
         }
 
-        .btn-back {
-            background: #e2e8f0;
-            color: #4a5568;
+        .btn-prev {
+            background: #ddd;
+            color: #333;
+        }
+
+        .btn-prev:hover {
+            background: #ccc;
+            transform: translateX(5px);
         }
 
         .btn-next {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
+            flex: 1;
         }
 
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        .btn-next:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
 
         .btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
-            transform: none;
         }
 
-        .result-box {
-            background: white;
-            border-radius: 20px;
-            padding: 50px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        .progress-bar {
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+            border-radius: 10px;
+        }
+
+        .result-container {
             display: none;
             text-align: center;
+            padding: 40px;
         }
 
-        .result-box.active {
+        .result-container.active {
             display: block;
-            animation: fadeIn 0.5s ease-in;
+            animation: fadeIn 0.8s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .result-icon {
@@ -237,823 +198,442 @@
 
         .result-title {
             font-size: 2.5em;
-            color: #2d3748;
+            color: #667eea;
             margin-bottom: 20px;
             font-weight: bold;
         }
 
-        .result-subtitle {
-            font-size: 1.5em;
-            color: #667eea;
-            margin-bottom: 30px;
-            font-weight: 600;
-        }
-
         .result-description {
-            font-size: 1.2em;
+            font-size: 1.3em;
+            color: #555;
             line-height: 1.8;
-            color: #4a5568;
+            margin-bottom: 30px;
+        }
+
+        .result-details {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 30px;
+            border-radius: 20px;
             text-align: right;
             margin-bottom: 30px;
-            padding: 30px;
-            background: #f7fafc;
-            border-radius: 15px;
-            border-right: 5px solid #667eea;
         }
 
-        .result-section {
-            text-align: right;
-            margin: 30px 0;
-            padding: 25px;
-            background: #f7fafc;
-            border-radius: 15px;
+        .detail-section {
+            margin-bottom: 25px;
         }
 
-        .result-section h3 {
-            color: #667eea;
-            font-size: 1.5em;
-            margin-bottom: 15px;
+        .detail-title {
+            font-size: 1.4em;
+            color: #764ba2;
+            margin-bottom: 10px;
+            font-weight: bold;
         }
 
-        .result-section p {
+        .detail-content {
             font-size: 1.1em;
-            line-height: 1.8;
-            color: #4a5568;
-        }
-
-        .result-section ul {
-            margin-right: 25px;
-            margin-top: 15px;
-        }
-
-        .result-section li {
-            margin: 10px 0;
-            font-size: 1.1em;
-            color: #4a5568;
+            color: #333;
+            line-height: 1.6;
         }
 
         @media (max-width: 768px) {
             .container {
-                padding: 10px;
+                padding: 30px 20px;
             }
 
-            h1 {
-                font-size: 2em;
-            }
-
-            .header, .intro-box, .question-card, .result-box {
-                padding: 25px;
+            .station-title {
+                font-size: 1.8em;
             }
 
             .question-text {
-                font-size: 1.3em;
+                font-size: 1.2em;
             }
 
-            .result-title {
-                font-size: 2em;
+            .option {
+                padding: 15px;
+                font-size: 1em;
+            }
+
+            .navigation {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="progress-bar">
-            <div class="progress-fill" id="progress"></div>
-        </div>
-        <div class="progress-text" id="progressText">מוכנה להתחיל?</div>
-
-        <div class="header">
+        <div class="station-header">
             <div class="station-number"></div>
-            <h1>גלי את התחום שלך בהייטק 🚀</h1>
-            <p class="subtitle">את לא צריכה להכיר טכנולוגיה כדי למצוא את המקום שלך בה</p>
+            <h1 class="station-title">🎯 מצאי את התחום המושלם בהייטק</h1>
+            <p class="station-subtitle">ענו על 12 שאלות קצרות ונגלה יחד איזה תחום בהייטק מתאים לכן בדיוק!</p>
         </div>
 
-        <div class="intro-box" id="intro">
-            <p class="intro-text">
-                <strong>רגע לפני שמתחילים...</strong>
-            </p>
-            <p class="intro-text">
-                השאלון הזה לא יבדוק אם את "טכנולוגית" או לא.
-            </p>
-            <p class="intro-text">
-                הוא ישאל אותך על <strong>מה את אוהבת לעשות</strong>, 
-                <strong>איך את חושבת</strong>, ו<strong>מה מעניין אותך בחיים</strong>.
-            </p>
-            <p class="intro-text">
-                ובסוף - תגלי איזה תחום בהייטק <strong>מתאים לך בול</strong>, 
-                גם אם לא שמעת עליו מעולם 💜
-            </p>
-            <p class="intro-text">
-                <strong>12 שאלות קצרות, תשובות כנות, ותוצאה שתפתיע אותך!</strong>
-            </p>
-            <button class="btn btn-next" onclick="startQuiz()" style="width: 100%; margin-top: 20px;">
-                בואי נתחיל! 🎯
-            </button>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressBar"></div>
         </div>
 
         <!-- Questions -->
-        <div class="question-card" id="q1">
-            <div class="question-number">שאלה 1 מתוך 12</div>
-            <div class="question-text">מה הכי כיף לך לעשות בזמן הפנוי?</div>
-            <div class="options">
-                <div class="option" onclick="selectOption(1, 'design')">
-                    <span class="option-icon">🎨</span>
-                    <span>לצייר, לעצב, ליצור דברים יפים</span>
-                </div>
-                <div class="option" onclick="selectOption(1, 'analyze')">
-                    <span class="option-icon">🧩</span>
-                    <span>לפתור חידות, לוגיקה, בעיות מתמטיות</span>
-                </div>
-                <div class="option" onclick="selectOption(1, 'people')">
-                    <span class="option-icon">💬</span>
-                    <span>לדבר עם אנשים, לשמוע סיפורים, להבין מה הם צריכים</span>
-                </div>
-                <div class="option" onclick="selectOption(1, 'organize')">
-                    <span class="option-icon">📋</span>
-                    <span>לארגן דברים, לתכנן פרויקטים, לוודא שהכל עובד</span>
-                </div>
-                <div class="option" onclick="selectOption(1, 'protect')">
-                    <span class="option-icon">🛡️</span>
-                    <span>לחקור איך דברים עובדים ולמצוא חולשות</span>
-                </div>
-            </div>
-            <div class="navigation">
-                <button class="btn btn-back" onclick="goToIntro()">← חזרה</button>
-                <button class="btn btn-next" onclick="nextQuestion(1)" id="next1" disabled>המשך →</button>
-            </div>
+        <div id="questionsContainer"></div>
+
+        <!-- Navigation -->
+        <div class="navigation" id="navigationButtons">
+            <button class="btn btn-prev" id="prevBtn" onclick="previousQuestion()">← חזרה</button>
+            <button class="btn btn-next" id="nextBtn" onclick="nextQuestion()">המשך →</button>
         </div>
 
-        <div class="question-card" id="q2">
-            <div class="question-number">שאלה 2 מתוך 12</div>
-            <div class="question-text">איך את הכי אוהבת ללמוד דברים חדשים?</div>
-            <div class="options">
-                <div class="option" onclick="selectOption(2, 'visual')">
-                    <span class="option-icon">👀</span>
-                    <span>דרך תמונות, סרטונים, דברים ויזואליים</span>
-                </div>
-                <div class="option" onclick="selectOption(2, 'hands')">
-                    <span class="option-icon">✋</span>
-                    <span>לנסות בעצמי, ללמוד מניסוי וטעייה</span>
-                </div>
-                <div class="option" onclick="selectOption(2, 'theory')">
-                    <span class="option-icon">📚</span>
-                    <span>לקרוא, להבין את התיאוריה לעומק</span>
-                </div>
-                <div class="option" onclick="selectOption(2, 'discuss')">
-                    <span class="option-icon">🗣️</span>
-                    <span>לדבר על זה עם אחרים, לשמוע דעות</span>
-                </div>
-            </div>
-            <div class="navigation">
-                <button class="btn btn-back" onclick="prevQuestion(2)">← חזרה</button>
-                <button class="btn btn-next" onclick="nextQuestion(2)" id="next2" disabled>המשך →</button>
-            </div>
-        </div>
-
-        <div class="question-card" id="q3">
-            <div class="question-number">שאלה 3 מתוך 12</div>
-            <div class="question-text">מה הכי משעמם אותך?</div>
-            <div class="options">
-                <div class="option" onclick="selectOption(3, 'repetitive')">
-                    <span class="option-icon">🔁</span>
-                    <span>לעשות אותו הדבר שוב ושוב</span>
-                </div>
-                <div class="option" onclick="selectOption(3, 'unclear')">
-                    <span class="option-icon">❓</span>
-                    <span>כשלא ברור מה המטרה או מה צריך לעשות</span>
-                </div>
-                <div class="option" onclick="selectOption(3, 'alone')">
-                    <span class="option-icon">😔</span>
-                    <span>לעבוד לבד בלי אינטראקציה עם אחרים</span>
-                </div>
-                <div class="option" onclick="selectOption(3, 'chaos')">
-                    <span class="option-icon">🌀</span>
-                    <span>כאוס וחוסר ארגון</span>
-                </div>
-            </div>
-            <div class="navigation">
-                <button class="btn btn-back" onclick="prevQuestion(3)">← חזרה</button>
-                <button class="btn btn-next" onclick="nextQuestion(3)" id="next3" disabled>המשך →</button>
-            </div>
-        </div>
-
-        <div class="question-card" id="q4">
-            <div class="question-number">שאלה 4 מתוך 12</div>
-            <div class="question-text">איזה סוג של בעיות את הכי אוהבת לפתור?</div>
-            <div class="options">
-                <div class="option" onclick="selectOption(4, 'creative')">
-                    <span class="option-icon">💡</span>
-                    <span>בעיות שדורשות יצירתיות ופתרונות מקוריים</span>
-                </div>
-                <div class="option" onclick="selectOption(4, 'logical')">
-                    <span class="option-icon">🧮</span>
-                    <span>בעיות לוגיות עם תשובה ברורה</span>
-                </div>
-                <div class="option" onclick="selectOption(4, 'human')">
-                    <span class="option-icon">❤️</span>
-                    <span>בעיות שקשורות לאנשים ולרגשות שלהם</span>
-                </div>
-                <div class="option" onclick="selectOption(4, 'complex')">
-                    <span class="option-icon">🔬</span>
-                    <span>בעיות מורכבות שדורשות מחקר עמוק</span>
-                </div>
-            </div>
-            <div class="navigation">
-                <button class="btn btn-back" onclick="prevQuestion(4)">← חזרה</button>
-                <button class="btn btn-next" onclick="nextQuestion(4)" id="next4" disabled>המשך →</button>
-            </div>
-        </div>
-
-        <div class="question-card" id="q5">
-            <div class="question-number">שאלה 5 מתוך 12</div>
-            <div class="question-text">מה הכי חשוב לך במוצר או אפליקציה?</div>
-            <div class="options">
-                <div class="option" onclick="selectOption(5, 'beauty')">
-                    <span class="option-icon">✨</span>
-                    <span>שזה יהיה יפה, נעים לעין, עם עיצוב מושקע</span>
-                </div>
-                <div class="option" onclick="selectOption(5, 'function')">
-                    <span class="option-icon">⚙️</span>
-                    <span>שזה יעבוד טוב, מהיר, יעיל</span>
-                </div>
-                <div class="option" onclick="selectOption(5, 'easy')">
-                    <span class="option-icon">😊</span>
-                    <span>שזה יהיה קל ונוח לשימוש</span>
-                </div>
-                <div class="option" onclick="selectOption(5, 'safe')">
-                    <span class="option-icon">🔐</span>
-                    <span>שזה יהיה בטוח ושומר על הפרטיות שלי</span>
-                </div>
-            </div>
-            <div class="navigation">
-                <button class="btn btn-back" onclick="prevQuestion(5)">← חזרה</button>
-                <button class="btn btn-next" onclick="nextQuestion(5)" id="next5" disabled>המשך →</button>
-            </div>
-        </div>
-
-        <div class="question-card" id="q6">
-            <div class="question-number">שאלה 6 מתוך 12</div>
-            <div class="question-text">איך את מגיבה כשמשהו לא עובד?</div>
-            <div class="options">
-                <div class="option" onclick="selectOption(6, 'redesign')">
-                    <span class="option-icon">🎨</span>
-                    <span>מנסה לחשוב על דרך אחרת, יותר יפה ונוחה</span>
-                </div>
-                <div class="option" onclick="selectOption(6, 'debug')">
-                    <span class="option-icon">🔍</span>
-                    <span>מחפשת את הבעיה הטכנית ומתקנת אותה</span>
-                </div>
-                <div class="option" onclick="selectOption(6, 'ask')">
-                    <span class="option-icon">💬</span>
-                    <span>שואלת אנשים אחרים מה הם חושבים</span>
-                </div>
-                <div class="option" onclick="selectOption(6, 'analyze')">
-                    <span class="option-icon">📊</span>
-                    <span>בודקת נתונים כדי להבין מה השתבש</span>
-                </div>
-            </div>
-            <div class="navigation">
-                <button class="btn btn-back" onclick="prevQuestion(6)">← חזרה</button>
-                <button class="btn btn-next" onclick="nextQuestion(6)" id="next6" disabled>המשך →</button>
-            </div>
-        </div>
-
-        <div class="question-card" id="q7">
-            <div class="question-number">שאלה 7 מתוך 12</div>
-            <div class="question-text">איזה סוג של פרויקט היית הכי רוצה לעשות?</div>
-            <div class="options">
-                <div class="option" onclick="selectOption(7, 'app')">
-                    <span class="option-icon">📱</span>
-                    <span>אפליקציה שעוזרת לאנשים בחיי היום-יום</span>
-                </div>
-                <div class="option" onclick="selectOption(7, 'ai')">
-                    <span class="option-icon">🤖</span>
-                    <span>מערכת חכמה שלומדת ומשתפרת</span>
-                </div>
-                <div class="option" onclick="selectOption(7, 'web')">
-                    <span class="option-icon">🌐</span>
-                    <span>אתר או פלטפורמה דיגיטלית</span>
-                </div>
-                <div class="option" onclick="selectOption(7, 'iot')">
-                    <span class="option-icon">💡</span>
-                    <span>מכשיר חכם שמתחבר לאינטרנט</span>
-                </div>
-                <div class="option" onclick="selectOption(7, 'security')">
-                    <span class="option-icon">🛡️</span>
-                    <span>משהו שמגן על אנשים ברשת</span>
-                </div>
-            </div>
-            <div class="navigation">
-                <button class="btn btn-back" onclick="prevQuestion(7)">← חזרה</button>
-                <button class="btn btn-next" onclick="nextQuestion(7)" id="next7" disabled>המשך →</button>
-            </div>
-        </div>
-
-        <div class="question-card" id="q8">
-            <div class="question-number">שאלה 8 מתוך 12</div>
-            <div class="question-text">מה גורם לך להרגיש הכי גאה?</div>
-            <div class="options">
-                <div class="option" onclick="selectOption(8, 'create')">
-                    <span class="option-icon">🎨</span>
-                    <span>כשיצרתי משהו יפה שאנשים אוהבים</span>
-                </div>
-                <div class="option" onclick="selectOption(8, 'solve')">
-                    <span class="option-icon">✅</span>
-                    <span>כשפתרתי בעיה מסובכת</span>
-                </div>
-                <div class="option" onclick="selectOption(8, 'help')">
-                    <span class="option-icon">🤝</span>
-                    <span>כשעזרתי למישהו להשיג משהו</span>
-                </div>
-                <div class="option" onclick="selectOption(8, 'build')">
-                    <span class="option-icon">🏗️</span>
-                    <span>כשבניתי משהו שעובד מהתחלה ועד הסוף</span>
-                </div>
-            </div>
-            <div class="navigation">
-                <button class="btn btn-back" onclick="prevQuestion(8)">← חזרה</button>
-                <button class="btn btn-next" onclick="nextQuestion(8)" id="next8" disabled>המשך →</button>
-            </div>
-        </div>
-
-        <div class="question-card" id="q9">
-            <div class="question-number">שאלה 9 מתוך 12</div>
-            <div class="question-text">באיזה תפקיד בקבוצה את הכי נוחה?</div>
-            <div class="options">
-                <div class="option" onclick="selectOption(9, 'designer')">
-                    <span class="option-icon">🎨</span>
-                    <span>זו שאחראית על המראה והעיצוב</span>
-                </div>
-                <div class="option" onclick="selectOption(9, 'builder')">
-                    <span class="option-icon">🔧</span>
-                    <span>זו שבונה ומפתחת את הדברים</span>
-                </div>
-                <div class="option" onclick="selectOption(9, 'leader')">
-                    <span class="option-icon">👑</span>
-                    <span>זו שמתכננת ומחליטה מה עושים</span>
-                </div>
-                <div class="option" onclick="selectOption(9, 'researcher')">
-                    <span class="option-icon">🔬</span>
-                    <span>זו שחוקרת ומביאה מידע</span>
-                </div>
-            </div>
-            <div class="navigation">
-                <button class="btn btn-back" onclick="prevQuestion(9)">← חזרה</button>
-                <button class="btn btn-next" onclick="nextQuestion(9)" id="next9" disabled>המשך →</button>
-            </div>
-        </div>
-
-        <div class="question-card" id="q10">
-            <div class="question-number">שאלה 10 מתוך 12</div>
-            <div class="question-text">מה הכי מעניין אותך?</div>
-            <div class="options">
-                <div class="option" onclick="selectOption(10, 'art')">
-                    <span class="option-icon">🎭</span>
-                    <span>אמנות, עיצוב, יופי, תרבות</span>
-                </div>
-                <div class="option" onclick="selectOption(10, 'tech')">
-                    <span class="option-icon">⚡</span>
-                    <span>איך דברים עובדים מבפנים, טכנולוגיה</span>
-                </div>
-                <div class="option" onclick="selectOption(10, 'social')">
-                    <span class="option-icon">👥</span>
-                    <span>אנשים, חברה, פסיכולוגיה</span>
-                </div>
-                <div class="option" onclick="selectOption(10, 'data')">
-                    <span class="option-icon">📊</span>
-                    <span>מספרים, מגמות, דפוסים</span>
-                </div>
-            </div>
-            <div class="navigation">
-                <button class="btn btn-back" onclick="prevQuestion(10)">← חזרה</button>
-                <button class="btn btn-next" onclick="nextQuestion(10)" id="next10" disabled>המשך →</button>
-            </div>
-        </div>
-
-        <div class="question-card" id="q11">
-            <div class="question-number">שאלה 11 מתוך 12</div>
-            <div class="question-text">מה הדבר הראשון שאת שמה לב אליו באפליקציה חדשה?</div>
-            <div class="options">
-                <div class="option" onclick="selectOption(11, 'look')">
-                    <span class="option-icon">👀</span>
-                    <span>איך זה נראה - הצבעים, הגופנים, הסידור</span>
-                </div>
-                <div class="option" onclick="selectOption(11, 'flow')">
-                    <span class="option-icon">🌊</span>
-                    <span>עד כמה קל לעבור ממקום למקום</span>
-                </div>
-                <div class="option" onclick="selectOption(11, 'speed')">
-                    <span class="option-icon">⚡</span>
-                    <span>עד כמה זה מהיר ועובד טוב</span>
-                </div>
-                <div class="option" onclick="selectOption(11, 'privacy')">
-                    <span class="option-icon">🔒</span>
-                    <span>האם זה בטוח ולא דורש יותר מדי הרשאות</span>
-                </div>
-            </div>
-            <div class="navigation">
-                <button class="btn btn-back" onclick="prevQuestion(11)">← חזרה</button>
-                <button class="btn btn-next" onclick="nextQuestion(11)" id="next11" disabled>המשך →</button>
-            </div>
-        </div>
-
-        <div class="question-card" id="q12">
-            <div class="question-number">שאלה 12 מתוך 12 - האחרונה! 🎉</div>
-            <div class="question-text">מה היית הכי רוצה לשנות בעולם?</div>
-            <div class="options">
-                <div class="option" onclick="selectOption(12, 'experience')">
-                    <span class="option-icon">😊</span>
-                    <span>לגרום לאנשים להרגיש טוב יותר עם המוצרים שהם משתמשים</span>
-                </div>
-                <div class="option" onclick="selectOption(12, 'efficiency')">
-                    <span class="option-icon">⚡</span>
-                    <span>לעשות דברים מהירים יותר, חכמים יותר, יעילים יותר</span>
-                </div>
-                <div class="option" onclick="selectOption(12, 'connect')">
-                    <span class="option-icon">🌍</span>
-                    <span>לחבר בין אנשים ולאפשר להם לעזור אחד לשני</span>
-                </div>
-                <div class="option" onclick="selectOption(12, 'safety')">
-                    <span class="option-icon">🛡️</span>
-                    <span>להגן על אנשים מסכנות ברשת</span>
-                </div>
-            </div>
-            <div class="navigation">
-                <button class="btn btn-back" onclick="prevQuestion(12)">← חזרה</button>
-                <button class="btn btn-next" onclick="showResults()" id="next12" disabled>לראות את התוצאה! ✨</button>
-            </div>
-        </div>
-
-        <!-- Results -->
-        <div class="result-box" id="results">
-            <div class="result-icon" id="resultIcon">🎯</div>
-            <div class="result-title" id="resultTitle">התחום שלך בהייטק:</div>
-            <div class="result-subtitle" id="resultField"></div>
-            
-            <div class="result-description" id="resultWhy"></div>
-
-            <div class="result-section">
-                <h3>מה עושים ביום-יום בתפקיד הזה? 💼</h3>
-                <p id="resultDaily"></p>
-            </div>
-
-            <div class="result-section">
-                <h3>איך זה קשור לעולם התוכן שלך? 🌟</h3>
-                <p id="resultConnection"></p>
-            </div>
-
-            <div class="result-section">
-                <h3>מה צריך ללמוד כדי להתחיל? 📚</h3>
-                <ul id="resultSkills"></ul>
-            </div>
-
-            <div class="result-section">
-                <h3>דוגמאות לחברות ומוצרים 🏢</h3>
-                <p id="resultExamples"></p>
-            </div>
-
-            <button class="btn btn-next" onclick="window.location.href='station2.html'" style="width: 100%; margin-top: 30px;">
-                בהצלחה
-            </button>
-        </div>
+        <!-- Result -->
+        <div class="result-container" id="resultContainer"></div>
     </div>
 
     <script>
-        let currentQuestion = 0;
-        const totalQuestions = 12;
-        let answers = {};
+        const questions = [
+            {
+                id: 1,
+                text: "איך את הכי אוהבת לבלות את הזמן החופשי שלך?",
+                options: [
+                    { text: "לעצב ולצייר דברים יפים", scores: { ux: 3, product: 1 } },
+                    { text: "לפתור חידות ובעיות לוגיות", scores: { data: 3, cyber: 2 } },
+                    { text: "לתכנן ולארגן פרויקטים", scores: { product: 3, ai: 1 } },
+                    { text: "לבנות ולהרכיב דברים", scores: { mobile: 2, iot: 3 } }
+                ]
+            },
+            {
+                id: 2,
+                text: "מה הכי מעניין אותך בטכנולוגיה?",
+                options: [
+                    { text: "איך דברים נראים ומרגישים", scores: { ux: 3, mobile: 1 } },
+                    { text: "איך דברים עובדים מאחורי הקלעים", scores: { mobile: 3, cyber: 2, iot: 2 } },
+                    { text: "איך להפוך רעיונות למציאות", scores: { product: 3, ai: 2 } },
+                    { text: "איך לנתח מידע ולמצוא תובנות", scores: { data: 3, ai: 1 } }
+                ]
+            },
+            {
+                id: 3,
+                text: "איזה סוג אתגר הכי מרגש אותך?",
+                options: [
+                    { text: "לעצב חוויה שאנשים יאהבו", scores: { ux: 3, product: 1 } },
+                    { text: "לפתור בעיה מורכבת עם נתונים", scores: { data: 3, ai: 2 } },
+                    { text: "לבנות משהו חדש מאפס", scores: { mobile: 3, iot: 2 } },
+                    { text: "להגן על מידע חשוב", scores: { cyber: 3 } }
+                ]
+            },
+            {
+                id: 4,
+                text: "באיזה תחום את רוצה להשפיע הכי הרבה?",
+                options: [
+                    { text: "לעזור לאנשים דרך עיצוב טוב", scores: { ux: 2, product: 2 } },
+                    { text: "לפתח טכנולוגיות חכמות", scores: { ai: 3, iot: 2 } },
+                    { text: "לשמור על אנשים בטוחים ברשת", scores: { cyber: 3 } },
+                    { text: "ליצור אפליקציות שישנו חיים", scores: { mobile: 3, product: 1 } }
+                ]
+            },
+            {
+                id: 5,
+                text: "מה הכי חשוב לך בעבודה?",
+                options: [
+                    { text: "יופי ואסתטיקה", scores: { ux: 3 } },
+                    { text: "לוגיקה וסדר", scores: { data: 2, cyber: 2, mobile: 1 } },
+                    { text: "יצירתיות וחדשנות", scores: { product: 3, ai: 2 } },
+                    { text: "פתרון בעיות מעשיות", scores: { mobile: 2, iot: 3 } }
+                ]
+            },
+            {
+                id: 6,
+                text: "איך את מעדיפה ללמוד דברים חדשים?",
+                options: [
+                    { text: "דרך צבעים, תמונות ווידאו", scores: { ux: 3, mobile: 1 } },
+                    { text: "דרך מספרים וגרפים", scores: { data: 3, ai: 1 } },
+                    { text: "דרך ניסוי וטעייה", scores: { mobile: 2, iot: 2 } },
+                    { text: "דרך מחקר וקריאה", scores: { product: 2, cyber: 2, ai: 1 } }
+                ]
+            },
+            {
+                id: 7,
+                text: "מה הכי מושך אותך באפליקציה חדשה?",
+                options: [
+                    { text: "העיצוב והממשק היפים", scores: { ux: 3 } },
+                    { text: "הטכנולוגיה שמאחורי", scores: { mobile: 3, ai: 1 } },
+                    { text: "הרעיון והחדשנות", scores: { product: 3 } },
+                    { text: "הבטיחות והאבטחה", scores: { cyber: 3 } }
+                ]
+            },
+            {
+                id: 8,
+                text: "איך את מגיבה לבעיה טכנית?",
+                options: [
+                    { text: "חושבת איך לעצב פתרון נוח", scores: { ux: 3, product: 1 } },
+                    { text: "מנתחת את הנתונים כדי להבין מה קרה", scores: { data: 3 } },
+                    { text: "מנסה למצוא איפה הקוד נשבר", scores: { mobile: 3, cyber: 1 } },
+                    { text: "בודקת איך להגן מפני זה בעתיד", scores: { cyber: 3 } }
+                ]
+            },
+            {
+                id: 9,
+                text: "מה הכי מסקרן אותך בעתיד?",
+                options: [
+                    { text: "עיצובים חדשניים ווירטואליים", scores: { ux: 2, mobile: 1 } },
+                    { text: "בינה מלאכותית וחיזוי עתיד", scores: { ai: 3, data: 2 } },
+                    { text: "אינטרנט של הדברים ובית חכם", scores: { iot: 3, mobile: 1 } },
+                    { text: "הגנה מפני פשיעת סייבר", scores: { cyber: 3 } }
+                ]
+            },
+            {
+                id: 10,
+                text: "איך את הכי אוהבת לעבוד?",
+                options: [
+                    { text: "עם אנשים, בשיתוף פעולה", scores: { ux: 2, product: 3 } },
+                    { text: "לבד, בריכוז מלא", scores: { data: 2, mobile: 2, cyber: 2 } },
+                    { text: "בצוות קטן ומגובש", scores: { mobile: 2, ai: 2, iot: 1 } },
+                    { text: "עם מגוון אנשים מתחומים שונים", scores: { product: 2, ux: 1 } }
+                ]
+            },
+            {
+                id: 11,
+                text: "מה הכי חשוב לך במוצר טכנולוגי?",
+                options: [
+                    { text: "שיהיה קל ונוח לשימוש", scores: { ux: 3, product: 1 } },
+                    { text: "שיהיה מהיר ויעיל", scores: { mobile: 2, data: 1 } },
+                    { text: "שיהיה חכם ומותאם אישית", scores: { ai: 3, data: 1 } },
+                    { text: "שיהיה מאובטח ובטוח", scores: { cyber: 3 } }
+                ]
+            },
+            {
+                id: 12,
+                text: "איזה סוג פרויקט הכי מרגש אותך?",
+                options: [
+                    { text: "לעצב אתר או אפליקציה מדהימים", scores: { ux: 3, mobile: 1 } },
+                    { text: "לבנות מערכת שעובדת מושלם", scores: { mobile: 3, iot: 2 } },
+                    { text: "להוביל מוצר מרעיון למציאות", scores: { product: 3 } },
+                    { text: "למצוא תובנות בהרי מידע", scores: { data: 3, ai: 1 } }
+                ]
+            }
+        ];
 
-        // Score system for each field
+        const careers = {
+            ux: {
+                icon: "🎨",
+                title: "מעצבת חוויית משתמש (UX/UI Designer)",
+                description: "את מעצבת חוויות דיגיטליות מדהימות! את זו שגורמת לאפליקציות להרגיש טבעיות, יפות וקלות לשימוש.",
+                daily: "את משלבת יצירתיות עם חשיבה על המשתמש - יוצרת עיצובים, בודקת איך אנשים משתמשים במוצר, ומשפרת כל הזמן.",
+                skills: "חשיבה עיצובית, אמפתיה, יצירתיות חזותית, הבנת התנהגות משתמשים, כלי עיצוב כמו Figma",
+                examples: "עיצבת את הממשק של אפליקציית הבנק שכולם אומרים שהיא כל כך נוחה, או את האתר שזכה בפרס על העיצוב המדהים שלו"
+            },
+            product: {
+                icon: "🚀",
+                title: "מנהלת מוצר (Product Manager)",
+                description: "את המוח מאחורי המוצר! את זו שרואה את התמונה הגדולה ומובילה את כל הצוות ליצור משהו מדהים.",
+                daily: "את מגדירה מה המוצר צריך לעשות, מדברת עם לקוחות, עובדת עם מפתחים ומעצבים, ומחליטה על העדיפויות.",
+                skills: "חשיבה אסטרטגית, תקשורת מעולה, הבנה טכנולוגית, יכולת קבלת החלטות, ניהול פרויקטים",
+                examples: "החלטת שהאפליקציה תוסיף פיצ'ר חדש שהפך אותה לפופולרית פי 10, או הובלת את הפיתוח של מוצר שעזר למיליון משתמשים"
+            },
+            data: {
+                icon: "📊",
+                title: "אנליסטית נתונים (Data Analyst)",
+                description: "את בלשית המידע! את לוקחת הרי מספרים ומפענחת מהם סיפורים ותובנות שעוזרות לקבל החלטות חכמות.",
+                daily: "את אוספת נתונים, מנתחת אותם עם כלים מתקדמים, יוצרת דוחות ויזואליים יפים, ומציגה ממצאים.",
+                skills: "חשיבה אנליטית, מתמטיקה, SQL, Python, Excel מתקדם, סקרנות, יכולת סיפור עם נתונים",
+                examples: "גילית בנתונים שהמשתמשים עוזבים בדיוק באותה נקודה באפליקציה ועזרת לתקן את זה, או חזית מגמה שעזרה לחברה להרוויח מיליונים"
+            },
+            ai: {
+                icon: "🤖",
+                title: "מפתחת מוצרי AI (AI Product Developer)",
+                description: "את יוצרת את העתיד! את בונה מוצרים חכמים שלומדים ומשתפרים, כמו צ'אטבוטים, מערכות המלצה, וזיהוי תמונות.",
+                daily: "את משלבת בינה מלאכותית במוצרים, מאמנת מודלים, בודקת שהם עובדים טוב, ומשפרת את הדיוק שלהם.",
+                skills: "Python, Machine Learning, הבנת אלגוריתמים, סקרנות טכנולוגית, חשיבה יצירתית",
+                examples: "בנית בוט ששולח התראות חכמות שחוסכות זמן לאנשים, או פיתחת מערכת שממליצה בדיוק מה כל אחד צריך"
+            },
+            mobile: {
+                icon: "📱",
+                title: "מפתחת אפליקציות (Mobile/Web Developer)",
+                description: "את בונה את האפליקציות והאתרים שכולם משתמשים בהם! את הופכת רעיונות לקוד שעובד ממש.",
+                daily: "את כותבת קוד, בודקת שהכל עובד, מתקנת באגים, ומוסיפה פיצ'רים חדשים. עובדת עם מעצבים ומנהלי מוצר.",
+                skills: "שפות תכנות (Swift, Kotlin, JavaScript), חשיבה לוגית, פתרון בעיות, סבלנות, למידה מתמדת",
+                examples: "פיתחת את האפליקציה שכל החברות שלך משתמשות בה, או בנית אתר שזוכה למיליון כניסות ביום"
+            },
+            cyber: {
+                icon: "🔒",
+                title: "מומחית אבטחת מידע (Cyber Security Specialist)",
+                description: "את השומרת על הדיגיטל! את מגינה על מידע חשוב מפני האקרים ומוודאת שהכל מאובטח.",
+                daily: "את בודקת איפה יש חולשות במערכות, מגינה מפני התקפות, מפתחת מנגנוני הגנה, ומלמדת אנשים על אבטחה.",
+                skills: "חשיבה ביקורתית, ידע טכני עמוק, סקרנות, יכולת לחשוב כמו האקר, למידה מתמשכת",
+                examples: "מנעת מהאקרים לפרוץ למערכת של החברה, או גילית חולשה באפליקציה פופולרית לפני שמישהו ניצל אותה"
+            },
+            iot: {
+                icon: "🏠",
+                title: "מפתחת מערכות חכמות (IoT & Smart Systems)",
+                description: "את מחברת בין העולם הפיזי לדיגיטלי! את בונה מכשירים חכמים שמדברים אחד עם השני.",
+                daily: "את מתכננת ובונה מערכות שמחברות חיישנים, מכשירים וקוד - כמו בית חכם, עיר חכמה, או רפואה מרחוק.",
+                skills: "תכנות, הבנת חומרה, רשתות, פתרון בעיות מעשיות, חשיבה מערכתית",
+                examples: "פיתחת מערכת שמזהה מתי צמחים צריכים מים ומשקה אותם אוטומטית, או בנית צמיד חכם שעוזר לאנשים לעקוב אחרי הבריאות שלהם"
+            }
+        };
+
+        let currentQuestion = 0;
+        let answers = [];
         let scores = {
-            ux_ui: 0,
+            ux: 0,
             product: 0,
             data: 0,
             ai: 0,
-            dev: 0,
+            mobile: 0,
             cyber: 0,
             iot: 0
         };
 
-        function startQuiz() {
-            document.getElementById('intro').style.display = 'none';
-            document.getElementById('q1').classList.add('active');
-            currentQuestion = 1;
+        function initQuiz() {
+            renderQuestions();
+            showQuestion(0);
             updateProgress();
         }
 
-        function selectOption(qNum, value) {
-            // Remove selected from all options
-            const options = document.querySelectorAll(`#q${qNum} .option`);
-            options.forEach(opt => opt.classList.remove('selected'));
+        function renderQuestions() {
+            const container = document.getElementById('questionsContainer');
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-container';
+                questionDiv.id = `question-${index}`;
+                
+                questionDiv.innerHTML = `
+                    <div class="question-number">שאלה ${q.id} מתוך ${questions.length}</div>
+                    <div class="question-text">${q.text}</div>
+                    <div class="options" id="options-${index}">
+                        ${q.options.map((opt, optIndex) => `
+                            <div class="option" onclick="selectOption(${index}, ${optIndex})">
+                                ${opt.text}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function showQuestion(index) {
+            document.querySelectorAll('.question-container').forEach(q => q.classList.remove('active'));
+            document.getElementById(`question-${index}`).classList.add('active');
             
-            // Add selected to clicked option
-            event.currentTarget.classList.add('selected');
+            // Update buttons
+            document.getElementById('prevBtn').style.display = index === 0 ? 'none' : 'block';
+            document.getElementById('nextBtn').textContent = index === questions.length - 1 ? 'סיום ורואים תוצאות! 🎉' : 'המשך →';
+            
+            // Check if answer exists
+            if (answers[index] !== undefined) {
+                const optionElements = document.querySelectorAll(`#options-${index} .option`);
+                optionElements[answers[index]].classList.add('selected');
+            }
+            
+            updateProgress();
+        }
+
+        function selectOption(questionIndex, optionIndex) {
+            // Remove previous selection
+            document.querySelectorAll(`#options-${questionIndex} .option`).forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Add new selection
+            document.querySelectorAll(`#options-${questionIndex} .option`)[optionIndex].classList.add('selected');
+            
+            // Update scores
+            if (answers[questionIndex] !== undefined) {
+                // Remove old scores
+                const oldScores = questions[questionIndex].options[answers[questionIndex]].scores;
+                Object.keys(oldScores).forEach(key => {
+                    scores[key] -= oldScores[key];
+                });
+            }
+            
+            // Add new scores
+            const newScores = questions[questionIndex].options[optionIndex].scores;
+            Object.keys(newScores).forEach(key => {
+                scores[key] += newScores[key];
+            });
             
             // Save answer
-            answers[qNum] = value;
-            
-            // Enable next button
-            document.getElementById(`next${qNum}`).disabled = false;
-
-            // Update scores based on answer
-            updateScores(qNum, value);
+            answers[questionIndex] = optionIndex;
         }
 
-        function updateScores(qNum, value) {
-            // Mapping answers to fields
-            const scoreMap = {
-                1: {
-                    'design': {ux_ui: 3},
-                    'analyze': {data: 2, dev: 1},
-                    'people': {product: 2, ux_ui: 1},
-                    'organize': {product: 3},
-                    'protect': {cyber: 3}
-                },
-                2: {
-                    'visual': {ux_ui: 2, product: 1},
-                    'hands': {dev: 2, iot: 1},
-                    'theory': {data: 2, ai: 1},
-                    'discuss': {product: 2}
-                },
-                3: {
-                    'repetitive': {ux_ui: 1, product: 2},
-                    'unclear': {product: 2, dev: 1},
-                    'alone': {product: 2, ux_ui: 1},
-                    'chaos': {data: 2, dev: 1}
-                },
-                4: {
-                    'creative': {ux_ui: 3, product: 1},
-                    'logical': {dev: 2, data: 2},
-                    'human': {ux_ui: 2, product: 2},
-                    'complex': {ai: 2, data: 2}
-                },
-                5: {
-                    'beauty': {ux_ui: 3},
-                    'function': {dev: 2, iot: 1},
-                    'easy': {ux_ui: 2, product: 1},
-                    'safe': {cyber: 3}
-                },
-                6: {
-                    'redesign': {ux_ui: 2, product: 1},
-                    'debug': {dev: 2, cyber: 1},
-                    'ask': {product: 2, ux_ui: 1},
-                    'analyze': {data: 3}
-                },
-                7: {
-                    'app': {dev: 2, ux_ui: 1},
-                    'ai': {ai: 3},
-                    'web': {dev: 2},
-                    'iot': {iot: 3},
-                    'security': {cyber: 3}
-                },
-                8: {
-                    'create': {ux_ui: 2, product: 1},
-                    'solve': {dev: 2, data: 1},
-                    'help': {product: 2, ux_ui: 1},
-                    'build': {dev: 2, iot: 1}
-                },
-                9: {
-                    'designer': {ux_ui: 3},
-                    'builder': {dev: 2, iot: 1},
-                    'leader': {product: 3},
-                    'researcher': {data: 2, ai: 1}
-                },
-                10: {
-                    'art': {ux_ui: 3},
-                    'tech': {dev: 2, iot: 1},
-                    'social': {product: 2, ux_ui: 1},
-                    'data': {data: 3, ai: 1}
-                },
-                11: {
-                    'look': {ux_ui: 3},
-                    'flow': {ux_ui: 2, product: 1},
-                    'speed': {dev: 2},
-                    'privacy': {cyber: 3}
-                },
-                12: {
-                    'experience': {ux_ui: 2, product: 1},
-                    'efficiency': {ai: 2, dev: 1},
-                    'connect': {product: 2, dev: 1},
-                    'safety': {cyber: 3}
-                }
-            };
-
-            // Add scores
-            const answerScores = scoreMap[qNum][value];
-            for (let field in answerScores) {
-                scores[field] += answerScores[field];
-            }
-        }
-
-        function nextQuestion(qNum) {
-            if (!answers[qNum]) {
-                alert('בבקשה בחרי תשובה לפני שממשיכים');
+        function nextQuestion() {
+            if (answers[currentQuestion] === undefined) {
+                alert('נא לבחור תשובה לפני המשך');
                 return;
             }
-
-            document.getElementById(`q${qNum}`).classList.remove('active');
-            currentQuestion = qNum + 1;
             
-            if (qNum < totalQuestions) {
-                document.getElementById(`q${qNum + 1}`).classList.add('active');
-                updateProgress();
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                showQuestion(currentQuestion);
+            } else {
+                showResults();
             }
         }
 
-        function prevQuestion(qNum) {
-            document.getElementById(`q${qNum}`).classList.remove('active');
-            currentQuestion = qNum - 1;
-            document.getElementById(`q${qNum - 1}`).classList.add('active');
-            updateProgress();
-        }
-
-        function goToIntro() {
-            document.getElementById('q1').classList.remove('active');
-            document.getElementById('intro').style.display = 'block';
-            currentQuestion = 0;
-            updateProgress();
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion(currentQuestion);
+            }
         }
 
         function updateProgress() {
-            const percentage = (currentQuestion / totalQuestions) * 100;
-            document.getElementById('progress').style.width = percentage + '%';
-            
-            if (currentQuestion === 0) {
-                document.getElementById('progressText').textContent = 'מוכנה להתחיל?';
-            } else {
-                document.getElementById('progressText').textContent = `שאלה ${currentQuestion} מתוך ${totalQuestions}`;
-            }
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
         }
 
         function showResults() {
-            if (!answers[12]) {
-                alert('בבקשה בחרי תשובה לפני שממשיכים');
-                return;
-            }
-
             // Find highest score
             let maxScore = 0;
-            let resultField = '';
+            let topCareer = '';
             
-            for (let field in scores) {
-                if (scores[field] > maxScore) {
-                    maxScore = scores[field];
-                    resultField = field;
+            Object.keys(scores).forEach(key => {
+                if (scores[key] > maxScore) {
+                    maxScore = scores[key];
+                    topCareer = key;
                 }
-            }
-
-            // Save results
-            localStorage.setItem('station1_field', resultField);
-            localStorage.setItem('station1_answers', JSON.stringify(answers));
-            localStorage.setItem('station1_scores', JSON.stringify(scores));
-
-            // Display results
-            displayResult(resultField);
-
-            // Hide questions, show results
-            document.getElementById('q12').classList.remove('active');
-            document.getElementById('results').classList.add('active');
-            
-            // Update progress to 100%
-            document.getElementById('progress').style.width = '100%';
-            document.getElementById('progressText').textContent = 'סיימת! 🎉';
-        }
-
-        function displayResult(field) {
-            const results = {
-                'ux_ui': {
-                    icon: '🎨',
-                    title: 'UX/UI Designer',
-                    subtitle: 'מעצבת חוויית משתמש',
-                    why: 'את יצירתית, אוהבת יופי ועיצוב, ותמיד חושבת איך לגרום לדברים להיות נוחים ונעימים יותר לשימוש. זה בול מה ש-UX/UI Designer עושה!',
-                    daily: 'מעצבת ממשקים של אפליקציות ואתרים, בוחרת צבעים וגופנים, מחליטה איפה כפתורים יופיעו, חושבת איך המשתמש יעבור בין מסכים, ובודקת שהכל נוח ואינטואיטיבי.',
-                    connection: 'כל אפליקציה שאת משתמשת בה - מישהו עיצב אותה! אם את אוהבת אסתטיקה, אומנות, וחושבת על איך אנשים מרגישים כשהם משתמשים במשהו - זה התחום שלך.',
-                    skills: [
-                        'כלי עיצוב: Figma, Canva, Adobe XD',
-                        'עקרונות עיצוב: צבעים, טיפוגרפיה, חוקי UX',
-                        'הבנת משתמשים: איך אנשים חושבים ומרגישים',
-                        'פידבק ובדיקות: איך לשפר עיצוב על סמך משוב'
-                    ],
-                    examples: 'אפליקציות כמו Instagram, Pinterest, Airbnb - כולן נבנו על ידי מעצבות UX/UI מוכשרות. חברות כמו Google, Apple, Facebook מחפשות כל הזמן מעצבות.'
-                },
-                'product': {
-                    icon: '👑',
-                    title: 'Product Manager',
-                    subtitle: 'מנהלת מוצר ואסטרטגיה',
-                    why: 'את אוהבת לתכנן, לארגן, להבין מה אנשים צריכים, ולהוביל פרויקטים. את "המוח" מאחורי המוצר - זה התפקיד של Product Manager!',
-                    daily: 'מחליטה מה המוצר יעשה, מי קהל היעד, מה הבעיה שהוא פותר. מתכננת תכונות חדשות, עובדת עם מעצבות ומפתחות, בודקת משוב ממשתמשים, ומחליטה מה בונים הלאה.',
-                    connection: 'אם את אוהבת לחשוב על הרעיון הגדול, להבין מה אנשים צריכים, ולהוביל את הכיוון - זה התחום שלך. Product Manager היא "המנכ״לית" של המוצר.',
-                    skills: [
-                        'חשיבה אסטרטגית: מה המטרה? איך מגיעים אליה?',
-                        'הבנת משתמשים: ראיונות, סקרים, מחקר שטח',
-                        'עבודת צוות: תקשורת עם מעצבות, מפתחות, שיווק',
-                        'קבלת החלטות: לדעת מה חשוב ומה לא'
-                    ],
-                    examples: 'כל מוצר מוצלח - WhatsApp, TikTok, Spotify - יש מאחוריו Product Manager מעולה. חברות הייטק מובילות מחפשות PM בכל רגע!'
-                },
-                'data': {
-                    icon: '📊',
-                    title: 'Data Analyst',
-                    subtitle: 'אנליסטית נתונים והחלטות חכמות',
-                    why: 'את אוהבת מספרים, דפוסים, ולהבין "למה" דברים קורים. Data Analyst לוקחת נתונים והופכת אותם להחלטות חכמות!',
-                    daily: 'אוספת נתונים מהמערכת, מנתחת אותם, מחפשת דפוסים ומגמות, יוצרת גרפים וויזואליזציות, ועוזרת לחברה להבין מה עובד ומה לא - ולקבל החלטות על סמך זה.',
-                    connection: 'אם את אוהבת לפתור חידות, להבין "למה", ולהשתמש במספרים כדי לגלות אמיתות מעניינות - זה התחום שלך. כל החלטה בהייטק מבוססת על נתונים!',
-                    skills: [
-                        'כלי ניתוח: Excel, Google Sheets, Tableau',
-                        'סטטיסטיקה בסיסית: ממוצעים, אחוזים, מגמות',
-                        'SQL: שפת שאילתות לנתונים (פשוט מאוד!)',
-                        'סיפור נתונים: איך להסביר ממצאים בצורה ברורה'
-                    ],
-                    examples: 'Netflix מחליטה איזה סדרות לייצר על סמך נתונים. Spotify בוחרת מוזיקה לפלייליסטים שלך על סמך ניתוח. Data Analysts עושות את זה!'
-                },
-                'ai': {
-                    icon: '🤖',
-                    title: 'AI Product Developer',
-                    subtitle: 'מפתחת מוצרי בינה מלאכותית',
-                    why: 'את סקרנית, אוהבת דברים חכמים שלומדים ומשתפרים, וחושבת על העתיד. AI Product Developer בונה מוצרים שחושבים בעצמם!',
-                    daily: 'חושבת על בעיות שאפשר לפתור עם AI, מתכננת איך המערכת תלמד, עובדת עם מודלים קיימים (כמו ChatGPT), בודקת איך האלגוריתם עובד, ומשפרת אותו כדי שיהיה יותר חכם.',
-                    connection: 'אם את מתלהבת מ-ChatGPT, סנאפצ\'ט פילטרים, או המלצות של YouTube - כל אלה הם AI! את יכולה לבנות דברים כאלה בעצמך.',
-                    skills: [
-                        'הבנת AI: מה זה, איך זה עובד, מה אפשר לעשות איתו',
-                        'כלים ללא קוד: Teachable Machine, Runway ML',
-                        'חשיבה אלגוריתמית: איך מערכת "לומדת"?',
-                        'Python (בסיסי): שפת התכנות של AI'
-                    ],
-                    examples: 'ChatGPT, סירי, אלקסה, פילטרים בסנאפצ\'ט - כל אלה AI! חברות כמו OpenAI, Google DeepMind, ואלפי סטארט-אפים בונים מוצרי AI כל יום.'
-                },
-                'dev': {
-                    icon: '💻',
-                    title: 'Mobile / Web Developer',
-                    subtitle: 'מפתחת אפליקציות ואתרים',
-                    why: 'את אוהבת לבנות דברים, לראות איך הם עובדים, וליצור משהו מאפס. Developer בונה את האפליקציות והאתרים שאנחנו משתמשים בהם כל יום!',
-                    daily: 'כותבת קוד שגורם לאפליקציות ולאתרים לעבוד, מחברת כפתורים לפעולות, בונה מסכים ותפריטים, מתקנת באגים (טעויות), ומוסיפה תכונות חדשות.',
-                    connection: 'כל אפליקציה שאת משתמשת בה - מישהו כתב את הקוד שלה! אם את אוהבת לבנות דברים ולראות אותם עובדים בפועל - זה התחום שלך.',
-                    skills: [
-                        'HTML + CSS: בניית דפי אינטרנט (קל מאוד!)',
-                        'JavaScript: שפת התכנות של האינטרנט',
-                        'React / Flutter: כלים לבניית אפליקציות',
-                        'לוגיקה: איך לחשוב כמו מחשב'
-                    ],
-                    examples: 'אפליקציות כמו TikTok, WhatsApp, Instagram - כולן נבנו על ידי Developers. אתרים כמו YouTube, Amazon, כל אתר שאת מכירה - מישהו פיתח אותו!'
-                },
-                'cyber': {
-                    icon: '🛡️',
-                    title: 'Cyber Security Specialist',
-                    subtitle: 'מומחית אבטחת מידע',
-                    why: 'את סקרנית, אוהבת לגלות איך דברים עובדים, ורוצה להגן על אנשים. Cyber Security מגנה על אנשים וחברות מפני פושעי אינטרנט!',
-                    daily: 'בודקת איפה יש חולשות במערכות, מנסה "לפרוץ" כדי למצוא בעיות (באופן חוקי!), בונה הגנות, מזהה איומים, ומלמדת אנשים איך להישאר בטוחים ברשת.',
-                    connection: 'אם שמעת על האקרים, נגיפים, גניבת סיסמאות - Cyber Security עוסקת בכל זה! זה כמו להיות בלשית שמגנה על אנשים ברשת.',
-                    skills: [
-                        'הבנת רשתות: איך האינטרנט עובד',
-                        'חשיבה של האקר: איפה יש חולשות?',
-                        'כלים לבדיקה: Wireshark, Nmap (נשמע מפחיד, אבל לא!)',
-                        'Python: שפת תכנות לאבטחה'
-                    ],
-                    examples: 'חברות כמו Check Point (ישראלית!), Microsoft, Google - כולן צריכות Cyber Security. זה אחד התחומים המבוקשים בעולם!'
-                },
-                'iot': {
-                    icon: '💡',
-                    title: 'IoT & Smart Systems',
-                    subtitle: 'מערכות חכמות ואינטרנט של הדברים',
-                    why: 'את אוהבת מכשירים חכמים, טכנולוגיה שמתחברת לחיים, וליצור דברים שעושים משהו פיזי. IoT בונה את העתיד החכם!',
-                    daily: 'בונה מכשירים חכמים שמתחברים לאינטרנט - נורות חכמות, חיישנים, רובוטים קטנים. מתכנתת אותם, מחברת אותם לאפליקציה, ויוצרת מערכות שעוזרות בחיי היום-יום.',
-                    connection: 'אם את משתמשת בנורות חכמות, שעון חכם, או רמקולים חכמים - זה IoT! זה החיבור בין הדיגיטלי לפיזי, והעתיד מלא בזה.',
-                    skills: [
-                        'Arduino / Raspberry Pi: מחשבים זעירים (כיף לעבוד איתם!)',
-                        'חיישנים: טמפרטורה, תנועה, אור',
-                        'תכנות בסיסי: Python, C++',
-                        'חיבור לאינטרנט: איך המכשיר מדבר עם האפליקציה'
-                    ],
-                    examples: 'נורות Philips Hue, שעוני Apple Watch, רמקולי Alexa - כל אלה IoT! חברות רבות מחפשות מפתחות IoT כי העולם הולך להיות חכם יותר ויותר.'
-                }
-            };
-
-            const result = results[field];
-
-            document.getElementById('resultIcon').textContent = result.icon;
-            document.getElementById('resultField').textContent = result.title + ' - ' + result.subtitle;
-            document.getElementById('resultWhy').textContent = '✨ למה זה מתאים לך: ' + result.why;
-            document.getElementById('resultDaily').textContent = result.daily;
-            document.getElementById('resultConnection').textContent = result.connection;
-            
-            const skillsList = document.getElementById('resultSkills');
-            skillsList.innerHTML = '';
-            result.skills.forEach(skill => {
-                const li = document.createElement('li');
-                li.textContent = skill;
-                skillsList.appendChild(li);
             });
             
-            document.getElementById('resultExamples').textContent = result.examples;
+            const career = careers[topCareer];
+            
+            // Hide questions and navigation
+            document.getElementById('questionsContainer').style.display = 'none';
+            document.getElementById('navigationButtons').style.display = 'none';
+            document.querySelector('.progress-bar').style.display = 'none';
+            
+            // Show results
+            const resultContainer = document.getElementById('resultContainer');
+            resultContainer.innerHTML = `
+                <div class="result-icon">${career.icon}</div>
+                <h2 class="result-title">${career.title}</h2>
+                <p class="result-description">${career.description}</p>
+                
+                <div class="result-details">
+                    <div class="detail-section">
+                        <div class="detail-title">💼 מה את תעשי ביום-יום?</div>
+                        <div class="detail-content">${career.daily}</div>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <div class="detail-title">⭐ מיומנויות שתפתחי</div>
+                        <div class="detail-content">${career.skills}</div>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <div class="detail-title">🎯 דוגמאות למה שתוכלי לעשות</div>
+                        <div class="detail-content">${career.examples}</div>
+                    </div>
+                </div>
+                
+                <button class="btn btn-next" style="width: 100%; margin-top: 30px;">בהצלחה! 💪</button>
+            `;
+            
+            resultContainer.classList.add('active');
         }
 
-        // Load saved answers on page load
-        window.onload = function() {
-            const saved = localStorage.getItem('station1_answers');
-            if (saved) {
-                answers = JSON.parse(saved);
-            }
-        };
+        // Initialize on load
+        window.onload = initQuiz;
     </script>
 </body>
 </html>
