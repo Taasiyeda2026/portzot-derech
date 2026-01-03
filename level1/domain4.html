@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>תת-תחום 1.4: ארכיטקטורת ענן ותשתיות אינטרנט | פורצות דרך</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo-container">
+                <img src="logo.png" alt="פורצות דרך" class="logo">
+                <h1 class="site-title">פורצות דרך</h1>
+            </div>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">עמוד הבית</a>
+                <a href="domain1.html" class="nav-link">הייטק ליבה</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="subtopic-hero" style="background: linear-gradient(135deg, #4FACFE, #00F2FE);">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="index.html">עמוד הבית</a> / 
+                <a href="domain1.html">הייטק ליבה</a> / 
+                <span>תת-תחום 1.4</span>
+            </div>
+            <div class="subtopic-number-display">1.4</div>
+            <h1 class="subtopic-hero-title">☁️ ארכיטקטורת ענן ותשתיות אינטרנט</h1>
+        </div>
+    </section>
+
+    <section class="subtopic-content">
+        <div class="container">
+            <div class="content-section">
+                <p class="content-text">תוכן מפורט של תת-תחום זה...</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="questionnaire-section">
+        <div class="container">
+            <h2 class="section-title">שאלון חיבור</h2>
+            <form id="subQuestionnaire" class="questionnaire-form">
+
+                <div class="question-item">
+                    <p class="question-text">חשוב לי שדברים יעבדו תמיד</p>
+                    <div class="rating-scale">
+                        <label><input type="radio" name="sq1" value="1" required> 1</label>
+                        <label><input type="radio" name="sq1" value="2"> 2</label>
+                        <label><input type="radio" name="sq1" value="3"> 3</label>
+                        <label><input type="radio" name="sq1" value="4"> 4</label>
+                        <label><input type="radio" name="sq1" value="5"> 5</label>
+                    </div>
+                </div>
+                <div class="question-item">
+                    <p class="question-text">אני חושבת על תכנון מראש</p>
+                    <div class="rating-scale">
+                        <label><input type="radio" name="sq2" value="1" required> 1</label>
+                        <label><input type="radio" name="sq2" value="2"> 2</label>
+                        <label><input type="radio" name="sq2" value="3"> 3</label>
+                        <label><input type="radio" name="sq2" value="4"> 4</label>
+                        <label><input type="radio" name="sq2" value="5"> 5</label>
+                    </div>
+                </div>
+                <div class="question-item">
+                    <p class="question-text">מפריע לי חוסר יציבות</p>
+                    <div class="rating-scale">
+                        <label><input type="radio" name="sq3" value="1" required> 1</label>
+                        <label><input type="radio" name="sq3" value="2"> 2</label>
+                        <label><input type="radio" name="sq3" value="3"> 3</label>
+                        <label><input type="radio" name="sq3" value="4"> 4</label>
+                        <label><input type="radio" name="sq3" value="5"> 5</label>
+                    </div>
+                </div>
+                <div class="question-item">
+                    <p class="question-text">אני אוהבת סדר</p>
+                    <div class="rating-scale">
+                        <label><input type="radio" name="sq4" value="1" required> 1</label>
+                        <label><input type="radio" name="sq4" value="2"> 2</label>
+                        <label><input type="radio" name="sq4" value="3"> 3</label>
+                        <label><input type="radio" name="sq4" value="4"> 4</label>
+                        <label><input type="radio" name="sq4" value="5"> 5</label>
+                    </div>
+                </div>
+                <div class="question-item">
+                    <p class="question-text">מעניינת אותי תשתית</p>
+                    <div class="rating-scale">
+                        <label><input type="radio" name="sq5" value="1" required> 1</label>
+                        <label><input type="radio" name="sq5" value="2"> 2</label>
+                        <label><input type="radio" name="sq5" value="3"> 3</label>
+                        <label><input type="radio" name="sq5" value="4"> 4</label>
+                        <label><input type="radio" name="sq5" value="5"> 5</label>
+                    </div>
+                </div>
+                <button type="submit" class="submit-btn">שמירת תשובות</button>
+            </form>
+            <div id="subQuestionnaireResult" class="result-box" style="display: none;">
+                <h3>תוצאת השאלון</h3>
+                <p class="result-score">הציון שלך: <span id="subScoreValue">0</span>/25</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="navigation-section">
+        <div class="container">
+            <div class="navigation-buttons">
+                <a href="domain1-sub3.html" class="nav-button secondary">← תת-תחום קודם</a>
+                <a href="domain1-sub5.html" class="nav-button primary">תת-תחום הבא →</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 קורס פורצות דרך | תת-תחום 1.4: ארכיטקטורת ענן ותשתיות אינטרנט</p>
+        </div>
+    </footer>
+
+    <script src="subtopic.js"></script>
+</body>
+</html>
