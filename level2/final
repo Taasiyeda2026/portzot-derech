@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>שאלון זיהוי תחום הייטק מתאים</title>
+    <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Varela Round', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            direction: rtl;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 30px;
+            padding: 50px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .station-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .station-number {
+            
+        }
+
+        .station-title {
+            font-size: 2.5em;
+            color: #667eea;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .station-subtitle {
+            font-size: 1.2em;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .question-container {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 20px;
+            display: none;
+        }
+
+        .question-container.active {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .question-number {
+            font-size: 1.1em;
+            color: #764ba2;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .question-text {
+            font-size: 1.4em;
+            color: #333;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            font-size: 1.1em;
+        }
+
+        .option:hover {
+            transform: translateX(-5px);
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .option.selected {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #764ba2;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Varela Round', sans-serif;
+        }
+
+        .btn-prev {
+            background: #ddd;
+            color: #333;
+        }
+
+        .btn-prev:hover {
+            background: #ccc;
+            transform: translateX(5px);
+        }
+
+        .btn-next {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            flex: 1;
+        }
+
+        .btn-next:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+            border-radius: 10px;
+        }
+
+        .result-container {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .result-container.active {
+            display: block;
+            animation: fadeIn 0.8s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .result-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+        }
+
+        .result-title {
+            font-size: 2.5em;
+            color: #667eea;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .result-description {
+            font-size: 1.3em;
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .result-details {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: right;
+            margin-bottom: 30px;
+        }
+
+        .detail-section {
+            margin-bottom: 25px;
+        }
+
+        .detail-title {
+            font-size: 1.4em;
+            color: #764ba2;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .detail-content {
+            font-size: 1.1em;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            .station-title {
+                font-size: 1.8em;
+            }
+
+            .question-text {
+                font-size: 1.2em;
+            }
+
+            .option {
+                padding: 15px;
+                font-size: 1em;
+            }
+
+            .navigation {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="station-header">
+            <div class="station-number"></div>
+            <h1 class="station-title">🎯 מצאי את התחום המושלם בהייטק</h1>
+            <p class="station-subtitle">ענו על 12 שאלות קצרות ונגלה יחד איזה תחום בהייטק מתאים לכן בדיוק!</p>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressBar"></div>
+        </div>
+
+        <!-- Questions -->
+        <div id="questionsContainer"></div>
+
+        <!-- Navigation -->
+        <div class="navigation" id="navigationButtons">
+            <button class="btn btn-prev" id="prevBtn" onclick="previousQuestion()">← חזרה</button>
+            <button class="btn btn-next" id="nextBtn" onclick="nextQuestion()">המשך →</button>
+        </div>
+
+        <!-- Result -->
+        <div class="result-container" id="resultContainer"></div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                id: 1,
+                text: "איך את הכי אוהבת לבלות את הזמן החופשי שלך?",
+                options: [
+                    { text: "לעצב ולצייר דברים יפים", scores: { ux: 3, product: 1 } },
+                    { text: "לפתור חידות ובעיות לוגיות", scores: { data: 3, cyber: 2 } },
+                    { text: "לתכנן ולארגן פרויקטים", scores: { product: 3, ai: 1 } },
+                    { text: "לבנות ולהרכיב דברים", scores: { mobile: 2, iot: 3 } }
+                ]
+            },
+            {
+                id: 2,
+                text: "מה הכי מעניין אותך בטכנולוגיה?",
+                options: [
+                    { text: "איך דברים נראים ומרגישים", scores: { ux: 3, mobile: 1 } },
+                    { text: "איך דברים עובדים מאחורי הקלעים", scores: { mobile: 3, cyber: 2, iot: 2 } },
+                    { text: "איך להפוך רעיונות למציאות", scores: { product: 3, ai: 2 } },
+                    { text: "איך לנתח מידע ולמצוא תובנות", scores: { data: 3, ai: 1 } }
+                ]
+            },
+            {
+                id: 3,
+                text: "איזה סוג אתגר הכי מרגש אותך?",
+                options: [
+                    { text: "לעצב חוויה שאנשים יאהבו", scores: { ux: 3, product: 1 } },
+                    { text: "לפתור בעיה מורכבת עם נתונים", scores: { data: 3, ai: 2 } },
+                    { text: "לבנות משהו חדש מאפס", scores: { mobile: 3, iot: 2 } },
+                    { text: "להגן על מידע חשוב", scores: { cyber: 3 } }
+                ]
+            },
+            {
+                id: 4,
+                text: "באיזה תחום את רוצה להשפיע הכי הרבה?",
+                options: [
+                    { text: "לעזור לאנשים דרך עיצוב טוב", scores: { ux: 2, product: 2 } },
+                    { text: "לפתח טכנולוגיות חכמות", scores: { ai: 3, iot: 2 } },
+                    { text: "לשמור על אנשים בטוחים ברשת", scores: { cyber: 3 } },
+                    { text: "ליצור אפליקציות שישנו חיים", scores: { mobile: 3, product: 1 } }
+                ]
+            },
+            {
+                id: 5,
+                text: "מה הכי חשוב לך בעבודה?",
+                options: [
+                    { text: "יופי ואסתטיקה", scores: { ux: 3 } },
+                    { text: "לוגיקה וסדר", scores: { data: 2, cyber: 2, mobile: 1 } },
+                    { text: "יצירתיות וחדשנות", scores: { product: 3, ai: 2 } },
+                    { text: "פתרון בעיות מעשיות", scores: { mobile: 2, iot: 3 } }
+                ]
+            },
+            {
+                id: 6,
+                text: "איך את מעדיפה ללמוד דברים חדשים?",
+                options: [
+                    { text: "דרך צבעים, תמונות ווידאו", scores: { ux: 3, mobile: 1 } },
+                    { text: "דרך מספרים וגרפים", scores: { data: 3, ai: 1 } },
+                    { text: "דרך ניסוי וטעייה", scores: { mobile: 2, iot: 2 } },
+                    { text: "דרך מחקר וקריאה", scores: { product: 2, cyber: 2, ai: 1 } }
+                ]
+            },
+            {
+                id: 7,
+                text: "מה הכי מושך אותך באפליקציה חדשה?",
+                options: [
+                    { text: "העיצוב והממשק היפים", scores: { ux: 3 } },
+                    { text: "הטכנולוגיה שמאחורי", scores: { mobile: 3, ai: 1 } },
+                    { text: "הרעיון והחדשנות", scores: { product: 3 } },
+                    { text: "הבטיחות והאבטחה", scores: { cyber: 3 } }
+                ]
+            },
+            {
+                id: 8,
+                text: "איך את מגיבה לבעיה טכנית?",
+                options: [
+                    { text: "חושבת איך לעצב פתרון נוח", scores: { ux: 3, product: 1 } },
+                    { text: "מנתחת את הנתונים כדי להבין מה קרה", scores: { data: 3 } },
+                    { text: "מנסה למצוא איפה הקוד נשבר", scores: { mobile: 3, cyber: 1 } },
+                    { text: "בודקת איך להגן מפני זה בעתיד", scores: { cyber: 3 } }
+                ]
+            },
+            {
+                id: 9,
+                text: "מה הכי מסקרן אותך בעתיד?",
+                options: [
+                    { text: "עיצובים חדשניים ווירטואליים", scores: { ux: 2, mobile: 1 } },
+                    { text: "בינה מלאכותית וחיזוי עתיד", scores: { ai: 3, data: 2 } },
+                    { text: "אינטרנט של הדברים ובית חכם", scores: { iot: 3, mobile: 1 } },
+                    { text: "הגנה מפני פשיעת סייבר", scores: { cyber: 3 } }
+                ]
+            },
+            {
+                id: 10,
+                text: "איך את הכי אוהבת לעבוד?",
+                options: [
+                    { text: "עם אנשים, בשיתוף פעולה", scores: { ux: 2, product: 3 } },
+                    { text: "לבד, בריכוז מלא", scores: { data: 2, mobile: 2, cyber: 2 } },
+                    { text: "בצוות קטן ומגובש", scores: { mobile: 2, ai: 2, iot: 1 } },
+                    { text: "עם מגוון אנשים מתחומים שונים", scores: { product: 2, ux: 1 } }
+                ]
+            },
+            {
+                id: 11,
+                text: "מה הכי חשוב לך במוצר טכנולוגי?",
+                options: [
+                    { text: "שיהיה קל ונוח לשימוש", scores: { ux: 3, product: 1 } },
+                    { text: "שיהיה מהיר ויעיל", scores: { mobile: 2, data: 1 } },
+                    { text: "שיהיה חכם ומותאם אישית", scores: { ai: 3, data: 1 } },
+                    { text: "שיהיה מאובטח ובטוח", scores: { cyber: 3 } }
+                ]
+            },
+            {
+                id: 12,
+                text: "איזה סוג פרויקט הכי מרגש אותך?",
+                options: [
+                    { text: "לעצב אתר או אפליקציה מדהימים", scores: { ux: 3, mobile: 1 } },
+                    { text: "לבנות מערכת שעובדת מושלם", scores: { mobile: 3, iot: 2 } },
+                    { text: "להוביל מוצר מרעיון למציאות", scores: { product: 3 } },
+                    { text: "למצוא תובנות בהרי מידע", scores: { data: 3, ai: 1 } }
+                ]
+            }
+        ];
+
+        const careers = {
+            ux: {
+                icon: "🎨",
+                title: "מעצבת חוויית משתמש (UX/UI Designer)",
+                description: "את מעצבת חוויות דיגיטליות מדהימות! את זו שגורמת לאפליקציות להרגיש טבעיות, יפות וקלות לשימוש.",
+                daily: "את משלבת יצירתיות עם חשיבה על המשתמש - יוצרת עיצובים, בודקת איך אנשים משתמשים במוצר, ומשפרת כל הזמן.",
+                skills: "חשיבה עיצובית, אמפתיה, יצירתיות חזותית, הבנת התנהגות משתמשים, כלי עיצוב כמו Figma",
+                examples: "עיצבת את הממשק של אפליקציית הבנק שכולם אומרים שהיא כל כך נוחה, או את האתר שזכה בפרס על העיצוב המדהים שלו"
+            },
+            product: {
+                icon: "🚀",
+                title: "מנהלת מוצר (Product Manager)",
+                description: "את המוח מאחורי המוצר! את זו שרואה את התמונה הגדולה ומובילה את כל הצוות ליצור משהו מדהים.",
+                daily: "את מגדירה מה המוצר צריך לעשות, מדברת עם לקוחות, עובדת עם מפתחים ומעצבים, ומחליטה על העדיפויות.",
+                skills: "חשיבה אסטרטגית, תקשורת מעולה, הבנה טכנולוגית, יכולת קבלת החלטות, ניהול פרויקטים",
+                examples: "החלטת שהאפליקציה תוסיף פיצ'ר חדש שהפך אותה לפופולרית פי 10, או הובלת את הפיתוח של מוצר שעזר למיליון משתמשים"
+            },
+            data: {
+                icon: "📊",
+                title: "אנליסטית נתונים (Data Analyst)",
+                description: "את בלשית המידע! את לוקחת הרי מספרים ומפענחת מהם סיפורים ותובנות שעוזרות לקבל החלטות חכמות.",
+                daily: "את אוספת נתונים, מנתחת אותם עם כלים מתקדמים, יוצרת דוחות ויזואליים יפים, ומציגה ממצאים.",
+                skills: "חשיבה אנליטית, מתמטיקה, SQL, Python, Excel מתקדם, סקרנות, יכולת סיפור עם נתונים",
+                examples: "גילית בנתונים שהמשתמשים עוזבים בדיוק באותה נקודה באפליקציה ועזרת לתקן את זה, או חזית מגמה שעזרה לחברה להרוויח מיליונים"
+            },
+            ai: {
+                icon: "🤖",
+                title: "מפתחת מוצרי AI (AI Product Developer)",
+                description: "את יוצרת את העתיד! את בונה מוצרים חכמים שלומדים ומשתפרים, כמו צ'אטבוטים, מערכות המלצה, וזיהוי תמונות.",
+                daily: "את משלבת בינה מלאכותית במוצרים, מאמנת מודלים, בודקת שהם עובדים טוב, ומשפרת את הדיוק שלהם.",
+                skills: "Python, Machine Learning, הבנת אלגוריתמים, סקרנות טכנולוגית, חשיבה יצירתית",
+                examples: "בנית בוט ששולח התראות חכמות שחוסכות זמן לאנשים, או פיתחת מערכת שממליצה בדיוק מה כל אחד צריך"
+            },
+            mobile: {
+                icon: "📱",
+                title: "מפתחת אפליקציות (Mobile/Web Developer)",
+                description: "את בונה את האפליקציות והאתרים שכולם משתמשים בהם! את הופכת רעיונות לקוד שעובד ממש.",
+                daily: "את כותבת קוד, בודקת שהכל עובד, מתקנת באגים, ומוסיפה פיצ'רים חדשים. עובדת עם מעצבים ומנהלי מוצר.",
+                skills: "שפות תכנות (Swift, Kotlin, JavaScript), חשיבה לוגית, פתרון בעיות, סבלנות, למידה מתמדת",
+                examples: "פיתחת את האפליקציה שכל החברות שלך משתמשות בה, או בנית אתר שזוכה למיליון כניסות ביום"
+            },
+            cyber: {
+                icon: "🔒",
+                title: "מומחית אבטחת מידע (Cyber Security Specialist)",
+                description: "את השומרת על הדיגיטל! את מגינה על מידע חשוב מפני האקרים ומוודאת שהכל מאובטח.",
+                daily: "את בודקת איפה יש חולשות במערכות, מגינה מפני התקפות, מפתחת מנגנוני הגנה, ומלמדת אנשים על אבטחה.",
+                skills: "חשיבה ביקורתית, ידע טכני עמוק, סקרנות, יכולת לחשוב כמו האקר, למידה מתמשכת",
+                examples: "מנעת מהאקרים לפרוץ למערכת של החברה, או גילית חולשה באפליקציה פופולרית לפני שמישהו ניצל אותה"
+            },
+            iot: {
+                icon: "🏠",
+                title: "מפתחת מערכות חכמות (IoT & Smart Systems)",
+                description: "את מחברת בין העולם הפיזי לדיגיטלי! את בונה מכשירים חכמים שמדברים אחד עם השני.",
+                daily: "את מתכננת ובונה מערכות שמחברות חיישנים, מכשירים וקוד - כמו בית חכם, עיר חכמה, או רפואה מרחוק.",
+                skills: "תכנות, הבנת חומרה, רשתות, פתרון בעיות מעשיות, חשיבה מערכתית",
+                examples: "פיתחת מערכת שמזהה מתי צמחים צריכים מים ומשקה אותם אוטומטית, או בנית צמיד חכם שעוזר לאנשים לעקוב אחרי הבריאות שלהם"
+            }
+        };
+
+        let currentQuestion = 0;
+        let answers = [];
+        let scores = {
+            ux: 0,
+            product: 0,
+            data: 0,
+            ai: 0,
+            mobile: 0,
+            cyber: 0,
+            iot: 0
+        };
+
+        function initQuiz() {
+            renderQuestions();
+            showQuestion(0);
+            updateProgress();
+        }
+
+        function renderQuestions() {
+            const container = document.getElementById('questionsContainer');
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-container';
+                questionDiv.id = `question-${index}`;
+                
+                questionDiv.innerHTML = `
+                    <div class="question-number">שאלה ${q.id} מתוך ${questions.length}</div>
+                    <div class="question-text">${q.text}</div>
+                    <div class="options" id="options-${index}">
+                        ${q.options.map((opt, optIndex) => `
+                            <div class="option" onclick="selectOption(${index}, ${optIndex})">
+                                ${opt.text}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function showQuestion(index) {
+            document.querySelectorAll('.question-container').forEach(q => q.classList.remove('active'));
+            document.getElementById(`question-${index}`).classList.add('active');
+            
+            // Update buttons
+            document.getElementById('prevBtn').style.display = index === 0 ? 'none' : 'block';
+            document.getElementById('nextBtn').textContent = index === questions.length - 1 ? 'סיום ורואים תוצאות! 🎉' : 'המשך →';
+            
+            // Check if answer exists
+            if (answers[index] !== undefined) {
+                const optionElements = document.querySelectorAll(`#options-${index} .option`);
+                optionElements[answers[index]].classList.add('selected');
+            }
+            
+            updateProgress();
+        }
+
+        function selectOption(questionIndex, optionIndex) {
+            // Remove previous selection
+            document.querySelectorAll(`#options-${questionIndex} .option`).forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Add new selection
+            document.querySelectorAll(`#options-${questionIndex} .option`)[optionIndex].classList.add('selected');
+            
+            // Update scores
+            if (answers[questionIndex] !== undefined) {
+                // Remove old scores
+                const oldScores = questions[questionIndex].options[answers[questionIndex]].scores;
+                Object.keys(oldScores).forEach(key => {
+                    scores[key] -= oldScores[key];
+                });
+            }
+            
+            // Add new scores
+            const newScores = questions[questionIndex].options[optionIndex].scores;
+            Object.keys(newScores).forEach(key => {
+                scores[key] += newScores[key];
+            });
+            
+            // Save answer
+            answers[questionIndex] = optionIndex;
+        }
+
+        function nextQuestion() {
+            if (answers[currentQuestion] === undefined) {
+                alert('נא לבחור תשובה לפני המשך');
+                return;
+            }
+            
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                showQuestion(currentQuestion);
+            } else {
+                showResults();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion(currentQuestion);
+            }
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function showResults() {
+            // Find highest score
+            let maxScore = 0;
+            let topCareer = '';
+            
+            Object.keys(scores).forEach(key => {
+                if (scores[key] > maxScore) {
+                    maxScore = scores[key];
+                    topCareer = key;
+                }
+            });
+            
+            const career = careers[topCareer];
+            
+            // Hide questions and navigation
+            document.getElementById('questionsContainer').style.display = 'none';
+            document.getElementById('navigationButtons').style.display = 'none';
+            document.querySelector('.progress-bar').style.display = 'none';
+            
+            // Show results
+            const resultContainer = document.getElementById('resultContainer');
+            resultContainer.innerHTML = `
+                <div class="result-icon">${career.icon}</div>
+                <h2 class="result-title">${career.title}</h2>
+                <p class="result-description">${career.description}</p>
+                
+                <div class="result-details">
+                    <div class="detail-section">
+                        <div class="detail-title">💼 מה את תעשי ביום-יום?</div>
+                        <div class="detail-content">${career.daily}</div>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <div class="detail-title">⭐ מיומנויות שתפתחי</div>
+                        <div class="detail-content">${career.skills}</div>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <div class="detail-title">🎯 דוגמאות למה שתוכלי לעשות</div>
+                        <div class="detail-content">${career.examples}</div>
+                    </div>
+                </div>
+                
+                <button class="btn btn-next" style="width: 100%; margin-top: 30px;">בהצלחה! 💪</button>
+            `;
+            
+            resultContainer.classList.add('active');
+        }
+
+        // Initialize on load
+        window.onload = initQuiz;
+    </script>
+</body>
+</html>
