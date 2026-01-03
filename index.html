@@ -1,1262 +1,1357 @@
+
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>מסע פורצות דרך | מרעיון למוצר</title>
+<title>מסע פורצות דרך | 9 תחנות</title>
 
 <style>
+:root {
+  --primary: #9b59b6;
+  --secondary: #e74c3c;
+  --accent: #3498db;
+  --success: #2ecc71;
+  --warm: #f39c12;
+  --pink: #fd79a8;
+  --purple-light: #a29bfe;
+  --teal: #00b894;
+}
+
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    min-height: 100vh;
-    padding: 20px;
+  margin: 0;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  color: #2c3e50;
 }
 
-.main-container {
-    max-width: 1200px;
-    margin: 0 auto;
+.container {
+  max-width: 950px;
+  margin: auto;
 }
 
 /* כותרת ראשית */
 .main-header {
-    background: white;
-    border-radius: 30px;
-    padding: 50px 40px;
-    text-align: center;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    margin-bottom: 30px;
+  text-align: center;
+  color: white;
+  margin-bottom: 30px;
+  animation: fadeInDown 0.8s ease;
 }
 
 .main-header h1 {
-    font-size: 3em;
-    color: #2d3748;
-    margin-bottom: 15px;
+  font-size: 2.5em;
+  margin: 0;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
 }
 
-.main-header .subtitle {
-    font-size: 1.5em;
-    color: #718096;
-    margin-bottom: 30px;
+.main-header .emoji {
+  font-size: 1.2em;
+  display: inline-block;
+  animation: bounce 2s infinite;
+}
+
+.main-header p {
+  font-size: 1.05em;
+  margin-top: 10px;
+  opacity: 0.95;
+  line-height: 1.5;
 }
 
 /* פס התקדמות */
+.progress-container {
+  background: white;
+  border-radius: 30px;
+  padding: 20px;
+  margin-bottom: 25px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
 .progress-bar {
-    background: white;
-    border-radius: 20px;
-    padding: 25px;
-    margin-bottom: 30px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  height: 12px;
+  background: #ecf0f1;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
 }
 
-.progress-steps {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--success), var(--accent));
+  border-radius: 10px;
+  transition: width 0.5s ease;
+  box-shadow: 0 2px 8px rgba(46, 204, 113, 0.4);
 }
 
-.progress-step {
-    flex: 1;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.3s;
-    position: relative;
+.progress-text {
+  text-align: center;
+  margin-top: 10px;
+  font-weight: 600;
+  color: #555;
+  font-size: 0.95em;
 }
 
-.progress-step:not(:last-child)::after {
-    content: '';
-    position: absolute;
-    top: 20px;
-    right: -50%;
-    width: 100%;
-    height: 3px;
-    background: #e2e8f0;
-    z-index: 1;
+/* כרטיס תחנה */
+.step {
+  display: none;
+  background: white;
+  border-radius: 25px;
+  padding: 45px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+  animation: fadeInUp 0.6s ease;
+  position: relative;
+  overflow: hidden;
 }
 
-.progress-step.active:not(:last-child)::after {
-    background: #667eea;
+.step::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, var(--primary), var(--pink), var(--accent));
 }
 
-.step-circle {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: #e2e8f0;
-    color: #a0aec0;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    margin-bottom: 8px;
-    position: relative;
-    z-index: 2;
-    transition: all 0.3s;
+.step.active {
+  display: block;
 }
 
-.progress-step.active .step-circle {
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: white;
-    transform: scale(1.2);
+/* כותרות */
+.step h2 {
+  color: var(--primary);
+  font-size: 1.9em;
+  margin: 0 0 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-.progress-step.completed .step-circle {
-    background: #48bb78;
-    color: white;
+.step h2 .icon {
+  font-size: 1.1em;
 }
 
-.step-label {
-    font-size: 0.85em;
-    color: #718096;
-    font-weight: 600;
+.step-intro {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+  padding: 15px 20px;
+  border-radius: 12px;
+  margin: 15px 0 25px 0;
+  font-size: 1.05em;
+  line-height: 1.5;
+  box-shadow: 0 4px 15px rgba(240, 147, 251, 0.3);
 }
 
-.progress-step.active .step-label {
-    color: #667eea;
+.step > p {
+  color: #555;
+  font-size: 1.05em;
+  line-height: 1.6;
+  margin-bottom: 20px;
 }
 
-/* תחנות */
-.station {
-    display: none;
-    background: white;
-    border-radius: 30px;
-    padding: 50px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    animation: fadeIn 0.5s ease-in;
+/* שלבים פנימיים (שלב א, ב, ג) */
+.sub-stage {
+  margin: 25px 0;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border-right: 4px solid var(--accent);
 }
 
-.station.active {
-    display: block;
+.sub-stage h3 {
+  color: var(--accent);
+  font-size: 1.3em;
+  margin: 0 0 15px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+.sub-stage-label {
+  background: var(--accent);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.85em;
+  font-weight: 600;
 }
 
-.station-header {
-    text-align: center;
-    margin-bottom: 40px;
+/* שדות קלט */
+textarea, input[type="text"] {
+  width: 100%;
+  padding: 14px;
+  font-size: 15px;
+  border-radius: 10px;
+  border: 2px solid #e0e0e0;
+  margin-top: 10px;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  resize: vertical;
 }
 
-.station-number {
-    display: inline-block;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: white;
-    padding: 10px 30px;
-    border-radius: 50px;
-    font-size: 1.2em;
-    font-weight: bold;
-    margin-bottom: 20px;
+textarea {
+  min-height: 100px;
 }
 
-.station h2 {
-    font-size: 2.5em;
-    color: #2d3748;
-    margin-bottom: 15px;
+textarea.large {
+  min-height: 140px;
 }
 
-.station-subtitle {
-    font-size: 1.3em;
-    color: #718096;
-    line-height: 1.6;
+textarea:focus, input[type="text"]:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
 }
 
-/* תיבות מידע */
-.info-box {
-    background: #f7fafc;
-    padding: 30px;
-    border-radius: 20px;
-    margin: 30px 0;
-    border-right: 6px solid #667eea;
+/* תיבות סימון */
+.checkbox-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+  margin: 15px 0;
 }
 
-.info-box p {
-    font-size: 1.15em;
-    line-height: 1.8;
-    color: #4a5568;
-    margin-bottom: 12px;
+.checkbox-group.two-col {
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
 }
 
-.highlight {
-    background: #edf2f7;
-    padding: 15px;
-    border-radius: 14px;
-    font-weight: 600;
-    color: #2d3748;
+.checkbox-group label {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  background: white;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid #e0e0e0;
 }
 
-/* אפשרויות בחירה */
-.options-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 25px;
-    margin: 30px 0;
+.checkbox-group label:hover {
+  background: #e8f4f8;
+  border-color: var(--accent);
+  transform: translateX(-3px);
 }
 
-.option-card {
-    background: white;
-    padding: 30px;
-    border-radius: 20px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    cursor: pointer;
-    transition: all 0.3s;
-    border: 3px solid transparent;
+.checkbox-group input[type="checkbox"] {
+  margin-left: 10px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: var(--primary);
 }
 
-.option-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+/* שדות מרובים */
+.field-group {
+  margin: 20px 0;
 }
 
-.option-card.selected {
-    border-color: #667eea;
-    background: #eef2ff;
+.field-group label {
+  display: block;
+  font-weight: 600;
+  color: #444;
+  margin-bottom: 8px;
+  font-size: 1.05em;
 }
 
-.option-card h3 {
-    font-size: 1.4em;
-    color: #2d3748;
-    margin-bottom: 12px;
+.field-group input,
+.field-group textarea {
+  margin-top: 0;
 }
 
-.option-card p {
-    font-size: 1.05em;
-    color: #718096;
-    line-height: 1.6;
+/* כפתורים */
+.nav {
+  display: flex;
+  gap: 15px;
+  margin-top: 35px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-/* שדות טקסט */
-.form-group {
-    margin: 25px 0;
+button {
+  padding: 16px 32px;
+  border-radius: 50px;
+  border: none;
+  background: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  position: relative;
+  overflow: hidden;
 }
 
-.form-group label {
-    display: block;
-    font-size: 1.2em;
-    font-weight: bold;
-    color: #2d3748;
-    margin-bottom: 10px;
+button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
 }
 
-.form-group input,
-.form-group textarea {
-    width: 100%;
-    padding: 15px;
-    border: 2px solid #e2e8f0;
-    border-radius: 12px;
-    font-size: 1.1em;
-    font-family: inherit;
-    transition: all 0.3s;
+button:hover::before {
+  width: 300px;
+  height: 300px;
 }
 
-.form-group input:focus,
-.form-group textarea:focus {
-    outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
 }
 
-.form-group textarea {
-    min-height: 120px;
-    resize: vertical;
+button:active {
+  transform: translateY(0);
 }
 
-/* כפתורי ניווט */
-.navigation {
-    display: flex;
-    gap: 20px;
-    margin-top: 50px;
-    flex-wrap: wrap;
+button.primary {
+  background: linear-gradient(135deg, var(--primary), var(--pink));
+  color: white;
+  font-size: 17px;
 }
 
-.btn {
-    flex: 1;
-    min-width: 180px;
-    padding: 18px 35px;
-    border: none;
-    border-radius: 50px;
-    font-size: 1.2em;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s;
-    text-align: center;
+button.secondary {
+  background: linear-gradient(135deg, var(--accent), var(--purple-light));
+  color: white;
 }
 
-.btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+button.success {
+  background: linear-gradient(135deg, var(--success), var(--teal));
+  color: white;
 }
 
-.btn-prev {
-    background: linear-gradient(135deg, #a29bfe, #6c5ce7);
-    color: white;
+/* תיבת פלט */
+.output {
+  margin-top: 20px;
+  padding: 20px;
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  border: 2px dashed var(--accent);
+  border-radius: 12px;
+  white-space: pre-wrap;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.8;
+  max-height: 400px;
+  overflow-y: auto;
 }
 
-.btn-next {
-    background: linear-gradient(135deg, #00b894, #00cec9);
-    color: white;
+.output:empty::before {
+  content: 'התוכן יופיע כאן...';
+  color: #999;
+  font-style: italic;
 }
 
-.btn-save {
-    background: linear-gradient(135deg, #0984e3, #74b9ff);
-    color: white;
+/* הודעות עידוד */
+.encouragement {
+  background: linear-gradient(135deg, #fdeb71, #f8d800);
+  padding: 15px 20px;
+  border-radius: 12px;
+  margin: 20px 0;
+  text-align: center;
+  font-weight: 600;
+  color: #333;
+  box-shadow: 0 4px 15px rgba(248, 216, 0, 0.3);
 }
 
-/* תיבת תוצאות */
-.result-box {
-    background: linear-gradient(135deg, #f093fb, #f5576c);
-    color: white;
-    padding: 40px;
-    border-radius: 25px;
-    margin: 40px 0;
-    display: none;
+/* טיפ מסייע */
+.helper-tip {
+  background: #e8f5e9;
+  border-right: 4px solid var(--success);
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin: 15px 0;
+  font-size: 0.95em;
+  color: #2e7d32;
+  line-height: 1.5;
 }
 
-.result-box.show {
-    display: block;
-    animation: fadeIn 0.5s ease-in;
+.helper-tip::before {
+  content: '💡 ';
+  font-size: 1.2em;
 }
 
-.result-box h3 {
-    font-size: 2em;
-    margin-bottom: 20px;
-    text-align: center;
+.warning-tip {
+  background: #fff3cd;
+  border-right: 4px solid var(--warm);
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin: 15px 0;
+  font-size: 0.95em;
+  color: #856404;
+  line-height: 1.5;
 }
 
-.result-content {
-    background: white;
-    color: #2d3748;
-    padding: 30px;
-    border-radius: 18px;
-    font-size: 1.15em;
-    line-height: 1.8;
+.warning-tip::before {
+  content: '⚠️ ';
+  font-size: 1.2em;
 }
 
-/* כפתור שאלון סופי */
-.final-cta {
-    background: linear-gradient(135deg, #f093fb, #f5576c);
-    padding: 60px;
-    border-radius: 30px;
-    text-align: center;
-    color: white;
-    margin: 50px 0;
-    box-shadow: 0 20px 60px rgba(240,147,251,0.4);
+/* עיצוב מיוחד לתחנה אחרונה */
+.step-final {
+  text-align: center;
 }
 
-.final-cta .emoji {
-    font-size: 4em;
-    margin-bottom: 20px;
+.step-final h2 {
+  font-size: 2.5em;
+  justify-content: center;
+  color: var(--success);
 }
 
-.final-cta h2 {
-    font-size: 2.5em;
-    margin-bottom: 20px;
-    color: white;
+.step-final .celebration {
+  font-size: 5em;
+  margin: 20px 0;
+  animation: celebration 1s ease infinite;
 }
 
-.final-cta p {
-    font-size: 1.4em;
-    line-height: 1.8;
-    margin-bottom: 15px;
+/* אזור סיכום */
+.summary-box {
+  background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+  padding: 20px;
+  border-radius: 15px;
+  margin: 20px 0;
+  box-shadow: 0 4px 15px rgba(142, 197, 252, 0.3);
 }
 
-.final-cta .highlight-text {
-    font-size: 1.6em;
-    font-weight: bold;
-    margin: 30px 0;
+.summary-box h4 {
+  margin: 0 0 10px 0;
+  color: #333;
+  font-size: 1.2em;
 }
 
-.btn-questionnaire {
-    display: inline-block;
-    background: white;
-    color: #f093fb;
-    padding: 25px 60px;
-    border-radius: 50px;
-    font-size: 1.5em;
-    font-weight: bold;
-    text-decoration: none;
-    transition: all 0.3s;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    margin-top: 20px;
+.summary-box p {
+  margin: 5px 0;
+  color: #444;
+  line-height: 1.6;
 }
 
-.btn-questionnaire:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+/* אנימציות */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.final-note {
-    font-size: 1.1em;
-    margin-top: 25px;
-    opacity: 0.95;
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* רספונסיבי */
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes celebration {
+  0%, 100% { transform: rotate(-5deg) scale(1); }
+  50% { transform: rotate(5deg) scale(1.1); }
+}
+
+/* רספונסיביות */
 @media (max-width: 768px) {
-    .main-header h1 {
-        font-size: 2em;
-    }
-    
-    .station {
-        padding: 30px 20px;
-    }
-    
-    .station h2 {
-        font-size: 2em;
-    }
-    
-    .progress-steps {
-        flex-wrap: wrap;
-    }
-    
-    .progress-step {
-        flex-basis: 33%;
-        margin-bottom: 15px;
-    }
-    
-    .progress-step:not(:last-child)::after {
-        display: none;
-    }
-    
-    .navigation {
-        flex-direction: column;
-    }
-    
-    .btn {
-        min-width: 100%;
-    }
+  body {
+    padding: 15px;
+  }
+  
+  .step {
+    padding: 30px 20px;
+  }
+  
+  .main-header h1 {
+    font-size: 2em;
+  }
+  
+  .checkbox-group,
+  .checkbox-group.two-col {
+    grid-template-columns: 1fr;
+  }
+  
+  .nav {
+    flex-direction: column;
+  }
+  
+  button {
+    width: 100%;
+  }
+}
+
+/* כפתור העתקה */
+.copy-btn {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  padding: 12px 24px;
+  margin-top: 15px;
+}
+
+.copy-btn:hover {
+  background: linear-gradient(135deg, #764ba2, #667eea);
 }
 </style>
 </head>
 
 <body>
-<div class="main-container">
+<div class="container">
 
 <!-- כותרת ראשית -->
 <div class="main-header">
-    <h1>🚀 מסע פורצות דרך</h1>
-    <p class="subtitle">מרעיון למוצר טכנולוגי מוגמר</p>
-    <p style="font-size: 1.1em; color: #718096; margin-top: 15px;">
-        תהליך מלא של חשיבה הנדסית - 9 תחנות עד למוצר AI מושלם
-    </p>
+  <h1><span class="emoji">🚀</span> מסע פורצות דרך <span class="emoji">💜</span></h1>
+  <p>תהליך חשיבה מלא בשלושה שלבים: קל → עמוק → החלטי<br>
+  שמוביל חשיבה בצורה קלה, עמוקה ואז החלטית</p>
 </div>
 
 <!-- פס התקדמות -->
-<div class="progress-bar">
-    <div class="progress-steps" id="progressSteps">
-        <div class="progress-step active" data-station="1">
-            <div class="step-circle">1</div>
-            <div class="step-label">כיוון</div>
-        </div>
-        <div class="progress-step" data-station="2">
-            <div class="step-circle">2</div>
-            <div class="step-label">בעיה</div>
-        </div>
-        <div class="progress-step" data-station="3">
-            <div class="step-circle">3</div>
-            <div class="step-label">ניסוח</div>
-        </div>
-        <div class="progress-step" data-station="4">
-            <div class="step-circle">4</div>
-            <div class="step-label">חקר</div>
-        </div>
-        <div class="progress-step" data-station="5">
-            <div class="step-circle">5</div>
-            <div class="step-label">פתרון</div>
-        </div>
-        <div class="progress-step" data-station="6">
-            <div class="step-circle">6</div>
-            <div class="step-label">מוצר</div>
-        </div>
-        <div class="progress-step" data-station="7">
-            <div class="step-circle">7</div>
-            <div class="step-label">סיפור</div>
-        </div>
-        <div class="progress-step" data-station="8">
-            <div class="step-circle">8</div>
-            <div class="step-label">סרטון</div>
-        </div>
-        <div class="progress-step" data-station="9">
-            <div class="step-circle">9</div>
-            <div class="step-label">פוסטר</div>
-        </div>
-    </div>
+<div class="progress-container">
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+  <div class="progress-text" id="progressText">תחנה 1 מתוך 9</div>
 </div>
 
-<!-- תחנה 1: כיוון ראשון -->
-<div class="station active" id="station1">
-    <div class="station-header">
-        <div class="station-number">תחנה 1 מתוך 9</div>
-        <h2>🌱 בחרי את התחום שלך</h2>
-        <p class="station-subtitle">מה מעניין אותך? בחרי 1-3 תחומים שמסקרנים אותך</p>
+<!-- תחנה 1: בחירת כיוון -->
+<div class="step active" id="step1">
+  <h2><span class="icon">🎯</span> תחנה 1: בחירת כיוון</h2>
+  
+  <div class="step-intro">
+    למה אנחנו כאן: בוחרים כיוון שמסקרן אותך. לא בוחרים מקצוע, עכשיו.
+  </div>
+
+  <!-- שלב א: סימון -->
+  <div class="sub-stage">
+    <h3><span class="sub-stage-label">שלב א</span> מה מושך אותי</h3>
+    <p>סמני עד 3 תחומים שמעניינים אותך:</p>
+    <div class="checkbox-group" id="directionsBox"></div>
+  </div>
+
+  <!-- שלב ב: מיקוד קצר -->
+  <div class="sub-stage">
+    <h3><span class="sub-stage-label">שלב ב</span> מיקוד קצר</h3>
+    <p>לכל תחום שסימנת – מילה אחת למה:</p>
+    <div id="focusFields"></div>
+  </div>
+
+  <!-- שלב ג: החלטה -->
+  <div class="sub-stage">
+    <h3><span class="sub-stage-label">שלב ג</span> החלטה</h3>
+    <div class="checkbox-group two-col">
+      <label><input type="radio" name="decision1" value="one"> אני בוחרת להמשיך עם תחום אחד מרכזי</label>
+      <label><input type="radio" name="decision1" value="two"> אני משאירה שני כיוונים פתוחים</label>
     </div>
-    
-    <div class="info-box">
-        <p>זו לא בדיקה, ולא החלטה סופית.</p>
-        <p>המטרה כאן היא לבחור <strong>תחום שמעניין אותך עכשיו</strong> — גם אם את לא בטוחה למה.</p>
-        <div class="highlight">
-            💛 מותר לסמן מספר תחומים ולשנות בהמשך המסע!
-        </div>
-    </div>
-    
-    <div class="options-grid">
-        <div class="option-card" onclick="selectDirection(this, 'תחבורה')">
-            <h3>🚗 תחבורה</h3>
-            <p>תחבורה חכמה, ניווט, רכבים אוטונומיים, תחבורה ציבורית, קורקטים</p>
-        </div>
-        
-        <div class="option-card" onclick="selectDirection(this, 'בטיחות')">
-            <h3>🛡️ בטיחות</h3>
-            <p>בטיחות אישית, אבטחת מידע, Cyber, מניעת תאונות, הגנה אישית</p>
-        </div>
-        
-        <div class="option-card" onclick="selectDirection(this, 'בריאות')">
-            <h3>🏥 בריאות</h3>
-            <p>רפואה דיגיטלית, אבחון מוקדם, מעקב בריאות, תזונה, פעילות גופנית</p>
-        </div>
-        
-        <div class="option-card" onclick="selectDirection(this, 'בריאות נפשית')">
-            <h3>💚 בריאות נפשית</h3>
-            <p>רווחה נפשית, התמודדות עם חרדה ולחץ, תמיכה רגשית, מיינדפולנס</p>
-        </div>
-        
-        <div class="option-card" onclick="selectDirection(this, 'בית חכם')">
-            <h3>🏠 בית חכם</h3>
-            <p>אוטומציה ביתית, חיסכון באנרגיה, מכשירים חכמים, IoT</p>
-        </div>
-        
-        <div class="option-card" onclick="selectDirection(this, 'חינוך')">
-            <h3>📚 חינוך (EdTech)</h3>
-            <p>למידה דיגיטלית, כלי עזר ללמידה, חינוך מותאם אישית, נגישות</p>
-        </div>
-        
-        <div class="option-card" onclick="selectDirection(this, 'סביבה וקיימות')">
-            <h3>🌍 סביבה וקיימות</h3>
-            <p>שינוי אקלים, מיחזור, חיסכון במשאבים, אנרגיה מתחדשת</p>
-        </div>
-        
-        <div class="option-card" onclick="selectDirection(this, 'חברה')">
-            <h3>👥 חברה</h3>
-            <p>שוויון, נגישות, קשר בין אנשים, קהילות, שיתוף פעולה</p>
-        </div>
-        
-        <div class="option-card" onclick="selectDirection(this, 'מדיה')">
-            <h3>📱 מדיה</h3>
-            <p>תקשורת, תוכן דיגיטלי, רשתות חברתיות, סטרימינג, וידאו</p>
-        </div>
-        
-        <div class="option-card" onclick="selectDirection(this, 'AI חברתי')">
-            <h3>🤖 AI חברתי</h3>
-            <p>בינה מלאכותית למען טוב חברתי, אתיקה, AI נגיש לכולם</p>
-        </div>
-        
-        <div class="option-card" onclick="selectDirection(this, 'צרכנות')">
-            <h3>🛒 צרכנות</h3>
-            <p>קניות חכמות, השוואת מחירים, חסכון, צרכנות אחראית</p>
-        </div>
-        
-        <div class="option-card" onclick="selectDirection(this, 'עיצוב')">
-            <h3>🎨 עיצוב</h3>
-            <p>חוויית משתמש (UX/UI), עיצוב גרפי, נגישות, אסתטיקה</p>
-        </div>
-        
-        <div class="option-card" onclick="selectDirection(this, 'מנהיגות')">
-            <h3>👑 מנהיגות</h3>
-            <p>השפעה חברתית, שינוי, יזמות, ניהול פרויקטים, יצירתיות</p>
-        </div>
-        
-        <div class="option-card" onclick="selectDirection(this, 'IoT (אינטרנט של הדברים)')">
-            <h3>📡 IoT</h3>
-            <p>התקנים מחוברים, חיישנים, מכשירים חכמים, אוטומציה</p>
-        </div>
-        
-        <div class="option-card" onclick="selectDirection(this, 'רווחה')">
-            <h3>💛 רווחה</h3>
-            <p>איכות חיים, שיפור יומיום, נוחות, איזון עבודה-חיים</p>
-        </div>
-    </div>
-    
-    <div class="result-box" id="result1">
-        <h3>הכיוון הראשון שלך למסע</h3>
-        <div class="result-content">
-            <p id="selectedDirection"></p>
-            <p>זה לא אומר שזה "המקצוע שלך".<br>זה אומר שזה כיוון שנצא איתו למסע — ונבדוק יחד:</p>
-            <ul style="margin-right: 20px; line-height: 1.9; margin-top: 15px;">
-                <li>איזו בעיה מעניינת מסתתרת כאן</li>
-                <li>איך אפשר לפתור אותה</li>
-                <li>ומה נגלה על עצמנו בדרך</li>
-            </ul>
-            <p style="font-weight: 600; margin-top: 20px;">
-                💡 בתחנה הבאה נתחיל לחפש <strong>בעיה אמיתית</strong> שמתאימה לכיוון הזה.
-            </p>
-        </div>
-    </div>
-    
-    <div class="navigation">
-        <button class="btn btn-save" onclick="saveStation(1)">💾 שמירה</button>
-        <button class="btn btn-next" onclick="nextStation()">⏩ המשך לתחנה 2</button>
-    </div>
+  </div>
+
+  <div class="helper-tip">
+    בחרי את התחומים שבאמת מדברים אלייך – זה המסע שלך!
+  </div>
+
+  <div class="nav">
+    <button class="primary" onclick="nextStep()">המשך למסע ➜</button>
+  </div>
 </div>
 
 <!-- תחנה 2: זיהוי בעיה -->
-<div class="station" id="station2">
-    <div class="station-header">
-        <div class="station-number">תחנה 2 מתוך 9</div>
-        <h2>🔍 מצאי את הבעיה</h2>
-        <p class="station-subtitle">כל חידוש טכנולוגי מתחיל מבעיה אמיתית</p>
+<div class="step" id="step2">
+  <h2><span class="icon">🔍</span> תחנה 2: זיהוי בעיה</h2>
+  
+  <div class="step-intro">
+    למה אנחנו כאן: רעיון טוב מתחיל מבעיה אמיתית – לא מפתרון.
+  </div>
+
+  <!-- שלב א: זיהוי ראשוני -->
+  <div class="sub-stage">
+    <h3><span class="sub-stage-label">שלב א</span> זיהוי ראשוני</h3>
+    <p>מה נכון לגבי הבעיה? (סמני את הרלוונטי):</p>
+    <div class="checkbox-group">
+      <label><input type="checkbox"> זה קורה לי אישית</label>
+      <label><input type="checkbox"> זה קורה לחברות שלי</label>
+      <label><input type="checkbox"> זה קורה להרבה אנשים</label>
+      <label><input type="checkbox"> זה חוזר שוב ושוב</label>
+      <label><input type="checkbox"> זה גורם תסכול / פגיעה</label>
     </div>
+  </div>
+
+  <!-- שלב ב: תיאור מנומק -->
+  <div class="sub-stage">
+    <h3><span class="sub-stage-label">שלב ב</span> תיאור מנומק</h3>
     
-    <div class="info-box">
-        <p><strong>מטרת התחנה:</strong> לזהות בעיה אמיתית מהחיים שלך או של הסובבים אותך.</p>
-        <div class="highlight" style="margin-top: 15px;">
-            💡 בעיה טובה = בעיה שחווית בעצמך או שמישהו ספר לך עליה
-        </div>
+    <div class="field-group">
+      <label>1. איפה זה קורה?</label>
+      <input type="text" id="where" placeholder="לדוגמה: בדרך לבית הספר, באפליקציה של...">
     </div>
-    
-    <div class="form-group">
-        <label>ספרי על אירוע אמיתי שבו נתקלת בבעיה:</label>
-        <textarea id="problem_story" placeholder="למשל: בשבוע שעבר בבית הספר, חברה שלי עם דיסלקציה לא הצליחה להבין את המטלה כי זה היה בכתב יד..."></textarea>
+
+    <div class="field-group">
+      <label>2. למי זה קורה?</label>
+      <input type="text" id="who" placeholder="לדוגמה: לתלמידות שנוסעות בתחבורה ציבורית">
     </div>
-    
-    <div class="form-group">
-        <label>מי נפגע מהבעיה הזו?</label>
-        <input type="text" id="problem_who" placeholder="למשל: תלמידים עם לקויות למידה">
+
+    <div class="field-group">
+      <label>3. מה הרגע הכי מתסכל?</label>
+      <textarea id="moment" placeholder="תארי את הרגע המדויק שבו הבעיה הכי מורגשת"></textarea>
     </div>
-    
-    <div class="form-group">
-        <label>מה המחיר של הבעיה? (זמן, כסף, רגש, בטיחות...)</label>
-        <textarea id="problem_cost" placeholder="למשל: הם מרגישים מתוסכלים, מפסידים ציונים, מתביישים לבקש עזרה..."></textarea>
+  </div>
+
+  <!-- שלב ג: בדיקת עומק -->
+  <div class="sub-stage">
+    <h3><span class="sub-stage-label">שלב ג</span> בדיקת עומק</h3>
+    <div class="checkbox-group">
+      <label><input type="checkbox"> זו בעיה יומיומית</label>
+      <label><input type="checkbox"> יש פתרונות חלקיים</label>
+      <label><input type="checkbox"> אין פתרון טוב היום</label>
     </div>
-    
-    <div class="form-group">
-        <label>למה זה חשוב לך אישית?</label>
-        <textarea id="problem_why" placeholder="למשל: אני רואה שחברה שלי מתקשה ואין לה כלים טובים..."></textarea>
-    </div>
-    
-    <div class="navigation">
-        <button class="btn btn-prev" onclick="prevStation()">⏪ חזרה</button>
-        <button class="btn btn-save" onclick="saveStation(2)">💾 שמירה</button>
-        <button class="btn btn-next" onclick="nextStation()">⏩ המשך לתחנה 3</button>
-    </div>
+  </div>
+
+  <div class="helper-tip">
+    הבעיות הכי טובות הן אלה שאת חווה אותן באופן אישי!
+  </div>
+
+  <div class="nav">
+    <button onclick="prevStep()">← חזרה</button>
+    <button class="primary" onclick="nextStep()">המשך ➜</button>
+  </div>
 </div>
 
 <!-- תחנה 3: ניסוח הבעיה -->
-<div class="station" id="station3">
-    <div class="station-header">
-        <div class="station-number">תחנה 3 מתוך 9</div>
-        <h2>📝 ניסוח הבעיה כמו מקצוענית</h2>
-        <p class="station-subtitle">Problem Statement - כמו בהייטק</p>
+<div class="step" id="step3">
+  <h2><span class="icon">✍️</span> תחנה 3: ניסוח הבעיה</h2>
+  
+  <div class="step-intro">
+    למה אנחנו כאן: בהייטק – בעיה שלא מנוסחת טוב, לא נפתרת טוב.
+  </div>
+
+  <!-- שלב א: רכיבי הבעיה -->
+  <div class="sub-stage">
+    <h3><span class="sub-stage-label">שלב א</span> רכיבי הבעיה</h3>
+    <div class="checkbox-group">
+      <label><input type="checkbox"> יש קהל יעד ברור</label>
+      <label><input type="checkbox"> יש קושי מרכזי אחד</label>
+      <label><input type="checkbox"> יש השפעה ברורה</label>
     </div>
+  </div>
+
+  <!-- שלב ב: מילוי רכיבים -->
+  <div class="sub-stage">
+    <h3><span class="sub-stage-label">שלב ב</span> מילוי רכיבים (קצר)</h3>
     
-    <div class="info-box">
-        <p><strong>מטרת התחנה:</strong> להפוך את הבעיה שזיהית לניסוח ברור ומקצועי.</p>
-        <div class="highlight" style="margin-top: 15px;">
-            📐 תבנית: "בתחום X, עבור Y, הבעיה היא ש-..., וזה גורם ל-..."
-        </div>
+    <div class="field-group">
+      <label>תחום:</label>
+      <input type="text" id="domain" placeholder="לדוגמה: תחבורה, בריאות...">
     </div>
-    
-    <div class="form-group">
-        <label>בחרי תחום:</label>
-        <input type="text" id="statement_domain" placeholder="למשל: חינוך, בריאות, תחבורה...">
+
+    <div class="field-group">
+      <label>קהל יעד:</label>
+      <input type="text" id="target" placeholder="לדוגמה: בנות 15-18 שנוסעות לבית ספר">
     </div>
-    
-    <div class="form-group">
-        <label>למי מפריע? (קהל היעד)</label>
-        <input type="text" id="statement_audience" placeholder="למשל: תלמידים עם לקויות למידה">
+
+    <div class="field-group">
+      <label>הקושי המרכזי:</label>
+      <input type="text" id="difficulty" placeholder="לדוגמה: לא יודעות מתי האוטובוס יגיע">
     </div>
-    
-    <div class="form-group">
-        <label>מה הקושי המרכזי?</label>
-        <textarea id="statement_problem" placeholder="למשל: קשה להם להבין מטלות בכתב יד או טקסטים מורכבים"></textarea>
+
+    <div class="field-group">
+      <label>למה זה גורם:</label>
+      <input type="text" id="cause" placeholder="לדוגמה: איחורים, לחץ, פחד מהמורים">
     </div>
-    
-    <div class="form-group">
-        <label>למה זה גורם? (ההשפעה)</label>
-        <textarea id="statement_impact" placeholder="למשל: תסכול, ציונים נמוכים, חוסר ביטחון"></textarea>
-    </div>
-    
-    <div class="result-box" id="result3">
-        <h3>הניסוח המקצועי שלך</h3>
-        <div class="result-content" id="finalStatement"></div>
-    </div>
-    
-    <div class="navigation">
-        <button class="btn btn-prev" onclick="prevStation()">⏪ חזרה</button>
-        <button class="btn btn-save" onclick="saveStation(3); generateStatement()">💾 שמירה וניסוח</button>
-        <button class="btn btn-next" onclick="nextStation()">⏩ המשך לתחנה 4</button>
-    </div>
+  </div>
+
+  <!-- שלב ג: ניסוח סופי -->
+  <div class="sub-stage">
+    <h3><span class="sub-stage-label">שלב ג</span> ניסוח סופי (משפט אחד)</h3>
+    <p>השלימי את המשפט:</p>
+    <textarea id="problemStatement" class="large" placeholder='הבעיה היא ש_____, עבור _____, בתחום _____, וזה גורם ל_____.'></textarea>
+  </div>
+
+  <div class="encouragement">
+    🌟 ניסוח ברור של הבעיה = חצי הדרך לפתרון!
+  </div>
+
+  <div class="nav">
+    <button onclick="prevStep()">← חזרה</button>
+    <button class="primary" onclick="nextStep()">המשך ➜</button>
+  </div>
 </div>
 
-<!-- תחנה 4: חקר מעמיק -->
-<div class="station" id="station4">
-    <div class="station-header">
-        <div class="station-number">תחנה 4 מתוך 9</div>
-        <h2>🔬 חקרי והבני</h2>
-        <p class="station-subtitle">מחקר מעמיק - זה שיהפוך אותך למקצוענית</p>
+<!-- תחנה 4: חקר והבנה -->
+<div class="step" id="step4">
+  <h2><span class="icon">📚</span> תחנה 4: חקר והבנה</h2>
+  
+  <div class="step-intro">
+    למה אנחנו כאן: לא ממציאים באוויר. לומדים מה כבר קיים.
+  </div>
+
+  <!-- שלב א: פתרונות קיימים -->
+  <div class="sub-stage">
+    <h3><span class="sub-stage-label">שלב א</span> פתרונות קיימים</h3>
+    <div class="checkbox-group">
+      <label><input type="checkbox"> קיימים פתרונות דומים</label>
+      <label><input type="checkbox"> הם עובדים חלקית</label>
+      <label><input type="checkbox"> הם לא עונים לגמרי על הצורך</label>
     </div>
+  </div>
+
+  <!-- שלב ב: חיפוש במקורות מידע -->
+  <div class="sub-stage">
+    <h3><span class="sub-stage-label">שלב ב</span> תיאור קצר – חיפוש במקורות מידע</h3>
     
-    <div class="info-box">
-        <p><strong>מטרת התחנה:</strong> להבין לעומק את הבעיה ומה כבר קיים בשטח.</p>
-        <p style="margin-top: 10px;">החקר הזה יעזור לך לבנות פתרון שבאמת עובד!</p>
+    <p>מה בדקתי? (סמני לפחות שניים):</p>
+    <div class="checkbox-group">
+      <label><input type="checkbox"> חיפוש בגוגל/בינג (מידע על פתרונות קיימים)</label>
+      <label><input type="checkbox"> סרטון הסבר ביוטיוב (הסקה / הסברה)</label>
+      <label><input type="checkbox"> כתבה חדשותית / אתר ידע</label>
+      <label><input type="checkbox"> שאלת אדם שמכיר את התחום</label>
     </div>
+
+    <p style="margin-top: 20px;">תארי <strong>שני מקורות שונים</strong> (אל תסתמך רק על מקור אחד):</p>
     
-    <h3 style="color: #667eea; margin: 30px 0 20px 0; font-size: 1.6em;">4א. פתרונות קיימים</h3>
-    <p style="color: #718096; margin-bottom: 20px;">מצאי 2-3 פתרונות שכבר קיימים לבעיה הזו:</p>
-    
-    <div class="form-group">
-        <label>פתרון 1: מה זה ומה עובד/לא עובד בו?</label>
-        <textarea id="research_solution1" placeholder="למשל: יש אפליקציות OCR - הן טובות לטקסט מודפס אבל לא מתמודדות עם כתב יד..."></textarea>
+    <div class="field-group">
+      <label>פתרון 1 – מה מצאתי? מה עובד בו? מה לא עונה על הצורך?</label>
+      <input type="text" id="source1" placeholder="מקור מידע:">
+      <textarea id="solution1" placeholder="תיאור הפתרון וממצאים"></textarea>
     </div>
-    
-    <div class="form-group">
-        <label>פתרון 2: מה זה ומה עובד/לא עובד בו?</label>
-        <textarea id="research_solution2"></textarea>
+
+    <div class="field-group">
+      <label>פתרון 2 – מה מצאתי? מה עובד בו? מה חסר או בעייתי?</label>
+      <input type="text" id="source2" placeholder="מקור מידע:">
+      <textarea id="solution2" placeholder="תיאור הפתרון וממצאים"></textarea>
     </div>
-    
-    <h3 style="color: #667eea; margin: 40px 0 20px 0; font-size: 1.6em;">4ב. נתונים ועובדות</h3>
-    <div class="form-group">
-        <label>מצאי נתון/עובדה מפתיעה על הבעיה:</label>
-        <textarea id="research_data" placeholder="למשל: 15% מהתלמידים בישראל מתמודדים עם לקויות למידה (מקור: משרד החינוך 2023)"></textarea>
+  </div>
+
+  <!-- שלב ג: עובדה/נתון -->
+  <div class="sub-stage">
+    <h3><span class="sub-stage-label">שלב ג</span> עובדה / נתון</h3>
+    <div class="field-group">
+      <label>נתון אחד שלמדתי:</label>
+      <input type="text" id="fact" placeholder="לדוגמה: 70% מהנוסעים לא יודעים מתי האוטובוס יגיע">
     </div>
-    
-    <h3 style="color: #667eea; margin: 40px 0 20px 0; font-size: 1.6em;">4ג. תובנות מרכזיות</h3>
-    <div class="form-group">
-        <label>מה למדת מהחקר? 3 תובנות חשובות:</label>
-        <textarea id="research_insights" placeholder="1. הפתרונות הקיימים לא מתמודדים עם כתב יד&#10;2. המשתמשים צריכים פתרון מהיר וזמין&#10;3. ..."></textarea>
+  </div>
+
+  <!-- תובנות -->
+  <div class="sub-stage">
+    <h3>תובנות (3 סעיפים קצרים)</h3>
+    <div class="field-group">
+      <label>תובנה 1:</label>
+      <textarea id="insight1" placeholder="מה למדתי?"></textarea>
     </div>
-    
-    <div class="navigation">
-        <button class="btn btn-prev" onclick="prevStation()">⏪ חזרה</button>
-        <button class="btn btn-save" onclick="saveStation(4)">💾 שמירה</button>
-        <button class="btn btn-next" onclick="nextStation()">⏩ המשך לתחנה 5</button>
+    <div class="field-group">
+      <label>תובנה 2:</label>
+      <textarea id="insight2" placeholder="מה הפתיע אותי?"></textarea>
     </div>
+    <div class="field-group">
+      <label>תובנה 3:</label>
+      <textarea id="insight3" placeholder="מה חסר בפתרונות הקיימים?"></textarea>
+    </div>
+  </div>
+
+  <div class="helper-tip">
+    כל מה שלמדת מקרב אותך לפתרון טוב יותר!
+  </div>
+
+  <div class="nav">
+    <button onclick="prevStep()">← חזרה</button>
+    <button class="primary" onclick="nextStep()">המשך ➜</button>
+  </div>
 </div>
 
-<!-- תחנה 5: פתרון -->
-<div class="station" id="station5">
-    <div class="station-header">
-        <div class="station-number">תחנה 5 מתוך 9</div>
-        <h2>💡 המציאי את הפתרון</h2>
-        <p class="station-subtitle">מתוך החקר - בואי נמציא משהו חדש!</p>
+<!-- תחנה 5: רעיון לפתרון (WHAT) -->
+<div class="step" id="step5">
+  <h2><span class="icon">💡</span> תחנה 5: רעיון לפתרון (WHAT)</h2>
+  
+  <div class="step-intro">
+    למה אנחנו כאן: רעיון פתרון עקרוני. לא מתכננים מוצר, מנסחים.
+  </div>
+
+  <!-- שלב א: סוג הפתרון -->
+  <div class="sub-stage">
+    <h3><span class="sub-stage-label">שלב א</span> סוג הפתרון</h3>
+    <div class="checkbox-group two-col">
+      <label><input type="checkbox" value="digital"> דיגיטלי (אפליקציה / אתר)</label>
+      <label><input type="checkbox" value="physical"> פיזי (מוצר / מכשיר)</label>
+      <label><input type="checkbox" value="service"> שירות / תהליך</label>
+      <label><input type="checkbox" value="combined"> שילוב בין כמה סוגים</label>
     </div>
-    
-    <div class="info-box">
-        <p><strong>מטרת התחנה:</strong> לבנות פתרון שעונה על הבעיה והתובנות מהחקר.</p>
-        <div class="highlight" style="margin-top: 15px;">
-            🤖 רוב הפתרונות המעניינים היום כוללים AI - חשבי איך AI יכול לעזור!
-        </div>
+  </div>
+
+  <!-- שלב ב: בעיה-פתרון במשפט אחד -->
+  <div class="sub-stage">
+    <h3><span class="sub-stage-label">שלב ב</span> בעיה-פתרון במשפט אחד</h3>
+    <div class="field-group">
+      <textarea id="solutionOneLine" class="large" placeholder='הרעיון הוא _____, כדי לעזור ל_____ להתמודד עם _____.'></textarea>
     </div>
-    
-    <div class="form-group">
-        <label>תארי את הפתרון שלך במשפט אחד:</label>
-        <input type="text" id="solution_name" placeholder="למשל: אפליקציה שהופכת כתב יד לטקסט דיגיטלי ומסבירה אותו בקול">
+  </div>
+
+  <!-- שלב ג: מה חדש כאן -->
+  <div class="sub-stage">
+    <h3><span class="sub-stage-label">שלב ג</span> מה חדש כאן?</h3>
+    <p>בחרי לפחות אחת:</p>
+    <div class="checkbox-group two-col">
+      <label><input type="checkbox"> עושה משהו שלא היה אפשרי קודם</label>
+      <label><input type="checkbox"> עושה את אותו דבר – אבל הרבה יותר פשוט</label>
+      <label><input type="checkbox"> מתאים לקהל שלא קיבל מענה</label>
+      <label><input type="checkbox"> משתמש בטכנולוגיה בצורה אחרת</label>
     </div>
-    
-    <div class="form-group">
-        <label>מה חכם בפתרון? איך AI עוזר?</label>
-        <textarea id="solution_ai" placeholder="למשל: AI מזהה כתב יד (גם לא ברור), מתרגם לטקסט, וקורא בקול ברור עם הדגשים"></textarea>
-    </div>
-    
-    <div class="form-group">
-        <label>מה המשתמש יעשה? (תארי צעד אחר צעד)</label>
-        <textarea id="solution_steps" placeholder="1. צולם את המטלה&#10;2. AI מזהה ומתרגם&#10;3. שומע את המטלה בקול&#10;4. ..."></textarea>
-    </div>
-    
-    <div class="form-group">
-        <label>מה משתנה בחיי המשתמש?</label>
-        <textarea id="solution_impact" placeholder="למשל: החברה שלי יכולה להבין מטלות לבד, בלי לבקש עזרה כל הזמן"></textarea>
-    </div>
-    
-    <div class="navigation">
-        <button class="btn btn-prev" onclick="prevStation()">⏪ חזרה</button>
-        <button class="btn btn-save" onclick="saveStation(5)">💾 שמירה</button>
-        <button class="btn btn-next" onclick="nextStation()">⏩ המשך לתחנה 6</button>
-    </div>
+  </div>
+
+  <div class="encouragement">
+    💪 רעיונות טובים מתחילים פשוטים ומתפתחים בהמשך!
+  </div>
+
+  <div class="nav">
+    <button onclick="prevStep()">← חזרה</button>
+    <button class="primary" onclick="nextStep()">המשך ➜</button>
+  </div>
 </div>
 
-<!-- תחנה 6: תכנון מוצר -->
-<div class="station" id="station6">
-    <div class="station-header">
-        <div class="station-number">תחנה 6 מתוך 9</div>
-        <h2>🎨 עצבי את המוצר</h2>
-        <p class="station-subtitle">איך הפתרון נראה ועובד בפועל</p>
+<!-- תחנה 6: תכנון מוצר (HOW) -->
+<div class="step" id="step6">
+  <h2><span class="icon">⚙️</span> תחנה 6: תכנון מוצר (HOW)</h2>
+  
+  <div class="step-intro">
+    למה אנחנו כאן: עכשיו לא שואלים מה הרעיון אלא איך הוא עובד בפועל.
+  </div>
+
+  <!-- שלב א: נקודת התחלה של המשתמש -->
+  <div class="sub-stage">
+    <h3><span class="sub-stage-label">שלב א</span> נקודת התחלה של המשתמש</h3>
+    <div class="checkbox-group two-col">
+      <label><input type="checkbox"> המשתמש מגיע עם בעיה ברורה</label>
+      <label><input type="checkbox"> המשתמש לא בטוח מה לעשות</label>
+      <label><input type="checkbox"> המשתמש בלחץ / בזמן קצר</label>
     </div>
+  </div>
+
+  <!-- שלב ב: תרחיש שימוש ברור אחד -->
+  <div class="sub-stage">
+    <h3><span class="sub-stage-label">שלב ב</span> תרחיש שימוש ברור אחד</h3>
     
-    <div class="info-box">
-        <p><strong>מטרת התחנה:</strong> להפוך את הרעיון למוצר עם חוויית משתמש ברורה.</p>
+    <div class="field-group">
+      <label>תארי סיטואציה אחת אמיתית:</label>
+      <textarea id="scenario" placeholder="איפה נמצא המשתמש? מה הוא מנסה לעשות?"></textarea>
     </div>
+  </div>
+
+  <!-- שלב ג: רצף פעולות -->
+  <div class="sub-stage">
+    <h3><span class="sub-stage-label">שלב ג</span> רצף פעולות (לא מסכים, לא פיצ'רים)</h3>
     
-    <div class="form-group">
-        <label>מי המשתמש הראשי?</label>
-        <input type="text" id="product_user" placeholder="למשל: תלמידת תיכון עם דיסלקציה">
+    <div class="field-group">
+      <label>1. משתמש עושה:</label>
+      <textarea id="action1" placeholder="לדוגמה: פותח את האפליקציה"></textarea>
     </div>
-    
-    <div class="form-group">
-        <label>מתי ואיפה היא משתמשת במוצר?</label>
-        <textarea id="product_when" placeholder="למשל: בבית אחרי בית הספר, כשהיא צריכה לעשות שיעורי בית"></textarea>
+
+    <div class="field-group">
+      <label>2. המערכת מגיבה ב:</label>
+      <textarea id="action2" placeholder="לדוגמה: מציגה מפה עם מיקום האוטובוסים"></textarea>
     </div>
-    
-    <div class="form-group">
-        <label>תארי את התהליך - שלב 1 עד 4:</label>
-        <textarea id="product_flow" placeholder="שלב 1: פותחת את האפליקציה&#10;שלב 2: מצלמת את הדף&#10;שלב 3: AI מעבד ומציג טקסט&#10;שלב 4: לוחצת על 'קריאה בקול' ושומעת"></textarea>
+
+    <div class="field-group">
+      <label>3. משתמש מקבל:</label>
+      <textarea id="action3" placeholder="לדוגמה: הודעה מתי האוטובוס יגיע"></textarea>
     </div>
-    
-    <div class="form-group">
-        <label>מה הכי חשוב שהמוצר יהיה? (פשוט? מהיר? יפה?)</label>
-        <textarea id="product_priority" placeholder="למשל: פשוט ומהיר - בלי הרבה כפתורים, עובד תוך שניות"></textarea>
+
+    <div class="field-group">
+      <label>4. הבעיה נפתרת בכך ש:</label>
+      <textarea id="action4" placeholder="לדוגמה: המשתמש יודע בדיוק מתי לצאת מהבית"></textarea>
     </div>
-    
-    <div class="navigation">
-        <button class="btn btn-prev" onclick="prevStation()">⏪ חזרה</button>
-        <button class="btn btn-save" onclick="saveStation(6)">💾 שמירה</button>
-        <button class="btn btn-next" onclick="nextStation()">⏩ המשך לתחנה 7</button>
-    </div>
+  </div>
+
+  <div class="helper-tip">
+    חשבי על החוויה של המשתמש – מה הם רואים, לוחצים, ומקבלים?
+  </div>
+
+  <div class="nav">
+    <button onclick="prevStep()">← חזרה</button>
+    <button class="primary" onclick="nextStep()">המשך ➜</button>
+  </div>
 </div>
 
-<!-- תחנה 7: סיפור המסע -->
-<div class="station" id="station7">
-    <div class="station-header">
-        <div class="station-number">תחנה 7 מתוך 9</div>
-        <h2>📖 ספרי את הסיפור</h2>
-        <p class="station-subtitle">חברי את כל השלבים לזרימה אחת</p>
+<!-- תחנה 7: סיפור המיזם (WHY) -->
+<div class="step" id="step7">
+  <h2><span class="icon">📖</span> תחנה 7: סיפור המיזם (WHY)</h2>
+  
+  <div class="step-intro">
+    למה אנחנו כאן: למה זה משנה. לא מסבירים מה עשינו – מסבירים למה זה חשוב.
+  </div>
+
+  <!-- שלב א: בחירת זווית סיפור -->
+  <div class="sub-stage">
+    <h3><span class="sub-stage-label">שלב א</span> בחירת זווית סיפור</h3>
+    <p>בחרי אחת:</p>
+    <div class="checkbox-group two-col">
+      <label><input type="radio" name="storyAngle" value="personal"> סיפור של אדם אחד</label>
+      <label><input type="radio" name="storyAngle" value="group"> סיפור של קבוצה / קהילה</label>
+      <label><input type="radio" name="storyAngle" value="social"> סיפור של שינוי חברתי</label>
+      <label><input type="radio" name="storyAngle" value="mine"> סיפור אישי שלי</label>
     </div>
+  </div>
+
+  <!-- שלב ב: מבנה סיפור קצר -->
+  <div class="sub-stage">
+    <h3><span class="sub-stage-label">שלב ב</span> מבנה סיפור קצר</h3>
     
-    <div class="info-box">
-        <p><strong>מטרת התחנה:</strong> לבנות את הסיפור המלא - מהבעיה ועד לפתרון.</p>
-        <div class="highlight" style="margin-top: 15px;">
-            💬 הסיפור הזה ישמש אותך להצגה ולפוסטר!
-        </div>
+    <div class="field-group">
+      <label>לפני: מה היה קשה?</label>
+      <textarea id="before" placeholder="תארי את המצב הבעייתי"></textarea>
     </div>
-    
-    <div class="form-group">
-        <label>1. הבעיה במשפט אחד:</label>
-        <input type="text" id="story_problem" placeholder="תלמידים עם לקויות למידה מתקשים להבין מטלות בכתב יד">
+
+    <div class="field-group">
+      <label>רגע השינוי: מה גילינו?</label>
+      <textarea id="change" placeholder="מה למדנו? מה הבנו?"></textarea>
     </div>
-    
-    <div class="form-group">
-        <label>2. מה גילינו בחקר?</label>
-        <textarea id="story_research" placeholder="למשל: הפתרונות הקיימים לא עובדים עם כתב יד, ו-15% מהתלמידים צריכים עזרה"></textarea>
+
+    <div class="field-group">
+      <label>אחרי: מה השתנה?</label>
+      <textarea id="after" placeholder="איך זה שונה עכשיו?"></textarea>
     </div>
-    
-    <div class="form-group">
-        <label>3. הפתרון שלנו:</label>
-        <textarea id="story_solution" placeholder="אפליקציה שמזהה כתב יד ב-AI וקוראת אותו בקול"></textarea>
+  </div>
+
+  <!-- שלב ג: משפט משמעות -->
+  <div class="sub-stage">
+    <h3><span class="sub-stage-label">שלב ג</span> משפט משמעות</h3>
+    <div class="field-group">
+      <textarea id="meaning" placeholder='הפתרון הזה חשוב כי _____.'></textarea>
     </div>
-    
-    <div class="form-group">
-        <label>4. מה משתנה?</label>
-        <textarea id="story_change" placeholder="תלמידים יכולים להבין מטלות לבד, בלי עזרה ובלי תסכול"></textarea>
-    </div>
-    
-    <div class="form-group">
-        <label>5. המשפט הכי חזק שלך - למה זה חשוב?</label>
-        <input type="text" id="story_tagline" placeholder="למשל: כי כל ילד צריך להרגיש שהוא יכול לעשות דברים לבד">
-    </div>
-    
-    <div class="navigation">
-        <button class="btn btn-prev" onclick="prevStation()">⏪ חזרה</button>
-        <button class="btn btn-save" onclick="saveStation(7)">💾 שמירה</button>
-        <button class="btn btn-next" onclick="nextStation()">⏩ המשך לתחנה 8</button>
-    </div>
+  </div>
+
+  <div class="encouragement">
+    🌟 הסיפור שלך הוא הלב של הפרויקט!
+  </div>
+
+  <div class="nav">
+    <button onclick="prevStep()">← חזרה</button>
+    <button class="primary" onclick="nextStep()">המשך ➜</button>
+  </div>
 </div>
 
-<!-- תחנה 8: סרטון הדגמה -->
-<div class="station" id="station8">
-    <div class="station-header">
-        <div class="station-number">תחנה 8 מתוך 9</div>
-        <h2>🎬 ספרי את הסיפור - סרטון</h2>
-        <p class="station-subtitle">סרטון הדגמה של 45 שניות</p>
+<!-- תחנה 8: תסריט סרטון -->
+<div class="step" id="step8">
+  <h2><span class="icon">🎬</span> תחנה 8: תסריט סרטון</h2>
+  
+  <div class="step-intro">
+    למה אנחנו כאן: 45 שניות שגורמות להבין ולהרגיש.
+  </div>
+
+  <!-- שלב א: מבנה -->
+  <div class="sub-stage">
+    <h3><span class="sub-stage-label">שלב א</span> מבנה</h3>
+    <div class="checkbox-group two-col">
+      <label><input type="checkbox"> בעיה</label>
+      <label><input type="checkbox"> משתמש</label>
+      <label><input type="checkbox"> פתרון</label>
+      <label><input type="checkbox"> שינוי</label>
     </div>
+  </div>
+
+  <!-- שלב ב: תסריט קצר -->
+  <div class="sub-stage">
+    <h3><span class="sub-stage-label">שלב ב</span> תסריט קצר</h3>
     
-    <div class="info-box">
-        <p><strong>מטרת התחנה:</strong> ליצור תסריט לסרטון קצר שמציג את המוצר.</p>
-        <div class="highlight" style="margin-top: 15px;">
-            📹 הסרטון צריך להיות 45 שניות - פשוט, ברור ומרגש!
-        </div>
+    <div class="field-group">
+      <label>0-10 שניות:</label>
+      <textarea id="script1" placeholder="הצגת הבעיה"></textarea>
     </div>
-    
-    <h3 style="color: #667eea; margin: 30px 0 15px 0;">מבנה הסרטון (45 שניות):</h3>
-    
-    <div class="form-group">
-        <label>0-10 שניות: הבעיה בסצנה אמיתית</label>
-        <textarea id="video_scene" placeholder="למשל: [תמונה] תלמידה מסתכלת על דף עם כתב יד מבולבל, נאנחת מתסכול"></textarea>
+
+    <div class="field-group">
+      <label>10-20 שניות:</label>
+      <textarea id="script2" placeholder="המשתמש והצורך"></textarea>
     </div>
-    
-    <div class="form-group">
-        <label>10-20 שניות: מי המשתמש ומה קשה?</label>
-        <textarea id="video_user" placeholder="למשל: [טקסט על מסך] 'עבור 15% מהתלמידים, כתב יד זה חידה בלתי פתירה'"></textarea>
+
+    <div class="field-group">
+      <label>20-30 שניות:</label>
+      <textarea id="script3" placeholder="הצגת הפתרון"></textarea>
     </div>
-    
-    <div class="form-group">
-        <label>20-30 שניות: הפתרון במשפט + הדגמה</label>
-        <textarea id="video_solution" placeholder="למשל: [הצגת האפליקציה] 'פשוט תצלמי - וה-AI יקרא לך בקול'"></textarea>
+
+    <div class="field-group">
+      <label>30-45 שניות:</label>
+      <textarea id="script4" placeholder="השינוי והמסר"></textarea>
     </div>
+  </div>
+
+  <!-- שלב ג: יצירת פרומפטים (אוטומטי) -->
+  <div class="sub-stage">
+    <h3><span class="sub-stage-label">שלב ג</span> יצירת פרומפטים – סרטון ותמונה (אוטומטי)</h3>
+    <p>בסיום מילוי התחנה יופיעו שני כפתורים:</p>
     
-    <div class="form-group">
-        <label>30-45 שניות: מה משתנה + סיום</label>
-        <textarea id="video_ending" placeholder="למשל: [תלמידה מחייכת] 'עכשיו אני יכולה לעשות את זה לבד!' [לוגו + שם האפליקציה]"></textarea>
-    </div>
-    
-    <div class="form-group">
-        <label>קישור לסרטון (אם כבר הכנת):</label>
-        <input type="text" id="video_link" placeholder="https://...">
-    </div>
-    
-    <div class="navigation">
-        <button class="btn btn-prev" onclick="prevStation()">⏪ חזרה</button>
-        <button class="btn btn-save" onclick="saveStation(8)">💾 שמירה</button>
-        <button class="btn btn-next" onclick="nextStation()">⏩ המשך לתחנה 9</button>
-    </div>
+    <button class="secondary" onclick="generateVideoPrompt()">🎬 צור לי פרומפט לסרטון</button>
+    <button class="secondary" onclick="generateImagePrompt()">🎨 צור לי פרומפט לתמונה</button>
+
+    <div id="videoPromptOutput" class="output"></div>
+    <button class="copy-btn" onclick="copyText('videoPromptOutput')">📋 העתק פרומפט לסרטון</button>
+
+    <div id="imagePromptOutput" class="output"></div>
+    <button class="copy-btn" onclick="copyText('imagePromptOutput')">📋 העתק פרומפט לתמונה</button>
+  </div>
+
+  <div class="helper-tip">
+    הפרומפטים מוכנים להדבקה בכלי יצירה כמו Canva, Runway או AI!
+  </div>
+
+  <div class="nav">
+    <button onclick="prevStep()">← חזרה</button>
+    <button class="primary" onclick="nextStep()">המשך ➜</button>
+  </div>
 </div>
 
-<!-- תחנה 9: פוסטר סופי -->
-<div class="station" id="station9">
-    <div class="station-header">
-        <div class="station-number">תחנה 9 מתוך 9 - האחרונה!</div>
-        <h2>📊 הסיפור המלא - פוסטר מדעי</h2>
-        <p class="station-subtitle">סכמי את כל המסע בפוסטר מקצועי אחד</p>
-    </div>
+<!-- תחנה 9: פוסטר מסכם (עבודה על תבנית) -->
+<div class="step step-final" id="step9">
+  <div class="celebration">🎉</div>
+  <h2><span class="icon">🎨</span> תחנה 9: פוסטר מסכם</h2>
+  
+  <div class="step-intro">
+    למה אנחנו כאן: פוסטר סופי על תבנית קבועה. לא כותבים עוד טקסט – בונים.
+  </div>
+
+  <!-- שלב א: מילוי תוכן לפוסטר -->
+  <div class="sub-stage">
+    <h3><span class="sub-stage-label">שלב א</span> מילוי תוכן לפוסטר (שדות קצרים)</h3>
+    <p>התשובות שמילאת בתחנות הקודמות יזרמו אוטומטית לשדות הבאים, וניתן לערוך בקיצור:</p>
     
-    <div class="info-box">
-        <p><strong>מטרת התחנה:</strong> ליצור פוסטר מדעי שמראה את כל התהליך.</p>
-        <div class="highlight" style="margin-top: 15px;">
-            🎨 הפוסטר כולל 6 חלקים: כותרת, בעיה, מחקר, פתרון, תוצאות, סיכום
-        </div>
+    <div class="field-group">
+      <label>כותרת הפרויקט:</label>
+      <input type="text" id="posterTitle" placeholder="שם הפרויקט שלך">
     </div>
-    
-    <h3 style="color: #667eea; margin: 30px 0 15px 0;">חלקי הפוסטר:</h3>
-    
-    <div class="form-group">
-        <label>1. כותרת הפרויקט + שמות + בית ספר:</label>
-        <input type="text" id="poster_title" placeholder="למשל: ReadEasy - אפליקציית AI לזיהוי כתב יד | רות כהן, מיה לוי | תיכון נווה צדק 2026">
+
+    <div class="field-group">
+      <label>הבעיה (2-3 שורות):</label>
+      <textarea id="posterProblem"></textarea>
     </div>
-    
-    <div class="form-group">
-        <label>2. הבעיה והרקע (מה, למי, למה חשוב):</label>
-        <textarea id="poster_problem" placeholder="15% מהתלמידים בישראל מתמודדים עם לקויות למידה ומתקשים להבין מטלות בכתב יד..."></textarea>
+
+    <div class="field-group">
+      <label>קהל יעד:</label>
+      <input type="text" id="posterAudience">
     </div>
-    
-    <div class="form-group">
-        <label>3. המחקר (מה חקרנו, מה מצאנו):</label>
-        <textarea id="poster_research" placeholder="בדקנו 3 פתרונות קיימים, ראיינו 5 תלמידים, גילינו שהבעיה המרכזית היא..."></textarea>
+
+    <div class="field-group">
+      <label>תובנות מהחקר (3 נקודות):</label>
+      <textarea id="posterInsights"></textarea>
     </div>
-    
-    <div class="form-group">
-        <label>4. הפתרון (איך עובד, תרשים זרימה):</label>
-        <textarea id="poster_solution" placeholder="משתמש מצלם → AI מזהה כתב יד → מתרגם לטקסט → קורא בקול → משתמש מבין"></textarea>
+
+    <div class="field-group">
+      <label>הפתרון (איך זה עובד):</label>
+      <textarea id="posterSolution"></textarea>
     </div>
-    
-    <div class="form-group">
-        <label>5. התוצאות (מה בנינו, מה עובד, פידבק):</label>
-        <textarea id="poster_results" placeholder="בנינו אבטיפוס, בדקנו עם 3 משתמשים, קיבלנו פידבק חיובי על..."></textarea>
+
+    <div class="field-group">
+      <label>השינוי / הערך:</label>
+      <textarea id="posterValue"></textarea>
     </div>
-    
-    <div class="form-group">
-        <label>6. סיכום ועתיד (מה למדנו, מה הלאה):</label>
-        <textarea id="poster_conclusion" placeholder="למדנו ש-AI יכול לעזור לתלמידים להיות עצמאיים. בעתיד נרצה להוסיף תמיכה ב..."></textarea>
+
+    <div class="field-group">
+      <label>מה הלאה:</label>
+      <textarea id="posterNext"></textarea>
     </div>
+  </div>
+
+  <!-- שלב ב: בחירת תבנית עיצוב -->
+  <div class="sub-stage">
+    <h3><span class="sub-stage-label">שלב ב</span> בחירת תבנית עיצוב</h3>
+    <p>בחרי רקע אחד לפוסטר (כל התבניות באותו מבנה):</p>
     
-    <div class="form-group">
-        <label>קישור לפוסטר (Canva / PDF / תמונה):</label>
-        <input type="text" id="poster_link" placeholder="https://...">
+    <div class="checkbox-group two-col">
+      <label><input type="radio" name="template" value="1"> תבנית 1 – בהירה ונקייה (אקדמית)</label>
+      <label><input type="radio" name="template" value="2"> תבנית 2 – צבעונית וחדשנית (טכנולוגית)</label>
+      <label><input type="radio" name="template" value="3"> תבנית 3 – כהה ומרשימה (פיץ׳ / תחרות)</label>
     </div>
+
+    <p style="margin-top: 15px; color: #666;">רק העיצוב משתנה – התוכן נשאר זהה.</p>
+  </div>
+
+  <!-- שלב ג: תצוגה מקדימה -->
+  <div class="sub-stage">
+    <h3><span class="sub-stage-label">שלב ג</span> תצוגה מקדימה</h3>
+    <p>לאחר בחירת התבנית תוצג תצוגה מקדימה מלאה של הפוסטר בגודל אמיתי.</p>
     
-    <!-- כפתור שאלון סופי -->
-    <div class="final-cta">
-        <div class="emoji">✨🎉🚀</div>
-        <h2>כל הכבוד! סיימת את כל המסע!</h2>
-        <p>
-            עברת תהליך מלא של חשיבה הנדסית וטכנולוגית -<br>
-            מזיהוי בעיה ועד ליצירת מוצר מוגמר!
-        </p>
-        <p class="highlight-text">
-            💡 עכשיו זמן לגלות את התחום המושלם שלך בהייטק!
-        </p>
-        <a href="final.html" class="btn-questionnaire">
-            🎯 מעבר לשאלון הייטק
-        </a>
-        <p class="final-note">
-            השאלון יעזור לך להבין איזה תפקיד בהייטק הכי מתאים לך!
-        </p>
+    <div class="summary-box">
+      <h4>📊 תצוגה מקדימה של הפוסטר תופיע כאן</h4>
+      <p>(כאן תוצג תצוגה מקדימה של הפוסטר עם כל התוכן שמילאת)</p>
     </div>
+  </div>
+
+  <!-- שלב ד: יצוא -->
+  <div class="sub-stage">
+    <h3><span class="sub-stage-label">שלב ד</span> יצוא</h3>
+    <button class="success" onclick="exportPoster()">📥 יצוא לפוסטר PDF</button>
+    <p style="margin-top: 10px; color: #666;">גודל: 100×70 ס״מ (Landscape) – מוכן להדפסה ולהצגה</p>
+  </div>
+
+  <div class="encouragement">
+    💜 סיימת את המסע! את פורצת דרך אמיתית!
+  </div>
+
+  <div class="nav">
+    <button onclick="prevStep()">← חזרה</button>
+  </div>
+
+  <!-- שלב ו: המשך הדרך והצגה -->
+  <div class="sub-stage">
+    <h3>המשך הדרך והצגה – שלב סיום</h3>
+    <p>משך כולל: 6 דקות – חלוקה: 2 דקות לכל תלמידה</p>
     
-    <div class="navigation">
-        <button class="btn btn-prev" onclick="prevStation()">⏪ חזרה</button>
-        <button class="btn btn-save" onclick="saveStation(9)">💾 שמירה</button>
-    </div>
+    <button class="success" onclick="generatePitch()">🎤 צור פיץ׳ להצגה קבוצתית (6 דקות)</button>
+    
+    <div id="pitchOutput" class="output"></div>
+    
+    <p style="margin-top: 20px;">הפיץ׳ מבוסס על התכנים שמולאו לאורך המסע, ומוכן להצגה בפני כיתה / קהל.</p>
+  </div>
+
+  <div class="warning-tip">
+    חשוב: לא כל שדה חייב להתמלא בצורה משולמת. החשיבה חשובה מהדיוק.
+  </div>
 </div>
 
 </div>
 
 <script>
-// ניהול תחנות
-let currentStation = 1;
-const totalStations = 9;
+// רשימת הכיוונים
+const directions = [
+  "תחבורה 🚗",
+  "בטיחות 🛡️",
+  "בריאות ❤️",
+  "בריאות נפשית 🧠",
+  "בית חכם / IoT 🏠",
+  "חינוך (EdTech) 📚",
+  "סביבה וקיימות 🌱",
+  "חברה / קהילה 🤝",
+  "מדיה 📱",
+  "AI חברתי 🤖",
+  "צרכנות 🛍️",
+  "עיצוב 🎨",
+  "מנהיגות 👑"
+];
 
-// ניווט בין תחנות
-function nextStation() {
-    if (currentStation < totalStations) {
-        currentStation++;
-        showStation(currentStation);
-        updateProgress();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+// מילוי תיבות הסימון של הכיוונים
+const box = document.getElementById("directionsBox");
+directions.forEach(d => {
+  const label = document.createElement('label');
+  const input = document.createElement('input');
+  input.type = 'checkbox';
+  input.value = d;
+  input.onchange = updateFocusFields;
+  label.appendChild(input);
+  label.appendChild(document.createTextNode(' ' + d));
+  box.appendChild(label);
+});
+
+// עדכון שדות המיקוד
+function updateFocusFields() {
+  const selected = [...document.querySelectorAll('#directionsBox input:checked')].map(i => i.value);
+  const focusFields = document.getElementById('focusFields');
+  focusFields.innerHTML = '';
+  
+  if (selected.length > 0) {
+    selected.forEach((dir, idx) => {
+      const fieldGroup = document.createElement('div');
+      fieldGroup.className = 'field-group';
+      fieldGroup.innerHTML = `
+        <label>תחום ${idx + 1}: ${dir} – מילה אחת למה:</label>
+        <input type="text" id="focus${idx}" placeholder="למה זה מעניין אותך?">
+      `;
+      focusFields.appendChild(fieldGroup);
+    });
+  }
 }
 
-function prevStation() {
-    if (currentStation > 1) {
-        currentStation--;
-        showStation(currentStation);
-        updateProgress();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-}
+let current = 1;
+const totalSteps = 9;
 
-function showStation(num) {
-    // הסתרת כל התחנות
-    document.querySelectorAll('.station').forEach(s => s.classList.remove('active'));
-    
-    // הצגת התחנה הנוכחית
-    document.getElementById('station' + num).classList.add('active');
-    
-    currentStation = num;
-}
-
-// עדכון פס התקדמות
 function updateProgress() {
-    const steps = document.querySelectorAll('.progress-step');
-    steps.forEach((step, index) => {
-        const stepNum = index + 1;
-        if (stepNum < currentStation) {
-            step.classList.add('completed');
-            step.classList.remove('active');
-        } else if (stepNum === currentStation) {
-            step.classList.add('active');
-            step.classList.remove('completed');
-        } else {
-            step.classList.remove('active', 'completed');
-        }
+  const progress = (current / totalSteps) * 100;
+  document.getElementById('progressFill').style.width = progress + '%';
+  document.getElementById('progressText').innerText = `תחנה ${current} מתוך ${totalSteps}`;
+}
+
+function showStep(n) {
+  if (n < 1 || n > totalSteps) return;
+  
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById('step' + n).classList.add('active');
+  current = n;
+  updateProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function nextStep() {
+  saveData();
+  if (current < totalSteps) {
+    showStep(current + 1);
+  }
+}
+
+function prevStep() {
+  if (current > 1) {
+    showStep(current - 1);
+  }
+}
+
+function saveData() {
+  // שמירת כל הנתונים ב-localStorage
+  const data = {
+    // תחנה 1
+    directions: [...document.querySelectorAll('#directionsBox input:checked')].map(i => i.value),
+    decision1: document.querySelector('input[name="decision1"]:checked')?.value || '',
+    
+    // תחנה 2
+    where: document.getElementById('where')?.value || '',
+    who: document.getElementById('who')?.value || '',
+    moment: document.getElementById('moment')?.value || '',
+    
+    // תחנה 3
+    domain: document.getElementById('domain')?.value || '',
+    target: document.getElementById('target')?.value || '',
+    difficulty: document.getElementById('difficulty')?.value || '',
+    cause: document.getElementById('cause')?.value || '',
+    problemStatement: document.getElementById('problemStatement')?.value || '',
+    
+    // תחנה 4
+    source1: document.getElementById('source1')?.value || '',
+    solution1: document.getElementById('solution1')?.value || '',
+    source2: document.getElementById('source2')?.value || '',
+    solution2: document.getElementById('solution2')?.value || '',
+    fact: document.getElementById('fact')?.value || '',
+    insight1: document.getElementById('insight1')?.value || '',
+    insight2: document.getElementById('insight2')?.value || '',
+    insight3: document.getElementById('insight3')?.value || '',
+    
+    // תחנה 5
+    solutionOneLine: document.getElementById('solutionOneLine')?.value || '',
+    
+    // תחנה 6
+    scenario: document.getElementById('scenario')?.value || '',
+    action1: document.getElementById('action1')?.value || '',
+    action2: document.getElementById('action2')?.value || '',
+    action3: document.getElementById('action3')?.value || '',
+    action4: document.getElementById('action4')?.value || '',
+    
+    // תחנה 7
+    storyAngle: document.querySelector('input[name="storyAngle"]:checked')?.value || '',
+    before: document.getElementById('before')?.value || '',
+    change: document.getElementById('change')?.value || '',
+    after: document.getElementById('after')?.value || '',
+    meaning: document.getElementById('meaning')?.value || '',
+    
+    // תחנה 8
+    script1: document.getElementById('script1')?.value || '',
+    script2: document.getElementById('script2')?.value || '',
+    script3: document.getElementById('script3')?.value || '',
+    script4: document.getElementById('script4')?.value || ''
+  };
+  
+  localStorage.setItem('portzotData', JSON.stringify(data));
+}
+
+function loadData() {
+  const saved = localStorage.getItem('portzotData');
+  if (saved) {
+    const data = JSON.parse(saved);
+    
+    // טעינת נתונים חזרה לשדות
+    if (data.where) document.getElementById('where').value = data.where;
+    if (data.who) document.getElementById('who').value = data.who;
+    // ... (ניתן להוסיף את כל השדות)
+  }
+}
+
+// פונקציות ליצירת פרומפטים
+function generateVideoPrompt() {
+  const data = JSON.parse(localStorage.getItem('portzotData') || '{}');
+  
+  const prompt = `פרומפט לסרטון (45 שניות)
+
+צור סרטון שמציג:
+
+1. הבעיה: ${data.problemStatement || '[תיאור הבעיה]'}
+
+2. משתמש: ${data.target || '[קהל היעד]'}
+
+3. פתרון טכנולוגי: ${data.solutionOneLine || '[הפתרון]'}
+
+4. השינוי שנוצר: ${data.meaning || '[המשמעות]'}
+
+הסרטון מיועד לקהל צעיר ומציג רעיון טכנולוגי בצורה פשוטה ומובנת.
+הסגנון צריך להיות ברור, אמפתי ומעורר הזדהות.`;
+
+  document.getElementById('videoPromptOutput').innerText = prompt;
+}
+
+function generateImagePrompt() {
+  const data = JSON.parse(localStorage.getItem('portzotData') || '{}');
+  
+  const prompt = `פרומפט לתמונה (Hero Image)
+
+צור תמונה שמציגה את רגע השינוי:
+
+משתמש/ת ${data.target || '[קהל היעד]'} שמתמודד/ת עם ${data.problemStatement || '[הבעיה]'}
+כאשר הפתרון הטכנולוגי ${data.solutionOneLine || '[הפתרון]'} נוכח בתמונה בצורה ברורה אך לא טכנית מדי.
+
+הסגנון: איור ריאליסטי-עדין / צילום מבוים / אנימציה נקייה (לבחירה).
+האווירה: אופטימיסטית, מעצימה, נגישה לצעירים.
+
+התמונה מיועדת לשימוש בפוסטר ובמצגת.`;
+
+  document.getElementById('imagePromptOutput').innerText = prompt;
+}
+
+function copyText(id) {
+  const text = document.getElementById(id).innerText;
+  if (text && text !== 'התוכן יופיע כאן...') {
+    navigator.clipboard.writeText(text).then(() => {
+      alert("✅ הפרומפט הועתק ללוח! עכשיו אפשר להדביק אותו בכלי יצירה");
     });
+  } else {
+    alert("⚠️ אנא צרי קודם את הפרומפט");
+  }
 }
 
-// לחיצה על צעד בפס התקדמות
-document.querySelectorAll('.progress-step').forEach(step => {
-    step.addEventListener('click', function() {
-        const stationNum = parseInt(this.dataset.station);
-        currentStation = stationNum;
-        showStation(stationNum);
-        updateProgress();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-});
-
-// תחנה 1: בחירת כיוון
-let selectedDirection = '';
-
-function selectDirection(element, direction) {
-    // הסרת בחירה קודמת
-    document.querySelectorAll('.option-card').forEach(card => {
-        card.classList.remove('selected');
-    });
-    
-    // סימון הבחירה החדשה
-    element.classList.add('selected');
-    selectedDirection = direction;
-    
-    // הצגת התוצאה
-    document.getElementById('selectedDirection').textContent = 'בחרת כיוון שמסקרן אותך: ' + direction;
-    document.getElementById('result1').classList.add('show');
+function exportPoster() {
+  alert("🎨 הפוסטר מוכן ליצוא! (בגרסה מלאה ייווצר קובץ PDF מוכן להדפסה)");
+  // כאן תתווסף פונקציונליות יצוא אמיתית
 }
 
-// תחנה 3: יצירת ניסוח הבעיה
-function generateStatement() {
-    const domain = document.getElementById('statement_domain').value;
-    const audience = document.getElementById('statement_audience').value;
-    const problem = document.getElementById('statement_problem').value;
-    const impact = document.getElementById('statement_impact').value;
-    
-    if (!domain || !audience || !problem || !impact) {
-        alert('נא למלא את כל השדות כדי ליצור ניסוח מקצועי');
-        return;
-    }
-    
-    const statement = `בתחום <strong>${domain}</strong>, עבור <strong>${audience}</strong>, הבעיה היא ש<strong>${problem}</strong>, וזה גורם ל<strong>${impact}</strong>.`;
-    
-    document.getElementById('finalStatement').innerHTML = `
-        <p style="font-size: 1.3em; line-height: 1.8; margin-bottom: 20px;">${statement}</p>
-        <p style="margin-top: 20px; font-weight: 600;">
-            ✅ זה הניסוח המקצועי שלך! שמרי אותו - תשתמשי בו בפוסטר ובהצגה.
-        </p>
-    `;
-    
-    document.getElementById('result3').classList.add('show');
+function generatePitch() {
+  const data = JSON.parse(localStorage.getItem('portzotData') || '{}');
+  
+  const pitch = `🎤 פיץ׳ קבוצתי – 6 דקות (2 דקות לכל תלמידה)
+
+תלמידה 1: הבעיה ולמה היא חשובה
+- הציגי את ${data.problemStatement || '[הבעיה]'}
+- הסבירי למי זה קורה ולמה זה חשוב
+משך: 2 דקות
+
+תלמידה 2: החקר והפתרון
+- שתפי מה גילינו בחקר
+- הציגי את הפתרון: ${data.solutionOneLine || '[הפתרון]'}
+משך: 2 דקות
+
+תלמידה 3: המוצר, השינוי והחזון
+- הסבירי איך המוצר עובד
+- תארי את השינוי שזה יביא
+- סיימי עם המסר: ${data.meaning || '[למה זה חשוב]'}
+משך: 2 דקות
+
+הפיץ׳ מבוסס על המסע שעברתן ומוכן להצגה!`;
+
+  document.getElementById('pitchOutput').innerText = pitch;
 }
 
-// שמירה ב-localStorage
-function saveStation(stationNum) {
-    const data = {};
-    
-    // שמירת נתונים לפי תחנה
-    switch(stationNum) {
-        case 1:
-            data.direction = selectedDirection;
-            break;
-        case 2:
-            data.story = document.getElementById('problem_story').value;
-            data.who = document.getElementById('problem_who').value;
-            data.cost = document.getElementById('problem_cost').value;
-            data.why = document.getElementById('problem_why').value;
-            break;
-        case 3:
-            data.domain = document.getElementById('statement_domain').value;
-            data.audience = document.getElementById('statement_audience').value;
-            data.problem = document.getElementById('statement_problem').value;
-            data.impact = document.getElementById('statement_impact').value;
-            break;
-        case 4:
-            data.solution1 = document.getElementById('research_solution1').value;
-            data.solution2 = document.getElementById('research_solution2').value;
-            data.data = document.getElementById('research_data').value;
-            data.insights = document.getElementById('research_insights').value;
-            break;
-        case 5:
-            data.name = document.getElementById('solution_name').value;
-            data.ai = document.getElementById('solution_ai').value;
-            data.steps = document.getElementById('solution_steps').value;
-            data.impact = document.getElementById('solution_impact').value;
-            break;
-        case 6:
-            data.user = document.getElementById('product_user').value;
-            data.when = document.getElementById('product_when').value;
-            data.flow = document.getElementById('product_flow').value;
-            data.priority = document.getElementById('product_priority').value;
-            break;
-        case 7:
-            data.problem = document.getElementById('story_problem').value;
-            data.research = document.getElementById('story_research').value;
-            data.solution = document.getElementById('story_solution').value;
-            data.change = document.getElementById('story_change').value;
-            data.tagline = document.getElementById('story_tagline').value;
-            break;
-        case 8:
-            data.scene = document.getElementById('video_scene').value;
-            data.user = document.getElementById('video_user').value;
-            data.solution = document.getElementById('video_solution').value;
-            data.ending = document.getElementById('video_ending').value;
-            data.link = document.getElementById('video_link').value;
-            break;
-        case 9:
-            data.title = document.getElementById('poster_title').value;
-            data.problem = document.getElementById('poster_problem').value;
-            data.research = document.getElementById('poster_research').value;
-            data.solution = document.getElementById('poster_solution').value;
-            data.results = document.getElementById('poster_results').value;
-            data.conclusion = document.getElementById('poster_conclusion').value;
-            data.link = document.getElementById('poster_link').value;
-            break;
-    }
-    
-    localStorage.setItem('station' + stationNum, JSON.stringify(data));
-    alert('✅ התחנה נשמרה בהצלחה!');
-}
-
-// טעינת נתונים שמורים
-function loadAllStations() {
-    for (let i = 1; i <= totalStations; i++) {
-        const saved = localStorage.getItem('station' + i);
-        if (saved) {
-            const data = JSON.parse(saved);
-            loadStationData(i, data);
-        }
-    }
-}
-
-function loadStationData(stationNum, data) {
-    // טעינת נתונים לפי תחנה
-    switch(stationNum) {
-        case 1:
-            if (data.direction) {
-                selectedDirection = data.direction;
-            }
-            break;
-        case 2:
-            if (data.story) document.getElementById('problem_story').value = data.story;
-            if (data.who) document.getElementById('problem_who').value = data.who;
-            if (data.cost) document.getElementById('problem_cost').value = data.cost;
-            if (data.why) document.getElementById('problem_why').value = data.why;
-            break;
-        case 3:
-            if (data.domain) document.getElementById('statement_domain').value = data.domain;
-            if (data.audience) document.getElementById('statement_audience').value = data.audience;
-            if (data.problem) document.getElementById('statement_problem').value = data.problem;
-            if (data.impact) document.getElementById('statement_impact').value = data.impact;
-            break;
-        case 4:
-            if (data.solution1) document.getElementById('research_solution1').value = data.solution1;
-            if (data.solution2) document.getElementById('research_solution2').value = data.solution2;
-            if (data.data) document.getElementById('research_data').value = data.data;
-            if (data.insights) document.getElementById('research_insights').value = data.insights;
-            break;
-        case 5:
-            if (data.name) document.getElementById('solution_name').value = data.name;
-            if (data.ai) document.getElementById('solution_ai').value = data.ai;
-            if (data.steps) document.getElementById('solution_steps').value = data.steps;
-            if (data.impact) document.getElementById('solution_impact').value = data.impact;
-            break;
-        case 6:
-            if (data.user) document.getElementById('product_user').value = data.user;
-            if (data.when) document.getElementById('product_when').value = data.when;
-            if (data.flow) document.getElementById('product_flow').value = data.flow;
-            if (data.priority) document.getElementById('product_priority').value = data.priority;
-            break;
-        case 7:
-            if (data.problem) document.getElementById('story_problem').value = data.problem;
-            if (data.research) document.getElementById('story_research').value = data.research;
-            if (data.solution) document.getElementById('story_solution').value = data.solution;
-            if (data.change) document.getElementById('story_change').value = data.change;
-            if (data.tagline) document.getElementById('story_tagline').value = data.tagline;
-            break;
-        case 8:
-            if (data.scene) document.getElementById('video_scene').value = data.scene;
-            if (data.user) document.getElementById('video_user').value = data.user;
-            if (data.solution) document.getElementById('video_solution').value = data.solution;
-            if (data.ending) document.getElementById('video_ending').value = data.ending;
-            if (data.link) document.getElementById('video_link').value = data.link;
-            break;
-        case 9:
-            if (data.title) document.getElementById('poster_title').value = data.title;
-            if (data.problem) document.getElementById('poster_problem').value = data.problem;
-            if (data.research) document.getElementById('poster_research').value = data.research;
-            if (data.solution) document.getElementById('poster_solution').value = data.solution;
-            if (data.results) document.getElementById('poster_results').value = data.results;
-            if (data.conclusion) document.getElementById('poster_conclusion').value = data.conclusion;
-            if (data.link) document.getElementById('poster_link').value = data.link;
-            break;
-    }
-}
-
-// טעינה בעת פתיחת הדף
-window.onload = function() {
-    loadAllStations();
-    updateProgress();
-};
-
-// קיצורי מקלדת
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'ArrowLeft' && currentStation < totalStations) {
-        nextStation();
-    } else if (e.key === 'ArrowRight' && currentStation > 1) {
-        prevStation();
-    }
-});
+// אתחול
+updateProgress();
+updateFocusFields();
+loadData();
 </script>
 
 </body>
