@@ -1,30 +1,33 @@
-/* Reset and Base Styles */
+/* ===================================
+   פורצות דרך - קובץ עיצוב מלא ומשופר
+   =================================== */
+
+/* משתנים גלובליים */
+:root {
+    --primary-color: #E91E63;
+    --secondary-color: #00BCD4;
+    --accent-orange: #FF9800;
+    --accent-purple: #9C27B0;
+    --accent-gold: #FFC107;
+    --text-dark: #2c3e50;
+    --text-light: #666;
+    --bg-light: #f8f9fa;
+    --white: #ffffff;
+}
+
+/* איפוס וגופנים */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-:root {
-    --primary-pink: #E91E63;
-    --primary-cyan: #00BCD4;
-    --primary-orange: #FF9800;
-    --primary-yellow: #FFC107;
-    --primary-purple: #9C27B0;
-    --dark-gray: #424242;
-    --light-gray: #F5F5F5;
-    --white: #FFFFFF;
-    --text-dark: #212121;
-    --gradient-1: linear-gradient(135deg, #E91E63, #9C27B0);
-    --gradient-2: linear-gradient(135deg, #00BCD4, #3F51B5);
-    --gradient-3: linear-gradient(135deg, #FF9800, #FF5722);
-}
-
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    line-height: 1.6;
+    font-family: 'Heebo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    direction: rtl;
+    background: var(--bg-light);
     color: var(--text-dark);
-    background-color: var(--white);
+    line-height: 1.8;
 }
 
 .container {
@@ -33,600 +36,774 @@ body {
     padding: 0 20px;
 }
 
-/* Header */
-.header {
-    background: var(--gradient-1);
-    color: var(--white);
-    padding: 1rem 0;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+/* ===================================
+   Header
+   =================================== */
+header {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-purple) 100%);
+    padding: 20px 0;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
     position: sticky;
     top: 0;
     z-index: 1000;
 }
 
-.header .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.logo-container {
+.logo {
     display: flex;
     align-items: center;
     gap: 15px;
+    color: white;
+    font-size: 28px;
+    font-weight: 700;
 }
 
-.logo {
-    height: 60px;
-    width: auto;
+.logo img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
 }
 
-.site-title {
-    font-size: 1.8rem;
-    font-weight: bold;
-}
-
-.nav {
+nav {
     display: flex;
-    gap: 20px;
+    gap: 30px;
+    margin-top: 15px;
+    flex-wrap: wrap;
 }
 
-.nav-link {
-    color: var(--white);
+nav a {
+    color: white;
     text-decoration: none;
-    padding: 8px 16px;
-    border-radius: 20px;
+    font-size: 18px;
+    font-weight: 500;
     transition: all 0.3s ease;
+    padding: 8px 16px;
+    border-radius: 8px;
 }
 
-.nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.2);
+nav a:hover {
+    background: rgba(255,255,255,0.2);
 }
 
-/* Hero Section */
+/* ===================================
+   Hero Section
+   =================================== */
 .hero {
-    position: relative;
-    background: var(--gradient-1);
-    color: var(--white);
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-purple) 100%);
+    color: white;
     padding: 100px 0;
     text-align: center;
-    overflow: hidden;
 }
 
-.hero::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><path d="M0,300 Q300,200 600,300 T1200,300 L1200,600 L0,600 Z" fill="rgba(255,255,255,0.1)"/></svg>');
-    background-size: cover;
-}
-
-.hero-content {
-    position: relative;
-    z-index: 1;
-}
-
-.hero-title {
-    font-size: 3rem;
+.hero h1 {
+    font-size: 56px;
+    font-weight: 700;
     margin-bottom: 20px;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
 }
 
-.hero-subtitle {
-    font-size: 1.5rem;
-    margin-bottom: 30px;
+.hero p {
+    font-size: 24px;
+    margin-bottom: 15px;
     opacity: 0.95;
 }
 
 .hero-question {
-    background: rgba(255, 255, 255, 0.2);
-    padding: 30px;
+    font-size: 28px;
+    font-weight: 600;
+    margin: 30px 0;
+    padding: 20px;
+    background: rgba(255,255,255,0.1);
     border-radius: 15px;
-    margin: 40px auto;
-    max-width: 600px;
     backdrop-filter: blur(10px);
-}
-
-.hero-question p {
-    font-size: 1.8rem;
-    line-height: 1.4;
 }
 
 .cta-button {
     display: inline-block;
-    background: var(--white);
-    color: var(--primary-pink);
-    padding: 15px 40px;
-    border-radius: 30px;
+    padding: 18px 45px;
+    background: white;
+    color: var(--primary-color);
     text-decoration: none;
-    font-size: 1.2rem;
-    font-weight: bold;
+    border-radius: 50px;
+    font-size: 20px;
+    font-weight: 600;
+    margin-top: 30px;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    border: none;
+    cursor: pointer;
 }
 
 .cta-button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
 }
 
-/* Intro Section */
-.intro-section {
+/* ===================================
+   Domain Hero / Subtopic Hero
+   =================================== */
+.domain-hero, .subtopic-hero {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
     padding: 80px 0;
-    background: var(--light-gray);
+    text-align: center;
+}
+
+.domain-hero h1, .subtopic-hero h1 {
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.domain-subtitle, .subtopic-subtitle {
+    font-size: 24px;
+    opacity: 0.95;
+}
+
+.breadcrumb {
+    margin-bottom: 30px;
+    font-size: 16px;
+}
+
+.breadcrumb a {
+    color: white;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+}
+
+.breadcrumb a:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+}
+
+.breadcrumb span {
+    margin: 0 10px;
+    opacity: 0.7;
+}
+
+.subtopic-icon-large {
+    font-size: 80px;
+    margin-bottom: 20px;
+}
+
+/* ===================================
+   סעיפי תוכן - זה החלק החשוב ביותר!
+   =================================== */
+section {
+    padding: 60px 0;
 }
 
 .intro-card {
-    background: var(--white);
+    background: white;
+    border-radius: 24px;
     padding: 50px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    margin-bottom: 50px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
 }
 
 .intro-card h2 {
-    font-size: 2.5rem;
-    color: var(--primary-pink);
+    color: var(--primary-color);
+    font-size: 32px;
+    margin-bottom: 25px;
+}
+
+.intro-card p {
+    font-size: 19px;
+    line-height: 2;
+    color: var(--text-dark);
+    margin-bottom: 20px;
+}
+
+/* כרטיסי תוכן - עם הרבה רווח! */
+.domain-content, .subtopic-content {
+    padding: 80px 0;
+    background: var(--bg-light);
+}
+
+.content-card {
+    background: white;
+    border-radius: 24px;
+    padding: 50px;
+    margin-bottom: 50px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+}
+
+.content-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+}
+
+/* כותרות בולטות עם קו תחתון */
+.content-card h2 {
+    color: var(--primary-color);
+    font-size: 32px;
+    font-weight: 700;
     margin-bottom: 30px;
-    text-align: center;
+    padding-bottom: 20px;
+    border-bottom: 4px solid var(--primary-color);
+    line-height: 1.4;
 }
 
-.intro-text {
-    font-size: 1.2rem;
-    margin-bottom: 20px;
-    line-height: 1.8;
+.content-card h3 {
+    color: var(--text-dark);
+    font-size: 26px;
+    font-weight: 600;
+    margin: 35px 0 20px 0;
+    line-height: 1.4;
 }
 
-.highlight-box {
-    background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
-    padding: 25px;
-    border-radius: 10px;
-    border-right: 5px solid var(--primary-orange);
-    margin-top: 30px;
-}
-
-.highlight-box p {
-    font-size: 1.1rem;
-    margin-bottom: 10px;
-}
-
-.highlight-box p:last-child {
-    margin-bottom: 0;
-}
-
-/* Process Section */
-.process-section {
-    padding: 80px 0;
-    background: var(--white);
-}
-
-.section-title {
-    font-size: 2.5rem;
-    text-align: center;
-    margin-bottom: 20px;
-    color: var(--primary-purple);
-}
-
-.section-subtitle {
-    font-size: 1.3rem;
-    text-align: center;
-    margin-bottom: 50px;
-    color: var(--dark-gray);
-}
-
-.process-steps {
-    display: grid;
-    gap: 30px;
-}
-
-.step-card {
-    background: var(--white);
-    padding: 35px;
-    border-radius: 15px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
-}
-
-.step-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-}
-
-.step-card.active {
-    background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
-    border: 2px solid #4CAF50;
-}
-
-.step-number {
-    display: inline-block;
-    width: 60px;
-    height: 60px;
-    background: var(--gradient-1);
-    color: var(--white);
-    border-radius: 50%;
-    text-align: center;
-    line-height: 60px;
-    font-size: 2rem;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
-
-.step-number.current {
-    background: #4CAF50;
-    font-size: 2.5rem;
-}
-
-.step-card h3 {
-    font-size: 1.8rem;
+.content-card h4 {
+    color: var(--primary-color);
+    font-size: 20px;
+    font-weight: 600;
     margin-bottom: 15px;
-    color: var(--primary-purple);
+    line-height: 1.4;
 }
 
-.step-card p {
-    font-size: 1.1rem;
-    line-height: 1.7;
-    margin-bottom: 10px;
+/* פסקאות עם רווח נוח לקריאה */
+.content-card p {
+    font-size: 19px;
+    line-height: 2;
+    color: var(--text-dark);
+    margin-bottom: 25px;
 }
 
-.current-step {
-    font-weight: bold;
-    color: #2E7D32;
-    font-size: 1.2rem !important;
+.content-card strong {
+    color: var(--primary-color);
+    font-weight: 600;
 }
 
-/* How To Section */
-.how-to-section {
-    padding: 80px 0;
-    background: var(--light-gray);
-}
-
-.how-to-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
-    margin-bottom: 50px;
-}
-
-.how-to-card {
-    background: var(--white);
-    padding: 35px;
-    border-radius: 15px;
-    text-align: center;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-}
-
-.how-to-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-}
-
-.icon {
-    font-size: 4rem;
-    margin-bottom: 20px;
-}
-
-.how-to-card h3 {
-    font-size: 1.6rem;
-    margin-bottom: 15px;
-    color: var(--primary-cyan);
-}
-
-.how-to-card p {
-    font-size: 1.1rem;
-    color: var(--dark-gray);
-}
-
-.outcomes-box {
-    background: linear-gradient(135deg, #E3F2FD, #BBDEFB);
-    padding: 40px;
-    border-radius: 15px;
-    border-right: 5px solid var(--primary-cyan);
-}
-
-.outcomes-box h3 {
-    font-size: 1.8rem;
-    margin-bottom: 20px;
-    color: var(--primary-cyan);
-}
-
-.outcomes-list {
+/* רשימות עם רווח מושלם */
+.content-card ul {
+    margin: 30px 0;
+    padding-right: 30px;
     list-style: none;
-    font-size: 1.2rem;
 }
 
-.outcomes-list li {
-    padding: 10px 0;
-    border-bottom: 1px solid rgba(0,0,0,0.1);
+.content-card li {
+    font-size: 18px;
+    line-height: 2.2;
+    color: var(--text-dark);
+    margin-bottom: 20px;
+    position: relative;
+    padding-right: 25px;
 }
 
-.outcomes-list li:last-child {
-    border-bottom: none;
+.content-card li::before {
+    content: "▪";
+    color: var(--secondary-color);
+    font-size: 24px;
+    position: absolute;
+    right: 0;
+    top: -2px;
 }
 
-/* Domains Section */
-.domains-section {
-    padding: 80px 0;
-    background: var(--white);
+.content-card li strong {
+    color: var(--primary-color);
+    font-weight: 600;
 }
 
-.domains-grid {
+/* ===================================
+   כרטיסי תפקידים
+   =================================== */
+.roles-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 30px;
+    margin-top: 40px;
+}
+
+.role-card {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 30px;
+    border-radius: 20px;
+    border-right: 5px solid var(--primary-color);
+    transition: all 0.3s ease;
+}
+
+.role-card:hover {
+    transform: translateX(-8px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    border-right-width: 8px;
+}
+
+.role-card h4 {
+    margin-bottom: 15px;
+    font-size: 20px;
+    color: var(--primary-color);
+}
+
+.role-card p {
+    margin: 0;
+    font-size: 16px;
+    color: #666;
+    line-height: 1.6;
+}
+
+/* ===================================
+   כרטיס סיכום
+   =================================== */
+.summary-card {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    border: none;
+    padding: 50px;
+}
+
+.summary-card h2 {
+    color: white;
+    border-bottom-color: rgba(255,255,255,0.3);
+}
+
+.summary-card p {
+    color: white;
+    font-size: 20px;
+    line-height: 2;
+}
+
+/* ===================================
+   תתי-תחומים
+   =================================== */
+.subtopics-section {
+    margin: 80px 0;
+}
+
+.subtopics-section h2 {
+    text-align: center;
+    font-size: 36px;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}
+
+.subtopics-intro {
+    font-size: 20px;
+    text-align: center;
+    color: var(--text-light);
+    margin-bottom: 50px;
+    line-height: 1.6;
+}
+
+.subtopics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 35px;
+    margin-top: 50px;
+}
+
+.subtopic-card {
+    background: white;
+    border-radius: 24px;
+    padding: 40px;
+    text-align: center;
+    text-decoration: none;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.subtopic-card:hover {
+    transform: translateY(-15px);
+    box-shadow: 0 15px 50px rgba(0,0,0,0.15);
+}
+
+.subtopic-icon {
+    font-size: 70px;
+    margin-bottom: 25px;
+}
+
+.subtopic-card h3 {
+    color: var(--primary-color);
+    font-size: 22px;
+    margin-bottom: 18px;
+    line-height: 1.4;
+}
+
+.subtopic-card p {
+    color: #666;
+    font-size: 17px;
+    line-height: 1.8;
+    margin-bottom: 25px;
+    flex-grow: 1;
+}
+
+.explore-btn {
+    color: var(--secondary-color);
+    font-weight: 600;
+    font-size: 17px;
+}
+
+/* ===================================
+   תחומים - דף הבית
+   =================================== */
+.domains-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 40px;
     margin-top: 50px;
 }
 
 .domain-card {
-    background: var(--white);
-    padding: 35px;
-    border-radius: 15px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-    text-align: center;
+    background: white;
+    border-radius: 24px;
+    padding: 40px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
     transition: all 0.3s ease;
-    border: 3px solid transparent;
 }
 
 .domain-card:hover {
     transform: translateY(-10px);
-    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
-}
-
-.domain-card[data-domain="1"] {
-    border-top: 5px solid #2196F3;
-}
-
-.domain-card[data-domain="2"] {
-    border-top: 5px solid var(--primary-pink);
-}
-
-.domain-card[data-domain="3"] {
-    border-top: 5px solid #4CAF50;
-}
-
-.domain-card[data-domain="4"] {
-    border-top: 5px solid var(--primary-orange);
-}
-
-.domain-card[data-domain="5"] {
-    border-top: 5px solid var(--primary-purple);
+    box-shadow: 0 15px 50px rgba(0,0,0,0.15);
 }
 
 .domain-icon {
-    font-size: 4rem;
+    font-size: 60px;
     margin-bottom: 20px;
 }
 
 .domain-card h3 {
-    font-size: 1.8rem;
-    margin-bottom: 10px;
+    font-size: 26px;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+.domain-card p {
+    font-size: 17px;
+    color: #666;
+    line-height: 1.8;
+    margin-bottom: 25px;
+}
+
+.explore-domain-btn {
+    display: inline-block;
+    padding: 12px 30px;
+    background: var(--primary-color);
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.explore-domain-btn:hover {
+    background: var(--secondary-color);
+    transform: translateY(-3px);
+}
+
+/* דירוג כוכבים */
+.rating {
+    margin: 25px 0;
+}
+
+.rating label {
+    display: block;
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 12px;
     color: var(--text-dark);
 }
 
-.domain-subtitle {
-    font-size: 1.1rem;
-    color: var(--dark-gray);
-    margin-bottom: 20px;
-}
-
-.explore-btn {
-    background: var(--gradient-1);
-    color: var(--white);
-    border: none;
-    padding: 12px 30px;
-    border-radius: 25px;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-bottom: 20px;
-}
-
-.explore-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-}
-
-.interest-level {
-    margin-top: 20px;
-    padding-top: 20px;
-    border-top: 1px solid #E0E0E0;
-}
-
-.interest-level label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: var(--dark-gray);
-}
-
-.rating {
+.stars {
     display: flex;
+    gap: 8px;
     justify-content: center;
-    gap: 5px;
 }
 
 .star {
-    font-size: 2rem;
+    font-size: 36px;
     cursor: pointer;
+    color: #ddd;
     transition: all 0.2s ease;
-    color: #DDD;
 }
 
 .star:hover,
 .star.active {
-    color: #FFD700;
+    color: var(--accent-gold);
     transform: scale(1.2);
 }
 
-/* Selection Section */
-.selection-section {
-    padding: 80px 0;
-    background: var(--light-gray);
-}
-
-.selection-card {
-    background: var(--white);
+/* ===================================
+   שאלון - עיצוב מושלם!
+   =================================== */
+.questionnaire-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border: 3px solid var(--primary-color);
     padding: 50px;
+    border-radius: 24px;
+}
+
+.questionnaire-card h2 {
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+}
+
+.questionnaire-card > p {
+    text-align: center;
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 40px;
+}
+
+.questionnaire-form {
+    margin-top: 40px;
+}
+
+/* כל שאלה בכרטיס נפרד עם רווח! */
+.question-item {
+    background: white;
+    padding: 35px;
+    margin-bottom: 35px;
     border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border-right: 6px solid var(--secondary-color);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
 }
 
-.selection-instruction {
-    font-size: 1.3rem;
-    margin-bottom: 30px;
-    text-align: center;
-    color: var(--dark-gray);
+.question-item:hover {
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    transform: translateX(-5px);
 }
 
-.summary-box {
-    background: linear-gradient(135deg, #F3E5F5, #E1BEE7);
-    padding: 30px;
-    border-radius: 15px;
-    margin-bottom: 30px;
-    min-height: 150px;
-    border-right: 5px solid var(--primary-purple);
+.question-item label {
+    display: block;
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--text-dark);
+    margin-bottom: 25px;
+    line-height: 1.8;
 }
 
-.empty-state {
-    text-align: center;
-    color: var(--dark-gray);
-    font-size: 1.2rem;
-    font-style: italic;
-}
-
-.domain-summary {
-    background: var(--white);
-    padding: 20px;
-    border-radius: 10px;
-    margin-bottom: 15px;
+/* כפתורי דירוג גדולים ונוחים */
+.rating-scale {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 15px;
+    max-width: 450px;
 }
 
-.domain-summary h4 {
-    font-size: 1.3rem;
-    color: var(--primary-purple);
+.rating-scale input[type="radio"] {
+    display: none;
 }
 
-.domain-rating {
-    color: #FFD700;
-    font-size: 1.5rem;
+.rating-scale label {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    border: 3px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 0;
+    background: white;
 }
 
-.notes-section {
-    margin-top: 30px;
+.rating-scale input[type="radio"]:checked + label {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+    transform: scale(1.15);
+    box-shadow: 0 5px 20px rgba(233, 30, 99, 0.4);
 }
 
-.notes-section h3 {
-    font-size: 1.6rem;
+.rating-scale label:hover {
+    border-color: var(--primary-color);
+    transform: scale(1.08);
+    background: rgba(233, 30, 99, 0.1);
+}
+
+/* ===================================
+   תוצאות שאלון
+   =================================== */
+.result-box {
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    padding: 50px;
+    border-radius: 20px;
+    margin-top: 40px;
+    text-align: center;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.result-box h3 {
+    color: var(--primary-color);
+    font-size: 28px;
+    margin-bottom: 25px;
+}
+
+.score-display {
+    font-size: 50px;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin: 30px 0;
+}
+
+.score-number {
+    font-size: 80px;
+}
+
+.score-label {
+    font-size: 40px;
+    color: #666;
+}
+
+.recommendation-text {
+    font-size: 20px;
+    line-height: 1.8;
+    color: var(--text-dark);
+    margin-top: 25px;
+}
+
+/* ===================================
+   סיכום הבחירה
+   =================================== */
+.selection-summary {
+    background: white;
+    border-radius: 24px;
+    padding: 40px;
+    margin-bottom: 40px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+}
+
+.selection-summary h3 {
+    color: var(--primary-color);
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.selection-summary p {
+    font-size: 18px;
+    line-height: 1.8;
+    color: var(--text-dark);
     margin-bottom: 15px;
-    color: var(--primary-cyan);
 }
 
-#personalNotes {
+.notes-area {
     width: 100%;
     min-height: 150px;
     padding: 20px;
-    border: 2px solid #E0E0E0;
-    border-radius: 10px;
-    font-size: 1.1rem;
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    font-size: 17px;
     font-family: inherit;
+    line-height: 1.6;
     resize: vertical;
-    transition: all 0.3s ease;
+    transition: border-color 0.3s ease;
 }
 
-#personalNotes:focus {
+.notes-area:focus {
     outline: none;
-    border-color: var(--primary-cyan);
-    box-shadow: 0 0 10px rgba(0, 188, 212, 0.2);
+    border-color: var(--primary-color);
 }
 
-.save-btn {
-    display: block;
-    width: 100%;
-    max-width: 300px;
-    margin: 30px auto 0;
-    padding: 15px 40px;
-    background: var(--gradient-2);
-    color: var(--white);
-    border: none;
-    border-radius: 30px;
-    font-size: 1.3rem;
-    font-weight: bold;
-    cursor: pointer;
+/* ===================================
+   כפתורי ניווט
+   =================================== */
+.navigation-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 25px;
+    margin-top: 60px;
+}
+
+.nav-button {
+    flex: 1;
+    padding: 22px 40px;
+    background: var(--primary-color);
+    color: white;
+    text-decoration: none;
+    border-radius: 15px;
+    font-size: 19px;
+    font-weight: 600;
+    text-align: center;
     transition: all 0.3s ease;
+    box-shadow: 0 5px 20px rgba(233, 30, 99, 0.3);
 }
 
-.save-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+.nav-button:hover {
+    background: var(--secondary-color);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0, 188, 212, 0.4);
 }
 
-/* Footer */
-.footer {
-    background: var(--dark-gray);
-    color: var(--white);
+/* ===================================
+   Footer
+   =================================== */
+footer {
+    background: var(--text-dark);
+    color: white;
     text-align: center;
     padding: 30px 0;
     margin-top: 80px;
 }
 
-/* Responsive Design */
+footer p {
+    font-size: 16px;
+}
+
+/* ===================================
+   רספונסיבי - למובייל
+   =================================== */
 @media (max-width: 768px) {
-    .hero-title {
-        font-size: 2rem;
+    .hero h1 {
+        font-size: 36px;
     }
     
-    .hero-subtitle {
-        font-size: 1.2rem;
+    .hero p {
+        font-size: 18px;
     }
     
-    .hero-question p {
-        font-size: 1.3rem;
+    .content-card {
+        padding: 30px;
+        margin-bottom: 30px;
     }
     
-    .nav {
-        flex-direction: column;
-        gap: 10px;
+    .content-card h2 {
+        font-size: 26px;
     }
     
-    .section-title {
-        font-size: 2rem;
+    .content-card p,
+    .content-card li {
+        font-size: 17px;
     }
     
-    .domains-grid {
+    .domains-grid,
+    .subtopics-grid {
         grid-template-columns: 1fr;
     }
     
-    .intro-card,
-    .selection-card {
-        padding: 30px 20px;
+    .navigation-buttons {
+        flex-direction: column;
     }
-}
-
-/* Smooth Scrolling */
-html {
-    scroll-behavior: smooth;
-}
-
-/* Animations */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
+    
+    .question-item {
+        padding: 25px;
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+    
+    .rating-scale {
+        gap: 8px;
     }
-}
-
-.step-card,
-.domain-card,
-.how-to-card {
-    animation: fadeIn 0.5s ease-out;
+    
+    .rating-scale label {
+        width: 50px;
+        height: 50px;
+        font-size: 18px;
+    }
+    
+    .domain-hero h1,
+    .subtopic-hero h1 {
+        font-size: 32px;
+    }
+    
+    .domain-subtitle,
+    .subtopic-subtitle {
+        font-size: 18px;
+    }
 }
