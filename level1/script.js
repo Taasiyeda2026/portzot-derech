@@ -9,7 +9,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const introSection = document.querySelector('#intro');
 
   // נועל גלילה בכניסה לעמוד הראשי
-  document.body.classList.add('locked');
+  // נועל גלילה רק אם קיים Hero (עמוד כניסה)
+  if (document.querySelector('.hero')) {
+    document.body.classList.add('locked');
+  }
 
   if (heroBtn && introSection) {
     heroBtn.addEventListener('click', (e) => {
