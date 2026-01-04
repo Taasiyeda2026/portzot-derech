@@ -58,7 +58,10 @@ body{
 
 /* לוגו */
 .logo-section{
-  padding:70px 0;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:0; /* חשוב: מבטל הגדלה של ההידר */
 }
 
 .logo{
