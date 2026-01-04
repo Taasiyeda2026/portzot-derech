@@ -56,8 +56,7 @@ body.locked{
   align-items:center;
   justify-content:space-between;
   gap:20px;
-  height:72px;
-  padding:0;
+  padding:16px 0;
 }
 
 .logo-section,
@@ -72,9 +71,8 @@ img.logo,
 .logo img,
 .logo-section img,
 .logo-container img{
-  height:52px;
+  height:56px;
   width:auto;
-  max-height:52px;
   max-width:180px;
   object-fit:contain;
   display:block;
@@ -84,39 +82,6 @@ img.logo,
   font-size:1.4rem;
   font-weight:700;
   color:var(--purple);
-}
-
-/* Header navigation */
-.main-nav ul,
-.nav{
-  list-style:none;
-  display:flex;
-  align-items:center;
-  gap:18px;
-  margin:0;
-  padding:0;
-}
-
-.main-nav a,
-.nav-link{
-  text-decoration:none;
-  color:var(--dark);
-  font-weight:600;
-  padding:8px 14px;
-  border-radius:999px;
-  background:#f5f5f7;
-  transition:background .2s ease, color .2s ease;
-}
-
-.main-nav a:hover,
-.nav-link:hover{
-  background:#ececf1;
-  color:var(--purple);
-}
-
-.nav-link.active{
-  background:linear-gradient(135deg,var(--purple),var(--pink));
-  color:#fff;
 }
 
 /* ריווח בין סקשנים */
