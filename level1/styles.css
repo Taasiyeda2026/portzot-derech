@@ -1,6 +1,6 @@
 /* ===============================
-   styles.css – עיצוב מקור (baseline)
-   פורצות דרך | Header מתוקן בלבד
+   styles.css – baseline מתוקן
+   פורצות דרך | Header יציב וקומפקטי
    =============================== */
 
 /* ===== Reset ===== */
@@ -39,12 +39,12 @@ body{
 }
 
 /* ===============================
-   HEADER – תיקון מבני וכפתורים בלבד
+   HEADER – מתוקן (גובה תקין)
    =============================== */
 
 .site-header{
   background: linear-gradient(135deg, var(--purple), var(--pink));
-  padding:12px 0;
+  padding:10px 0;
   position:sticky;
   top:0;
   z-index:1000;
@@ -58,15 +58,72 @@ body{
 
 /* לוגו */
 .logo-section{
-  padding:70px 0;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:0;
 }
+
+.logo{
+  height:40px;
+  width:auto;
 }
+
+.site-title{
+  font-size:1.4rem;
+  font-weight:700;
+  color:#fff;
+}
+
+/* ניווט */
+.main-nav ul{
+  list-style:none;
+  display:flex;
+  gap:22px;
+}
+
+.main-nav a{
+  color:#fff;
+  text-decoration:none;
+  font-weight:600;
+  font-size:1rem;
+}
+
+.main-nav a:hover{
+  text-decoration:underline;
+}
+
+/* ================= HERO ================= */
+
+.hero{
+  padding:80px 0 70px;
+  background:linear-gradient(135deg,#f6f0fb,#ffffff);
+  text-align:center;
+}
+
+.hero-title{
+  font-size:2.6rem;
+  color:var(--purple);
+  margin-bottom:14px;
+}
+
+.hero-subtitle{
+  font-size:1.2rem;
+  margin-bottom:14px;
+}
+
+.hero-tagline{
+  color:#555;
+  font-size:1.05rem;
+}
+
+/* ================= TITLES ================= */
 
 .section-title{
   text-align:center;
   font-size:2.4rem;
   color:var(--purple);
-  margin-bottom:18px; /* יותר רווח */
+  margin-bottom:18px;
 }
 
 .section-subtitle{
@@ -75,24 +132,16 @@ body{
   margin-bottom:50px;
   font-weight:700;
   font-size:1.35rem;
-  background:none;
-  padding:0;
-  border-radius:0;
 }
 
+/* ================= PROCESS ================= */
 
-/* ================= PROCESS (תהליך) ================= */
-
-/* תת-כותרת שקטה וממורכזת */
 .section-subtitle.muted-center{
-  text-align: center;
-  font-size: 1.05rem;
-  color: #666;
-  margin-top: 8px;
-  margin-bottom: 50px;
-  font-weight: 400;
+  font-size:1.05rem;
+  color:#666;
+  margin-top:8px;
+  font-weight:400;
 }
-
 
 .process-steps{
   display:grid;
@@ -106,10 +155,8 @@ body{
   border-radius:22px;
   padding:38px 34px 42px;
   box-shadow:var(--shadow);
-  position:relative;
 }
 
-/* מספרים – נוכחות */
 .step-number{
   width:50px;
   height:50px;
@@ -124,14 +171,9 @@ body{
   margin-bottom:18px;
 }
 
-/* שלב נוכחי */
 .step-card.active{
   background:linear-gradient(135deg,#f6f0fb,#fbeaf3);
   border:2px solid var(--pink);
-}
-
-.step-card.active .step-number{
-  background:var(--pink);
 }
 
 .step-card h3{
@@ -140,75 +182,16 @@ body{
   color:var(--purple);
 }
 
-.step-card p{
+.step-card ul{
+  padding-right:18px;
+}
+
+.step-card li{
+  margin-bottom:6px;
   font-size:1.05rem;
-  color:#444;
-  margin-bottom:10px;
-}
-
-/* ================= HOW TO – הוסר מהמערכת ================= */
-.how-to-section{
-  display:none;
-}
-
-/* ================= INTRO – איך זה עובד ================= */
-.intro-card{
-  background:linear-gradient(135deg,#f6f0fb,#ffffff);
-  border-radius:24px;
-  padding:44px 40px;
-  box-shadow:var(--shadow);
-}
-
-.intro-card h2{
-  font-size:2rem;
-  color:var(--purple);
-  margin-bottom:26px;
-}
-
-.intro-text{
-  font-size:1.1rem;
-  margin-bottom:18px;
-  color:#333;
-}
-
-.intro-text strong{
-  color:var(--purple);
-}
-
-.highlight-box{
-  margin-top:28px;
-  padding:22px 26px;
-  background:linear-gradient(135deg,#fbeaf3,#f6f0fb);
-  border-right:6px solid var(--pink);
-  border-radius:18px;
-}
-
-.highlight-box p{
-  margin-bottom:10px;
-  font-size:1.05rem;
-}
-
-/* ================= CARDS ================= */
-.selection-card,
-.step-card,
-.how-to-card{
-  background:#fff;
-  border-radius:20px;
-  padding:40px;
-  box-shadow:var(--shadow);
 }
 
 /* ================= DOMAINS ================= */
-
-/* כותרת תחומים – הדגשה רכה */
-.domains-section .section-title{
-  margin-bottom:10px;
-}
-
-/* הוסר: אין תת-כותרת בתחומים */
-.domains-section .section-subtitle{
-  display:none;
-}
 
 .domains-grid{
   display:grid;
@@ -218,29 +201,11 @@ body{
 }
 
 .domain-card{
-  background:linear-gradient(135deg,#ffffff,#faf7fb);
+  background:#fff;
   border-radius:22px;
   padding:28px 22px 30px;
   text-align:center;
   box-shadow:var(--shadow);
-  transition:transform .25s ease, box-shadow .25s ease;
-  position:relative;
-}
-
-.domain-card::after{
-  content:'';
-  position:absolute;
-  left:20px;
-  right:20px;
-  bottom:14px;
-  height:2px;
-  background:linear-gradient(135deg,var(--purple),var(--pink));
-  opacity:.15;
-}
-
-.domain-card:hover{
-  transform:translateY(-6px);
-  box-shadow:0 18px 42px rgba(0,0,0,.14);
 }
 
 .domain-icon{
@@ -250,14 +215,8 @@ body{
 
 .domain-card h3{
   font-size:1.35rem;
-  margin-bottom:6px;
+  margin-bottom:10px;
   color:var(--purple);
-}
-
-.domain-subtitle{
-  font-size:0.95rem;
-  color:#666;
-  margin-bottom:18px;
 }
 
 .explore-btn{
@@ -268,7 +227,6 @@ body{
   color:#fff;
   font-weight:600;
   text-decoration:none;
-  margin-bottom:18px;
 }
 
 .explore-btn.disabled{
@@ -276,24 +234,8 @@ body{
   cursor:not-allowed;
 }
 
-.rating{
-  display:flex;
-  justify-content:center;
-  gap:8px;
-}
-
-.star{
-  font-size:24px;
-  cursor:pointer;
-  color:#ddd;
-}
-
-.star:hover,
-.star.active{
-  color:#f1c40f;
-}
-
 /* ================= FOOTER ================= */
+
 .footer{
   background:#2d2d2d;
   color:#fff;
@@ -302,6 +244,7 @@ body{
 }
 
 /* ================= RESPONSIVE ================= */
+
 @media (max-width:1100px){
   .domains-grid{
     grid-template-columns:repeat(3,1fr);
@@ -313,9 +256,9 @@ body{
     grid-template-columns:repeat(2,1fr);
   }
 
-  .main-nav ul{
-    flex-wrap:wrap;
-    justify-content:center;
+  .site-header .container{
+    flex-direction:column;
+    gap:12px;
   }
 }
 
@@ -328,14 +271,8 @@ body{
     font-size:2rem;
   }
 
-  .site-header .container{
-    flex-direction:column;
-    gap:15px;
-  }
-
   .main-nav ul{
     flex-direction:column;
-    width:100%;
-    text-align:center;
+    align-items:center;
   }
 }
