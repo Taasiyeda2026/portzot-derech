@@ -1,34 +1,38 @@
 /* ===============================
-   styles.css – גרסה סופית ונקייה
-   פורצות דרך | אתר סטטי
+   styles.css – גרסה יציבה
+   פורצות דרך
    =============================== */
 
-/* === Reset === */
+/* ===== Reset ===== */
 *{
   margin:0;
   padding:0;
   box-sizing:border-box;
 }
 
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  font-family:'Segoe UI', Tahoma, sans-serif;
+  background:#ffffff;
+  color:#2d2d2d;
+  line-height:1.6;
+}
+
+/* ===== Variables ===== */
 :root{
   --pink:#e84393;
   --purple:#9b59b6;
   --cyan:#00bcd4;
-  --dark:#2d2d2d;
   --gray:#f5f5f7;
+  --dark:#2d2d2d;
   --white:#ffffff;
   --shadow:0 12px 30px rgba(0,0,0,.08);
 }
 
-html{scroll-behavior:smooth;}
-
-body{
-  font-family:'Segoe UI',Tahoma,sans-serif;
-  background:#fff;
-  color:var(--dark);
-  line-height:1.6;
-}
-
+/* ===== Layout ===== */
 .container{
   max-width:1200px;
   margin:0 auto;
@@ -36,7 +40,6 @@ body{
 }
 
 /* ================= HEADER ================= */
-.header,
 .site-header{
   background:linear-gradient(135deg,var(--purple),var(--pink));
   padding:18px 0;
@@ -45,15 +48,14 @@ body{
   z-index:1000;
 }
 
-.header .container,
 .site-header .container{
   display:flex;
   justify-content:space-between;
   align-items:center;
 }
 
-.logo-section,
-.logo-container{
+/* Logo */
+.logo-section{
   display:flex;
   align-items:center;
   gap:12px;
@@ -64,38 +66,34 @@ body{
 }
 
 .site-title{
-  font-size:1.5rem;
   color:#fff;
+  font-size:1.5rem;
   font-weight:700;
 }
 
-.main-nav ul,
-.nav{
+/* Navigation – כפתורים אחידים */
+.main-nav ul{
   list-style:none;
   display:flex;
-  gap:20px;
+  gap:14px;
 }
 
-/* === ניווט כפתורי – אחיד ומדויק === */
-.main-nav a,
-.nav-link{
-  display:inline-flex;
+.main-nav a{
+  display:flex;
   align-items:center;
   justify-content:center;
-  height:38px;              /* גובה אחיד לכל הכפתורים */
-  min-width:96px;           /* רוחב מינימלי – מונע קפיצות */
-  padding:0 18px;           /* בלי שינוי גובה בין טקסטים */
+  width:130px;        /* רוחב אחיד */
+  height:40px;        /* גובה אחיד */
   color:#fff;
   text-decoration:none;
   font-weight:500;
   border-radius:20px;
-  background:rgba(255,255,255,0.15);
+  background:rgba(255,255,255,0.18);
   transition:background .25s ease, transform .2s ease;
 }
 
-.main-nav a:hover,
-.nav-link:hover{
-  background:rgba(255,255,255,0.28);
+.main-nav a:hover{
+  background:rgba(255,255,255,0.32);
   transform:translateY(-1px);
 }
 
@@ -109,7 +107,7 @@ body{
 
 .hero-title{
   font-size:3rem;
-  margin-bottom:20px;
+  margin-bottom:16px;
 }
 
 .hero-subtitle{
@@ -118,10 +116,10 @@ body{
 }
 
 .hero-question{
-  background:rgba(255,255,255,.2);
-  padding:30px;
+  background:rgba(255,255,255,0.2);
+  padding:28px;
   border-radius:16px;
-  max-width:600px;
+  max-width:620px;
   margin:0 auto 30px;
 }
 
@@ -136,13 +134,15 @@ body{
 }
 
 /* ================= SECTIONS ================= */
-section{padding:80px 0;}
+section{
+  padding:80px 0;
+}
 
 .section-title{
   text-align:center;
   font-size:2.4rem;
   color:var(--purple);
-  margin-bottom:16px;
+  margin-bottom:14px;
 }
 
 .section-subtitle{
@@ -151,7 +151,7 @@ section{padding:80px 0;}
   margin-bottom:50px;
 }
 
-/* ================= CARDS ================= */
+/* ================= CARDS (כללי) ================= */
 .intro-card,
 .selection-card,
 .step-card,
@@ -165,22 +165,23 @@ section{padding:80px 0;}
 /* ================= DOMAINS ================= */
 .domains-grid{
   display:grid;
-  grid-template-columns:repeat(5,1fr);
+  grid-template-columns:repeat(5, 1fr); /* 5 בשורה */
   gap:20px;
   margin-top:40px;
 }
 
 .domain-card{
-  background:linear-gradient(135deg,#fff,#f7f8fc);
+  background:linear-gradient(135deg,#ffffff,#f7f8fc);
   border-radius:20px;
   padding:26px 22px 28px;
   text-align:center;
   box-shadow:var(--shadow);
-  transition:.3s ease;
+  transition:transform .3s ease, box-shadow .3s ease;
 }
 
 .domain-card:hover{
   transform:translateY(-6px);
+  box-shadow:0 20px 45px rgba(0,0,0,.15);
 }
 
 .domain-icon{
@@ -215,7 +216,7 @@ section{padding:80px 0;}
   cursor:not-allowed;
 }
 
-/* ================= RATING ================= */
+/* Rating */
 .rating{
   display:flex;
   justify-content:center;
@@ -228,8 +229,8 @@ section{padding:80px 0;}
   color:#ddd;
 }
 
-.star.active,
-.star:hover{
+.star:hover,
+.star.active{
   color:#f1c40f;
 }
 
@@ -241,8 +242,30 @@ section{padding:80px 0;}
   padding:30px 0;
 }
 
-/* ================= MOBILE ================= */
-@media(max-width:768px){
-  .hero-title{font-size:2.1rem;}
-  .main-nav ul{flex-direction:column;}
+/* ================= RESPONSIVE ================= */
+@media (max-width:1100px){
+  .domains-grid{
+    grid-template-columns:repeat(3,1fr);
+  }
+}
+
+@media (max-width:800px){
+  .domains-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .main-nav ul{
+    flex-wrap:wrap;
+    justify-content:center;
+  }
+}
+
+@media (max-width:500px){
+  .domains-grid{
+    grid-template-columns:1fr;
+  }
+
+  .hero-title{
+    font-size:2rem;
+  }
 }
