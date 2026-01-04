@@ -99,7 +99,12 @@ text-decoration:underline;
 .hero{
 background:linear-gradient(135deg,#f6f0fb,#ffffff);
 text-align:center;
-padding-top:40px; /* החרגה מה-padding הכללי */
+
+min-height:100vh;        /* מסך מלא – ללא הצצה */
+display:flex;
+align-items:center;
+
+padding-top:80px;        /* פיצוי על header sticky */
 }
 
 .hero-title{
