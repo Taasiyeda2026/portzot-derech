@@ -168,6 +168,18 @@ section{
 
 
 /* ================= PROCESS (תהליך) ================= */
+
+/* תת-כותרת שקטה וממורכזת */
+.section-subtitle.muted-center{
+  text-align: center;
+  font-size: 1.05rem;
+  color: #666;
+  margin-top: 8px;
+  margin-bottom: 50px;
+  font-weight: 400;
+}
+
+
 .process-steps{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
