@@ -21,6 +21,11 @@ color:#2d2d2d;
 line-height:1.6;
 }
 
+/* ===== Scroll Lock ===== */
+body.locked{
+overflow:hidden;
+}
+
 /* ===== Variables ===== */
 :root{
 --pink:#e84393;
@@ -47,158 +52,47 @@ padding:60px 0;
 
 .hero{
 background:linear-gradient(135deg,#f6f0fb,#ffffff);
-height:100vh;              /* מסך מלא – ללא הצצה */
+height:100vh;
 display:flex;
-align-items:center;        /* מרכז אנכי */
-justify-content:center;    /* מרכז אופקי */
-}
-
-.hero .container{
-padding:0;                 /* ביטול השפעת container */
+align-items:center;
+justify-content:center;
 }
 
 .hero-content{
-max-width:720px;
+max-width:820px;
 margin:0 auto;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
 text-align:center;
 }
 
 .hero-title{
-font-size:2.6rem;
+font-size:3.4rem;        /* הגדלה משמעותית */
+font-weight:800;
 color:var(--purple);
-margin-bottom:14px;
+margin-bottom:22px;
 }
 
 .hero-subtitle{
-font-size:1.2rem;
-margin-bottom:18px;
+font-size:1.6rem;        /* הגדלת שורת המסר */
+line-height:1.6;
+margin-bottom:28px;
 }
 
-/* כפתור Hero */
 .hero-btn{
 display:inline-block;
-margin-top:22px;
-padding:14px 34px;
-border-radius:30px;
+padding:18px 44px;       /* כפתור גדול וברור */
+font-size:1.25rem;
+font-weight:700;
+border-radius:40px;
 background:linear-gradient(135deg,var(--purple),var(--pink));
 color:#fff;
-font-size:1.1rem;
-font-weight:700;
 text-decoration:none;
-box-shadow:0 10px 24px rgba(0,0,0,.18);
+box-shadow:0 14px 30px rgba(0,0,0,.22);
 transition:transform .2s ease, box-shadow .2s ease;
 }
 
 .hero-btn:hover{
-transform:translateY(-3px);
-box-shadow:0 16px 36px rgba(0,0,0,.25);
-}
-
-/* ================= HEADER ================= */
-
-.site-header{
-background:linear-gradient(135deg, var(--purple), var(--pink));
-padding:12px 0;
-position:sticky;
-top:0;
-z-index:1000;
-}
-
-.site-header .container{
-display:flex;
-align-items:center;
-justify-content:space-between;
-}
-
-/* לוגו */
-.logo-section{
-display:flex;
-align-items:center;
-gap:12px;
-}
-
-.logo{
-height:40px;
-width:auto;
-}
-
-.site-title{
-font-size:1.4rem;
-font-weight:700;
-color:#fff;
-}
-
-/* ניווט */
-.main-nav ul{
-list-style:none;
-display:flex;
-gap:22px;
-}
-
-.main-nav a{
-color:#fff;
-text-decoration:none;
-font-weight:600;
-}
-
-.main-nav a:hover{
-text-decoration:underline;
-}
-
-/* ================= HERO ================= */
-
-/* עטיפת Hero – אחראית רק על הרקע והגובה */
-.hero{
-background:linear-gradient(135deg,#f6f0fb,#ffffff);
-min-height:100vh;        /* מסך מלא – ללא הצצה */
-padding-top:80px;        /* פיצוי על header sticky */
-}
-
-/* בידוד תוכן עמוד הבית בלבד */
-.hero-content{
-max-width:720px;         /* בידוד רוחב הטקסט */
-margin:0 auto;
-text-align:center;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-min-height:calc(100vh - 80px);
-}
-
-.hero-title{
-font-size:2.6rem;
-color:var(--purple);
-margin-bottom:14px;
-}
-
-.hero-subtitle{
-font-size:1.2rem;
-margin-bottom:18px;
-}
-
-/* כפתור Hero */
-.hero-btn{
-display:inline-block;
-margin-top:22px;
-padding:14px 34px;
-border-radius:30px;
-background:linear-gradient(135deg,var(--purple),var(--pink));
-color:#fff;
-font-size:1.1rem;
-font-weight:700;
-text-decoration:none;
-box-shadow:0 10px 24px rgba(0,0,0,.18);
-transition:transform .2s ease, box-shadow .2s ease;
-}
-
-.hero-btn:hover{
-transform:translateY(-3px);
-box-shadow:0 16px 36px rgba(0,0,0,.25);
+transform:translateY(-4px);
+box-shadow:0 20px 44px rgba(0,0,0,.28);
 }
 
 /* ================= TITLES ================= */
