@@ -1,6 +1,6 @@
 /* ===============================
-   styles.css – עיצוב מקור (baseline)
-   פורצות דרך | Header מתוקן בלבד
+   styles.css – baseline מלא ותקין
+   פורצות דרך
    =============================== */
 
 /* ===== Reset ===== */
@@ -38,12 +38,15 @@ body{
   padding:0 20px;
 }
 
-/* ===============================
-   HEADER – תיקון מבני וכפתורים בלבד
-   =============================== */
+/* ריווח בין סקשנים – אחיד ונכון */
+section{
+  padding:60px 0;
+}
+
+/* ================= HEADER ================= */
 
 .site-header{
-  background: linear-gradient(135deg, var(--purple), var(--pink));
+  background:linear-gradient(135deg, var(--purple), var(--pink));
   padding:12px 0;
   position:sticky;
   top:0;
@@ -56,10 +59,66 @@ body{
   justify-content:space-between;
 }
 
-/* לוגו – תיקון מינימלי */
+/* לוגו */
 .logo-section{
-  padding:0;
+  display:flex;
+  align-items:center;
+  gap:12px;
 }
+
+.logo{
+  height:40px;
+  width:auto;
+}
+
+.site-title{
+  font-size:1.4rem;
+  font-weight:700;
+  color:#fff;
+}
+
+/* ניווט */
+.main-nav ul{
+  list-style:none;
+  display:flex;
+  gap:22px;
+}
+
+.main-nav a{
+  color:#fff;
+  text-decoration:none;
+  font-weight:600;
+}
+
+.main-nav a:hover{
+  text-decoration:underline;
+}
+
+/* ================= HERO ================= */
+
+.hero{
+  background:linear-gradient(135deg,#f6f0fb,#ffffff);
+  text-align:center;
+  padding-top:40px; /* החרגה מה-padding הכללי */
+}
+
+.hero-title{
+  font-size:2.6rem;
+  color:var(--purple);
+  margin-bottom:14px;
+}
+
+.hero-subtitle{
+  font-size:1.2rem;
+  margin-bottom:14px;
+}
+
+.hero-tagline{
+  color:#555;
+  font-size:1.05rem;
+}
+
+/* ================= TITLES ================= */
 
 .section-title{
   text-align:center;
@@ -71,92 +130,41 @@ body{
 .section-subtitle{
   text-align:center;
   color:var(--pink);
-  margin-bottom:50px;
+  margin-bottom:40px;
   font-weight:700;
   font-size:1.35rem;
-  background:none;
-  padding:0;
-  border-radius:0;
 }
-
-/* ================= PROCESS (תהליך) ================= */
 
 .section-subtitle.muted-center{
-  text-align: center;
-  font-size: 1.05rem;
-  color: #666;
-  margin-top: 8px;
-  margin-bottom: 50px;
-  font-weight: 400;
-}
-
-.process-steps{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-  gap:22px;
-  margin-top:32px;
-}
-
-.step-card{
-  background:#fff;
-  border-radius:22px;
-  padding:38px 34px 42px;
-  box-shadow:var(--shadow);
-  position:relative;
-}
-
-.step-number{
-  width:50px;
-  height:50px;
-  border-radius:50%;
-  background:linear-gradient(135deg,var(--purple),var(--pink));
-  color:#fff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:1.5rem;
-  font-weight:700;
-  margin-bottom:18px;
-}
-
-.step-card.active{
-  background:linear-gradient(135deg,#f6f0fb,#fbeaf3);
-  border:2px solid var(--pink);
-}
-
-.step-card.active .step-number{
-  background:var(--pink);
-}
-
-.step-card h3{
-  font-size:1.4rem;
-  margin-bottom:12px;
-  color:var(--purple);
-}
-
-.step-card p{
   font-size:1.05rem;
-  color:#444;
-  margin-bottom:10px;
+  color:#666;
+  font-weight:400;
 }
 
-/* ================= HOW TO – הוסר מהמערכת ================= */
-.how-to-section{
-  display:none;
-}
+/* ================= INTRO ================= */
 
-/* ================= INTRO – איך זה עובד ================= */
 .intro-card{
   background:linear-gradient(135deg,#f6f0fb,#ffffff);
   border-radius:24px;
   padding:44px 40px;
   box-shadow:var(--shadow);
+  max-width:900px;
+  margin:0 auto 40px; /* רווח מתחת לכרטיס */
 }
 
-.intro-card h2{
+.intro-title{
   font-size:2rem;
   color:var(--purple);
-  margin-bottom:26px;
+  margin-bottom:24px;
+  text-align:center;
+}
+
+.intro-lead{
+  font-size:1.2rem;
+  font-weight:600;
+  margin-bottom:22px;
+  text-align:center;
+  color:#333;
 }
 
 .intro-text{
@@ -182,25 +190,57 @@ body{
   font-size:1.05rem;
 }
 
-/* ================= CARDS ================= */
-.selection-card,
-.step-card,
-.how-to-card{
+/* ================= PROCESS ================= */
+
+.process-steps{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:22px;
+  margin-top:32px;
+}
+
+.step-card{
   background:#fff;
-  border-radius:20px;
-  padding:40px;
+  border-radius:22px;
+  padding:38px 34px 42px;
   box-shadow:var(--shadow);
 }
 
+.step-number{
+  width:50px;
+  height:50px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--purple),var(--pink));
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:1.5rem;
+  font-weight:700;
+  margin-bottom:18px;
+}
+
+.step-card.active{
+  background:linear-gradient(135deg,#f6f0fb,#fbeaf3);
+  border:2px solid var(--pink);
+}
+
+.step-card h3{
+  font-size:1.4rem;
+  margin-bottom:12px;
+  color:var(--purple);
+}
+
+.step-card ul{
+  padding-right:18px;
+}
+
+.step-card li{
+  margin-bottom:6px;
+  font-size:1.05rem;
+}
+
 /* ================= DOMAINS ================= */
-
-.domains-section .section-title{
-  margin-bottom:10px;
-}
-
-.domains-section .section-subtitle{
-  display:none;
-}
 
 .domains-grid{
   display:grid;
@@ -216,18 +256,6 @@ body{
   text-align:center;
   box-shadow:var(--shadow);
   transition:transform .25s ease, box-shadow .25s ease;
-  position:relative;
-}
-
-.domain-card::after{
-  content:'';
-  position:absolute;
-  left:20px;
-  right:20px;
-  bottom:14px;
-  height:2px;
-  background:linear-gradient(135deg,var(--purple),var(--pink));
-  opacity:.15;
 }
 
 .domain-card:hover{
@@ -242,14 +270,8 @@ body{
 
 .domain-card h3{
   font-size:1.35rem;
-  margin-bottom:6px;
+  margin-bottom:10px;
   color:var(--purple);
-}
-
-.domain-subtitle{
-  font-size:0.95rem;
-  color:#666;
-  margin-bottom:18px;
 }
 
 .explore-btn{
@@ -260,7 +282,6 @@ body{
   color:#fff;
   font-weight:600;
   text-decoration:none;
-  margin-bottom:18px;
 }
 
 .explore-btn.disabled{
@@ -268,24 +289,8 @@ body{
   cursor:not-allowed;
 }
 
-.rating{
-  display:flex;
-  justify-content:center;
-  gap:8px;
-}
-
-.star{
-  font-size:24px;
-  cursor:pointer;
-  color:#ddd;
-}
-
-.star:hover,
-.star.active{
-  color:#f1c40f;
-}
-
 /* ================= FOOTER ================= */
+
 .footer{
   background:#2d2d2d;
   color:#fff;
@@ -294,6 +299,7 @@ body{
 }
 
 /* ================= RESPONSIVE ================= */
+
 @media (max-width:1100px){
   .domains-grid{
     grid-template-columns:repeat(3,1fr);
@@ -303,6 +309,11 @@ body{
 @media (max-width:800px){
   .domains-grid{
     grid-template-columns:repeat(2,1fr);
+  }
+
+  .site-header .container{
+    flex-direction:column;
+    gap:12px;
   }
 
   .main-nav ul{
@@ -320,14 +331,8 @@ body{
     font-size:2rem;
   }
 
-  .site-header .container{
-    flex-direction:column;
-    gap:15px;
-  }
-
   .main-nav ul{
     flex-direction:column;
-    width:100%;
     text-align:center;
   }
 }
