@@ -12,6 +12,7 @@ styles.css – baseline מלא ותקין
 
 html{
   scroll-behavior:smooth;
+  scroll-padding-top:72px;
 }
 
 body{
@@ -23,7 +24,7 @@ body{
 
 /* ===== Scroll Lock ===== */
 body.locked{
-  overflow:hidden !important;
+  overflow:hidden;
 }
 
 /* ===== Variables ===== */
@@ -43,6 +44,89 @@ body.locked{
   padding:0 20px;
 }
 
+/* ===== Header ===== */
+header,
+header.site-header,
+header.header{
+  position:sticky;
+  top:0;
+  z-index:1000;
+  height:72px;
+  background:linear-gradient(135deg,#f6f0fb,#ffffff);
+  box-shadow:var(--shadow);
+  overflow:visible;
+}
+
+header .container{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  height:72px;
+  padding:0;
+}
+
+.logo-section,
+.logo-container,
+.logo{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+img.logo,
+.logo img,
+.logo-section img,
+.logo-container img{
+  height:52px;
+  width:auto;
+  max-height:52px;
+  max-width:180px;
+  object-fit:contain;
+  display:block;
+}
+
+header .site-title{
+  font-size:1.4rem;
+  font-weight:700;
+  color:var(--purple);
+}
+
+/* Header navigation */
+header .main-nav ul,
+header .nav{
+  list-style:none;
+  display:flex;
+  align-items:center;
+  gap:18px;
+  margin:0;
+  padding:0;
+}
+
+header .main-nav a,
+header .nav-link{
+  text-decoration:none;
+  color:var(--dark);
+  font-weight:600;
+  padding:8px 14px;
+  border-radius:999px;
+  background:linear-gradient(135deg,#f5f5f7,#ffffff);
+  transition:transform .2s ease, background .2s ease, color .2s ease, box-shadow .2s ease;
+}
+
+header .main-nav a:hover,
+header .nav-link:hover{
+  background:linear-gradient(135deg,#ececf1,#f5f5f7);
+  color:var(--purple);
+  transform:translateY(-1px);
+  box-shadow:0 6px 16px rgba(0,0,0,.08);
+}
+
+header .nav-link.active{
+  background:linear-gradient(135deg,var(--purple),var(--pink));
+  color:#fff;
+}
+
 /* ריווח בין סקשנים */
 section{
   padding:60px 0;
@@ -56,6 +140,13 @@ section{
   display:flex;
   align-items:center;
   justify-content:center;
+}
+
+.hero .container{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
 }
 
 .hero-content{
