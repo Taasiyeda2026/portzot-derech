@@ -43,6 +43,49 @@ body.locked{
   padding:0 20px;
 }
 
+/* ===== Header ===== */
+.site-header,
+.header{
+  background:#fff;
+  box-shadow:var(--shadow);
+}
+
+.site-header .container,
+.header .container{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  height:72px;
+  padding:0;
+}
+
+.logo-section,
+.logo-container,
+.logo{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+img.logo,
+.logo img,
+.logo-section img,
+.logo-container img{
+  height:52px;
+  width:auto;
+  max-height:52px;
+  max-width:180px;
+  object-fit:contain;
+  display:block;
+}
+
+.site-title{
+  font-size:1.4rem;
+  font-weight:700;
+  color:var(--purple);
+}
+
 /* ריווח בין סקשנים */
 section{
   padding:60px 0;
