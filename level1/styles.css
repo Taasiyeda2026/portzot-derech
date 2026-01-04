@@ -157,14 +157,13 @@ section{
 
 .section-subtitle{
   text-align:center;
-  color:var(--purple);
+  color:var(--pink);
   margin-bottom:50px;
   font-weight:700;
-  font-size:1.25rem;
-  background:linear-gradient(135deg,#f6f0fb,#fbeaf3);
-  display:inline-block;
-  padding:12px 26px;
-  border-radius:30px;
+  font-size:1.35rem;
+  background:none;
+  padding:0;
+  border-radius:0;
 }
 
 
@@ -226,8 +225,44 @@ section{
   display:none;
 }
 
+/* ================= INTRO – איך זה עובד ================= */
+.intro-card{
+  background:linear-gradient(135deg,#f6f0fb,#ffffff);
+  border-radius:24px;
+  padding:48px 44px;
+  box-shadow:var(--shadow);
+}
+
+.intro-card h2{
+  font-size:2.1rem;
+  color:var(--purple);
+  margin-bottom:26px;
+}
+
+.intro-text{
+  font-size:1.15rem;
+  margin-bottom:18px;
+  color:#333;
+}
+
+.intro-text strong{
+  color:var(--purple);
+}
+
+.highlight-box{
+  margin-top:28px;
+  padding:22px 26px;
+  background:linear-gradient(135deg,#fbeaf3,#f6f0fb);
+  border-right:6px solid var(--pink);
+  border-radius:18px;
+}
+
+.highlight-box p{
+  margin-bottom:10px;
+  font-size:1.05rem;
+}
+
 /* ================= CARDS ================= */
-.intro-card,
 .selection-card,
 .step-card,
 .how-to-card{
@@ -238,20 +273,43 @@ section{
 }
 
 /* ================= DOMAINS ================= */
+
+/* כותרת תחומים – הדגשה רכה */
+.domains-section .section-title{
+  margin-bottom:10px;
+}
+
+/* הוסר: אין תת-כותרת בתחומים */
+.domains-section .section-subtitle{
+  display:none;
+}
+
 .domains-grid{
   display:grid;
   grid-template-columns:repeat(5,1fr);
   gap:22px;
-  margin-top:40px;
+  margin-top:30px;
 }
 
 .domain-card{
   background:linear-gradient(135deg,#ffffff,#faf7fb);
   border-radius:22px;
-  padding:28px 24px 30px;
+  padding:28px 22px 30px;
   text-align:center;
   box-shadow:var(--shadow);
-  transition:transform .3s ease, box-shadow .3s ease;
+  transition:transform .25s ease, box-shadow .25s ease;
+  position:relative;
+}
+
+.domain-card::after{
+  content:'';
+  position:absolute;
+  left:20px;
+  right:20px;
+  bottom:14px;
+  height:2px;
+  background:linear-gradient(135deg,var(--purple),var(--pink));
+  opacity:.15;
 }
 
 .domain-card:hover{
@@ -271,7 +329,7 @@ section{
 }
 
 .domain-subtitle{
-  font-size:1rem;
+  font-size:0.95rem;
   color:#666;
   margin-bottom:18px;
 }
