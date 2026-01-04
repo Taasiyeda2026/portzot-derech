@@ -157,10 +157,16 @@ section{
 
 .section-subtitle{
   text-align:center;
-  color:#555;
+  color:var(--purple);
   margin-bottom:50px;
-  font-weight:600; /* הדגשה */
+  font-weight:700;
+  font-size:1.25rem;
+  background:linear-gradient(135deg,#f6f0fb,#fbeaf3);
+  display:inline-block;
+  padding:12px 26px;
+  border-radius:30px;
 }
+
 
 /* ================= PROCESS (תהליך) ================= */
 .process-steps{
@@ -215,24 +221,9 @@ section{
   margin-bottom:10px;
 }
 
-/* ================= HOW TO – ניקוי עדין ================= */
-.how-to-card{
-  background:#fff;
-  border-radius:22px;
-  padding:34px;
-  box-shadow:var(--shadow);
-  text-align:center;
-}
-
-.how-to-card h3{
-  font-size:1.3rem;
-  color:var(--purple);
-  margin-bottom:12px;
-}
-
-.how-to-card p{
-  font-size:1.05rem;
-  color:#555;
+/* ================= HOW TO – הוסר מהמערכת ================= */
+.how-to-section{
+  display:none;
 }
 
 /* ================= CARDS ================= */
