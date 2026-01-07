@@ -1,7 +1,8 @@
 /* =====================================================
-   פורצות דרך | Level1
-   styles.css — עיצוב פדגוגי חי, נקי ובוגר (RTL)
+   פורצות דרך | Level1 — PURE CSS UPGRADE
+   styles-updated-clean.css — עיצוב משודרג ללא שינויי HTML
    מתאים לנערות 15–16 | סטטי | Vanilla
+   גרסה נקייה: רק שדרוג CSS, אפס שינויים ב-HTML נדרשים
    ===================================================== */
 
 /* ===== Reset ===== */
@@ -12,7 +13,7 @@ img,svg,video{max-width:100%;height:auto}
 a{color:inherit}
 button,input,select,textarea{font:inherit}
 
-/* ===== Tokens ===== */
+/* ===== Tokens — צבעים מעודכנים ותוססים ===== */
 :root{
   /* Base */
   --bg:#ffffff;
@@ -24,11 +25,15 @@ button,input,select,textarea{font:inherit}
   --border:rgba(15,23,42,.12);
   --border2:rgba(15,23,42,.08);
 
-  /* Brand (calm but alive) */
-  --brand:#7c3aed;     /* violet */
-  --brand2:#06b6d4;    /* cyan */
-  --accent:#f97316;    /* warm accent */
-  --success:#22c55e;
+  /* Brand — צבעים חיים ואנרגטיים יותר */
+  --brand:#8b5cf6;        /* violet בהיר יותר */
+  --brand2:#14b8a6;       /* teal חי */
+  --accent:#f59e0b;       /* amber חם */
+  --success:#10b981;      /* emerald */
+
+  /* גרדיאנטים דינמיים */
+  --gradient-primary: linear-gradient(135deg, #8b5cf6 0%, #14b8a6 100%);
+  --gradient-hero: linear-gradient(135deg, #8b5cf6 0%, #06b6d4 50%, #f59e0b 100%);
 
   /* Typography */
   --font: system-ui, -apple-system, "Segoe UI", "Heebo", "Rubik", Arial, sans-serif;
@@ -47,7 +52,7 @@ button,input,select,textarea{font:inherit}
   --gap:14px;
 
   /* Focus */
-  --focus:0 0 0 4px rgba(6,182,212,.22);
+  --focus:0 0 0 4px rgba(20,184,166,.22);
 }
 
 /* ===== Base ===== */
@@ -72,14 +77,42 @@ body{
 }
 :focus-visible{outline:none;box-shadow:var(--focus);border-radius:14px}
 
-/* ===== Typography hierarchy ===== */
-.h1, h1{font-size:clamp(30px, 3.3vw, 40px);line-height:1.15;letter-spacing:-.3px;margin:0 0 10px}
-.h2, h2{font-size:clamp(22px, 2.2vw, 28px);line-height:1.25;letter-spacing:-.2px;margin:0 0 10px}
-.h3, h3{font-size:clamp(18px, 1.6vw, 20px);line-height:1.35;margin:0 0 8px}
+/* ===== Typography hierarchy — עם הדגשות חזקות יותר ===== */
+.h1, h1{
+  font-size:clamp(30px, 3.3vw, 40px);
+  line-height:1.15;
+  letter-spacing:-.3px;
+  margin:0 0 10px;
+  font-weight: 700;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.h2, h2{
+  font-size:clamp(22px, 2.2vw, 28px);
+  line-height:1.25;
+  letter-spacing:-.2px;
+  margin:0 0 10px;
+  font-weight: 600;
+}
+
+.h3, h3{
+  font-size:clamp(18px, 1.6vw, 20px);
+  line-height:1.35;
+  margin:0 0 8px;
+  font-weight: 600;
+}
 
 p{margin:0 0 12px}
 .lead{font-size:clamp(16px, 1.3vw, 18px);color:var(--muted);max-width:70ch}
 .small{font-size:13px;color:var(--muted2)}
+
+strong {
+  font-weight: 600;
+  color: var(--brand);
+}
 
 .kicker{
   display:inline-flex;align-items:center;gap:8px;
@@ -90,16 +123,18 @@ p{margin:0 0 12px}
 }
 
 /* ===== Links ===== */
-.link{color:rgba(124,58,237,.95);text-decoration:none}
-.link:hover{text-decoration:underline}
+.link{color:var(--brand);text-decoration:none;transition: color .2s ease;}
+.link:hover{text-decoration:underline;color:var(--brand2);}
 
-/* ===== Header / Nav ===== */
+/* ===== Header / Nav — עם אפקט sticky משופר ===== */
 .site-header{
   position:sticky;top:0;z-index:50;
-  background:rgba(255,255,255,.86);
-  backdrop-filter:saturate(1.2) blur(10px);
+  background:rgba(255,255,255,.92);
+  backdrop-filter:saturate(1.3) blur(12px);
   border-bottom:1px solid var(--border);
+  transition: box-shadow .3s ease;
 }
+
 .header-inner{
   display:flex;align-items:center;justify-content:space-between;
   gap:14px;padding:12px 0;
@@ -108,12 +143,25 @@ p{margin:0 0 12px}
 .brand{
   display:flex;align-items:center;gap:10px;text-decoration:none;
   min-width:220px;
+  transition: transform .2s ease;
 }
+
+.brand:hover{
+  transform: translateY(-1px);
+}
+
 .brand-badge{
   width:40px;height:40px;border-radius:14px;
-  background:linear-gradient(135deg, rgba(124,58,237,.95), rgba(6,182,212,.90));
+  background: var(--gradient-primary);
   box-shadow:var(--shadow2);
+  transition: transform .3s ease, box-shadow .3s ease;
 }
+
+.brand:hover .brand-badge{
+  transform: rotate(-5deg) scale(1.05);
+  box-shadow: 0 8px 22px rgba(139,92,246,.28);
+}
+
 .brand-title{display:flex;flex-direction:column;gap:2px}
 .brand-title strong{font-size:15px;letter-spacing:.2px}
 .brand-title span{font-size:12px;color:var(--muted2)}
@@ -125,23 +173,38 @@ p{margin:0 0 12px}
   border-radius:14px;
   padding:10px 12px;
   cursor:pointer;
+  transition: all .2s ease;
+}
+
+.nav-toggle:hover{
+  background: var(--surface);
+  border-color: var(--brand);
 }
 
 .main-nav ul{
   list-style:none;margin:0;padding:0;
   display:flex;gap:10px;flex-wrap:wrap;align-items:center;
 }
+
 .main-nav a{
   text-decoration:none;
   padding:9px 12px;
   border-radius:14px;
   border:1px solid transparent;
   color:var(--text);
+  transition: all .2s ease;
 }
-.main-nav a:hover{background:var(--surface);border-color:var(--border)}
+
+.main-nav a:hover{
+  background:var(--surface);
+  border-color:var(--border);
+  transform: translateY(-1px);
+}
+
 .main-nav a[aria-current="page"]{
-  background:rgba(124,58,237,.10);
-  border-color:rgba(124,58,237,.25);
+  background:rgba(139,92,246,.12);
+  border-color:rgba(139,92,246,.30);
+  color: var(--brand);
 }
 
 /* ===== Breadcrumb ===== */
@@ -150,27 +213,48 @@ p{margin:0 0 12px}
   color:var(--muted2);
   font-size:13px;
 }
-.breadcrumb a{color:var(--muted2);text-decoration:none}
-.breadcrumb a:hover{text-decoration:underline}
+.breadcrumb a{color:var(--muted2);text-decoration:none;transition: color .2s ease;}
+.breadcrumb a:hover{text-decoration:underline;color:var(--brand);}
 
-/* ===== Page Hero ===== */
+/* ===== Page Hero — משודרג עם אנימציות ===== */
 .hero{
   position:relative;
   border-bottom:1px solid var(--border);
   background:
-    radial-gradient(900px 420px at 88% -10%, rgba(124,58,237,.22), transparent 58%),
-    radial-gradient(760px 380px at 12% 0%, rgba(6,182,212,.18), transparent 55%),
-    radial-gradient(560px 280px at 50% 18%, rgba(249,115,22,.10), transparent 60%),
-    linear-gradient(180deg, #fff 0%, #fff 52%, #fbfcff 100%);
+    radial-gradient(1200px 600px at 85% -15%, rgba(139,92,246,.28), transparent 65%),
+    radial-gradient(900px 500px at 15% -8%, rgba(20,184,166,.22), transparent 60%),
+    radial-gradient(700px 400px at 50% 20%, rgba(245,158,11,.15), transparent 65%),
+    linear-gradient(180deg, #ffffff 0%, #fdfbff 45%, #f0fdf9 100%);
+  
+  animation: heroGlow 20s ease-in-out infinite alternate;
 }
+
+@keyframes heroGlow {
+  0% { filter: hue-rotate(0deg) brightness(1); }
+  100% { filter: hue-rotate(8deg) brightness(1.03); }
+}
+
 .hero::after{
   content:"";
   position:absolute;inset:0;
   pointer-events:none;
   background:
-    linear-gradient(90deg, rgba(124,58,237,.00), rgba(124,58,237,.05), rgba(6,182,212,.00));
+    linear-gradient(90deg, 
+      rgba(139,92,246,.00), 
+      rgba(139,92,246,.10) 20%, 
+      rgba(20,184,166,.08) 50%, 
+      rgba(245,158,11,.06) 80%, 
+      rgba(139,92,246,.00)
+    );
   opacity:.75;
+  animation: shimmer 12s linear infinite;
 }
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
 .hero-inner{
   position:relative;
   padding:46px 0 28px;
@@ -181,11 +265,17 @@ p{margin:0 0 12px}
 }
 
 .hero-card{
-  background:rgba(255,255,255,.72);
+  background:rgba(255,255,255,.80);
   border:1px solid var(--border);
   border-radius:var(--radius2);
   padding:18px;
   box-shadow:var(--shadow2);
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+
+.hero-card:hover{
+  transform: translateY(-3px);
+  box-shadow: 0 14px 32px rgba(2,6,23,.14);
 }
 
 .hero-bullets{margin:0;padding:0 18px 0 0}
@@ -196,51 +286,151 @@ p{margin:0 0 12px}
 .section-title{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:10px}
 .section .muted{color:var(--muted)}
 
-/* ===== Cards / Layout ===== */
+/* ===== Cards / Layout — עם אנימציות כניסה ===== */
 .card{
   background:#fff;
   border:1px solid var(--border);
   border-radius:var(--radius);
   box-shadow:var(--shadow2);
+  transition: transform .25s ease, box-shadow .25s ease;
+  animation: fadeInUp .6s ease-out backwards;
 }
+
+.card:hover{
+  transform: translateY(-3px);
+  box-shadow: 0 14px 32px rgba(2,6,23,.14);
+}
+
 .card.pad{padding:var(--pad2)}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
 .grid{display:grid;gap:var(--gap)}
 .grid.domains{grid-template-columns: repeat(3, minmax(0,1fr))}
 
-/* Domain cards feel like choices */
+/* ===== Domain cards — עיצוב משודרג עם גרדיאנטים מגוונים ===== */
 .domain-card{
-  padding:18px;
-  display:flex;flex-direction:column;gap:10px;
+  padding:22px;
+  display:flex;flex-direction:column;gap:12px;
   position:relative;
   overflow:hidden;
+  transition: transform .3s ease, box-shadow .3s ease;
 }
+
+.domain-card:hover{
+  transform: translateY(-5px) scale(1.01);
+  box-shadow: 0 20px 42px rgba(2,6,23,.16);
+}
+
+/* גרדיאנטים מגוונים לכרטיסים - מתחלפים אוטומטית */
 .domain-card::before{
   content:"";
   position:absolute;inset:-2px;
-  background:
-    radial-gradient(420px 240px at 70% 15%, rgba(124,58,237,.18), transparent 62%),
-    radial-gradient(380px 220px at 18% 10%, rgba(6,182,212,.14), transparent 62%);
+  background: radial-gradient(500px 300px at 70% 15%, rgba(139,92,246,.24), transparent 65%);
   opacity:.9;
   pointer-events:none;
+  transition: opacity .3s ease;
 }
+
+.domain-card:hover::before{
+  opacity: 1;
+}
+
+/* כל כרטיס שני - צבע שונה */
+.domain-card:nth-child(2)::before{
+  background: radial-gradient(500px 300px at 70% 15%, rgba(239,68,68,.22), transparent 65%);
+}
+
+.domain-card:nth-child(3)::before{
+  background: radial-gradient(500px 300px at 70% 15%, rgba(20,184,166,.24), transparent 65%);
+}
+
+.domain-card:nth-child(4)::before{
+  background: radial-gradient(500px 300px at 70% 15%, rgba(245,158,11,.24), transparent 65%);
+}
+
+.domain-card:nth-child(5)::before{
+  background: radial-gradient(500px 300px at 70% 15%, rgba(6,182,212,.24), transparent 65%);
+}
+
+.domain-card:nth-child(6)::before{
+  background: radial-gradient(500px 300px at 70% 15%, rgba(236,72,153,.22), transparent 65%);
+}
+
+/* כל התוכן בכרטיס מעל הרקע */
 .domain-card > *{position:relative}
-.domain-card h3{margin:0;font-size:18px}
+.domain-card h3{margin:0;font-size:18px;transition: color .3s ease;}
 .domain-card p{margin:0;color:var(--muted);font-size:14px;max-width:60ch}
+
+/* צבעי כותרות מגוונים */
+.domain-card:nth-child(1) h3{color: #8b5cf6;}
+.domain-card:nth-child(2) h3{color: #ef4444;}
+.domain-card:nth-child(3) h3{color: #14b8a6;}
+.domain-card:nth-child(4) h3{color: #f59e0b;}
+.domain-card:nth-child(5) h3{color: #06b6d4;}
+.domain-card:nth-child(6) h3{color: #ec4899;}
+
+/* סטיילינג לאנימציות מדורגות */
+.domain-card:nth-child(1) { animation-delay: .05s; }
+.domain-card:nth-child(2) { animation-delay: .1s; }
+.domain-card:nth-child(3) { animation-delay: .15s; }
+.domain-card:nth-child(4) { animation-delay: .2s; }
+.domain-card:nth-child(5) { animation-delay: .25s; }
+.domain-card:nth-child(6) { animation-delay: .3s; }
 
 /* ===== Pedagogic callouts ===== */
 .callout{
   border-radius:16px;
   padding:14px 14px;
   border:1px solid var(--border);
-  background:linear-gradient(180deg, rgba(124,58,237,.06), rgba(6,182,212,.04));
+  background:linear-gradient(180deg, rgba(139,92,246,.08), rgba(20,184,166,.04));
+  animation: fadeInUp .6s ease-out backwards;
+  transition: transform .2s ease, box-shadow .2s ease;
 }
-.callout strong{display:block;margin-bottom:6px}
+
+.callout:hover{
+  transform: translateX(-3px);
+  box-shadow: 0 6px 18px rgba(2,6,23,.08);
+}
+
+.callout strong{display:block;margin-bottom:6px;color:var(--brand);}
 
 /* Variants */
-.callout.reflect{background:linear-gradient(180deg, rgba(6,182,212,.07), rgba(6,182,212,.03));border-right:4px solid rgba(6,182,212,.55)}
-.callout.explore{background:linear-gradient(180deg, rgba(124,58,237,.08), rgba(124,58,237,.03));border-right:4px solid rgba(124,58,237,.55)}
-.callout.life{background:linear-gradient(180deg, rgba(249,115,22,.10), rgba(249,115,22,.03));border-right:4px solid rgba(249,115,22,.55)}
+.callout.reflect{
+  background:linear-gradient(180deg, rgba(20,184,166,.09), rgba(20,184,166,.03));
+  border-right:4px solid rgba(20,184,166,.60);
+}
+
+.callout.reflect strong{
+  color: var(--brand2);
+}
+
+.callout.explore{
+  background:linear-gradient(180deg, rgba(139,92,246,.10), rgba(139,92,246,.03));
+  border-right:4px solid rgba(139,92,246,.60);
+}
+
+.callout.explore strong{
+  color: var(--brand);
+}
+
+.callout.life{
+  background:linear-gradient(180deg, rgba(245,158,11,.12), rgba(245,158,11,.03));
+  border-right:4px solid rgba(245,158,11,.60);
+}
+
+.callout.life strong{
+  color: var(--accent);
+}
 
 .hr{height:1px;background:var(--border);margin:16px 0}
 
@@ -248,7 +438,7 @@ p{margin:0 0 12px}
 .list{margin:10px 0 0;padding:0 18px 0 0}
 .list li{margin:8px 0}
 
-/* Styled “question lists” */
+/* Styled "question lists" */
 .q-list{margin:10px 0 0;padding:0;list-style:none;display:grid;gap:10px}
 .q-list li{
   border:1px solid var(--border);
@@ -256,19 +446,32 @@ p{margin:0 0 12px}
   padding:12px 12px;
   background:#fff;
   box-shadow:0 2px 10px rgba(2,6,23,.04);
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
 }
+
+.q-list li:hover{
+  transform: translateX(-3px);
+  box-shadow: 0 6px 18px rgba(2,6,23,.10);
+  border-color: rgba(139,92,246,.30);
+}
+
 .q-list li::before{
   content:"?";
   display:inline-flex;align-items:center;justify-content:center;
   width:26px;height:26px;border-radius:10px;
   margin-left:10px;
-  background:rgba(124,58,237,.10);
-  border:1px solid rgba(124,58,237,.18);
-  color:rgba(124,58,237,.95);
+  background:rgba(139,92,246,.12);
+  border:1px solid rgba(139,92,246,.24);
+  color:var(--brand);
   font-weight:700;
+  transition: transform .2s ease;
 }
 
-/* “Life interfaces” bullets */
+.q-list li:hover::before{
+  transform: scale(1.1) rotate(-5deg);
+}
+
+/* "Life interfaces" bullets */
 .life-points{margin:10px 0 0;padding:0;list-style:none;display:grid;gap:10px}
 .life-points li{
   display:flex;gap:10px;align-items:flex-start;
@@ -276,15 +479,22 @@ p{margin:0 0 12px}
   border-radius:16px;
   padding:12px 12px;
   background:#fff;
+  transition: transform .2s ease, box-shadow .2s ease;
 }
+
+.life-points li:hover{
+  transform: translateX(-3px);
+  box-shadow: 0 6px 18px rgba(2,6,23,.08);
+}
+
 .life-points li::before{
   content:"•";
   font-size:28px;line-height:1;
-  color:rgba(249,115,22,.95);
+  color:var(--accent);
   margin-top:-4px;
 }
 
-/* ===== Buttons ===== */
+/* ===== Buttons — משודרגים עם אפקטים מרשימים ===== */
 .btn{
   display:inline-flex;align-items:center;justify-content:center;gap:8px;
   padding:11px 14px;
@@ -293,24 +503,70 @@ p{margin:0 0 12px}
   background:#fff;
   text-decoration:none;
   cursor:pointer;
-  transition:transform .08s ease, filter .15s ease, background .15s ease, border-color .15s ease;
+  transition:transform .15s ease, filter .2s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease;
 }
-.btn:hover{background:var(--surface);border-color:rgba(15,23,42,.16)}
-.btn:active{transform:translateY(1px)}
 
+.btn:hover{
+  background:var(--surface);
+  border-color:rgba(15,23,42,.18);
+  transform: translateY(-2px);
+}
+
+.btn:active{
+  transform:translateY(0px);
+}
+
+/* כפתור ראשי — משודרג עם גרדיאנט חי ואפקטים */
 .btn.primary{
-  background:linear-gradient(135deg, rgba(124,58,237,.96), rgba(6,182,212,.92));
-  color:#fff;
-  border-color:transparent;
-  box-shadow:0 10px 22px rgba(124,58,237,.18);
+  background: var(--gradient-primary);
+  color: #fff;
+  border: none;
+  box-shadow: 
+    0 12px 28px rgba(139,92,246,.26),
+    0 4px 12px rgba(20,184,166,.20);
+  position: relative;
+  overflow: hidden;
+  font-weight: 500;
 }
-.btn.primary:hover{filter:brightness(.98)}
 
-.btn.ghost{background:transparent}
+.btn.primary::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,.28), transparent 65%);
+  opacity: 0;
+  transition: opacity .3s ease;
+}
+
+.btn.primary:hover{
+  transform: translateY(-3px);
+  box-shadow: 
+    0 16px 36px rgba(139,92,246,.32),
+    0 6px 18px rgba(20,184,166,.24);
+  filter: brightness(1.05);
+}
+
+.btn.primary:hover::before{
+  opacity: 1;
+}
+
+.btn.primary:active{
+  transform: translateY(-1px);
+}
+
+.btn.ghost{
+  background:transparent;
+  border-color: var(--border);
+}
+
+.btn.ghost:hover{
+  background: rgba(139,92,246,.08);
+  border-color: var(--brand);
+}
 
 .btn.pill{
   border-radius:999px;
-  padding:9px 12px;
+  padding:9px 14px;
   font-size:13px;
 }
 
@@ -331,9 +587,9 @@ p{margin:0 0 12px}
   font-size:13px;
 }
 
-/* ===== Quiz ===== */
+/* ===== Quiz — עם אינטראקטיביות משופרת ===== */
 .quiz-wrap{display:grid;gap:14px}
-.q-card{padding:18px}
+.q-card{padding:18px;animation: fadeInUp .6s ease-out backwards;}
 .q-title{margin:0 0 10px;font-size:18px}
 .q-help{margin:0 0 10px;color:var(--muted2);font-size:13px}
 .q-options{display:grid;gap:10px}
@@ -345,16 +601,27 @@ p{margin:0 0 12px}
   border-radius:16px;
   background:#fff;
   cursor:pointer;
-  transition:background .15s ease, border-color .15s ease, transform .08s ease;
+  transition:background .2s ease, border-color .2s ease, transform .15s ease, box-shadow .2s ease;
 }
-.choice:hover{background:var(--surface)}
-.choice:active{transform:translateY(1px)}
+
+.choice:hover{
+  background:var(--surface);
+  border-color: rgba(139,92,246,.30);
+  transform: translateX(-3px);
+  box-shadow: 0 4px 14px rgba(2,6,23,.08);
+}
+
+.choice:active{
+  transform:translateX(-1px);
+}
+
 .choice input{margin-top:4px}
 
 .scale{
   display:grid;grid-template-columns: repeat(5, minmax(0,1fr));
   gap:8px;
 }
+
 .scale label{
   display:flex;flex-direction:column;align-items:center;gap:6px;
   padding:10px 8px;
@@ -363,12 +630,18 @@ p{margin:0 0 12px}
   cursor:pointer;
   background:#fff;
   font-size:13px;
-  transition:background .15s ease, border-color .15s ease;
+  transition:background .2s ease, border-color .2s ease, transform .15s ease;
 }
-.scale label:hover{background:var(--surface)}
+
+.scale label:hover{
+  background:var(--surface);
+  border-color: rgba(139,92,246,.30);
+  transform: translateY(-2px);
+}
+
 .scale small{color:var(--muted2);font-size:11px}
 
-.result{padding:18px}
+.result{padding:18px;animation: fadeInUp .6s ease-out backwards;}
 .result h2{margin:0 0 10px}
 .result p{margin:0 0 10px}
 
@@ -380,6 +653,12 @@ p{margin:0 0 12px}
   background:rgba(255,255,255,.7);
   color:var(--muted2);
   font-size:12px;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.badge:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(2,6,23,.08);
 }
 
 /* ===== Responsive ===== */
@@ -387,6 +666,7 @@ p{margin:0 0 12px}
   .hero-inner{grid-template-columns:1fr;gap:14px;padding:34px 0 22px}
   .grid.domains{grid-template-columns: repeat(2, minmax(0,1fr))}
 }
+
 @media (max-width: 560px){
   .grid.domains{grid-template-columns: 1fr}
   .nav-toggle{display:inline-flex}
@@ -394,4 +674,49 @@ p{margin:0 0 12px}
   .main-nav.open{display:block}
   .main-nav ul{flex-direction:column;gap:8px;padding:10px 0}
   .brand{min-width:auto}
+  
+  /* כפתורים בגדלים קטנים */
+  .btn{
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+  
+  .flow-nav{
+    flex-direction: column;
+  }
+  
+  .flow-nav .btn{
+    width: 100%;
+  }
 }
+
+/* ===== אפקטים נוספים להנאה ===== */
+
+/* פוקוס משופר */
+.btn:focus-visible,
+.choice:focus-within,
+.scale label:focus-within{
+  box-shadow: var(--focus);
+  outline: none;
+}
+
+/* אנימציות לכרטיסים */
+.card:nth-child(odd){
+  animation-delay: .1s;
+}
+
+.card:nth-child(even){
+  animation-delay: .2s;
+}
+
+/* הוברים עדינים לכל האלמנטים האינטראקטיביים */
+a, button, .btn, .choice, .scale label, .domain-card, .hero-card, .callout, .q-list li, .life-points li{
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Smooth transitions לכל הדף */
+* {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== סוף הקובץ ===== */
