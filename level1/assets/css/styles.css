@@ -1,10 +1,9 @@
-/* =================================================
-   פורצות דרך | Startup Future Design
-   קהל: בנות 15–16 | יזמות | עתיד | בחירה
-================================================= */
+/* =========================================
+   פורצות דרך – Startup / Future (Girls 15–16)
+========================================= */
 
 :root{
-  --bg:#f7f8fc;
+  --bg:#f6f7fb;
   --surface:#ffffff;
   --text:#111827;
   --muted:#6b7280;
@@ -14,30 +13,37 @@
   --pink:#ec4899;
   --amber:#f59e0b;
 
-  --radius:24px;
-  --shadow:0 12px 30px rgba(0,0,0,.08);
-  --shadow-hover:0 24px 50px rgba(0,0,0,.12);
+  --radius:22px;
+  --shadow:0 14px 32px rgba(0,0,0,.08);
+  --shadow-hover:0 26px 48px rgba(0,0,0,.12);
 }
 
-/* ===== Base ===== */
 *{box-sizing:border-box}
+
 body{
   margin:0;
   font-family: system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
-  background:linear-gradient(180deg,#f7f8fc,#eef2ff);
+  background:linear-gradient(180deg,#f6f7fb,#eef2ff);
   color:var(--text);
   line-height:1.75;
 }
+
 a{text-decoration:none;color:inherit}
 
 /* ===== Layout ===== */
 .container{
-  max-width:1120px;
+  max-width:1100px;
   margin:0 auto;
-  padding:0 22px;
+  padding:0 20px;
 }
-.section{padding:52px 0}
+
+.section{padding:48px 0}
 .muted{color:var(--muted)}
+
+.grid{
+  display:grid;
+  gap:16px;
+}
 
 /* ===== Header ===== */
 .site-header{
@@ -45,31 +51,35 @@ a{text-decoration:none;color:inherit}
   color:#fff;
   box-shadow:var(--shadow);
 }
+
 .header-inner{
   display:flex;
   justify-content:space-between;
   align-items:center;
   padding:18px 0;
 }
+
 .brand{
   display:flex;
-  gap:14px;
   align-items:center;
+  gap:14px;
 }
-.brand-badge{
+
+.brand-logo{
   width:44px;
   height:44px;
-  border-radius:14px;
-  background:linear-gradient(135deg,#fff,#e0e7ff);
+  object-fit:contain;
 }
+
 .brand-title strong{
-  font-size:20px;
   display:block;
+  font-size:20px;
 }
 .brand-title span{
   font-size:13px;
   opacity:.9;
 }
+
 .main-nav ul{
   list-style:none;
   display:flex;
@@ -77,6 +87,7 @@ a{text-decoration:none;color:inherit}
   margin:0;
   padding:0;
 }
+
 .main-nav a{
   font-weight:600;
   opacity:.9;
@@ -94,16 +105,16 @@ a{text-decoration:none;color:inherit}
 .card{
   background:var(--surface);
   border-radius:var(--radius);
-  padding:28px;
+  padding:26px;
   box-shadow:var(--shadow);
   transition:transform .25s ease, box-shadow .25s ease;
 }
+
 .card:hover{
-  transform:translateY(-6px);
+  transform:translateY(-5px);
   box-shadow:var(--shadow-hover);
 }
 
-/* ===== Card titles ===== */
 .kicker{
   font-size:12px;
   font-weight:700;
@@ -112,7 +123,7 @@ a{text-decoration:none;color:inherit}
   margin-bottom:12px;
 }
 
-/* ===== Thematic cards ===== */
+/* ===== Themed cards ===== */
 .card-questions{
   border-top:6px solid var(--violet);
 }
@@ -137,29 +148,24 @@ a{text-decoration:none;color:inherit}
   margin-bottom:10px;
 }
 
-/* ===== Grid ===== */
-.grid{
-  display:grid;
-  gap:18px;
-}
-
 /* ===== Buttons ===== */
 .btn{
   padding:12px 24px;
   border-radius:999px;
-  font-weight:600;
   background:#fff;
   border:1px solid rgba(0,0,0,.08);
+  font-weight:600;
   transition:all .2s ease;
 }
+
 .btn:hover{transform:translateY(-2px)}
+
 .btn.wide{
   background:linear-gradient(135deg,var(--violet),var(--cyan));
   color:#fff;
   border:none;
 }
 
-/* ===== Flow nav ===== */
 .flow-nav{
   display:flex;
   gap:12px;
