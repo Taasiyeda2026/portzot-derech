@@ -7,108 +7,133 @@
   <link rel="stylesheet" href="assets/css/styles.css"/>
 </head>
 <body>
-<a class="skip-link" href="#main">דלגי לתוכן</a>
+
 <header class="site-header">
   <div class="container">
     <div class="header-inner">
       <a class="brand" href="index.html">
-        <div class="brand-badge" aria-hidden="true"></div>
+        <img src="assets/img/logo.png" alt="פורצות דרך" class="brand-logo">
         <div class="brand-title">
           <strong>פורצות דרך</strong>
-          <span>תחומי חקר והכוונה | שלב בחירה</span>
+          <span>תחומי חקר והכוונה</span>
         </div>
       </a>
-      <button class="nav-toggle" data-nav-toggle aria-expanded="false" aria-controls="mainNav">תפריט</button>
-      <nav class="main-nav" id="mainNav" data-nav>
+      <nav class="main-nav">
         <ul>
           <li><a href="index.html">בית</a></li>
-          <li><a href="domain-1.html">תחומים</a></li>
-          <li><a href="quiz.html">שאלון מסכם</a></li>
+          <li><a href="#domains">תחומים</a></li>
+          <li><a href="quiz.html">שאלון</a></li>
         </ul>
       </nav>
     </div>
   </div>
 </header>
+
+<main>
+
+<!-- ===== פתיח ===== -->
+<section class="section">
   <div class="container">
-    <div class="breadcrumb"><a href="index.html">בית</a></div>
-  </div>
-  <main id="main">
-<section class="hero">
-  <div class="container">
-    <div class="hero-inner">
-      <div>
-        <p class="pill">שלב חקר והכוונה • גיל 15–16 • לשון נקבה</p>
+
+    <div class="grid" style="grid-template-columns:1.2fr .8fr">
+      <div class="card">
+        <p class="kicker">שלב חקר והכוונה • גיל 15–16</p>
         <h1>בחירת תחום חקר שמתחבר אלייך</h1>
         <p>
-          זהו אתר שמרכז במקום אחד את תחומי-העל ותתי-התחומים, כדי לעזור לך
-          <strong>להבין מה מושך אותך באמת</strong> ולהתחיל חקר שמבוסס על החיים שלך.
-          כאן עדיין לא בוחרות בעיה ולא מפתחות פתרון — רק בונות כיוון חכם ומודע.
+          זהו שלב שבו <strong>לא בוחרות בעיה ולא מפתחות פתרון</strong>,
+          אלא עוצרות להבין:
+          מה מסקרן אותך, מה חשוב לך, ואיפה את רוצה לחקור לעומק.
         </p>
-        <div class="hero-actions">
-          <a class="btn primary" href="#domains">בחירת תחום-על</a>
+        <p class="muted">
+          האתר מרכז תחומי-על ותתי-תחומים, ומאפשר לך
+          לבנות כיוון חקר מודע שמבוסס על החיים שלך.
+        </p>
+
+        <div class="flow-nav">
+          <a class="btn wide" href="#domains">בחירת תחום-על</a>
           <a class="btn" href="quiz.html">שאלון מסכם</a>
         </div>
       </div>
-      <div class="card pad">
+
+      <div class="card">
         <p class="kicker">איך משתמשות באתר?</p>
         <ol class="list">
           <li>מתחילות מתחום-על שמסקרן אותך.</li>
-          <li>קוראות את ההכוונה ומחפשות חיבור לחיים שלך.</li>
-          <li>נכנסות לתת-תחום ומעמיקות בשאלות ובממשקים.</li>
-          <li>בסוף — משתמשות בשאלון המסכם כדי לדייק בחירה.</li>
+          <li>קוראות ומחפשות חיבור לחיים שלך.</li>
+          <li>נכנסות לתת-תחום ומעמיקות.</li>
+          <li>בסוף — משתמשות בשאלון כדי לדייק.</li>
         </ol>
-        <div class="notice" style="margin-top:12px">
-          <strong>חשוב:</strong>
-          זהו שלב בסיס לפני התהליך ההנדסי. כאן לא בונים בעיות ולא מציעות פתרונות — רק מחפשות כיוון חקר שמרגיש נכון.
-        </div>
+        <p class="muted" style="margin-top:10px">
+          זהו שלב בסיס לפני התהליך ההנדסי.
+          כאן בונות כיוון — לא פתרון.
+        </p>
       </div>
     </div>
+
   </div>
 </section>
 
+<!-- ===== תחומי-על ===== -->
 <section class="section" id="domains">
   <div class="container">
     <h2>תחומי-העל</h2>
-    <p class="muted">כל תחום מציע נקודת מבט אחרת על טכנולוגיה, חיים וזהות. את יכולה לעבור ביניהם בחופשיות.</p>
-    <div class="grid domains">
-      <div class="card domain-card">
-  <h3>תחום-על 1: הייטק ותשתיות</h3>
-  <p>המערכות שמחזיקות את העולם הדיגיטלי — מאחורי הקלעים, בשקט ובדיוק.</p>
-  <a class="btn" href="domain-1.html">כניסה לתחום</a>
-</div>
-<div class="card domain-card">
-  <h3>תחום-על 2: העצמי והחוסן בעידן טכנולוגי</h3>
-  <p>איך טכנולוגיה יכולה לחזק אותך — ולא להכביד.</p>
-  <a class="btn" href="domain-2.html">כניסה לתחום</a>
-</div>
-<div class="card domain-card">
-  <h3>תחום-על 3: סביבה וקיימות חכמה</h3>
-  <p>טכנולוגיה שמכבדת משאבים, מצמצמת נזק, ועוזרת לבחור אחרת.</p>
-  <a class="btn" href="domain-3.html">כניסה לתחום</a>
-</div>
-<div class="card domain-card">
-  <h3>תחום-על 4: חברה, קהילה והשפעה בעידן דיגיטלי</h3>
-  <p>לא רק מה המערכת עושה — אלא איך היא משנה אנשים, שיח וקהילה.</p>
-  <a class="btn" href="domain-4.html">כניסה לתחום</a>
-</div>
-<div class="card domain-card">
-  <h3>תחום-על 5: יצירה, מדיה וחדשנות תרבותית</h3>
-  <p>כשהטכנולוגיה פוגשת סיפור, זהות, אמנות והשפעה תרבותית.</p>
-  <a class="btn" href="domain-5.html">כניסה לתחום</a>
-</div>
+    <p class="muted">
+      כל תחום מציע זווית אחרת על טכנולוגיה, חיים וזהות.
+      אפשר לעבור ביניהם בחופשיות.
+    </p>
+
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr))">
+
+      <div class="card">
+        <p class="kicker">תחום-על 1</p>
+        <h3>הייטק ותשתיות</h3>
+        <p>המערכות שמחזיקות את העולם הדיגיטלי — מאחורי הקלעים.</p>
+        <a class="btn" href="domain-1.html">כניסה לתחום</a>
+      </div>
+
+      <div class="card">
+        <p class="kicker">תחום-על 2</p>
+        <h3>העצמי והחוסן בעידן טכנולוגי</h3>
+        <p>איך טכנולוגיה יכולה לחזק אותך — ולא להכביד.</p>
+        <a class="btn" href="domain-2.html">כניסה לתחום</a>
+      </div>
+
+      <div class="card">
+        <p class="kicker">תחום-על 3</p>
+        <h3>סביבה וקיימות חכמה</h3>
+        <p>בחירות טכנולוגיות שמכבדות משאבים ועתיד.</p>
+        <a class="btn" href="domain-3.html">כניסה לתחום</a>
+      </div>
+
+      <div class="card">
+        <p class="kicker">תחום-על 4</p>
+        <h3>חברה, קהילה והשפעה</h3>
+        <p>איך מערכות משנות שיח, קהילה וזהות.</p>
+        <a class="btn" href="domain-4.html">כניסה לתחום</a>
+      </div>
+
+      <div class="card">
+        <p class="kicker">תחום-על 5</p>
+        <h3>יצירה, מדיה וחדשנות</h3>
+        <p>טכנולוגיה שפוגשת תרבות, סיפור וזהות.</p>
+        <a class="btn" href="domain-5.html">כניסה לתחום</a>
+      </div>
+
     </div>
+
     <div class="flow-nav">
       <a class="btn wide" href="quiz.html">שאלון מסכם: לכיוון מדויק</a>
     </div>
   </div>
 </section>
-  </main>
+
+</main>
+
 <footer class="footer">
   <div class="container">
-    <div>© 2026 פורצות דרך | אתר חקר והכוונה (שלב בחירת תחום)</div>
+    © 2026 פורצות דרך | אתר חקר והכוונה
   </div>
 </footer>
-<script src="assets/js/app.js"></script>
 
 </body>
 </html>
