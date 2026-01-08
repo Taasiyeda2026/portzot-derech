@@ -100,6 +100,20 @@
       align-items:center;
       text-align:center;
       padding:3rem 1.5rem;
+      position:relative;
+      background:#ffffff;
+    }
+
+    /* מעבר עמוד – Hero */
+    .hero::after{
+      content:"";
+      position:absolute;
+      bottom:-1px;
+      left:0;
+      width:100%;
+      height:120px;
+      background:linear-gradient(to bottom, rgba(255,255,255,0), #ffffff);
+      pointer-events:none;
     }
 
     .hero-brand{
@@ -116,27 +130,52 @@
 }
 
     .hero-title{
-      font-size:2.2rem;
-      margin-bottom:1rem;
-    }
+  font-size:clamp(2.4rem,6vw,3.6rem);
+  margin-bottom:1.2rem;
+  font-weight:800;
+  font-family:'Rubik Rounded','Varela Round',sans-serif;
+  color:#6d28d9;
+}
 
     .hero-subtitle{
-      font-size:1.45rem;
-      margin-bottom:1.6rem;
-      font-weight:600;
-      color:#2a2a2a;
-    }
+  font-size:1.6rem;
+  margin-bottom:1.4rem;
+  font-weight:600;
+  color:#2a2a2a;
+}
 
     .hero-text{
-      font-size:1.15rem;
-      max-width:850px;
-      color:#333333;
-    }
+  font-size:1.35rem;
+  max-width:900px;
+  color:#333333;
+  line-height:1.85;
+}
 
     .section{
       max-width:1200px;
-      margin:4rem auto;
-      padding:0 1.5rem;
+      margin:0 auto;
+      padding:6rem 1.5rem;
+      position:relative;
+    }
+
+    /* תחושת עמוד נפרד */
+    .section-page{
+      background:#ffffff;
+      box-shadow:0 -40px 80px rgba(0,0,0,0.04);
+    }
+
+    .section-page::before{
+      content:"";
+      position:absolute;
+      top:-80px;
+      left:0;
+      width:100%;
+      height:80px;
+      background:linear-gradient(to top, rgba(255,255,255,0), #ffffff);
+    }
+
+    .section-page.alt{
+      background:#faf7ff;
     }
 
     .section-title{
@@ -170,10 +209,12 @@
     }
 
     .process-title{
-      font-size:1.25rem;
-      font-weight:700;
-      margin-bottom:0.5rem;
-    }
+  font-size:1.35rem;
+  font-weight:800;
+  margin-bottom:0.5rem;
+  font-family:'Rubik Rounded','Varela Round',sans-serif;
+  color:#7c3aed;
+}
 
     .process-text{
       font-size:1rem;
@@ -211,6 +252,13 @@
       font-weight:700;
       margin-bottom:0.75rem;
     }
+
+    /* צבע שונה לכל תחום */
+    .domain-card:nth-child(1) .domain-title{color:#7c3aed;} /* סגול */
+    .domain-card:nth-child(2) .domain-title{color:#2563eb;} /* כחול */
+    .domain-card:nth-child(3) .domain-title{color:#16a34a;} /* ירוק */
+    .domain-card:nth-child(4) .domain-title{color:#db2777;} /* ורוד */
+    .domain-card:nth-child(5) .domain-title{color:#ea580c;} /* כתום */
 
     .domain-btn{
       display:inline-block;
@@ -258,13 +306,13 @@
   <h1 class="hero-title">הדרך שלך לפרוץ קדימה</h1>
   <p class="hero-subtitle">זהו מסע שמתחיל בך ומסתיים בשינוי המציאות.</p>
   <p class="hero-text">
-    בתוכנית "פורצות דרך" תגלי שהשילוב בין החוזקות שלך לבין טכנולוגיה
+    בתוכנית "פורצות דרך" תגלי שהשילוב בין החוזקות שלך לבין טכנולוגיה,<br>
     הוא הכוח הכי חזק שיש לך בידיים.<br><br>
-    כאן לא רק לומדות על העתיד – כאן יוצרות אותו.
+    <span class="hero-subtitle">כאן לא רק לומדות על העתיד – כאן יוצרות אותו.</span>
   </p>
 </section>
 
-<section class="section" id="how">
+<section class="section section-page" id="how">
   <h2 class="section-title">איך זה עובד?</h2>
 
   <div class="process-grid">
@@ -313,7 +361,7 @@
   </div>
 </section>
 
-<section class="section" id="domains">
+<section class="section section-page alt" id="domains">
   <h2 class="section-title">התחומים</h2>
 
   <div class="domains-grid">
