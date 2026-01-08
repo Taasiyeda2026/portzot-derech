@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>פורצות דרך | הדרך שלך לפרוץ קדימה</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Varela+Round&family=Rubik+Rounded:wght@700;800;900&display=swap" rel="stylesheet">
 
   <style>
     body{
@@ -32,11 +32,28 @@
       align-items:center;
     }
 
+    /* === Brand + Logo (שומר על העיצוב המקורי) === */
     .brand{
+      display:flex;
+      align-items:center;
+      gap:0.75rem;
       color:white;
       font-size:1.4rem;
       font-weight:800;
       text-decoration:none;
+      white-space:nowrap;
+    }
+
+    .brand-logo{
+      height:54px;
+      width:auto;
+      max-width:90px;
+      border-radius:14px;
+      object-fit:contain;
+      background:#ffffff;
+      padding:6px;
+      box-shadow:0 6px 16px rgba(0,0,0,.18);
+      flex:0 0 auto;
     }
 
     nav{
@@ -86,13 +103,17 @@
     }
 
     .hero-brand{
-      font-size:4.5rem;
-      font-weight:900;
-      background:linear-gradient(135deg,#ec4899,#8b5cf6);
-      -webkit-background-clip:text;
-      -webkit-text-fill-color:transparent;
-      margin-bottom:1rem;
-    }
+  font-family:'Rubik Rounded','Varela Round',sans-serif;
+  font-size:clamp(4.8rem,14vw,7.2rem);
+  font-weight:900;
+  letter-spacing:0.08em;
+  line-height:1;
+  margin-bottom:1rem;
+  background:linear-gradient(135deg,#ec4899,#8b5cf6);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  text-shadow:0 12px 32px rgba(236,72,153,.25);
+}
 
     .hero-title{
       font-size:2.2rem;
@@ -100,13 +121,16 @@
     }
 
     .hero-subtitle{
-      font-size:1.3rem;
-      margin-bottom:1.5rem;
+      font-size:1.45rem;
+      margin-bottom:1.6rem;
+      font-weight:600;
+      color:#2a2a2a;
     }
 
     .hero-text{
-      font-size:1.1rem;
+      font-size:1.15rem;
       max-width:850px;
+      color:#333333;
     }
 
     .section{
@@ -216,7 +240,10 @@
 
 <header>
   <div class="header-content">
-    <a href="index.html" class="brand">פורצות דרך</a>
+    <a href="index.html" class="brand">
+      <img src="logo.png" alt="פורצות דרך" class="brand-logo">
+      פורצות דרך
+    </a>
     <nav>
       <a href="#home" class="nav-link" data-label="עמוד הבית">🏠</a>
       <a href="#domains" class="nav-link" data-label="תחומים">🧭</a>
