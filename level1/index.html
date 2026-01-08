@@ -1,264 +1,186 @@
 <!DOCTYPE html>
-
 <html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>פורצות דרך | הדרך שלך לפרוץ קדימה</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg-primary: #fafbfc;
-      --bg-secondary: #ffffff;
-      --text-primary: #1a202c;
-      --text-secondary: #4a5568;
-      --accent-primary: #8b5cf6;
-      --accent-secondary: #ec4899;
-      --domain-1: #8b5cf6;
-      --domain-2: #ec4899;
-      --domain-3: #10b981;
-      --domain-4: #3b82f6;
-      --domain-5: #f59e0b;
-      --spacing-sm: 0.5rem;
-      --spacing-md: 1rem;
-      --spacing-lg: 2rem;
-      --spacing-xl: 3rem;
-      --radius-sm: 8px;
-      --radius-md: 16px;
-      --radius-lg: 24px;
-      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
-      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
-      --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
+      --bg-primary:#fafbfc;
+      --bg-secondary:#ffffff;
+      --text-primary:#1a202c;
+      --text-secondary:#4a5568;
+      --accent-primary:#8b5cf6;
+      --accent-secondary:#ec4899;
+      --domain-1:#8b5cf6;
+      --domain-2:#ec4899;
+      --domain-3:#10b981;
+      --domain-4:#3b82f6;
+      --domain-5:#f59e0b;
+      --spacing-sm:.5rem;
+      --spacing-md:1rem;
+      --spacing-lg:2rem;
+      --spacing-xl:3rem;
+      --radius-sm:8px;
+      --radius-md:16px;
+      --radius-lg:24px;
+      --shadow-sm:0 2px 8px rgba(0,0,0,.08);
+      --shadow-md:0 4px 16px rgba(0,0,0,.12);
+      --shadow-lg:0 8px 32px rgba(0,0,0,.16);
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    *{margin:0;padding:0;box-sizing:border-box}
 
-    body {
-      font-family: 'Varela Round', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      line-height: 1.6;
-      direction: rtl;
+    body{
+      font-family:'Varela Round',system-ui,-apple-system,"Segoe UI",sans-serif;
+      background:var(--bg-primary);
+      color:var(--text-primary);
+      line-height:1.6;
+      direction:rtl;
     }
 
-    /* Header */
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: linear-gradient(135deg, #8b5cf6 0%, #14b8a6 100%);
-      padding: 1rem 2rem;
-      box-shadow: var(--shadow-md);
-      will-change: transform;
+    /* ================= Header ================= */
+    header{
+      position:sticky;
+      top:0;
+      z-index:100;
+      background:linear-gradient(135deg,#8b5cf6 0%,#14b8a6 100%);
+      padding:1rem 2rem;
+      box-shadow:var(--shadow-md);
     }
 
-    .header-content {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    .header-content{
+      max-width:1200px;
+      margin:0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
     }
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      text-decoration: none;
-      color: white;
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:1rem;
+      text-decoration:none;
+      color:#fff;
     }
 
-    .brand-logo {
-      width: auto;
-      height: 68px;
-      max-width: 95px;
-      border-radius: 14px;
-      object-fit: contain;
-      background: white;
-      padding: 6px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      flex: 0 0 auto;
+    .brand-logo{
+      height:68px;
+      max-width:95px;
+      border-radius:14px;
+      background:#fff;
+      padding:6px;
+      box-shadow:0 4px 12px rgba(0,0,0,.15);
+      object-fit:contain;
     }
 
-    .brand-text {
-      font-size: 1.5rem;
-      font-weight: 800;
-      white-space: nowrap;
+    .brand-text{
+      font-size:1.5rem;
+      font-weight:800;
+      white-space:nowrap;
     }
 
-    nav {
-      display: flex;
-      gap: 1rem;
-      align-items: center;
-    }
-
-    .nav-link {
-      position: relative;
-      color: white;
-      text-decoration: none;
-      font-weight: 700;
-      padding: 0.6rem 1.3rem;
-      border-radius: 999px;
-      font-size: 0.95rem;
-      background: rgba(255,255,255,0.18);
-      border: 1.5px solid rgba(255,255,255,0.35);
-      backdrop-filter: blur(6px);
-      transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.18);
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .nav-link:hover {
-      background: rgba(255,255,255,0.28);
-      transform: translateY(-2px);
-      box-shadow: 0 10px 26px rgba(0,0,0,0.28);
-    }
-
-    .nav-link:active {
-      transform: translateY(0) scale(0.97);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.22);
-    }
-
-    /* CTA emphasis */
-    .nav-link:nth-child(2) {
-      background: linear-gradient(135deg,#14b8a6,#10b981);
-      border: none;
-      box-shadow: 0 10px 28px rgba(16,185,129,0.45);
-    }
-
-    .nav-link:nth-child(2):hover {
-      box-shadow: 0 14px 36px rgba(16,185,129,0.6);
-    }
-
-    .nav-link:hover {
-      background: rgba(255, 255, 255, 0.2);
-      transform: translateY(-2px);
-    }
-
-    /* Hero Section + WOW layer */
-    .hero {
-      position: relative;
-      overflow: hidden;
-      background: #ffffff; /* רקע לבן לקריאות מלאה */
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: var(--spacing-xl) 2rem;
-      text-align: center;
-      border-bottom: 3px solid var(--accent-primary);
-      isolation: isolate;
-    }
-
-    /* WOW layer עדין – נשאר מינימלי ולא פוגע בקריאה */
-    .hero::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      z-index: -1;
-      background: radial-gradient(circle at 50% 0%, rgba(139,92,246,0.06), transparent 60%);
-      pointer-events: none;
-    }
-      50% { transform: translate3d(2%, -2%, 0) scale(1.02); }
-    }
-
-    .hero-title {
-      font-size: clamp(3.5rem, 10vw, 6rem);
-      font-weight: 800;
-      color: #4c1d95; /* טקסט חד וברור על רקע לבן */
-      margin-bottom: var(--spacing-lg);
-      line-height: 1.2;
-    }
-
-    .hero-subtitle {
-      font-size: 2.2rem;
-      font-weight: 700;
-      color: #0f766e;
-      margin-bottom: 3rem;
-      line-height: 1.5;
-      max-width: 1000px;
-    }
-
-    .hero-text {
-      font-size: 1.5rem;
-      max-width: 1000px;
-      margin: 0 auto;
-      line-height: 1.9;
-      font-weight: 500;
-      color: #374151; /* קריאות גבוהה */
-    }
-
-    /* Hero buttons */
-    .hero-actions{
+    nav{
       display:flex;
       gap:1rem;
-      margin-top:2.5rem;
-      flex-wrap:wrap;
-      justify-content:center;
-    }
-
-    .hero-btn{
-      text-decoration:none;
-      padding:0.85rem 2rem;
-      border-radius:999px;
-      font-weight:700;
-      font-size:1.05rem;
-      transition:all .3s ease;
-      border:2px solid transparent;
-      display:inline-flex;
       align-items:center;
-      justify-content:center;
-      min-width:160px;
     }
 
-    .hero-btn.primary{
-      background:linear-gradient(135deg,#8b5cf6,#ec4899);
+    .nav-link{
+      position:relative;
       color:#fff;
-      box-shadow:0 10px 28px rgba(139,92,246,.35);
+      text-decoration:none;
+      font-weight:700;
+      padding:.6rem 1.3rem;
+      border-radius:999px;
+      font-size:.95rem;
+      background:rgba(255,255,255,.18);
+      border:1.5px solid rgba(255,255,255,.35);
+      backdrop-filter:blur(6px);
+      transition:.25s ease;
+      box-shadow:0 6px 18px rgba(0,0,0,.18);
     }
 
-    .hero-btn.primary.quiz{
-      background:linear-gradient(135deg,#14b8a6,#10b981);
-      box-shadow:0 10px 28px rgba(16,185,129,.35);
+    .nav-link::after{
+      content:attr(data-label);
+      position:absolute;
+      bottom:-42px;
+      left:50%;
+      transform:translateX(-50%);
+      background:rgba(15,23,42,.92);
+      color:#fff;
+      padding:.35rem .75rem;
+      border-radius:8px;
+      font-size:.8rem;
+      opacity:0;
+      pointer-events:none;
+      transition:.2s ease;
+      white-space:nowrap;
     }
 
-    .hero-btn.primary.quiz:hover{
-      transform:translateY(-2px) scale(1.02);
-      box-shadow:0 14px 36px rgba(16,185,129,.45);
+    .nav-link:hover::after{opacity:1}
+    .nav-link:hover{background:rgba(255,255,255,.28);transform:translateY(-2px)}
+
+    @media(max-width:768px){
+      .nav-link::after{display:none}
     }
 
-    .hero-btn.primary:hover{
-      transform:translateY(-2px) scale(1.02);
-      box-shadow:0 14px 36px rgba(139,92,246,.45);
+    /* ================= Hero ================= */
+    .hero{
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      padding:var(--spacing-xl) 2rem;
+      text-align:center;
+      background:#fff;
+      border-bottom:3px solid var(--accent-primary);
+      position:relative;
     }
 
-    .hero-btn.secondary{
-      background:#ffffff;
-      color:#6b21a8;
-      border-color:#e9d5ff;
+    .hero-brand{
+      font-size:clamp(4rem,12vw,7rem);
+      font-weight:900;
+      margin-bottom:1.25rem;
+      background:linear-gradient(135deg,#ec4899,#8b5cf6);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
     }
 
-    .hero-btn.secondary:hover{
-      background:#faf5ff;
-      transform:translateY(-2px);
+    .hero-title{
+      font-size:clamp(2.4rem,6vw,3.6rem);
+      font-weight:800;
+      margin-bottom:1.5rem;
+      background:linear-gradient(135deg,#8b5cf6,#ec4899,#14b8a6);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
     }
 
-    @media (max-width:768px){
-      .hero-actions{
-        gap:.75rem;
-        margin-top:2rem;
-      }
-      .hero-btn{
-        width:100%;
-        max-width:320px;
-      }
+    .hero-subtitle{
+      font-size:2rem;
+      font-weight:700;
+      margin-bottom:2.5rem;
+      background:linear-gradient(135deg,#ec4899,#14b8a6);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
     }
 
-    /* Scroll hint */
+    .hero-text{
+      font-size:1.5rem;
+      max-width:1000px;
+      line-height:1.9;
+      background:linear-gradient(135deg,#8b5cf6,#ec4899);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+    }
+
     .scroll-hint{
       position:absolute;
       bottom:24px;
@@ -267,11 +189,9 @@
       display:flex;
       flex-direction:column;
       align-items:center;
-      gap:6px;
-      font-size:0.9rem;
+      font-size:.9rem;
       color:#6b7280;
-      opacity:0.85;
-      pointer-events:none;
+      opacity:.85;
     }
 
     .scroll-arrow{
@@ -284,523 +204,70 @@
       50%{transform:translateY(8px)}
     }
 
-    @media (max-width:768px){
-      .scroll-hint{bottom:16px}
+    /* ================= Sections ================= */
+    .section{
+      max-width:1200px;
+      margin:var(--spacing-xl) auto;
+      padding:0 2rem;
     }
 
-    /* Process Section */
-    .section {
-      max-width: 1200px;
-      margin: var(--spacing-xl) auto;
-      padding: 0 2rem;
+    .section-title{
+      text-align:center;
+      font-size:3rem;
+      font-weight:800;
+      margin-bottom:3rem;
+      background:linear-gradient(135deg,#8b5cf6,#ec4899,#14b8a6);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
     }
 
-    .section-header {
-      text-align: center;
-      margin-bottom: var(--spacing-lg);
-    }
-
-    .section-title {
-      font-size: 3rem;
-      font-weight: 800;
-      background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 50%, #14b8a6 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: var(--spacing-lg);
-    }
-
-    /* Process Cards */
-    .process-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1.5rem;
-      margin-bottom: var(--spacing-xl);
-    }
-
-    .process-card {
-      background: var(--bg-secondary);
-      border-radius: var(--radius-lg);
-      padding: 1.5rem;
-      box-shadow: var(--shadow-sm);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      border: 2px solid #e2e8f0;
-      min-height: 320px;
-      display: flex;
-      flex-direction: column;
-      animation: fadeInUp 0.6s ease forwards;
-      opacity: 0;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* Card backgrounds */
-    .process-card:nth-child(1) {
-      background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(168, 139, 250, 0.05) 100%);
-      border-color: rgba(139, 92, 246, 0.3);
-      animation-delay: 0.1s;
-    }
-
-    .process-card:nth-child(2) {
-      background: linear-gradient(135deg, rgba(13, 148, 136, 0.05) 0%, rgba(20, 184, 166, 0.05) 100%);
-      border-color: rgba(13, 148, 136, 0.3);
-      border-style: dashed;
-      border-width: 3px;
-      animation-delay: 0.2s;
-    }
-
-    .process-card:nth-child(3) {
-      background: linear-gradient(135deg, rgba(236, 72, 153, 0.05) 0%, rgba(244, 114, 182, 0.05) 100%);
-      border-color: rgba(236, 72, 153, 0.3);
-      animation-delay: 0.3s;
-    }
-
-    .process-card:nth-child(4) {
-      background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(96, 165, 250, 0.05) 100%);
-      border-color: rgba(59, 130, 246, 0.3);
-      animation-delay: 0.4s;
-    }
-
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(13, 148, 136, 0.4); }
-      50%      { box-shadow: 0 0 0 10px rgba(13, 148, 136, 0); }
-    }
-
-    /* Only the highlighted card pulses */
-    .process-card.is-highlight {
-      animation-name: fadeInUp, pulse;
-      animation-duration: 0.6s, 2s;
-      animation-timing-function: ease, ease-in-out;
-      animation-iteration-count: 1, infinite;
-      animation-fill-mode: forwards, both;
-      animation-delay: 0.2s, 0.6s;
-    }
-
-    .process-card:hover {
-      transform: translateY(-5px);
-      box-shadow: var(--shadow-md);
-    }
-
-    .process-number {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 1.1rem;
-      margin-bottom: var(--spacing-md);
-      background: var(--accent-primary);
-      color: white;
-      line-height: 1;
-    }
-
-    .process-card:nth-child(2) .process-number {
-      background: var(--domain-3);
-      font-size: 2rem;
-      width: 55px;
-      height: 55px;
-    }
-
-    .process-title {
-      font-size: 1.4rem;
-      font-weight: 700;
-      background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: var(--spacing-sm);
-    }
-
-    .process-text {
-      font-size: 1rem;
-      line-height: 1.7;
-      color: var(--text-secondary);
-      flex: 1;
-    }
-
-    /* Domain Links in Card 2 */
-    .domain-links {
-      display: flex;
-      gap: 0.5rem;
-      margin-top: var(--spacing-md);
-      flex-wrap: wrap;
-    }
-
-    .domain-link {
-      text-decoration: none;
-      font-size: 1.8rem;
-      background: white;
-      border: 2px solid #e2e8f0;
-      border-radius: var(--radius-sm);
-      padding: 0.5rem;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 50px;
-      min-height: 50px;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .domain-link:hover {
-      transform: scale(1.1);
-      box-shadow: var(--shadow-sm);
-    }
-
-    .domain-link:nth-child(1):hover { border-color: var(--domain-1); }
-    .domain-link:nth-child(2):hover { border-color: var(--domain-2); }
-    .domain-link:nth-child(3):hover { border-color: var(--domain-3); }
-    .domain-link:nth-child(4):hover { border-color: var(--domain-4); }
-    .domain-link:nth-child(5):hover { border-color: var(--domain-5); }
-
-    /* Domains Section */
-    .domains-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 1.5rem;
-    }
-
-    .domain-card {
-      background: var(--bg-secondary);
-      border-radius: var(--radius-lg);
-      padding: 2rem 1.5rem;
-      text-align: center;
-      transition: all 0.3s ease;
-      box-shadow: var(--shadow-sm);
-      border: 2px solid transparent;
-      text-decoration: none;
-      color: var(--text-primary);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .domain-card:hover {
-      transform: translateY(-8px);
-      box-shadow: var(--shadow-lg);
-    }
-
-    .domain-card:nth-child(1) { border-color: rgba(139, 92, 246, 0.3); }
-    .domain-card:nth-child(1):hover { border-color: var(--domain-1); background: rgba(139, 92, 246, 0.05); }
-
-    .domain-card:nth-child(2) { border-color: rgba(236, 72, 153, 0.3); }
-    .domain-card:nth-child(2):hover { border-color: var(--domain-2); background: rgba(236, 72, 153, 0.05); }
-
-    .domain-card:nth-child(3) { border-color: rgba(16, 185, 129, 0.3); }
-    .domain-card:nth-child(3):hover { border-color: var(--domain-3); background: rgba(16, 185, 129, 0.05); }
-
-    .domain-card:nth-child(4) { border-color: rgba(59, 130, 246, 0.3); }
-    .domain-card:nth-child(4):hover { border-color: var(--domain-4); background: rgba(59, 130, 246, 0.05); }
-
-    .domain-card:nth-child(5) { border-color: rgba(245, 158, 11, 0.3); }
-    .domain-card:nth-child(5):hover { border-color: var(--domain-5); background: rgba(245, 158, 11, 0.05); }
-
-    .domain-icon {
-      font-size: 3.5rem;
-      transition: all 0.3s ease;
-    }
-
-    .domain-card:hover .domain-icon {
-      transform: scale(1.15);
-    }
-
-    .domain-title {
-      font-size: 1.35rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-    }
-
-    .domain-card:nth-child(1) .domain-title { color: var(--domain-1); }
-    .domain-card:nth-child(2) .domain-title { color: var(--domain-2); }
-    .domain-card:nth-child(3) .domain-title { color: var(--domain-3); }
-    .domain-card:nth-child(4) .domain-title { color: var(--domain-4); }
-    .domain-card:nth-child(5) .domain-title { color: var(--domain-5); }
-
-    .domain-btn {
-      margin-top: auto;
-      padding: 0.6rem 1.5rem;
-      border: 2px solid;
-      border-radius: var(--radius-sm);
-      background: transparent;
-      font-weight: 600;
-      font-size: 0.95rem;
-      transition: all 0.3s ease;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .domain-card:nth-child(1) .domain-btn { border-color: var(--domain-1); color: var(--domain-1); }
-    .domain-card:nth-child(1):hover .domain-btn { background: var(--domain-1); color: white; }
-
-    .domain-card:nth-child(2) .domain-btn { border-color: var(--domain-2); color: var(--domain-2); }
-    .domain-card:nth-child(2):hover .domain-btn { background: var(--domain-2); color: white; }
-
-    .domain-card:nth-child(3) .domain-btn { border-color: var(--domain-3); color: var(--domain-3); }
-    .domain-card:nth-child(3):hover .domain-btn { background: var(--domain-3); color: white; }
-
-    .domain-card:nth-child(4) .domain-btn { border-color: var(--domain-4); color: var(--domain-4); }
-    .domain-card:nth-child(4):hover .domain-btn { background: var(--domain-4); color: white; }
-
-    .domain-card:nth-child(5) .domain-btn { border-color: var(--domain-5); color: var(--domain-5); }
-    .domain-card:nth-child(5):hover .domain-btn { background: var(--domain-5); color: white; }
-
-    /* Footer */
-    footer {
-      text-align: center;
-      padding: var(--spacing-lg);
-      background: var(--bg-secondary);
-      color: var(--text-secondary);
-      border-top: 1px solid #e2e8f0;
-      margin-top: var(--spacing-xl);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    /* Accessibility */
-    @media (prefers-reduced-motion: reduce) {
-      .process-card,
-      .process-card.is-highlight,
-      .hero::after {
-        animation: none !important;
-        opacity: 1 !important;
-        transform: none !important;
-      }
-    }
-
-    /* Responsive */
-    @media (max-width: 1200px) {
-      .domains-grid { grid-template-columns: repeat(3, 1fr); }
-      .process-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-
-    @media (max-width: 768px) {
-      header { padding: 0.75rem 1rem; }
-
-      .header-content {
-        gap: 0.75rem;
-      }
-
-      .brand-logo { height: 54px; max-width: 78px; }
-      .brand-text { font-size: 1.15rem; }
-
-      nav { gap: 0.5rem; }
-      .nav-link { font-size: 0.95rem; padding: 0.45rem 0.8rem; }
-
-      .hero {
-        min-height: calc(100vh - 80px);
-        padding: 2.25rem 1.25rem;
-      }
-
-      .hero-title { font-size: 2.6rem; margin-bottom: 1.5rem; }
-      .hero-subtitle { font-size: 1.35rem; margin-bottom: 1.75rem; }
-      .hero-text { font-size: 1.1rem; line-height: 1.85; }
-
-      .section { padding: 0 1.25rem; }
-      .section-title { font-size: 2rem; }
-
-      .process-grid { grid-template-columns: 1fr; }
-
-      /* WOW mobile micro-interactions */
-      .process-card {
-        opacity: 1;
-        animation: mobileFade 0.65s ease both;
-        transform-origin: center;
-      }
-
-      .process-card:active { transform: scale(0.985); }
-
-      .process-card.is-highlight {
-        box-shadow: 0 14px 38px rgba(16, 185, 129, 0.22);
-        animation: mobileFade 0.7s ease both, pulse 2s ease-in-out infinite;
-        animation-delay: 0s, 0.8s;
-      }
-
-      @keyframes mobileFade {
-        from { opacity: 0; transform: translateY(22px) scale(0.98); }
-        to   { opacity: 1; transform: translateY(0) scale(1); }
-      }
-
-      .domains-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-
-    @media (max-width: 480px) {
-      .domains-grid { grid-template-columns: 1fr; }
-      .domain-links { justify-content: center; }
+    /* ================= Footer ================= */
+    footer{
+      text-align:center;
+      padding:var(--spacing-lg);
+      background:#fff;
+      color:var(--text-secondary);
+      border-top:1px solid #e2e8f0;
     }
   </style>
-
 </head>
+
 <body>
 
-  <!-- Header -->
-
-  <header>
-    <div class="header-content">
-      <a href="index.html" class="brand">
-        <img src="logo.png" alt="פורצות דרך" class="brand-logo">
-        <span class="brand-text">פורצות דרך</span>
-      </a>
-      <nav>
-        <a href="#" class="nav-link nav-home" aria-label="עמוד הבית">🏠</a>
-        <a href="#domains" class="nav-link" aria-label="בחירת תחום">🧭</a>
-        <a href="#quiz" class="nav-link" aria-label="שאלון">📝</a>
-        <a href="#about" class="nav-link" aria-label="איך זה עובד">ℹ️</a>
-      </nav>
-    </div>
-  </header>
-
-  <!-- Hero Section -->
-
-  <section class="hero">
-    <h1 class="hero-title">הדרך שלך לפרוץ קדימה</h1>
-    <p class="hero-subtitle">זהו מסע שמתחיל בך ומסתיים בשינוי המציאות.</p>
-    <p class="hero-text">
-      בתוכנית "פורצות דרך" תגלי שהשילוב בין החוזקות שלך לבין טכנולוגיה<br>הוא הכוח הכי חזק שיש לך בידיים.<br><br>כאן לא רק לומדות על העתיד – כאן יוצרות אותו.
-    </p>
-
-```
-  <!-- Scroll Hint -->
-<div class="scroll-hint" aria-hidden="true">
-  <span class="scroll-text">גללי למטה</span>
-  <span class="scroll-arrow">⌄</span>
-</div>
-```
-
-  </section>
-
-  <!-- Process Section -->
-
-  <section id="about" class="section">
-    <div class="section-header">
-      <h2 class="section-title">איך זה עובד?</h2>
-    </div>
-
-```
-<div class="process-grid">
-  <!-- Card 1 -->
-  <div class="process-card">
-    <div class="process-number">1</div>
-    <h3 class="process-title">מגלות את ה-Power שלך: זהות ומנהיגות</h3>
-    <p class="process-text">
-      לפני הטכנולוגיה מתחילות בך. בשלב הזה מחזקות ביטחון עצמי וקול אישי, מזהות חוזקות, שוברות חסמים ותקרות זכוכית ונחשפות לנשים מעוררות השראה מעולמות המדע, ההייטק והיזמות. בונות זהות של מנהיגה שמובילה שינוי.
-    </p>
+<header>
+  <div class="header-content">
+    <a href="index.html" class="brand">
+      <img src="logo.png" alt="פורצות דרך" class="brand-logo">
+      <span class="brand-text">פורצות דרך</span>
+    </a>
+    <nav>
+      <a href="#" class="nav-link" data-label="בית">🏠</a>
+      <a href="#domains" class="nav-link" data-label="תחומים">🧭</a>
+      <a href="#quiz" class="nav-link" data-label="שאלון לבחירת תחום">📝</a>
+      <a href="#about" class="nav-link" data-label="שלבים – איך זה עובד">ℹ️</a>
+    </nav>
   </div>
-    <h3 class="process-title">מגלות את ה-Power שלך: זהות ומנהיגות</h3>
-    <p class="process-text">
-      לפני הטכנולוגיה – מתחילות בך.
-      בשלב הזה מחזקות את הביטחון העצמי והקול האישי שלך, מזהות חוזקות, ושוברות יחד חסמים ותקרות זכוכית. נחשפות לנשים מעוררות השראה שעשו את זה בענק בעולמות המדע, ההייטק והיזמות, ולומדות איך בונות זהות של מנהיגה שמובילה שינוי.
-    </p>
+</header>
+
+<section class="hero">
+  <div class="hero-brand">פורצות דרך</div>
+  <h1 class="hero-title">הדרך שלך לפרוץ קדימה</h1>
+  <p class="hero-subtitle">זהו מסע שמתחיל בך ומסתיים בשינוי המציאות.</p>
+  <p class="hero-text">
+    בתוכנית "פורצות דרך" תגלי שהשילוב בין החוזקות שלך לבין טכנולוגיה<br>
+    הוא הכוח הכי חזק שיש לך בידיים.<br><br>
+    כאן לא רק לומדות על העתיד – כאן יוצרות אותו.
+  </p>
+
+  <div class="scroll-hint">
+    <span>גללי למטה</span>
+    <span class="scroll-arrow">⌄</span>
   </div>
+</section>
 
-  <!-- Card 2 - Highlighted -->
-  <div class="process-card is-highlight">
-    <div class="process-number">⭐️</div>
-    <h3 class="process-title">בחירת תחום: אתר החקר</h3>
-    <p class="process-text">
-      בשלב הזה את בוחרת תחום שמסקרן אותך באמת או תחום שבו היית רוצה להשפיע. דרך חקר, שאלות וחשיבה את מדייקת כיוון אישי, מזהה נושאים משמעותיים עבורך ובונה בסיס רעיוני שישמש בהמשך לבחירת בעיה ולפיתוח פתרון.
-    </p>
-    <div class="domain-links">
-      <a href="domain-1.html" class="domain-link" title="הייטק ליבה">💻</a>
-      <a href="domain-2.html" class="domain-link" title="אדם וטכנולוגיה">💪</a>
-      <a href="domain-3.html" class="domain-link" title="סביבה וקיימות">🌱</a>
-      <a href="domain-4.html" class="domain-link" title="חברה ודיגיטל">🤝</a>
-      <a href="domain-5.html" class="domain-link" title="יזמות ועתיד">🚀</a>
-    </div>
-  </div>
-    <h3 class="process-title">שלב ביניים: בחירת תחום – אתר החקר</h3>
-    <p class="process-text">
-      בשלב הזה את בוחרת תחום מרכזי שמעניין אותך באמת, או תחום שבו היית רוצה להשפיע וליצור שינוי. דרך חקר, שאלות וחשיבה, את מדייקת כיוון אישי שישמש בסיס לבחירת הבעיה ולפיתוח הפתרון.
-    </p>
-    <div class="domain-links">
-      <a href="domain-1.html" class="domain-link" title="הייטק ליבה">💻</a>
-      <a href="domain-2.html" class="domain-link" title="אדם וטכנולוגיה">💪</a>
-      <a href="domain-3.html" class="domain-link" title="סביבה וקיימות">🌱</a>
-      <a href="domain-4.html" class="domain-link" title="חברה ודיגיטל">🤝</a>
-      <a href="domain-5.html" class="domain-link" title="יזמות ועתיד">🚀</a>
-    </div>
-  </div>
-
-  <!-- Card 3 -->
-  <div class="process-card">
-    <div class="process-number">2</div>
-    <h3 class="process-title">הופכות רעיון לפתרון טכנולוגי: יזמות ו-AI</h3>
-    <p class="process-text">
-      בשלב הזה את עובדת בקבוצה על בעיה אמיתית מתוך התחום שנבחר. לומדות לחשוב כמו יזמיות, חוקרות פתרונות קיימים ומשתמשות בכלי AI לפיתוח פתרון טכנולוגי חכם, עם דגש על חקר, חשיבה מערכתית ויצירת השפעה.
-    </p>
-  </div>
-
-  <!-- Card 4 -->
-  <div class="process-card">
-    <div class="process-number">3</div>
-    <h3 class="process-title">מציגות ומשפיעות: פוסטר חקר ופיץ' יזמי</h3>
-    <p class="process-text">
-      בשלב הסיום את מסכמת את התהליך בשני תוצרים: פוסטר חקר טכנולוגי המציג בעיה, חשיבה ופתרון, לצד פיץ' יזמי קצר וברור. לומדות להציג רעיון בצורה ויזואלית ומשכנעת, לעמוד מול קהל ולהסביר את חשיבותו, בדיוק כמו בהייטק.
-    </p>
-  </div>
-</div>
-```
-
-  </section>
-
-  <!-- Domains Section -->
-
-  <section id="domains" class="section">
-    <div class="section-header">
-      <h2 class="section-title">התחומים</h2>
-    </div>
-
-```
-<div class="domains-grid">
-  <a href="domain-1.html" class="domain-card">
-    <div class="domain-icon">💻</div>
-    <h3 class="domain-title">הייטק ליבה</h3>
-    <div class="domain-btn">כניסה לתחום ←</div>
-  </a>
-
-  <a href="domain-2.html" class="domain-card">
-    <div class="domain-icon">💪</div>
-    <h3 class="domain-title">אדם וטכנולוגיה</h3>
-    <div class="domain-btn">כניסה לתחום ←</div>
-  </a>
-
-  <a href="domain-3.html" class="domain-card">
-    <div class="domain-icon">🌱</div>
-    <h3 class="domain-title">סביבה וקיימות</h3>
-    <div class="domain-btn">כניסה לתחום ←</div>
-  </a>
-
-  <a href="domain-4.html" class="domain-card">
-    <div class="domain-icon">🤝</div>
-    <h3 class="domain-title">חברה ודיגיטל</h3>
-    <div class="domain-btn">כניסה לתחום ←</div>
-  </a>
-
-  <a href="domain-5.html" class="domain-card">
-    <div class="domain-icon">🚀</div>
-    <h3 class="domain-title">יזמות ועתיד</h3>
-    <div class="domain-btn">כניסה לתחום ←</div>
-  </a>
-</div>
-```
-
-  </section>
-
-  <!-- Footer -->
-
-  <footer>
-    <p>© 2026 פורצות דרך</p>
-  </footer>
+<footer>
+  © 2026 פורצות דרך
+</footer>
 
 </body>
 </html>
