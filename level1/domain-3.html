@@ -1,91 +1,565 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>פורצות דרך | תחום-על 3: סביבה וקיימות חכמה</title>
-  <link rel="stylesheet" href="assets/css/styles.css"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>סביבה וקיימות | פורצות דרך</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #fafbfc;
+      --bg-secondary: #ffffff;
+      --text-primary: #1a202c;
+      --text-secondary: #4a5568;
+      --domain-color: #10b981;
+      --domain-light: rgba(16, 185, 129, 0.1);
+      --domain-border: rgba(16, 185, 129, 0.3);
+      --spacing-sm: 0.5rem;
+      --spacing-md: 1rem;
+      --spacing-lg: 2rem;
+      --spacing-xl: 3rem;
+      --radius-sm: 8px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+      --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Varela Round', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      direction: rtl;
+    }
+
+    /* Header */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+      padding: 1rem 2rem;
+      box-shadow: var(--shadow-md);
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .back-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.2rem;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .back-button:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateX(4px);
+    }
+
+    .brand-logo {
+      width: auto;
+      height: 80px;
+      max-width: 110px;
+      border-radius: 14px;
+      object-fit: contain;
+      background: white;
+      padding: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(135deg, var(--domain-light) 0%, rgba(255, 255, 255, 0.5) 100%);
+      padding: var(--spacing-xl) 2rem;
+      text-align: center;
+      border-bottom: 3px solid var(--domain-color);
+    }
+
+    .hero-icon {
+      font-size: 4rem;
+      margin-bottom: var(--spacing-md);
+    }
+
+    .hero-title {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800;
+      color: var(--domain-color);
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .hero-tagline {
+      font-size: 1.25rem;
+      color: var(--text-secondary);
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    /* Sub-domains Section */
+    .sub-domains {
+      max-width: 1200px;
+      margin: var(--spacing-xl) auto;
+      padding: 0 2rem;
+    }
+
+    .sub-domains-header {
+      text-align: center;
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .sub-domains-title {
+      font-size: 2rem;
+      color: var(--text-primary);
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .sub-domains-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+    }
+
+    .sub-domains-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .sub-domain-card {
+      background: var(--bg-secondary);
+      padding: 1.5rem;
+      border-radius: var(--radius-md);
+      border: 2px solid var(--domain-border);
+      box-shadow: var(--shadow-sm);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .sub-domain-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 60px;
+      height: 60px;
+      background: var(--domain-light);
+      border-radius: 0 0 0 100%;
+    }
+
+    .sub-domain-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--domain-color);
+    }
+
+    .sub-domain-number {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      width: 32px;
+      height: 32px;
+      background: var(--domain-color);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      z-index: 1;
+    }
+
+    .sub-domain-title {
+      font-size: 1.15rem;
+      color: var(--text-primary);
+      font-weight: 700;
+      margin-top: 1rem;
+    }
+
+    /* Main Content */
+    main {
+      max-width: 1000px;
+      margin: var(--spacing-xl) auto;
+      padding: 0 2rem var(--spacing-xl);
+    }
+
+    .content-section {
+      background: var(--bg-secondary);
+      padding: var(--spacing-lg);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: var(--spacing-lg);
+      border-right: 4px solid var(--domain-color);
+      animation: fadeInUp 0.6s ease forwards;
+      opacity: 0;
+    }
+
+    .content-section:nth-child(1) { animation-delay: 0.1s; }
+    .content-section:nth-child(2) { animation-delay: 0.2s; }
+    .content-section:nth-child(3) { animation-delay: 0.3s; }
+    .content-section:nth-child(4) { animation-delay: 0.4s; }
+    .content-section:nth-child(5) { animation-delay: 0.5s; }
+    .content-section:nth-child(6) { animation-delay: 0.6s; }
+    .content-section:nth-child(7) { animation-delay: 0.7s; }
+    .content-section:nth-child(8) { animation-delay: 0.8s; }
+    .content-section:nth-child(9) { animation-delay: 0.9s; }
+    .content-section:nth-child(10) { animation-delay: 1s; }
+    .content-section:nth-child(11) { animation-delay: 1.1s; }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .section-title {
+      font-size: 1.75rem;
+      color: var(--domain-color);
+      margin-bottom: var(--spacing-md);
+      font-weight: 700;
+    }
+
+    .section-text {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: var(--text-secondary);
+      margin-bottom: var(--spacing-md);
+    }
+
+    .question-box {
+      background: var(--domain-light);
+      border-right: 4px solid var(--domain-color);
+      padding: 1.25rem;
+      border-radius: var(--radius-sm);
+      margin: var(--spacing-md) 0;
+      font-weight: 600;
+      color: var(--text-primary);
+      font-size: 1.1rem;
+    }
+
+    .highlight-box {
+      background: linear-gradient(135deg, var(--domain-light) 0%, rgba(255, 255, 255, 0.3) 100%);
+      padding: 1.5rem;
+      border-radius: var(--radius-md);
+      border: 2px solid var(--domain-border);
+      margin: var(--spacing-md) 0;
+    }
+
+    .custom-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .custom-list li {
+      padding: 0.75rem 0;
+      padding-right: 2rem;
+      position: relative;
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+    }
+
+    .custom-list li::before {
+      content: '●';
+      position: absolute;
+      right: 0;
+      color: var(--domain-color);
+      font-size: 1.5rem;
+      line-height: 1;
+    }
+
+    /* Jobs Grid */
+    .jobs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: var(--spacing-md);
+    }
+
+    .job-card {
+      background: var(--bg-secondary);
+      padding: 1rem;
+      border-radius: var(--radius-sm);
+      border: 2px solid var(--domain-border);
+      text-align: center;
+      font-weight: 600;
+      color: var(--text-primary);
+      transition: all 0.3s ease;
+    }
+
+    .job-card:hover {
+      background: var(--domain-light);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: var(--spacing-lg);
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      border-top: 1px solid #e2e8f0;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 1.75rem;
+      }
+
+      .section-title {
+        font-size: 1.5rem;
+      }
+
+      .sub-domains-grid {
+        grid-template-columns: 1fr;
+      }
+
+      main {
+        padding: 0 1rem var(--spacing-lg);
+      }
+    }
+  </style>
 </head>
 <body>
-<a class="skip-link" href="#main">דלגי לתוכן</a>
-<header class="site-header">
-  <div class="container">
-    <div class="header-inner">
-      <a class="brand" href="index.html">
-        <div class="brand-badge" aria-hidden="true"></div>
-        <div class="brand-title">
-          <strong>פורצות דרך</strong>
-          <span>תחומי חקר והכוונה | שלב בחירה</span>
-        </div>
+
+  <!-- Header -->
+  <header>
+    <div class="header-content">
+      <a href="index.html" class="back-button">
+        ← חזרה לדף הבית
       </a>
-      <button class="nav-toggle" data-nav-toggle aria-expanded="false" aria-controls="mainNav">תפריט</button>
-      <nav class="main-nav" id="mainNav" data-nav>
-        <ul>
-          <li><a href="index.html">בית</a></li>
-          <li><a href="domain-1.html">תחומים</a></li>
-          <li><a href="quiz.html">שאלון מסכם</a></li>
-        </ul>
-      </nav>
+      <img src="logo.png" alt="פורצות דרך" class="brand-logo">
     </div>
-  </div>
-</header>
-  <div class="container">
-    <div class="breadcrumb"><a href="index.html">בית</a> &nbsp;›&nbsp; <span>תחום-על 3: סביבה וקיימות חכמה</span></div>
-  </div>
-  <main id="main">
-<section class="section">
-  <div class="container">
-    <h1 style="margin:0 0 8px; font-size:28px">תחום-על 3: סביבה וקיימות חכמה</h1>
-    <p class="muted" style="margin:0 0 12px">טכנולוגיה שמכבדת משאבים, מצמצמת נזק, ועוזרת לבחור אחרת.</p>
+  </header>
 
-    <div class="grid" style="grid-template-columns:1fr; gap:14px">
-      <div class="card pad">
-        <p class="kicker">פתיח רעיוני</p>
-        <p style="margin:0">תחום זה עוסק בקשר שבין טכנולוגיה לבין הסביבה שבה אנו חיות: משאבים, אקלים, צריכה, בעלי חיים ותחבורה. הוא בוחן כיצד פתרונות טכנולוגיים יכולים לצמצם נזקים, לייעל שימוש במשאבים, ולשפר את האיזון בין האדם, הטבע והמערכות שסביבו.</p>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-icon">🌱</div>
+    <h1 class="hero-title">סביבה וקיימות</h1>
+    <p class="hero-tagline">לחקור איך טכנולוגיה יכולה לשמור על העולם – או לפגוע בו.</p>
+  </section>
+
+  <!-- Sub-domains Section -->
+  
+
+  <!-- Main Content -->
+  <main>
+    <!-- Section 1 -->
+    <section class="content-section">
+      <h2 class="section-title">1. מהו התחום?</h2>
+      <div class="question-box">
+        שאלת פתיחה למחשבה: איך טכנולוגיה יכולה לשנות את הקשר שלנו עם הסביבה – לטובה או לרעה?
       </div>
+      <p class="section-text">
+        תחום זה עוסק בקשר שבין טכנולוגיה לבין הסביבה: משאבים, אקלים, צריכה, בעלי חיים ותחבורה.
+      </p>
+      <p class="section-text">
+        המטרה היא לפתח פתרונות טכנולוגיים שמצמצמים נזקים סביבתיים, מייעלים שימוש במשאבים, ומחברים בין האדם, הטבע והמערכת הסביבתית באופן מאוזן יותר.
+      </p>
+    </section>
 
-      <div class="card pad">
-        <p class="kicker">למה זה נוגע לחיים שלי</p>
-        <p style="margin:0">שינויי אקלים, זיהום ובזבוז משאבים הפכו לנושאים יומיומיים. יש צורך בפתרונות חכמים, מדידים וישימים — לא רק רעיונות ערכיים.</p>
+    <!-- Section 2 -->
+    <section class="content-section">
+      <h2 class="section-title">2. חשיבות התחום וההקשר העכשווי</h2>
+      <p class="section-text">
+        <strong>למה זה נוגע לכל אחת מאיתנו?</strong> כי אתגרי הסביבה הם יומיומיים ומשפיעים על כולנו.
+      </p>
+      <ul class="custom-list">
+        <li>שינוי אקלים</li>
+        <li>זיהום</li>
+        <li>בזבוז משאבים</li>
+        <li>פגיעה בבעלי חיים</li>
+      </ul>
+      <div class="highlight-box">
+        <p class="section-text">
+          הצורך בפתרונות חכמים, מדידים וישימים הוא צורך דחוף – והטכנולוגיה יכולה להיות חלק מהפתרון.
+        </p>
       </div>
+    </section>
 
-      <div class="card pad">
-        <p class="kicker">איך זה פוגש טכנולוגיה / חברה / עצמי</p>
-        <p style="margin:0">זה פוגש טכנולוגיה דרך חיישנים וניטור, אוטומציה ובקרה, ניתוח נתונים, תכנון מערכות יעילות וחומרים מתקדמים. זה פוגש חברה דרך שינוי הרגלים, נגישות, ועלויות.</p>
+    <!-- Section 3 -->
+    <section class="content-section">
+      <h2 class="section-title">3. חיבור לטכנולוגיה ולהייטק</h2>
+      <p class="section-text">
+        התחום משלב טכנולוגיות מגוונות:
+      </p>
+      <ul class="custom-list">
+        <li>חיישני ניטור סביבתי (אוויר, מים, אנרגיה)</li>
+        <li>מוצרים חכמים וטכנולוגיות ירוקות</li>
+        <li>ניתוח נתונים ואוטומציה להפחתת בזבוז</li>
+        <li>תכנון מערכות יעילות (חשמל, מים, תחבורה)</li>
+        <li>שילוב חומרה, תוכנה ועיצוב</li>
+      </ul>
+    </section>
+
+    <!-- Section 4 -->
+    <section class="content-section">
+      <h2 class="section-title">4. אתגרים ובעיות מרכזיות בתחום</h2>
+      <ul class="custom-list">
+        <li><strong>פער בין מודעות לפעולה:</strong> אנשים יודעים על הבעיה, אבל לא תמיד פועלים</li>
+        <li><strong>עלות:</strong> פתרונות סביבתיים יקרים או לא נגישים</li>
+        <li><strong>מדידה בזמן אמת:</strong> קושי לראות השפעה של פעולות יום-יומיות</li>
+        <li><strong>שינוי הרגלים:</strong> קשה לשנות דפוסי צריכה וחשיבה</li>
+        <li><strong>פגיעה בסביבה:</strong> טכנולוגיה עצמה יכולה לפגוע בסביבה</li>
+      </ul>
+    </section>
+
+    <!-- Section 5 -->
+    <section class="content-section">
+      <h2 class="section-title">5. הקשר יומיומי והשפעה אישית</h2>
+      <p class="section-text">
+        התחום פוגש אותך כל יום:
+      </p>
+      <ul class="custom-list">
+        <li>בצריכת חשמל ומים</li>
+        <li>בתחבורה (אוטובוס, רכב פרטי, אופניים)</li>
+        <li>בבגדים, מזון ומוצרים שאת קונה</li>
+        <li>באיכות האוויר והמרחב שסביבך</li>
+      </ul>
+      <div class="question-box">
+        כאן נדרשת עצירה לחשיבה אישית:<br>
+        איזה הרגל יומיומי משפיע על הסביבה?<br>
+        איזה פתרון טכנולוגי יכול לעזור לך לקבל החלטות טובות יותר?
       </div>
+    </section>
 
-      <div class="card pad">
-        <p class="kicker">איך לחקור כאן</p>
-        <p style="margin:0">כאן חוקרות איפה יש בזבוז או נזק בסביבה הקרובה, ומה גורם לאנשים לפעול או לא לפעול — לפני שמחליטות על כיוון.</p>
+    <!-- Section 6 -->
+    <section class="content-section">
+      <h2 class="section-title">6. כיווני חשיבה לפתרונות</h2>
+      <p class="section-text"><strong>לא פתרונות – כיוונים:</strong></p>
+      <ul class="custom-list">
+        <li>טכנולוגיה שמסייעת לקבל בחירה מושכלת</li>
+        <li>מערכות שמפחיתות בזבוז</li>
+        <li>פתרונות שמשלבים קיימות ונוחות</li>
+        <li>מדידה בזמן אמת כבסיס לשינוי התנהגות</li>
+      </ul>
+    </section>
+
+    <!-- Section 7 -->
+    <section class="content-section">
+      <h2 class="section-title">7. שאלות חקר מנחות</h2>
+      <ul class="custom-list">
+        <li>איך טכנולוגיה יכולה להפחית נזק סביבתי?</li>
+        <li>אילו הרגלים יומיומיים אפשר לשנות?</li>
+        <li>איך משלבים קיימות בלי לפגוע בנוחות?</li>
+        <li>איך מודדים השפעה בזמן אמת?</li>
+      </ul>
+    </section>
+
+    <!-- Section 8 -->
+    <section class="content-section">
+      <h2 class="section-title">8. דוגמאות לתפקידים בעולם המדע והטכנולוגיה</h2>
+      <div class="jobs-grid">
+        <div class="job-card">CleanTech Engineer</div>
+        <div class="job-card">Systems Designer</div>
+        <div class="job-card">Data Analyst</div>
+        <div class="job-card">Product Manager</div>
+        <div class="job-card">Environmental Technologist</div>
       </div>
-    </div>
+      <p class="section-text" style="margin-top: 1rem; font-size: 0.95rem; font-style: italic;">
+        הדוגמאות נועדו לפתוח אופק ולהמחיש סוגי עיסוק אפשריים, ולא להכוונה מקצועית.
+      </p>
+    </section>
 
-    <div class="hr"></div>
+    <!-- Section 9 -->
+    <section class="content-section">
+      <h2 class="section-title">9. דוגמאות לאתגרים ולבעיות אפשריות לחקר</h2>
+      <ul class="custom-list">
+        <li>בזבוז אנרגיה או משאבים</li>
+        <li>זיהום מקומי</li>
+        <li>פגיעה בבעלי חיים</li>
+        <li>חוסר מודעות</li>
+        <li>מערכות שאינן מתחשבות בסביבה</li>
+      </ul>
+    </section>
 
-    <h2 style="margin:0 0 10px; font-size:20px">תתי-תחומים</h2>
-    <div class="grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); gap:14px">
-      <div class="card pad">
-            <p class="kicker">תת-תחום מומלץ</p>
-            <h3 style="margin:0 0 8px">תת-תחום 3: קיימות יומיומית ומערכות חכמות</h3>
-            <p class="muted" style="margin:0 0 10px">כי כל החלטה יומיומית (מים, חשמל, צריכה) מתחברת לכאן.</p>
-            <a class="btn" href="sub-3.html">כניסה לתת-תחום</a>
-          </div>
-    </div>
+    <!-- Section 10 -->
+    <section class="content-section">
+      <h2 class="section-title">10. יישומים אפשריים</h2>
+      <ul class="custom-list">
+        <li>בבית ספר, בבית או בשכונה</li>
+        <li>תחבורה והתנהלות יומיומית</li>
+        <li>בדיקת מערכות קיימות והצעת שיפור</li>
+        <li>פיילוטים קטנים לשינוי התנהגות</li>
+      </ul>
+    </section>
 
-    <div class="flow-nav">
-      <a class="btn" href="domain-2.html">הקודם</a>
-<a class="btn wide" href="quiz.html">לשאלון מסכם</a>
-<a class="btn" href="domain-4.html">הבא</a>
-    </div>
-  </div>
-</section>
+    <!-- Section 11 -->
+    <section class="content-section">
+      <h2 class="section-title">11. סיכום והכוונה לבחירה</h2>
+      <div class="highlight-box">
+        <p class="section-text">
+          <strong>זהו תחום למי שמרגישה אחריות כלפי הסביבה.</strong>
+        </p>
+        <p class="section-text">
+          למי שמחפשת לחבר בין טכנולוגיה, מודעות והשפעה אמיתית.
+        </p>
+        <p class="section-text">
+          אם במהלך הקריאה עלו בך שאלות על איזון, קיימות וטכנולוגיה לאורך זמן –<br>
+          <strong>ייתכן שזהו כיוון נכון עבורך לבחירת נושא החקר ולהמשך התהליך ההנדסי.</strong>
+        </p>
+      </div>
+    </section>
+
   </main>
-<footer class="footer">
-  <div class="container">
-    <div>© 2026 פורצות דרך | אתר חקר והכוונה (שלב בחירת תחום)</div>
-  </div>
-</footer>
-<script src="assets/js/app.js"></script>
+
+  <!-- Footer -->
+  <section class="sub-domains">
+    <div class="sub-domains-header">
+      <h2 class="sub-domains-title">תתי התחומים</h2>
+      <p class="sub-domains-subtitle">טכנולוגיה, משאבים ואחריות סביבתית</p>
+    </div>
+    <div class="sub-domains-grid">
+      <div class="sub-domain-card">
+        <div class="sub-domain-number">1</div>
+        <h3 class="sub-domain-title">קיימות וטכנולוגיות ירוקות (CleanTech)</h3>
+      </div>
+      <div class="sub-domain-card">
+        <div class="sub-domain-number">2</div>
+        <h3 class="sub-domain-title">אופנה וטכנולוגיה (FashionTech)</h3>
+      </div>
+      <div class="sub-domain-card">
+        <div class="sub-domain-number">3</div>
+        <h3 class="sub-domain-title">בעלי חיים וטכנולוגיה</h3>
+      </div>
+      <div class="sub-domain-card">
+        <div class="sub-domain-number">4</div>
+        <h3 class="sub-domain-title">תחבורה חכמה ואוטונומית</h3>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2026 קורס פורצות דרך</p>
+  </footer>
 
 </body>
 </html>
