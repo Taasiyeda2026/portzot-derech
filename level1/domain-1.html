@@ -1,13 +1,15 @@
-
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title> ליבה | פורצות דרך</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>הייטק ליבה | פורצות דרך</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet" />
+
   <style>
     :root {
       --bg-primary: #fafbfc;
@@ -17,30 +19,28 @@
       --domain-color: #8b5cf6;
       --domain-light: rgba(139, 92, 246, 0.1);
       --domain-border: rgba(139, 92, 246, 0.3);
-      --spacing-sm: 0.5rem;
-      --spacing-md: 1rem;
-      --spacing-lg: 2rem;
-      --spacing-xl: 3rem;
       --radius-sm: 8px;
       --radius-md: 16px;
-      --radius-lg: 24px;
+      --radius-lg: 20px;
       --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
       --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
-      --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
+      --space-xs: 0.35rem;
+      --space-sm: 0.55rem;
+      --space-md: 1.1rem;
+      --space-lg: 1.6rem;
     }
 
     * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
     }
 
     body {
-      font-family: 'Varela Round', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-family: 'Varela Round', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background: var(--bg-primary);
       color: var(--text-primary);
-      line-height: 1.6;
-      direction: rtl;
+      line-height: 1.7;
     }
 
     header {
@@ -63,50 +63,50 @@
     .back-button {
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
-      padding: 0.6rem 1.2rem;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
       background: rgba(255, 255, 255, 0.2);
-      color: white;
+      color: #fff;
       text-decoration: none;
-      border-radius: var(--radius-sm);
+      border-radius: 50%;
+      font-size: 1.25rem;
       font-weight: 600;
-      transition: all 0.3s ease;
-      backdrop-filter: blur(10px);
+      transition: background 0.3s ease, transform 0.3s ease;
     }
 
     .back-button:hover {
       background: rgba(255, 255, 255, 0.3);
-      transform: translateX(4px);
+      transform: translateY(-1px);
     }
 
     .brand-logo {
-      width: auto;
-      height: 80px;
-      max-width: 110px;
-      border-radius: 14px;
+      height: 72px;
+      max-width: 120px;
       object-fit: contain;
-      background: white;
+      background: #fff;
       padding: 8px;
+      border-radius: 14px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
 
     .hero {
-      background: linear-gradient(135deg, var(--domain-light) 0%, rgba(255, 255, 255, 0.5) 100%);
-      padding: var(--spacing-xl) 2rem;
+      background: linear-gradient(135deg, var(--domain-light), rgba(255, 255, 255, 0.6));
+      padding: 3rem 2rem;
       text-align: center;
       border-bottom: 3px solid var(--domain-color);
     }
 
     .hero-icon {
       font-size: 4rem;
-      margin-bottom: var(--spacing-md);
+      margin-bottom: 1rem;
     }
 
     .hero-title {
       font-size: clamp(2rem, 5vw, 3rem);
       font-weight: 800;
       color: var(--domain-color);
-      margin-bottom: var(--spacing-sm);
+      margin-bottom: 0.5rem;
     }
 
     .hero-tagline {
@@ -117,89 +117,92 @@
     }
 
     main {
-      max-width: 1000px;
-      margin: var(--spacing-xl) auto;
-      padding: 0 2rem var(--spacing-xl);
+      max-width: 960px;
+      margin: 2rem auto;
+      padding: 0 1.25rem 2rem;
     }
 
     .content-section {
       background: var(--bg-secondary);
-      padding: var(--spacing-lg);
+      padding: var(--space-lg);
       border-radius: var(--radius-lg);
       box-shadow: var(--shadow-sm);
-      margin-bottom: var(--spacing-lg);
+      margin-bottom: var(--space-lg);
       border-right: 4px solid var(--domain-color);
-      animation: fadeInUp 0.6s ease forwards;
-      opacity: 0;
-    }
-
-    .content-section:nth-child(1) { animation-delay: 0.1s; }
-    .content-section:nth-child(2) { animation-delay: 0.2s; }
-    .content-section:nth-child(3) { animation-delay: 0.3s; }
-    .content-section:nth-child(4) { animation-delay: 0.4s; }
-    .content-section:nth-child(5) { animation-delay: 0.5s; }
-    .content-section:nth-child(6) { animation-delay: 0.6s; }
-    .content-section:nth-child(7) { animation-delay: 0.7s; }
-    .content-section:nth-child(8) { animation-delay: 0.8s; }
-    .content-section:nth-child(9) { animation-delay: 0.9s; }
-    .content-section:nth-child(10) { animation-delay: 1s; }
-    .content-section:nth-child(11) { animation-delay: 1.1s; }
-
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
     }
 
     .section-title {
-      font-size: 1.75rem;
+      font-size: 1.5rem;
       color: var(--domain-color);
-      margin-bottom: var(--spacing-md);
+      margin-bottom: var(--space-xs);
       font-weight: 700;
     }
 
     .section-text {
       font-size: 1.05rem;
-      line-height: 1.8;
       color: var(--text-secondary);
-      margin-bottom: var(--spacing-md);
+      margin-bottom: var(--space-xs);
+    }
+
+    .section-text.emphasis {
+      font-weight: 700;
+      color: var(--text-primary);
     }
 
     .question-box {
-      background: var(--domain-light);
-      border-right: 4px solid var(--domain-color);
-      padding: 1.25rem;
+      position: relative;
+      background: #ffffff;
+      padding: var(--space-md);
       border-radius: var(--radius-sm);
-      margin: var(--spacing-md) 0;
+      margin: var(--space-md) 0;
       font-weight: 600;
+      font-size: 1.05rem;
+      line-height: 1.6;
       color: var(--text-primary);
-      font-size: 1.1rem;
+      border: 1.5px solid var(--domain-border);
+    }
+
+    .question-box::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--domain-color);
+      border-radius: 4px;
+    }
+
+    .question-box::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--domain-color);
+      border-radius: 4px;
     }
 
     .highlight-box {
-      background: linear-gradient(135deg, var(--domain-light) 0%, rgba(255, 255, 255, 0.3) 100%);
-      padding: 1.5rem;
+      font-size: 1.05rem;
+      line-height: 1.7;
+
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.14), rgba(139, 92, 246, 0.04));
+      padding: var(--space-md);
       border-radius: var(--radius-md);
       border: 2px solid var(--domain-border);
-      margin: var(--spacing-md) 0;
+      margin: var(--space-md) 0;
     }
 
     .custom-list {
       list-style: none;
-      padding: 0;
     }
 
     .custom-list li {
-      padding: 0.75rem 0;
-      padding-right: 2rem;
       position: relative;
+      padding: 0.25rem 1.5rem 0.25rem 0;
       color: var(--text-secondary);
-      font-size: 1.05rem;
     }
 
     .custom-list li::before {
@@ -207,7 +210,7 @@
       position: absolute;
       right: 0;
       color: var(--domain-color);
-      font-size: 1.5rem;
+      font-size: 1.3rem;
       line-height: 1;
     }
 
@@ -215,79 +218,64 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 1rem;
-      margin-top: var(--spacing-md);
+      margin-top: 1rem;
     }
 
     .job-card {
-      background: var(--bg-secondary);
       padding: 1rem;
       border-radius: var(--radius-sm);
       border: 2px solid var(--domain-border);
       text-align: center;
       font-weight: 600;
-      color: var(--text-primary);
-      transition: all 0.3s ease;
+      background: #fff;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .job-card:hover {
-      background: var(--domain-light);
-      transform: translateY(-2px);
+      transform: translateY(-3px);
       box-shadow: var(--shadow-sm);
+      background: var(--domain-light);
     }
 
     .sub-domains {
-      max-width: 1200px;
-      margin: var(--spacing-xl) auto;
-      padding: 0 2rem var(--spacing-xl);
+      max-width: 1100px;
+      margin: 2.5rem auto;
+      padding: 0 1.25rem 2rem;
     }
 
     .sub-domains-header {
       text-align: center;
-      margin-bottom: var(--spacing-lg);
+      margin-bottom: 2rem;
     }
 
     .sub-domains-title {
       font-size: 2rem;
-      color: var(--text-primary);
-      margin-bottom: var(--spacing-sm);
+      margin-bottom: 0.5rem;
     }
 
     .sub-domains-subtitle {
-      font-size: 1.1rem;
       color: var(--text-secondary);
     }
 
     .sub-domains-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.75rem;
     }
 
     .sub-domain-card {
-      background: var(--bg-secondary);
-      padding: 1.5rem;
-      border-radius: var(--radius-md);
-      border: 2px solid var(--domain-border);
-      box-shadow: var(--shadow-sm);
-      transition: all 0.3s ease;
+      background: #fff;
+      padding: 1rem 1rem 1.1rem;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--domain-border);
       position: relative;
-      overflow: hidden;
-    }
-
-    .sub-domain-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 60px;
-      height: 60px;
-      background: var(--domain-light);
-      border-radius: 0 0 0 100%;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+      cursor: pointer;
     }
 
     .sub-domain-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
       border-color: var(--domain-color);
     }
 
@@ -295,99 +283,99 @@
       position: absolute;
       top: 0.5rem;
       right: 0.5rem;
-      width: 32px;
-      height: 32px;
+      width: 26px;
+      height: 26px;
       background: var(--domain-color);
-      color: white;
+      color: #fff;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 700;
-      font-size: 0.9rem;
-      z-index: 1;
+      font-size: 0.75rem;
     }
 
     .sub-domain-title {
-      font-size: 1.15rem;
-      color: var(--text-primary);
+      font-size: 1rem;
       font-weight: 700;
-      margin-top: 1rem;
+      margin-top: 1.4rem;
+      line-height: 1.4;
     }
 
     footer {
       text-align: center;
-      padding: var(--spacing-lg);
+      padding: 2rem;
       background: var(--bg-secondary);
       color: var(--text-secondary);
       border-top: 1px solid #e2e8f0;
     }
 
     @media (max-width: 768px) {
+      main,
+      .sub-domains {
+        padding: 0 1rem 2rem;
+      }
+
       .hero-title {
-        font-size: 1.75rem;
+        font-size: 1.8rem;
       }
+
       .section-title {
-        font-size: 1.5rem;
-      }
-      .sub-domains-grid {
-        grid-template-columns: 1fr;
-      }
-      main {
-        padding: 0 1rem var(--spacing-lg);
+        font-size: 1.4rem;
       }
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <div class="header-content">
-      <a href="index.html" class="back-button">← חזרה לדף הבית</a>
-      <img src="logo.png" alt="פורצות דרך" class="brand-logo">
-    </div>
-  </header>
+<header>
+  <div class="header-content">
+    <a href="index.html" class="back-button home-button" aria-label="דף הבית" title="דף הבית">🏠</a>
+    <img src="logo.png" alt="פורצות דרך" class="brand-logo" />
+  </div>
+</header>
 
-  <section class="hero">
-    <div class="hero-icon">💻</div>
-    <h1 class="hero-title">הייטק ליבה</h1>
-    <p class="hero-tagline">להבין איך הטכנולוגיה באמת עובדת – ומה קורה כשזה משתבש.</p>
+<section class="hero">
+  <div class="hero-icon">💻</div>
+  <h1 class="hero-title">הייטק ליבה</h1>
+  <p class="hero-tagline">להבין איך הטכנולוגיה באמת עובדת – ומה קורה כשזה משתבש.</p>
+</section>
+
+<main>
+
+  <!-- 1 -->
+  <section class="content-section">
+    <h2 class="section-title">1. מהו התחום?</h2>
+    <div class="question-box">
+      מה קורה מאחורי המסך – ומי באמת שולט במערכות שאנחנו משתמשות בהן כל יום?
+    </div>
+    <div class="highlight-box">
+      <p class="section-text">תחום זה עוסק בקוד, מערכות מחשוב, רשתות, אבטחה, אלגוריתמים ותשתיות חכמות.</p>
+      <p class="section-text">הוא בוחן את "מאחורי הקלעים" של המערכות הדיגיטליות – איך הן עובדות, מה גורם להן להצליח או להיכשל, ואיך הן משפיעות על חיינו היומיומיים.</p>
+    </div>
   </section>
 
-  <main>
-    <section class="content-section">
-      <h2 class="section-title">1. מהו התחום?</h2>
-      <div class="question-box">
-        שאלת פתיחה למחשבה: מה קורה מאחורי המסך – ומי באמת שולט במערכות שאנחנו משתמשות בהן כל יום?
-      </div>
-      <p class="section-text">
-        תחום זה עוסק בקוד, מערכות מחשוב, רשתות, אבטחה, אלגוריתמים ותשתיות חכמות.
-      </p>
-      <p class="section-text">
-        הוא בוחן את הבניית "מאחורי הקלעים" של המערכות הדיגיטליות – איך הן עובדות, מה גורם להן להצליח או להיכשל, ואיך הן משפיעות על חיינו היומיומיים.
-      </p>
-    </section>
+  <!-- 2 -->
+  <section class="content-section">
+    <h2 class="section-title">2. חשיבות התחום וההקשר העכשווי</h2>
+    <div class="question-box">
+      למה זה נוגע לכל אחת מאיתנו?
+    </div>
+    <div class="highlight-box">
+      <p class="section-text">כי כל דבר דיגיטלי שאנחנו משתמשות בו – אפליקציה, אתר, מערכת בית ספרית – נשען על תשתית טכנולוגית.</p>
+      <p class="section-text">יציבות, אמינות, ביטחון וחדשנות תלויים באיכות הקוד, המערכת והתשתית.</p>
+      <p class="section-text">ההשפעה של תחום זה נמצאת בכל מקום: בנקאות, בריאות, חינוך, תקשורת, בידור ועוד.</p>
+    </div>
+  </section>
 
-    <section class="content-section">
-      <h2 class="section-title">2. חשיבות התחום וההקשר העכשווי</h2>
-      <p class="section-text">
-        <strong>למה זה נוגע לכל אחת מאיתנו?</strong> כי כל דבר דיגיטלי שאנחנו משתמשות בו – אפליקציה, אתר, מערכת בית ספרית – נשען על תשתית טכנולוגית.
-      </p>
-      <div class="highlight-box">
-        <p class="section-text">
-          יציבות, אמינות, ביטחון וחדשנות – כולם תלויים באיכות הקוד, המערכת והתשתית.
-        </p>
-        <p class="section-text">
-          ההשפעה של תחום זה נמצאת בכל מקום: בנקאות, בריאות, חינוך, תקשורת, בידור ועוד.
-        </p>
-      </div>
-    </section>
-
-    <section class="content-section">
-      <h2 class="section-title">3. חיבור לטכנולוגיה ולהייטק</h2>
-      <p class="section-text">
-        זהו ליבת ההייטק – המקום שבו נוצרת הטכנולוגיה עצמה:
-      </p>
+  <!-- 3 -->
+  <section class="content-section">
+    <h2 class="section-title">3. חיבור לטכנולוגיה ולהייטק</h2>
+    <div class="question-box">
+      איפה זה פוגש את ההייטק שאנחנו שומעות עליו כל הזמן?
+    </div>
+    <div class="highlight-box">
+      <p class="section-text emphasis">זהו ליבת ההייטק – המקום שבו נוצרת הטכנולוגיה עצמה:</p>
       <ul class="custom-list">
         <li>פיתוח תוכנה – יצירת אפליקציות, מערכות ומוצרים דיגיטליים</li>
         <li>בינה מלאכותית ולמידת מכונה – מערכות חכמות שלומדות ומשתפרות</li>
@@ -396,11 +384,16 @@
         <li>חומרה ושבבים – הבסיס הפיזי של כל מחשב ומכשיר</li>
         <li>אלגוריתמים – ההיגיון שמאחורי כל החלטה דיגיטלית</li>
       </ul>
-    </section>
+    </div>
+  </section>
 
-    <section class="content-section">
-      <h2 class="section-title">4. אתגרים ובעיות מרכזיות בתחום</h2>
-      <p class="section-text"><strong>כאן עולות שאלות של אחריות, מורכבות וכוח:</strong></p>
+  <!-- 4 -->
+  <section class="content-section">
+    <h2 class="section-title">4. אתגרים ובעיות מרכזיות בתחום</h2>
+    <div class="question-box">
+      אילו קשיים ואתגרים מסתתרים מאחורי מערכות טכנולוגיות?
+    </div>
+    <div class="highlight-box">
       <ul class="custom-list">
         <li><strong>מורכבות:</strong> מערכות גדולות וקשות להבנה</li>
         <li><strong>פער טכנולוגי:</strong> קצב התפתחות מהיר מול יכולת אנושית מוגבלת</li>
@@ -408,51 +401,65 @@
         <li><strong>שקיפות:</strong> קושי להבין איך מערכות מקבלות החלטות</li>
         <li><strong>תלות:</strong> מה קורה כשמערכת מרכזית מתרסקת?</li>
       </ul>
-    </section>
+    </div>
+  </section>
 
-    <section class="content-section">
-      <h2 class="section-title">5. הקשר יומיומי והשפעה אישית</h2>
-      <p class="section-text">
-        התחום פוגש אותך כל יום:
-      </p>
+  <!-- 5 -->
+  <section class="content-section">
+    <h2 class="section-title">5. הקשר יומיומי והשפעה אישית</h2>
+    <div class="question-box">
+      איך התחום הזה משפיע על החיים האישיים שלך?
+    </div>
+    <div class="highlight-box">
       <ul class="custom-list">
         <li>במהירות האינטרנט ובזמינות האפליקציות</li>
         <li>בביטחון החשבונות והמידע שלך</li>
         <li>בחוויית השימוש – חלקה או מתסכלת</li>
         <li>בשאלות של פרטיות ושליטה</li>
       </ul>
-      <div class="question-box">
-        כאן נדרשת עצירה לחשיבה אישית:<br>
-        מתי חווית תקלה טכנולוגית שהשפיעה עליך?<br>
-        מה גורם לך לסמוך על מערכת – או לא לסמוך?<br>
-        איזה חלק "מאחורי הקלעים" היית רוצה להבין יותר לעומק?
-      </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="content-section">
-      <h2 class="section-title">6. כיווני חשיבה לפתרונות</h2>
-      <p class="section-text"><strong>לא פתרונות – כיוונים:</strong></p>
+  <!-- 6 -->
+  <section class="content-section">
+    <h2 class="section-title">6. כיווני חשיבה לפתרונות</h2>
+    <div class="question-box">
+      באילו כיוונים אפשר לחשוב כדי לשפר מערכות?
+    </div>
+    <div class="highlight-box">
       <ul class="custom-list">
-        <li>פשטות מובנת – איך הופכים מורכבות למשהו ברור?</li>
-        <li>אמינות וביטחון – איך בונים מערכות שאפשר לסמוך עליהן?</li>
-        <li>שקיפות – איך מסבירים למשתמש מה קורה?</li>
-        <li>איזון – איך משלבים ביצועים גבוהים עם נגישות?</li>
+        <li><strong>פשטות מובנת</strong> – איך הופכים מורכבות למשהו ברור?</li>
+        <li><strong>אמינות וביטחון</strong> – איך בונים מערכות שאפשר לסמוך עליהן?</li>
+        <li><strong>שקיפות</strong> – איך מסבירים למשתמש מה קורה?</li>
+        <li><strong>איזון</strong> – איך משלבים ביצועים גבוהים עם נגישות?</li>
       </ul>
-    </section>
+    </div>
+  </section>
 
-    <section class="content-section">
-      <h2 class="section-title">7. שאלות חקר מנחות</h2>
+  <!-- 7 -->
+  <section class="content-section">
+    <h2 class="section-title">7. שאלות חקר מנחות</h2>
+    <div class="question-box">
+      אילו שאלות יכולות להוביל לחקר משמעותי?
+    </div>
+    <div class="highlight-box">
       <ul class="custom-list">
         <li>מה קורה כשמערכת מרכזית קורסת?</li>
-        <li>אילו חלקים של המערכת נשארים "נסתרים" מהמשתמש?</li>
+        <li>אילו חלקים של המערכת נשארים נסתרים מהמשתמש?</li>
         <li>איך מתכננים מערכות חזקות, יעילות והוגנות?</li>
         <li>איך מאבטחים מידע מפני התקפות?</li>
         <li>מה ההבדל בין קוד שעובד לבין קוד שעובד טוב?</li>
       </ul>
-    </section>
+    </div>
+  </section>
 
-    <section class="content-section">
-      <h2 class="section-title">8. דוגמאות לתפקידים בעולם המדע והטכנולוגיה</h2>
+  <!-- 8 -->
+  <section class="content-section">
+    <h2 class="section-title">8. דוגמאות לתפקידים בעולם המדע והטכנולוגיה</h2>
+    <div class="question-box">
+      אילו תפקידים עוסקים בליבה הטכנולוגית?
+    </div>
+    <div class="highlight-box">
       <div class="jobs-grid">
         <div class="job-card">מפתחת תוכנה</div>
         <div class="job-card">מהנדסת מערכות</div>
@@ -460,13 +467,16 @@
         <div class="job-card">מהנדסת תשתיות ענן</div>
         <div class="job-card">חוקרת אלגוריתמים</div>
       </div>
-      <p class="section-text" style="margin-top: 1rem; font-size: 0.95rem; font-style: italic;">
-        הדוגמאות נועדו לפתוח אופק ולהמחיש סוגי עיסוק אפשריים, ולא להכוונה מקצועית.
-      </p>
-    </section>
+    </div>
+  </section>
 
-    <section class="content-section">
-      <h2 class="section-title">9. דוגמאות לאתגרים ולבעיות אפשריות לחקר</h2>
+  <!-- 9 -->
+  <section class="content-section">
+    <h2 class="section-title">9. דוגמאות לאתגרים ולבעיות אפשריות לחקר</h2>
+    <div class="question-box">
+      באילו בעיות אפשר לבחור כנושא חקר?
+    </div>
+    <div class="highlight-box">
       <ul class="custom-list">
         <li>מערכות איטיות או לא יציבות</li>
         <li>חשיפה של מידע אישי או ארגוני</li>
@@ -474,10 +484,16 @@
         <li>חוסר שקיפות בהחלטות אלגוריתמיות</li>
         <li>קושי בהבנת מערכות מורכבות</li>
       </ul>
-    </section>
+    </div>
+  </section>
 
-    <section class="content-section">
-      <h2 class="section-title">10. יישומים אפשריים</h2>
+  <!-- 10 -->
+  <section class="content-section">
+    <h2 class="section-title">10. יישומים אפשריים</h2>
+    <div class="question-box">
+      איפה אפשר ליישם חקר מהתחום הזה?
+    </div>
+    <div class="highlight-box">
       <ul class="custom-list">
         <li>מערכות בית ספריות</li>
         <li>אפליקציות יומיומיות</li>
@@ -485,61 +501,61 @@
         <li>פלטפורמות מקוונות</li>
         <li>בדיקת ביצועים ואבטחה של מערכות קיימות</li>
       </ul>
-    </section>
-
-    <section class="content-section">
-      <h2 class="section-title">11. סיכום והכוונה לבחירה</h2>
-      <div class="highlight-box">
-        <p class="section-text">
-          <strong>זהו תחום למי שאוהבת לפרק מערכות ולהבין מה קורה מתחת לפני השטח.</strong>
-        </p>
-        <p class="section-text">
-          למי שמסקרן אותה איך הכול עובד – וגם מה קורה כשזה לא עובד.
-        </p>
-        <p class="section-text">
-          אם במהלך הקריאה עלו בך שאלות על קוד, מערכות, אבטחה או תשתיות –<br>
-          <strong>ייתכן שזהו כיוון נכון עבורך לבחירת נושא החקר ולהמשך התהליך ההנדסי.</strong>
-        </p>
-      </div>
-    </section>
-  </main>
-
-  <section class="sub-domains">
-    <div class="sub-domains-header">
-      <h2 class="sub-domains-title">תתי התחומים</h2>
-      <p class="sub-domains-subtitle">תשתיות, פיתוח ומערכות מורכבות</p>
-    </div>
-    <div class="sub-domains-grid">
-      <div class="sub-domain-card">
-        <div class="sub-domain-number">1</div>
-        <h3 class="sub-domain-title">פיתוח תוכנה ומערכות</h3>
-      </div>
-      <div class="sub-domain-card">
-        <div class="sub-domain-number">2</div>
-        <h3 class="sub-domain-title">בינה מלאכותית, למידת מכונה ודאטה</h3>
-      </div>
-      <div class="sub-domain-card">
-        <div class="sub-domain-number">3</div>
-        <h3 class="sub-domain-title">סייבר – הגנתי והתקפי</h3>
-      </div>
-      <div class="sub-domain-card">
-        <div class="sub-domain-number">4</div>
-        <h3 class="sub-domain-title">תשתיות ענן, רשת ואינטרנט</h3>
-      </div>
-      <div class="sub-domain-card">
-        <div class="sub-domain-number">5</div>
-        <h3 class="sub-domain-title">חומרה, שבבים ומוליכים למחצה</h3>
-      </div>
-      <div class="sub-domain-card">
-        <div class="sub-domain-number">6</div>
-        <h3 class="sub-domain-title">אלגוריתמיקה וחישוב מתקדם</h3>
-      </div>
     </div>
   </section>
 
-  <footer>
-    <p>© 2026 קורס פורצות דרך</p>
-  </footer>
+  <!-- 11 -->
+  <section class="content-section">
+    <h2 class="section-title">11. סיכום והכוונה לבחירה</h2>
+    <div class="question-box">
+      למי התחום הזה מתאים במיוחד?
+    </div>
+    <div class="highlight-box">
+      <p class="section-text"><strong>זהו תחום למי שאוהבת לפרק מערכות ולהבין מה קורה מתחת לפני השטח.</strong></p>
+      <p class="section-text">למי שמסקרן אותה איך הכול עובד – וגם מה קורה כשזה לא עובד.</p>
+      <p class="section-text">אם במהלך הקריאה עלו בך שאלות על קוד, מערכות, אבטחה או תשתיות – ייתכן שזהו כיוון נכון עבורך לבחירת נושא החקר ולהמשך התהליך ההנדסי.</p>
+    </div>
+  </section>
+
+</main>
+
+<section class="sub-domains">
+  <div class="sub-domains-header">
+    <h2 class="sub-domains-title">תתי התחומים</h2>
+    <p class="sub-domains-subtitle">תשתיות, פיתוח ומערכות מורכבות</p>
+  </div>
+
+  <div class="sub-domains-grid">
+    <div class="sub-domain-card">
+      <div class="sub-domain-number">1</div>
+      <h3 class="sub-domain-title">פיתוח תוכנה ומערכות</h3>
+    </div>
+    <div class="sub-domain-card">
+      <div class="sub-domain-number">2</div>
+      <h3 class="sub-domain-title">בינה מלאכותית, למידת מכונה ודאטה</h3>
+    </div>
+    <div class="sub-domain-card">
+      <div class="sub-domain-number">3</div>
+      <h3 class="sub-domain-title">סייבר – הגנתי והתקפי</h3>
+    </div>
+    <div class="sub-domain-card">
+      <div class="sub-domain-number">4</div>
+      <h3 class="sub-domain-title">תשתיות ענן, רשת ואינטרנט</h3>
+    </div>
+    <div class="sub-domain-card">
+      <div class="sub-domain-number">5</div>
+      <h3 class="sub-domain-title">חומרה, שבבים ומוליכים למחצה</h3>
+    </div>
+    <div class="sub-domain-card">
+      <div class="sub-domain-number">6</div>
+      <h3 class="sub-domain-title">אלגוריתמיקה וחישוב מתקדם</h3>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 קורס פורצות דרך</p>
+</footer>
 
 </body>
 </html>
