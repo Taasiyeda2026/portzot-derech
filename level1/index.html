@@ -88,6 +88,27 @@
       font-weight: 800;
     }
 
+    nav {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .nav-link {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+    }
+
+    .nav-link:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
     /* Hero Section */
     .hero {
       background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(20, 184, 166, 0.1) 100%);
@@ -96,14 +117,7 @@
       border-bottom: 3px solid var(--accent-primary);
     }
 
-    .hero-title-line1 {
-      font-size: clamp(2rem, 5vw, 3.5rem);
-      font-weight: 800;
-      color: var(--text-primary);
-      margin-bottom: 0.5rem;
-    }
-
-    .hero-title-line2 {
+    .hero-title {
       font-size: clamp(2.5rem, 6vw, 4rem);
       font-weight: 800;
       background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
@@ -148,6 +162,12 @@
       margin-bottom: var(--spacing-sm);
     }
 
+    .section-subtitle {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      margin-top: 0.5rem;
+    }
+
     /* Process Cards */
     .process-grid {
       display: grid;
@@ -163,7 +183,7 @@
       box-shadow: var(--shadow-sm);
       transition: all 0.3s ease;
       border: 2px solid #e2e8f0;
-      min-height: 280px;
+      min-height: 320px;
       display: flex;
       flex-direction: column;
       animation: fadeInUp 0.6s ease forwards;
@@ -238,7 +258,15 @@
 
     .process-card:nth-child(2) .process-number {
       background: var(--domain-3);
-      font-size: 1.3rem;
+      font-size: 2rem;
+      width: 55px;
+      height: 55px;
+      line-height: 1;
+    }
+
+    .process-card:nth-child(2) .process-number::before {
+      content: '⭐️';
+      display: block;
     }
 
     .process-title {
@@ -249,7 +277,7 @@
     }
 
     .process-text {
-      font-size: 1.05rem;
+      font-size: 1rem;
       line-height: 1.7;
       color: var(--text-secondary);
       flex: 1;
@@ -409,12 +437,29 @@
         grid-template-columns: repeat(2, 1fr);
       }
 
-      .hero-title-line1 {
-        font-size: 1.75rem;
+      .hero-title {
+        font-size: 2rem;
       }
 
-      .hero-title-line2 {
-        font-size: 2.25rem;
+      .hero-subtitle {
+        font-size: 1.1rem;
+      }
+
+      .section-title {
+        font-size: 1.5rem;
+      }
+
+      nav {
+        gap: 0.5rem;
+      }
+
+      .nav-link {
+        font-size: 0.9rem;
+        padding: 0.4rem 0.8rem;
+      }
+
+      .brand-text {
+        font-size: 1.2rem;
       }
     }
 
@@ -438,13 +483,16 @@
         <img src="logo.png" alt="פורצות דרך" class="brand-logo">
         <span class="brand-text">פורצות דרך</span>
       </a>
+      <nav>
+        <a href="#about" class="nav-link">איך זה עובד?</a>
+        <a href="#domains" class="nav-link">התחומים</a>
+      </nav>
     </div>
   </header>
 
   <!-- Hero Section -->
   <section class="hero">
-    <h1 class="hero-title-line1">ברוכות הבאות</h1>
-    <h1 class="hero-title-line2">פורצות דרך</h1>
+    <h1 class="hero-title">הדרך שלך לפרוץ קדימה</h1>
     <p class="hero-subtitle">זהו מסע שמתחיל בך ומסתיים בשינוי המציאות.</p>
     <p class="hero-text">
       בתוכנית "פורצות דרך" תגלי שהשילוב בין החוזקות שלך לבין טכנולוגיה הוא הכוח הכי חזק שיש לך בידיים. כאן לא רק לומדות על העתיד – כאן יוצרות אותו.
@@ -452,27 +500,29 @@
   </section>
 
   <!-- Process Section -->
-  <section class="section">
+  <section id="about" class="section">
     <div class="section-header">
       <h2 class="section-title">איך זה עובד?</h2>
+      <p class="section-subtitle">(השלבים שלנו)</p>
     </div>
 
     <div class="process-grid">
       <!-- Card 1 -->
       <div class="process-card">
         <div class="process-number">1</div>
-        <h3 class="process-title">מגלות את ה-Power</h3>
+        <h3 class="process-title">מגלות את ה-Power שלך: זהות ומנהיגות</h3>
         <p class="process-text">
-          לפני הטכנולוגיה – מתחילות בך. בניית ביטחון עצמי, זיהוי חוזקות ופריצת תקרות זכוכית יחד עם נשים מעוררות השראה.
+          לפני הטכנולוגיה – מתחילות בך.
+          בשלב הזה מחזקות את הביטחון העצמי והקול האישי שלך, מזהות חוזקות, ושוברות יחד חסמים ותקרות זכוכית. נחשפות לנשים מעוררות השראה שעשו את זה בענק בעולמות המדע, ההייטק והיזמות, ולומדות איך בונות זהות של מנהיגה שמובילה שינוי.
         </p>
       </div>
 
       <!-- Card 2 - Highlighted -->
       <div class="process-card">
-        <div class="process-number">★</div>
-        <h3 class="process-title">בחירת תחום - חקר</h3>
+        <div class="process-number">⭐️</div>
+        <h3 class="process-title">שלב ביניים: בחירת תחום – אתר החקר</h3>
         <p class="process-text">
-          בחירת תחום שמעניין אותך באמת להשפיע בו. דיוק כיוון אישי שישמש בסיס לפתרון הבעיה.
+          בשלב הזה את בוחרת תחום מרכזי שמעניין אותך באמת, או תחום שבו היית רוצה להשפיע וליצור שינוי. דרך חקר, שאלות וחשיבה, את מדייקת כיוון אישי שישמש בסיס לבחירת הבעיה ולפיתוח הפתרון.
         </p>
         <div class="domain-links">
           <a href="domain-1.html" class="domain-link" title="הייטק ליבה">💻</a>
@@ -486,25 +536,28 @@
       <!-- Card 3 -->
       <div class="process-card">
         <div class="process-number">2</div>
-        <h3 class="process-title">רעיון לפתרון</h3>
+        <h3 class="process-title">הופכות רעיון לפתרון טכנולוגי: יזמות ו-AI</h3>
         <p class="process-text">
-          עבודה בקבוצה על בעיה אמיתית. שימוש בכלי AI ויזמות כדי לפתח מענה טכנולוגי חכם וחדשני.
+          בשלב הזה את עובדת בקבוצה על בעיה אמיתית מתוך התחום שנבחר.
+          לומדות לחשוב כמו יזמיות, חוקרות פתרונות קיימים ומשתמשות בכלי AI כדי לפתח פתרון טכנולוגי חכם. הדגש הוא על חקר, חשיבה מערכתית והבנה איך טכנולוגיה ובינה מלאכותית יכולות לתת מענה אמיתי לאתגר.
         </p>
       </div>
 
       <!-- Card 4 -->
       <div class="process-card">
         <div class="process-number">3</div>
-        <h3 class="process-title">מציגות ומשפיעות</h3>
+        <h3 class="process-title">מציגות ומשפיעות: פוסטר חקר ופיץ' יזמי</h3>
         <p class="process-text">
-          סיכום התהליך בפוסטר חקר ופיץ' יזמי. עמידה מול קהל והצגת הפתרון בדיוק כמו בעולם האמיתי.
+          בשלב הסיום את מסכמת את תהליך העבודה והחקר בשני תוצרים מרכזיים:
+          פוסטר חקר טכנולוגי שמציג את הבעיה, תהליך החשיבה, הפתרון וההשפעה הצפויה – לצד פיץ' יזמי קצר וברור.
+          לומדות להציג רעיון טכנולוגי בצורה ויזואלית ומשכנעת, לעמוד מול קהל ולהסביר למה הפתרון שלך חשוב – בדיוק כמו בעולם ההייטק האמיתי.
         </p>
       </div>
     </div>
   </section>
 
   <!-- Domains Section -->
-  <section class="section">
+  <section id="domains" class="section">
     <div class="section-header">
       <h2 class="section-title">התחומים</h2>
     </div>
