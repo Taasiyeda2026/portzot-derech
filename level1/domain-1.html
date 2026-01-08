@@ -15,51 +15,27 @@
 
     :root {
       --bg-primary: #ffffff;
-      --bg-secondary: #f8f9fa;
-      --text-primary: #1e293b;
-      --text-secondary: #475569; /* צבע כהה יותר לקריאות משופרת */
-      --text-muted: #64748b;
-      
-      --domain-color: #7c3aed; /* סגול מעט עמוק יותר */
-      --domain-light: rgba(124, 58, 237, 0.08);
-      --domain-border: rgba(124, 58, 237, 0.3);
-      
-      --max-width: 1000px; /* צמצום קל לקריאות טקסט טובה יותר */
-      --spacing-sm: 1rem;
-      --spacing-md: 1.5rem;
-      --spacing-lg: 2rem;
-      --spacing-xl: 3.5rem;
-      
-      --radius-md: 12px;
-      --radius-lg: 20px;
-      
-      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
-      --shadow-lg: 0 10px 25px rgba(124, 58, 237, 0.15);
+      --bg-secondary: #f1f5f9;
+      --text-primary: #0f172a;
+      --text-secondary: #334155; 
+      --domain-color: #6d28d9; /* סגול עמוק ובולט */
+      --accent-color: #0d9488; /* טורקיז לניגודיות */
+      --max-width: 900px;
     }
 
     body {
       font-family: 'Varela Round', sans-serif;
       background: var(--bg-primary);
       color: var(--text-primary);
-      line-height: 1.7;
+      line-height: 1.8;
       direction: rtl;
-      overflow-x: hidden;
+      font-size: 1.1rem; /* טקסט רץ גדול יותר */
     }
 
-    /* Typography */
-    h1, h2, h3, h4 {
-      font-weight: 700;
-      color: var(--text-primary);
-      margin-bottom: 1rem;
-    }
-
-    h1 { font-size: clamp(2rem, 8vw, 3.5rem); }
-    h2 { font-size: clamp(1.6rem, 5vw, 2.2rem); }
-    h3 { font-size: 1.4rem; color: var(--domain-color); }
-
-    p {
-      margin-bottom: 1.2rem;
-      color: var(--text-secondary);
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 1.25rem;
     }
 
     /* Header */
@@ -67,181 +43,171 @@
       position: sticky;
       top: 0;
       z-index: 1000;
-      background: linear-gradient(135deg, rgba(124, 58, 237, 0.95) 0%, rgba(20, 184, 166, 0.95) 100%);
-      backdrop-filter: blur(10px);
-      padding: 0.75rem 0;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      background: linear-gradient(135deg, #6d28d9 0%, #0d9488 100%);
+      padding: 1rem 0;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     }
 
     .header-content {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      max-width: var(--max-width);
-      margin: 0 auto;
-      padding: 0 var(--spacing-md);
     }
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      text-decoration: none;
-    }
-
-    .brand-logo {
-      height: 50px; /* מותאם יותר למובייל */
-      width: auto;
-      background: white;
-      padding: 4px;
-      border-radius: 10px;
-    }
-
-    .brand-text {
-      color: white;
-      font-weight: 700;
-      font-size: 1.2rem;
-    }
+    .brand-text { color: white; font-weight: 800; font-size: 1.3rem; text-decoration: none; }
 
     .back-btn {
-      padding: 0.5rem 1rem;
-      background: rgba(255, 255, 255, 0.15);
-      color: white;
+      padding: 0.6rem 1rem;
+      background: white;
+      color: var(--domain-color);
       text-decoration: none;
-      border-radius: var(--radius-md);
-      font-weight: 600;
-      font-size: 0.85rem;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      white-space: nowrap; /* מונע שבירת טקסט במובייל */
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.95rem;
     }
 
     /* Hero */
     .hero {
-      padding: var(--spacing-xl) 0;
+      padding: 4rem 0;
       text-align: center;
-      background: radial-gradient(circle at top right, var(--domain-light), transparent);
+      background: #f8fafc;
+      border-bottom: 4px solid var(--domain-color);
     }
 
-    .hero-icon { font-size: 4rem; margin-bottom: 1rem; }
-    .hero-title { color: var(--domain-color); }
-    .hero-tagline { font-size: 1.3rem; font-weight: 600; color: var(--text-secondary); max-width: 700px; margin: 0 auto; }
+    .hero-icon { font-size: 5rem; margin-bottom: 1rem; }
+    .hero-title { 
+        font-size: clamp(2.5rem, 10vw, 4rem); 
+        color: var(--domain-color); 
+        margin-bottom: 1rem;
+        line-height: 1.1;
+    }
+    .hero-tagline { font-size: 1.5rem; font-weight: 600; color: var(--text-secondary); }
 
-    /* Grid Layouts */
-    .container { max-width: var(--max-width); margin: 0 auto; padding: 0 var(--spacing-md); }
+    /* Typography & Titles */
+    .section { padding: 3rem 0; border-bottom: 2px solid #e2e8f0; }
+    
+    .main-section-title {
+      font-size: 2.2rem;
+      color: var(--domain-color);
+      margin-bottom: 2rem;
+      display: inline-block;
+      border-bottom: 6px solid var(--accent-color);
+      padding-bottom: 5px;
+    }
 
+    .subsection-title {
+      font-size: 1.8rem;
+      color: #1e293b;
+      margin-top: 2rem;
+      margin-bottom: 1.2rem;
+      background: #f1f5f9;
+      padding: 0.5rem 1rem;
+      border-right: 8px solid var(--domain-color);
+      border-radius: 0 8px 8px 0;
+    }
+
+    h4 {
+        font-size: 1.4rem;
+        color: var(--domain-color);
+        margin: 1.5rem 0 1rem;
+    }
+
+    p { margin-bottom: 1.5rem; }
+
+    /* Cards & Grids */
     .subtopics-grid, .jobs-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.2rem;
+      gap: 1.5rem;
       margin: 2rem 0;
     }
 
-    .subtopic-card, .job-card {
+    .card {
       background: white;
-      border: 2px solid var(--domain-border);
-      border-radius: var(--radius-md);
+      border: 3px solid #e2e8f0;
+      border-radius: 18px;
       padding: 1.5rem;
-      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
     }
 
-    .subtopic-card:hover, .job-card:hover {
-      transform: translateY(-5px);
-      box-shadow: var(--shadow-lg);
-      border-color: var(--domain-color);
+    .subtopic-number {
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--domain-color);
+      margin-left: 10px;
     }
 
-    /* Styled Elements */
-    .section-title {
-      border-right: 5px solid var(--domain-color);
-      padding-right: 1rem;
-      margin: 3rem 0 1.5rem;
-    }
-
+    /* Important Boxes */
     .question-box {
-      background: var(--domain-light);
-      border-right: 4px solid var(--domain-color);
-      padding: 1.25rem;
-      border-radius: var(--radius-md);
-      margin-bottom: 1.5rem;
+      background: #eff6ff;
+      border: 2px solid #bfdbfe;
+      padding: 1.5rem;
+      border-radius: 15px;
+      margin: 1.5rem 0;
+      font-style: italic;
     }
 
     .highlight-box {
-      background: #fefce8; /* צבע רקע מעט יותר בולט להודעה חשובה */
-      border: 2px dashed var(--domain-color);
-      padding: 1.5rem;
-      border-radius: var(--radius-lg);
-      margin: 2rem 0;
+      background: #fffbeb;
+      border: 3px solid #fcd34d;
+      padding: 2rem;
+      border-radius: 20px;
+      margin: 2.5rem 0;
     }
 
-    .custom-list {
-      list-style: none;
-      margin-right: 0.5rem;
+    .highlight-box h4 { color: #92400e; margin-top: 0; }
+
+    .custom-list { list-style: none; padding-right: 0.5rem; }
+    .custom-list li { 
+        position: relative; 
+        padding-right: 2rem; 
+        margin-bottom: 1rem; 
+        font-weight: 500;
+    }
+    .custom-list li::before { 
+        content: '●'; 
+        position: absolute; 
+        right: 0; 
+        color: var(--domain-color); 
+        font-size: 1.5rem;
     }
 
-    .custom-list li {
-      position: relative;
-      padding-right: 1.5rem;
-      margin-bottom: 0.75rem;
-    }
-
-    .custom-list li::before {
-      content: '✔';
-      position: absolute;
-      right: 0;
-      color: var(--domain-color);
-      font-weight: bold;
-    }
-
+    /* Summary Section */
     .summary-section {
       background: var(--domain-color);
       color: white;
-      padding: 3rem 2rem;
-      border-radius: var(--radius-lg);
+      padding: 4rem 2rem;
+      border-radius: 30px;
       text-align: center;
       margin: 4rem 0;
+      box-shadow: 0 10px 25px rgba(109, 40, 217, 0.3);
     }
+    .summary-section h2 { color: white; font-size: 2.5rem; margin-bottom: 2rem; }
+    .summary-section p { color: white; font-size: 1.3rem; line-height: 1.9; }
 
-    .summary-section h2, .summary-section p { color: white; }
+    .footer { padding: 3rem; text-align: center; background: #f8fafc; font-weight: 600; }
 
-    /* Footer */
-    .footer { padding: 2rem; text-align: center; border-top: 1px solid #eee; color: var(--text-muted); }
-
-    /* Mobile Adjustments */
+    /* Mobile adjustments */
     @media (max-width: 600px) {
-      :root { --spacing-xl: 2.5rem; }
-      .header-content { flex-direction: row; justify-content: space-between; }
-      .brand-text { font-size: 1rem; }
-      .brand-logo { height: 40px; }
-      .back-btn { font-size: 0.75rem; padding: 0.4rem 0.7rem; }
-      .hero-tagline { font-size: 1.1rem; }
-      .section-title { font-size: 1.4rem; }
-    }
-
-    /* Animation */
-    .animate-in {
-      animation: fadeInUp 0.6s ease forwards;
-      opacity: 0;
-    }
-
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+        body { font-size: 1.05rem; }
+        .hero-title { font-size: 2.8rem; }
+        .subsection-title { font-size: 1.4rem; }
+        .main-section-title { font-size: 1.8rem; }
     }
   </style>
 </head>
 <body>
 
   <header class="header">
-    <div class="header-content">
-      <a href="index.html" class="brand">
-        <img src="logo.png" alt="לוגו" class="brand-logo">
-        <span class="brand-text">פורצות דרך</span>
-      </a>
-      <a href="index.html" class="back-btn">→ חזרה לבית</a>
+    <div class="container">
+      <div class="header-content">
+        <a href="index.html" class="brand-text">פורצות דרך</a>
+        <a href="index.html" class="back-btn">→ חזרה לדף הבית</a>
+      </div>
     </div>
   </header>
 
-  <section class="hero animate-in">
+  <section class="hero">
     <div class="container">
       <div class="hero-icon">💻</div>
       <h1 class="hero-title">הייטק ליבה</h1>
@@ -251,68 +217,154 @@
 
   <main class="container">
     
-    <section class="subtopics-section animate-in" style="animation-delay: 0.2s;">
-      <h2 class="section-title">תתי התחומים</h2>
+    <section class="section">
+      <h2 class="main-section-title">תתי התחומים</h2>
       <div class="subtopics-grid">
-        <div class="subtopic-card"><h3>פיתוח תוכנה ומערכות</h3></div>
-        <div class="subtopic-card"><h3>בינה מלאכותית ודאטה</h3></div>
-        <div class="subtopic-card"><h3>סייבר הגנתי והתקפי</h3></div>
-        <div class="subtopic-card"><h3>תשתיות ענן ורשת</h3></div>
-        <div class="subtopic-card"><h3>חומרה ושבבים</h3></div>
-        <div class="subtopic-card"><h3>אלגוריתמיקה</h3></div>
+        <div class="card"><span class="subtopic-number">1</span><strong>פיתוח תוכנה ומערכות</strong></div>
+        <div class="card"><span class="subtopic-number">2</span><strong>בינה מלאכותית, למידת מכונה ודאטה</strong></div>
+        <div class="card"><span class="subtopic-number">3</span><strong>סייבר – הגנתי והתקפי</strong></div>
+        <div class="card"><span class="subtopic-number">4</span><strong>תשתיות ענן, רשת ואינטרנט</strong></div>
+        <div class="card"><span class="subtopic-number">5</span><strong>חומרה, שבבים ומוליכים למחצה</strong></div>
+        <div class="card"><span class="subtopic-number">6</span><strong>אלגוריתמיקה וחישוב מתקדם</strong></div>
       </div>
     </section>
 
-    <section class="animate-in" style="animation-delay: 0.3s;">
-      <h2 class="section-title">מהו התחום?</h2>
+    <section class="section">
+      <h2 class="main-section-title">עמוד חקר והכוונה לקבלת החלטה</h2>
+      <p>עמוד זה מציג מידע ממוקד וחשוב, ומסייע בבניית תהליך מושכל של קבלת החלטה לקראת בחירת תחום החקר והמשך התהליך ההנדסי.</p>
+    </section>
+
+    <section class="section">
+      <h3 class="subsection-title">1. מהו התחום?</h3>
       <div class="question-box">
-        <p><strong>שאלת מחשבה:</strong> מי באמת אחראי לכך שהעולם הדיגיטלי עובד – גם כשלא רואים את זה?</p>
+        <p><strong>שאלת פתיחה למחשבה:</strong> מי באמת אחראי לכך שהעולם הדיגיטלי עובד – גם כשלא רואים את זה?</p>
       </div>
-      <p>הייטק ליבה עוסק בפיתוח הטכנולוגיות הבסיסיות שעליהן נשען העולם הדיגיטלי. זהו התחום שבו בונים את ה״מאחורי הקלעים״ של כל מה שאנחנו מכירים.</p>
+      <p>הייטק ליבה עוסק בפיתוח הטכנולוגיות הבסיסיות שעליהן נשען העולם הדיגיטלי: קוד, מערכות מחשוב, רשתות, אבטחת מידע, אלגוריתמים ותשתיות חכמות.</p>
+      <p>זהו התחום שבו בונים את ה״מאחורי הקלעים״ של אפליקציות, אתרים, מערכות חכמות ומכשירים טכנולוגיים — גם אם המשתמשים עצמם אינם רואים זאת.</p>
     </section>
 
-    <section class="animate-in">
-      <h2 class="section-title">אתגרים מרכזיים</h2>
+    <section class="section">
+      <h3 class="subsection-title">2. חשיבות התחום וההקשר העכשווי</h3>
+      <div class="question-box">
+        <p><strong>למה זה אמור לעניין אותך?</strong> כי כמעט כל תחום בחיים שלך נשען על מערכות שמישהי תכננה – או שלא תכננה מספיק טוב.</p>
+      </div>
+      <p>העולם המודרני נשען על מערכות טכנולוגיות מורכבות: תקשורת, בריאות, תחבורה, כלכלה, חינוך וביטחון.</p>
+      <p><strong>כאשר תשתיות אלו אינן מתוכננות היטב:</strong></p>
       <ul class="custom-list">
-        <li>מערכות מורכבות שקשה לתחזק</li>
-        <li>בעיות אבטחה ופרטיות בעידן ה-AI</li>
-        <li>חוסר שקיפות באופן שבו מערכות מקבלות החלטות</li>
-        <li>פער בין קצב הפיתוח ליכולת השליטה האנושית</li>
+        <li>מערכות קורסות</li>
+        <li>מידע נחשף</li>
+        <li>שירותים נפגעים</li>
+        <li>חוויית המשתמש נפגעת</li>
       </ul>
     </section>
 
-    <div class="highlight-box animate-in">
-      <h4>עצירה לחשיבה אישית:</h4>
-      <p>אילו תקלות טכנולוגיות שנתקלת בהן ביומיום גרמו לך לתסכול? מתי הרגשת שמערכת לא עבדה בצורה הוגנת או שקופה? <strong>זה המקום למצוא את נושא החקר שלך.</strong></p>
-    </div>
+    <section class="section">
+      <h3 class="subsection-title">3. חיבור לטכנולוגיה ולהייטק</h3>
+      <p>בתחום זה נעשה שימוש בטכנולוגיות כמו:</p>
+      <ul class="custom-list">
+        <li>שפות תכנות וקוד</li>
+        <li>אלגוריתמים וחישוב מתקדם</li>
+        <li>מערכות ענן ורשת</li>
+        <li>אבטחת מידע וסייבר</li>
+        <li>חומרה ומעגלים חכמים</li>
+      </ul>
+    </section>
 
-    <section class="animate-in">
-      <h2 class="section-title">תפקידים בעולם האמיתי</h2>
-      <div class="jobs-grid">
-        <div class="job-card">
-          <h4 style="color:var(--domain-color)">מפתחת תוכנה</h4>
-          <p>כותבת את הקוד שמניע את העולם.</p>
-        </div>
-        <div class="job-card">
-          <h4 style="color:var(--domain-color)">מומחית סייבר</h4>
-          <p>מגנה על המידע הכי רגיש שלנו.</p>
-        </div>
-        <div class="job-card">
-          <h4 style="color:var(--domain-color)">מהנדסת AI</h4>
-          <p>מלמדת מכונות לחשוב וללמוד.</p>
-        </div>
+    <section class="section">
+      <h3 class="subsection-title">4. אתגרים ובעיות מרכזיות בתחום</h3>
+      <div class="question-box">
+        <p><strong>כאן מתחילה הסקרנות:</strong> זה המקום לשאול איפה דברים נשברים, מסתבכים או מפסיקים לעבוד כמו שצריך.</p>
+      </div>
+      <ul class="custom-list">
+        <li>מערכות מורכבות שקשה להבין ולתחזק</li>
+        <li>פער בין קצב ההתפתחות הטכנולוגית ליכולת האנושית לשלוט בה</li>
+        <li>בעיות אבטחה ופרטיות</li>
+        <li>תלות גוברת בטכנולוגיה שאינה תמיד אמינה</li>
+        <li>חוסר שקיפות באופן שבו מערכות פועלות ומקבלות החלטות</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h3 class="subsection-title">5. הקשר יומיומי והשפעה אישית</h3>
+      <p>הייטק ליבה משפיע על מהירות האינטרנט, זמינות אפליקציות, אבטחת החשבונות ואיכות השירותים הדיגיטליים.</p>
+      
+      <div class="highlight-box">
+        <h4>כאן נדרשת עצירה לחשיבה אישית:</h4>
+        <ul class="custom-list">
+          <li>אילו מצבים טכנולוגיים גורמים לך תסכול, חוסר אמון או חוסר ביטחון?</li>
+          <li>מתי הרגשת שמערכת טכנולוגית לא עבדה כפי שציפית?</li>
+          <li>אילו תקלות או כשלים משפיעים עלייך באופן ישיר ביומיום?</li>
+        </ul>
+        <p><strong>המטרה אינה לאתר פתרון, אלא לזהות נקודת חיבור אישית לתחום.</strong></p>
       </div>
     </section>
 
-    <section class="summary-section animate-in">
-      <h2>האם זה התחום שלך?</h2>
-      <p>הייטק ליבה הוא המקום למי שאוהבת לפרק דברים כדי להבין איך הם עובדים. אם את סקרנית לגבי ה"איך" ולא רק ה"מה" - מקומך איתנו.</p>
+    <section class="section">
+      <h3 class="subsection-title">6. כיווני חשיבה לפתרונות</h3>
+      <div class="question-box">
+        <p><strong>לא פתרונות – כיוונים:</strong> מחשבה ראשונית על מה אפשר לשאול, לא על מה צריך לבנות.</p>
+      </div>
+      <ul class="custom-list">
+        <li>איך ניתן להפוך מערכות מורכבות לפשוטות וברורות יותר?</li>
+        <li>כיצד ניתן לשפר אמינות וביטחון?</li>
+        <li>איך יוצרים טכנולוגיה אחראית ושקופה?</li>
+        <li>איך משלבים בין ביצועים, נגישות וערכים?</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h3 class="subsection-title">7. שאלות חקר מנחות</h3>
+      <ul class="custom-list">
+        <li>מה קורה כאשר מערכת טכנולוגית מרכזית קורסת?</li>
+        <li>אילו חלקים בטכנולוגיה נשארים "נסתרים" מהמשתמשים?</li>
+        <li>כיצד ניתן לתכנן מערכות כך שיהיו גם חזקות וגם הוגנות?</li>
+        <li>מי אחראי כאשר טכנולוגיה פוגעת?</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h3 class="subsection-title">8. דוגמאות לתפקידים</h3>
+      <div class="jobs-grid">
+        <div class="card"><h4>מפתחת תוכנה</h4><p>כותבת קוד שמפעיל אפליקציות ודואגת שהכל יעבוד ביעילות.</p></div>
+        <div class="card"><h4>מהנדסת מערכות</h4><p>מתכננת איך חלקים שונים של מערכת טכנולוגית עובדים יחד.</p></div>
+        <div class="card"><h4>מומחית סייבר</h4><p>מגינה על מערכות ומידע מפני פריצות והתקפות.</p></div>
+        <div class="card"><h4>מהנדסת ענן</h4><p>בונה מערכות שמאפשרות לשירותים לעבוד בקנה מידה גדול.</p></div>
+        <div class="card"><h4>חוקרת אלגוריתמים</h4><p>מפתחת דרכים חכמות לפתרון בעיות באמצעות חישוב.</p></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h3 class="subsection-title">9. דוגמאות לאתגרים ובעיות לחקר</h3>
+      <ul class="custom-list">
+        <li>מערכות איטיות או לא יציבות</li>
+        <li>חשיפה של מידע אישי</li>
+        <li>תקלות המשפיעות על משתמשים רבים</li>
+        <li>חוסר שקיפות בהחלטות טכנולוגיות</li>
+        <li>קושי בהבנת מערכות מורכבות</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h3 class="subsection-title">10. יישומים אפשריים</h3>
+      <ul class="custom-list">
+        <li>מערכות בית ספריות</li>
+        <li>אפליקציות יומיומיות</li>
+        <li>שירותים דיגיטליים ציבוריים</li>
+        <li>פלטפורמות מקוונות</li>
+      </ul>
+    </section>
+
+    <section class="summary-section">
+      <h2>11. סיכום והכוונה לבחירה</h2>
+      <p><strong>זה לא תחום למי שמחפשת תשובות מהירות.</strong></p>
+      <p>זה תחום למי שנהנית לשאול שאלות, לפרק מערכות, ולהבין מה קורה מתחת לפני השטח.</p>
+      <p>אם הרגשת בזמן הקריאה סקרנות, הזדהות או רצון להבין לעומק – ייתכן שזהו כיוון נכון עבורך לבחירת נושא החקר ולהמשך התהליך ההנדסי.</p>
     </section>
 
   </main>
 
   <footer class="footer">
-    <p>© 2026 קורס פורצות דרך | מסע של חקירה והשפעה</p>
+    <p>© 2026 קורס פורצות דרך | מסע של חקירה, חשיבה והשפעה</p>
   </footer>
 
 </body>
