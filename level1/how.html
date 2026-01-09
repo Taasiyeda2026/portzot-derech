@@ -166,8 +166,19 @@
     .section{
       max-width:1200px;
       margin:0 auto;
-      padding:1.5rem 1.5rem; /* העלאה נוספת למעלה */
+      padding:1.5rem 1.5rem;
       position:relative;
+    }
+
+    /* פיצוי קבוע לתוכן הראשון מתחת ל-header sticky */
+    .first-section{
+      padding-top:110px;
+    }
+
+    @media (max-width:900px){
+      .first-section{
+        padding-top:96px;
+      }
     }
 
     /* תחושת עמוד נפרד */
