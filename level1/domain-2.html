@@ -48,7 +48,7 @@
       top: 0;
       z-index: 100;
       background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
-      padding: 1rem 2rem;
+      padding: 0.75rem 1rem; /* זהה לדומיין 1 */
       box-shadow: var(--shadow-md);
     }
 
@@ -58,35 +58,72 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 0.75rem;
     }
 
     .header-actions {
       display: flex;
-      gap: 0.9rem;
+      align-items: center;
+      gap: 0.75rem;
     }
 
     .back-button {
-      width: 44px;
-      height: 44px;
+      position: relative;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      background: rgba(255,255,255,0.18);
-      border: 1.5px solid rgba(255,255,255,0.35);
-      border-radius: 12px;
+      width: 46px;
+      height: 46px;
+      background: rgba(255,255,255,0.22);
       color: #fff;
-      font-size: 1.25rem;
       text-decoration: none;
+      border-radius: 14px;
+      font-size: 1.3rem;
+      font-weight: 600;
+      border: 1.5px solid rgba(255,255,255,0.45);
+      backdrop-filter: blur(8px);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15);
+      transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .back-button:hover {
+      background: rgba(255,255,255,0.38);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.22);
+    }
+
+    .back-button::after {
+      content: attr(title);
+      position: absolute;
+      top: 100%;
+      margin-top: 0.4rem;
+      right: 50%;
+      transform: translateX(50%) translateY(-4px);
+      background: rgba(255,255,255,0.96);
+      color: var(--text-primary);
+      font-size: 0.75rem;
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
+      opacity: 0;
+      pointer-events: none;
+      white-space: nowrap;
+      transition: opacity .2s, transform .2s;
+    }
+
+    .back-button:hover::after {
+      opacity: 1;
+      transform: translateX(50%) translateY(0);
     }
 
     .brand-logo {
-      width: 64px;
-      height: 120px;
+      height: 72px;
+      width: 54px;
       object-fit: contain;
-      background: rgba(255,255,255,0.75);
-      padding: 6px 10px;
-      border-radius: 12px;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+      background: rgba(255,255,255,0.9);
+      padding: 3px;
+      border-radius: 16px;
+      box-shadow: 0 6px 16px rgba(0,0,0,.18);
+      flex: 0 0 auto;
     }
 
     .hero {
@@ -316,7 +353,7 @@
     <img src="logo.png" alt="פורצות דרך" class="brand-logo" />
     <div class="header-actions">
       <a href="index.html" class="back-button" title="דף הבית">🏠</a>
-      <a href="how.html" class="back-button" title="עמוד התחומים">🧭</a>
+      <a href="how.html#domains" class="back-button" title="עמוד התחומים">🧭</a>
     </div>
   </div>
 </header>
