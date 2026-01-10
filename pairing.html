@@ -401,7 +401,7 @@ window.finish = async () => {
     return;
   }
 
-  const payload = {
+    const payload = {
     sessionId: SESSION_ID,
     deviceId,
     displayName: displayName.value.trim(),
@@ -411,6 +411,8 @@ window.finish = async () => {
     teamStyle: teamStyle.value,
     lifeInterest: lifeInterest.value,
     valuePlace: valuePlace.value,
+    // שמירה של קוד מדריכה לצורך תאימות לרולס / בקרה
+    instructorCode: currentSession?.instructorCode || null,
     createdAt: Date.now(),
     expiresAt: new Date(Date.now() + DAY_MS)
   };
