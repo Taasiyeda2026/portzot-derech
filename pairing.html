@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>פורצות דרך | חיבור לזוגות</title>
+<title>פורצות דרך | חיבור לשותפות</title>
 
 <style>
 :root{
@@ -18,342 +18,257 @@
 }
 *{box-sizing:border-box}
 body{margin:0;font-family:system-ui,"Segoe UI",Arial;background:linear-gradient(145deg,#020617,#0f172a);color:var(--text)}
-.container{max-width:760px;margin:auto;padding:22px}
-.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:18px}
+.container{max-width:760px;margin:auto;padding:24px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:26px;margin-bottom:22px}
 
-/* LOCK (מסך כניסת מדריכה – גרסה מוקטנת) */
-#lock{
-  max-width:360px;
-  margin:70px auto 0;
-  padding:16px 18px;
-}
-#lock h1{font-size:18px}
-#lock p{font-size:13px}
-#lock input{padding:10px;font-size:14px}
-#lock button{margin-top:14px;padding:10px;font-size:14px}
+h1{margin:0 0 12px;font-size:24px;color:var(--accent)}
+h2{margin:0 0 10px;font-size:18px}
+p{color:var(--muted);line-height:1.7;margin:0 0 14px}
 
-h1{margin:0 0 8px;font-size:22px}
-p{color:var(--muted);line-height:1.6;margin:0}
-label{display:block;margin-top:14px;color:var(--muted)}
-input,select{width:100%;padding:12px;margin-top:6px;border-radius:12px;border:1px solid var(--border);background:rgba(0,0,0,.25);color:var(--text)}
-
-/* תיבת מספר משתתפות – קטנה כמו קוד מדריכה */
-.small-input{
-  width:120px;
-  padding:10px;
-  font-size:14px;
-}
-
-button{width:100%;margin-top:18px;padding:13px;border:none;border-radius:14px;font-weight:600;cursor:pointer;color:white;background:linear-gradient(135deg,var(--accent),var(--accent2))}
-
-/* כפתור קטן – תואם לשדות הקטנים */
-.small-btn{
-  width:120px;
-  padding:10px;
-  font-size:14px;
-  margin-top:12px;
-}
-
+button{width:100%;margin-top:18px;padding:14px;border:none;border-radius:14px;font-weight:700;cursor:pointer;color:white;background:linear-gradient(135deg,var(--accent),var(--accent2))}
 button.secondary{background:transparent;border:1px solid var(--border)}
-.hidden{display:none}
-.group{padding:12px;border:1px solid var(--border);border-radius:14px;margin-top:10px;background:rgba(0,0,0,.25)}
-.counter{font-size:18px;font-weight:600;margin-top:10px}
 
-.notice{border:1px solid rgba(255,255,255,.22);background:rgba(0,0,0,.28);padding:12px;border-radius:14px}
-.notice strong{display:block;margin-bottom:6px}
-.notice a{color:var(--text)}
+.hidden{display:none}
+.quote{margin:18px 0;padding:16px;border-radius:14px;background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.18);font-weight:600;text-align:center}
+
+label{display:block;margin-top:16px;color:var(--muted)}
+input,select{width:100%;padding:12px;margin-top:6px;border-radius:12px;border:1px solid var(--border);background:rgba(0,0,0,.25);color:var(--text)}
 </style>
 </head>
 
 <body>
 <div class="container">
 
-  <!-- ERROR BANNER -->
-  <div class="card hidden" id="errorBox">
-    <div class="notice">
-      <strong>יש בעיה בחיבור למסד (Firestore)</strong>
-      <div id="errorMsg"></div>
-    </div>
-  </div>
+<!-- מסך פתיחה / המתנה -->
+<div class="card" id="introScreen">
+  <h1>בחירת שותפה לתהליך</h1>
+  <p>הפעילות הזו אינה מבחן ואין בה תשובות נכונות או לא נכונות.</p>
+  <p>המטרה היא ליצור שותפות טובה לעבודה משותפת בתהליך ההנדסי.</p>
+  <div class="quote">פורצת דרך מצליחה כשהיא צועדת קדימה עם נשים מצליחות כמוה.</div>
+  <p><strong>הפעילות תיפתח כאשר המדריכה תפעיל אותה.</strong></p>
+  <button id="startBtn" class="hidden">מתחילות</button>
+</div>
 
-  <!-- LOCK -->
-  <div class="card" id="lock">
-    <h1>כניסת מדריכה</h1>
-    <p>הזיני קוד כדי להמשיך</p>
-    <input type="password" id="adminCode" placeholder="••••" inputmode="numeric" autocomplete="one-time-code">
-    <button id="unlockBtn">כניסה</button>
-  </div>
+<!-- מסכי שאלון -->
+<div class="card hidden" id="step1">
+  <h2>תחומי עניין</h2>
+  <label>מה התחום המרכזי שבחרת?</label>
+  <select id="mainDomain">
+    <option value="">בחרי</option>
+    <option>הייטק וליבה</option>
+    <option>אדם וטכנולוגיה</option>
+    <option>סביבה וקיימות</option>
+    <option>עתיד ויזמות</option>
+    <option>חברה ודיגיטל</option>
+  </select>
 
-  <!-- ADMIN -->
-  <div class="card hidden" id="admin">
-    <h1>ניהול פעילות</h1>
-    <label for="expected">מספר משתתפות</label>
-    <input type="number" id="expected" value="18" min="2" class="small-input" inputmode="numeric">
-    <button id="startSessionBtn" class="small-btn">התחל פעילות</button>
-    <div class="counter" id="counter"></div>
-    <button class="secondary hidden" id="generateBtn">צור חיבורים</button>
-  </div>
+  <label>האם יש תחום נוסף שמעניין אותך?</label>
+  <select id="secondDomain">
+    <option value="">בחרי</option>
+    <option>הייטק וליבה</option>
+    <option>אדם וטכנולוגיה</option>
+    <option>סביבה וקיימות</option>
+    <option>עתיד ויזמות</option>
+    <option>חברה ודיגיטל</option>
+    <option>אין תחום נוסף שמעניין אותי כרגע</option>
+  </select>
+  <button onclick="next(2)">המשך</button>
+</div>
 
-  <!-- INTRO -->
-  <div class="card hidden" id="intro">
-    <h1>בחירת שותפה לתהליך</h1>
-    <p>בעוד רגע תתחילי שאלון קצר שיעזור לנו לחבר ביניכן לזוגות עבודה.</p>
-    <button id="startQuizBtn">מתחילות</button>
-  </div>
+<div class="card hidden" id="step2">
+  <h2>איך את פועלת?</h2>
+  <label>כשיש משימה חדשה ולא ברורה:</label>
+  <select id="workStyle">
+    <option value="">בחרי</option>
+    <option>מתחילה להתנסות ולומדת תוך כדי</option>
+    <option>עוצרת להבין ולתכנן</option>
+  </select>
 
-  <!-- QUIZ -->
-  <div class="card hidden" id="quiz">
-    <h1>שאלון קצר</h1>
-    <p>עני על השאלון. החיבור יתבצע אוטומטית.</p>
+  <label>בעבודה בזוג:</label>
+  <select id="teamStyle">
+    <option value="">בחרי</option>
+    <option>חושבת בקול ומשתפת</option>
+    <option>עובדת בשקט ואז מציגה</option>
+  </select>
+  <button onclick="next(3)">המשך</button>
+</div>
 
-    <label for="name">שם פרטי</label>
-    <input id="name" autocomplete="given-name">
+<div class="card hidden" id="step3">
+  <h2>קצת מהחיים שלך</h2>
+  <label>איזה תוכן מושך אותך באמת?</label>
+  <select id="lifeInterest">
+    <option value="">בחרי</option>
+    <option>טכנולוגיה ואפליקציות</option>
+    <option>אנשים והשפעה חברתית</option>
+    <option>סביבה וקיימות</option>
+    <option>רעיונות ועתיד</option>
+  </select>
 
-    <label for="domain">תחום</label>
-    <select id="domain">
-      <option value="">בחרי…</option>
-      <option>הייטק וליבה</option>
-      <option>אדם וטכנולוגיה</option>
-      <option>סביבה וקיימות</option>
-      <option>עתיד ויזמות</option>
-      <option>חברה ודיגיטל</option>
-    </select>
+  <label>מתי את מרגישה שאת מביאה ערך?</label>
+  <select id="valuePlace">
+    <option value="">בחרי</option>
+    <option>כשאני מביאה רעיון חדש</option>
+    <option>כשאני עוזרת להבין</option>
+    <option>כשאני מחברת אנשים</option>
+    <option>כשאני משנה מצב קיים</option>
+  </select>
+  <button onclick="finish()">סיימתי – מוכנה לשותפות</button>
+</div>
 
-    <label for="style">סגנון עבודה</label>
-    <select id="style">
-      <option value="">בחרי…</option>
-      <option>מתכננת ואז מבצעת</option>
-      <option>זורמת ואז מסדרת</option>
-      <option>מדברת וחושבת בקול</option>
-      <option>עובדת בשקט ואז משתפת</option>
-    </select>
+<!-- מסך המתנה -->
+<div class="card hidden" id="waiting">
+  <h1>מחכות יחד</h1>
+  <p>הבחירות שלך נשמרו.</p>
+  <p>כשהחיבורים ייווצרו – תראי כאן את השותפה שלך.</p>
+</div>
 
-    <button id="submitBtn">שליחה</button>
-  </div>
-
-  <!-- RESULT -->
-  <div class="card hidden" id="result">
-    <h1>החיבורים</h1>
-    <div id="groups"></div>
-    <button class="secondary" onclick="location.href='index.html'">חזרה לדף הבית</button>
-  </div>
+<!-- מסך חיבורים -->
+<div class="card hidden" id="pairing">
+  <h1>השותפות שלך</h1>
+  <p>שותפות טובה נבנית משילוב של תחומי עניין ודרך עבודה.</p>
+  <div id="pairingResult"></div>
+</div>
 
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  onSnapshot,
-  getDocs,
-  enableIndexedDbPersistence
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// 🔴 פרטי Firebase – נכונים ל-GitHub Pages (CDN)
 const firebaseConfig = {
   apiKey: "AIzaSyCFSq5b-HgkTxFNhBJIBdOe2ian5TZvMPE",
   authDomain: "portzot-derech.firebaseapp.com",
   projectId: "portzot-derech"
 };
 
-const ADMIN_CODE = "2311";
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-// DOM helpers (ב-module אין גישה אוטומטית ל-id כמשתנים גלובליים)
-const $ = (id) => document.getElementById(id);
+const sessionRef = doc(db, "session", "active");
+const responsesRef = collection(db, "responses");
 
-const errorBox = $("errorBox");
-const errorMsg = $("errorMsg");
+const SESSION_DURATION = 20 * 60 * 1000;
+let sessionEnd = 0;
 
-const lock = $("lock");
-const admin = $("admin");
-const intro = $("intro");
-const quiz = $("quiz");
-const result = $("result");
+onSnapshot(sessionRef, async (snap) => {
+  if (!snap.exists()) return;
+  const data = snap.data();
 
-const adminCode = $("adminCode");
-const unlockBtn = $("unlockBtn");
+  if (data.started && data.startTime) {
+    sessionEnd = data.startTime + SESSION_DURATION;
 
-const expected = $("expected");
-const startSessionBtn = $("startSessionBtn");
-const counter = $("counter");
-const generateBtn = $("generateBtn");
-
-const startQuizBtn = $("startQuizBtn");
-
-const nameInput = $("name");
-const domainSel = $("domain");
-const styleSel = $("style");
-const submitBtn = $("submitBtn");
-
-const groupsEl = $("groups");
-
-function showError(userText, err){
-  console.error(err);
-  errorMsg.innerHTML = `${userText}${err?.message ? `<br><span style='opacity:.9'>${escapeHtml(err.message)}</span>` : ""}`;
-  errorBox.classList.remove("hidden");
-}
-
-function escapeHtml(s){
-  return String(s)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-}
-
-// Init Firebase/Firestore
-let db;
-let responsesRef;
-let unsub = null;
-let expectedCount = 0;
-
-try{
-  // בדיקות קונפיגורציה בסיסיות
-  if(!firebaseConfig?.apiKey || !firebaseConfig?.authDomain || !firebaseConfig?.projectId){
-    throw new Error("Firebase config חסר (apiKey/authDomain/projectId)");
-  }
-
-  const app = initializeApp(firebaseConfig);
-  db = getFirestore(app);
-
-  // אופציונלי: התמדה מקומית (לא חובה; משפר יציבות במובייל)
-  enableIndexedDbPersistence(db).catch(()=>{});
-
-  responsesRef = collection(db, "responses");
-} catch (err){
-  showError(
-    "לא הצלחתי לאתחל את Firestore. ודאי שיצרת Firestore Database בפרויקט ושאת מריצה דרך HTTPS (GitHub Pages).",
-    err
-  );
-}
-
-// UI Logic
-function unlock(){
-  if(adminCode.value === ADMIN_CODE){
-    lock.classList.add("hidden");
-    admin.classList.remove("hidden");
-  } else {
-    alert("קוד שגוי");
-  }
-}
-
-function startSession(){
-  if(!responsesRef) return;
-
-  expectedCount = parseInt(expected.value || "0", 10);
-  if(!Number.isFinite(expectedCount) || expectedCount < 2){
-    return alert("אנא הזיני מספר משתתפות תקין (2 ומעלה)");
-  }
-
-  counter.innerText = "ממתינה לתשובות…";
-  intro.classList.remove("hidden");
-
-  // אם לוחצים שוב בטעות – לא להוסיף מאזין נוסף
-  if(typeof unsub === "function") unsub();
-
-  unsub = onSnapshot(
-    responsesRef,
-    (snap)=>{
-      counter.innerText = `נכנסו ${snap.size} מתוך ${expectedCount}`;
-      if(snap.size >= expectedCount) generateBtn.classList.remove("hidden");
-      else generateBtn.classList.add("hidden");
-    },
-    (err)=>{
-      // שגיאה נפוצה: Missing or insufficient permissions
-      const hint = (err?.code === "permission-denied")
-        ? "נראה שההרשאות (Rules) של Firestore לא מאפשרות קריאה/כתיבה. ודאי שהתחלת ב-Test mode או עדכנת Rules."
-        : "בדקי שיש Firestore Database פעיל ושאת מחוברת לאינטרנט.";
-      showError(`החיבור ל-Firestore נכשל. ${hint}` , err);
+    if (Date.now() < sessionEnd) {
+      startBtn.classList.remove('hidden');
+    } else {
+      lockAll();
     }
-  );
-}
 
-function startQuiz(){
-  intro.classList.add("hidden");
-  quiz.classList.remove("hidden");
-}
-
-async function submitResponse(){
-  if(!responsesRef) return;
-
-  if(!nameInput.value.trim() || !domainSel.value || !styleSel.value){
-    return alert("אנא מלאי את כל השדות");
-  }
-
-  try{
-    await addDoc(responsesRef, {
-      name: nameInput.value.trim(),
-      domain: domainSel.value,
-      style: styleSel.value,
-      time: Date.now()
-    });
-
-    quiz.innerHTML = "<h1>תודה 🙌</h1><p>החיבור מתבצע כעת.</p>";
-  } catch (err){
-    const hint = (err?.code === "permission-denied")
-      ? "אין הרשאות כתיבה ל-Firestore (Rules)."
-      : "ייתכן שאין חיבור אינטרנט או שיש חסימה זמנית.";
-    showError(`לא הצלחתי לשמור את התשובה. ${hint}`, err);
-  }
-}
-
-async function generateGroups(){
-  if(!responsesRef) return;
-
-  try{
-    const snap = await getDocs(responsesRef);
-    const data = snap.docs.map(d=>d.data()).sort(()=>Math.random()-0.5);
-
-    admin.classList.add("hidden");
-    intro.classList.add("hidden");
-    quiz.classList.add("hidden");
-    result.classList.remove("hidden");
-
-    groupsEl.innerHTML = "";
-
-    if(data.length % 2 === 1){
-      renderGroup(data.splice(0,3), "שלשה");
+    if (data.pairingReady) {
+      showPairing();
     }
-    while(data.length){
-      renderGroup(data.splice(0,2), "זוג");
-    }
-  } catch (err){
-    showError("לא הצלחתי לקרוא תשובות מ-Firestore כדי ליצור חיבורים.", err);
   }
+});
+
+function lockAll() {
+  document.querySelectorAll('.card').forEach(c => c.classList.add('hidden'));
+  introScreen.classList.remove('hidden');
 }
 
-function renderGroup(arr, type){
-  const div = document.createElement("div");
-  div.className = "group";
-  div.innerHTML = `<strong>${type}</strong><br>${arr.map(a=>escapeHtml(a.name)).join(" + ")}<br><span style='color:var(--muted)'>תחום: ${escapeHtml(arr?.[0]?.domain || "")}</span>`;
-  groupsEl.appendChild(div);
-}
+window.next = (n) => {
+  document.querySelectorAll('.card').forEach(c => c.classList.add('hidden'));
+  document.getElementById('step' + n).classList.remove('hidden');
+};
 
-// Events
-unlockBtn.addEventListener("click", unlock);
-adminCode.addEventListener("keydown", (e)=>{ if(e.key === "Enter") unlock(); });
-startSessionBtn.addEventListener("click", startSession);
-generateBtn.addEventListener("click", generateGroups);
-startQuizBtn.addEventListener("click", startQuiz);
-submitBtn.addEventListener("click", submitResponse);
+window.finish = async () => {
+  await setDoc(doc(responsesRef, crypto.randomUUID()), {
+    mainDomain: mainDomain.value,
+    secondDomain: secondDomain.value,
+    workStyle: workStyle.value,
+    teamStyle: teamStyle.value,
+    lifeInterest: lifeInterest.value,
+    valuePlace: valuePlace.value,
+    time: Date.now()
+  });
+  document.querySelectorAll('.card').forEach(c => c.classList.add('hidden'));
+  waiting.classList.remove('hidden');
+};
 
-// --- Self-tests (רק כשפותחים עם ?test=1) ---
-function assert(cond, msg){ if(!cond) throw new Error(`TEST FAILED: ${msg}`); }
-function runSelfTests(){
-  assert(typeof unlock === "function", "unlock() exists");
-  assert(typeof startSession === "function", "startSession() exists");
-  assert(typeof startQuiz === "function", "startQuiz() exists");
-  assert(typeof submitResponse === "function", "submitResponse() exists");
-  assert(typeof generateGroups === "function", "generateGroups() exists");
-  assert(!!lock && !!admin && !!intro && !!quiz && !!result, "core screens exist");
-  assert(!!responsesRef, "responsesRef initialized");
-  console.log("All tests passed ✅");
-}
-if(new URLSearchParams(location.search).get("test") === "1"){
-  try{ runSelfTests(); } catch(e){ console.error(e); showError("בדיקות פנימיות נכשלו.", e); }
+startBtn.onclick = () => {
+  introScreen.classList.add('hidden');
+  step1.classList.remove('hidden');
+};
+
+async function showPairing() {
+  const snap = await getDocs(responsesRef);
+  let students = snap.docs.map(d => d.data());
+  if (students.length < 2) return;
+
+  // פונקציית ניקוד התאמה בין שתיים
+  function score(a, b) {
+    let s = 0;
+
+    // 1️⃣ תחום עניין – המשקל הגבוה ביותר
+    if (a.mainDomain === b.mainDomain) s += 5;
+    if (a.mainDomain === b.secondDomain) s += 3;
+    if (b.mainDomain === a.secondDomain) s += 3;
+
+    // 2️⃣ סגנון עבודה – השלמה עדיפה על זהות
+    if (a.workStyle !== b.workStyle) s += 3;
+    if (a.teamStyle !== b.teamStyle) s += 2;
+
+    // 3️⃣ ערכים / חיים – כיוון דומה
+    if (a.lifeInterest === b.lifeInterest) s += 1;
+    if (a.valuePlace === b.valuePlace) s += 1;
+
+    return s;
+  }
+
+  let pairs = [];
+
+  while (students.length > 1) {
+    let bestPair = null;
+    let bestScore = -1;
+
+    for (let i = 0; i < students.length; i++) {
+      for (let j = i + 1; j < students.length; j++) {
+        const sc = score(students[i], students[j]);
+        if (sc > bestScore) {
+          bestScore = sc;
+          bestPair = [i, j];
+        }
+      }
+    }
+
+    const [i, j] = bestPair;
+    pairs.push([students[i], students[j], bestScore]);
+
+    // הסרה מהמאגר
+    students = students.filter((_, idx) => idx !== i && idx !== j);
+  }
+
+  // תצוגה
+  pairingResult.innerHTML = "";
+  pairs.forEach(p => {
+    const [a, b, sc] = p;
+    const div = document.createElement('div');
+    div.className = 'quote';
+    div.innerHTML = `
+      <strong>${a.mainDomain}</strong><br>
+      ${a.lifeInterest}<br><br>
+      <strong>השותפה שלך:</strong><br>
+      ${b.mainDomain}<br>
+      <em>החיבור נבחר לפי תחום משותף והשלמה בסגנון עבודה</em>
+    `;
+    pairingResult.appendChild(div);
+  });
+
+  document.querySelectorAll('.card').forEach(c => c.classList.add('hidden'));
+  pairing.classList.remove('hidden');
+} · ${pair[1].mainDomain}</p>
+  `;
+
+  document.querySelectorAll('.card').forEach(c => c.classList.add('hidden'));
+  pairing.classList.remove('hidden');
 }
 </script>
 </body>
