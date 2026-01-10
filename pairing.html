@@ -75,7 +75,7 @@ p{color:var(--muted);line-height:1.75;margin:0 0 12px}
 
 button.primary{width:100%;margin-top:16px;padding:14px;border:none;border-radius:14px;font-weight:800;cursor:pointer;color:white;background:linear-gradient(135deg,var(--accent),var(--accent2))}
 
-/* כפתור התחלה קטן – לפי אורך המילה */
+/* כפתור התחלה קטן - לפי אורך המילה */
 button.start-compact{
   width:auto;
   display:inline-block;
@@ -103,20 +103,20 @@ button.secondary{width:100%;margin-top:12px;padding:14px;border-radius:14px;font
 .intro-note ul{margin:0;padding:0 18px 0 0;color:var(--muted);line-height:1.8}
 .intro-note li{margin:6px 0}
 
-label{display:block;margin-top:14px;color:#f1f5ff;font-weight:700}
+label{display:flex;align-items:center;gap:8px;margin-top:14px;color:#f1f5ff;font-weight:700}
+label::before{content:"❓";font-size:18px;opacity:.9}
 input{width:100%;padding:12px;margin-top:6px;border-radius:12px;border:1px solid var(--border);background:rgba(0,0,0,.35);color:#ffffff;font-size:15px}
 
 /* קבוצות לחיצה במקום select */
 .choice-group{display:grid;grid-template-columns:1fr;gap:10px;margin-top:8px}
-.choice{padding:12px 14px;border-radius:14px;border:1px solid var(--border);background:rgba(0,0,0,.25);cursor:pointer;font-weight:600;transition:.2s}
+.choice{padding:12px 14px;border-radius:14px;border:1px solid var(--border);background:rgba(0,0,0,.25);cursor:pointer;font-weight:400;transition:.2s}
 .choice:hover{background:rgba(255,255,255,.08)}
 .choice.active{background:linear-gradient(135deg,rgba(236,72,153,.35),rgba(99,102,241,.35));border-color:var(--accent)}
 @media (min-width:520px){.choice-group{grid-template-columns:1fr 1fr}}
 
 .small-note{font-size:13px;color:rgba(199,210,254,.9);margin-top:10px}
-.warn{color:#fde68a}
 
-/* נא להמתין – ורוד זוהר */
+/* נא להמתין - ורוד זוהר */
 .wait-text{
   text-align:center;
   font-size:20px;
@@ -140,9 +140,11 @@ input{width:100%;padding:12px;margin-top:6px;border-radius:12px;border:1px solid
 <div id="instructorBar" class="hidden">
   <div class="inner">
     <label for="instructorCode">קוד מדריכה</label>
-    <input id="instructorCode" inputmode="numeric" placeholder="••••" autocomplete="one-time-code">
-    <label for="expectedCount" style="margin-right:8px">מס׳ משתתפות</label>
+    <input id="instructorCode" type="password" inputmode="numeric" placeholder="••••" autocomplete="one-time-code">
+
+    <label for="expectedCount" style="margin-right:8px">מס' משתתפות</label>
     <input id="expectedCount" inputmode="numeric" placeholder="18" style="width:90px">
+
     <button id="activateBtn" type="button">התחל פעילות</button>
     <div class="status" id="barStatus">הפעילות עדיין לא הופעלה</div>
   </div>
@@ -157,20 +159,22 @@ input{width:100%;padding:12px;margin-top:6px;border-radius:12px;border:1px solid
   <div class="card" id="introScreen">
     <h1>בחירת שותפה לתהליך</h1>
     <div class="intro-note">
-      <p><strong>הפעילות הזו אינה מבחן</strong> — ואין בה תשובות נכונות או לא נכונות.</p>
+      <p><strong>הפעילות הזו אינה מבחן</strong> - ואין בה תשובות נכונות או לא נכונות.</p>
       <p>המטרה היא ליצור <strong>שותפות טובה</strong> לעבודה משותפת בתהליך התיכון ההנדסי.</p>
       <ul>
-        <li><strong>היכרות</strong> — להבין מי את ואיך נוח לך לעבוד</li>
-        <li><strong>אמון</strong> — להתחיל יחד בתחושה טובה ובטוחה</li>
-        <li><strong>דיוק</strong> — לבחור שותפה שתעזור לכן להתקדם באמת</li>
+        <li><strong>היכרות</strong> - להבין מי את ואיך נוח לך לעבוד</li>
+        <li><strong>אמון</strong> - להתחיל יחד בתחושה טובה ובטוחה</li>
+        <li><strong>דיוק</strong> - לבחור שותפה שתעזור לכן להתקדם באמת</li>
       </ul>
     </div>
+
     <div class="quote">פורצת דרך מצליחה כשהיא צועדת קדימה עם נשים מצליחות כמוה.</div>
 
     <p class="wait-text" id="waitText"><strong>נא להמתין</strong></p>
 
-    <button id="startBtn" class="primary start-compact hidden" type="button">מתחילות</button>
-    <p id="lockedMsg" class="small-note warn hidden">הפעילות הסתיימה וננעלה. אם צריך — המדריכה יכולה להפעיל שוב.</p>
+    <div style="text-align:center">
+      <button id="startBtn" class="primary start-compact hidden" type="button">מתחילות</button>
+    </div>
   </div>
 
   <!-- שלב 1 -->
@@ -218,7 +222,6 @@ input{width:100%;padding:12px;margin-top:6px;border-radius:12px;border:1px solid
     </div>
 
     <button class="primary" type="button" onclick="next(3)">המשך</button>
-    <button class="secondary" type="button" onclick="next(1)">חזרה</button>
   </div>
 
   <!-- שלב 3 -->
@@ -241,7 +244,7 @@ input{width:100%;padding:12px;margin-top:6px;border-radius:12px;border:1px solid
       <div class="choice">כשאני משנה מצב קיים</div>
     </div>
 
-    <label>כשיש אי־הסכמה בעבודה משותפת, מה את נוטה לעשות?</label>
+    <label>כשיש אי-הסכמה בעבודה משותפת, מה את נוטה לעשות?</label>
     <div class="choice-group" data-field="conflictStyle">
       <div class="choice">עוצרת ומנסה להבין את הצד השני</div>
       <div class="choice">מציגה עמדה ברורה ומנסה לשכנע</div>
@@ -253,14 +256,13 @@ input{width:100%;padding:12px;margin-top:6px;border-radius:12px;border:1px solid
       <div class="choice">אתגר ופתרון בעיות</div>
     </div>
 
-    <button class="primary" type="button" onclick="finish()">סיימתי – מוכנה לשותפות</button>
-    <button class="secondary" type="button" onclick="next(2)">חזרה</button>
+    <button class="primary" type="button" onclick="finish()">סיימתי - מוכנה לשותפות</button>
   </div>
 
   <!-- מסך המתנה לאחר מילוי -->
   <div class="card hidden" id="waiting">
     <h1>מחכות יחד</h1>
-    <p>מעולה — הבחירות שלך נשמרו.</p>
+    <p>מעולה - הבחירות שלך נשמרו.</p>
     <p>כשהמדריכה תייצר את החיבורים, תראי כאן את תוצאת השותפות.</p>
   </div>
 
@@ -306,7 +308,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// 🔒 מסמכים/קולקציות (מותאם לרולס: instructors / sessions / responses)
+// מסמכים/קולקציות (מותאם לרולס: instructors / sessions / responses)
 const SESSION_ID = "active";
 const sessionRef = doc(db, "sessions", SESSION_ID);
 const responsesRef = collection(db, "responses");
@@ -321,8 +323,8 @@ localStorage.setItem(DEVICE_ID_KEY, deviceId);
 
 // DOM
 const openInstructorBtn = document.getElementById('openInstructor');
+const instructorBar = document.getElementById('instructorBar');
 const startBtn = document.getElementById('startBtn');
-const lockedMsg = document.getElementById('lockedMsg');
 const waitText = document.getElementById('waitText');
 
 const activateBtn = document.getElementById('activateBtn');
@@ -335,11 +337,11 @@ const pairingResult = document.getElementById('pairingResult');
 
 // ערכים נבחרים מקבוצות לחיצה
 const selections = {};
-document.querySelectorAll('.choice-group').forEach(group=>{
+document.querySelectorAll('.choice-group').forEach(group => {
   const field = group.dataset.field;
-  group.querySelectorAll('.choice').forEach(ch=>{
-    ch.addEventListener('click',()=>{
-      group.querySelectorAll('.choice').forEach(c=>c.classList.remove('active'));
+  group.querySelectorAll('.choice').forEach(ch => {
+    ch.addEventListener('click', () => {
+      group.querySelectorAll('.choice').forEach(c => c.classList.remove('active'));
       ch.classList.add('active');
       selections[field] = ch.textContent.trim();
     });
@@ -356,33 +358,25 @@ function setStartEnabled(enabled){
     startBtn.classList.remove('hidden');
     startBtn.classList.remove('start-animate');
     requestAnimationFrame(() => startBtn.classList.add('start-animate'));
-    lockedMsg.classList.add('hidden');
+    waitText?.classList.add('hidden');
   } else {
     startBtn.classList.add('hidden');
+    waitText?.classList.remove('hidden');
   }
 }
 
-function setLockedMessage(on){
-  if(on) lockedMsg.classList.remove('hidden');
-  else lockedMsg.classList.add('hidden');
+function resetToWaiting(){
+  setStartEnabled(false);
+  showOnly('introScreen');
 }
 
-function hideWaitUI(){
-  waitText?.classList.add('hidden');
-}
-
-// מצב ברירת מחדל
-openInstructorBtn.addEventListener('click', () => {
-  document.getElementById('instructorBar').classList.toggle('hidden');
-});
-showOnly('introScreen');
-setStartEnabled(false);
-setLockedMessage(false);
+// מצב התחלתי
+resetToWaiting();
 
 // מצב סשן
 let currentSession = null;
 let sessionEndsAt = 0;
-let sessionStartedAt = 0;
+let pairingShown = false;
 
 async function countValidResponses(){
   const snap = await getDocs(responsesRef);
@@ -397,63 +391,64 @@ async function countValidResponses(){
   return c;
 }
 
-async function isSessionActive(data){
+function isActiveFromData(data){
   if(!data?.started || typeof data.startTime !== 'number') return false;
-  const endAt = data.startTime + SESSION_DURATION_MS;
-  return Date.now() < endAt;
+  return Date.now() < (data.startTime + SESSION_DURATION_MS);
 }
 
 // מאזין לסשן
 onSnapshot(sessionRef, async (snap) => {
+  pairingShown = false; // אם המדריכה מפעילה מחדש - נאפשר להציג שוב
+
   if(!snap.exists()){
+    currentSession = null;
     barStatus.textContent = "הפעילות עדיין לא הופעלה";
-    setStartEnabled(false);
-    setLockedMessage(false);
+    resetToWaiting();
     return;
   }
 
   const data = snap.data();
   currentSession = data;
 
-  // זמן סשן
-  if(data.started && typeof data.startTime === 'number'){
-    sessionStartedAt = data.startTime;
+  if(isActiveFromData(data)){
     sessionEndsAt = data.startTime + SESSION_DURATION_MS;
 
     const now = Date.now();
-    if(now < sessionEndsAt){
-      const answersCount = await countValidResponses();
-      const minsLeft = Math.max(0, Math.ceil((sessionEndsAt - now)/60000));
-      const expected = data.expectedCount || 0;
-      const progress = expected ? ` · ${answersCount}/${expected} תשובות` : '';
-      barStatus.textContent = `פעיל עכשיו · נשארו בערך ${minsLeft} דק׳${progress}`;
-      setStartEnabled(true);
-      hideWaitUI();
-    } else {
-      barStatus.textContent = "הפעילות הסתיימה";
-      setStartEnabled(false);
-      setLockedMessage(true);
-      showOnly('introScreen');
-    }
+    const answersCount = await countValidResponses();
+    const minsLeft = Math.max(0, Math.ceil((sessionEndsAt - now) / 60000));
+    const expected = Number(data.expectedCount || 0);
+    const progress = expected ? ` · ${answersCount}/${expected} תשובות` : '';
+
+    barStatus.textContent = `פעיל עכשיו · נשארו בערך ${minsLeft} דק'${progress}`;
+    setStartEnabled(true);
 
     if(data.pairingReady){
       await showPairing();
     }
-  } else {
-    barStatus.textContent = "הפעילות עדיין לא הופעלה";
-    setStartEnabled(false);
+    return;
   }
+
+  // לא פעיל (נגמר הזמן / לא התחיל באמת)
+  barStatus.textContent = "הפעילות עדיין לא הופעלה";
+  resetToWaiting();
 });
 
-// ---- כפתור המדריכה (פרודקשן) ----
+// פתיחת אזור מדריכה
+openInstructorBtn.addEventListener('click', () => {
+  instructorBar.classList.remove('hidden');
+  openInstructorBtn.classList.add('hidden');
+  // התמקדות נעימה על שדה קוד (מוסתר תמיד)
+  setTimeout(() => instructorCode?.focus(), 50);
+});
+
+// כפתור המדריכה (פרודקשן)
 // לחיצה ראשונה: הפעלה
 // לחיצה שנייה (אחרי שכולן סיימו): יצירת חיבורים
 activateBtn.addEventListener('click', async () => {
-  // אם אין סשן פעיל עדיין — ננסה להפעיל
   const sessionSnap = await getDoc(sessionRef);
   const sessionData = sessionSnap.exists() ? sessionSnap.data() : null;
 
-  const active = await isSessionActive(sessionData);
+  const active = isActiveFromData(sessionData);
 
   if(!active){
     const code = (instructorCode.value || '').trim();
@@ -462,7 +457,7 @@ activateBtn.addEventListener('click', async () => {
       return;
     }
 
-    // בדיקה שקוד קיים ב־instructors
+    // בדיקה שקוד קיים ב-instructors
     const instructorRef = doc(db, 'instructors', code);
     const instSnap = await getDoc(instructorRef);
     if(!instSnap.exists() || instSnap.data()?.active !== true){
@@ -470,7 +465,6 @@ activateBtn.addEventListener('click', async () => {
       return;
     }
 
-    // הפעלת סשן (20 דקות)
     const startTime = Date.now();
     await setDoc(sessionRef, {
       started: true,
@@ -482,19 +476,16 @@ activateBtn.addEventListener('click', async () => {
       updatedAt: serverTimestamp()
     }, { merge: true });
 
-    // לאחר הפעלה: מסתירים קוד והמתנה
+    // מסתירים את שדה הקוד אחרי ההפעלה (הקוד מוסתר תמיד גם לפני)
     instructorCode.classList.add('hidden');
-    openInstructorBtn.classList.add('hidden');
-    hideWaitUI();
 
     barStatus.textContent = "הפעילות הופעלה";
     setStartEnabled(true);
     return;
   }
 
-  // אם יש סשן פעיל — זו לחיצה שנייה: ננסה ליצור חיבורים
-  const data = sessionData;
-  const expected = data?.expectedCount || 0;
+  // לחיצה שנייה: יצירת חיבורים
+  const expected = Number(sessionData?.expectedCount || 0);
   const answersCount = await countValidResponses();
 
   if(expected && answersCount !== expected){
@@ -506,23 +497,37 @@ activateBtn.addEventListener('click', async () => {
   barStatus.textContent = "החיבורים נוצרו";
 });
 
-// ---- ניווט בין שלבים ----
+// ניווט בין שלבים - כל השאלות חובה ואין חזרה
 window.next = (n) => {
-  if(n === 1) return showOnly('step1');
+  if(n === 2){
+    const required = ['mainDomain','secondDomain'];
+    if(required.some(k => !selections[k])){
+      alert('נא לענות על כל השאלות לפני המשך');
+      return;
+    }
+  }
+  if(n === 3){
+    const required = ['workStyle','teamStyle'];
+    if(required.some(k => !selections[k])){
+      alert('נא לענות על כל השאלות לפני המשך');
+      return;
+    }
+  }
+
   if(n === 2) return showOnly('step2');
   if(n === 3) return showOnly('step3');
 };
 
+// כניסה לשאלון (רק כשהמדריכה הפעילה)
 startBtn.addEventListener('click', () => {
   if(sessionEndsAt && Date.now() > sessionEndsAt){
-    setStartEnabled(false);
-    setLockedMessage(true);
+    resetToWaiting();
     return;
   }
   showOnly('step1');
 });
 
-// ---- שמירת תשובות ----
+// שמירת תשובות
 window.finish = async () => {
   if(!displayName.value.trim()){
     alert('כתבי שם פרטי/כינוי כדי שתוכלי לזהות את עצמך במסך החיבורים.');
@@ -535,13 +540,12 @@ window.finish = async () => {
   ];
   const missing = required.filter(k => !selections[k]);
   if(missing.length){
-    alert('רק עוד רגע — השלימי את כל הבחירות לפני סיום.');
+    alert('נא לענות על כל השאלות לפני סיום.');
     return;
   }
 
   if(sessionEndsAt && Date.now() > sessionEndsAt){
-    showOnly('introScreen');
-    setLockedMessage(true);
+    resetToWaiting();
     return;
   }
 
@@ -557,7 +561,6 @@ window.finish = async () => {
     valuePlace: selections.valuePlace,
     conflictStyle: selections.conflictStyle,
     motivationSource: selections.motivationSource,
-    instructorCode: currentSession?.instructorCode || null,
     createdAt: Date.now(),
     expiresAt: new Date(Date.now() + DAY_MS)
   };
@@ -566,7 +569,7 @@ window.finish = async () => {
   showOnly('waiting');
 };
 
-// ---- אלגוריתם חיבורים ----
+// אלגוריתם חיבורים
 function score(a, b){
   let s = 0;
 
@@ -634,6 +637,9 @@ function pickBestPairs(list){
 }
 
 async function showPairing(){
+  if(pairingShown) return;
+  pairingShown = true;
+
   showOnly('thinking');
   await new Promise(r=>setTimeout(r,5000));
 
@@ -646,6 +652,7 @@ async function showPairing(){
     .filter(x => typeof x.createdAt === 'number' && (now - x.createdAt) <= DAY_MS);
 
   if(students.length < 2){
+    resetToWaiting();
     return;
   }
 
@@ -671,7 +678,7 @@ async function showPairing(){
     tDiv.innerHTML = `
       <strong>שלשה</strong><br>
       ${base.a.displayName} · ${base.b.displayName} · ${trio.lone.displayName}<br>
-      <span style="opacity:.85">בכיתה עם מספר אי-זוגי — נוצרת שלשה אחת כדי לשמור על שותפות לכל משתתפת.</span>
+      <span style="opacity:.85">בכיתה עם מספר אי-זוגי - נוצרת שלשה אחת כדי לשמור על שותפות לכל משתתפת.</span>
     `;
     pairingResult.appendChild(tDiv);
   }
@@ -679,7 +686,7 @@ async function showPairing(){
   showOnly('pairing');
 }
 
-// ---- בדיקות עצמאיות (רק אם מוסיפים ?test=1 לכתובת) ----
+// בדיקות עצמאיות (רק אם מוסיפים ?test=1 לכתובת)
 function assert(name, cond){
   if(!cond){
     console.error('TEST FAIL:', name);
@@ -698,7 +705,7 @@ if(new URLSearchParams(location.search).get('test') === '1'){
   const B = {displayName:'ב', mainDomain:'הייטק וליבה', secondDomain:'אדם וטכנולוגיה', workStyle:'z', teamStyle:'w', lifeInterest:'t', valuePlace:'q', conflictStyle:'d', motivationSource:'m'};
   assert('score is symmetric-ish', Math.abs(score(A,B) - score(B,A)) < 0.2);
 
-  // 3) pickBestPairs מחזיר זוגות נכונים
+  // 3) pickBestPairs מחזיר זוג אחד
   const res = pickBestPairs([A,B]);
   assert('pickBestPairs creates one pair', res.pairs.length === 1);
 }
