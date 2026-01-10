@@ -165,13 +165,30 @@
     .section-page.alt{background:#faf7ff}
 
     .section-title{
+      position:relative;
       text-align:center;
       font-size:2.3rem;
       font-weight:700;
       margin-bottom:2rem;
+      font-family:'Varela Round', sans-serif;
       background:linear-gradient(135deg,#8b5cf6,#ec4899);
       -webkit-background-clip:text;
       -webkit-text-fill-color:transparent;
+    }
+
+    /* עומק עדין ובטוח לכותרת – בלי לפגוע בצבע */
+    .section-title::after{
+      content:"";
+      position:absolute;
+      left:50%;
+      transform:translateX(-50%);
+      bottom:-6px; /* צמצום מרחק מהכותרת */
+      width:200px; /* הארכת הקו */
+      height:6px;
+      background:linear-gradient(135deg,rgba(139,92,246,0.35),rgba(236,72,153,0.35));
+      border-radius:999px;
+      filter:blur(4px);
+      pointer-events:none;
     }
 
     .process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem}
@@ -179,19 +196,80 @@
     .process-number{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;font-size:1.2rem;font-weight:900;margin-bottom:0.75rem;background:#fde68a;color:#92400e}
     .process-card:nth-child(2) .process-number{background:#bfdbfe;color:#1e3a8a}
     .process-title{font-size:1.35rem;font-weight:800;margin-bottom:0.5rem;color:#7c3aed}
+
+    /* הדגשת כותרות שלבים בצבעים שונים */
+    .process-card:first-child .process-title{
+      color:#db2777;
+    }
+
+    /* הדגשת כותרת שלב ביניים – חקר ובחירת תחום */
+    .process-card:nth-child(2) .process-title{
+      color:#f59e0b; /* צהוב-כתום */
+    }
+
+    /* הדגשת כותרת שלב 3 – הופכות רעיון לפתרון */
+    .process-card:nth-child(3) .process-title{
+      color:#2563eb;
+    }
+
+    /* הדגשת כותרת שלב 4 – מציגות ומשפיעות */
+    .process-card:nth-child(4) .process-title{
+      color:#16a34a;
+    }
     .process-text{font-size:1rem;color:#333}
 
     .domains-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:1.5rem}
     .domain-card{border:2px solid #e5e7eb;border-radius:20px;padding:2rem 1.5rem;text-align:center;text-decoration:none;color:#111;transition:.25s}
     .domain-card:hover{transform:translateY(-6px);box-shadow:0 12px 28px rgba(0,0,0,.12)}
-    .domain-icon{font-size:2.8rem;margin-bottom:0.5rem}
-    .domain-title{font-size:1.2rem;font-weight:700;margin-bottom:0.75rem}
+    .domain-icon{
+      font-size:2.8rem;
+      margin-bottom:0.5rem;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:64px;
+      height:64px;
+      border-radius:50%;
+      background:linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.9),
+        rgba(245,245,255,0.85)
+      );
+      box-shadow:
+        0 2px 4px rgba(255,255,255,0.9) inset,
+        0 -2px 4px rgba(0,0,0,0.08) inset,
+        0 8px 18px rgba(0,0,0,0.18);
+    }
+    .domain-title{
+      font-size:1.2rem;
+      font-weight:700;
+      margin-bottom:0.75rem;
+      text-shadow:
+        0 1px 0 rgba(255,255,255,0.9),
+        0 2px 4px rgba(0,0,0,0.15);
+    }
     .domain-card:nth-child(1) .domain-title{color:#7c3aed}
     .domain-card:nth-child(2) .domain-title{color:#2563eb}
     .domain-card:nth-child(3) .domain-title{color:#16a34a}
     .domain-card:nth-child(4) .domain-title{color:#db2777}
     .domain-card:nth-child(5) .domain-title{color:#ea580c}
-    .domain-btn{display:inline-block;border:2px solid #8b5cf6;padding:0.4rem 1.2rem;border-radius:999px;color:#8b5cf6;font-weight:600}
+    .domain-btn{
+      display:inline-block;
+      border:2px solid rgba(139,92,246,0.6);
+      padding:0.45rem 1.3rem;
+      border-radius:999px;
+      color:#7c3aed;
+      font-weight:600;
+      background:linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.95),
+        rgba(255,228,235,0.75)
+      );
+      box-shadow:
+        0 2px 4px rgba(255,255,255,0.9) inset,
+        0 -2px 4px rgba(236,72,153,0.18) inset,
+        0 6px 14px rgba(124,58,237,0.22);
+    }
 
     footer{text-align:center;padding:2rem;border-top:1px solid #eee;margin-top:3rem}
 
@@ -216,7 +294,6 @@
     <nav>
       <a href="index.html" class="nav-link" data-label="עמוד הבית">🏠</a>
       <a href="#domains" class="nav-link" data-label="תחומים">🧭</a>
-      <a href="#how" class="nav-link" data-label="איך זה עובד">ℹ️</a>
       <a href="quiz.html" class="nav-link" data-label="שאלון">📝</a>
     </nav>
   </div>
