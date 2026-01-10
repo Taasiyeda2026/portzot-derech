@@ -79,20 +79,35 @@ button.secondary{width:100%;margin-top:12px;padding:14px;border-radius:14px;font
 .hidden{display:none}
 .quote{margin:16px 0;padding:14px;border-radius:14px;background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.18);font-weight:650;text-align:center}
 
+.intro-note{margin:14px 0 6px;padding:14px 14px 12px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14)}
+.intro-note p{margin:0 0 10px;color:rgba(248,250,252,.92)}
+.intro-note ul{margin:0;padding:0 18px 0 0;color:var(--muted);line-height:1.8}
+.intro-note li{margin:6px 0}
+
 label{display:block;margin-top:14px;color:var(--muted);font-weight:650}
 input,select{width:100%;padding:12px;margin-top:6px;border-radius:12px;border:1px solid var(--border);background:rgba(0,0,0,.25);color:var(--text)}
 
 .small-note{font-size:13px;color:rgba(199,210,254,.9);margin-top:10px}
 .warn{color:#fde68a}
+
+/* נא להמתין – ורוד זוהר */
+.wait-text{
+  text-align:center;
+  font-size:20px;
+  font-weight:900;
+  color:#ff3ea5;
+  text-shadow:0 0 8px rgba(255,62,165,.8),0 0 18px rgba(255,62,165,.6);
+  margin-top:18px;
+}
 </style>
 </head>
 
 <body>
-<!-- פס מדריכה עליון -->
-<div id="instructorBar">
+<!-- פס מדריכה עליון (מוסתר כברירת מחדל) -->
+<div id="instructorBar" class="hidden">
   <div class="inner">
     <label for="instructorCode">קוד מדריכה</label>
-    <input id="instructorCode" inputmode="numeric" placeholder="2311" autocomplete="one-time-code">
+    <input id="instructorCode" inputmode="numeric" placeholder="••••" autocomplete="one-time-code">
     <button id="activateBtn" type="button">התחל פעילות</button>
     <div class="status" id="barStatus">הפעילות עדיין לא הופעלה</div>
   </div>
@@ -100,14 +115,23 @@ input,select{width:100%;padding:12px;margin-top:6px;border-radius:12px;border:1p
 
 <div class="container">
 
+  <!-- כפתור פתיחת אזור מדריכה -->
+  <button id="openInstructor" class="secondary" type="button" style="margin-bottom:12px">כניסת מדריכה</button>
+
   <!-- מסך פתיחה / המתנה -->
   <div class="card" id="introScreen">
     <h1>בחירת שותפה לתהליך</h1>
-    <p>הפעילות הזו אינה מבחן ואין בה תשובות נכונות או לא נכונות.</p>
-    <p>המטרה היא ליצור שותפות טובה לעבודה משותפת בתהליך התיכון ההנדסי — דרך היכרות, אמון ודיוק.</p>
+    <div class="intro-note">
+      <p><strong>הפעילות הזו אינה מבחן</strong> — ואין בה תשובות נכונות או לא נכונות.</p>
+      <p>המטרה היא ליצור <strong>שותפות טובה</strong> לעבודה משותפת בתהליך התיכון ההנדסי.</p>
+      <ul>
+        <li><strong>היכרות</strong> — להבין מי את ואיך נוח לך לעבוד</li>
+        <li><strong>אמון</strong> — להתחיל יחד בתחושה טובה ובטוחה</li>
+        <li><strong>דיוק</strong> — לבחור שותפה שתעזור לכן להתקדם באמת</li>
+      </ul>
+    </div>
     <div class="quote">פורצת דרך מצליחה כשהיא צועדת קדימה עם נשים מצליחות כמוה.</div>
-    <p><strong>כרגע מחכות להפעלה של המדריכה.</strong></p>
-    <p class="small-note">ברגע שהמדריכה תלחץ "התחל פעילות" יופיע כאן כפתור להתחלה — לכל הכיתה.</p>
+    <p class="wait-text"><strong>נא להמתין</strong></p>
 
     <button id="startBtn" class="primary hidden" type="button">מתחילות</button>
     <p id="lockedMsg" class="small-note warn hidden">הפעילות הסתיימה וננעלה. אם צריך — המדריכה יכולה להפעיל שוב.</p>
@@ -245,6 +269,7 @@ const deviceId = localStorage.getItem(DEVICE_ID_KEY) || crypto.randomUUID();
 localStorage.setItem(DEVICE_ID_KEY, deviceId);
 
 // DOM
+const openInstructorBtn = document.getElementById('openInstructor');
 const introScreen = document.getElementById('introScreen');
 const startBtn = document.getElementById('startBtn');
 const lockedMsg = document.getElementById('lockedMsg');
@@ -287,6 +312,9 @@ function setLockedMessage(on){
 }
 
 // מצב ברירת מחדל: מסך פתיחה
+openInstructorBtn.addEventListener('click', () => {
+  document.getElementById('instructorBar').classList.toggle('hidden');
+});
 showOnly('introScreen');
 setStartEnabled(false);
 setLockedMessage(false);
