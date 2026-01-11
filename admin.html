@@ -25,7 +25,6 @@
       overflow-x: hidden;
     }
     
-    /* אנימציית רקע */
     body::before {
       content: '';
       position: fixed;
@@ -82,7 +81,6 @@
       font-size: 16px;
     }
     
-    /* חלוקת תצוגה - טופס / מעקב */
     .setup-view, .monitoring-view {
       display: none;
     }
@@ -141,7 +139,6 @@
       color: #ff69b4;
     }
     
-    /* תצוגת מעקב */
     .progress-container {
       background: rgba(0, 0, 0, 0.4);
       border: 2px solid rgba(255, 20, 147, 0.3);
@@ -246,7 +243,6 @@
       50% { opacity: 0.7; }
     }
     
-    /* כפתורים */
     .btn {
       width: 100%;
       padding: 18px;
@@ -380,11 +376,12 @@
         <form id="activityForm">
           
           <div class="form-group">
-            <label for="firebaseCode">קוד פיירבייס</label>
+            <label for="instructorCode">קוד מדריכה (2311)</label>
             <input 
               type="text" 
-              id="firebaseCode" 
-              placeholder="הזיני את קוד הפיירבייס"
+              id="instructorCode" 
+              placeholder="הזיני את קוד המדריכה"
+              value="2311"
               required
             >
           </div>
@@ -461,16 +458,15 @@
     </div>
   </div>
 
-  <!-- Firebase SDK -->
+  <!-- Firebase SDK - Firestore -->
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-    import { getDatabase, ref, set, get, update, onValue } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+    import { getFirestore, collection, doc, setDoc, getDoc, updateDoc, onSnapshot, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
     // TODO: החליפי את הקונפיגורציה הזו עם הקונפיגורציה שלך מ-Firebase Console
     const firebaseConfig = {
       apiKey: "YOUR_API_KEY",
       authDomain: "YOUR_AUTH_DOMAIN",
-      databaseURL: "YOUR_DATABASE_URL",
       projectId: "YOUR_PROJECT_ID",
       storageBucket: "YOUR_STORAGE_BUCKET",
       messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
@@ -478,7 +474,7 @@
     };
 
     const app = initializeApp(firebaseConfig);
-    const database = getDatabase(app);
+    const db = getFirestore(app);
 
     // אלמנטים
     const setupView = document.querySelector('.setup-view');
@@ -490,11 +486,12 @@
     const backToSetupBtn = document.getElementById('backToSetupBtn');
     
     // משתנים גלובליים
-    let currentActivityCode = null;
+    let currentSessionId = null;
     let refreshInterval = null;
     let timerInterval = null;
-    let currentRefreshDelay = 45000; // התחלה ב-45 שניות
+    let currentRefreshDelay = 45000;
     let isComplete = false;
+    let unsubscribe = null;
 
     // בדיקה אם יש פעילות פעילה בטעינה
     checkExistingActivity();
@@ -503,10 +500,10 @@
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       
-      const firebaseCode = document.getElementById('firebaseCode').value.trim();
+      const instructorCode = document.getElementById('instructorCode').value.trim();
       const participantCount = parseInt(document.getElementById('participantCount').value);
       
-      if (!firebaseCode || !participantCount || participantCount < 2) {
+      if (!instructorCode || !participantCount || participantCount < 2) {
         showSetupStatus('אנא מלאי את כל השדות בצורה תקינה', 'error');
         return;
       }
@@ -515,9 +512,23 @@
       startBtn.textContent = '⏳ מפעיל...';
       
       try {
-        const activityRef = ref(database, `activities/${firebaseCode}`);
+        // בדיקה שקוד המדריכה קיים
+        const instructorRef = doc(db, 'instructors', instructorCode);
+        const instructorSnap = await getDoc(instructorRef);
         
-        await set(activityRef, {
+        if (!instructorSnap.exists()) {
+          showSetupStatus('❌ קוד מדריכה לא תקין', 'error');
+          startBtn.disabled = false;
+          startBtn.textContent = '🚀 התחילי את הפעילות';
+          return;
+        }
+        
+        // יצירת סשן חדש
+        const sessionId = 'session_' + Date.now();
+        const sessionRef = doc(db, 'sessions', sessionId);
+        
+        await setDoc(sessionRef, {
+          instructorCode: instructorCode,
           participantCount: participantCount,
           completedCount: 0,
           isActive: true,
@@ -525,19 +536,19 @@
           status: 'active'
         });
         
-        currentActivityCode = firebaseCode;
-        localStorage.setItem('currentActivity', firebaseCode);
+        currentSessionId = sessionId;
+        localStorage.setItem('currentSession', sessionId);
         
         showSetupStatus('✅ הפעילות הופעלה בהצלחה!', 'success');
         
         setTimeout(() => {
           switchToMonitoring();
-          startMonitoring(firebaseCode);
+          startMonitoring(sessionId);
         }, 1500);
         
       } catch (error) {
         console.error('Error:', error);
-        showSetupStatus('❌ שגיאה בהפעלת הפעילות. נסי שוב', 'error');
+        showSetupStatus('❌ שגיאה: ' + error.message, 'error');
         startBtn.disabled = false;
         startBtn.textContent = '🚀 התחילי את הפעילות';
       }
@@ -549,8 +560,8 @@
       
       if (newCount && !isNaN(newCount) && parseInt(newCount) >= 2) {
         try {
-          const activityRef = ref(database, `activities/${currentActivityCode}`);
-          await update(activityRef, {
+          const sessionRef = doc(db, 'sessions', currentSessionId);
+          await updateDoc(sessionRef, {
             participantCount: parseInt(newCount)
           });
           showMonitorStatus('✅ כמות המשתתפות עודכנה', 'success');
@@ -567,22 +578,22 @@
       }
       
       try {
-        const activityRef = ref(database, `activities/${currentActivityCode}`);
-        await update(activityRef, {
-          completedCount: 0,
+        const sessionRef = doc(db, 'sessions', currentSessionId);
+        await updateDoc(sessionRef, {
           isActive: false,
           status: 'reset'
         });
         
         stopMonitoring();
-        localStorage.removeItem('currentActivity');
-        currentActivityCode = null;
+        localStorage.removeItem('currentSession');
+        currentSessionId = null;
         
         showMonitorStatus('✅ הפעילות אופסה', 'success');
         
         setTimeout(() => {
           switchToSetup();
           form.reset();
+          document.getElementById('instructorCode').value = '2311';
         }, 2000);
         
       } catch (error) {
@@ -598,16 +609,16 @@
 
     // בדיקת פעילות קיימת
     async function checkExistingActivity() {
-      const savedActivity = localStorage.getItem('currentActivity');
-      if (savedActivity) {
+      const savedSession = localStorage.getItem('currentSession');
+      if (savedSession) {
         try {
-          const activityRef = ref(database, `activities/${savedActivity}`);
-          const snapshot = await get(activityRef);
+          const sessionRef = doc(db, 'sessions', savedSession);
+          const sessionSnap = await getDoc(sessionRef);
           
-          if (snapshot.exists() && snapshot.val().isActive) {
-            currentActivityCode = savedActivity;
+          if (sessionSnap.exists() && sessionSnap.data().isActive) {
+            currentSessionId = savedSession;
             switchToMonitoring();
-            startMonitoring(savedActivity);
+            startMonitoring(savedSession);
           }
         } catch (error) {
           console.error('Error checking existing activity:', error);
@@ -616,13 +627,13 @@
     }
 
     // התחלת מעקב
-    function startMonitoring(activityCode) {
-      const activityRef = ref(database, `activities/${activityCode}`);
+    function startMonitoring(sessionId) {
+      const sessionRef = doc(db, 'sessions', sessionId);
       
       // האזנה לשינויים בזמן אמת
-      onValue(activityRef, (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
+      unsubscribe = onSnapshot(sessionRef, (docSnap) => {
+        if (docSnap.exists()) {
+          const data = docSnap.data();
           updateProgress(data.completedCount || 0, data.participantCount || 0);
         }
       });
@@ -653,7 +664,7 @@
 
     // רענון דינמי
     function startDynamicRefresh() {
-      currentRefreshDelay = 45000; // 45 שניות
+      currentRefreshDelay = 45000;
       scheduleNextRefresh();
     }
 
@@ -663,13 +674,12 @@
       startTimer(currentRefreshDelay / 1000);
       
       refreshInterval = setTimeout(() => {
-        // עדכון זמן הרענון הבא
         if (currentRefreshDelay === 45000) {
-          currentRefreshDelay = 30000; // 30 שניות
+          currentRefreshDelay = 30000;
         } else if (currentRefreshDelay === 30000) {
-          currentRefreshDelay = 15000; // 15 שניות
+          currentRefreshDelay = 15000;
         } else if (currentRefreshDelay === 15000) {
-          currentRefreshDelay = 10000; // 10 שניות
+          currentRefreshDelay = 10000;
         }
         
         scheduleNextRefresh();
@@ -711,6 +721,10 @@
 
     // עצירת מעקב
     function stopMonitoring() {
+      if (unsubscribe) {
+        unsubscribe();
+        unsubscribe = null;
+      }
       stopDynamicRefresh();
       isComplete = false;
       currentRefreshDelay = 45000;
