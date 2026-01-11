@@ -60,29 +60,11 @@
             box-shadow: 0 0 30px rgba(255,20,147,0.3);
         }
 
-        .input-group {
-            margin-bottom: 24px;
-        }
-
-        label {
-            display: block;
-            color: #ff69b4;
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px;
-            background: rgba(0,0,0,0.5);
-            border: 1px solid #ff1493;
-            border-radius: 8px;
-            color: #fff;
-            font-size: 16px;
-        }
-
         button {
+            max-width: 400px;
             width: 100%;
+            margin: 0 auto;
+            display: block;
             padding: 14px;
             background: linear-gradient(135deg, #ff1493, #ff69b4);
             color: #fff;
@@ -174,25 +156,22 @@
         <h1>🎯 מנוע שותפות 🎯</h1>
 
         <div class="card">
-            <div class="input-group">
-                <label for="sessionId">קוד סשן/פעילות</label>
-                <input type="text" id="sessionId" placeholder="הזן קוד סשן...">
-            </div>
-            <button onclick="runMatching()">הפעל שותפות</button>
+            <button id="runButton" onclick="runMatching()">💝 הפעילי מנוע למציאת שותפויות</button>
             <div class="error" id="error"></div>
         </div>
 
         <div class="loading" id="loading">
-            <p>מחשב שותפותים אופטימליים...</p>
+            <p>⏳ מחשב שותפויות אופטימליות...</p>
         </div>
 
         <div class="results" id="results"></div>
     </div>
 
-    <!-- Firebase Firestore -->
     <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getFirestore, collection, query, where, getDocs, doc, setDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';        const firebaseConfig = {
+        import { initializeApp } from 'https://www.genspark.ai/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, query, where, getDocs, doc, setDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        const firebaseConfig = {
             apiKey: "AIzaSyCFSq5b-HgkTxFNhBJIBdOe2ian5TZvMPE",
             authDomain: "portzot-derech.firebaseapp.com",
             projectId: "portzot-derech",
@@ -206,27 +185,26 @@
         db._settings.experimentalForceLongPolling = true;
         console.log("✅ Firestore connection: OK");
 
-        // טעינת session מה-URL אוטומטית 🚀
+        // קבלת session מה-URL
         const urlParams = new URLSearchParams(window.location.search);
-        const sessionFromURL = urlParams.get('session');
+        const sessionId = urlParams.get('session');
         
-        if (sessionFromURL) {
-            console.log('🎯 נמצא session ב-URL:', sessionFromURL);
-            document.getElementById('sessionId').value = sessionFromURL;
-            // הרצה אוטומטית אחרי 0.5 שניות
-            setTimeout(() => {
-                console.log('▶️ מתחיל זיווג אוטומטי...');
-                window.runMatching();
-            }, 500);
+        // הגדרת showError לפני השימוש
+        function showError(message) {
+            document.getElementById('error').textContent = message;
+            document.getElementById('error').classList.add('show');
+            document.getElementById('loading').classList.remove('show');
+            document.getElementById('runButton').disabled = false;
         }
 
+        // הגדרת runMatching
         window.runMatching = async function() {
-            const sessionId = document.getElementById('sessionId').value.trim();
             if (!sessionId) {
-                showError('אנא הזן קוד סשן');
+                showError('שגיאה: לא נמצא קוד פעילות');
                 return;
             }
 
+            document.getElementById('runButton').disabled = true;
             document.getElementById('loading').classList.add('show');
             document.getElementById('error').classList.remove('show');
             document.getElementById('results').classList.remove('show');
@@ -240,7 +218,7 @@
                 const snapshot = await getDocs(responsesQuery);
 
                 if (snapshot.empty) {
-                    showError('לא נמצאו תשובות לסשן זה');
+                    showError('לא נמצאו תשובות לפעילות זו');
                     return;
                 }
 
@@ -249,198 +227,111 @@
                     responses.push({ id: doc.id, ...doc.data() });
                 });
 
-                // הרצת אלגוריתם השותפות
+                console.log(`📊 נמצאו ${responses.length} תשובות`);
+
+                // הרצת אלגוריתם הזיווג
                 const pairs = pickBestPairs(responses);
 
-                // שמירת השותפותים ב-Firestore
+                // שמירה ב-Firestore
                 await setDoc(doc(db, 'pairings', sessionId), {
+                    sessionId: sessionId,
                     pairs: pairs,
                     totalParticipants: responses.length,
                     createdAt: new Date().toISOString()
                 });
 
+                console.log('✅ זיווגים נשמרו ב-Firestore');
+
                 // הצגת התוצאות
                 displayResults(pairs);
 
             } catch (error) {
-                console.error('Error:', error);
-                showError('שגיאה בחישוב השותפותים: ' + error.message);
+                console.error('❌ Error:', error);
+                showError('שגיאה בחישוב הזיווגים: ' + error.message);
             } finally {
                 document.getElementById('loading').classList.remove('show');
+                document.getElementById('runButton').disabled = false;
             }
         };
 
         function calculateScore(a, b) {
-  let score = 0;
-  let reasons = [];
+            let totalScore = 0;
+            const reasons = [];
 
-  // ====== תחומי עניין (30 נקודות מקס) ======
-  
-  if (a.mainDomain === b.mainDomain) {
-    score += 15;
-    reasons.push(`שתיכן בחרתן ב${a.mainDomain} כתחום עיקרי`);
-  }
-  
-  if (a.mainDomain === b.secondDomain && b.secondDomain !== "אני מעדיפה להתמקד בתחום אחד") {
-    score += 8;
-    reasons.push(`${b.displayName || 'השותפה'} מתעניינת גם ב${a.mainDomain}`);
-  }
-  if (b.mainDomain === a.secondDomain && a.secondDomain !== "אני מעדיפה להתמקד בתחום אחד") {
-    score += 8;
-    reasons.push(`${a.displayName || 'את'} מתעניינת גם ב${b.mainDomain}`);
-  }
-  
-  if (a.secondDomain === b.secondDomain && 
-      a.secondDomain !== "אני מעדיפה להתמקד בתחום אחד") {
-    score += 5;
-  }
-  
-  if (a.secondDomain === "אני מעדיפה להתמקד בתחום אחד" && 
-      b.secondDomain === "אני מעדיפה להתמקד בתחום אחד") {
-    score += 3;
-  }
+            // תחומי עניין (30 נקודות)
+            if (a.mainDomain === b.mainDomain) {
+                totalScore += 15;
+                reasons.push(`שתיכן בחרתן ב-${a.mainDomain} כתחום עיקרי`);
+            }
+            
+            if (a.mainDomain === b.secondDomain && b.secondDomain !== "אני מעדיפה להתמקד בתחום אחד") {
+                totalScore += 8;
+            }
+            if (b.mainDomain === a.secondDomain && a.secondDomain !== "אני מעדיפה להתמקד בתחום אחד") {
+                totalScore += 8;
+            }
+            
+            if (a.secondDomain === b.secondDomain && a.secondDomain !== "אני מעדיפה להתמקד בתחום אחד") {
+                totalScore += 5;
+            }
 
-  // ====== סגנון עבודה (25 נקודות מקס) ======
-  
-  if (a.workStyle !== b.workStyle) {
-    score += 8;
-    reasons.push('סגנונות עבודה משלימים');
-  } else {
-    score += 2;
-  }
-  
-  if (a.teamStyle !== b.teamStyle) {
-    score += 7;
-    reasons.push('אחת חושבת בקול ואחת מעבדת בשקט');
-  } else {
-    score += 3;
-  }
-  
-  if (a.workPace === b.workPace && a.workPace !== "תלוי במשימה - אני גמישה") {
-    score += 5;
-  } else if (a.workPace === "תלוי במשימה - אני גמישה" || 
-             b.workPace === "תלוי במשימה - אני גמישה") {
-    if (a.workPace === "תלוי במשימה - אני גמישה" && 
-        b.workPace === "תלוי במשימה - אני גמישה") {
-      score += 8;
-      reasons.push('שתיכן גמישות בקצב העבודה');
-    } else {
-      score += 6;
-    }
-  } else if ((a.workPace === "אני אוהבת לעבוד מהר ולסיים מוקדם" && 
-              b.workPace === "אני מעדיפה לקחת זמן ולעשות בדיוק") ||
-             (b.workPace === "אני אוהבת לעבוד מהר ולסיים מוקדם" && 
-              a.workPace === "אני מעדיפה לקחת זמן ולעשות בדיוק")) {
-    score -= 3;
-  }
+            // סגנון עבודה (25 נקודות)
+            if (a.workStyle !== b.workStyle) {
+                totalScore += 8;
+                reasons.push('סגנונות עבודה משלימים');
+            }
+            
+            if (a.teamStyle !== b.teamStyle) {
+                totalScore += 7;
+            }
+            
+            if (a.workPace === b.workPace) {
+                totalScore += 5;
+            }
 
-  // ====== תפקיד בצוות (20 נקודות מקס) ======
-  
-  if (a.teamRole !== b.teamRole) {
-    score += 7;
-    
-    if ((a.teamRole === "למצוא רעיונות מקוריים ולהתחיל דברים חדשים" && 
-         b.teamRole === "לארגן משימות ולוודא שהכל זורם בזמן") ||
-        (b.teamRole === "למצוא רעיונות מקוריים ולהתחיל דברים חדשים" && 
-         a.teamRole === "לארגן משימות ולוודא שהכל זורם בזמן")) {
-      score += 2;
-      reasons.push('קומבינציה מושלמת: רעיונות + ארגון');
-    }
-    
-    if ((a.teamRole === "לעזור לאחרות להבין ולהסביר מושגים מורכבים" && 
-         b.teamRole === "לפתור בעיות טכניות כשמשהו תקוע") ||
-        (b.teamRole === "לעזור לאחרות להבין ולהסביר מושגים מורכבים" && 
-         a.teamRole === "לפתור בעיות טכניות כשמשהו תקוע")) {
-      score += 1;
-    }
-  } else {
-    score += 2;
-  }
-  
-  if (a.motivationSource === b.motivationSource) {
-    score += 6;
-    reasons.push('אותה מוטיבציה מניעה את שתיכן');
-  } else {
-    score += 3;
-  }
+            // תפקיד בצוות (20 נקודות)
+            if (a.teamRole !== b.teamRole) {
+                totalScore += 7;
+            }
+            
+            if (a.motivationSource === b.motivationSource) {
+                totalScore += 6;
+                reasons.push('אותה מוטיבציה מניעה את שתיכן');
+            }
 
-  // ====== תקשורת ומתח (25 נקודות מקס) ======
-  
-  if ((a.pressureResponse === "אני פועלת הכי טוב תחת לחץ - זה מניע אותי" && 
-       b.pressureResponse === "אני צריכה לתכנן מראש כדי למנוע לחץ") ||
-      (b.pressureResponse === "אני פועלת הכי טוב תחת לחץ - זה מניע אותי" && 
-       a.pressureResponse === "אני צריכה לתכנן מראש כדי למנוע לחץ")) {
-    score += 9;
-    reasons.push('איזון מושלם בניהול לחץ');
-  } else if ((a.pressureResponse === "אני פועלת הכי טוב תחת לחץ - זה מניע אותי" && 
-              b.pressureResponse === "אני לוקחת הפסקה קצרה ואז חוזרת בכוח") ||
-             (b.pressureResponse === "אני פועלת הכי טוב תחת לחץ - זה מניע אותי" && 
-              a.pressureResponse === "אני לוקחת הפסקה קצרה ואז חוזרת בכוח")) {
-    score += 6;
-  } else {
-    score += 4;
-  }
-  
-  if ((a.conflictStyle === "עוצרת ומנסה להבין לעומק את הצד השני" && 
-       b.conflictStyle === "מציגה את העמדה שלי בבירור ומנסה לשכנע") ||
-      (b.conflictStyle === "עוצרת ומנסה להבין לעומק את הצד השני" && 
-       a.conflictStyle === "מציגה את העמדה שלי בבירור ומנסה לשכנע")) {
-    score += 8;
-    reasons.push('שילוב מעולה: אחת מקשיבה ואחת מובילה');
-  } else if (a.conflictStyle === "מחפשת פשרה שמשלבת את שני הצדדים" || 
-             b.conflictStyle === "מחפשת פשרה שמשלבת את שני הצדדים") {
-    if (a.conflictStyle === b.conflictStyle) {
-      score += 9;
-      reasons.push('שתיכן מחפשות פשרות');
-    } else {
-      score += 7;
-    }
-  } else if (a.conflictStyle === b.conflictStyle && 
-             a.conflictStyle === "מציגה את העמדה שלי בבירור ומנסה לשכנע") {
-    score += 1;
-  } else {
-    score += 5;
-  }
-  
-  if (a.communicationStyle === b.communicationStyle && 
-      a.communicationStyle !== "לא משנה לי - אני גמישה") {
-    score += 8;
-    reasons.push('אותו סגנון תקשורת מועדף');
-  } else if (a.communicationStyle === "לא משנה לי - אני גמישה" || 
-             b.communicationStyle === "לא משנה לי - אני גמישה") {
-    score += 7;
-  } else {
-    score += 2;
-  }
+            // תקשורת (25 נקודות)
+            if ((a.pressureResponse === "אני פועלת הכי טוב תחת לחץ - זה מניע אותי" && 
+                 b.pressureResponse === "אני צריכה לתכנן מראש כדי למנוע לחץ") ||
+                (b.pressureResponse === "אני פועלת הכי טוב תחת לחץ - זה מניע אותי" && 
+                 a.pressureResponse === "אני צריכה לתכנן מראש כדי למנוע לחץ")) {
+                totalScore += 9;
+                reasons.push('איזון מושלם בניהול לחץ');
+            }
+            
+            if (a.conflictStyle === b.conflictStyle) {
+                totalScore += 8;
+            }
+            
+            if (a.communicationStyle === b.communicationStyle) {
+                totalScore += 8;
+                reasons.push('אותו סגנון תקשורת מועדף');
+            }
 
-  // ====== תחומי עניין אישיים (10 נקודות מקס) ======
-  
-  if (a.lifeInterest === b.lifeInterest) {
-    score += 4;
-  } else {
-    score += 1;
-  }
+            // תחומי עניין אישיים (10 נקודות)
+            if (a.lifeInterest === b.lifeInterest) {
+                totalScore += 4;
+            }
 
-  // ====== כפל לפי חשיבות ======
-  
-  let multiplier = 1;
-  if (a.importanceLevel === "מאוד חשוב - אני רוצה התאמה הכי טובה" ||
-      b.importanceLevel === "מאוד חשוב - אני רוצה התאמה הכי טובה") {
-    multiplier = 1.3;
-  }
-  
-  score = score * multiplier;
+            // כפל לפי חשיבות
+            let multiplier = 1;
+            if (a.importanceLevel === "מאוד חשוב - אני רוצה התאמה הכי טובה" ||
+                b.importanceLevel === "מאוד חשוב - אני רוצה התאמה הכי טובה") {
+                multiplier = 1.3;
+            }
+            
+            totalScore = totalScore * multiplier;
 
-  // רעש קטן
-  const nameKey = (a.displayName + '|' + b.displayName)
-    .split('')
-    .reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
-  score += (nameKey % 7) * 0.01;
-
-  return { score: Math.round(score * 100) / 100, reasons };
-}
-
-
+            return { totalScore: Math.round(totalScore * 100) / 100, reasons };
         }
 
         function pickBestPairs(participants) {
@@ -448,19 +339,23 @@
             const pairs = [];
             const used = new Set();
 
-            // מיפוי כל הזוגות האפשריים
+            // מיפוי כל הזוגות
             const scores = [];
             for (let i = 0; i < n; i++) {
                 for (let j = i + 1; j < n; j++) {
                     const result = calculateScore(participants[i], participants[j]);
-                    scores.push({ i, j, scoreValue: result.score, reasons: result.reasons });
+                    scores.push({ 
+                        i, j, 
+                        scoreValue: result.totalScore, 
+                        reasons: result.reasons 
+                    });
                 }
             }
 
-            // מיון לפי ציון (מהגבוה לנמוך)
+            // מיון מהגבוה לנמוך
             scores.sort((a, b) => b.scoreValue - a.scoreValue);
 
-            // בחירה greedy - הזוג הטוב ביותר הזמין
+            // בחירה greedy
             for (const { i, j, scoreValue, reasons } of scores) {
                 if (!used.has(i) && !used.has(j)) {
                     pairs.push({
@@ -475,7 +370,7 @@
                 }
             }
 
-            // טיפול במקרה של מספר אי-זוגי
+            // טיפול במספר אי-זוגי
             if (used.size < n) {
                 const leftOverIndices = [];
                 for (let i = 0; i < n; i++) {
@@ -487,25 +382,19 @@
                 if (leftOverIndices.length > 0) {
                     const leftOverParticipants = leftOverIndices.map(i => participants[i]);
                     
-                    // חישוב ציון לצוות (אם יש 3 או יותר)
                     let teamScore = 0;
                     let teamReasons = [];
                     
                     if (leftOverParticipants.length === 3) {
-                        // חישוב ממוצע של 3 הזוגות
                         const score_ab = calculateScore(leftOverParticipants[0], leftOverParticipants[1]);
                         const score_ac = calculateScore(leftOverParticipants[0], leftOverParticipants[2]);
                         const score_bc = calculateScore(leftOverParticipants[1], leftOverParticipants[2]);
                         
                         teamScore = Math.round((score_ab.totalScore + score_ac.totalScore + score_bc.totalScore) / 3);
                         teamReasons = [
-                            `${leftOverParticipants[0].displayName} ↔️ ${leftOverParticipants[1].displayName}: ${score_ab.totalScore} נקודות`,
-                            `${leftOverParticipants[0].displayName} ↔️ ${leftOverParticipants[2].displayName}: ${score_ac.totalScore} נקודות`,
-                            `${leftOverParticipants[1].displayName} ↔️ ${leftOverParticipants[2].displayName}: ${score_bc.totalScore} נקודות`,
-                            `ממוצע הצוות: ${teamScore} נקודות`
+                            `ציון ממוצע של הצוות: ${teamScore} נקודות`
                         ];
                     } else if (leftOverParticipants.length === 2) {
-                        // אם יש 2 - זה זוג רגיל
                         const pairScore = calculateScore(leftOverParticipants[0], leftOverParticipants[1]);
                         teamScore = pairScore.totalScore;
                         teamReasons = pairScore.reasons;
@@ -528,20 +417,29 @@
 
         function displayResults(pairs) {
             const resultsDiv = document.getElementById('results');
-            resultsDiv.innerHTML = '<div class="card"><h2>תוצאות השותפות</h2></div>';
+            resultsDiv.innerHTML = '<div class="card"><h2>📊 תוצאות השותפויות</h2></div>';
 
             pairs.forEach((pair, index) => {
                 const pairDiv = document.createElement('div');
                 pairDiv.className = 'pair';
 
-                if (pair.isLeftover) {
+                if (pair.isTeam) {
+                    const members = [pair.person1, pair.person2, pair.person3].filter(Boolean);
                     pairDiv.innerHTML = `
-                        <h3>קבוצה ${index + 1} (משתתפות נוספות)</h3>
+                        <h3>צוות ${index + 1} (3 משתתפות)</h3>
+                        <div class="pair-info">
+                            <div class="pair-names">
+                                <p>${members.join(' 💖 ')}</p>
+                            </div>
+                            <div class="score">${pair.score}</div>
+                        </div>
+                    `;
+                } else if (pair.isLeftover) {
+                    pairDiv.innerHTML = `
+                        <h3>משתתפת נוספת</h3>
                         <div class="pair-info">
                             <div class="pair-names">
                                 <p>${pair.person1}</p>
-                                ${pair.person2 ? `<p>${pair.person2}</p>` : ''}
-                                ${pair.person3 ? `<p>${pair.person3}</p>` : ''}
                             </div>
                         </div>
                     `;
@@ -563,11 +461,14 @@
             resultsDiv.classList.add('show');
         }
 
-        function showError(message) {
-            const errorDiv = document.getElementById('error');
-            errorDiv.textContent = message;
-            errorDiv.classList.add('show');
-            document.getElementById('loading').classList.remove('show');
+        // הרצה אוטומטית
+        if (!sessionId) {
+            showError('שגיאה: לא נמצא קוד פעילות. נא לגשת דרך admin.html');
+        } else {
+            console.log('🎯 Session ID:', sessionId);
+            setTimeout(() => {
+                runMatching();
+            }, 500);
         }
     </script>
 </body>
