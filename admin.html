@@ -1,24 +1,759 @@
 <!doctype html>
 <html lang="he" dir="rtl">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ניהול פעילות | פורצות דרך</title>
-<link rel="stylesheet" href="styles.css">
-<link rel="stylesheet" href="pairing.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ניהול הפעילות | פורצות דרך</title>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #000000;
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+    
+    /* אנימציית רקע */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: 
+        radial-gradient(circle at 20% 50%, rgba(255, 0, 127, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 20, 147, 0.1) 0%, transparent 50%);
+      animation: glow 15s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+    
+    @keyframes glow {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(5%, 5%) scale(1.1); }
+    }
+    
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 600px;
+      width: 100%;
+    }
+    
+    .admin-card {
+      background: rgba(30, 30, 35, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      padding: 48px 40px;
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.5),
+        0 0 60px rgba(255, 20, 147, 0.3);
+      border: 1px solid rgba(255, 20, 147, 0.4);
+    }
+    
+    h1 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      text-align: center;
+      background: linear-gradient(135deg, #ff1493, #ff69b4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .subtitle {
+      text-align: center;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 36px;
+      font-size: 16px;
+    }
+    
+    /* חלוקת תצוגה - טופס / מעקב */
+    .setup-view, .monitoring-view {
+      display: none;
+    }
+    
+    .setup-view.active, .monitoring-view.active {
+      display: block;
+    }
+    
+    .form-group {
+      margin-bottom: 28px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: 600;
+      color: #ff69b4;
+      font-size: 15px;
+    }
+    
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      padding: 16px;
+      font-size: 16px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 2px solid rgba(255, 20, 147, 0.3);
+      border-radius: 12px;
+      color: #ffffff;
+      transition: all 0.3s ease;
+    }
+    
+    input[type="text"]:focus,
+    input[type="number"]:focus {
+      outline: none;
+      border-color: #ff1493;
+      box-shadow: 0 0 20px rgba(255, 20, 147, 0.3);
+    }
+    
+    input::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+    }
+    
+    .info-box {
+      background: rgba(255, 20, 147, 0.1);
+      border: 1px solid rgba(255, 20, 147, 0.3);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 28px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.8);
+    }
+    
+    .info-box strong {
+      color: #ff69b4;
+    }
+    
+    /* תצוגת מעקב */
+    .progress-container {
+      background: rgba(0, 0, 0, 0.4);
+      border: 2px solid rgba(255, 20, 147, 0.3);
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 32px;
+      text-align: center;
+    }
+    
+    .progress-title {
+      font-size: 18px;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 20px;
+    }
+    
+    .progress-numbers {
+      font-size: 56px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #ff1493, #ff69b4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+    
+    .progress-numbers .separator {
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 48px;
+    }
+    
+    .progress-label {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 24px;
+    }
+    
+    .progress-bar-wrapper {
+      width: 100%;
+      height: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+    
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #ff1493, #ff69b4);
+      border-radius: 6px;
+      transition: width 0.6s ease;
+      box-shadow: 0 0 20px rgba(255, 20, 147, 0.6);
+    }
+    
+    .progress-percentage {
+      font-size: 16px;
+      font-weight: 600;
+      color: #ff69b4;
+    }
+    
+    .refresh-timer {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.5);
+      margin-top: 16px;
+      font-style: italic;
+    }
+    
+    .refresh-timer.active {
+      color: #ff69b4;
+      animation: pulse 1s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+    
+    .status-badge {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    
+    .status-badge.active {
+      background: rgba(76, 175, 80, 0.2);
+      color: #4caf50;
+      border: 1px solid rgba(76, 175, 80, 0.4);
+    }
+    
+    .status-badge.complete {
+      background: rgba(255, 215, 0, 0.2);
+      color: #ffd700;
+      border: 1px solid rgba(255, 215, 0, 0.4);
+      animation: shimmerBadge 2s ease-in-out infinite;
+    }
+    
+    @keyframes shimmerBadge {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+    
+    /* כפתורים */
+    .btn {
+      width: 100%;
+      padding: 18px;
+      font-size: 18px;
+      font-weight: 700;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-bottom: 12px;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #ff1493, #ff69b4);
+      color: white;
+      box-shadow: 0 6px 20px rgba(255, 20, 147, 0.4);
+    }
+    
+    .btn-primary:hover:not(:disabled) {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(255, 20, 147, 0.6);
+    }
+    
+    .btn-primary:active:not(:disabled) {
+      transform: translateY(-1px);
+    }
+    
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+    
+    .btn-danger {
+      background: rgba(244, 67, 54, 0.2);
+      color: #f44336;
+      border: 1px solid rgba(244, 67, 54, 0.4);
+    }
+    
+    .btn-danger:hover {
+      background: rgba(244, 67, 54, 0.3);
+      transform: translateY(-2px);
+    }
+    
+    .buttons-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 24px;
+    }
+    
+    .status-msg {
+      text-align: center;
+      margin-top: 20px;
+      padding: 12px;
+      border-radius: 10px;
+      font-weight: 600;
+      min-height: 20px;
+    }
+    
+    .status-success {
+      background: rgba(76, 175, 80, 0.2);
+      color: #4caf50;
+      border: 1px solid rgba(76, 175, 80, 0.4);
+    }
+    
+    .status-error {
+      background: rgba(244, 67, 54, 0.2);
+      color: #f44336;
+      border: 1px solid rgba(244, 67, 54, 0.4);
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 24px;
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.3s ease;
+    }
+    
+    .back-link:hover {
+      color: #ff69b4;
+    }
+    
+    @media (max-width: 768px) {
+      .admin-card {
+        padding: 36px 28px;
+      }
+      
+      h1 {
+        font-size: 26px;
+      }
+      
+      .progress-numbers {
+        font-size: 42px;
+      }
+      
+      .buttons-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
-<body class="admin-page">
 
-<div class="container">
-  <div class="card">
-    <h1>ניהול פעילות</h1>
-    <button id="startSession" class="primary">התחל פעילות</button>
-    <button id="generatePairs" class="secondary">צור זוגות</button>
-    <button id="resetSystem" class="secondary">איפוס</button>
-    <div id="adminStatus"></div>
+<body>
+
+  <div class="container">
+    <div class="admin-card">
+      
+      <h1>ניהול הפעילות</h1>
+      <p class="subtitle">הגדרות ומעקב זיווג משתתפות</p>
+      
+      <!-- תצוגת הגדרה ראשונית -->
+      <div class="setup-view active">
+        
+        <div class="info-box">
+          <strong>שימי לב:</strong> לאחר הזנת הפרטים והפעלת הפעילות, המשתתפות יוכלו להתחיל את תהליך הזיווג בעמוד הראשי.
+        </div>
+        
+        <form id="activityForm">
+          
+          <div class="form-group">
+            <label for="firebaseCode">קוד פיירבייס</label>
+            <input 
+              type="text" 
+              id="firebaseCode" 
+              placeholder="הזיני את קוד הפיירבייס"
+              required
+            >
+          </div>
+          
+          <div class="form-group">
+            <label for="participantCount">מספר משתתפות</label>
+            <input 
+              type="number" 
+              id="participantCount" 
+              placeholder="כמה משתתפות בפעילות?"
+              min="2"
+              required
+            >
+          </div>
+          
+          <button type="submit" class="btn btn-primary" id="startBtn">
+            🚀 התחילי את הפעילות
+          </button>
+          
+        </form>
+        
+        <div id="setupStatusMsg" class="status-msg"></div>
+        
+      </div>
+      
+      <!-- תצוגת מעקב -->
+      <div class="monitoring-view">
+        
+        <div class="progress-container">
+          <span class="status-badge active" id="statusBadge">● פעילות פעילה</span>
+          
+          <div class="progress-title">שאלונים שהושלמו</div>
+          
+          <div class="progress-numbers">
+            <span id="completedCount">0</span>
+            <span class="separator">/</span>
+            <span id="totalCount">0</span>
+          </div>
+          
+          <div class="progress-label">משתתפות סיימו את השאלון</div>
+          
+          <div class="progress-bar-wrapper">
+            <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+          </div>
+          
+          <div class="progress-percentage" id="progressPercentage">0%</div>
+          
+          <div class="refresh-timer" id="refreshTimer">
+            רענון הבא בעוד <span id="timerSeconds">45</span> שניות
+          </div>
+        </div>
+        
+        <div class="buttons-row">
+          <button class="btn btn-secondary" id="updateCountBtn">
+            📝 עדכון כמות משתתפות
+          </button>
+          <button class="btn btn-danger" id="resetBtn">
+            🔄 איפוס הפעילות
+          </button>
+        </div>
+        
+        <button class="btn btn-primary" id="backToSetupBtn" style="margin-top: 12px;">
+          ← חזרה להגדרות
+        </button>
+        
+        <div id="monitorStatusMsg" class="status-msg"></div>
+        
+      </div>
+      
+      <center>
+        <a href="pairing.html" class="back-link">← חזרה לעמוד הראשי</a>
+      </center>
+      
+    </div>
   </div>
-</div>
 
-<script type="module" src="js/admin-app.js"></script>
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+    import { getDatabase, ref, set, get, update, onValue } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+
+    // TODO: החליפי את הקונפיגורציה הזו עם הקונפיגורציה שלך מ-Firebase Console
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_AUTH_DOMAIN",
+      databaseURL: "YOUR_DATABASE_URL",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_STORAGE_BUCKET",
+      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+
+    // אלמנטים
+    const setupView = document.querySelector('.setup-view');
+    const monitoringView = document.querySelector('.monitoring-view');
+    const form = document.getElementById('activityForm');
+    const startBtn = document.getElementById('startBtn');
+    const updateCountBtn = document.getElementById('updateCountBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const backToSetupBtn = document.getElementById('backToSetupBtn');
+    
+    // משתנים גלובליים
+    let currentActivityCode = null;
+    let refreshInterval = null;
+    let timerInterval = null;
+    let currentRefreshDelay = 45000; // התחלה ב-45 שניות
+    let isComplete = false;
+
+    // בדיקה אם יש פעילות פעילה בטעינה
+    checkExistingActivity();
+
+    // טופס התחלת פעילות
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const firebaseCode = document.getElementById('firebaseCode').value.trim();
+      const participantCount = parseInt(document.getElementById('participantCount').value);
+      
+      if (!firebaseCode || !participantCount || participantCount < 2) {
+        showSetupStatus('אנא מלאי את כל השדות בצורה תקינה', 'error');
+        return;
+      }
+      
+      startBtn.disabled = true;
+      startBtn.textContent = '⏳ מפעיל...';
+      
+      try {
+        const activityRef = ref(database, `activities/${firebaseCode}`);
+        
+        await set(activityRef, {
+          participantCount: participantCount,
+          completedCount: 0,
+          isActive: true,
+          createdAt: Date.now(),
+          status: 'active'
+        });
+        
+        currentActivityCode = firebaseCode;
+        localStorage.setItem('currentActivity', firebaseCode);
+        
+        showSetupStatus('✅ הפעילות הופעלה בהצלחה!', 'success');
+        
+        setTimeout(() => {
+          switchToMonitoring();
+          startMonitoring(firebaseCode);
+        }, 1500);
+        
+      } catch (error) {
+        console.error('Error:', error);
+        showSetupStatus('❌ שגיאה בהפעלת הפעילות. נסי שוב', 'error');
+        startBtn.disabled = false;
+        startBtn.textContent = '🚀 התחילי את הפעילות';
+      }
+    });
+
+    // עדכון כמות משתתפות
+    updateCountBtn.addEventListener('click', async () => {
+      const newCount = prompt('הזיני מספר משתתפות חדש:', document.getElementById('totalCount').textContent);
+      
+      if (newCount && !isNaN(newCount) && parseInt(newCount) >= 2) {
+        try {
+          const activityRef = ref(database, `activities/${currentActivityCode}`);
+          await update(activityRef, {
+            participantCount: parseInt(newCount)
+          });
+          showMonitorStatus('✅ כמות המשתתפות עודכנה', 'success');
+        } catch (error) {
+          showMonitorStatus('❌ שגיאה בעדכון', 'error');
+        }
+      }
+    });
+
+    // איפוס פעילות
+    resetBtn.addEventListener('click', async () => {
+      if (!confirm('האם את בטוחה שאת רוצה לאפס את הפעילות? פעולה זו תמחק את כל הנתונים!')) {
+        return;
+      }
+      
+      try {
+        const activityRef = ref(database, `activities/${currentActivityCode}`);
+        await update(activityRef, {
+          completedCount: 0,
+          isActive: false,
+          status: 'reset'
+        });
+        
+        stopMonitoring();
+        localStorage.removeItem('currentActivity');
+        currentActivityCode = null;
+        
+        showMonitorStatus('✅ הפעילות אופסה', 'success');
+        
+        setTimeout(() => {
+          switchToSetup();
+          form.reset();
+        }, 2000);
+        
+      } catch (error) {
+        showMonitorStatus('❌ שגיאה באיפוס', 'error');
+      }
+    });
+
+    // חזרה להגדרות
+    backToSetupBtn.addEventListener('click', () => {
+      stopMonitoring();
+      switchToSetup();
+    });
+
+    // בדיקת פעילות קיימת
+    async function checkExistingActivity() {
+      const savedActivity = localStorage.getItem('currentActivity');
+      if (savedActivity) {
+        try {
+          const activityRef = ref(database, `activities/${savedActivity}`);
+          const snapshot = await get(activityRef);
+          
+          if (snapshot.exists() && snapshot.val().isActive) {
+            currentActivityCode = savedActivity;
+            switchToMonitoring();
+            startMonitoring(savedActivity);
+          }
+        } catch (error) {
+          console.error('Error checking existing activity:', error);
+        }
+      }
+    }
+
+    // התחלת מעקב
+    function startMonitoring(activityCode) {
+      const activityRef = ref(database, `activities/${activityCode}`);
+      
+      // האזנה לשינויים בזמן אמת
+      onValue(activityRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          updateProgress(data.completedCount || 0, data.participantCount || 0);
+        }
+      });
+      
+      // התחלת רענון דינמי
+      startDynamicRefresh();
+    }
+
+    // עדכון תצוגת התקדמות
+    function updateProgress(completed, total) {
+      document.getElementById('completedCount').textContent = completed;
+      document.getElementById('totalCount').textContent = total;
+      
+      const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+      document.getElementById('progressBar').style.width = percentage + '%';
+      document.getElementById('progressPercentage').textContent = percentage + '%';
+      
+      // בדיקה אם הושלם
+      if (completed >= total && total > 0 && !isComplete) {
+        isComplete = true;
+        document.getElementById('statusBadge').textContent = '🎉 כל השאלונים הושלמו!';
+        document.getElementById('statusBadge').classList.remove('active');
+        document.getElementById('statusBadge').classList.add('complete');
+        stopDynamicRefresh();
+        showMonitorStatus('🎉 מעולה! כל המשתתפות סיימו את השאלון', 'success');
+      }
+    }
+
+    // רענון דינמי
+    function startDynamicRefresh() {
+      currentRefreshDelay = 45000; // 45 שניות
+      scheduleNextRefresh();
+    }
+
+    function scheduleNextRefresh() {
+      if (isComplete) return;
+      
+      startTimer(currentRefreshDelay / 1000);
+      
+      refreshInterval = setTimeout(() => {
+        // עדכון זמן הרענון הבא
+        if (currentRefreshDelay === 45000) {
+          currentRefreshDelay = 30000; // 30 שניות
+        } else if (currentRefreshDelay === 30000) {
+          currentRefreshDelay = 15000; // 15 שניות
+        } else if (currentRefreshDelay === 15000) {
+          currentRefreshDelay = 10000; // 10 שניות
+        }
+        
+        scheduleNextRefresh();
+      }, currentRefreshDelay);
+    }
+
+    function startTimer(seconds) {
+      let remaining = seconds;
+      const timerElement = document.getElementById('timerSeconds');
+      const timerContainer = document.getElementById('refreshTimer');
+      
+      timerContainer.classList.add('active');
+      timerElement.textContent = remaining;
+      
+      if (timerInterval) clearInterval(timerInterval);
+      
+      timerInterval = setInterval(() => {
+        remaining--;
+        timerElement.textContent = remaining;
+        
+        if (remaining <= 0) {
+          clearInterval(timerInterval);
+          timerContainer.classList.remove('active');
+        }
+      }, 1000);
+    }
+
+    function stopDynamicRefresh() {
+      if (refreshInterval) {
+        clearTimeout(refreshInterval);
+        refreshInterval = null;
+      }
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+      document.getElementById('refreshTimer').textContent = 'כל השאלונים הושלמו ✓';
+    }
+
+    // עצירת מעקב
+    function stopMonitoring() {
+      stopDynamicRefresh();
+      isComplete = false;
+      currentRefreshDelay = 45000;
+    }
+
+    // מעבר בין תצוגות
+    function switchToMonitoring() {
+      setupView.classList.remove('active');
+      monitoringView.classList.add('active');
+    }
+
+    function switchToSetup() {
+      monitoringView.classList.remove('active');
+      setupView.classList.add('active');
+      startBtn.disabled = false;
+      startBtn.textContent = '🚀 התחילי את הפעילות';
+    }
+
+    // הודעות סטטוס
+    function showSetupStatus(message, type) {
+      const statusMsg = document.getElementById('setupStatusMsg');
+      statusMsg.textContent = message;
+      statusMsg.className = `status-msg status-${type}`;
+      
+      if (type === 'success') {
+        setTimeout(() => {
+          statusMsg.textContent = '';
+          statusMsg.className = 'status-msg';
+        }, 3000);
+      }
+    }
+
+    function showMonitorStatus(message, type) {
+      const statusMsg = document.getElementById('monitorStatusMsg');
+      statusMsg.textContent = message;
+      statusMsg.className = `status-msg status-${type}`;
+      
+      setTimeout(() => {
+        statusMsg.textContent = '';
+        statusMsg.className = 'status-msg';
+      }, 5000);
+    }
+  </script>
+
 </body>
 </html>
