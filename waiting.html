@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ממתינות לזיווג | שותפה לדרך</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff1493 0%, #ff69b4 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.2) 0%, transparent 70%);
+            pointer-events: none;
+            animation: pulseGlow 4s ease-in-out infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+
+        .container {
+            text-align: center;
+            color: white;
+            z-index: 10;
+            padding: 40px 20px;
+            max-width: 600px;
+        }
+
+        .icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        h1 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .message {
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 40px;
+            opacity: 0.95;
+            line-height: 1.6;
+        }
+
+        .dots {
+            display: inline-block;
+            width: 60px;
+            text-align: left;
+        }
+
+        .dots::after {
+            content: '...';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: ''; }
+            40% { content: '.'; }
+            60% { content: '..'; }
+            80%, 100% { content: '...'; }
+        }
+
+        .stats {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px 50px;
+            display: inline-block;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            margin-top: 20px;
+        }
+
+        .stats-number {
+            font-size: 64px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .stats-label {
+            font-size: 20px;
+            opacity: 0.9;
+        }
+
+        .hearts {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 30px;
+            opacity: 0.6;
+            animation: float 10s ease-in infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .heart:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .heart:nth-child(2) { left: 25%; animation-delay: 2s; }
+        .heart:nth-child(3) { left: 40%; animation-delay: 4s; }
+        .heart:nth-child(4) { left: 55%; animation-delay: 1s; }
+        .heart:nth-child(5) { left: 70%; animation-delay: 3s; }
+        .heart:nth-child(6) { left: 85%; animation-delay: 5s; }
+
+        /* מסך תוצאה */
+        .waiting-screen {
+            display: block;
+        }
+
+        .waiting-screen.hide {
+            display: none;
+        }
+
+        .result-screen {
+            display: none;
+        }
+
+        .result-screen.show {
+            display: block;
+        }
+
+        .partner-card {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 50px 40px;
+            margin-top: 30px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .partner-name {
+            font-size: 52px;
+            font-weight: 700;
+            margin: 25px 0;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            animation: slideIn 0.8s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .match-percent {
+            font-size: 72px;
+            font-weight: 700;
+            color: #ffeb3b;
+            margin: 25px 0;
+            text-shadow: 0 4px 25px rgba(255,235,59,0.6);
+            animation: popIn 0.6s ease 0.3s backwards;
+        }
+
+        @keyframes popIn {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .positive-message {
+            font-size: 26px;
+            line-height: 1.7;
+            margin-top: 30px;
+            opacity: 0.95;
+            animation: fadeIn 0.8s ease 0.6s backwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 0.95;
+            }
+        }
+
+        .team-badge {
+            display: inline-block;
+            background: rgba(255,193,7,0.3);
+            border: 2px solid #ffc107;
+            border-radius: 15px;
+            padding: 12px 24px;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            animation: slideIn 0.8s ease;
+        }
+
+        .team-members {
+            font-size: 20px;
+            margin-top: 20px;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 32px;
+            }
+
+            .message {
+                font-size: 18px;
+            }
+
+            .icon {
+                font-size: 60px;
+            }
+
+            .stats {
+                padding: 20px 30px;
+            }
+
+            .stats-number {
+                font-size: 48px;
+            }
+
+            .stats-label {
+                font-size: 16px;
+            }
+
+            .partner-name {
+                font-size: 36px;
+            }
+
+            .match-percent {
+                font-size: 56px;
+            }
+
+            .positive-message {
+                font-size: 20px;
+            }
+
+            .partner-card {
+                padding: 35px 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts">
+        <div class="heart">💕</div>
+        <div class="heart">💖</div>
+        <div class="heart">💗</div>
+        <div class="heart">💓</div>
+        <div class="heart">💝</div>
+        <div class="heart">💞</div>
+    </div>
+
+    <div class="container">
+        <!-- מסך המתנה -->
+        <div class="waiting-screen" id="waitingScreen">
+            <div class="icon">✨</div>
+            <h1>תודה רבה! 🎉</h1>
+            <div class="message">
+                התשובות שלך נשמרו בהצלחה!<br>
+                <strong>ממתינה לשאר המשתתפות<span class="dots"></span></strong>
+            </div>
+
+            <div class="stats">
+                <div class="stats-number" id="completedCount">-</div>
+                <div class="stats-label">משתתפות סיימו</div>
+            </div>
+
+            <div class="message" style="margin-top: 40px; font-size: 18px; opacity: 0.8;">
+                💝 המדריכה תשדך לך שותפה מושלמת בקרוב
+            </div>
+        </div>
+
+        <!-- מסך תוצאה -->
+        <div class="result-screen" id="resultScreen">
+            <div class="icon">💕</div>
+            <h1 id="resultTitle">מצאנו לך שותפה!</h1>
+            
+            <div class="partner-card">
+                <div id="teamBadge" class="team-badge" style="display: none;">
+                    👥 צוות של 3
+                </div>
+                
+                <div class="message" style="margin-bottom: 10px;">
+                    <span id="partnerLabel">השותפה שלך היא:</span>
+                </div>
+                
+                <div class="partner-name" id="partnerName">...</div>
+                
+                <div id="teamMembers" class="team-members" style="display: none;"></div>
+                
+                <div class="match-percent" id="matchPercent">...</div>
+                
+                <div class="positive-message" id="positiveMessage">...</div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCFSq5b-HgkTxFNhBJIBdOe2ian5TZvMPE",
+            authDomain: "portzot-derech.firebaseapp.com",
+            projectId: "portzot-derech",
+            storageBucket: "portzot-derech.firebasestorage.app",
+            messagingSenderId: "236417614890",
+            appId: "1:236417614890:web:587b0eb3c5eedfa352af53"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        db._settings.experimentalForceLongPolling = true;
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const sessionId = urlParams.get('session');
+        const myName = localStorage.getItem('displayName');
+
+        if (!sessionId) {
+            alert('שגיאה: לא נמצא קוד פעילות');
+            window.location.href = 'pairing.html';
+        }
+
+        let resetTimer = null;
+
+        // מאזין לעדכון session
+        const sessionRef = doc(db, 'sessions', sessionId);
+        onSnapshot(sessionRef, (docSnap) => {
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                const completedCount = data.completedCount || 0;
+                const participantCount = data.participantCount || 0;
+
+                document.getElementById('completedCount').textContent = 
+                    `${completedCount}/${participantCount}`;
+
+                console.log('📊 עדכון:', completedCount, 'מתוך', participantCount);
+            }
+        });
+
+        // מאזין לזיווגים
+        const pairingsRef = doc(db, 'pairings', sessionId);
+        onSnapshot(pairingsRef, (docSnap) => {
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                const pairs = data.pairs || [];
+                
+                console.log('💝 נמצאו זיווגים:', pairs);
+                
+                // מציאת השותפה/צוות שלי
+                const myPairing = pairs.find(pair => 
+                    pair.person1 === myName || 
+                    pair.person2 === myName || 
+                    pair.person3 === myName
+                );
+                
+                if (myPairing) {
+                    console.log('✅ נמצא הזיווג שלי:', myPairing);
+                    showResult(myPairing);
+                    
+                    // טיימר 5 דקות
+                    if (resetTimer) clearTimeout(resetTimer);
+                    resetTimer = setTimeout(() => {
+                        console.log('⏰ 5 דקות עברו - מתאפס');
+                        resetToWaiting();
+                    }, 5 * 60 * 1000);
+                }
+            }
+        });
+
+        function showResult(pairing) {
+            document.getElementById('waitingScreen').classList.add('hide');
+            document.getElementById('resultScreen').classList.add('show');
+            
+            const percent = Math.round((pairing.score / 143) * 100);
+            
+            if (pairing.isTeam) {
+                // צוות של 3
+                document.getElementById('teamBadge').style.display = 'inline-block';
+                document.getElementById('resultTitle').textContent = 'הצוות שלך מוכן! 👥';
+                document.getElementById('partnerLabel').textContent = 'את חלק מצוות של 3:';
+                
+                const members = [pairing.person1, pairing.person2, pairing.person3].filter(Boolean);
+                document.getElementById('partnerName').textContent = members.join(' • ');
+                
+                document.getElementById('matchPercent').textContent = `🎯 ${percent}%`;
+                document.getElementById('positiveMessage').textContent = 
+                    generateTeamMessage(percent, pairing.reasons);
+                    
+            } else if (pairing.isLeftover) {
+                // אחת לבד
+                document.getElementById('resultTitle').textContent = 'עדכון 💝';
+                document.getElementById('partnerLabel').textContent = '';
+                document.getElementById('partnerName').textContent = 'המדריכה תיצור איתך קשר בקרוב';
+                document.getElementById('matchPercent').textContent = '';
+                document.getElementById('positiveMessage').textContent = 
+                    'נשמח לשדך לך שותפה בהזדמנות הקרובה! 💕';
+                    
+            } else {
+                // זוג רגיל
+                const partnerName = pairing.person1 === myName ? pairing.person2 : pairing.person1;
+                document.getElementById('partnerName').textContent = partnerName;
+                document.getElementById('matchPercent').textContent = `🎯 ${percent}%`;
+                document.getElementById('positiveMessage').textContent = 
+                    generatePositiveMessage(percent, pairing.reasons);
+            }
+        }
+
+        function generatePositiveMessage(percent, reasons) {
+            const topReason = reasons && reasons.length > 0 ? reasons[0] : '';
+            
+            if (percent >= 95) {
+                return `זה שידוך מושלם! 💕 ${topReason}`;
+            } else if (percent >= 90) {
+                return `שתיכן תפרחו ביחד! ${topReason}`;
+            } else if (percent >= 85) {
+                return `זה שידוך מעולה! ${topReason}`;
+            } else if (percent >= 80) {
+                return `אתן תשלימו אחת את השנייה בצורה נהדרת! ${topReason}`;
+            } else {
+                return `יש לכן הרבה פוטנציאל לצמיחה משותפת! 💝`;
+            }
+        }
+
+        function generateTeamMessage(percent, reasons) {
+            if (percent >= 85) {
+                return 'צוות מעולה! יש לכן הרבה משותף והשלמה מדהימה! 💕';
+            } else if (percent >= 75) {
+                return 'צוות נהדר! תוכלו ללמוד הרבה אחת מהשנייה! 🌟';
+            } else {
+                return 'צוות עם פוטנציאל גדול! תיהנו מהגיוון והשוני! 💝';
+            }
+        }
+
+        function resetToWaiting() {
+            document.getElementById('waitingScreen').classList.remove('hide');
+            document.getElementById('resultScreen').classList.remove('show');
+            
+            document.getElementById('teamBadge').style.display = 'none';
+            document.getElementById('resultTitle').textContent = 'מצאנו לך שותפה!';
+            document.getElementById('partnerLabel').textContent = 'השותפה שלך היא:';
+            document.getElementById('teamMembers').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

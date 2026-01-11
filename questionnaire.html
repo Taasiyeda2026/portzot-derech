@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>שאלון שותפה לדרך - פורצות דרך</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(255,20,147,0.15) 0%, transparent 70%);
+            pointer-events: none;
+            animation: pulseGlow 4s ease-in-out infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card {
+            background: rgba(20, 20, 20, 0.95);
+            border: 2px solid #ff1493;
+            border-radius: 24px;
+            padding: 40px 32px;
+            box-shadow: 0 0 40px rgba(255,20,147,0.3),
+                        inset 0 0 60px rgba(255,20,147,0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg,
+                transparent 30%,
+                rgba(255,20,147,0.1) 50%,
+                transparent 70%);
+            animation: rotate 8s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .progress-bar {
+            background: rgba(255,20,147,0.2);
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #ff1493, #ff69b4);
+            height: 100%;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px #ff1493;
+        }
+
+        .step {
+            display: none;
+            position: relative;
+            z-index: 2;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .step.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: #ff1493;
+            text-shadow: 0 0 20px rgba(255,20,147,0.5);
+            margin-bottom: 24px;
+            font-size: 28px;
+            text-align: center;
+        }
+
+        .question {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ff69b4;
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid #ff1493;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #ff69b4;
+            box-shadow: 0 0 15px rgba(255,20,147,0.5);
+        }
+
+        select option {
+            background: #1a1a1a;
+            color: #fff;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 32px;
+            justify-content: space-between;
+        }
+
+        button {
+            flex: 1;
+            padding: 14px 28px;
+            background: linear-gradient(135deg, #ff1493, #ff69b4);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255,20,147,0.4);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255,20,147,0.6);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        button:active:not(:disabled) {
+            transform: translateY(0px) scale(0.97);
+            box-shadow: 0 2px 10px rgba(255,20,147,0.3);
+        }
+
+        button.secondary {
+            background: rgba(255,20,147,0.2);
+            border: 1px solid #ff1493;
+        }
+
+        .warning {
+            background: rgba(255,50,50,0.2);
+            border: 1px solid #ff3232;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 16px;
+            color: #ff6b6b;
+            display: none;
+        }
+
+        .warning.show {
+            display: block;
+            animation: shake 0.5s;
+        }
+
+        /* Choice Group Styles */
+        .choice-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 12px;
+            margin-bottom: 24px;
+        }
+
+        .choice {
+            background: rgba(255,20,147,0.1);
+            border: 2px solid rgba(255,20,147,0.3);
+            border-radius: 12px;
+            padding: 16px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: right;
+            font-size: 16px;
+            line-height: 1.5;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .choice:hover {
+            background: rgba(255,20,147,0.2);
+            border-color: #ff1493;
+            transform: translateX(-3px) scale(1.01);
+        }
+
+        .choice.selected {
+            background: linear-gradient(135deg, rgba(255,20,147,0.4), rgba(255,105,180,0.4));
+            border: 3px solid #ff1493;
+            box-shadow: 0 0 30px rgba(255,20,147,0.6), inset 0 0 20px rgba(255,20,147,0.2);
+            transform: translateX(-5px) scale(1.02);
+            font-weight: 600;
+        }
+
+        .choice.selected::after {
+            content: '✓';
+            position: absolute;
+            left: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff1493;
+            text-shadow: 0 0 10px rgba(255,20,147,0.8);
+            animation: checkmark 0.4s ease;
+        }
+
+        @keyframes checkmark {
+            0% { transform: scale(0) rotate(-45deg); opacity: 0; }
+            50% { transform: scale(1.3) rotate(5deg); }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        .card h2 {
+            margin-bottom: 8px;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ff1493;
+            text-shadow: 0 0 20px rgba(255,20,147,0.7);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .card { padding: 32px 24px; }
+            h2 { font-size: 24px; }
+            .button-group { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="logo">
+                <h1>🌟 שאלון שותפה לדרך 🌟</h1>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+
+            <!-- שלב 1 -->
+            <div class="step active" id="step1">
+                <h2>לפני שמתחילות</h2>
+                <div class="question">
+                    <label>שם פרטי / כינוי (כדי שתוכלי לזהות את עצמך במסך החיבורים)</label>
+                    <input type="text" id="displayName" placeholder="לדוגמה: נועה" maxlength="24">
+                </div>
+
+                <h2 style="margin-top:18px">תחומי עניין</h2>
+                <div class="question">
+                    <label>מה התחום המרכזי שבחרת לתהליך?</label>
+                    <div class="choice-group" data-field="mainDomain">
+                        <div class="choice">הייטק וליבה</div>
+                        <div class="choice">אדם וטכנולוגיה</div>
+                        <div class="choice">סביבה וקיימות</div>
+                        <div class="choice">עתיד ויזמות</div>
+                        <div class="choice">חברה ודיגיטל</div>
+                    </div>
+
+                    <label>האם יש תחום נוסף שמעניין אותך?</label>
+                    <div class="choice-group" data-field="secondDomain">
+                        <div class="choice">הייטק וליבה</div>
+                        <div class="choice">אדם וטכנולוגיה</div>
+                        <div class="choice">סביבה וקיימות</div>
+                        <div class="choice">עתיד ויזמות</div>
+                        <div class="choice">חברה ודיגיטל</div>
+                        <div class="choice">אני מעדיפה להתמקד בתחום אחד</div>
+                    </div>
+                </div>
+
+                <div class="warning" id="warning1">אנא ענה על כל השאלות לפני המשך</div>
+                <div class="button-group">
+                    <button onclick="nextStep()">המשך →</button>
+                </div>
+            </div>
+
+            <!-- שלב 2 -->
+            <div class="step" id="step2">
+                <h2>איך את פועלת?</h2>
+                
+                <div class="question">
+                    <label>כשיש משימה חדשה ולא ברורה, את בדרך כלל:</label>
+                    <div class="choice-group" data-field="workStyle">
+                        <div class="choice">מתחילה להתנסות ולומדת תוך כדי התנסות</div>
+                        <div class="choice">עוצרת קודם להבין לעומק ולתכנן את הצעדים</div>
+                    </div>
+
+                    <label>כשאת עובדת עם שותפה על משימה:</label>
+                    <div class="choice-group" data-field="teamStyle">
+                        <div class="choice">אני חושבת בקול רם ומשתפת כל רעיון</div>
+                        <div class="choice">אני מעדיפה לעבוד בשקט ואז להציג את התוצאה</div>
+                    </div>
+
+                    <label>מהו קצב העבודה הטבעי שלך?</label>
+                    <div class="choice-group" data-field="workPace">
+                        <div class="choice">אני אוהבת לעבוד מהר ולסיים מוקדם</div>
+                        <div class="choice">אני מעדיפה לקחת זמן ולעשות בדיוק</div>
+                        <div class="choice">תלוי במשימה - אני גמישה</div>
+                    </div>
+                </div>
+
+                <div class="warning" id="warning2">אנא ענה על כל השאלות לפני המשך</div>
+                <div class="button-group">
+                    <button class="secondary" onclick="prevStep()">← חזרה</button>
+                    <button onclick="nextStep()">המשך →</button>
+                </div>
+            </div>
+
+            <!-- שלב 3 -->
+            <div class="step" id="step3">
+                <h2>התפקיד שלך בצוות</h2>
+
+                <div class="question">
+                    <label>באיזה תפקיד את הכי טובה בעבודת צוות?</label>
+                    <div class="choice-group" data-field="teamRole">
+                        <div class="choice">למצוא רעיונות מקוריים ולהתחיל דברים חדשים</div>
+                        <div class="choice">לארגן משימות ולוודא שהכל זורם בזמן</div>
+                        <div class="choice">לעזור לאחרות להבין ולהסביר מושגים מורכבים</div>
+                        <div class="choice">לפתור בעיות טכניות כשמשהו תקוע</div>
+                    </div>
+
+                    <label>מה עוזר לך להתמיד בפרויקט לאורך זמן?</label>
+                    <div class="choice-group" data-field="motivationSource">
+                        <div class="choice">תחושת משמעות - שאני עושה משהו חשוב</div>
+                        <div class="choice">אתגר אינטלקטואלי - פתרון בעיות מורכבות</div>
+                        <div class="choice">עבודת צוות - החיבור עם האנשים</div>
+                        <div class="choice">התוצאה הסופית - לראות את המוצר מוכן</div>
+                    </div>
+                </div>
+
+                <div class="warning" id="warning3">אנא ענה על כל השאלות לפני המשך</div>
+                <div class="button-group">
+                    <button class="secondary" onclick="prevStep()">← חזרה</button>
+                    <button onclick="nextStep()">המשך →</button>
+                </div>
+            </div>
+
+            <!-- שלב 4 -->
+            <div class="step" id="step4">
+                <h2>תקשורת ופתרון בעיות</h2>
+
+                <div class="question">
+                    <label>כשיש דדלין קרוב ואת מרגישה לחץ:</label>
+                    <div class="choice-group" data-field="pressureResponse">
+                        <div class="choice">אני פועלת הכי טוב תחת לחץ - זה מניע אותי</div>
+                        <div class="choice">אני צריכה לתכנן מראש כדי למנוע לחץ</div>
+                        <div class="choice">אני לוקחת הפסקה קצרה ואז חוזרת בכוח</div>
+                    </div>
+
+                    <label>כשיש אי-הסכמה עם השותפה שלך בנושא חשוב:</label>
+                    <div class="choice-group" data-field="conflictStyle">
+                        <div class="choice">עוצרת ומנסה להבין לעומק את הצד השני</div>
+                        <div class="choice">מציגה את העמדה שלי בבירור ומנסה לשכנע</div>
+                        <div class="choice">מחפשת פשרה שמשלבת את שני הצדדים</div>
+                    </div>
+
+                    <label>איך את הכי נוחה לתקשר עם השותפה בין המפגשים?</label>
+                    <div class="choice-group" data-field="communicationStyle">
+                        <div class="choice">פגישות פנים אל פנים בלבד</div>
+                        <div class="choice">שיחות וידאו או טלפון</div>
+                        <div class="choice">הודעות טקסט וקבצים משותפים</div>
+                        <div class="choice">לא משנה לי - אני גמישה</div>
+                    </div>
+
+                    <label>איזה תוכן באמת מושך אותך ביום-יום?</label>
+                    <div class="choice-group" data-field="lifeInterest">
+                        <div class="choice">טכנולוגיה, אפליקציות וחדשנות</div>
+                        <div class="choice">אנשים, פסיכולוגיה והשפעה חברתית</div>
+                        <div class="choice">סביבה, טבע וקיימות</div>
+                        <div class="choice">רעיונות, עתיד ותרבות</div>
+                    </div>
+                </div>
+
+                <div class="warning" id="warning4">אנא ענה על כל השאלות לפני המשך</div>
+                <div class="button-group">
+                    <button class="secondary" onclick="prevStep()">← חזרה</button>
+                    <button onclick="nextStep()">המשך →</button>
+                </div>
+            </div>
+
+            <!-- שלב 5 - אופציונלי -->
+            <div class="step" id="step5">
+                <h2>שאלה אחרונה</h2>
+
+                <div class="question">
+                    <label>כמה חשוב לך להתאים עם השותפה שלך?</label>
+                    <div class="choice-group" data-field="importanceLevel">
+                        <div class="choice">מאוד חשוב - אני רוצה התאמה הכי טובה</div>
+                        <div class="choice">קצת חשוב - אבל אני יכולה להסתדר עם כולן</div>
+                        <div class="choice">לא כל כך חשוב - אני גמישה</div>
+                    </div>
+                </div>
+
+                <div class="warning" id="warning5">אנא ענה על כל השאלות לפני המשך</div>
+                <div class="button-group">
+                    <button class="secondary" onclick="prevStep()">← חזרה</button>
+                    <button onclick="finish()">סיימתי - מוכנה לשותפות</button>
+                </div>
+            </div>
+
+            <div class="loading" id="loading">
+                <p>שומר את התשובות שלך...</p>
+            </div>
+
+            <div class="loading" id="loading">
+                <p>שומר את התשובות שלך...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase Firestore -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, doc, setDoc, updateDoc, increment } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCFSq5b-HgkTxFNhBJIBdOe2ian5TZvMPE",
+            authDomain: "portzot-derech.firebaseapp.com",
+            projectId: "portzot-derech",
+            storageBucket: "portzot-derech.firebasestorage.app",
+            messagingSenderId: "236417614890",
+            appId: "1:236417614890:web:587b0eb3c5eedfa352af53"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        db._settings.experimentalForceLongPolling = true;
+        console.log("✅ Firestore connection: OK");
+
+        // Get sessionId from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const sessionId = urlParams.get('session');
+
+        if (!sessionId) {
+            alert('שגיאה: לא נמצא קוד פעילות');
+            window.location.href = 'pairing.html';
+        }
+
+        let currentStep = 1;
+        const totalSteps = 5;
+
+        // אובייקט לשמירת בחירות המשתמש
+        const selections = {};
+
+        // טיפול ב-choice-group clicks
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('✅ DOM נטען!');
+            const choiceGroups = document.querySelectorAll('.choice-group');
+            
+            console.log('🔍 נמצאו', choiceGroups.length, 'קבוצות בחירה');
+            
+            if (choiceGroups.length === 0) {
+                console.error('❌ לא נמצאו choice-groups! בודק HTML...');
+            }
+            
+            choiceGroups.forEach(group => {
+                const field = group.getAttribute('data-field');
+                const choices = group.querySelectorAll('.choice');
+                
+                console.log('📌 מגדיר listeners ל:', field, '- ', choices.length, 'אפשרויות');
+                
+                choices.forEach(choice => {
+                    choice.addEventListener('click', function() {
+                        console.log('👆 נלחץ:', this.textContent.trim());
+                        
+                        // אנימציה מיידית
+                        this.style.transform = 'scale(0.95)';
+                        setTimeout(() => {
+                            this.style.transform = '';
+                        }, 150);
+                        
+                        // הסרת selected מכל האפשרויות בקבוצה
+                        choices.forEach(c => c.classList.remove('selected'));
+                        
+                        // הוספת selected לאפשרות שנבחרה
+                        this.classList.add('selected');
+                        
+                        // שמירת הבחירה
+                        selections[field] = this.textContent.trim();
+                        
+                        console.log('💾 נשמר:', field, '=', selections[field]);
+                    });
+                });
+            });
+        });
+
+        window.nextStep = function() {
+            if (!validateStep(currentStep)) {
+                document.getElementById(`warning${currentStep}`).classList.add('show');
+                setTimeout(() => {
+                    document.getElementById(`warning${currentStep}`).classList.remove('show');
+                }, 3000);
+                return;
+            }
+
+            if (currentStep < totalSteps) {
+                document.getElementById(`step${currentStep}`).classList.remove('active');
+                currentStep++;
+                document.getElementById(`step${currentStep}`).classList.add('active');
+                updateProgress();
+            }
+        };
+
+        window.prevStep = function() {
+            if (currentStep > 1) {
+                document.getElementById(`step${currentStep}`).classList.remove('active');
+                currentStep--;
+                document.getElementById(`step${currentStep}`).classList.add('active');
+                updateProgress();
+            }
+        };
+
+        function updateProgress() {
+            const progress = (currentStep / totalSteps) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function validateStep(step) {
+            const displayName = document.getElementById('displayName');
+            
+            switch(step) {
+                case 1:
+                    return displayName.value.trim() !== '' &&
+                           selections.mainDomain &&
+                           selections.secondDomain;
+                case 2:
+                    return selections.workStyle &&
+                           selections.teamStyle &&
+                           selections.workPace;
+                case 3:
+                    return selections.teamRole &&
+                           selections.motivationSource;
+                case 4:
+                    return selections.pressureResponse &&
+                           selections.conflictStyle &&
+                           selections.communicationStyle &&
+                           selections.lifeInterest;
+                case 5:
+                    return selections.importanceLevel;
+                default:
+                    return false;
+            }
+        }
+
+        function getDeviceId() {
+            let deviceId = localStorage.getItem('deviceId');
+            if (!deviceId) {
+                deviceId = crypto.randomUUID();
+                localStorage.setItem('deviceId', deviceId);
+            }
+            return deviceId;
+        }
+
+        window.finish = async function() {
+            if (!validateStep(5)) {
+                document.getElementById('warning5').classList.add('show');
+                setTimeout(() => {
+                    document.getElementById('warning5').classList.remove('show');
+                }, 3000);
+                return;
+            }
+
+            document.getElementById('loading').style.display = 'block';
+
+            const payload = {
+                sessionId: sessionId,
+                deviceId: getDeviceId(),
+                displayName: document.getElementById('displayName').value.trim(),
+                mainDomain: selections.mainDomain,
+                secondDomain: selections.secondDomain,
+                workStyle: selections.workStyle,
+                teamStyle: selections.teamStyle,
+                workPace: selections.workPace,
+                teamRole: selections.teamRole,
+                motivationSource: selections.motivationSource,
+                pressureResponse: selections.pressureResponse,
+                conflictStyle: selections.conflictStyle,
+                communicationStyle: selections.communicationStyle,
+                lifeInterest: selections.lifeInterest,
+                importanceLevel: selections.importanceLevel,
+                createdAt: new Date().toISOString()
+            };
+
+            try {
+                // שמירת התשובה
+                const responseId = crypto.randomUUID();
+                await setDoc(doc(db, 'responses', responseId), payload);
+
+                // עדכון המונה
+                const sessionRef = doc(db, 'sessions', sessionId);
+                await updateDoc(sessionRef, {
+                    completedCount: increment(1)
+                });
+
+                // שמירת השם ב-localStorage 💝
+                const displayName = document.getElementById('displayName').value.trim();
+                localStorage.setItem('displayName', displayName);
+                console.log('💾 שם נשמר:', displayName);
+
+                // הצלחה!
+                console.log('✅ התשובות נשמרו! מעביר לעמוד המתנה...');
+                window.location.href = `waiting.html?session=${sessionId}`;
+            } catch (error) {
+                console.error('Error:', error);
+                alert('שגיאה בשמירת התשובות. אנא נסי שוב.');
+                document.getElementById('loading').style.display = 'none';
+            }
+        };
+
+    </script>
+</body>
+</html>
+                                                 
