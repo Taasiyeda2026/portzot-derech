@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>שאלון זיווג - פורצות דרך</title>
+    <title>שאלון שותפה לדרך - פורצות דרך</title>
     <style>
         * {
             margin: 0;
@@ -239,7 +239,7 @@
     <div class="container">
         <div class="card">
             <div class="logo">
-                <h1>🌟 שאלון זיווג 🌟</h1>
+                <h1>🌟 שאלון שותפה לדרך 🌟</h1>
             </div>
 
             <div class="progress-bar">
@@ -432,16 +432,18 @@
         db._settings.experimentalForceLongPolling = true;
         // Firebase Configuration
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
+            apiKey: "AIzaSyCFSq5b-HgkTxFNhBJIBdOe2ian5TZvMPE",
+            authDomain: "portzot-derech.firebaseapp.com",
+            projectId: "portzot-derech",
+            storageBucket: "portzot-derech.firebasestorage.app",
+            messagingSenderId: "236417614890",
+            appId: "1:236417614890:web:587b0eb3c5eedfa352af53"
         };
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        db._settings.experimentalForceLongPolling = true;
+        console.log("✅ Firestore connection: OK");
 
         // Get sessionId from URL
         const urlParams = new URLSearchParams(window.location.search);
