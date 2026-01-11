@@ -1,0 +1,677 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>שאלון זיווג | פורצות דרך</title>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #000000;
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+    
+    /* אנימציית רקע מזוהרת */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: 
+        radial-gradient(circle at 20% 50%, rgba(255, 0, 127, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 20, 147, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 20%, rgba(199, 21, 133, 0.1) 0%, transparent 50%);
+      animation: glow 15s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+    
+    @keyframes glow {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(5%, 5%) scale(1.1); }
+    }
+    
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 700px;
+      width: 100%;
+      margin-top: 40px;
+    }
+    
+    /* פס התקדמות */
+    .progress-bar-container {
+      background: rgba(255, 255, 255, 0.1);
+      height: 6px;
+      border-radius: 3px;
+      margin-bottom: 32px;
+      overflow: hidden;
+    }
+    
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #ff1493, #ff69b4);
+      border-radius: 3px;
+      width: 0%;
+      transition: width 0.5s ease;
+      box-shadow: 0 0 15px rgba(255, 20, 147, 0.6);
+    }
+    
+    .progress-text {
+      text-align: center;
+      margin-bottom: 12px;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.7);
+    }
+    
+    /* כרטיס שאלה */
+    .card {
+      background: rgba(30, 30, 35, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      padding: 42px 38px;
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.5),
+        0 0 60px rgba(255, 20, 147, 0.2);
+      border: 1px solid rgba(255, 20, 147, 0.3);
+      margin-bottom: 20px;
+      animation: slideIn 0.5s ease;
+    }
+    
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .card.hidden {
+      display: none;
+    }
+    
+    h2 {
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 24px;
+      background: linear-gradient(135deg, #ff1493, #ff69b4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    label {
+      display: block;
+      margin: 20px 0 12px 0;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    
+    /* שדה קלט טקסט */
+    input[type="text"] {
+      width: 100%;
+      padding: 16px;
+      font-size: 16px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 2px solid rgba(255, 20, 147, 0.3);
+      border-radius: 12px;
+      color: #ffffff;
+      transition: all 0.3s ease;
+      margin-bottom: 12px;
+    }
+    
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #ff1493;
+      box-shadow: 0 0 20px rgba(255, 20, 147, 0.3);
+    }
+    
+    input::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+    }
+    
+    /* קבוצת בחירות */
+    .choice-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    
+    .choice {
+      padding: 16px 20px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+    
+    .choice:hover {
+      background: rgba(255, 20, 147, 0.1);
+      border-color: rgba(255, 20, 147, 0.4);
+      transform: translateX(-3px);
+    }
+    
+    .choice.selected {
+      background: rgba(255, 20, 147, 0.2);
+      border-color: #ff1493;
+      box-shadow: 0 0 20px rgba(255, 20, 147, 0.3);
+      font-weight: 600;
+    }
+    
+    /* כפתורים */
+    button.primary {
+      width: 100%;
+      padding: 18px;
+      margin-top: 24px;
+      font-size: 18px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #ff1493, #ff69b4);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 20px rgba(255, 20, 147, 0.4);
+    }
+    
+    button.primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(255, 20, 147, 0.6);
+    }
+    
+    button.primary:active {
+      transform: translateY(-1px);
+    }
+    
+    button.primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    /* מסך המתנה */
+    .waiting-screen {
+      text-align: center;
+      padding: 60px 40px;
+    }
+    
+    .waiting-screen h2 {
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+    
+    .waiting-screen p {
+      font-size: 18px;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 16px;
+    }
+    
+    .spinner {
+      width: 60px;
+      height: 60px;
+      border: 4px solid rgba(255, 20, 147, 0.2);
+      border-top-color: #ff1493;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 32px auto;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* מסך תוצאות */
+    .results-screen h2 {
+      margin-bottom: 28px;
+    }
+    
+    .partner-card {
+      background: rgba(255, 20, 147, 0.1);
+      border: 2px solid rgba(255, 20, 147, 0.3);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    
+    .partner-name {
+      font-size: 24px;
+      font-weight: 700;
+      color: #ff69b4;
+      margin-bottom: 12px;
+    }
+    
+    .match-score {
+      font-size: 18px;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 16px;
+    }
+    
+    .match-reasons {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .match-reasons li {
+      padding: 8px 0;
+      padding-right: 24px;
+      position: relative;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 15px;
+    }
+    
+    .match-reasons li:before {
+      content: '✓';
+      position: absolute;
+      right: 0;
+      color: #ff69b4;
+      font-weight: bold;
+    }
+    
+    @media (max-width: 768px) {
+      .card {
+        padding: 32px 24px;
+      }
+      
+      h2 {
+        font-size: 22px;
+      }
+      
+      label {
+        font-size: 15px;
+      }
+      
+      .choice {
+        padding: 14px 16px;
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    
+    <!-- פס התקדמות -->
+    <div class="progress-text" id="progressText">שלב 1 מתוך 5</div>
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+    
+    <!-- שלב 1 -->
+    <div class="card" id="step1">
+      <h2>לפני שמתחילות</h2>
+      <label>שם פרטי / כינוי (כדי שתוכלי לזהות את עצמך במסך החיבורים)</label>
+      <input type="text" id="displayName" placeholder="לדוגמה: נועה" maxlength="24">
+
+      <h2 style="margin-top:24px">תחומי עניין</h2>
+      <label>מה התחום המרכזי שבחרת לתהליך?</label>
+      <div class="choice-group" data-field="mainDomain">
+        <div class="choice">הייטק וליבה</div>
+        <div class="choice">אדם וטכנולוגיה</div>
+        <div class="choice">סביבה וקיימות</div>
+        <div class="choice">עתיד ויזמות</div>
+        <div class="choice">חברה ודיגיטל</div>
+      </div>
+
+      <label>האם יש תחום נוסף שמעניין אותך?</label>
+      <div class="choice-group" data-field="secondDomain">
+        <div class="choice">הייטק וליבה</div>
+        <div class="choice">אדם וטכנולוגיה</div>
+        <div class="choice">סביבה וקיימות</div>
+        <div class="choice">עתיד ויזמות</div>
+        <div class="choice">חברה ודיגיטל</div>
+        <div class="choice">אני מעדיפה להתמקד בתחום אחד</div>
+      </div>
+
+      <button class="primary" type="button" onclick="next(2)">המשך</button>
+    </div>
+
+    <!-- שלב 2 -->
+    <div class="card hidden" id="step2">
+      <h2>איך את פועלת?</h2>
+      
+      <label>כשיש משימה חדשה ולא ברורה, את בדרך כלל:</label>
+      <div class="choice-group" data-field="workStyle">
+        <div class="choice">מתחילה להתנסות ולומדת תוך כדי התנסות</div>
+        <div class="choice">עוצרת קודם להבין לעומק ולתכנן את הצעדים</div>
+      </div>
+
+      <label>כשאת עובדת עם שותפה על משימה:</label>
+      <div class="choice-group" data-field="teamStyle">
+        <div class="choice">אני חושבת בקול רם ומשתפת כל רעיון</div>
+        <div class="choice">אני מעדיפה לעבוד בשקט ואז להציג את התוצאה</div>
+      </div>
+
+      <label>מהו קצב העבודה הטבעי שלך?</label>
+      <div class="choice-group" data-field="workPace">
+        <div class="choice">אני אוהבת לעבוד מהר ולסיים מוקדם</div>
+        <div class="choice">אני מעדיפה לקחת זמן ולעשות בדיוק</div>
+        <div class="choice">תלוי במשימה - אני גמישה</div>
+      </div>
+
+      <button class="primary" type="button" onclick="next(3)">המשך</button>
+    </div>
+
+    <!-- שלב 3 -->
+    <div class="card hidden" id="step3">
+      <h2>התפקיד שלך בצוות</h2>
+
+      <label>באיזה תפקיד את הכי טובה בעבודת צוות?</label>
+      <div class="choice-group" data-field="teamRole">
+        <div class="choice">למצוא רעיונות מקוריים ולהתחיל דברים חדשים</div>
+        <div class="choice">לארגן משימות ולוודא שהכל זורם בזמן</div>
+        <div class="choice">לעזור לאחרות להבין ולהסביר מושגים מורכבים</div>
+        <div class="choice">לפתור בעיות טכניות כשמשהו תקוע</div>
+      </div>
+
+      <label>מה עוזר לך להתמיד בפרויקט לאורך זמן?</label>
+      <div class="choice-group" data-field="motivationSource">
+        <div class="choice">תחושת משמעות - שאני עושה משהו חשוב</div>
+        <div class="choice">אתגר אינטלקטואלי - פתרון בעיות מורכבות</div>
+        <div class="choice">עבודת צוות - החיבור עם האנשים</div>
+        <div class="choice">התוצאה הסופית - לראות את המוצר מוכן</div>
+      </div>
+
+      <button class="primary" type="button" onclick="next(4)">המשך</button>
+    </div>
+
+    <!-- שלב 4 -->
+    <div class="card hidden" id="step4">
+      <h2>תקשורת ופתרון בעיות</h2>
+
+      <label>כשיש דדלין קרוב ואת מרגישה לחץ:</label>
+      <div class="choice-group" data-field="pressureResponse">
+        <div class="choice">אני פועלת הכי טוב תחת לחץ - זה מניע אותי</div>
+        <div class="choice">אני צריכה לתכנן מראש כדי למנוע לחץ</div>
+        <div class="choice">אני לוקחת הפסקה קצרה ואז חוזרת בכוח</div>
+      </div>
+
+      <label>כשיש אי-הסכמה עם השותפה שלך בנושא חשוב:</label>
+      <div class="choice-group" data-field="conflictStyle">
+        <div class="choice">עוצרת ומנסה להבין לעומק את הצד השני</div>
+        <div class="choice">מציגה את העמדה שלי בבירור ומנסה לשכנע</div>
+        <div class="choice">מחפשת פשרה שמשלבת את שני הצדדים</div>
+      </div>
+
+      <label>איך את הכי נוחה לתקשר עם השותפה בין המפגשים?</label>
+      <div class="choice-group" data-field="communicationStyle">
+        <div class="choice">פגישות פנים אל פנים בלבד</div>
+        <div class="choice">שיחות וידאו או טלפון</div>
+        <div class="choice">הודעות טקסט וקבצים משותפים</div>
+        <div class="choice">לא משנה לי - אני גמישה</div>
+      </div>
+
+      <label>איזה תוכן באמת מושך אותך ביום-יום?</label>
+      <div class="choice-group" data-field="lifeInterest">
+        <div class="choice">טכנולוגיה, אפליקציות וחדשנות</div>
+        <div class="choice">אנשים, פסיכולוגיה והשפעה חברתית</div>
+        <div class="choice">סביבה, טבע וקיימות</div>
+        <div class="choice">רעיונות, עתיד ותרבות</div>
+      </div>
+
+      <button class="primary" type="button" onclick="next(5)">המשך</button>
+    </div>
+
+    <!-- שלב 5 -->
+    <div class="card hidden" id="step5">
+      <h2>שאלה אחרונה</h2>
+
+      <label>כמה חשוב לך להתאים עם השותפה שלך?</label>
+      <div class="choice-group" data-field="importanceLevel">
+        <div class="choice">מאוד חשוב - אני רוצה התאמה הכי טובה</div>
+        <div class="choice">קצת חשוב - אבל אני יכולה להסתדר עם כולן</div>
+        <div class="choice">לא כל כך חשוב - אני גמישה</div>
+      </div>
+
+      <button class="primary" type="button" id="finishBtn" onclick="finish()">סיימתי - מוכנה לשותפות</button>
+    </div>
+
+    <!-- מסך המתנה -->
+    <div class="card hidden waiting-screen" id="waiting">
+      <h2>תודה שסיימת! 🎉</h2>
+      <div class="spinner"></div>
+      <p>אנחנו עובדות על מציאת השותפה המושלמת עבורך...</p>
+      <p style="font-size: 15px; color: rgba(255,255,255,0.6); margin-top: 24px;">
+        ברגע שכל המשתתפות יסיימו, נציג כאן את השותפה שלך.
+      </p>
+    </div>
+
+    <!-- מסך תוצאות -->
+    <div class="card hidden results-screen" id="results">
+      <h2>השותפה שלך למסע! 🌟</h2>
+      <div id="partnerInfo"></div>
+    </div>
+
+  </div>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+    import { getDatabase, ref, set, get, onValue, update } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+
+    // TODO: החליפי את הקונפיגורציה
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_AUTH_DOMAIN",
+      databaseURL: "YOUR_DATABASE_URL",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_STORAGE_BUCKET",
+      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+
+    // קבלת קוד הפעילות מה-URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const activityCode = urlParams.get('code') || 'default_activity';
+
+    // משתנים גלובליים
+    let selections = {};
+    let deviceId = localStorage.getItem('deviceId') || crypto.randomUUID();
+    localStorage.setItem('deviceId', deviceId);
+
+    // הגדרת בחירות
+    document.querySelectorAll('.choice-group').forEach(group => {
+      const field = group.dataset.field;
+      group.querySelectorAll('.choice').forEach(choice => {
+        choice.addEventListener('click', () => {
+          group.querySelectorAll('.choice').forEach(c => c.classList.remove('selected'));
+          choice.classList.add('selected');
+          selections[field] = choice.textContent;
+        });
+      });
+    });
+
+    // ניווט בין שלבים
+    window.next = (stepNum) => {
+      // בדיקת תשובות לפי שלב
+      const validations = {
+        2: ['mainDomain', 'secondDomain'],
+        3: ['workStyle', 'teamStyle', 'workPace'],
+        4: ['teamRole', 'motivationSource'],
+        5: ['pressureResponse', 'conflictStyle', 'communicationStyle', 'lifeInterest']
+      };
+
+      const required = validations[stepNum];
+      if (required && required.some(k => !selections[k])) {
+        alert('נא לענות על כל השאלות לפני המשך');
+        return;
+      }
+
+      showStep(stepNum);
+      updateProgress(stepNum);
+    };
+
+    function showStep(stepNum) {
+      document.querySelectorAll('.card').forEach(card => card.classList.add('hidden'));
+      document.getElementById('step' + stepNum).classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function updateProgress(stepNum) {
+      const percentage = (stepNum / 5) * 100;
+      document.getElementById('progressBar').style.width = percentage + '%';
+      document.getElementById('progressText').textContent = `שלב ${stepNum} מתוך 5`;
+    }
+
+    // סיום השאלון
+    window.finish = async () => {
+      const displayName = document.getElementById('displayName').value.trim();
+      
+      if (!displayName) {
+        alert('כתבי שם פרטי/כינוי כדי שתוכלי לזהות את עצמך במסך החיבורים.');
+        return;
+      }
+
+      const required = [
+        'mainDomain', 'secondDomain', 'workStyle', 'teamStyle', 'workPace',
+        'teamRole', 'motivationSource', 'pressureResponse', 'conflictStyle',
+        'communicationStyle', 'lifeInterest', 'importanceLevel'
+      ];
+      
+      if (required.some(k => !selections[k])) {
+        alert('נא לענות על כל השאלות לפני סיום.');
+        return;
+      }
+
+      document.getElementById('finishBtn').disabled = true;
+      document.getElementById('finishBtn').textContent = 'שולח...';
+
+      try {
+        // שמירת התשובות
+        const responseId = crypto.randomUUID();
+        const responseRef = ref(database, `responses/${activityCode}/${responseId}`);
+        
+        await set(responseRef, {
+          deviceId,
+          displayName,
+          ...selections,
+          createdAt: Date.now()
+        });
+
+        // עדכון מספר השאלונים שהושלמו
+        const activityRef = ref(database, `activities/${activityCode}`);
+        const snapshot = await get(activityRef);
+        
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          await update(activityRef, {
+            completedCount: (data.completedCount || 0) + 1
+          });
+        }
+
+        // מעבר למסך המתנה
+        showStep('waiting');
+        document.querySelector('.progress-bar-container').style.display = 'none';
+        document.querySelector('.progress-text').style.display = 'none';
+
+        // האזנה לתוצאות
+        listenForResults();
+
+      } catch (error) {
+        console.error('Error:', error);
+        alert('אירעה שגיאה. נסי שוב.');
+        document.getElementById('finishBtn').disabled = false;
+        document.getElementById('finishBtn').textContent = 'סיימתי - מוכנה לשותפות';
+      }
+    };
+
+    function showStep(stepId) {
+      document.querySelectorAll('.card').forEach(card => card.classList.add('hidden'));
+      document.getElementById(stepId).classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // האזנה לתוצאות זיווג
+    function listenForResults() {
+      const pairingsRef = ref(database, `pairings/${activityCode}`);
+      
+      onValue(pairingsRef, (snapshot) => {
+        if (snapshot.exists()) {
+          const pairings = snapshot.val();
+          const myPairing = Object.values(pairings).find(p => 
+            p.deviceIds && p.deviceIds.includes(deviceId)
+          );
+          
+          if (myPairing) {
+            displayResults(myPairing);
+          }
+        }
+      });
+    }
+
+    function displayResults(pairing) {
+      const partnerInfo = document.getElementById('partnerInfo');
+      
+      let html = '';
+      
+      if (pairing.type === 'pair') {
+        const partner = pairing.members.find(m => m.deviceId !== deviceId);
+        html = `
+          <div class="partner-card">
+            <div class="partner-name">${partner.displayName}</div>
+            <div class="match-score">התאמה: ${pairing.score}%</div>
+            ${pairing.reasons ? `
+              <ul class="match-reasons">
+                ${pairing.reasons.slice(0, 3).map(r => `<li>${r}</li>`).join('')}
+              </ul>
+            ` : ''}
+          </div>
+          <p style="text-align:center; margin-top:20px; color:rgba(255,255,255,0.7);">
+            מזל טוב! התחילו לעבוד ביחד 💪
+          </p>
+        `;
+      } else if (pairing.type === 'trio') {
+        html = `
+          <div class="partner-card">
+            <div class="partner-name">קבוצת שלישייה</div>
+            <p style="margin-top:12px; line-height:1.6;">
+              נוצרה קבוצה של 3 משתתפות:
+            </p>
+            <ul style="margin-top:16px;">
+              ${pairing.members.map(m => `<li style="padding:8px 0;">${m.displayName}</li>`).join('')}
+            </ul>
+          </div>
+          <p style="text-align:center; margin-top:20px; color:rgba(255,255,255,0.7);">
+            שלוש זה כוח! בהצלחה 💪
+          </p>
+        `;
+      }
+      
+      partnerInfo.innerHTML = html;
+      showStep('results');
+    }
+
+    // התחלה - הצגת שלב 1
+    updateProgress(1);
+  </script>
+
+</body>
+</html>
