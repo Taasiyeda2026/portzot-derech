@@ -54,13 +54,9 @@
     }
     
     .logo {
-      width: 180px;
+      width: 280px;
       height: auto;
       max-width: 90vw;
-      display: block;
-      margin: 0 auto;
-      display: block;
-      margin: 0 auto;
       cursor: pointer;
       transition: transform 0.3s ease, filter 0.3s ease;
       filter: drop-shadow(0 0 20px rgba(255, 20, 147, 0.5));
@@ -168,10 +164,11 @@
     
     .btn-start-activity {
       display: none;
-      max-width: 400px;
+      max-width: 220px;
+      width: auto;
+      padding: 14px 28px;
       margin: 32px auto 0 auto;
-      padding: 16px 32px;
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 700;
       background: linear-gradient(135deg, #ff1493, #ff69b4);
       color: white;
@@ -449,7 +446,7 @@
         </p>
         <p style="margin-bottom: 0;">
           <strong style="color: #ff69b4; font-size: 18px;">🎯 דיוק</strong><br>
-          <span style="opacity: 0.9; color: #ffffff; font-weight: 500;">לבחור שותפה שתעזור לכן להתקדם באמת</span>
+          <span style="opacity: 0.9;">לבחור שותפה שתעזור לכן להתקדם באמת</span>
         </p>
       </div>
 
@@ -479,12 +476,12 @@
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
     import { getFirestore, collection, query, where, getDocs, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';    const firebaseConfig = {
-      apiKey: "AIzaSyCFSq5b-HgkTxFNhBJIBdOe2ian5TZvMPE",
-      authDomain: "portzot-derech.firebaseapp.com",
-      projectId: "portzot-derech",
-      storageBucket: "portzot-derech.firebasestorage.app",
-      messagingSenderId: "236417614890",
-      appId: "1:236417614890:web:587b0eb3c5eedfa352af53"
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_AUTH_DOMAIN",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_STORAGE_BUCKET",
+      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+      appId: "YOUR_APP_ID"
     };
 
     const app = initializeApp(firebaseConfig);
@@ -492,32 +489,32 @@
         db._settings.experimentalForceLongPolling = true;
         console.log("✅ Firestore connection: OK");
 
-    // מציאת סשן פעיל
-    async function findActiveSession() {
-      const sessionsRef = collection(db, 'sessions');
-      const q = query(sessionsRef, where('isActive', '==', true), where('status', '==', 'active'));
-      const querySnapshot = await getDocs(q);
-      
-      if (!querySnapshot.empty) {
-        return querySnapshot.docs[0].id;
-      }
-      return null;
-    }
-
+    // האזנה לשינויים בסשן
     // בדיקה אוטומטית כל 3 שניות אם יש session פעיל 🔄
     async function checkForActiveSession() {
       try {
+        console.log('🔄 מתחיל בדיקת session...');
+        
         const sessionsRef = collection(db, 'sessions');
         const q = query(sessionsRef, where('isActive', '==', true), where('status', '==', 'active'));
         const querySnapshot = await getDocs(q);
         
+        console.log('📊 מספר sessions פעילים:', querySnapshot.size);
+        
         const startBtn = document.getElementById('startActivityBtn');
+        
+        if (!startBtn) {
+          console.error('❌ כפתור לא נמצא!');
+          return;
+        }
         
         if (!querySnapshot.empty) {
           const sessionDoc = querySnapshot.docs[0];
           const sessionId = sessionDoc.id;
+          const data = sessionDoc.data();
           
           console.log('✅ נמצא session פעיל:', sessionId);
+          console.log('🔍 נתונים:', JSON.stringify({isActive: data.isActive, status: data.status}));
           
           // הכפתור מופיע! ✨
           startBtn.classList.add('show');
