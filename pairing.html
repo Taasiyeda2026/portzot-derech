@@ -3,58 +3,458 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>פורצות דרך | שותפה לדרך</title>
-
-  <!-- עיצוב קיים -->
-  <link rel="stylesheet" href="styles.css">
-  <!-- עיצוב ייעודי ל-pairing -->
-  <link rel="stylesheet" href="pairing.css">
+  <title>זיווג מושלם | שותפות מושלמת</title>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #000000;
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+    
+    /* אנימציית רקע מזוהרת */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: 
+        radial-gradient(circle at 20% 50%, rgba(255, 0, 127, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 20, 147, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 20%, rgba(199, 21, 133, 0.1) 0%, transparent 50%);
+      animation: glow 15s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+    
+    @keyframes glow {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(5%, 5%) scale(1.1); }
+    }
+    
+    .logo-container {
+      position: relative;
+      z-index: 2;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+    
+    .logo {
+      width: 280px;
+      height: auto;
+      max-width: 90vw;
+      cursor: pointer;
+      transition: transform 0.3s ease, filter 0.3s ease;
+      filter: drop-shadow(0 0 20px rgba(255, 20, 147, 0.5));
+    }
+    
+    .logo:hover {
+      transform: scale(1.05);
+      filter: drop-shadow(0 0 30px rgba(255, 20, 147, 0.8));
+    }
+    
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 650px;
+      width: 100%;
+    }
+    
+    .card {
+      background: rgba(30, 30, 35, 0.85);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      padding: 48px 40px;
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.5),
+        0 0 60px rgba(255, 20, 147, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 20, 147, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    /* זוהר בפינות */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255, 20, 147, 0.15) 0%, transparent 70%);
+      animation: rotateGlow 20s linear infinite;
+      pointer-events: none;
+    }
+    
+    @keyframes rotateGlow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    h1 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 28px;
+      text-align: center;
+      background: linear-gradient(135deg, #ff1493, #ff69b4, #ff1493);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 3s ease-in-out infinite;
+      text-shadow: 0 0 30px rgba(255, 20, 147, 0.5);
+      position: relative;
+      z-index: 1;
+    }
+    
+    @keyframes shimmer {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    
+    p {
+      font-size: 17px;
+      line-height: 1.8;
+      margin-bottom: 20px;
+      color: rgba(255, 255, 255, 0.9);
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    
+    p:last-child {
+      margin-bottom: 0;
+      font-weight: 700;
+      color: #ff69b4;
+      text-shadow: 0 0 15px rgba(255, 105, 180, 0.6);
+    }
+    
+    /* אפקט זוהר על הטקסט */
+    .card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 20, 147, 0.8) 50%, 
+        transparent);
+      animation: scan 3s ease-in-out infinite;
+    }
+    
+    @keyframes scan {
+      0%, 100% { transform: translateY(0); opacity: 0; }
+      50% { transform: translateY(400px); opacity: 1; }
+    }
+    
+    /* מודל קוד סודי */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .modal-content {
+      background: rgba(30, 30, 35, 0.95);
+      border: 2px solid rgba(255, 20, 147, 0.5);
+      border-radius: 20px;
+      padding: 40px;
+      min-width: 320px;
+      max-width: 90%;
+      box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.7),
+        0 0 80px rgba(255, 20, 147, 0.3);
+      animation: slideUp 0.4s ease;
+      position: relative;
+    }
+    
+    @keyframes slideUp {
+      from { 
+        transform: translateY(50px);
+        opacity: 0;
+      }
+      to { 
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+    
+    .modal-content::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(135deg, #ff1493, #ff69b4, #ff1493);
+      border-radius: 20px;
+      z-index: -1;
+      opacity: 0.3;
+      filter: blur(10px);
+    }
+    
+    .modal-content h2 {
+      font-size: 24px;
+      margin-bottom: 24px;
+      text-align: center;
+      background: linear-gradient(135deg, #ff1493, #ff69b4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    #codeInput {
+      width: 100%;
+      padding: 16px;
+      font-size: 24px;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.5);
+      border: 2px solid rgba(255, 20, 147, 0.4);
+      border-radius: 12px;
+      color: #ffffff;
+      letter-spacing: 8px;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+      font-family: monospace;
+    }
+    
+    #codeInput:focus {
+      outline: none;
+      border-color: #ff1493;
+      box-shadow: 0 0 20px rgba(255, 20, 147, 0.4);
+    }
+    
+    #codeInput::placeholder {
+      color: rgba(255, 105, 180, 0.4);
+      letter-spacing: 8px;
+    }
+    
+    .modal-buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+    
+    .modal-buttons button {
+      flex: 1;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+    
+    .btn-submit {
+      background: linear-gradient(135deg, #ff1493, #ff69b4);
+      color: white;
+      box-shadow: 0 4px 15px rgba(255, 20, 147, 0.4);
+    }
+    
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 20, 147, 0.6);
+    }
+    
+    .btn-submit:active {
+      transform: translateY(0);
+    }
+    
+    .btn-cancel {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .btn-cancel:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+    
+    .error-msg {
+      color: #ff1493;
+      text-align: center;
+      margin-top: 12px;
+      font-size: 14px;
+      min-height: 20px;
+      font-weight: 600;
+      text-shadow: 0 0 10px rgba(255, 20, 147, 0.5);
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-10px); }
+      75% { transform: translateX(10px); }
+    }
+    
+    .shake {
+      animation: shake 0.5s ease;
+    }
+    
+    @media (max-width: 768px) {
+      .logo {
+        width: 220px;
+      }
+      
+      .card {
+        padding: 36px 28px;
+      }
+      
+      h1 {
+        font-size: 26px;
+      }
+      
+      p {
+        font-size: 16px;
+      }
+      
+      .modal-content {
+        padding: 30px 24px;
+        min-width: 280px;
+      }
+      
+      .modal-content h2 {
+        font-size: 20px;
+      }
+      
+      #codeInput {
+        font-size: 20px;
+      }
+    }
+  </style>
 </head>
 
 <body class="pairing-page">
 
-  <!-- לוגו סודי -->
-  <img
-    src="logo.png"
-    alt="פורצות דרך"
-    class="logo"
-    id="secretLogo"
-  />
+  <!-- לוגו מעל התיבה -->
+  <div class="logo-container">
+    <img
+      src="logo.png"
+      alt="זיווג מושלם"
+      class="logo"
+      id="secretLogo"
+    />
+  </div>
 
   <div class="container">
     <div class="card">
 
-      <h1>שותפה לדרך</h1>
+      <h1>בחירת שותפה להתחלה</h1>
 
       <p>
-        פעילות זו היא נקודת פתיחה לתהליך משותף.
-        במהלך ההמשך תעבדו בזוגות, תלמדו יחד,
-        ותפתחו רעיונות וחיבורים שילוו אתכן לאורך הדרך.
+        הפעילות הזאת אינה מבחן ואין בה תשובות נכונות או לא נכונות
       </p>
 
       <p>
-        בשלב זה אין צורך לבצע פעולה.
+        המטרה היא ליצור שותפות טובה לעבודה משותפת ולתהליך הטכנולוגי
+      </p>
+
+      <p>
+        <strong>היכרות</strong> – להבין מי את ואיך נוח לך לעבוד
         <br>
-        הפעילות תתחיל בהנחיית המדריכה.
+        <strong>אמון</strong> - להתחיל יחד בתחושה טובה ובטוחה
+        <br>
+        <strong>דיוק</strong> - לבחור שותפה שתעזור לכן להתקדם באמת
       </p>
 
       <p style="margin-top:24px;font-weight:700;opacity:0.9">
-        אנא המתינו 🙏
+        פורצת דרך מצליחה כשהיא צועדת קדימה עם נשים מצליחות כמוה.
       </p>
 
     </div>
   </div>
 
-  <!-- לוגיקת לוגו סודי -->
+  <!-- מודל קוד סודי -->
+  <div id="codeModal" class="modal">
+    <div class="modal-content">
+      <h2>הזן קוד סודי</h2>
+      <input type="password" id="codeInput" maxlength="4" placeholder="⚫⚫⚫⚫" autocomplete="off">
+      <div class="modal-buttons">
+        <button id="submitCode" class="btn-submit">אישור</button>
+        <button id="cancelCode" class="btn-cancel">ביטול</button>
+      </div>
+      <p id="errorMsg" class="error-msg"></p>
+    </div>
+  </div>
+
+  <!-- קוד סודי -->
   <script>
     const SECRET_CODE = "2311";
+    const modal = document.getElementById("codeModal");
+    const input = document.getElementById("codeInput");
+    const errorMsg = document.getElementById("errorMsg");
 
+    // פתיחת המודל בלחיצה על הלוגו
     document.getElementById("secretLogo").addEventListener("click", () => {
-      const code = prompt("קוד מדריכה");
-      if (code === SECRET_CODE) {
-        window.location.href = "admin.html";
+      modal.style.display = "flex";
+      setTimeout(() => input.focus(), 100);
+    });
+
+    // סגירה בלחיצה על ביטול
+    document.getElementById("cancelCode").addEventListener("click", () => {
+      modal.style.display = "none";
+      input.value = "";
+      errorMsg.textContent = "";
+    });
+
+    // סגירה בלחיצה מחוץ למודל
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        modal.style.display = "none";
+        input.value = "";
+        errorMsg.textContent = "";
       }
     });
+
+    // אישור הקוד
+    document.getElementById("submitCode").addEventListener("click", checkCode);
+    input.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") checkCode();
+    });
+
+    function checkCode() {
+      if (input.value === SECRET_CODE) {
+        window.location.href = "admin.html";
+      } else {
+        errorMsg.textContent = "קוד שגוי, נסה שוב";
+        input.value = "";
+        input.classList.add("shake");
+        setTimeout(() => input.classList.remove("shake"), 500);
+      }
+    }
   </script>
 
 </body>
