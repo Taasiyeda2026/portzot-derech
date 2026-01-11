@@ -46,8 +46,12 @@ const logoImg = document.getElementById('logoImg');
 const openInstructorBtn = document.getElementById('openInstructor');
 const instructorBar = document.getElementById('instructorBar');
 const startBtn = document.getElementById('startBtn');
-const waitTextElement = document.querySelector('.wait-text'); // טקסט ההמתנה
+const waitTextElement = document.querySelector('p[style*="font-size:20px"]'); // טקסט ההמתשה
 const activateBtn = document.getElementById('activateBtn');
+const codeModal = document.getElementById('codeModal');
+const codeInput = document.getElementById('codeInput');
+const codeConfirmBtn = document.getElementById('codeConfirmBtn');
+const codeCancelBtn = document.getElementById('codeCancelBtn');
 const expectedCountInput = document.getElementById('expectedCount');
 const instructorCode = document.getElementById('instructorCode');
 const barStatus = document.getElementById('barStatus');
@@ -221,26 +225,74 @@ function scheduleNextRefresh() {
 // התחלת ריענון דינמי
 scheduleNextRefresh();
 
-// לחיצה על הלוגו - מקפיצ חלון קוד
+// לחיצה על הלוגו - מקפיץ חלון קוד מותאם אישית
 if (logoImg) {
   logoImg.addEventListener('click', () => {
-    const code = prompt('הזיני קוד מדריכה:');
+    codeModal.classList.remove('hidden');
+    codeInput.value = '';
+    setTimeout(() => codeInput?.focus(), 100);
+  });
+}
+
+// ביטול חלון הקוד
+codeCancelBtn.addEventListener('click', () => {
+  codeModal.classList.add('hidden');
+  codeInput.value = '';
+});
+
+// לחיצה על Enter בשדה הקוד
+codeInput.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') {
+    codeConfirmBtn.click();
+  }
+});
+
+// אישור הקוד
+codeConfirmBtn.addEventListener('click', async () => {
+  const code = codeInput.value.trim();
+  
+  if (!code) {
+    return;
+  }
+  
+  if (code !== VALID_CODE) {
+    alert('❌ קוד שגוי. נסי שוב.');
+    codeInput.value = '';
+    codeInput.focus();
+    return;
+  }
+  
+  // קוד נכון!
+  codeModal.classList.add('hidden');
+  codeInput.value = '';
+  
+  // שמירה שזה מדריכה
+  isInstructor = true;
+  localStorage.setItem(INSTRUCTOR_KEY, 'true');
+  
+  // בודק אם יש פעילות פעילה
+  const sessionSnap = await getDocs(collection(db, 'sessions'));
+  const activeSessionDoc = sessionSnap.docs.find(d => d.id === SESSION_ID && isActiveFromData(d.data()));
+  
+  if (activeSessionDoc) {
+    // יש פעילות פעילה - עובר ישירות לניהול
+    currentSession = activeSessionDoc.data();
+    showOnly('managementScreen');
+    await updateManagementScreen();
     
-    if (!code) {
-      return; // ביטול
-    }
+    // התחלת ריענון דינמי
+    refreshCount = 0;
+    scheduleNextRefresh();
     
-    if (code.trim() !== VALID_CODE) {
-      alert('❌ קוד שגוי. נסי שוב.');
-      return;
-    }
-    
-    // קוד נכון - מעביר לניהול
+    barStatus.textContent = `ניהול פעילות פעילה`;
+  } else {
+    // אין פעילות - מראה את פס ההפעלה
     instructorBar.classList.remove('hidden');
     instructorCode.value = code;
     setTimeout(() => expectedCountInput?.focus(), 50);
-  });
-}
+    barStatus.textContent = `הזיני מספר משתתפות ולחצי התחל פעילות`;
+  }
+});
 
 // כניסת מדריכה (כפתור גיבוי - אם קיים)
 if (openInstructorBtn) {
