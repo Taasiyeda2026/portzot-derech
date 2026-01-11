@@ -205,6 +205,43 @@
             animation: shake 0.5s;
         }
 
+        /* Choice Group Styles */
+        .choice-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 12px;
+            margin-bottom: 24px;
+        }
+
+        .choice {
+            background: rgba(255,20,147,0.1);
+            border: 2px solid rgba(255,20,147,0.3);
+            border-radius: 12px;
+            padding: 16px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: right;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .choice:hover {
+            background: rgba(255,20,147,0.2);
+            border-color: #ff1493;
+            transform: translateX(-3px);
+        }
+
+        .choice.selected {
+            background: rgba(255,20,147,0.3);
+            border-color: #ff1493;
+            box-shadow: 0 0 20px rgba(255,20,147,0.4);
+        }
+
+        .card h2 {
+            margin-bottom: 8px;
+        }
+
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-10px); }
@@ -248,40 +285,35 @@
 
             <!-- שלב 1 -->
             <div class="step active" id="step1">
-                <h2>פרטים בסיסיים</h2>
+                <h2>לפני שמתחילות</h2>
                 <div class="question">
-                    <label for="displayName">שם להצגה *</label>
-                    <input type="text" id="displayName" placeholder="איך תרצי שיקראו לך?" required>
+                    <label>שם פרטי / כינוי (כדי שתוכלי לזהות את עצמך במסך החיבורים)</label>
+                    <input type="text" id="displayName" placeholder="לדוגמה: נועה" maxlength="24">
                 </div>
+
+                <h2 style="margin-top:18px">תחומי עניין</h2>
                 <div class="question">
-                    <label for="mainDomain">תחום עיקרי *</label>
-                    <select id="mainDomain" required>
-                        <option value="">בחרי תחום...</option>
-                        <option value="frontend">פיתוח Frontend</option>
-                        <option value="backend">פיתוח Backend</option>
-                        <option value="fullstack">Fullstack</option>
-                        <option value="data">Data Science</option>
-                        <option value="design">עיצוב UX/UI</option>
-                        <option value="mobile">פיתוח Mobile</option>
-                        <option value="devops">DevOps</option>
-                        <option value="qa">QA/Testing</option>
-                    </select>
+                    <label>מה התחום המרכזי שבחרת לתהליך?</label>
+                    <div class="choice-group" data-field="mainDomain">
+                        <div class="choice">הייטק וליבה</div>
+                        <div class="choice">אדם וטכנולוגיה</div>
+                        <div class="choice">סביבה וקיימות</div>
+                        <div class="choice">עתיד ויזמות</div>
+                        <div class="choice">חברה ודיגיטל</div>
+                    </div>
+
+                    <label>האם יש תחום נוסף שמעניין אותך?</label>
+                    <div class="choice-group" data-field="secondDomain">
+                        <div class="choice">הייטק וליבה</div>
+                        <div class="choice">אדם וטכנולוגיה</div>
+                        <div class="choice">סביבה וקיימות</div>
+                        <div class="choice">עתיד ויזמות</div>
+                        <div class="choice">חברה ודיגיטל</div>
+                        <div class="choice">אני מעדיפה להתמקד בתחום אחד</div>
+                    </div>
                 </div>
-                <div class="question">
-                    <label for="secondDomain">תחום משני (אופציונלי)</label>
-                    <select id="secondDomain">
-                        <option value="">בחרי תחום...</option>
-                        <option value="frontend">פיתוח Frontend</option>
-                        <option value="backend">פיתוח Backend</option>
-                        <option value="fullstack">Fullstack</option>
-                        <option value="data">Data Science</option>
-                        <option value="design">עיצוב UX/UI</option>
-                        <option value="mobile">פיתוח Mobile</option>
-                        <option value="devops">DevOps</option>
-                        <option value="qa">QA/Testing</option>
-                    </select>
-                </div>
-                <div class="warning" id="warning1">אנא מלאי את כל השדות הנדרשים</div>
+
+                <div class="warning" id="warning1">אנא ענה על כל השאלות לפני המשך</div>
                 <div class="button-group">
                     <button onclick="nextStep()">המשך →</button>
                 </div>
@@ -289,37 +321,30 @@
 
             <!-- שלב 2 -->
             <div class="step" id="step2">
-                <h2>סגנון עבודה</h2>
+                <h2>איך את פועלת?</h2>
+                
                 <div class="question">
-                    <label for="workStyle">איך את מעדיפה לעבוד? *</label>
-                    <select id="workStyle" required>
-                        <option value="">בחרי...</option>
-                        <option value="structured">מאורגנת ומתוכננת</option>
-                        <option value="flexible">גמישה וספונטנית</option>
-                        <option value="detail">מדויקת ומפורטת</option>
-                        <option value="creative">יצירתית וחופשית</option>
-                    </select>
+                    <label>כשיש משימה חדשה ולא ברורה, את בדרך כלל:</label>
+                    <div class="choice-group" data-field="workStyle">
+                        <div class="choice">מתחילה להתנסות ולומדת תוך כדי התנסות</div>
+                        <div class="choice">עוצרת קודם להבין לעומק ולתכנן את הצעדים</div>
+                    </div>
+
+                    <label>כשאת עובדת עם שותפה על משימה:</label>
+                    <div class="choice-group" data-field="teamStyle">
+                        <div class="choice">אני חושבת בקול רם ומשתפת כל רעיון</div>
+                        <div class="choice">אני מעדיפה לעבוד בשקט ואז להציג את התוצאה</div>
+                    </div>
+
+                    <label>מהו קצב העבודה הטבעי שלך?</label>
+                    <div class="choice-group" data-field="workPace">
+                        <div class="choice">אני אוהבת לעבוד מהר ולסיים מוקדם</div>
+                        <div class="choice">אני מעדיפה לקחת זמן ולעשות בדיוק</div>
+                        <div class="choice">תלוי במשימה - אני גמישה</div>
+                    </div>
                 </div>
-                <div class="question">
-                    <label for="teamStyle">מה התפקיד הטבעי שלך בצוות? *</label>
-                    <select id="teamStyle" required>
-                        <option value="">בחרי...</option>
-                        <option value="leader">מובילה ומתאמת</option>
-                        <option value="executor">מבצעת ויישומית</option>
-                        <option value="creative">רעיונית ויצירתית</option>
-                        <option value="analyzer">מנתחת ומדייקת</option>
-                    </select>
-                </div>
-                <div class="question">
-                    <label for="workPace">קצב עבודה מועדף *</label>
-                    <select id="workPace" required>
-                        <option value="">בחרי...</option>
-                        <option value="fast">מהירה ואינטנסיבית</option>
-                        <option value="steady">יציבה ועקבית</option>
-                        <option value="balanced">מאוזנת בין השניים</option>
-                    </select>
-                </div>
-                <div class="warning" id="warning2">אנא מלאי את כל השדות הנדרשים</div>
+
+                <div class="warning" id="warning2">אנא ענה על כל השאלות לפני המשך</div>
                 <div class="button-group">
                     <button class="secondary" onclick="prevStep()">← חזרה</button>
                     <button onclick="nextStep()">המשך →</button>
@@ -328,37 +353,27 @@
 
             <!-- שלב 3 -->
             <div class="step" id="step3">
-                <h2>תפקיד בצוות</h2>
+                <h2>התפקיד שלך בצוות</h2>
+
                 <div class="question">
-                    <label for="teamRole">מה התפקיד שאת הכי טובה בו? *</label>
-                    <select id="teamRole" required>
-                        <option value="">בחרי...</option>
-                        <option value="ideas">הצעת רעיונות</option>
-                        <option value="organization">ארגון ותכנון</option>
-                        <option value="implementation">יישום וביצוע</option>
-                        <option value="testing">בדיקה ושיפור</option>
-                    </select>
+                    <label>באיזה תפקיד את הכי טובה בעבודת צוות?</label>
+                    <div class="choice-group" data-field="teamRole">
+                        <div class="choice">למצוא רעיונות מקוריים ולהתחיל דברים חדשים</div>
+                        <div class="choice">לארגן משימות ולוודא שהכל זורם בזמן</div>
+                        <div class="choice">לעזור לאחרות להבין ולהסביר מושגים מורכבים</div>
+                        <div class="choice">לפתור בעיות טכניות כשמשהו תקוע</div>
+                    </div>
+
+                    <label>מה עוזר לך להתמיד בפרויקט לאורך זמן?</label>
+                    <div class="choice-group" data-field="motivationSource">
+                        <div class="choice">תחושת משמעות - שאני עושה משהו חשוב</div>
+                        <div class="choice">אתגר אינטלקטואלי - פתרון בעיות מורכבות</div>
+                        <div class="choice">עבודת צוות - החיבור עם האנשים</div>
+                        <div class="choice">התוצאה הסופית - לראות את המוצר מוכן</div>
+                    </div>
                 </div>
-                <div class="question">
-                    <label for="motivationSource">מה מניע אותך? *</label>
-                    <select id="motivationSource" required>
-                        <option value="">בחרי...</option>
-                        <option value="achievement">הישגים אישיים</option>
-                        <option value="learning">למידה והתפתחות</option>
-                        <option value="impact">השפעה וערך</option>
-                        <option value="collaboration">שיתוף פעולה</option>
-                    </select>
-                </div>
-                <div class="question">
-                    <label for="pressureResponse">איך את מגיבה ללחץ? *</label>
-                    <select id="pressureResponse" required>
-                        <option value="">בחרי...</option>
-                        <option value="thrives">מצטיינת תחת לחץ</option>
-                        <option value="handles">מתמודדת היטב</option>
-                        <option value="prefers_calm">מעדיפה סביבה רגועה</option>
-                    </select>
-                </div>
-                <div class="warning" id="warning3">אנא מלאי את כל השדות הנדרשים</div>
+
+                <div class="warning" id="warning3">אנא ענה על כל השאלות לפני המשך</div>
                 <div class="button-group">
                     <button class="secondary" onclick="prevStep()">← חזרה</button>
                     <button onclick="nextStep()">המשך →</button>
@@ -368,55 +383,68 @@
             <!-- שלב 4 -->
             <div class="step" id="step4">
                 <h2>תקשורת ופתרון בעיות</h2>
+
                 <div class="question">
-                    <label for="conflictStyle">איך את פותרת קונפליקטים? *</label>
-                    <select id="conflictStyle" required>
-                        <option value="">בחרי...</option>
-                        <option value="direct">ישירה ופתוחה</option>
-                        <option value="diplomatic">דיפלומטית ורגישה</option>
-                        <option value="analytical">מנתחת ולוגית</option>
-                        <option value="mediating">מגשרת ומפייסת</option>
-                    </select>
+                    <label>כשיש דדלין קרוב ואת מרגישה לחץ:</label>
+                    <div class="choice-group" data-field="pressureResponse">
+                        <div class="choice">אני פועלת הכי טוב תחת לחץ - זה מניע אותי</div>
+                        <div class="choice">אני צריכה לתכנן מראש כדי למנוע לחץ</div>
+                        <div class="choice">אני לוקחת הפסקה קצרה ואז חוזרת בכוח</div>
+                    </div>
+
+                    <label>כשיש אי-הסכמה עם השותפה שלך בנושא חשוב:</label>
+                    <div class="choice-group" data-field="conflictStyle">
+                        <div class="choice">עוצרת ומנסה להבין לעומק את הצד השני</div>
+                        <div class="choice">מציגה את העמדה שלי בבירור ומנסה לשכנע</div>
+                        <div class="choice">מחפשת פשרה שמשלבת את שני הצדדים</div>
+                    </div>
+
+                    <label>איך את הכי נוחה לתקשר עם השותפה בין המפגשים?</label>
+                    <div class="choice-group" data-field="communicationStyle">
+                        <div class="choice">פגישות פנים אל פנים בלבד</div>
+                        <div class="choice">שיחות וידאו או טלפון</div>
+                        <div class="choice">הודעות טקסט וקבצים משותפים</div>
+                        <div class="choice">לא משנה לי - אני גמישה</div>
+                    </div>
+
+                    <label>איזה תוכן באמת מושך אותך ביום-יום?</label>
+                    <div class="choice-group" data-field="lifeInterest">
+                        <div class="choice">טכנולוגיה, אפליקציות וחדשנות</div>
+                        <div class="choice">אנשים, פסיכולוגיה והשפעה חברתית</div>
+                        <div class="choice">סביבה, טבע וקיימות</div>
+                        <div class="choice">רעיונות, עתיד ותרבות</div>
+                    </div>
                 </div>
-                <div class="question">
-                    <label for="communicationStyle">סגנון תקשורת מועדף *</label>
-                    <select id="communicationStyle" required>
-                        <option value="">בחרי...</option>
-                        <option value="frequent">תקשורת תכופה</option>
-                        <option value="scheduled">פגישות מתוכננות</option>
-                        <option value="minimal">תקשורת מינימלית</option>
-                        <option value="flexible">גמיש לפי הצורך</option>
-                    </select>
-                </div>
-                <div class="warning" id="warning4">אנא מלאי את כל השדות הנדרשים</div>
+
+                <div class="warning" id="warning4">אנא ענה על כל השאלות לפני המשך</div>
                 <div class="button-group">
                     <button class="secondary" onclick="prevStep()">← חזרה</button>
                     <button onclick="nextStep()">המשך →</button>
                 </div>
             </div>
 
-            <!-- שלב 5 -->
+            <!-- שלב 5 - אופציונלי -->
             <div class="step" id="step5">
-                <h2>תחומי עניין (אופציונלי)</h2>
+                <h2>שאלה אחרונה</h2>
+
                 <div class="question">
-                    <label for="lifeInterest">תחומי עניין מחוץ לטכנולוגיה</label>
-                    <input type="text" id="lifeInterest" placeholder="למשל: ספורט, אמנות, מוזיקה...">
+                    <label>כמה חשוב לך להתאים עם השותפה שלך?</label>
+                    <div class="choice-group" data-field="importanceLevel">
+                        <div class="choice">מאוד חשוב - אני רוצה התאמה הכי טובה</div>
+                        <div class="choice">קצת חשוב - אבל אני יכולה להסתדר עם כולן</div>
+                        <div class="choice">לא כל כך חשוב - אני גמישה</div>
+                    </div>
                 </div>
-                <div class="question">
-                    <label for="importanceLevel">כמה חשוב לך התאמה אישית? *</label>
-                    <select id="importanceLevel" required>
-                        <option value="">בחרי...</option>
-                        <option value="very_high">מאוד חשוב</option>
-                        <option value="high">חשוב</option>
-                        <option value="medium">בינוני</option>
-                        <option value="low">פחות חשוב</option>
-                    </select>
-                </div>
-                <div class="warning" id="warning5">אנא מלאי את כל השדות הנדרשים</div>
+
+                <div class="warning" id="warning5">אנא ענה על כל השאלות לפני המשך</div>
                 <div class="button-group">
                     <button class="secondary" onclick="prevStep()">← חזרה</button>
-                    <button onclick="finish()">סיום ושליחה</button>
+                    <button onclick="finish()">סיימתי - מוכנה לשותפות</button>
                 </div>
+            </div>
+
+            <div class="loading" id="loading">
+                <p>שומר את התשובות שלך...</p>
             </div>
 
             <div class="loading" id="loading">
@@ -457,6 +485,32 @@
         let currentStep = 1;
         const totalSteps = 5;
 
+        // אובייקט לשמירת בחירות המשתמש
+        const selections = {};
+
+        // טיפול ב-choice-group clicks
+        document.addEventListener('DOMContentLoaded', function() {
+            const choiceGroups = document.querySelectorAll('.choice-group');
+            
+            choiceGroups.forEach(group => {
+                const field = group.getAttribute('data-field');
+                const choices = group.querySelectorAll('.choice');
+                
+                choices.forEach(choice => {
+                    choice.addEventListener('click', function() {
+                        // הסרת selected מכל האפשרויות בקבוצה
+                        choices.forEach(c => c.classList.remove('selected'));
+                        
+                        // הוספת selected לאפשרות שנבחרה
+                        this.classList.add('selected');
+                        
+                        // שמירת הבחירה
+                        selections[field] = this.textContent.trim();
+                    });
+                });
+            });
+        });
+
         window.nextStep = function() {
             if (!validateStep(currentStep)) {
                 document.getElementById(`warning${currentStep}`).classList.add('show');
@@ -489,26 +543,39 @@
         }
 
         function validateStep(step) {
+            const displayName = document.getElementById('displayName');
+            
             switch(step) {
                 case 1:
-                    return document.getElementById('displayName').value.trim() !== '' &&
-                           document.getElementById('mainDomain').value !== '';
+                    return displayName.value.trim() !== '' &&
+                           selections.mainDomain &&
+                           selections.secondDomain;
                 case 2:
-                    return document.getElementById('workStyle').value !== '' &&
-                           document.getElementById('teamStyle').value !== '' &&
-                           document.getElementById('workPace').value !== '';
+                    return selections.workStyle &&
+                           selections.teamStyle &&
+                           selections.workPace;
                 case 3:
-                    return document.getElementById('teamRole').value !== '' &&
-                           document.getElementById('motivationSource').value !== '' &&
-                           document.getElementById('pressureResponse').value !== '';
+                    return selections.teamRole &&
+                           selections.motivationSource;
                 case 4:
-                    return document.getElementById('conflictStyle').value !== '' &&
-                           document.getElementById('communicationStyle').value !== '';
+                    return selections.pressureResponse &&
+                           selections.conflictStyle &&
+                           selections.communicationStyle &&
+                           selections.lifeInterest;
                 case 5:
-                    return document.getElementById('importanceLevel').value !== '';
+                    return selections.importanceLevel;
                 default:
-                    return true;
+                    return false;
             }
+        }
+
+        function getDeviceId() {
+            let deviceId = localStorage.getItem('deviceId');
+            if (!deviceId) {
+                deviceId = crypto.randomUUID();
+                localStorage.setItem('deviceId', deviceId);
+            }
+            return deviceId;
         }
 
         window.finish = async function() {
@@ -520,24 +587,24 @@
                 return;
             }
 
-            document.getElementById('loading').classList.add('show');
+            document.getElementById('loading').style.display = 'block';
 
             const payload = {
                 sessionId: sessionId,
                 deviceId: getDeviceId(),
                 displayName: document.getElementById('displayName').value.trim(),
-                mainDomain: document.getElementById('mainDomain').value,
-                secondDomain: document.getElementById('secondDomain').value || null,
-                workStyle: document.getElementById('workStyle').value,
-                teamStyle: document.getElementById('teamStyle').value,
-                workPace: document.getElementById('workPace').value,
-                teamRole: document.getElementById('teamRole').value,
-                motivationSource: document.getElementById('motivationSource').value,
-                pressureResponse: document.getElementById('pressureResponse').value,
-                conflictStyle: document.getElementById('conflictStyle').value,
-                communicationStyle: document.getElementById('communicationStyle').value,
-                lifeInterest: document.getElementById('lifeInterest').value.trim() || null,
-                importanceLevel: document.getElementById('importanceLevel').value,
+                mainDomain: selections.mainDomain,
+                secondDomain: selections.secondDomain,
+                workStyle: selections.workStyle,
+                teamStyle: selections.teamStyle,
+                workPace: selections.workPace,
+                teamRole: selections.teamRole,
+                motivationSource: selections.motivationSource,
+                pressureResponse: selections.pressureResponse,
+                conflictStyle: selections.conflictStyle,
+                communicationStyle: selections.communicationStyle,
+                lifeInterest: selections.lifeInterest,
+                importanceLevel: selections.importanceLevel,
                 createdAt: new Date().toISOString()
             };
 
@@ -552,23 +619,16 @@
                     completedCount: increment(1)
                 });
 
-                alert('תודה! התשובות שלך נשמרו בהצלחה 🎉');
-                window.location.href = 'pairing.html';
+                // הצלחה!
+                alert('תשובותיך נשמרו בהצלחה! תודה על ההשתתפות 🎉');
+                window.location.href = 'thank-you.html';
             } catch (error) {
-                console.error('Error saving:', error);
-                alert('שגיאה בשמירת הנתונים. אנא נסי שוב.');
-                document.getElementById('loading').classList.remove('show');
+                console.error('Error:', error);
+                alert('שגיאה בשמירת התשובות. אנא נסי שוב.');
+                document.getElementById('loading').style.display = 'none';
             }
         };
 
-        function getDeviceId() {
-            let deviceId = localStorage.getItem('deviceId');
-            if (!deviceId) {
-                deviceId = crypto.randomUUID();
-                localStorage.setItem('deviceId', deviceId);
-            }
-            return deviceId;
-        }
     </script>
 </body>
 </html>
