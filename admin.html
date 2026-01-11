@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ניהול פעילות | פורצות דרך</title>
+<link rel="stylesheet" href="pairing-styles.css">
+</head>
+
+<body>
+<div class="container">
+
+  <!-- מסך ניהול -->
+  <div class="card" id="managementScreen">
+    <h1>ניהול פעילות זיווג</h1>
+    <p>מעקב אחר התקדמות המשתתפות בזמן אמת</p>
+    
+    <div class="progress-big" id="progressCount">0 / 0</div>
+    <div class="progress-label">משתתפות שהשלימו את השאלון</div>
+    
+    <div style="margin-top:24px">
+      <label for="expectedCount">מספר משתתפות צפוי:</label>
+      <input id="expectedCount" type="number" inputmode="numeric" placeholder="10" style="width:100px;margin:0 8px">
+      <button id="activateBtn" class="primary" type="button">התחל פעילות</button>
+    </div>
+    
+    <div style="margin-top:20px">
+      <button id="refreshProgressBtn" class="secondary" type="button">🔄 עדכון משתתפות</button>
+      <button id="generatePairsBtn" class="primary hidden" type="button" style="margin-right:8px">💕 מחולל זוגות</button>
+    </div>
+    
+    <button id="resetSystemBtn" class="secondary" type="button" style="margin-top:12px;background:rgba(255,59,58,.1);border-color:rgba(255,59,58,.3);color:#ff6b6b">🗑️ איפוס מערכת</button>
+    
+    <p class="small-note" id="managementNote" style="text-align:center;margin-top:20px">
+      ממתינה שכל המשתתפות ישלימו את השאלון...
+    </p>
+    
+    <div id="barStatus" style="text-align:center;margin-top:16px;color:var(--muted);font-size:14px">
+      טוען...
+    </div>
+  </div>
+
+  <!-- מסך תוצאות זיווג (למדריכה) -->
+  <div class="card hidden" id="pairing">
+    <h1>מסך החיבורים - כל הזוגות</h1>
+    <p>שותפות טובה נבנית משילוב של <strong>תחומי עניין משותפים</strong> ודרך עבודה משלימה.</p>
+    <p class="small-note">זוהי מיומנות מרכזית בעולם ההייטק: לדעת לעבוד יחד, לחלוק אחריות, ולנוע קדימה כצוות.</p>
+    <div id="pairingResult"></div>
+    <button class="secondary" type="button" onclick="location.reload()">חזרה לניהול</button>
+  </div>
+
+</div>
+
+<script type="module" src="admin-app.js"></script>
+</body>
+</html>
