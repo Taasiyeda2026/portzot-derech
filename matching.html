@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מנוע שותפות - פורצות דרך</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000;
+            color: #fff;
+            min-height: 100vh;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(255,20,147,0.15) 0%, transparent 70%);
+            pointer-events: none;
+            animation: pulseGlow 4s ease-in-out infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ff1493;
+            text-shadow: 0 0 20px rgba(255,20,147,0.7);
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: rgba(20, 20, 20, 0.95);
+            border: 2px solid #ff1493;
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 0 30px rgba(255,20,147,0.3);
+        }
+
+        .input-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            color: #ff69b4;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid #ff1493;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #ff1493, #ff69b4);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255,20,147,0.4);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255,20,147,0.6);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .results {
+            display: none;
+        }
+
+        .results.show {
+            display: block;
+        }
+
+        .pair {
+            background: rgba(255,20,147,0.1);
+            border: 1px solid #ff1493;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .pair h3 {
+            color: #ff69b4;
+            margin-bottom: 12px;
+        }
+
+        .pair-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pair-names {
+            flex: 1;
+        }
+
+        .score {
+            background: linear-gradient(135deg, #ff1493, #ff69b4);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            display: none;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .error {
+            background: rgba(255,50,50,0.2);
+            border: 1px solid #ff3232;
+            border-radius: 8px;
+            padding: 16px;
+            color: #ff6b6b;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .error.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 מנוע שותפות 🎯</h1>
+
+        <div class="card">
+            <div class="input-group">
+                <label for="sessionId">קוד סשן/פעילות</label>
+                <input type="text" id="sessionId" placeholder="הזן קוד סשן...">
+            </div>
+            <button onclick="runMatching()">הפעל שותפות</button>
+            <div class="error" id="error"></div>
+        </div>
+
+        <div class="loading" id="loading">
+            <p>מחשב שותפותים אופטימליים...</p>
+        </div>
+
+        <div class="results" id="results"></div>
+    </div>
+
+    <!-- Firebase Firestore -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, query, where, getDocs, doc, setDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';        const firebaseConfig = {
+            apiKey: "AIzaSyCFSq5b-HgkTxFNhBJIBdOe2ian5TZvMPE",
+            authDomain: "portzot-derech.firebaseapp.com",
+            projectId: "portzot-derech",
+            storageBucket: "portzot-derech.firebasestorage.app",
+            messagingSenderId: "236417614890",
+            appId: "1:236417614890:web:587b0eb3c5eedfa352af53"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        db._settings.experimentalForceLongPolling = true;
+        console.log("✅ Firestore connection: OK");
+
+        window.runMatching = async function() {
+            const sessionId = document.getElementById('sessionId').value.trim();
+            if (!sessionId) {
+                showError('אנא הזן קוד סשן');
+                return;
+            }
+
+            document.getElementById('loading').classList.add('show');
+            document.getElementById('error').classList.remove('show');
+            document.getElementById('results').classList.remove('show');
+
+            try {
+                // שליפת כל התשובות של הסשן
+                const responsesQuery = query(
+                    collection(db, 'responses'),
+                    where('sessionId', '==', sessionId)
+                );
+                const snapshot = await getDocs(responsesQuery);
+
+                if (snapshot.empty) {
+                    showError('לא נמצאו תשובות לסשן זה');
+                    return;
+                }
+
+                const responses = [];
+                snapshot.forEach(doc => {
+                    responses.push({ id: doc.id, ...doc.data() });
+                });
+
+                // הרצת אלגוריתם השותפות
+                const pairs = pickBestPairs(responses);
+
+                // שמירת השותפותים ב-Firestore
+                await setDoc(doc(db, 'pairings', sessionId), {
+                    pairs: pairs,
+                    totalParticipants: responses.length,
+                    createdAt: new Date().toISOString()
+                });
+
+                // הצגת התוצאות
+                displayResults(pairs);
+
+            } catch (error) {
+                console.error('Error:', error);
+                showError('שגיאה בחישוב השותפותים: ' + error.message);
+            } finally {
+                document.getElementById('loading').classList.remove('show');
+            }
+        };
+
+        function calculateScore(a, b) {
+  let score = 0;
+  let reasons = [];
+
+  // ====== תחומי עניין (30 נקודות מקס) ======
+  
+  if (a.mainDomain === b.mainDomain) {
+    score += 15;
+    reasons.push(`שתיכן בחרתן ב${a.mainDomain} כתחום עיקרי`);
+  }
+  
+  if (a.mainDomain === b.secondDomain && b.secondDomain !== "אני מעדיפה להתמקד בתחום אחד") {
+    score += 8;
+    reasons.push(`${b.displayName || 'השותפה'} מתעניינת גם ב${a.mainDomain}`);
+  }
+  if (b.mainDomain === a.secondDomain && a.secondDomain !== "אני מעדיפה להתמקד בתחום אחד") {
+    score += 8;
+    reasons.push(`${a.displayName || 'את'} מתעניינת גם ב${b.mainDomain}`);
+  }
+  
+  if (a.secondDomain === b.secondDomain && 
+      a.secondDomain !== "אני מעדיפה להתמקד בתחום אחד") {
+    score += 5;
+  }
+  
+  if (a.secondDomain === "אני מעדיפה להתמקד בתחום אחד" && 
+      b.secondDomain === "אני מעדיפה להתמקד בתחום אחד") {
+    score += 3;
+  }
+
+  // ====== סגנון עבודה (25 נקודות מקס) ======
+  
+  if (a.workStyle !== b.workStyle) {
+    score += 8;
+    reasons.push('סגנונות עבודה משלימים');
+  } else {
+    score += 2;
+  }
+  
+  if (a.teamStyle !== b.teamStyle) {
+    score += 7;
+    reasons.push('אחת חושבת בקול ואחת מעבדת בשקט');
+  } else {
+    score += 3;
+  }
+  
+  if (a.workPace === b.workPace && a.workPace !== "תלוי במשימה - אני גמישה") {
+    score += 5;
+  } else if (a.workPace === "תלוי במשימה - אני גמישה" || 
+             b.workPace === "תלוי במשימה - אני גמישה") {
+    if (a.workPace === "תלוי במשימה - אני גמישה" && 
+        b.workPace === "תלוי במשימה - אני גמישה") {
+      score += 8;
+      reasons.push('שתיכן גמישות בקצב העבודה');
+    } else {
+      score += 6;
+    }
+  } else if ((a.workPace === "אני אוהבת לעבוד מהר ולסיים מוקדם" && 
+              b.workPace === "אני מעדיפה לקחת זמן ולעשות בדיוק") ||
+             (b.workPace === "אני אוהבת לעבוד מהר ולסיים מוקדם" && 
+              a.workPace === "אני מעדיפה לקחת זמן ולעשות בדיוק")) {
+    score -= 3;
+  }
+
+  // ====== תפקיד בצוות (20 נקודות מקס) ======
+  
+  if (a.teamRole !== b.teamRole) {
+    score += 7;
+    
+    if ((a.teamRole === "למצוא רעיונות מקוריים ולהתחיל דברים חדשים" && 
+         b.teamRole === "לארגן משימות ולוודא שהכל זורם בזמן") ||
+        (b.teamRole === "למצוא רעיונות מקוריים ולהתחיל דברים חדשים" && 
+         a.teamRole === "לארגן משימות ולוודא שהכל זורם בזמן")) {
+      score += 2;
+      reasons.push('קומבינציה מושלמת: רעיונות + ארגון');
+    }
+    
+    if ((a.teamRole === "לעזור לאחרות להבין ולהסביר מושגים מורכבים" && 
+         b.teamRole === "לפתור בעיות טכניות כשמשהו תקוע") ||
+        (b.teamRole === "לעזור לאחרות להבין ולהסביר מושגים מורכבים" && 
+         a.teamRole === "לפתור בעיות טכניות כשמשהו תקוע")) {
+      score += 1;
+    }
+  } else {
+    score += 2;
+  }
+  
+  if (a.motivationSource === b.motivationSource) {
+    score += 6;
+    reasons.push('אותה מוטיבציה מניעה את שתיכן');
+  } else {
+    score += 3;
+  }
+
+  // ====== תקשורת ומתח (25 נקודות מקס) ======
+  
+  if ((a.pressureResponse === "אני פועלת הכי טוב תחת לחץ - זה מניע אותי" && 
+       b.pressureResponse === "אני צריכה לתכנן מראש כדי למנוע לחץ") ||
+      (b.pressureResponse === "אני פועלת הכי טוב תחת לחץ - זה מניע אותי" && 
+       a.pressureResponse === "אני צריכה לתכנן מראש כדי למנוע לחץ")) {
+    score += 9;
+    reasons.push('איזון מושלם בניהול לחץ');
+  } else if ((a.pressureResponse === "אני פועלת הכי טוב תחת לחץ - זה מניע אותי" && 
+              b.pressureResponse === "אני לוקחת הפסקה קצרה ואז חוזרת בכוח") ||
+             (b.pressureResponse === "אני פועלת הכי טוב תחת לחץ - זה מניע אותי" && 
+              a.pressureResponse === "אני לוקחת הפסקה קצרה ואז חוזרת בכוח")) {
+    score += 6;
+  } else {
+    score += 4;
+  }
+  
+  if ((a.conflictStyle === "עוצרת ומנסה להבין לעומק את הצד השני" && 
+       b.conflictStyle === "מציגה את העמדה שלי בבירור ומנסה לשכנע") ||
+      (b.conflictStyle === "עוצרת ומנסה להבין לעומק את הצד השני" && 
+       a.conflictStyle === "מציגה את העמדה שלי בבירור ומנסה לשכנע")) {
+    score += 8;
+    reasons.push('שילוב מעולה: אחת מקשיבה ואחת מובילה');
+  } else if (a.conflictStyle === "מחפשת פשרה שמשלבת את שני הצדדים" || 
+             b.conflictStyle === "מחפשת פשרה שמשלבת את שני הצדדים") {
+    if (a.conflictStyle === b.conflictStyle) {
+      score += 9;
+      reasons.push('שתיכן מחפשות פשרות');
+    } else {
+      score += 7;
+    }
+  } else if (a.conflictStyle === b.conflictStyle && 
+             a.conflictStyle === "מציגה את העמדה שלי בבירור ומנסה לשכנע") {
+    score += 1;
+  } else {
+    score += 5;
+  }
+  
+  if (a.communicationStyle === b.communicationStyle && 
+      a.communicationStyle !== "לא משנה לי - אני גמישה") {
+    score += 8;
+    reasons.push('אותו סגנון תקשורת מועדף');
+  } else if (a.communicationStyle === "לא משנה לי - אני גמישה" || 
+             b.communicationStyle === "לא משנה לי - אני גמישה") {
+    score += 7;
+  } else {
+    score += 2;
+  }
+
+  // ====== תחומי עניין אישיים (10 נקודות מקס) ======
+  
+  if (a.lifeInterest === b.lifeInterest) {
+    score += 4;
+  } else {
+    score += 1;
+  }
+
+  // ====== כפל לפי חשיבות ======
+  
+  let multiplier = 1;
+  if (a.importanceLevel === "מאוד חשוב - אני רוצה התאמה הכי טובה" ||
+      b.importanceLevel === "מאוד חשוב - אני רוצה התאמה הכי טובה") {
+    multiplier = 1.3;
+  }
+  
+  score = score * multiplier;
+
+  // רעש קטן
+  const nameKey = (a.displayName + '|' + b.displayName)
+    .split('')
+    .reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
+  score += (nameKey % 7) * 0.01;
+
+  return { score: Math.round(score * 100) / 100, reasons };
+}
+
+
+        }
+
+        function pickBestPairs(participants) {
+            const n = participants.length;
+            const pairs = [];
+            const used = new Set();
+
+            // מיפוי כל הזוגות האפשריים
+            const scores = [];
+            for (let i = 0; i < n; i++) {
+                for (let j = i + 1; j < n; j++) {
+                    const score = calculateScore(participants[i], participants[j]);
+                    scores.push({ i, j, score });
+                }
+            }
+
+            // מיון לפי ציון (מהגבוה לנמוך)
+            scores.sort((a, b) => b.score - a.score);
+
+            // בחירה greedy - הזוג הטוב ביותר הזמין
+            for (const { i, j, score } of scores) {
+                if (!used.has(i) && !used.has(j)) {
+                    pairs.push({
+                        person1: participants[i].displayName,
+                        person2: participants[j].displayName,
+                        score: score
+                    });
+                    used.add(i);
+                    used.add(j);
+                }
+            }
+
+            // טיפול במקרה של מספר אי-זוגי
+            if (used.size < n) {
+                const leftOver = [];
+                for (let i = 0; i < n; i++) {
+                    if (!used.has(i)) {
+                        leftOver.push(participants[i].displayName);
+                    }
+                }
+                if (leftOver.length > 0) {
+                    pairs.push({
+                        person1: leftOver[0],
+                        person2: leftOver[1] || null,
+                        person3: leftOver[2] || null,
+                        score: 0,
+                        isLeftover: true
+                    });
+                }
+            }
+
+            return pairs;
+        }
+
+        function displayResults(pairs) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<div class="card"><h2>תוצאות השותפות</h2></div>';
+
+            pairs.forEach((pair, index) => {
+                const pairDiv = document.createElement('div');
+                pairDiv.className = 'pair';
+
+                if (pair.isLeftover) {
+                    pairDiv.innerHTML = `
+                        <h3>קבוצה ${index + 1} (משתתפות נוספות)</h3>
+                        <div class="pair-info">
+                            <div class="pair-names">
+                                <p>${pair.person1}</p>
+                                ${pair.person2 ? `<p>${pair.person2}</p>` : ''}
+                                ${pair.person3 ? `<p>${pair.person3}</p>` : ''}
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    pairDiv.innerHTML = `
+                        <h3>זוג ${index + 1}</h3>
+                        <div class="pair-info">
+                            <div class="pair-names">
+                                <p>${pair.person1} 💖 ${pair.person2}</p>
+                            </div>
+                            <div class="score">${pair.score}</div>
+                        </div>
+                    `;
+                }
+
+                resultsDiv.appendChild(pairDiv);
+            });
+
+            resultsDiv.classList.add('show');
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = message;
+            errorDiv.classList.add('show');
+            document.getElementById('loading').classList.remove('show');
+        }
+    </script>
+</body>
+</html>
