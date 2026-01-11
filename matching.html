@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>מנוע זיווג - פורצות דרך</title>
+    <title>מנוע שותפות - פורצות דרך</title>
     <style>
         * {
             margin: 0;
@@ -171,19 +171,19 @@
 </head>
 <body>
     <div class="container">
-        <h1>🎯 מנוע זיווג 🎯</h1>
+        <h1>🎯 מנוע שותפות 🎯</h1>
 
         <div class="card">
             <div class="input-group">
                 <label for="sessionId">קוד סשן/פעילות</label>
                 <input type="text" id="sessionId" placeholder="הזן קוד סשן...">
             </div>
-            <button onclick="runMatching()">הפעל זיווג</button>
+            <button onclick="runMatching()">הפעל שותפות</button>
             <div class="error" id="error"></div>
         </div>
 
         <div class="loading" id="loading">
-            <p>מחשב זיווגים אופטימליים...</p>
+            <p>מחשב שותפותים אופטימליים...</p>
         </div>
 
         <div class="results" id="results"></div>
@@ -192,19 +192,19 @@
     <!-- Firebase Firestore -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getFirestore, collection, query, where, getDocs, doc, setDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-        db._settings.experimentalForceLongPolling = true;
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
+        import { getFirestore, collection, query, where, getDocs, doc, setDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';        const firebaseConfig = {
+            apiKey: "AIzaSyCFSq5b-HgkTxFNhBJIBdOe2ian5TZvMPE",
+            authDomain: "portzot-derech.firebaseapp.com",
+            projectId: "portzot-derech",
+            storageBucket: "portzot-derech.firebasestorage.app",
+            messagingSenderId: "236417614890",
+            appId: "1:236417614890:web:587b0eb3c5eedfa352af53"
         };
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        db._settings.experimentalForceLongPolling = true;
+        console.log("✅ Firestore connection: OK");
 
         window.runMatching = async function() {
             const sessionId = document.getElementById('sessionId').value.trim();
@@ -235,10 +235,10 @@
                     responses.push({ id: doc.id, ...doc.data() });
                 });
 
-                // הרצת אלגוריתם הזיווג
+                // הרצת אלגוריתם השותפות
                 const pairs = pickBestPairs(responses);
 
-                // שמירת הזיווגים ב-Firestore
+                // שמירת השותפותים ב-Firestore
                 await setDoc(doc(db, 'pairings', sessionId), {
                     pairs: pairs,
                     totalParticipants: responses.length,
@@ -250,7 +250,7 @@
 
             } catch (error) {
                 console.error('Error:', error);
-                showError('שגיאה בחישוב הזיווגים: ' + error.message);
+                showError('שגיאה בחישוב השותפותים: ' + error.message);
             } finally {
                 document.getElementById('loading').classList.remove('show');
             }
@@ -375,7 +375,7 @@
 
         function displayResults(pairs) {
             const resultsDiv = document.getElementById('results');
-            resultsDiv.innerHTML = '<div class="card"><h2>תוצאות הזיווג</h2></div>';
+            resultsDiv.innerHTML = '<div class="card"><h2>תוצאות השותפות</h2></div>';
 
             pairs.forEach((pair, index) => {
                 const pairDiv = document.createElement('div');
