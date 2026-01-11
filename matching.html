@@ -1,455 +1,421 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>מנוע זיווג | פורצות דרך</title>
-  
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #000000;
-      color: #ffffff;
-      min-height: 100vh;
-      padding: 40px 20px;
-    }
-    
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-    }
-    
-    h1 {
-      font-size: 32px;
-      text-align: center;
-      margin-bottom: 40px;
-      background: linear-gradient(135deg, #ff1493, #ff69b4);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    
-    .btn {
-      width: 100%;
-      padding: 18px;
-      font-size: 18px;
-      font-weight: 700;
-      background: linear-gradient(135deg, #ff1493, #ff69b4);
-      color: white;
-      border: none;
-      border-radius: 14px;
-      cursor: pointer;
-      margin-bottom: 32px;
-    }
-    
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(255, 20, 147, 0.6);
-    }
-    
-    .status {
-      text-align: center;
-      padding: 16px;
-      border-radius: 12px;
-      margin-bottom: 24px;
-      background: rgba(76, 175, 80, 0.2);
-      border: 1px solid rgba(76, 175, 80, 0.4);
-    }
-    
-    .pairs-container {
-      display: grid;
-      gap: 20px;
-    }
-    
-    .pair-card {
-      background: rgba(30, 30, 35, 0.95);
-      border: 1px solid rgba(255, 20, 147, 0.3);
-      border-radius: 16px;
-      padding: 24px;
-    }
-    
-    .pair-header {
-      font-size: 20px;
-      font-weight: 700;
-      color: #ff69b4;
-      margin-bottom: 12px;
-    }
-    
-    .pair-members {
-      font-size: 18px;
-      margin-bottom: 8px;
-    }
-    
-    .pair-score {
-      color: rgba(255, 255, 255, 0.7);
-      font-size: 16px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מנוע זיווג - פורצות דרך</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000;
+            color: #fff;
+            min-height: 100vh;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(255,20,147,0.15) 0%, transparent 70%);
+            pointer-events: none;
+            animation: pulseGlow 4s ease-in-out infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ff1493;
+            text-shadow: 0 0 20px rgba(255,20,147,0.7);
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: rgba(20, 20, 20, 0.95);
+            border: 2px solid #ff1493;
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 0 30px rgba(255,20,147,0.3);
+        }
+
+        .input-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            color: #ff69b4;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid #ff1493;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #ff1493, #ff69b4);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255,20,147,0.4);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255,20,147,0.6);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .results {
+            display: none;
+        }
+
+        .results.show {
+            display: block;
+        }
+
+        .pair {
+            background: rgba(255,20,147,0.1);
+            border: 1px solid #ff1493;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .pair h3 {
+            color: #ff69b4;
+            margin-bottom: 12px;
+        }
+
+        .pair-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pair-names {
+            flex: 1;
+        }
+
+        .score {
+            background: linear-gradient(135deg, #ff1493, #ff69b4);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            display: none;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .error {
+            background: rgba(255,50,50,0.2);
+            border: 1px solid #ff3232;
+            border-radius: 8px;
+            padding: 16px;
+            color: #ff6b6b;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .error.show {
+            display: block;
+        }
+    </style>
 </head>
-
 <body>
+    <div class="container">
+        <h1>🎯 מנוע זיווג 🎯</h1>
 
-  <div class="container">
-    <h1>🔗 מנוע זיווג אוטומטי</h1>
-    
-    <button class="btn" onclick="runMatching()">🚀 הרץ חישוב זיווג</button>
-    
-    <div id="status"></div>
-    <div id="results" class="pairs-container"></div>
-  </div>
+        <div class="card">
+            <div class="input-group">
+                <label for="sessionId">קוד סשן/פעילות</label>
+                <input type="text" id="sessionId" placeholder="הזן קוד סשן...">
+            </div>
+            <button onclick="runMatching()">הפעל זיווג</button>
+            <div class="error" id="error"></div>
+        </div>
 
-  <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-    import { getDatabase, ref, get, set } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+        <div class="loading" id="loading">
+            <p>מחשב זיווגים אופטימליים...</p>
+        </div>
 
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_AUTH_DOMAIN",
-      databaseURL: "YOUR_DATABASE_URL",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_STORAGE_BUCKET",
-      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-      appId: "YOUR_APP_ID"
-    };
+        <div class="results" id="results"></div>
+    </div>
 
-    const app = initializeApp(firebaseConfig);
-    const database = getDatabase(app);
+    <!-- Firebase Firestore -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, query, where, getDocs, doc, setDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const activityCode = urlParams.get('code') || 'default_activity';
-
-    // ========================================
-    // אלגוריתם ניקוד משופר (מהקוד שלך)
-    // ========================================
-
-    function calculateScore(a, b) {
-      let score = 0;
-      let reasons = [];
-
-      // תחומי עניין (30 נקודות מקס)
-      if (a.mainDomain === b.mainDomain) {
-        score += 15;
-        reasons.push(`שתיכן בחרתן ב${a.mainDomain} כתחום עיקרי`);
-      }
-      
-      if (a.mainDomain === b.secondDomain && b.secondDomain !== "אני מעדיפה להתמקד בתחום אחד") {
-        score += 8;
-        reasons.push(`${b.displayName} מתעניינת גם ב${a.mainDomain}`);
-      }
-      if (b.mainDomain === a.secondDomain && a.secondDomain !== "אני מעדיפה להתמקד בתחום אחד") {
-        score += 8;
-        reasons.push(`${a.displayName} מתעניינת גם ב${b.mainDomain}`);
-      }
-      
-      if (a.secondDomain === b.secondDomain && 
-          a.secondDomain !== "אני מעדיפה להתמקד בתחום אחד") {
-        score += 5;
-      }
-      
-      if (a.secondDomain === "אני מעדיפה להתמקד בתחום אחד" && 
-          b.secondDomain === "אני מעדיפה להתמקד בתחום אחד") {
-        score += 3;
-      }
-
-      // סגנון עבודה (25 נקודות מקס)
-      if (a.workStyle !== b.workStyle) {
-        score += 8;
-        reasons.push('סגנונות עבודה משלימים');
-      } else {
-        score += 2;
-      }
-      
-      if (a.teamStyle !== b.teamStyle) {
-        score += 7;
-        reasons.push('איזון מצוין בתקשורת');
-      } else {
-        score += 3;
-      }
-      
-      if (a.workPace === b.workPace && a.workPace !== "תלוי במשימה - אני גמישה") {
-        score += 5;
-      } else if (a.workPace === "תלוי במשימה - אני גמישה" || 
-                 b.workPace === "תלוי במשימה - אני גמישה") {
-        if (a.workPace === "תלוי במשימה - אני גמישה" && 
-            b.workPace === "תלוי במשימה - אני גמישה") {
-          score += 8;
-          reasons.push('שתיכן גמישות בקצב');
-        } else {
-          score += 6;
-        }
-      } else if ((a.workPace === "אני אוהבת לעבוד מהר ולסיים מוקדם" && 
-                  b.workPace === "אני מעדיפה לקחת זמן ולעשות בדיוק") ||
-                 (b.workPace === "אני אוהבת לעבוד מהר ולסיים מוקדם" && 
-                  a.workPace === "אני מעדיפה לקחת זמן ולעשות בדיוק")) {
-        score -= 3;
-      }
-
-      // תפקיד בצוות (20 נקודות מקס)
-      if (a.teamRole !== b.teamRole) {
-        score += 7;
-        
-        if ((a.teamRole === "למצוא רעיונות מקוריים ולהתחיל דברים חדשים" && 
-             b.teamRole === "לארגן משימות ולוודא שהכל זורם בזמן") ||
-            (b.teamRole === "למצוא רעיונות מקוריים ולהתחיל דברים חדשים" && 
-             a.teamRole === "לארגן משימות ולוודא שהכל זורם בזמן")) {
-          score += 2;
-          reasons.push('קומבו מושלם: רעיונות + ארגון');
-        }
-      } else {
-        score += 2;
-      }
-      
-      if (a.motivationSource === b.motivationSource) {
-        score += 6;
-        reasons.push('אותה מוטיבציה');
-      } else {
-        score += 3;
-      }
-
-      // תקשורת ומתח (25 נקודות מקס)
-      if ((a.pressureResponse === "אני פועלת הכי טוב תחת לחץ - זה מניע אותי" && 
-           b.pressureResponse === "אני צריכה לתכנן מראש כדי למנוע לחץ") ||
-          (b.pressureResponse === "אני פועלת הכי טוב תחת לחץ - זה מניע אותי" && 
-           a.pressureResponse === "אני צריכה לתכנן מראש כדי למנוע לחץ")) {
-        score += 9;
-        reasons.push('איזון מושלם בניהול לחץ');
-      } else if ((a.pressureResponse === "אני פועלת הכי טוב תחת לחץ - זה מניע אותי" && 
-                  b.pressureResponse === "אני לוקחת הפסקה קצרה ואז חוזרת בכוח") ||
-                 (b.pressureResponse === "אני פועלת הכי טוב תחת לחץ - זה מניע אותי" && 
-                  a.pressureResponse === "אני לוקחת הפסקה קצרה ואז חוזרת בכוח")) {
-        score += 6;
-      } else {
-        score += 4;
-      }
-      
-      if ((a.conflictStyle === "עוצרת ומנסה להבין לעומק את הצד השני" && 
-           b.conflictStyle === "מציגה את העמדה שלי בבירור ומנסה לשכנע") ||
-          (b.conflictStyle === "עוצרת ומנסה להבין לעומק את הצד השני" && 
-           a.conflictStyle === "מציגה את העמדה שלי בבירור ומנסה לשכנע")) {
-        score += 8;
-        reasons.push('שילוב: אחת מקשיבה ואחת מובילה');
-      } else if (a.conflictStyle === "מחפשת פשרה שמשלבת את שני הצדדים" || 
-                 b.conflictStyle === "מחפשת פשרה שמשלבת את שני הצדדים") {
-        if (a.conflictStyle === b.conflictStyle) {
-          score += 9;
-          reasons.push('שתיכן מחפשות פשרות');
-        } else {
-          score += 7;
-        }
-      } else {
-        score += 5;
-      }
-      
-      if (a.communicationStyle === b.communicationStyle && 
-          a.communicationStyle !== "לא משנה לי - אני גמישה") {
-        score += 8;
-        reasons.push('אותו סגנון תקשורת');
-      } else if (a.communicationStyle === "לא משנה לי - אני גמישה" || 
-                 b.communicationStyle === "לא משנה לי - אני גמישה") {
-        score += 7;
-      } else {
-        score += 2;
-      }
-
-      // תחומי עניין אישיים (10 נקודות מקס)
-      if (a.lifeInterest === b.lifeInterest) {
-        score += 4;
-      } else {
-        score += 1;
-      }
-
-      // כפל לפי חשיבות
-      let multiplier = 1;
-      if (a.importanceLevel === "מאוד חשוב - אני רוצה התאמה הכי טובה" ||
-          b.importanceLevel === "מאוד חשוב - אני רוצה התאמה הכי טובה") {
-        multiplier = 1.3;
-      }
-      
-      score = score * multiplier;
-
-      // רעש לשבירת שוויון
-      const nameKey = (a.displayName + '|' + b.displayName)
-        .split('')
-        .reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
-      score += (nameKey % 7) * 0.01;
-
-      return { score: Math.round(score * 100) / 100, reasons };
-    }
-
-    // ========================================
-    // פונקציה לבחירת זוגות אופטימליים
-    // ========================================
-
-    function pickBestPairs(students) {
-      const n = students.length;
-      
-      function greedyPairing() {
-        let available = [...students];
-        let pairs = [];
-        
-        while (available.length > 1) {
-          let bestPair = { i: -1, j: -1, scoreData: { score: -Infinity } };
-          
-          for (let i = 0; i < available.length; i++) {
-            for (let j = i + 1; j < available.length; j++) {
-              const scoreData = calculateScore(available[i], available[j]);
-              if (scoreData.score > bestPair.scoreData.score) {
-                bestPair = { i, j, scoreData };
-              }
-            }
-          }
-          
-          if (bestPair.i !== -1) {
-            pairs.push({
-              a: available[bestPair.i],
-              b: available[bestPair.j],
-              scoreData: bestPair.scoreData
-            });
-            
-            available = available.filter((_, idx) => 
-              idx !== bestPair.i && idx !== bestPair.j
-            );
-          }
-        }
-        
-        return { pairs, remaining: available };
-      }
-
-      const result = greedyPairing();
-      let pairs = result.pairs;
-      let trio = null;
-
-      // טיפול במספר אי-זוגי
-      if (result.remaining.length === 1 && pairs.length > 0) {
-        const lone = result.remaining[0];
-        let bestTrioIdx = 0;
-        let bestTrioScore = -Infinity;
-        
-        for (let k = 0; k < pairs.length; k++) {
-          const score1 = calculateScore(lone, pairs[k].a).score;
-          const score2 = calculateScore(lone, pairs[k].b).score;
-          const totalScore = score1 + score2;
-          
-          if (totalScore > bestTrioScore) {
-            bestTrioScore = totalScore;
-            bestTrioIdx = k;
-          }
-        }
-        
-        trio = {
-          lone,
-          withPairIndex: bestTrioIdx
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
         };
-      }
 
-      return { pairs, trio };
-    }
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
-    // ========================================
-    // הרצת הזיווג
-    // ========================================
+        window.runMatching = async function() {
+            const sessionId = document.getElementById('sessionId').value.trim();
+            if (!sessionId) {
+                showError('אנא הזן קוד סשן');
+                return;
+            }
 
-    window.runMatching = async () => {
-      const statusDiv = document.getElementById('status');
-      const resultsDiv = document.getElementById('results');
-      
-      statusDiv.innerHTML = '⏳ טוען תשובות...';
-      resultsDiv.innerHTML = '';
+            document.getElementById('loading').classList.add('show');
+            document.getElementById('error').classList.remove('show');
+            document.getElementById('results').classList.remove('show');
 
-      try {
-        // שליפת תשובות
-        const responsesRef = ref(database, `responses/${activityCode}`);
-        const snapshot = await get(responsesRef);
-        
-        if (!snapshot.exists()) {
-          statusDiv.innerHTML = '❌ אין תשובות עדיין';
-          return;
+            try {
+                // שליפת כל התשובות של הסשן
+                const responsesQuery = query(
+                    collection(db, 'responses'),
+                    where('sessionId', '==', sessionId)
+                );
+                const snapshot = await getDocs(responsesQuery);
+
+                if (snapshot.empty) {
+                    showError('לא נמצאו תשובות לסשן זה');
+                    return;
+                }
+
+                const responses = [];
+                snapshot.forEach(doc => {
+                    responses.push({ id: doc.id, ...doc.data() });
+                });
+
+                // הרצת אלגוריתם הזיווג
+                const pairs = pickBestPairs(responses);
+
+                // שמירת הזיווגים ב-Firestore
+                await setDoc(doc(db, 'pairings', sessionId), {
+                    pairs: pairs,
+                    totalParticipants: responses.length,
+                    createdAt: new Date().toISOString()
+                });
+
+                // הצגת התוצאות
+                displayResults(pairs);
+
+            } catch (error) {
+                console.error('Error:', error);
+                showError('שגיאה בחישוב הזיווגים: ' + error.message);
+            } finally {
+                document.getElementById('loading').classList.remove('show');
+            }
+        };
+
+        function calculateScore(p1, p2) {
+            let score = 0;
+
+            // תחומי עניין (30 נקודות)
+            if (p1.mainDomain === p2.mainDomain) score += 15;
+            if (p1.mainDomain === p2.secondDomain) score += 10;
+            if (p1.secondDomain === p2.mainDomain) score += 10;
+            if (p1.secondDomain && p2.secondDomain && p1.secondDomain === p2.secondDomain) score += 5;
+            if (p1.mainDomain !== p2.mainDomain && p1.mainDomain !== p2.secondDomain) score += 5;
+
+            // סגנון עבודה (25 נקודות)
+            if ((p1.workStyle === 'structured' && p2.workStyle === 'flexible') ||
+                (p1.workStyle === 'flexible' && p2.workStyle === 'structured')) score += 10;
+            if ((p1.workStyle === 'detail' && p2.workStyle === 'creative') ||
+                (p1.workStyle === 'creative' && p2.workStyle === 'detail')) score += 10;
+            if (p1.communicationStyle === p2.communicationStyle) score += 8;
+            if ((p1.workPace === 'fast' && p2.workPace === 'steady') ||
+                (p1.workPace === 'steady' && p2.workPace === 'fast') ||
+                (p1.workPace === 'balanced')) score += 7;
+
+            // תפקיד בצוות (20 נקודות)
+            if ((p1.teamRole === 'ideas' && p2.teamRole === 'organization') ||
+                (p1.teamRole === 'organization' && p2.teamRole === 'ideas')) score += 10;
+            if ((p1.teamRole === 'implementation' && p2.teamRole === 'testing') ||
+                (p1.teamRole === 'testing' && p2.teamRole === 'implementation')) score += 10;
+            if (p1.teamRole !== p2.teamRole) score += 5;
+
+            // מוטיבציה ותקשורת (25 נקודות)
+            if (p1.motivationSource === p2.motivationSource) score += 8;
+            if ((p1.pressureResponse === 'thrives' && p2.pressureResponse === 'prefers_calm') ||
+                (p1.pressureResponse === 'prefers_calm' && p2.pressureResponse === 'thrives') ||
+                (p1.pressureResponse === 'handles' || p2.pressureResponse === 'handles')) score += 8;
+            if (p1.conflictStyle !== p2.conflictStyle) score += 6;
+            if (p1.communicationStyle === p2.communicationStyle) score += 3;
+
+            // תחומי עניין אישיים (10 נקודות)
+            if (p1.lifeInterest && p2.lifeInterest) {
+                const interests1 = p1.lifeInterest.toLowerCase().split(/[,،\/\s]+/);
+                const interests2 = p2.lifeInterest.toLowerCase().split(/[,،\/\s]+/);
+                const common = interests1.filter(i => interests2.includes(i)).length;
+                score += Math.min(common * 3, 10);
+            }
+
+            // כפל לפי חשיבות
+            const importance1 = getImportanceMultiplier(p1.importanceLevel);
+            const importance2 = getImportanceMultiplier(p2.importanceLevel);
+            score *= (importance1 + importance2) / 2;
+
+            // noise קטן למניעת שוויון
+            const noise = (p1.displayName.charCodeAt(0) + p2.displayName.charCodeAt(0)) % 100 / 1000;
+            score += noise;
+
+            return Math.round(score * 10) / 10;
         }
 
-        const responses = Object.entries(snapshot.val()).map(([id, data]) => ({
-          id,
-          ...data
-        }));
-
-        statusDiv.innerHTML = `🔄 מחשב זיווג עבור ${responses.length} משתתפות...`;
-
-        // חישוב זיווג
-        const { pairs, trio } = pickBestPairs(responses);
-
-        // שמירת הזיווג
-        const pairingsRef = ref(database, `pairings/${activityCode}`);
-        const pairingsData = {};
-
-        pairs.forEach((pair, index) => {
-          const pairId = `pair_${index + 1}`;
-          pairingsData[pairId] = {
-            type: 'pair',
-            members: [
-              { displayName: pair.a.displayName, deviceId: pair.a.deviceId },
-              { displayName: pair.b.displayName, deviceId: pair.b.deviceId }
-            ],
-            deviceIds: [pair.a.deviceId, pair.b.deviceId],
-            score: Math.round(pair.scoreData.score),
-            reasons: pair.scoreData.reasons
-          };
-        });
-
-        if (trio) {
-          const trioId = `trio_1`;
-          const pairMembers = pairs[trio.withPairIndex];
-          pairingsData[trioId] = {
-            type: 'trio',
-            members: [
-              { displayName: trio.lone.displayName, deviceId: trio.lone.deviceId },
-              { displayName: pairMembers.a.displayName, deviceId: pairMembers.a.deviceId },
-              { displayName: pairMembers.b.displayName, deviceId: pairMembers.b.deviceId }
-            ],
-            deviceIds: [trio.lone.deviceId, pairMembers.a.deviceId, pairMembers.b.deviceId]
-          };
+        function getImportanceMultiplier(level) {
+            switch(level) {
+                case 'very_high': return 1.2;
+                case 'high': return 1.1;
+                case 'medium': return 1.0;
+                case 'low': return 0.9;
+                default: return 1.0;
+            }
         }
 
-        await set(pairingsRef, pairingsData);
+        function pickBestPairs(participants) {
+            const n = participants.length;
+            const pairs = [];
+            const used = new Set();
 
-        // הצגת תוצאות
-        statusDiv.innerHTML = `✅ זיווג הושלם! נוצרו ${pairs.length} זוגות${trio ? ' ושלישייה אחת' : ''}`;
-        
-        let html = '';
-        pairs.forEach((pair, index) => {
-          html += `
-            <div class="pair-card">
-              <div class="pair-header">זוג ${index + 1}</div>
-              <div class="pair-members">${pair.a.displayName} ❤️ ${pair.b.displayName}</div>
-              <div class="pair-score">ציון התאמה: ${Math.round(pair.scoreData.score)}</div>
-            </div>
-          `;
-        });
+            // מיפוי כל הזוגות האפשריים
+            const scores = [];
+            for (let i = 0; i < n; i++) {
+                for (let j = i + 1; j < n; j++) {
+                    const score = calculateScore(participants[i], participants[j]);
+                    scores.push({ i, j, score });
+                }
+            }
 
-        if (trio) {
-          const pairMembers = pairs[trio.withPairIndex];
-          html += `
-            <div class="pair-card" style="border-color: #ffd700;">
-              <div class="pair-header">שלישייה מיוחדת ⭐</div>
-              <div class="pair-members">
-                ${trio.lone.displayName}, ${pairMembers.a.displayName}, ${pairMembers.b.displayName}
-              </div>
-            </div>
-          `;
+            // מיון לפי ציון (מהגבוה לנמוך)
+            scores.sort((a, b) => b.score - a.score);
+
+            // בחירה greedy - הזוג הטוב ביותר הזמין
+            for (const { i, j, score } of scores) {
+                if (!used.has(i) && !used.has(j)) {
+                    pairs.push({
+                        person1: participants[i].displayName,
+                        person2: participants[j].displayName,
+                        score: score
+                    });
+                    used.add(i);
+                    used.add(j);
+                }
+            }
+
+            // טיפול במקרה של מספר אי-זוגי
+            if (used.size < n) {
+                const leftOver = [];
+                for (let i = 0; i < n; i++) {
+                    if (!used.has(i)) {
+                        leftOver.push(participants[i].displayName);
+                    }
+                }
+                if (leftOver.length > 0) {
+                    pairs.push({
+                        person1: leftOver[0],
+                        person2: leftOver[1] || null,
+                        person3: leftOver[2] || null,
+                        score: 0,
+                        isLeftover: true
+                    });
+                }
+            }
+
+            return pairs;
         }
 
-        resultsDiv.innerHTML = html;
+        function displayResults(pairs) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<div class="card"><h2>תוצאות הזיווג</h2></div>';
 
-      } catch (error) {
-        console.error('Error:', error);
-        statusDiv.innerHTML = '❌ שגיאה בחישוב הזיווג';
-      }
-    };
-  </script>
+            pairs.forEach((pair, index) => {
+                const pairDiv = document.createElement('div');
+                pairDiv.className = 'pair';
 
+                if (pair.isLeftover) {
+                    pairDiv.innerHTML = `
+                        <h3>קבוצה ${index + 1} (משתתפות נוספות)</h3>
+                        <div class="pair-info">
+                            <div class="pair-names">
+                                <p>${pair.person1}</p>
+                                ${pair.person2 ? `<p>${pair.person2}</p>` : ''}
+                                ${pair.person3 ? `<p>${pair.person3}</p>` : ''}
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    pairDiv.innerHTML = `
+                        <h3>זוג ${index + 1}</h3>
+                        <div class="pair-info">
+                            <div class="pair-names">
+                                <p>${pair.person1} 💖 ${pair.person2}</p>
+                            </div>
+                            <div class="score">${pair.score}</div>
+                        </div>
+                    `;
+                }
+
+                resultsDiv.appendChild(pairDiv);
+            });
+
+            resultsDiv.classList.add('show');
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = message;
+            errorDiv.classList.add('show');
+            document.getElementById('loading').classList.remove('show');
+        }
+    </script>
 </body>
 </html>
