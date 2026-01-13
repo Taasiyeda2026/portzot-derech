@@ -4,434 +4,499 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>אדם וטכנולוגיה | פורצות דרך</title>
-
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Varela+Round&family=Rubik+Rounded:wght@700;800;900&display=swap" rel="stylesheet" />
-
   <style>
     :root {
-      --bg-primary: #fafbfc;
+      --bg-primary: #f2f3fa;
       --bg-secondary: #ffffff;
       --text-primary: #1a202c;
       --text-secondary: #4a5568;
-      --domain-color: #2563eb;
-      --domain-light: rgba(37, 99, 235, 0.1);
-      --domain-border: rgba(37, 99, 235, 0.3);
+      --domain-color: #ec4899;
+      --domain-light: rgba(236, 72, 153, 0.08);
+      --domain-border: rgba(236, 72, 153, 0.25);
       --radius-sm: 8px;
       --radius-md: 16px;
       --radius-lg: 20px;
-      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
-      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
-      --space-xs: 0.35rem;
-      --space-sm: 0.55rem;
-      --space-md: 1.1rem;
-      --space-lg: 1.6rem;
+      --shadow-sm: 0 1px 6px rgba(0, 0, 0, 0.06);
+      --shadow-md: 0 8px 28px rgba(20, 16, 60, 0.12);
+      --space-xs: 0.2rem;
+      --space-sm: 0.35rem;
+      --space-md: 0.65rem;
+      --space-lg: 0.95rem;
+      /* טיפוגרפיה כללית מוקטנת */
+      --fs-base: 0.95rem;
+      --fs-small: 0.9rem;
+      --fs-h2: clamp(1.4rem, 3.2vw, 1.75rem);
+      --fs-hero: clamp(1.95rem, 5.4vw, 2.7rem);
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; }
 
     body {
-      font-family: 'Varela Round', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: var(--bg-primary);
+      margin: 0;
+      font-family: 'Varela Round', system-ui, -apple-system, sans-serif;
+      background:
+        radial-gradient(1400px 700px at 85% -15%, rgba(236,72,153,0.08), transparent 60%),
+        radial-gradient(1000px 600px at 10% 25%, rgba(124,92,230,0.06), transparent 55%),
+        linear-gradient(180deg, #eef0f9 0%, #f6f7fb 35%, #f6f7fb 100%);
       color: var(--text-primary);
-      line-height: 1.7;
+      line-height: 1.4;
+      font-size: var(--fs-base);
     }
 
-    header{
-      position:sticky;
-      top:0;
-      z-index:100;
-      background:linear-gradient(135deg, rgba(37,99,235,.92), rgba(96,165,250,.92));
-      padding:0.75rem 1rem;
-      backdrop-filter:saturate(110%) blur(2px);
-      width:100%;
-      box-sizing:border-box;
-      overflow-x:hidden;
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.88));
+      backdrop-filter: saturate(120%) blur(6px);
+      padding: 0.55rem 1rem;
+      border-bottom: 1px solid rgba(236,72,153,0.18);
+      box-shadow: 0 2px 8px rgba(40,20,90,0.06);
     }
 
-    .header-content{
-      max-width:1200px;
-      margin:auto;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:0.75rem;
-      width:100%;
-      box-sizing:border-box;
+    .header-content {
+      max-width: 1100px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
     }
 
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:0.75rem;
-      color:white;
-      font-size:1.4rem;
-      font-weight:900;
-      font-family:'Rubik Rounded','Varela Round',sans-serif;
-      letter-spacing:0.04em;
-      text-decoration:none;
-      white-space:nowrap;
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      color: #2f2566;
+      font-size: 1.05rem;
+      font-weight: 900;
+      font-family: 'Rubik Rounded', 'Varela Round', sans-serif;
+      text-decoration: none;
     }
 
-    .brand-logo{
-      height:72px;
-      width:54px;
-      max-width:none;
-      border-radius:16px;
-      object-fit:contain;
-      background:rgba(255,255,255,.9);
-      padding:3px;
-      box-shadow:0 6px 16px rgba(0,0,0,.18);
-      flex:0 0 auto;
+    .brand-logo {
+      display: block;
+      height: 56px;
+      width: 42px;
+      min-width: 42px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.95);
+      padding: 3px;
+      box-shadow: 0 6px 16px rgba(0,0,0,.18);
     }
 
-    nav{display:flex;gap:0.75rem;}
+    nav { display: flex; gap: 0.6rem; }
 
-    .nav-link{
-      position:relative;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      width:46px;
-      height:46px;
-      color:white;
-      text-decoration:none;
-      border-radius:14px;
-      background:rgba(255,255,255,0.22);
-      border:1.5px solid rgba(255,255,255,0.45);
-      backdrop-filter:blur(8px);
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15);
-      font-size:1.3rem;
-      font-weight:600;
-      transition:background .25s ease, transform .25s ease, box-shadow .25s ease;
+    .nav-link {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      color: #2f2566;
+      border-radius: 12px;
+      background: rgba(236,72,153,0.08);
+      border: 1px solid rgba(236,72,153,0.22);
+      font-size: 1.2rem;
+      text-decoration: none;
+      transition: all 0.2s ease;
     }
 
-    .nav-link:hover{
-      background:rgba(255,255,255,0.38);
-      transform:translateY(-1px);
-      box-shadow:0 6px 14px rgba(0,0,0,0.22);
+    .nav-link:hover {
+      background: rgba(236,72,153,0.18);
+      border-color: rgba(236,72,153,0.45);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(236,72,153,0.25);
     }
 
-    .nav-link::after{
-      content:attr(data-label);
-      position:absolute;
-      top:100%;
-      margin-top:0.4rem;
-      right:50%;
-      transform:translateX(50%) translateY(-4px);
-      background:rgba(255,255,255,0.96);
-      color:var(--text-primary);
-      font-size:0.75rem;
-      padding:0.25rem 0.55rem;
-      border-radius:7px;
-      white-space:nowrap;
-      opacity:0;
-      pointer-events:none;
-      box-shadow:0 3px 8px rgba(0,0,0,0.18);
-      transition:opacity .2s ease, transform .2s ease;
+    .nav-link:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 6px rgba(236,72,153,0.2);
     }
 
-    .nav-link:hover::after{
-      opacity:1;
-      transform:translateX(50%) translateY(0);
+    /* Tooltip עבור כפתורי הניווט */
+    .nav-link::after {
+      content: attr(data-label);
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%) translateY(-4px);
+      background: rgba(255, 255, 255, 0.98);
+      color: #2f2566;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 0.6rem;
+      border-radius: 6px;
+      white-space: nowrap;
+      box-shadow: 0 4px 12px rgba(40, 20, 90, 0.15);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      border: 1px solid rgba(236,72,153,0.2);
+      z-index: 1000;
+    }
+
+    .nav-link:hover::after {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* חץ קטן מעל הטולטיפ */
+    .nav-link::before {
+      content: "";
+      position: absolute;
+      top: calc(100% + 2px);
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-bottom: 6px solid rgba(255, 255, 255, 0.98);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+      z-index: 1001;
+    }
+
+    .nav-link:hover::before {
+      opacity: 1;
     }
 
     .hero {
-      background: linear-gradient(135deg, var(--domain-light), rgba(255, 255, 255, 0.6));
-      padding: 3rem 2rem;
+      position: relative;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.88), rgba(255,255,255,0.96)),
+        radial-gradient(700px 320px at 50% 0%, rgba(236,72,153,0.22), transparent 70%);
+      padding: 2.4rem 1.6rem 2.6rem;
       text-align: center;
-      border-bottom: 3px solid var(--domain-color);
+      border-bottom: 1px solid rgba(236,72,153,0.25);
+      box-shadow:
+        inset 0 -1px 0 rgba(255,255,255,0.8),
+        0 12px 36px rgba(20,16,60,0.14);
     }
 
-    .hero-icon {
-      font-size: 4rem;
-      margin-bottom: 1rem;
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 -18px 0;
+      height: 18px;
+      background: linear-gradient(180deg, rgba(236,72,153,0.18), transparent);
+      pointer-events: none;
     }
+
+    .hero-icon { font-size: 3.6rem; margin-bottom: 0.6rem; }
 
     .hero-title {
-      font-family: 'Varela Round', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      font-size: clamp(2.2rem, 6vw, 3.2rem);
+      font-family: 'Varela Round', sans-serif;
+      font-size: var(--fs-hero);
       font-weight: 900;
-      letter-spacing: 0.02em;
       color: var(--domain-color);
-      margin-bottom: 0.5rem;
-      text-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
+      text-shadow:
+        0 1px 0 rgba(255,255,255,0.55),
+        0 4px 10px rgba(236,72,153,0.28);
+      margin-bottom: 0.3rem;
     }
 
     .hero-tagline {
-      font-size: 1.25rem;
       color: var(--text-secondary);
-      max-width: 800px;
-      margin: 0 auto;
+      max-width: 640px;
+      margin: 0.25rem auto;
+      line-height: 1.45;
+    }
+
+    .hero-statement {
+      font-family: 'Varela Round', system-ui, -apple-system, sans-serif;
+      font-size: 1.22rem;
+      font-weight: 800;
+      color: #2f2566;
+      text-shadow: 0 1px 3px rgba(60,40,140,0.22);
+    }
+
+    .hero-statement.secondary {
+      font-family: 'Varela Round', system-ui, -apple-system, sans-serif;
+      font-size: 1.22rem;
+      font-weight: 800;
+      color: #2f2566;
+      margin-top: 0.15rem;
     }
 
     main {
-      max-width: 960px;
-      margin: 2rem auto;
-      padding: 0 1.25rem 2rem;
+      max-width: 900px;
+      margin: auto;
+      padding: 1.3rem 1.05rem 1.6rem;
+      background: linear-gradient(180deg, rgba(255,255,255,0.65), rgba(255,255,255,0));
+      border-radius: 28px;
     }
 
     .content-section {
-      background: var(--bg-secondary);
-      padding: var(--space-lg);
+      position: relative;
+      background: linear-gradient(180deg, #ffffff, #fbfbff);
+      padding: 0.75rem;
       border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-sm);
-      margin-bottom: var(--space-lg);
-      border-right: 4px solid var(--domain-color);
+      box-shadow:
+        0 10px 30px rgba(20,16,60,0.16),
+        inset 0 1px 0 rgba(255,255,255,0.9);
+      margin-bottom: var(--space-md);
+      border-right: 3px solid var(--domain-color);
+    }
+
+    .content-section::after {
+      content: "";
+      position: absolute;
+      inset: auto 12px -10px 12px;
+      height: 10px;
+      background: linear-gradient(180deg, rgba(236,72,153,0.18), transparent);
+      border-radius: 0 0 14px 14px;
+      pointer-events: none;
     }
 
     .section-title {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      font-size: 1.5rem;
+      gap: 0.45rem;
+      font-family: 'Varela Round', sans-serif;
+      font-size: var(--fs-h2);
+      font-weight: 900;
       color: var(--domain-color);
       margin-bottom: var(--space-xs);
-      font-weight: 700;
+      text-shadow:
+        0 1px 0 rgba(255,255,255,0.55),
+        0 3px 8px rgba(236,72,153,0.3);
     }
 
-    
     .section-text {
-      font-size: 1.05rem;
-      color: var(--text-secondary);
-      margin-bottom: var(--space-xs);
+      font-size: var(--fs-base);
+      line-height: 1.38;
+      margin-bottom: 0.2rem;
+      color: var(--text-primary);
     }
 
     .section-text.emphasis {
       font-weight: 700;
-      color: var(--text-primary);
     }
 
     .question-box {
       position: relative;
       background: #ffffff;
-      padding: var(--space-md);
+      padding: 0.6rem;
       border-radius: var(--radius-sm);
-      margin: var(--space-md) 0;
+      margin: var(--space-sm) 0;
       font-weight: 600;
-      font-size: 1.05rem;
-      line-height: 1.6;
-      color: var(--text-primary);
+      font-size: var(--fs-base);
+      line-height: 1.38;
       border: 1.5px solid var(--domain-border);
     }
 
-    .question-box::before {
-      content: "❓";
-      position: absolute;
-      top: 0.6rem;
-      left: 0.6rem;
-      font-size: 1.1rem;
-      color: var(--domain-color);
-    }
-
-    .question-box::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 4px;
-      height: 100%;
-      background: var(--domain-color);
-      border-radius: 4px;
-    }
+    .question-box::before { content: "💭"; position: absolute; top: 0.5rem; left: 0.5rem; }
+    .question-box::after { content: ""; position: absolute; top: 0; right: 0; width: 4px; height: 100%; background: var(--domain-color); border-radius: 4px; }
 
     .highlight-box {
-      font-size: 1.05rem;
-      line-height: 1.7;
-      background: linear-gradient(135deg, rgba(37, 99, 235, 0.14), rgba(37, 99, 235, 0.04));
-      padding: var(--space-md);
+      background: linear-gradient(180deg, rgba(236,72,153,0.10), rgba(236,72,153,0.03));
+      padding: 0.6rem;
       border-radius: var(--radius-md);
-      border: 2px solid var(--domain-border);
-      margin: var(--space-md) 0 0;
+      border: 1px solid rgba(236,72,153,0.25);
+      margin: var(--space-sm) 0;
+      font-size: var(--fs-base);
+      line-height: 1.38;
     }
 
-    .question-box {
-      margin-bottom: var(--space-md);
-    }
-
-    .highlight-box .section-text {
-      margin-bottom: 0.6rem;
-    }
-
-    .highlight-box .section-text:last-child {
-      margin-bottom: 0;
-    }
-
-    .highlight-box .section-text {
-      margin-bottom: 0.6rem;
-    }
-
-    .highlight-box .section-text:last-child {
-      margin-bottom: 0;
-    }
-
-    .reflection-box {
-      margin-top: 0.9rem;
-      padding: 0.9rem 1rem;
+    .example-box {
+      background: rgba(6, 182, 212, 0.05);
+      border-right: 4px solid #14b8a6;
+      padding: 0.6rem;
       border-radius: var(--radius-sm);
-      background: #ffffff;
-      border: 1.5px dashed var(--domain-border);
-      color: var(--text-primary);
-      font-size: 1.02rem;
-      line-height: 1.65;
+      margin: var(--space-sm) 0;
+      font-size: var(--fs-base);
+      line-height: 1.38;
     }
 
-    .reflection-box strong { font-weight: 700; }
-
-    .custom-list {
+    /* חלונית נפתחת – חיווי ברור ללחיצה */
+    .example-expand summary {
+      cursor: pointer;
       list-style: none;
+      font-weight: 700;
+      color: #0e7490;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      padding: 0.35rem 0.45rem;
+      border-radius: 8px;
+      background: rgba(20,184,166,0.08);
+      border: 1px dashed rgba(20,184,166,0.45);
+      transition: background .15s ease, box-shadow .15s ease, transform .15s ease;
     }
+
+    .example-expand summary::after {
+      content: "▾";
+      font-size: 1rem;
+      transition: transform .15s ease;
+    }
+
+    .example-expand[open] summary::after {
+      transform: rotate(180deg);
+    }
+
+    .example-expand summary:hover {
+      background: rgba(20,184,166,0.16);
+      box-shadow: 0 6px 14px rgba(20,184,166,0.25);
+      transform: translateY(-1px);
+    }
+
+    .example-expand summary::-webkit-details-marker { display: none; }
+
+    .example-title {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-weight: 700;
+      color: #0e7490;
+      margin-bottom: 0.25rem;
+      line-height: 1.3;
+    }
+
+    .custom-list { list-style: none; padding: 0; margin-top: 0.4rem; }
 
     .custom-list li {
       position: relative;
-      padding: 0.25rem 1.5rem 0.25rem 0;
+      padding: 0.2rem 1.2rem 0.2rem 0;
       color: var(--text-secondary);
+      font-size: var(--fs-base);
+      line-height: 1.38;
     }
 
-    .custom-list li::before {
-      content: '●';
-      position: absolute;
-      right: 0;
-      color: var(--domain-color);
-      font-size: 1.3rem;
-      line-height: 1;
-    }
+    .custom-list li::before { content: '●'; position: absolute; right: 0; color: var(--domain-color); }
 
-    .jobs-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
-      margin-top: 1rem;
-    }
-
-    .job-card {
-      padding: 1rem;
-      border-radius: var(--radius-sm);
-      border: 2px solid var(--domain-border);
+    .pull-quote {
+      max-width: 720px;
+      margin: 1.4rem auto 1.6rem;
+      padding: 0.7rem;
       text-align: center;
-      font-weight: 600;
-      background: #fff;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      min-height: 80px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .job-card:hover {
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-sm);
-      background: var(--domain-light);
-    }
-
-    .sub-domains {
-      max-width: 1100px;
-      margin: 2.5rem auto;
-      padding: 0 1.25rem 2rem;
-    }
-
-    .sub-domains-header {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-
-    .sub-domains-title {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-      color: var(--domain-color);
-    }
-
-    .sub-domains-subtitle {
-      color: var(--text-secondary);
-    }
-
-    .sub-domains-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1.75rem;
-    }
-
-    .sub-domain-card {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      background: #ffffff;
-      padding: 1.1rem 1rem 1.25rem;
-      border-radius: var(--radius-sm);
-      border: 1.5px solid var(--domain-border);
-      position: relative;
-      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease;
-      cursor: pointer;
-    }
-
-    .sub-domain-card::after {
-      content: "→";
-      position: absolute;
-      left: 0.75rem;
-      bottom: 0.6rem;
-      font-size: 1rem;
-      color: var(--domain-color);
-      opacity: 0.6;
-      transition: transform 0.25s ease, opacity 0.25s ease;
-    }
-
-    .sub-domain-card:hover {
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-sm);
-      border-color: var(--domain-color);
-      background: var(--domain-light);
-    }
-
-    .sub-domain-card:hover::after {
-      transform: translateX(-4px);
-      opacity: 1;
-    }
-
-    .sub-domain-title {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 1.05rem;
       font-weight: 700;
-      line-height: 1.35;
-      margin: 0 0 0.35rem 0;
-      white-space: normal;
-    }
-
-    .sub-domain-desc {
-      font-size: 0.95rem;
-      color: var(--text-secondary);
-      line-height: 1.5;
+      font-size: 1.1rem;
+      color: #3a3270;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.97)),
+        radial-gradient(300px 140px at 50% 0%, rgba(236,72,153,0.18), transparent 72%);
+      border-radius: 16px;
+      box-shadow: 0 8px 26px rgba(40,20,90,.14);
     }
 
     footer {
       text-align: center;
-      padding: 2rem;
-      background: var(--bg-secondary);
+      padding: 0.75rem 1rem 0.9rem;
+      font-size: var(--fs-small);
+      font-weight: 700;
+      color: rgba(170, 24, 96, 0.6);
+      background: transparent;
+      text-shadow:
+        0 -1px 0 rgba(255,255,255,0.95),
+        0 1px 0 rgba(120,16,70,0.25);
+      letter-spacing: 0.02em;
+    }
+
+    .subdomains-grid-3d {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+      gap: 0.7rem;
+      margin-top: 0.8rem;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .subdomain-tile {
+      background: linear-gradient(180deg, #ffffff, #fff5f9);
+      border-radius: 10px;
+      padding: 0.35rem;
+      text-align: center;
+      box-shadow:
+        0 4px 10px rgba(236,72,153,0.16),
+        inset 0 1px 0 rgba(255,255,255,0.9);
+      border: 1px solid rgba(236,72,153,0.22);
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+
+    .subdomain-tile:hover {
+      transform: translateY(-6px);
+      box-shadow:
+        0 18px 38px rgba(236,72,153,0.28),
+        inset 0 1px 0 rgba(255,255,255,0.9);
+    }
+
+    .subdomain-tile:active,
+    .subdomain-tile:focus {
+      transform: translateY(-2px) scale(0.98);
+      box-shadow:
+        0 10px 22px rgba(236,72,153,0.22),
+        inset 0 2px 4px rgba(236,72,153,0.18);
+      outline: none;
+    }
+
+    .subdomain-icon {
+      font-size: 1.2rem;
+      margin-bottom: 0.05rem;
+    }
+
+    .subdomain-code {
+      font-weight: 800;
+      color: rgba(236,72,153,0.7);
+      font-size: 0.95rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .subdomain-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #2d255f;
+      margin: 0.05rem 0 0.1rem;
+      text-shadow:
+        0 1px 0 rgba(255,255,255,0.6),
+        0 1.5px 2px rgba(60,40,140,0.14);
+    }
+
+    .subdomain-desc {
+      font-size: 0.9rem;
+      line-height: 1.4;
       color: var(--text-secondary);
-      border-top: 1px solid #e2e8f0;
+    }
+
+    @media (max-width: 900px) {
+      .subdomains-grid-3d { 
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        max-width: 100%;
+      }
     }
 
     @media (max-width: 768px) {
-      main,
-      .sub-domains {
-        padding: 0 1rem 2rem;
-      }
-
-      .hero-title {
-        font-size: 1.8rem;
-      }
-
-      .section-title {
-        font-size: 1.4rem;
+      .nav-link::after,
+      .nav-link::before {
+        display: none;
       }
     }
+
+    @media (max-width: 520px) {
+      .header-content { align-items: center; }
+      .brand { gap: 0.5rem; font-size: 1rem; }
+      .hero {
+        padding: 1.6rem 1.2rem 1.9rem;
+      }
+      .nav-link {
+        width: 48px;
+        height: 48px;
+      }
+      .subdomains-grid-3d { 
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.8rem;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -439,7 +504,7 @@
 <header>
   <div class="header-content">
     <a href="index.html" class="brand">
-      <img src="logo.png" alt="פורצות דרך" class="brand-logo">
+      <img src="logo.png" alt="פורצות דרך" class="brand-logo" />
       פורצות דרך
     </a>
     <nav>
@@ -450,226 +515,226 @@
 </header>
 
 <section class="hero">
-  <div class="hero-icon">✨</div>
+  <div class="hero-icon">🧠</div>
   <h1 class="hero-title">אדם וטכנולוגיה</h1>
-  <p class="hero-tagline">לבדוק איך טכנולוגיה משפיעה על תחושות, התנהגות וחוסן אישי.</p>
-  <p class="hero-tagline" style="font-size:1rem;margin-top:.35rem;">אם אי פעם חשבת איך המסך משפיע על מצב הרוח שלך — כאן מתחילים להבין.</p>
+  <p class="hero-tagline hero-statement">טכנולוגיה אמורה לשרת את החיים שלנו, לא לשלוט בהם.</p>
+  <p class="hero-tagline hero-statement secondary">איך נבנה קשר בריא, מודע ומכוון רצון בין מה שאנחנו רוצות לבין מה שהמסך מציע?</p>
 </section>
 
 <main>
 
-  <!-- 1 -->
   <section class="content-section">
-    <h2 class="section-title">🧠 מהו התחום?</h2>
-    <div class="question-box">איך טכנולוגיה משפיעה על מי שאנחנו – ומה קורה כשהיא נמצאת בכל מקום?</div>
+    <h2 class="section-title">🧠 מה זה בעצם אדם וטכנולוגיה?</h2>
+    <div class="question-box">איך טכנולוגיה משפיעה על הגוף, הנפש והרגשות שלנו - ומתי החיבור הזה הופך להיות בעייתי?</div>
     <div class="highlight-box">
-      <p class="section-text">תחום זה עוסק במפגש בין טכנולוגיה לבין האדם עצמו: תחושות, מחשבות, התנהגות וחוסן נפשי.</p>
-      <p class="section-text">הוא בוחן כיצד מסכים, אפליקציות, מוצרים פיזיים חכמים ורשתות חברתיות משפיעים על הרווחה הנפשית, הזהות האישית והיכולת שלנו לנהל את החיים היומיומיים.</p>
+      <p class="section-text"><strong>אדם וטכנולוגיה הוא התחום שעוסק בקשר שבין הדיגיטלי לאישי.</strong> איך השימוש במסכים, באפליקציות ובמכשירים משפיע על הבריאות הנפשית, הפיזית, ההרגלים והתחושת השליטה שלנו בחיים.</p>
+      <p class="section-text">זה לא רק "להשתמש פחות בטלפון" - זה לשאול: למה אני משתמשת? מה זה עושה לי? איזה צרכים אמיתיים המסך ממלא - ואיזה צרכים הוא מסווה.</p>
+    </div>
+    <div class="example-box">
+      <details class="example-expand">
+        <summary>דוגמה מהחיים – מקרה אמיתי</summary>
+        <p class="section-text">📱 את פותחת את הטלפון כדי לבדוק משהו ספציפי.<br>
+⏱️ עוברות 40 דקות.<br>
+🤔 את לא זוכרת מה רצית לבדוק מלכתחילה.</p>
+        <p class="section-text">😵 מרגישה עייפות, ריקנות, אשמה קלה.<br>
+❓ מה קרה כאן?</p>
+        <p class="section-text"><strong>⚠️ זו לא "חולשה אישית".</strong><br>
+🧪 זו תוצאה של עיצוב מודע שמנצל את האופן שבו המוח שלנו מגיב לגירויים מהירים, צבעוניים, בלתי צפויים.<br>
+🎯 המערכת תוכננה להחזיק אותך שם - לא לשרת את המטרה שלך.</p>
+      </details>
     </div>
   </section>
 
-  <!-- 2 -->
+  <section class="pull-quote">
+    <p>טכנולוגיה אמורה לעזור לנו לחיות טוב יותר.<br>אבל רק אם אנחנו מכוונות אותה - ולא להיפך.</p>
+  </section>
+
   <section class="content-section">
-    <h2 class="section-title">🌍 חשיבות התחום וההקשר העכשווי</h2>
-    <div class="question-box">למה זה רלוונטי דווקא היום?</div>
+    <h2 class="section-title">🌍 למה זה חשוב דווקא עכשיו?</h2>
+    <div class="question-box">למה הקשר שלנו עם טכנולוגיה הפך לנושא כל כך מרכזי?</div>
     <div class="highlight-box">
-      <p class="section-text">כי הטכנולוגיה כבר לא רק כלי – היא סביבה שבה אנחנו חיים.</p>
-      <p class="section-text">המסך הוא המקום שבו אנחנו נפגשות עם חברות, לומדות, משחקות, מתעדכנות ומעצבות את התפיסה העצמית שלנו.</p>
-      <p class="section-text">ההשפעה של השימוש בטכנולוגיה על בריאות נפשית, קשב, שינה, תחושת שייכות וחוסן אישי היא אחד האתגרים המרכזיים של הדור שלנו.</p>
+      <p class="section-text">כי היום המסך הוא חלק בלתי נפרד מהחיים. אנחנו לומדות דרכו, מתכתבות, מתעדכנות, מרגיעות ומתארגנות. אבל בדיוק בגלל זה - קשה להבחין מתי זה מועיל ומתי זה פוגע.</p>
+      <p class="section-text">השאלה היא לא "להשתמש או לא להשתמש" אלא: <strong>איך לשמור על עצמנו כשהשימוש הוא בלתי נמנע?</strong></p>
+    </div>
+    <div class="example-box">
+      <details class="example-expand">
+        <summary>דוגמה מהחיים – מקרה אמיתי</summary>
+        <p class="section-text">😴 את הולכת לישון מוקדם.<br>
+📱 רק רגע אחד לבדוק הודעות...<br>
+🌙 שעתיים אחר כך, עיניים כבדות, מסך עדיין דולק.</p>
+        <p class="section-text">🛌 בבוקר את מתעוררת עייפה, מרגישה אשמה.<br>
+🤷‍♀️ "למה אני לא מצליחה פשוט לשים את זה בצד?"</p>
+        <p class="section-text"><strong>⚠️ כי זה לא "רק כוח רצון".</strong><br>
+🧠 זה קשור לאור כחול, לדופמין, לעיצוב ממכר ולחוסר גבולות פיזיים של המכשיר.<br>
+🔧 כשמבינים את המנגנון - אפשר לבנות פתרונות אמיתיים.</p>
+      </details>
     </div>
   </section>
 
-  <!-- 3 -->
   <section class="content-section">
-    <h2 class="section-title">⚙️ חיבור לטכנולוגיה ולהייטק</h2>
-    <div class="question-box">איפה הטכנולוגיה פוגשת את האדם?</div>
+    <h2 class="section-title">⚙️ מה בעצם כולל התחום?</h2>
+    <div class="question-box">איזה סוגי חשיבה, החלטות ועשייה מרכיבים את התחום הזה מבפנים?</div>
     <div class="highlight-box">
-      <p class="section-text emphasis">זהו תחום שבו טכנולוגיה פוגשת פסיכולוגיה, עיצוב חוויית משתמש וחשיבה מוסרית:</p>
+      <p class="section-text">אדם וטכנולוגיה הוא תחום רחב שכולל:</p>
       <ul class="custom-list">
-        <li>עיצוב חוויית משתמש (UX/UI) – איך ממשקים משפיעים על התנהגות</li>
-        <li>רשתות חברתיות ואלגוריתמים – מה מופיע בפיד ולמה</li>
-        <li>בריאות דיגיטלית – כלים למדידה ושיפור רווחה</li>
-        <li>משחקיות (Gamification) – איך משחקים משפיעים על מוטיבציה והתמדה</li>
-        <li>אתיקה טכנולוגית – האם מערכות מעוצבות לטובת המשתמש או לטובת החברה?</li>
-        <li>נגישות דיגיטלית – איך מבטיחים שטכנולוגיה משרתת את כולם</li>
+        <li><strong>חוסן רגשי ונפש:</strong> השפעת מסכים על מצב רוח, חרדה, ריכוז ותחושת ערך עצמי.</li>
+        <li><strong>גוף ובריאות:</strong> שינה, תנועה, יציבה, מתח - איך טכנולוגיה משפיעה על הגוף הפיזי.</li>
+        <li><strong>ביטחון אישי:</strong> הגנה על מידע אישי, פרטיות, זהות.</li>
+        <li><strong>הרגלים יומיומיים:</strong> איך לבנות שגרה בריאה עם טכנולוגיה במרכז.</li>
       </ul>
     </div>
   </section>
 
-  <!-- 4 -->
   <section class="content-section">
-    <h2 class="section-title">🚧 אתגרים ובעיות מרכזיות</h2>
-    <div class="question-box">איפה הדברים מסתבכים?</div>
+    <h2 class="section-title">🚧 איפה הדברים מסתבכים?</h2>
+    <div class="question-box">מה קורה כשהקשר עם טכנולוגיה הופך להיות לא בריא?</div>
     <div class="highlight-box">
-      <p class="section-text"><strong>כאן עולות שאלות של אחריות, השפעה והכוונה:</strong></p>
+      <p class="section-text">הבעיות מתחילות כשהגבולות נעלמים:</p>
       <ul class="custom-list">
-        <li><strong>התמכרות ומשיכה:</strong> מערכות שמעוצבות לשמור אותנו מחוברות</li>
-        <li><strong>השוואה חברתית:</strong> רשתות שמציגות חיים "מושלמים" ויוצרות לחץ</li>
-        <li><strong>קשב מפוזר:</strong> קושי להתרכז כשיש התראות כל הזמן</li>
-        <li><strong>חוסר שקיפות:</strong> לא תמיד ברור מי מכוון את התוכן שאנחנו רואות</li>
-        <li><strong>פגיעה ברווחה:</strong> השפעה שלילית על שינה, מצב רוח וביטחון עצמי</li>
+        <li><strong>השוואה:</strong> כשמה שרואים במסך הופך לסטנדרט שאי אפשר להגיע אליו.</li>
+        <li><strong>תלות:</strong> כשלא מצליחים להפסיק, גם כשיודעים שזה לא טוב.</li>
+        <li><strong>חוסר שליטה:</strong> כשמרגישים שהמסך מכתיב את הקצב - ולא את.</li>
+        <li><strong>השפעה פיזית:</strong> כאבי ראש, עייפות, קושי להירדם.</li>
+      </ul>
+    </div>
+    <div class="example-box">
+      <details class="example-expand">
+        <summary>דוגמה מהחיים – מקרה אמיתי</summary>
+        <p class="section-text">📷 חברה מפרסמת תמונה שנראית מושלמת.<br>
+😔 את מביטה בעצמך במראה ומרגישה לא מספיק טובה.<br>
+🤳 מנסה להתלבש כמוה, לדבר כמוה, להיות כמוה.</p>
+        <p class="section-text">💔 אבל זה תמיד מרגיש רחוק.<br>
+🤷‍♀️ "למה אני לא נראית ככה?"</p>
+        <p class="section-text"><strong>⚠️ כי זה לא אמיתי.</strong><br>
+📸 תמונות ממוינות, ערוכות, מתוזמנות.<br>
+🎭 המסך מציג גרסה מצונזרת של המציאות - והשוואה אליה פוגעת.</p>
+      </details>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <h2 class="section-title">💬 איך זה פוגש אותך ביום-יום?</h2>
+    <div class="question-box">איפה את מרגישה את זה על עצמך?</div>
+    <div class="highlight-box">
+      <p class="section-text">את פוגשת את זה בכל רגע:</p>
+      <ul class="custom-list">
+        <li><strong>אנרגיה:</strong> הרגשה של עייפות אחרי גלילה ארוכה.</li>
+        <li><strong>קשב:</strong> קושי להתרכז במשימה אחת בלי לבדוק הודעות.</li>
+        <li><strong>רגשות:</strong> תחושות של בדידות, השוואה, פחד מפספוס.</li>
       </ul>
     </div>
   </section>
 
-  <!-- 5 -->
   <section class="content-section">
-    <h2 class="section-title">💬 הקשר יומיומי והשפעה אישית</h2>
-    <div class="question-box">איפה זה פוגש אותך ביום-יום?</div>
+    <h2 class="section-title">🧭 איך מתחילים לחשוב על פתרונות?</h2>
+    <div class="question-box">מה השאלות הנכונות לשאול?</div>
     <div class="highlight-box">
-      <p class="section-text emphasis">התחום פוגש אותך כל יום:</p>
+      <p class="section-text">לא מתחילים בפתרון - מתחילים בשאלות.</p>
       <ul class="custom-list">
-        <li>כשאת בודקת את הטלפון בבוקר לפני שקמת</li>
-        <li>כשאת גוללת ברשתות חברתיות ופתאום עבר שעה</li>
-        <li>כשאת מרגישה לחץ להעלות תמונה "מושלמת"</li>
-        <li>כשאת מנסה להירדם אבל המסך עדיין דולק</li>
-        <li>כשאת מתקשה להתרכז בשיעור או בשיחה</li>
-      </ul>
-      <div class="reflection-box">
-        <strong>עצירה לחשיבה אישית:</strong><br>
-        מתי הטכנולוגיה משפרת לך את מצב הרוח – ומתי היא מוסיפה לחץ?<br>
-        איזה הרגל דיגיטלי היית רוצה לשנות?<br>
-        מה גורם לך להרגיש שאת שולטת בטכנולוגיה – או שהיא שולטת בך?
-      </div>
-    </div>
-  </section>
-
-  <!-- 6 -->
-  <section class="content-section">
-    <h2 class="section-title">🧭 כיווני חשיבה לפתרונות</h2>
-    <div class="question-box">איך מתחילים לחשוב אחרת?</div>
-    <div class="highlight-box">
-      <ul class="custom-list">
-        <li><strong>עיצוב מכוון רווחה</strong> – להפוך טכנולוגיה לכלי שמשרת את המשתמש</li>
-        <li><strong>שקיפות ובחירה</strong> – לתת למשתמש שליטה על מה שקורה</li>
-        <li><strong>מדידה ומודעות</strong> – להבין איך שימוש משפיע על רווחה</li>
-        <li><strong>איזון דיגיטלי</strong> – לעצב מערכות שלא דורשות קשב מתמיד</li>
+        <li><strong>למה אני משתמשת?</strong> מה הצורך האמיתי מאחורי הפתיחה.</li>
+        <li><strong>מה זה עושה לי?</strong> איך אני מרגישה אחרי השימוש.</li>
+        <li><strong>איך אפשר לעצב את זה אחרת?</strong> בניית גבולות ברורים.</li>
       </ul>
     </div>
   </section>
 
-  <!-- 7 -->
   <section class="content-section">
-    <h2 class="section-title">❓ שאלות חקר מנחות</h2>
-    <div class="question-box">על מה אפשר לחקור?</div>
+    <h2 class="section-title">🎯 איפה מתחילים?</h2>
+    <div class="question-box">אם התחום מסקרן אותך - מה הצעד הראשון?</div>
     <div class="highlight-box">
-      <ul class="custom-list">
-        <li>איך עיצוב של אפליקציה משפיע על התנהגות?</li>
-        <li>מה גורם להתמכרות לרשתות חברתיות?</li>
-        <li>איך אפשר למדוד רווחה דיגיטלית?</li>
-        <li>מהם ההבדלים בין שימוש בריא לשימוש בעייתי?</li>
-        <li>איך אפשר לעצב טכנולוגיה שמחזקת חוסן נפשי?</li>
-      </ul>
+      <p class="section-text"><strong>לא צריך לנתק מכל טכנולוגיה.</strong> צריך להבין מה זה עושה לך - ולבנות מערכת שמתאימה לך, לא למישהי אחרת.</p>
+      <p class="section-text">אם במהלך הקריאה משהו גרם לך לעצור, להזדהות או להתרגז - זה סימן טוב. שם מתחיל חקר אמיתי.</p>
     </div>
   </section>
 
-  <!-- 8 -->
-  <section class="content-section">
-    <h2 class="section-title">👩‍💻 תפקידים אפשריים</h2>
-    <div class="question-box">אילו מקצועות קשורים לתחום?</div>
+  <section class="content-section" style="margin-top:1.2rem;">
+    <h2 class="section-title">✨ מכאן מתחיל החקר שלך</h2>
+    <div class="question-box">אחרי כל מה שקראת - מה הכי נגע בך?</div>
     <div class="highlight-box">
-      <div class="jobs-grid">
-        <div class="job-card">מעצבת חוויית משתמש (UX Designer)</div>
-        <div class="job-card">חוקרת משתמשים (UX Researcher)</div>
-        <div class="job-card">מומחית בריאות דיגיטלית</div>
-        <div class="job-card">מנהלת מוצר ברווחה טכנולוגית</div>
-        <div class="job-card">יועצת אתיקה טכנולוגית</div>
-      </div>
-      <p class="section-text" style="margin-top: 1rem; font-size: 0.95rem; font-style: italic;">הדוגמאות נועדו לפתוח אופק ולהמחיש סוגי עיסוק אפשריים ולא להכוונה מקצועית.</p>
-    </div>
-  </section>
-
-  <!-- 9 -->
-  <section class="content-section">
-    <h2 class="section-title">🧩 בעיות לחקר</h2>
-    <div class="question-box">אילו אתגרים אפשר לבדוק?</div>
-    <div class="highlight-box">
-      <ul class="custom-list">
-        <li>התמכרות למסכים ולרשתות חברתיות</li>
-        <li>פגיעה בשינה ובקשב</li>
-        <li>לחץ חברתי ותחושת השוואה</li>
-        <li>קושי בניהול זמן מסך</li>
-        <li>חוסר שקיפות בעיצוב אפליקציות</li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- 10 -->
-  <section class="content-section">
-    <h2 class="section-title">📱 יישומים אפשריים</h2>
-    <div class="question-box">איפה זה יכול לבוא לידי ביטוי?</div>
-    <div class="highlight-box">
-      <ul class="custom-list">
-        <li>אפליקציות לניהול זמן מסך ורווחה דיגיטלית</li>
-        <li>מוצרים פיזיים חכמים למדידת ושיפור רווחה</li>
-        <li>כלים למדידת רווחה דיגיטלית</li>
-        <li>עיצוב מחדש של ממשקים שמעודדים שימוש בריא</li>
-        <li>מערכות חינוכיות שמלמדות מודעות דיגיטלית</li>
-        <li>פיילוטים לשינוי הרגלים דיגיטליים</li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- 11 -->
-  <section class="content-section">
-    <h2 class="section-title">✨ סיכום והכוונה לבחירה</h2>
-    <p class="section-text" style="margin-bottom:.35rem;">לא צריך להיות פסיכולוגית מראש — צריך סקרנות, רגישות ורצון להבין.</p>
-    <div class="question-box">למי התחום הזה מתאים במיוחד?</div>
-    <div class="highlight-box">
-      <p class="section-text"><strong>זהו תחום למי שמרגישה את ההשפעה של הטכנולוגיה על עצמה.</strong></p>
-      <p class="section-text">למי שרוצה להבין למה זה קורה – ואיך אפשר לעצב אחרת.</p>
-      <p class="section-text">אם במהלך הקריאה עלו בך שאלות על רווחה, עיצוב או השפעה נפשית –<br><strong>ייתכן שזהו כיוון נכון עבורך לבחירת נושא החקר ולהמשך התהליך ההנדסי.</strong></p>
+      <p class="section-text">לא צריך לבחור תחום "נכון" או לדעת מה את רוצה להיות. החקר מתחיל ברגע שבו משהו בעמוד הזה גרם לך לעצור - תסכול, סקרנות, זיהוי או רצון להבין.</p>
+      <p class="section-text">בחרי נקודה אחת שהרגישה לך מוכרת מהחיים, ושאלי את עצמך: <strong>איזו בעיה כאן הייתי רוצה לחקור לעומק?</strong></p>
+      <p class="section-text">משם אפשר להתקדם לרעיון של מוצר - פיזי או דיגיטלי - שמנסה להתמודד עם אותה בעיה בצורה חכמה, אנושית וברורה יותר.</p>
     </div>
   </section>
 
 </main>
 
-<section class="sub-domains">
-  <div class="sub-domains-header">
-    <h2 class="sub-domains-title">תתי התחומים</h2>
-    <p class="section-text" style="max-width:720px;margin:0.5rem auto 0.5rem;">בחרי תת-תחום שמסקרן אותך — כל אחד מהם מוביל לעמוד המשך עם דוגמאות ואתגרי חקר.</p>
+<section class="content-section" style="max-width:1100px;margin:2rem auto 1.5rem;">
+  <h2 class="section-title">🧩 תתי-תחומים באדם וטכנולוגיה</h2>
+  <div class="question-box">איפה אפשר לבחור זווית חקר אחת ולהעמיק בה?</div>
+
+  <div class="subdomains-grid-3d">
+    <div class="subdomain-tile" onclick="location.href='subdomain-2-1.html'" role="button" tabindex="0">
+      <div class="subdomain-icon">💚</div>
+      <div class="subdomain-code">2.1</div>
+      <div class="subdomain-title">חוסן רגשי ונפש</div>
+    </div>
+    <div class="subdomain-tile" onclick="location.href='subdomain-2-2.html'" role="button" tabindex="0">
+      <div class="subdomain-icon">🏃‍♀️</div>
+      <div class="subdomain-code">2.2</div>
+      <div class="subdomain-title">גוף, בריאות וטכנולוגיה אישית</div>
+    </div>
+    <div class="subdomain-tile" onclick="location.href='subdomain-2-3.html'" role="button" tabindex="0">
+      <div class="subdomain-icon">🛡️</div>
+      <div class="subdomain-code">2.3</div>
+      <div class="subdomain-title">ביטחון אישי והגנה</div>
+    </div>
+    <div class="subdomain-tile" onclick="location.href='subdomain-2-4.html'" role="button" tabindex="0">
+      <div class="subdomain-icon">🔄</div>
+      <div class="subdomain-code">2.4</div>
+      <div class="subdomain-title">הרגלים וטכנולוגיה יומיומית</div>
+    </div>
   </div>
 
-  <div class="sub-domains-grid">
-    <div class="sub-domain-card">
-      <h3 class="sub-domain-title">🧠 בריאות נפשית ורווחה דיגיטלית</h3>
-      <p class="sub-domain-desc">השפעת טכנולוגיה על מצב רוח, חרדה, דיכאון וחוסן נפשי</p>
-    </div>
-    <div class="sub-domain-card">
-      <h3 class="sub-domain-title">🎮 משחקיות, התמכרות ומוטיבציה</h3>
-      <p class="sub-domain-desc">איך עיצוב גיימיפיקציה משפיע על התנהגות והתמדה</p>
-    </div>
-    <div class="sub-domain-card">
-      <h3 class="sub-domain-title">📱 רשתות חברתיות וזהות דיגיטלית</h3>
-      <p class="sub-domain-desc">השפעת רשתות על תפיסה עצמית, השוואה חברתית ותחושת שייכות</p>
-    </div>
-    <div class="sub-domain-card">
-      <h3 class="sub-domain-title">🎨 עיצוב חוויית משתמש (UX) ונגישות</h3>
-      <p class="sub-domain-desc">איך עיצוב ממשקים משפיע על חוויה, נוחות ושוויון גישה</p>
-    </div>
-    <div class="sub-domain-card">
-      <h3 class="sub-domain-title">⚖️ אתיקה וטכנולוגיה מכוונת רווחה</h3>
-      <p class="sub-domain-desc">בחינת האחריות המוסרית בעיצוב טכנולוגיה</p>
-    </div>
-    <div class="sub-domain-card">
-      <h3 class="sub-domain-title">🔍 קשב, למידה וזיכרון בעידן הדיגיטלי</h3>
-      <p class="sub-domain-desc">איך טכנולוגיה משפיעה על יכולת קשב, ריכוז ותהליכי למידה</p>
-    </div>
-  </div>
 </section>
 
 <footer>
-  <p>© 2026 קורס פורצות דרך</p>
+  © 2026 פורצות דרך
 </footer>
-
-
-<script>
-document.querySelectorAll('.sub-domain-card').forEach((card, index) => {
-  card.addEventListener('click', function() {
-    window.location.href = `subdomain-2-${index + 1}.html`;
-  });
-});
-</script>
 
 </body>
 </html>
+✅ domain-2.html מוכן!
+
+עכשיו אמשיך ל-domain-3.html (סביבה וקיימות 🌍) בצבע ירוק #10b981...
+
+מחקר מעמיק
+תתי תחומים ללא מספר ותתי תחומים יש תיבה מסביב מאוד גדולה וצריך להתאים 
+משתמש בכלי
+|
+חושב
+המשתמש מבקש שני דברים: 1. להסיר את המספרים מתתי התחומים (למשל "2.1" צריך להיעלם) 2. התיבה של תתי-התחומים גדולה מדי וצריך להקטין אותה אני צריך: 1. למחוק את ה-div עם class="subdomain-code" שמכיל את המספור 2. להקטין את התיבה החיצונית - כנראה צריך להקטין את max-width של .content-section שמכיל את תתי-התחומים בקוד המקורי domain-1: - יש <div class="subdomain-code">1.1</div> וכו' - צריך למחוק - יש section עם style="max-width:1100px" לתתי-תחומים - צריך להקטין ל-900px או פחות כדי להתאים לרוחב הכללי של main אני אתקן את domain-2 שכבר כתבתי ואמשיך עם domain-3, domain-4, domain-5 עם התיקון הזה.
+הצג
+מובן! 👍
+
+2 שינויים:
+
+✅ להסיר את המספרים (2.1, 2.2 וכו') מתתי-התחומים
+✅ להקטין את התיבה החיצונית של תתי-התחומים (מ-1100px ל-900px)
+📄 domain-2.html מתוקן (ללא מספרים + תיבה קטנה יותר)
+רק החלק של תתי-התחומים משתנה:
+
+Copy<section class="content-section" style="max-width:900px;margin:2rem auto 1.5rem;">
+  <h2 class="section-title">🧩 תתי-תחומים באדם וטכנולוגיה</h2>
+  <div class="question-box">איפה אפשר לבחור זווית חקר אחת ולהעמיק בה?</div>
+
+  <div class="subdomains-grid-3d">
+    <div class="subdomain-tile" onclick="location.href='subdomain-2-1.html'" role="button" tabindex="0">
+      <div class="subdomain-icon">💚</div>
+      <div class="subdomain-title">חוסן רגשי ונפש</div>
+    </div>
+    <div class="subdomain-tile" onclick="location.href='subdomain-2-2.html'" role="button" tabindex="0">
+      <div class="subdomain-icon">🏃‍♀️</div>
+      <div class="subdomain-title">גוף, בריאות וטכנולוגיה אישית</div>
+    </div>
+    <div class="subdomain-tile" onclick="location.href='subdomain-2-3.html'" role="button" tabindex="0">
+      <div class="subdomain-icon">🛡️</div>
+      <div class="subdomain-title">ביטחון אישי והגנה</div>
+    </div>
+    <div class="subdomain-tile" onclick="location.href='subdomain-2-4.html'" role="button" tabindex="0">
+      <div class="subdomain-icon">🔄</div>
+      <div class="subdomain-title">הרגלים וטכנולוגיה יומיומית</div>
+    </div>
+  </div>
+
+</section>
