@@ -421,6 +421,7 @@
         inset 0 1px 0 rgba(255,255,255,0.9);
       border: 1px solid rgba(236,72,153,0.22);
       transition: transform .18s ease, box-shadow .18s ease;
+      cursor: pointer;
     }
 
     .subdomain-tile:hover {
@@ -442,13 +443,6 @@
     .subdomain-icon {
       font-size: 1.2rem;
       margin-bottom: 0.05rem;
-    }
-
-    .subdomain-code {
-      font-weight: 800;
-      color: rgba(236,72,153,0.7);
-      font-size: 0.95rem;
-      margin-bottom: 0.2rem;
     }
 
     .subdomain-title {
@@ -659,29 +653,25 @@
 
 </main>
 
-<section class="content-section" style="max-width:1100px;margin:2rem auto 1.5rem;">
+<section class="content-section" style="max-width:900px;margin:2rem auto 1.5rem;">
   <h2 class="section-title">🧩 תתי-תחומים באדם וטכנולוגיה</h2>
   <div class="question-box">איפה אפשר לבחור זווית חקר אחת ולהעמיק בה?</div>
 
   <div class="subdomains-grid-3d">
     <div class="subdomain-tile" onclick="location.href='subdomain-2-1.html'" role="button" tabindex="0">
       <div class="subdomain-icon">💚</div>
-      <div class="subdomain-code">2.1</div>
       <div class="subdomain-title">חוסן רגשי ונפש</div>
     </div>
     <div class="subdomain-tile" onclick="location.href='subdomain-2-2.html'" role="button" tabindex="0">
       <div class="subdomain-icon">🏃‍♀️</div>
-      <div class="subdomain-code">2.2</div>
       <div class="subdomain-title">גוף, בריאות וטכנולוגיה אישית</div>
     </div>
     <div class="subdomain-tile" onclick="location.href='subdomain-2-3.html'" role="button" tabindex="0">
       <div class="subdomain-icon">🛡️</div>
-      <div class="subdomain-code">2.3</div>
       <div class="subdomain-title">ביטחון אישי והגנה</div>
     </div>
     <div class="subdomain-tile" onclick="location.href='subdomain-2-4.html'" role="button" tabindex="0">
       <div class="subdomain-icon">🔄</div>
-      <div class="subdomain-code">2.4</div>
       <div class="subdomain-title">הרגלים וטכנולוגיה יומיומית</div>
     </div>
   </div>
@@ -694,47 +684,3 @@
 
 </body>
 </html>
-✅ domain-2.html מוכן!
-
-עכשיו אמשיך ל-domain-3.html (סביבה וקיימות 🌍) בצבע ירוק #10b981...
-
-מחקר מעמיק
-תתי תחומים ללא מספר ותתי תחומים יש תיבה מסביב מאוד גדולה וצריך להתאים 
-משתמש בכלי
-|
-חושב
-המשתמש מבקש שני דברים: 1. להסיר את המספרים מתתי התחומים (למשל "2.1" צריך להיעלם) 2. התיבה של תתי-התחומים גדולה מדי וצריך להקטין אותה אני צריך: 1. למחוק את ה-div עם class="subdomain-code" שמכיל את המספור 2. להקטין את התיבה החיצונית - כנראה צריך להקטין את max-width של .content-section שמכיל את תתי-התחומים בקוד המקורי domain-1: - יש <div class="subdomain-code">1.1</div> וכו' - צריך למחוק - יש section עם style="max-width:1100px" לתתי-תחומים - צריך להקטין ל-900px או פחות כדי להתאים לרוחב הכללי של main אני אתקן את domain-2 שכבר כתבתי ואמשיך עם domain-3, domain-4, domain-5 עם התיקון הזה.
-הצג
-מובן! 👍
-
-2 שינויים:
-
-✅ להסיר את המספרים (2.1, 2.2 וכו') מתתי-התחומים
-✅ להקטין את התיבה החיצונית של תתי-התחומים (מ-1100px ל-900px)
-📄 domain-2.html מתוקן (ללא מספרים + תיבה קטנה יותר)
-רק החלק של תתי-התחומים משתנה:
-
-Copy<section class="content-section" style="max-width:900px;margin:2rem auto 1.5rem;">
-  <h2 class="section-title">🧩 תתי-תחומים באדם וטכנולוגיה</h2>
-  <div class="question-box">איפה אפשר לבחור זווית חקר אחת ולהעמיק בה?</div>
-
-  <div class="subdomains-grid-3d">
-    <div class="subdomain-tile" onclick="location.href='subdomain-2-1.html'" role="button" tabindex="0">
-      <div class="subdomain-icon">💚</div>
-      <div class="subdomain-title">חוסן רגשי ונפש</div>
-    </div>
-    <div class="subdomain-tile" onclick="location.href='subdomain-2-2.html'" role="button" tabindex="0">
-      <div class="subdomain-icon">🏃‍♀️</div>
-      <div class="subdomain-title">גוף, בריאות וטכנולוגיה אישית</div>
-    </div>
-    <div class="subdomain-tile" onclick="location.href='subdomain-2-3.html'" role="button" tabindex="0">
-      <div class="subdomain-icon">🛡️</div>
-      <div class="subdomain-title">ביטחון אישי והגנה</div>
-    </div>
-    <div class="subdomain-tile" onclick="location.href='subdomain-2-4.html'" role="button" tabindex="0">
-      <div class="subdomain-icon">🔄</div>
-      <div class="subdomain-title">הרגלים וטכנולוגיה יומיומית</div>
-    </div>
-  </div>
-
-</section>
