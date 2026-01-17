@@ -228,10 +228,16 @@
         <div style="grid-column: 1 / -1; margin-top: 20px; text-align: right; font-weight: 900; color: #4b5a72; font-size: 1.1rem;">
           1. מתחילות כאן:
         </div>
-        <a class="gate-btn" href="questionnaire.html" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(20, 184, 166, 0.2)); border: 2px solid #8b5cf6; grid-column: 1 / -1; min-height: 80px;">
-          <div class="gate-icon">📋</div>
-          <div class="gate-title">שאלון פתיחה</div>
+        <a class="gate-btn" href="questionnaire.html" style="background: #8b5cf6; color: white; border: none; grid-column: auto; min-height: 80px; width: 120px; box-shadow: 0 6px 0 #6d28d9, 0 8px 15px rgba(0,0,0,0.2); transform: translateY(-2px); transition: all 0.1s ease; margin-right: 0; display: flex; align-items: center; justify-content: center; border-radius: 12px;">
+          <div class="gate-icon" style="margin-bottom: 0; font-size: 1.5rem; color: white;">📋</div>
+          <div class="gate-title" style="color: white; font-size: 0.9rem; margin-bottom: 0;">שאלון פתיחה</div>
         </a>
+        <style>
+          .gate-btn[href="questionnaire.html"]:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #6d28d9, 0 4px 8px rgba(0,0,0,0.2);
+          }
+        </style>
 
         <!-- שלב 2: תחומי חיים -->
         <div style="grid-column: 1 / -1; margin-top: 20px; text-align: right; font-weight: 900; color: #4b5a72; font-size: 1.1rem;">
