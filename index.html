@@ -125,29 +125,40 @@
       overflow: hidden;
     }
 
+    .gate-title-wrapper {
+      position: relative;
+      height: 24px;
+      width: 100%;
+      margin-top: 8px;
+    }
+
     .gate-btn .gate-title-full,
     .gate-btn .gate-title-short {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
       font-weight: 900;
       text-align: center;
-      margin-top: 8px;
       line-height: 1.3;
     }
 
     .gate-btn .gate-title-short {
       font-size: 18px;
+      opacity: 1;
     }
 
     .gate-btn .gate-title-full {
-      display: none;
       font-size: 14px;
+      opacity: 0;
     }
 
     .gate-btn:hover .gate-title-full {
-      display: block;
+      opacity: 1;
     }
 
     .gate-btn:hover .gate-title-short {
-      display: none;
+      opacity: 0;
     }
 
     .gate-btn:hover {
@@ -290,55 +301,75 @@
           איפה זה פוגש אותי
         </div>
         
-        <a class="gate-btn" href="d1.html" style="--btn-color: #8b5cf6;">
+        <a class="gate-btn" href="d1.html">
           <div class="gate-icon">🧘‍♀️</div>
-          <div class="gate-title-short" style="color: #8b5cf6;">תחושת גוף</div>
-          <div class="gate-title-full" style="color: #8b5cf6;">הגוף שלי וההרגשה שלי</div>
+          <div class="gate-title-wrapper">
+            <div class="gate-title-short" style="color: #8b5cf6;">תחושת גוף</div>
+            <div class="gate-title-full" style="color: #8b5cf6;">הגוף שלי וההרגשה שלי</div>
+          </div>
         </a>
-        <a class="gate-btn" href="d2.html" style="--btn-color: #0ea5e9;">
+        <a class="gate-btn" href="d2.html">
           <div class="gate-icon">📱</div>
-          <div class="gate-title-short" style="color: #0ea5e9;">חיים דיגיטליים</div>
-          <div class="gate-title-full" style="color: #0ea5e9;">המסך והעולם הדיגיטלי</div>
+          <div class="gate-title-wrapper">
+            <div class="gate-title-short" style="color: #0ea5e9;">חיים דיגיטליים</div>
+            <div class="gate-title-full" style="color: #0ea5e9;">המסך והעולם הדיגיטלי</div>
+          </div>
         </a>
-        <a class="gate-btn" href="d3.html" style="--btn-color: #f59e0b;">
+        <a class="gate-btn" href="d3.html">
           <div class="gate-icon">👩‍🏫</div>
-          <div class="gate-title-short" style="color: #f59e0b;">למידה בלחץ</div>
-          <div class="gate-title-full" style="color: #f59e0b;">בית ספר – אבל לא כמו שמלמדים</div>
+          <div class="gate-title-wrapper">
+            <div class="gate-title-short" style="color: #f59e0b;">למידה בלחץ</div>
+            <div class="gate-title-full" style="color: #f59e0b;">בית ספר – אבל לא כמו שמלמדים</div>
+          </div>
         </a>
-        <a class="gate-btn" href="d4.html" style="--btn-color: #ec4899;">
+        <a class="gate-btn" href="d4.html">
           <div class="gate-icon">👩‍❤️‍👩</div>
-          <div class="gate-title-short" style="color: #ec4899;">חיים חברתיים</div>
-          <div class="gate-title-full" style="color: #ec4899;">חברים, קשרים ומרחבים חברתיים</div>
+          <div class="gate-title-wrapper">
+            <div class="gate-title-short" style="color: #ec4899;">חיים חברתיים</div>
+            <div class="gate-title-full" style="color: #ec4899;">חברים, קשרים ומרחבים חברתיים</div>
+          </div>
         </a>
-        <a class="gate-btn" href="d5.html" style="--btn-color: #10b981;">
+        <a class="gate-btn" href="d5.html">
           <div class="gate-icon">💸</div>
-          <div class="gate-title-short" style="color: #10b981;">בחירות יומיומיות</div>
-          <div class="gate-title-full" style="color: #10b981;">כסף קטן, קניות ובחירות</div>
+          <div class="gate-title-wrapper">
+            <div class="gate-title-short" style="color: #10b981;">בחירות יומיומיות</div>
+            <div class="gate-title-full" style="color: #10b981;">כסף קטן, קניות ובחירות</div>
+          </div>
         </a>
-        <a class="gate-btn" href="d6.html" style="--btn-color: #f97316;">
+        <a class="gate-btn" href="d6.html">
           <div class="gate-icon">🏃‍♀️</div>
-          <div class="gate-title-short" style="color: #f97316;">מרחב ותנועה</div>
-          <div class="gate-title-full" style="color: #f97316;">תנועה ומרחב</div>
+          <div class="gate-title-wrapper">
+            <div class="gate-title-short" style="color: #f97316;">מרחב ותנועה</div>
+            <div class="gate-title-full" style="color: #f97316;">תנועה ומרחב</div>
+          </div>
         </a>
-        <a class="gate-btn" href="d7.html" style="--btn-color: #6366f1;">
+        <a class="gate-btn" href="d7.html">
           <div class="gate-icon">🏠</div>
-          <div class="gate-title-short" style="color: #6366f1;">מרחב אישי</div>
-          <div class="gate-title-full" style="color: #6366f1;">הבית והמרחב הקרוב</div>
+          <div class="gate-title-wrapper">
+            <div class="gate-title-short" style="color: #6366f1;">מרחב אישי</div>
+            <div class="gate-title-full" style="color: #6366f1;">הבית והמרחב הקרוב</div>
+          </div>
         </a>
-        <a class="gate-btn" href="d8.html" style="--btn-color: #22c55e;">
+        <a class="gate-btn" href="d8.html">
           <div class="gate-icon">🌿</div>
-          <div class="gate-title-short" style="color: #22c55e;">סביבה חיה</div>
-          <div class="gate-title-full" style="color: #22c55e;">טבע וחיות בסביבה שלי</div>
+          <div class="gate-title-wrapper">
+            <div class="gate-title-short" style="color: #22c55e;">סביבה חיה</div>
+            <div class="gate-title-full" style="color: #22c55e;">טבע וחיות בסביבה שלי</div>
+          </div>
         </a>
-        <a class="gate-btn" href="d9.html" style="--btn-color: #f43f5e;">
+        <a class="gate-btn" href="d9.html">
           <div class="gate-icon">🎨</div>
-          <div class="gate-title-short" style="color: #f43f5e;">פנאי ויצירה</div>
-          <div class="gate-title-full" style="color: #f43f5e;">זמן פנוי ויצירה</div>
+          <div class="gate-title-wrapper">
+            <div class="gate-title-short" style="color: #f43f5e;">פנאי ויצירה</div>
+            <div class="gate-title-full" style="color: #f43f5e;">זמן פנוי ויצירה</div>
+          </div>
         </a>
-        <a class="gate-btn" href="d10.html" style="--btn-color: #8b5cf6;">
+        <a class="gate-btn" href="d10.html">
           <div class="gate-icon">🔮</div>
-          <div class="gate-title-short" style="color: #8b5cf6;">מבט קדימה</div>
-          <div class="gate-title-full" style="color: #8b5cf6;">מחשבות על עתיד</div>
+          <div class="gate-title-wrapper">
+            <div class="gate-title-short" style="color: #8b5cf6;">מבט קדימה</div>
+            <div class="gate-title-full" style="color: #8b5cf6;">מחשבות על עתיד</div>
+          </div>
         </a>
       </div>
 
