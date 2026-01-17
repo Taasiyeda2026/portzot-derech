@@ -96,10 +96,11 @@
     .buttons {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: clamp(10px, 1.6vh, 16px);
+      gap: 20px;
       max-width: 600px;
       margin: 0 auto;
       padding: 20px 10px;
+      justify-items: center;
     }
 
     .gate-btn {
@@ -108,9 +109,11 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: clamp(12px, 1.6vh, 16px) 14px; /* הקטנת padding */
-      min-height: clamp(80px, 10.5vh, 105px); /* הקטנת גובה */
-      border-radius: 22px; 
+      width: 100%;
+      max-width: 260px;
+      padding: 20px;
+      min-height: 120px;
+      border-radius: 24px; 
       background: #ffffff;
       box-shadow: 
         0 10px 25px -5px rgba(0, 0, 0, 0.1),
@@ -119,6 +122,29 @@
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
       border: 1px solid rgba(255, 255, 255, 0.8);
+      overflow: hidden;
+    }
+
+    .gate-btn .gate-title-full {
+      display: none;
+      font-weight: 900;
+      font-size: 16px;
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    .gate-btn:hover .gate-title-full {
+      display: block;
+    }
+
+    .gate-btn:hover .gate-title-short {
+      display: none;
+    }
+
+    .gate-title-short {
+      font-weight: 900;
+      font-size: 18px;
+      margin-top: 8px;
     }
 
     .gate-btn:hover {
@@ -129,9 +155,9 @@
     }
 
     .gate-icon {
-      font-size: clamp(1.8rem, 3vh, 2.4rem);
-      margin-bottom: 6px;
-      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+      font-size: 2.5rem;
+      margin-bottom: 4px;
+      filter: drop-shadow(0 6px 8px rgba(0,0,0,0.15));
     }
 
     .gate-title {
@@ -261,55 +287,55 @@
           2. איפה זה פוגש אותי
         </div>
         
-        <a class="gate-btn" href="d1.html">
+        <a class="gate-btn" href="d1.html" style="--btn-color: #8b5cf6;">
           <div class="gate-icon">🧘‍♀️</div>
-          <div class="gate-title">הגוף שלי וההרגשה שלי</div>
-          <span>תחושות · דימוי עצמי · הקשבה פנימית</span>
+          <div class="gate-title-short" style="color: #8b5cf6;">תחושת גוף</div>
+          <div class="gate-title-full" style="color: #8b5cf6;">הגוף שלי וההרגשה שלי</div>
         </a>
-        <a class="gate-btn" href="d2.html">
+        <a class="gate-btn" href="d2.html" style="--btn-color: #0ea5e9;">
           <div class="gate-icon">📱</div>
-          <div class="gate-title">המסך והעולם הדיגיטלי</div>
-          <span>נוכחות · השוואה · חיבור וניתוק</span>
+          <div class="gate-title-short" style="color: #0ea5e9;">חיים דיגיטליים</div>
+          <div class="gate-title-full" style="color: #0ea5e9;">המסך והעולם הדיגיטלי</div>
         </a>
-        <a class="gate-btn" href="d3.html">
+        <a class="gate-btn" href="d3.html" style="--btn-color: #f59e0b;">
           <div class="gate-icon">👩‍🏫</div>
-          <div class="gate-title">בית ספר – אבל לא כמו שמלמדים</div>
-          <span>למידה אחרת · סקרנות · אתגרים</span>
+          <div class="gate-title-short" style="color: #f59e0b;">למידה בלחץ</div>
+          <div class="gate-title-full" style="color: #f59e0b;">בית ספר – אבל לא כמו שמלמדים</div>
         </a>
-        <a class="gate-btn" href="d4.html">
+        <a class="gate-btn" href="d4.html" style="--btn-color: #ec4899;">
           <div class="gate-icon">👩‍❤️‍👩</div>
-          <div class="gate-title">חברים, קשרים ומרחבים חברתיים</div>
-          <span>שייכות · נאמנות · מקום בקבוצה</span>
+          <div class="gate-title-short" style="color: #ec4899;">חיים חברתיים</div>
+          <div class="gate-title-full" style="color: #ec4899;">חברים, קשרים ומרחבים חברתיים</div>
         </a>
-        <a class="gate-btn" href="d5.html">
+        <a class="gate-btn" href="d5.html" style="--btn-color: #10b981;">
           <div class="gate-icon">💸</div>
-          <div class="gate-title">כסף קטן, קניות ובחירות</div>
-          <span>עצמאות · צרכנות · ערך וסדר עדיפויות</span>
+          <div class="gate-title-short" style="color: #10b981;">בחירות יומיומיות</div>
+          <div class="gate-title-full" style="color: #10b981;">כסף קטן, קניות ובחירות</div>
         </a>
-        <a class="gate-btn" href="d6.html">
+        <a class="gate-btn" href="d6.html" style="--btn-color: #14b8a6;">
           <div class="gate-icon">🏃‍♀️</div>
-          <div class="gate-title">תנועה ומרחב</div>
-          <span>חופש פעולה · ביטחון במרחב · נוכחות</span>
+          <div class="gate-title-short" style="color: #14b8a6;">מרחב ותנועה</div>
+          <div class="gate-title-full" style="color: #14b8a6;">תנועה ומרחב</div>
         </a>
-        <a class="gate-btn" href="d7.html">
+        <a class="gate-btn" href="d7.html" style="--btn-color: #6366f1;">
           <div class="gate-icon">🏠</div>
-          <div class="gate-title">הבית והסביבה הקרובה</div>
-          <span>מרחב אישי · משפחה · שייכות למקום</span>
+          <div class="gate-title-short" style="color: #6366f1;">מרחב אישי</div>
+          <div class="gate-title-full" style="color: #6366f1;">הבית והמרחב הקרוב</div>
         </a>
-        <a class="gate-btn" href="d8.html">
+        <a class="gate-btn" href="d8.html" style="--btn-color: #22c55e;">
           <div class="gate-icon">🌿</div>
-          <div class="gate-title">טבע וחיות בסביבה שלי</div>
-          <span>חיבור לסביבה · טיפול · שקט ומרגוע</span>
+          <div class="gate-title-short" style="color: #22c55e;">סביבה חיה</div>
+          <div class="gate-title-full" style="color: #22c55e;">טבע וחיות בסביבה שלי</div>
         </a>
-        <a class="gate-btn" href="d9.html">
+        <a class="gate-btn" href="d9.html" style="--btn-color: #f43f5e;">
           <div class="gate-icon">🎨</div>
-          <div class="gate-title">זמן פנוי ויצירה</div>
-          <span>ביטוי אישי · תחביבים · גילוי כישרונות</span>
+          <div class="gate-title-short" style="color: #f43f5e;">פנאי ויצירה</div>
+          <div class="gate-title-full" style="color: #f43f5e;">זמן פנוי ויצירה</div>
         </a>
-        <a class="gate-btn" href="d10.html">
+        <a class="gate-btn" href="d10.html" style="--btn-color: #8b5cf6;">
           <div class="gate-icon">🔮</div>
-          <div class="gate-title">מחשבות על עתיד</div>
-          <span>חלומות · שאיפות · הדרך שלפניי</span>
+          <div class="gate-title-short" style="color: #8b5cf6;">מבט קדימה</div>
+          <div class="gate-title-full" style="color: #8b5cf6;">מחשבות על עתיד</div>
         </a>
       </div>
 
