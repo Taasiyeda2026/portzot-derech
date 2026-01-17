@@ -28,4 +28,14 @@ The server runs on port 5000 and serves all static files.
 - Responsive design with modern CSS
 
 ## Recent Changes
+- 2026-01-17: Complete magazine-style layout for all domain pages (d1-d10)
+  - Hero sections with 3D drop-shadow icons
+  - H1 full titles + H2 subtitles (centered)
+  - Intro text with right border accent
+  - Content sections with hover effects
+  - Example boxes integrated throughout (not grouped at end)
+  - "Stop moment" reflection sections
+  - Unique color scheme per domain
+- 2026-01-17: Homepage button hover functionality (short title default, full title on hover)
+- 2026-01-17: Female-centered iconography throughout
 - 2026-01-17: Initial Replit environment setup, created static file server
