@@ -79,50 +79,52 @@
 
     .intro-cards {
       display: flex;
-      gap: 16px;
-      padding: 30px 40px 40px;
+      gap: 20px;
+      padding: 35px 40px 45px;
       background: linear-gradient(180deg, rgba(248,250,252,0.5) 0%, rgba(241,245,249,0.8) 100%);
+      align-items: stretch;
     }
 
     .intro-card {
       flex: 1;
-      background: #ffffff;
-      border-radius: 14px;
-      padding: 22px 18px;
+      background: linear-gradient(180deg, #fff9fb 0%, #fef7f9 100%);
+      border-radius: 16px;
+      padding: 40px;
       text-align: right;
       box-shadow:
         0 2px 8px rgba(0, 0, 0, 0.04),
         0 4px 20px rgba(0, 0, 0, 0.06);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .intro-card .opening {
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 1.6;
+      color: #374151;
+      margin-bottom: 16px;
     }
 
     .intro-card p {
-      font-size: 14px;
-      line-height: 1.8;
-      color: #475569;
-      margin-bottom: 14px;
+      font-size: 17px;
+      line-height: 1.7;
+      color: #4b5563;
+      margin-bottom: 0;
     }
 
-    .intro-card p:last-child {
-      margin-bottom: 0;
+    .intro-card .highlight {
+      color: #be185d;
+      font-weight: 500;
     }
 
     @media (max-width: 900px) {
       .intro-cards {
-        flex-wrap: wrap;
-        padding: 20px 25px 30px;
-      }
-      .intro-card {
-        flex: 1 1 calc(50% - 8px);
-        min-width: 200px;
-      }
-    }
-
-    @media (max-width: 550px) {
-      .intro-cards {
         flex-direction: column;
+        padding: 25px 25px 35px;
       }
       .intro-card {
-        flex: 1 1 100%;
+        padding: 32px;
       }
     }
 
@@ -324,60 +326,18 @@
 
     <div class="intro-cards">
       <div class="intro-card">
-        <p>
-          יש ימים שאת קמה ומרגישה טוב.<br>
-          יש ימים שפחות.
-        </p>
-        <p>
-          יש ימים של רגישות,<br>
-          עצבנות,<br>
-          או סתם תחושה לא ברורה.
-        </p>
-        <p>
-          זה קורה לכולנו.
-        </p>
+        <div class="opening">יש ימים שאת קמה ומרגישה טוב, ויש ימים שאת קמה ומרגישה פחות טוב.</div>
+        <p>יש ימים שאת עצבנית, רגישה, או סתם ככה - בלי סיבה ברורה. אלה דברים שקורים לנו כל יום, גם כשלא תמיד מדברות על זה.</p>
       </div>
 
       <div class="intro-card">
-        <p>
-          אלה דברים שקורים לנו כל יום.<br>
-          איך אנחנו מרגישות עם הגוף שלנו.<br>
-          איך אנחנו נראות בעיני עצמנו.
-        </p>
-        <p>
-          לפעמים זה קטן.<br>
-          לפעמים זה תופס יום שלם.
-        </p>
+        <div class="opening">זה פוגש אותנו בכל תחום בחיים.</div>
+        <p>איך אנחנו מרגישות עם הגוף שלנו, איך אנחנו נראות בעיני עצמנו, ואיך זה משפיע על הביטחון, על המצב רוח ועל היום כולו. רוב הזמן אנחנו פשוט ממשיכות, בלי לעצור רגע לשים לב.</p>
       </div>
 
       <div class="intro-card">
-        <p>
-          זה פוגש אותנו בכל תחום.<br>
-          בביטחון.<br>
-          במצב הרוח.<br>
-          ביום עצמו.
-        </p>
-        <p>
-          רוב הזמן פשוט ממשיכות,<br>
-          בלי לעצור רגע להקשיב.
-        </p>
-      </div>
-
-      <div class="intro-card">
-        <p>
-          כי כל שינוי גדול מתחיל ממשהו אישי.<br>
-          מחשבה קטנה.<br>
-          תחושה פנימית.
-        </p>
-        <p>
-          רגע אחד<br>
-          שבו את שמה לב למה שקורה אצלך.
-        </p>
-        <p>
-          מכאן אפשר להתחיל.<br>
-          לאט.<br>
-          בדרך שלך.
-        </p>
+        <div class="opening">כתבנו את זה כדי לעצור רגע.</div>
+        <p><span class="highlight">להקשיב</span> למה שקורה בפנים, ולבדוק בשקט עם עצמך איפה זה פוגש אותך עכשיו. כי כל <span class="highlight">שינוי גדול</span> מתחיל ממשהו אישי. מכאן אפשר להתחיל, לאט, <span class="highlight">בדרך שלך</span> <span class="highlight">ובבחירה שנכונה לך</span> עכשיו.</p>
       </div>
     </div>
 
