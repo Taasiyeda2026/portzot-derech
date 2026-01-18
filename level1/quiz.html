@@ -136,26 +136,27 @@
       flex-direction: column;
     }
 
-    .question-card-strip {
-      height: 6px;
-      width: 100%;
-      background: linear-gradient(90deg, #8A85C6, #A5A0D6, #C4B5E0);
+    .question-card-header {
+      background: linear-gradient(135deg, #ec4899, #db2777);
+      padding: 24px 28px;
       border-radius: 16px 16px 0 0;
     }
 
+    .question-text {
+      font-size: 1.3em;
+      font-weight: 600;
+      color: #fff;
+      line-height: 1.5;
+      text-align: center;
+      margin: 0;
+    }
+
     .question-card-body {
-      padding: 32px;
+      padding: 28px 32px 32px;
       flex: 1;
       display: flex;
       flex-direction: column;
-    }
-
-    .question-text {
-      font-size: 1.35em;
-      font-weight: 600;
-      color: #2F3A5F;
-      margin-bottom: 28px;
-      line-height: 1.5;
+      background: #fff;
     }
 
     .options {
@@ -382,9 +383,10 @@
 
     <div class="question-screen" id="questionScreen">
       <div class="question-card">
-        <div class="question-card-strip"></div>
-        <div class="question-card-body">
+        <div class="question-card-header">
           <div class="question-text" id="questionText"></div>
+        </div>
+        <div class="question-card-body">
           <div class="options" id="optionsContainer"></div>
         </div>
       </div>
