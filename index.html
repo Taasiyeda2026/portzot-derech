@@ -128,70 +128,91 @@
       }
     }
 
-    .process-section {
+    .action-section {
       display: flex;
-      justify-content: center;
       align-items: center;
-      gap: 60px;
-      padding: 35px 50px;
-      background: linear-gradient(180deg, #f1f5f9 0%, #e2e8f0 100%);
-      position: relative;
+      justify-content: center;
+      gap: 30px;
+      padding: 40px 50px;
+      background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
     }
 
-    .process-section::before {
-      content: "";
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 80px;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, #cbd5e1, transparent);
+    .action-card {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      background: linear-gradient(180deg, #fff9fb 0%, #fef7f9 100%);
+      border-radius: 20px;
+      padding: 32px 40px;
+      box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.04),
+        0 4px 20px rgba(0, 0, 0, 0.06);
+      max-width: 700px;
     }
 
-    .process-btn {
+    .action-card .action-btn {
       text-decoration: none;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      width: 140px;
-      height: 140px;
-      padding: 18px;
-      border-radius: 22px;
+      width: 120px;
+      height: 120px;
+      padding: 16px;
+      border-radius: 20px;
       background: #ffffff;
       box-shadow:
-        0 8px 0 rgba(0, 0, 0, 0.06),
-        0 12px 30px rgba(0, 0, 0, 0.12);
+        0 6px 0 rgba(0, 0, 0, 0.05),
+        0 10px 25px rgba(0, 0, 0, 0.1);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
-      position: relative;
-      z-index: 1;
+      flex-shrink: 0;
     }
 
-    .process-btn:hover {
+    .action-card .action-btn:hover {
       transform: translateY(-4px);
       box-shadow:
-        0 12px 0 rgba(0, 0, 0, 0.06),
-        0 18px 40px rgba(0, 0, 0, 0.15);
+        0 10px 0 rgba(0, 0, 0, 0.05),
+        0 16px 35px rgba(0, 0, 0, 0.12);
     }
 
-    .process-btn:active {
-      transform: translateY(2px);
-      box-shadow:
-        0 3px 0 rgba(0, 0, 0, 0.06),
-        0 6px 15px rgba(0, 0, 0, 0.1);
+    .action-card .action-btn .icon {
+      font-size: 2rem;
+      margin-bottom: 6px;
     }
 
-    .process-btn .icon {
-      font-size: 2.2rem;
-      margin-bottom: 8px;
-      filter: drop-shadow(0 3px 6px rgba(0,0,0,0.1));
-    }
-
-    .process-btn .label {
-      font-size: 14px;
-      font-weight: 900;
+    .action-card .action-btn .label {
+      font-size: 13px;
+      font-weight: 700;
       text-align: center;
+      color: #be185d;
+    }
+
+    .action-content {
+      text-align: right;
+    }
+
+    .action-content h3 {
+      font-size: 22px;
+      font-weight: 700;
+      color: #be185d;
+      margin-bottom: 12px;
+    }
+
+    .action-content p {
+      font-size: 16px;
+      line-height: 1.7;
+      color: #4b5563;
+    }
+
+    @media (max-width: 700px) {
+      .action-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 28px;
+      }
+      .action-content {
+        text-align: center;
+      }
     }
 
     .domains-section {
@@ -341,21 +362,17 @@
       </div>
     </div>
 
-    <div class="process-section">
-      <a class="process-btn" href="https://portzot-derech.org/level1/quiz.html">
-        <div class="icon">📋</div>
-        <div class="title-wrapper">
-          <div class="title-short label" style="color: #db2777;">שאלון פתיחה</div>
-          <div class="title-full label" style="color: #db2777;">שאלון פתיחה</div>
+    <div class="action-section">
+      <div class="action-card">
+        <a class="action-btn" href="https://portzot-derech.org/level1/quiz.html">
+          <div class="icon">📋</div>
+          <div class="label">שאלון פתיחה</div>
+        </a>
+        <div class="action-content">
+          <h3>איך מתחילים?</h3>
+          <p>היכנסי לשאלון.<br>עני על כמה שאלות,<br>ותגלי אילו תחומים כדאי לך להתחיל לחקור.<br>זו רק נקודת פתיחה והמלצה.<br>בסוף, הבחירה תמיד שלך 💜</p>
         </div>
-      </a>
-      <a class="process-btn" href="https://portzot-derech.org/pairing.html">
-        <div class="icon">🤝</div>
-        <div class="title-wrapper">
-          <div class="title-short label" style="color: #7c3aed;">מציאת שותפה</div>
-          <div class="title-full label" style="color: #7c3aed;">מציאת שותפה</div>
-        </div>
-      </a>
+      </div>
     </div>
 
     <div class="domains-section">
@@ -433,6 +450,19 @@
             <div class="title-full" style="color: #8b5cf6;">מחשבות על עתיד</div>
           </div>
         </a>
+      </div>
+    </div>
+
+    <div class="action-section">
+      <div class="action-card">
+        <a class="action-btn" href="https://portzot-derech.org/pairing.html">
+          <div class="icon">🤝</div>
+          <div class="label">מציאת שותפה</div>
+        </a>
+        <div class="action-content">
+          <h3>בחרת תחום?</h3>
+          <p>השלב הבא הוא למצוא שותפה מתאימה</p>
+        </div>
       </div>
     </div>
 
