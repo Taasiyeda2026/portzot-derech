@@ -3,593 +3,764 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>שאלון בחירת תחום חקר | פורצות דרך</title>
+  <title>שאלון פתיחה | פורצות דרך</title>
   <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet" />
 
   <style>
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{
-      font-family:'Varela Round',sans-serif;
-      background:linear-gradient(135deg,#667eea,#764ba2);
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:20px;
-      transition: background 0.8s ease;
-    }
-    .container{
-      background:#fff;
-      border-radius:22px;
-      max-width:760px;
-      width:100%;
-      padding:42px;
-      box-shadow:0 24px 70px rgba(0,0,0,.28);
-      animation:fade .5s ease;
-      position:relative;
-      overflow:hidden;
-    }
-    @keyframes fade{from{opacity:0;transform:translateY(20px)}to{opacity:1}}
-
-    h1{text-align:center;color:#667eea;margin-bottom:18px}
-    .subtitle{text-align:center;color:#555;line-height:1.7;margin-bottom:36px}
-
-    .start-screen{text-align:center}
-    .start-btn{
-      background:linear-gradient(90deg,#667eea,#764ba2);
-      color:#fff;border:none;border-radius:30px;
-      padding:16px 54px;font-size:1.2em;
-      cursor:pointer;transition:.2s
-    }
-    .start-btn:hover{transform:scale(1.05)}
-
-    .progress-wrap{display:none;background:#e5e7eb;height:10px;border-radius:10px;margin-bottom:28px;overflow:hidden}
-    .progress{height:100%;width:0;background:linear-gradient(90deg,#667eea,#764ba2);transition:.35s}
-
-    .question{display:none}
-    .question.active{display:block;animation:slide .3s ease}
-    @keyframes slide{from{opacity:0;transform:translateX(-20px)}to{opacity:1}}
-
-    .q-text{font-size:1.3em;font-weight:bold;margin-bottom:26px;color:#333}
-    .options{display:flex;flex-direction:column;gap:16px}
-    .option{
-      padding:18px;border-radius:14px;background:#f5f5f5;
-      border:2px solid #e5e7eb;cursor:pointer;transition:.2s
-    }
-    .option:hover{background:#eef2ff;border-color:#667eea}
-    .option.selected{background:#667eea;color:#fff;border-color:#667eea}
-    .option.selected::after{content:" ✓"}
-
-    .loading{display:none;text-align:center;padding:60px 0}
-    .loading.active{display:block}
-    .dots span{display:inline-block;width:10px;height:10px;border-radius:50%;background:#ec4899;margin:0 4px;animation:blink 1.4s infinite}
-    .dots span:nth-child(2){animation-delay:.2s}
-    .dots span:nth-child(3){animation-delay:.4s}
-    @keyframes blink{0%,100%{opacity:.3}50%{opacity:1}}
-
-    .result{display:none;text-align:center;position:relative;padding:8px 0}
-
-    /* אפקט סיום מיוחד */
-    .result::before{
-      content:"";
-      position:absolute;
-      inset:-20px;
-      background:radial-gradient(circle at center,rgba(102,126,234,.15),transparent 70%);
-      opacity:0;
-      animation:resultGlow 1.2s ease forwards;
-      pointer-events:none;
-    }
-    @keyframes resultGlow{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
-
-    .confetti{
-      position:absolute;
-      top:-10px;
-      width:8px;height:14px;
-      opacity:.9;
-      animation:fall 1.6s linear forwards;
-      pointer-events:none;
-    }
-    @keyframes fall{to{transform:translateY(120vh) rotate(360deg);opacity:0}}
-
-    .result.active{display:block;animation:fade .4s ease}
-    .icon{font-size:4em;margin-bottom:14px}
-    .title{font-size:2em;margin-bottom:10px;color:#111827}
-
-    .desc{color:#6b7280;line-height:1.6;margin-bottom:18px;font-size:1em}
-
-    /* הדגשת שם התחום בתוצאה */
-    .result .desc strong{
-      display:block;
-      font-size:1.8em;
-      line-height:1.25;
-      margin-bottom:6px;
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
-    /* תיאור קצר מתחת לשם התחום */
-    .result .desc .domain-desc{font-size:0.95em;margin-top:2px}
-
-    /* טקסט ההבהרה – מודגש יותר */
-    #resNote{font-size:0.92em;color:#374151;margin-top:8px;line-height:1.6}
-
-    .btn-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:10px;align-items:stretch}
-    .btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      padding:12px 22px;
-      min-width:190px;
-      border-radius:22px;
-      background:var(--btn-main, linear-gradient(90deg,#667eea,#764ba2));
-      color:#fff;
-      text-decoration:none;
-      font-size:1em;
-      line-height:1;
-      transition:transform .2s ease, background .3s ease, border-color .3s ease;
-      border:2px solid transparent;
+    body {
+      font-family: 'Varela Round', sans-serif;
+      background: #FAFAFA;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
     }
-    .btn.secondary{
-      background:#fff;
-      color:var(--btn-accent,#667eea);
-      border-color:var(--btn-accent,#667eea);
-    }
-    .btn:hover{transform:scale(1.03)}
 
-    @media (max-width: 600px){
-      .container{padding:26px}
-      .q-text{font-size:1.15em}
-      .btn-row{flex-direction:column}
-      .btn{width:100%;text-align:center}
+    .container {
+      background: #fff;
+      border-radius: 24px;
+      max-width: 680px;
+      width: 100%;
+      padding: 48px 42px;
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
+      min-height: 420px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .progress-bar {
+      height: 4px;
+      background: #E5E7EB;
+      border-radius: 4px;
+      margin-bottom: 40px;
+      overflow: hidden;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .progress-bar.visible {
+      opacity: 1;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, #8A85C6, #A5A0D6);
+      border-radius: 4px;
+      transition: width 0.4s ease;
+    }
+
+    .start-screen {
+      text-align: center;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .start-screen h1 {
+      font-size: 1.8em;
+      color: #2F3A5F;
+      margin-bottom: 16px;
+    }
+
+    .start-screen p {
+      color: #555;
+      line-height: 1.8;
+      margin-bottom: 32px;
+      max-width: 420px;
+    }
+
+    .start-btn {
+      background: linear-gradient(135deg, #8A85C6, #A5A0D6);
+      color: #fff;
+      border: none;
+      border-radius: 30px;
+      padding: 16px 48px;
+      font-size: 1.1em;
+      font-family: inherit;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .start-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(138, 133, 198, 0.3);
+    }
+
+    .question-screen {
+      display: none;
+      flex: 1;
+      flex-direction: column;
+    }
+
+    .question-screen.active {
+      display: flex;
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateX(-15px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .question-text {
+      font-size: 1.35em;
+      font-weight: 600;
+      color: #2F3A5F;
+      margin-bottom: 32px;
+      line-height: 1.5;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      flex: 1;
+    }
+
+    .option {
+      padding: 18px 22px;
+      border-radius: 14px;
+      background: #fff;
+      border: 2px solid #E0E0E0;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      font-size: 1.05em;
+      color: #333;
+    }
+
+    .option:hover {
+      background: #F0F1F5;
+      border-color: #C5C3E0;
+    }
+
+    .option.selected {
+      background: #E6E4F2;
+      border-color: #8A85C6;
+      color: #2F3A5F;
+    }
+
+    .result-screen {
+      display: none;
+      text-align: center;
+      flex: 1;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px 0;
+    }
+
+    .result-screen.active {
+      display: flex;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .result-intro {
+      font-size: 1.1em;
+      color: #555;
+      margin-bottom: 24px;
+      line-height: 1.7;
+    }
+
+    .domains-result {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+
+    .domain-card {
+      background: linear-gradient(135deg, #E6E4F2, #F0EEF8);
+      border-radius: 16px;
+      padding: 20px 28px;
+      min-width: 140px;
+    }
+
+    .domain-card .icon {
+      font-size: 2em;
+      margin-bottom: 8px;
+    }
+
+    .domain-card .name {
+      font-size: 1.15em;
+      font-weight: 600;
+      color: #2F3A5F;
+    }
+
+    .result-note {
+      color: #666;
+      font-size: 0.95em;
+      line-height: 1.7;
+      max-width: 400px;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 28px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 28px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #8A85C6, #A5A0D6);
+      color: #fff;
+      text-decoration: none;
+      font-size: 1em;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(138, 133, 198, 0.3);
+    }
+
+    .btn.secondary {
+      background: #f5f5f5;
+      color: #555;
+    }
+
+    .btn.secondary:hover {
+      background: #eee;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .loading-screen {
+      display: none;
+      text-align: center;
+      flex: 1;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .loading-screen.active {
+      display: flex;
+    }
+
+    .loading-dots {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .loading-dots span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #8A85C6;
+      animation: pulse 1.4s infinite;
+    }
+
+    .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.3; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1); }
+    }
+
+    .loading-text {
+      color: #666;
+      font-size: 1em;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 32px 24px;
+      }
+
+      .question-text {
+        font-size: 1.2em;
+      }
+
+      .option {
+        padding: 16px 18px;
+        font-size: 1em;
+      }
+
+      .domains-result {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .domain-card {
+        width: 100%;
+        max-width: 200px;
+      }
     }
   </style>
 </head>
 <body>
-<div class="container">
+  <div class="container">
+    <div class="progress-bar">
+      <div class="progress-fill"></div>
+    </div>
 
-  <div class="start-screen" id="start">
-    <h1>🔍 שאלון בחירת תחום חקר</h1>
-    <p class="subtitle">
-      התהליך מתחיל בבחירה אישית.<br>
-      עני על השאלון והתוצאה תציע לך תחום חקר שמתאים לך.<br>
-      בהמשך, הבחירות האישיות נפגשות בעבודה קבוצתית.
-    </p>
-    <button class="start-btn" onclick="startQuiz()">התחילי</button>
-  </div>
+    <div class="start-screen" id="startScreen">
+      <h1>שאלון פתיחה</h1>
+      <p>
+        השאלון הזה יעזור לך לגלות אילו תחומים מדברים אלייך עכשיו.
+        <br><br>
+        אין תשובות נכונות או לא נכונות – פשוט בחרי את מה שמרגיש הכי קרוב.
+      </p>
+      <button class="start-btn" onclick="startQuiz()">בואי נתחיל</button>
+    </div>
 
-  <div class="progress-wrap" id="progressWrap">
-    <div class="progress" id="progress"></div>
-  </div>
+    <div class="question-screen" id="questionScreen">
+      <div class="question-text" id="questionText"></div>
+      <div class="options" id="optionsContainer"></div>
+    </div>
 
-  <div id="questionBox"></div>
+    <div class="loading-screen" id="loadingScreen">
+      <div class="loading-dots">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div class="loading-text">מעבדת את התשובות שלך...</div>
+    </div>
 
-  <div class="loading" id="loading">
-    <h2>מחשב תוצאה</h2>
-    <div class="dots"><span></span><span></span><span></span></div>
-  </div>
-
-  <div class="result" id="result">
-    <div class="icon" id="resIcon"></div>
-    <div class="title" id="resTitle"></div>
-    <div class="desc" id="resDesc"></div>
-    <div class="desc" id="resNote"></div>
-    <div class="btn-row">
-      <a class="btn" id="resBtn" href="#">למעבר לעמוד התחום</a>
+    <div class="result-screen" id="resultScreen">
+      <div class="result-intro">
+        לפי התשובות שלך, נראה ששני תחומים מדברים אלייך במיוחד עכשיו:
+      </div>
+      <div class="domains-result" id="domainsResult"></div>
+      <div class="result-note">
+        זו רק המלצה. הבחירה הסופית תמיד שלך.
+      </div>
+      <div class="btn-row">
+        <a class="btn" href="../index.html">לעמוד התחומים</a>
+        <button class="btn secondary" onclick="restartQuiz()">למלא שוב</button>
+      </div>
     </div>
   </div>
-</div>
 
-<script>
-// ---------- עזר: שינוי בהירות צבע (fix לשגיאה: shadeColor לא מוגדר) ----------
-// amount: -100..100 (שלילי = כהה יותר, חיובי = בהיר יותר)
-function shadeColor(hex, amount){
-  if(typeof hex !== 'string') return '#000000';
-  let c = hex.trim();
-  if(c.startsWith('#')) c = c.slice(1);
-  if(c.length === 3){
-    c = c.split('').map(ch => ch + ch).join('');
-  }
-  if(!/^[0-9a-fA-F]{6}$/.test(c)) return '#000000';
+  <script>
+    const domains = [
+      { id: 1, name: 'תחושת גוף', icon: '🧘‍♀️' },
+      { id: 2, name: 'חיים דיגיטליים', icon: '📱' },
+      { id: 3, name: 'למידה בלחץ', icon: '👩‍🏫' },
+      { id: 4, name: 'חיים חברתיים', icon: '👩‍❤️‍👩' },
+      { id: 5, name: 'בחירות יומיומיות', icon: '💸' },
+      { id: 6, name: 'מרחב ותנועה', icon: '🏃‍♀️' },
+      { id: 7, name: 'המרחב האישי', icon: '🏠' },
+      { id: 8, name: 'סביבה חיה', icon: '🌿' },
+      { id: 9, name: 'פנאי ויצירה', icon: '🎨' },
+      { id: 10, name: 'מבט קדימה', icon: '🔮' }
+    ];
 
-  const num = parseInt(c, 16);
-  let r = (num >> 16) & 255;
-  let g = (num >> 8) & 255;
-  let b = num & 255;
+    const questions = [
+      {
+        id: 1,
+        text: 'כשאני עייפה או חסרת אנרגיה…',
+        weight: 1.0,
+        options: [
+          { text: 'זה מעצבן אותי ממש', primary: 1, secondary: 9 },
+          { text: 'זה מדאיג אותי קצת', primary: 1, secondary: 10 },
+          { text: 'אני מתעלמת וממשיכה', primary: 3, secondary: 5 },
+          { text: 'זה גורם לי לחשוב', primary: 1, secondary: 7 }
+        ]
+      },
+      {
+        id: 2,
+        text: 'כשאני גוללת ברשת ורואה אחרות…',
+        weight: 1.0,
+        options: [
+          { text: 'אני צוחקת וממשיכה', primary: 2, secondary: 9 },
+          { text: 'אני משווה את עצמי', primary: 2, secondary: 1 },
+          { text: 'אני מתעצבנת מבפנים', primary: 2, secondary: 4 },
+          { text: 'זה משפיע עליי', primary: 2, secondary: 1 }
+        ]
+      },
+      {
+        id: 3,
+        text: 'כששיעור לא מעניין אותי…',
+        weight: 1.0,
+        options: [
+          { text: 'אני מתנתקת לגמרי', primary: 3, secondary: 2 },
+          { text: 'אני סופרת דקות', primary: 3, secondary: 9 },
+          { text: 'אני שואלת למה', primary: 3, secondary: 10 },
+          { text: 'אני מדמיינת אחרת', primary: 9, secondary: 10 }
+        ]
+      },
+      {
+        id: 4,
+        text: 'כשאני עם חברות…',
+        weight: 1.0,
+        options: [
+          { text: 'אני מרגישה בפנים', primary: 4, secondary: null },
+          { text: 'אני חצי בפנים', primary: 4, secondary: 7 },
+          { text: 'אני מרגישה בצד', primary: 4, secondary: 1 },
+          { text: 'זה מאוד משתנה', primary: 4, secondary: 10 }
+        ]
+      },
+      {
+        id: 5,
+        text: 'כשאני רוצה לקנות משהו…',
+        weight: 1.0,
+        options: [
+          { text: 'אני קונה בלי לחשוב', primary: 5, secondary: 2 },
+          { text: 'אני מתלבטת הרבה', primary: 5, secondary: 10 },
+          { text: 'אני מושפעת מסביבה', primary: 5, secondary: 4 },
+          { text: 'אני שואלת למה', primary: 5, secondary: 10 }
+        ]
+      },
+      {
+        id: 6,
+        text: 'כשאני הולכת לבד ברחוב…',
+        weight: 1.0,
+        options: [
+          { text: 'אני לא חושבת על זה', primary: 6, secondary: null },
+          { text: 'אני בודקת סביבי', primary: 6, secondary: 7 },
+          { text: 'אני דרוכה ושקטה', primary: 6, secondary: 1 },
+          { text: 'זה תלוי בזמן', primary: 6, secondary: 10 }
+        ]
+      },
+      {
+        id: 7,
+        text: 'בבית שלי…',
+        weight: 1.0,
+        options: [
+          { text: 'יש לי מקום משלי', primary: 7, secondary: null },
+          { text: 'לפעמים יש ולפעמים לא', primary: 7, secondary: 4 },
+          { text: 'קשה לי למצוא שקט', primary: 7, secondary: 1 },
+          { text: 'זה ממש חסר לי', primary: 7, secondary: 9 }
+        ]
+      },
+      {
+        id: 8,
+        text: 'כשאני רואה טבע או חיות בעיר…',
+        weight: 1.0,
+        options: [
+          { text: 'זה מרגש אותי', primary: 8, secondary: 9 },
+          { text: 'אני כמעט לא שמה לב', primary: 2, secondary: 3 },
+          { text: 'אני שואלת מה קורה', primary: 8, secondary: 10 },
+          { text: 'זה גורם לי לחשוב', primary: 8, secondary: 10 }
+        ]
+      },
+      {
+        id: 9,
+        text: 'כשיש לי זמן פנוי…',
+        weight: 1.0,
+        options: [
+          { text: 'אני שמחה ומרוצה', primary: 9, secondary: null },
+          { text: 'אני משתעממת מהר', primary: 9, secondary: 2 },
+          { text: 'אני בורחת למסך', primary: 2, secondary: 9 },
+          { text: 'אני רוצה ליצור', primary: 9, secondary: 10 }
+        ]
+      },
+      {
+        id: 10,
+        text: 'כשאני חושבת על העתיד…',
+        weight: 1.0,
+        options: [
+          { text: 'זה מרגש אותי', primary: 10, secondary: 9 },
+          { text: 'זה מלחיץ אותי', primary: 10, secondary: 3 },
+          { text: 'אני די מבולבלת', primary: 10, secondary: 5 },
+          { text: 'הכול ביחד', primary: 10, secondary: 1 }
+        ]
+      },
+      {
+        id: 11,
+        text: 'כשמשהו מפריע לי ביומיום…',
+        weight: 1.5,
+        options: [
+          { text: 'אני מתעלמת', primary: 5, secondary: 3 },
+          { text: 'אני מתלוננת', primary: 4, secondary: 7 },
+          { text: 'אני מדברת על זה', primary: 4, secondary: 10 },
+          { text: 'אני רוצה לשנות', primary: 10, secondary: 5 }
+        ]
+      },
+      {
+        id: 12,
+        text: 'המשפט שמתאים לי עכשיו…',
+        weight: 1.5,
+        options: [
+          { text: 'זה מה שיש', primary: 5, secondary: 3 },
+          { text: 'למה זה ככה', primary: 10, secondary: 3 },
+          { text: 'צריך לעשות משהו', primary: 10, secondary: 6 },
+          { text: 'אולי אני יכולה', primary: 10, secondary: 9 }
+        ]
+      },
+      {
+        id: 13,
+        text: 'כשאני רואה בעיה סביבי…',
+        weight: 1.5,
+        options: [
+          { text: 'אני עוברת הלאה', primary: 5, secondary: 2 },
+          { text: 'זה מעצבן אותי', primary: 4, secondary: 1 },
+          { text: 'זה לא הוגן', primary: 4, secondary: 10 },
+          { text: 'אני חושבת פתרון', primary: 10, secondary: 8 }
+        ]
+      },
+      {
+        id: 14,
+        text: 'אם הייתה לי אפשרות להשפיע…',
+        weight: 1.5,
+        options: [
+          { text: 'הייתי מתחילה בקטן', primary: 5, secondary: 7 },
+          { text: 'הייתי משנה קרוב', primary: 7, secondary: 4 },
+          { text: 'הייתי עוזרת לאחרות', primary: 4, secondary: 10 },
+          { text: 'הייתי רוצה הקשבה', primary: 4, secondary: 1 }
+        ]
+      },
+      {
+        id: 15,
+        text: 'כשאני מרגישה שלא רואים אותי…',
+        weight: 1.0,
+        options: [
+          { text: 'אני שותקת', primary: 1, secondary: 4 },
+          { text: 'אני מתרחקת', primary: 4, secondary: 7 },
+          { text: 'אני מתעצבנת', primary: 1, secondary: 4 },
+          { text: 'אני בונה לעצמי מקום', primary: 7, secondary: 9 }
+        ]
+      },
+      {
+        id: 16,
+        text: 'מהי טכנולוגיה בעינייך?',
+        weight: 2.0,
+        isTechPerception: true,
+        options: [
+          { text: 'דרך לפתור בעיות מהחיים', primary: 10, secondary: 5, broadPerception: true },
+          { text: 'כל מה שיש בו מסך', primary: 2, secondary: 9 },
+          { text: 'אפליקציות ורשתות', primary: 2, secondary: 4 },
+          { text: 'מחשבים ואינטרנט', primary: 2, secondary: 3 }
+        ]
+      },
+      {
+        id: 17,
+        text: 'האם טכנולוגיה נמצאת בכל מקום?',
+        weight: 2.0,
+        isTechScope: true,
+        options: [
+          { text: 'כן, כמעט בכל תחום', primary: 10, secondary: 2, broadScope: true },
+          { text: 'רק כשיש אינטרנט', primary: 2, secondary: null },
+          { text: 'בעיקר במסכים', primary: 2, secondary: 9 },
+          { text: 'רק בדברים מתקדמים', primary: 2, secondary: 3 }
+        ]
+      },
+      {
+        id: 18,
+        text: 'אם הייתי בוחרת פרויקט…',
+        weight: 1.5,
+        options: [
+          { text: 'הוא היה אישי', primary: 1, secondary: 7 },
+          { text: 'הוא היה חברתי', primary: 4, secondary: 10 },
+          { text: 'הוא היה יומיומי', primary: 5, secondary: 6 },
+          { text: 'הוא היה פותר בעיה', primary: 10, secondary: 8 }
+        ]
+      },
+      {
+        id: 19,
+        text: 'כשאני חושבת על שינוי…',
+        weight: 1.5,
+        options: [
+          { text: 'זה מרגש', primary: 10, secondary: 9 },
+          { text: 'זה מפחיד', primary: 10, secondary: 1 },
+          { text: 'זה מאתגר', primary: 10, secondary: 3 },
+          { text: 'זה נותן תקווה', primary: 10, secondary: 8 }
+        ]
+      },
+      {
+        id: 20,
+        text: 'המשפט שהכי מדבר אליי עכשיו…',
+        weight: 1.5,
+        options: [
+          { text: 'משהו צריך לזוז', primary: 6, secondary: 10 },
+          { text: 'אני רוצה להבין', primary: 3, secondary: 10 },
+          { text: 'אני לא היחידה', primary: 4, secondary: 10 },
+          { text: 'אני מוכנה להתחיל', primary: 10, secondary: 9 }
+        ]
+      },
+      {
+        id: 21,
+        text: 'כשאני מדמיינת את עצמי בעוד כמה שנים…',
+        weight: 1.5,
+        options: [
+          { text: 'אני רוצה ביטחון', primary: 5, secondary: 7 },
+          { text: 'אני רוצה משמעות', primary: 10, secondary: 4 },
+          { text: 'אני רוצה חופש', primary: 6, secondary: 9 },
+          { text: 'אני רוצה להשפיע', primary: 10, secondary: 4 }
+        ]
+      }
+    ];
 
-  const delta = Math.round((amount / 100) * 255);
-  r = Math.max(0, Math.min(255, r + delta));
-  g = Math.max(0, Math.min(255, g + delta));
-  b = Math.max(0, Math.min(255, b + delta));
+    let currentQuestion = 0;
+    let answers = [];
+    let scores = {};
+    let hasBroadTechPerception = false;
+    let hasBroadTechScope = false;
 
-  const toHex = v => v.toString(16).padStart(2, '0');
-  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
-}
+    function initScores() {
+      scores = {};
+      domains.forEach(d => scores[d.id] = 0);
+      hasBroadTechPerception = false;
+      hasBroadTechScope = false;
+    }
 
-// ---------- הגדרות רקע מתחלף ----------
-// כל כמה שאלות מתחלף הרקע
-const QUESTIONS_PER_BACKGROUND = 2;
+    function startQuiz() {
+      document.getElementById('startScreen').style.display = 'none';
+      document.querySelector('.progress-bar').classList.add('visible');
+      initScores();
+      currentQuestion = 0;
+      answers = [];
+      showQuestion();
+    }
 
-// אינדקס רקע נוכחי (ללא חזרות)
-let bgOrder = [];
-let bgPointer = 0;
+    function showQuestion() {
+      const q = questions[currentQuestion];
+      const screen = document.getElementById('questionScreen');
+      const textEl = document.getElementById('questionText');
+      const optionsEl = document.getElementById('optionsContainer');
 
-// מאגר רקעים (לא קשור לתחומים)
-const backgroundGradients = [
-  'linear-gradient(135deg,#667eea,#764ba2)',
-  'linear-gradient(135deg,#0f766e,#22c55e)',
-  'linear-gradient(135deg,#7c3aed,#ec4899)',
-  'linear-gradient(135deg,#0ea5e9,#38bdf8)',
-  'linear-gradient(135deg,#f59e0b,#ef4444)'
-];
+      screen.classList.remove('active');
 
-function shuffleBackgrounds(){
-  bgOrder = [...backgroundGradients];
-  for(let i=bgOrder.length-1;i>0;i--){
-    const j = Math.floor(Math.random()*(i+1));
-    [bgOrder[i],bgOrder[j]] = [bgOrder[j],bgOrder[i]];
-  }
-  bgPointer = 0;
-}
+      setTimeout(() => {
+        textEl.textContent = q.text;
+        optionsEl.innerHTML = '';
 
-function updateBackground(questionIndex){
-  if(questionIndex % QUESTIONS_PER_BACKGROUND === 0){
-    if(bgOrder.length === 0) shuffleBackgrounds();
-    if(bgPointer >= bgOrder.length) shuffleBackgrounds();
-    document.body.style.background = bgOrder[bgPointer];
-    bgPointer++;
-  }
-}
+        q.options.forEach((opt, idx) => {
+          const div = document.createElement('div');
+          div.className = 'option';
+          div.textContent = opt.text;
+          div.onclick = () => selectOption(idx);
+          optionsEl.appendChild(div);
+        });
 
-const domains={
-  tech:{icon:"💻",title:"הייטק וליבה",desc:"פתרון בעיות, מערכות וחשיבה טכנולוגית",page:"domain-1.html",color:"#7c3aed"},
-  human:{icon:"💝",title:"אדם וטכנולוגיה",desc:"עיצוב חוויות ופתרונות לאנשים",page:"domain-2.html",color:"#2563eb"},
-  environment:{icon:"🌱",title:"סביבה וקיימות",desc:"פתרונות ירוקים וחשיבה עתידית",page:"domain-3.html",color:"#16a34a"},
-  society:{icon:"🌐",title:"חברה ודיגיטל",desc:"השפעה חברתית ותקשורת",page:"domain-4.html",color:"#0ea5e9"},
-  entrepreneurship:{icon:"🚀",title:"יזמות ועתיד",desc:"הובלת רעיונות ושינוי מציאות",page:"domain-5.html",color:"#f59e0b"}
-};
+        screen.classList.add('active');
+        updateProgress();
+      }, 50);
+    }
 
-// --- מאגר שאלות (26) ---
-// 25 שאלות רגילות מסודרות ב-5 בלוקים (5 לכל תחום) + שאלה מסכמת אחת בסוף.
-// לאחר מכן נמחק "שאלה ראשונה" מכל בלוק (סה"כ 5) כדי לקבל 20.
-const rawQuestions=[
-  // ===== בלוק 1: tech (5) =====
-  {text:"כשמשהו לא עובד כמו שצריך, את:",options:[
-    {t:"מנסה להבין מה השתבש ואיך זה עובד",s:{tech:3,human:0,environment:0,society:0,entrepreneurship:0}},
-    {t:"חושבת איך להפוך את זה ליותר ברור ונוח",s:{tech:1,human:2,environment:0,society:0,entrepreneurship:0}},
-    {t:"בודקת אם זה משפיע גם על אחרים",s:{tech:0,human:0,environment:0,society:2,entrepreneurship:1}},
-    {t:"מחפשת דרך לשפר את זה בצורה יצירתית",s:{tech:2,human:0,environment:0,society:0,entrepreneurship:1}}
-  ]},
-  {text:"את מרגישה הכי חזקה כשאת:",options:[
-    {t:"פותחת בעיה ומפרקת אותה לשלבים",s:{tech:3,human:0,environment:0,society:0,entrepreneurship:0}},
-    {t:"מוצאת דרך חכמה לקצר תהליך",s:{tech:2,human:0,environment:0,society:0,entrepreneurship:1}},
-    {t:"לומדת משהו חדש ומיישמת מיד",s:{tech:2,human:0,environment:0,society:0,entrepreneurship:1}},
-    {t:"מתכננת רעיון עד שהוא נהיה ממש ברור",s:{tech:2,human:0,environment:0,society:0,entrepreneurship:1}}
-  ]},
-  {text:"מה הכי מסקרן אותך בדברים חדשים?",options:[
-    {t:"איך זה עובד מבפנים",s:{tech:3,human:0,environment:0,society:0,entrepreneurship:0}},
-    {t:"איזה דאטה/מידע זה אוסף",s:{tech:3,human:0,environment:0,society:0,entrepreneurship:0}},
-    {t:"איך אפשר לשפר את זה עוד",s:{tech:2,human:0,environment:0,society:0,entrepreneurship:1}},
-    {t:"מה הבאג הכי מעניין שיכול לצאת מזה",s:{tech:3,human:0,environment:0,society:0,entrepreneurship:0}}
-  ]},
-  {text:"בזמן פרויקט, את הכי נהנית כשיש:",options:[
-    {t:"אתגר לוגי שצריך לפצח",s:{tech:3,human:0,environment:0,society:0,entrepreneurship:0}},
-    {t:"משימה שדורשת דיוק וסדר",s:{tech:3,human:0,environment:0,society:0,entrepreneurship:0}},
-    {t:"משהו שצריך לבנות/להגדיר צעד-צעד",s:{tech:2,human:0,environment:0,society:0,entrepreneurship:1}},
-    {t:"הרבה ניסוי-וטעייה עד שזה עובד",s:{tech:2,human:0,environment:0,society:0,entrepreneurship:1}}
-  ]},
-  {text:"אם הייתה לך שעה פנויה, את מעדיפה:",options:[
-    {t:"לפתור חידה/משחק חשיבה",s:{tech:3,human:0,environment:0,society:0,entrepreneurship:0}},
-    {t:"לשחק עם כלי דיגיטלי ולגלות טריקים",s:{tech:3,human:0,environment:0,society:0,entrepreneurship:0}},
-    {t:"להכין משהו שעובד (גם קטן)",s:{tech:2,human:0,environment:0,society:0,entrepreneurship:1}},
-    {t:"לשפר משהו קיים שיהיה מדויק יותר",s:{tech:3,human:0,environment:0,society:0,entrepreneurship:0}}
-  ]},
+    function updateProgress() {
+      const pct = ((currentQuestion + 1) / questions.length) * 100;
+      document.querySelector('.progress-fill').style.width = pct + '%';
+    }
 
-  // ===== בלוק 2: human (5) =====
-  {text:"כשאת משתמשת באפליקציה/מוצר, מה הכי חשוב לך?",options:[
-    {t:"שהכול יהיה ברור ונעים",s:{tech:0,human:3,environment:0,society:0,entrepreneurship:0}},
-    {t:"שזה ירגיש אישי ומותאם",s:{tech:0,human:3,environment:0,society:0,entrepreneurship:0}},
-    {t:"שהשפה תהיה מכבדת ולא מבלבלת",s:{tech:0,human:2,environment:0,society:1,entrepreneurship:0}},
-    {t:"שזה יעזור לי יותר מהר",s:{tech:1,human:2,environment:0,society:0,entrepreneurship:0}}
-  ]},
-  {text:"כשחברה משתפת בקושי, את:",options:[
-    {t:"מקשיבה עד הסוף לפני שמציעה פתרון",s:{tech:0,human:3,environment:0,society:0,entrepreneurship:0}},
-    {t:"שואלת שאלות כדי להבין מה היא מרגישה",s:{tech:0,human:3,environment:0,society:0,entrepreneurship:0}},
-    {t:"מציעה רעיון קטן שיקל עליה",s:{tech:0,human:2,environment:0,society:0,entrepreneurship:1}},
-    {t:"מחברת אותה לעוד אנשים שיכולים לעזור",s:{tech:0,human:1,environment:0,society:2,entrepreneurship:0}}
-  ]},
-  {text:"מה הכי מסקרן אותך בפרויקט?",options:[
-    {t:"איך אנשים יחוו את זה",s:{tech:0,human:3,environment:0,society:0,entrepreneurship:0}},
-    {t:"איזה בעיה אמיתית זה פותר",s:{tech:0,human:2,environment:0,society:0,entrepreneurship:1}},
-    {t:"איך להפוך את זה ליפה ומובן",s:{tech:0,human:3,environment:0,society:0,entrepreneurship:0}},
-    {t:"איך לגרום לזה להרגיש פשוט",s:{tech:0,human:3,environment:0,society:0,entrepreneurship:0}}
-  ]},
-  {text:"כשאת לומדת משהו חדש, את מעדיפה:",options:[
-    {t:"דוגמה מהחיים ואז להבין את הכלל",s:{tech:0,human:3,environment:0,society:0,entrepreneurship:0}},
-    {t:"לנסות ולעשות עם הידיים",s:{tech:1,human:2,environment:0,society:0,entrepreneurship:0}},
-    {t:"ללמוד עם מישהי ולדבר תוך כדי",s:{tech:0,human:2,environment:0,society:1,entrepreneurship:0}},
-    {t:"לראות איך זה עוזר למישהו",s:{tech:0,human:3,environment:0,society:0,entrepreneurship:0}}
-  ]},
-  {text:"מה את הכי רוצה שאנשים יגידו על מוצר שיצרת?",options:[
-    {t:"זה היה לי קל ונעים להשתמש",s:{tech:0,human:3,environment:0,society:0,entrepreneurship:0}},
-    {t:"הרגשתי שממש חשבו עליי",s:{tech:0,human:3,environment:0,society:0,entrepreneurship:0}},
-    {t:"זה פתר לי משהו אמיתי",s:{tech:0,human:2,environment:0,society:0,entrepreneurship:1}},
-    {t:"זה נראה מדהים ומסודר",s:{tech:0,human:3,environment:0,society:0,entrepreneurship:0}}
-  ]},
+    function selectOption(idx) {
+      const options = document.querySelectorAll('.option');
+      options.forEach(o => o.classList.remove('selected'));
+      options[idx].classList.add('selected');
 
-  // ===== בלוק 3: environment (5) =====
-  {text:"כשאת רואה בזבוז (מים/חשמל/פלסטיק), את:",options:[
-    {t:"מרגישה שצריך לעצור ולשנות",s:{tech:0,human:0,environment:3,society:0,entrepreneurship:0}},
-    {t:"מחפשת פתרון פרקטי וקל ליישום",s:{tech:1,human:0,environment:2,society:0,entrepreneurship:0}},
-    {t:"חושבת איך לשכנע עוד אנשים",s:{tech:0,human:0,environment:2,society:1,entrepreneurship:0}},
-    {t:"מדמיינת מיזם שיכול להשפיע",s:{tech:0,human:0,environment:2,society:0,entrepreneurship:1}}
-  ]},
-  {text:"איזה משפט הכי מדבר אלייך?",options:[
-    {t:"לחשוב כמה צעדים קדימה",s:{tech:0,human:0,environment:3,society:0,entrepreneurship:0}},
-    {t:"לעשות שינוי קטן שמצטבר לגדול",s:{tech:0,human:0,environment:2,society:0,entrepreneurship:1}},
-    {t:"לחסוך משאבים זה חכם",s:{tech:1,human:0,environment:2,society:0,entrepreneurship:0}},
-    {t:"להשאיר עולם טוב לדור הבא",s:{tech:0,human:0,environment:3,society:0,entrepreneurship:0}}
-  ]},
-  {text:"מה הכי מושך אותך בפרויקט סביבתי?",options:[
-    {t:"למדוד ולהבין מה באמת קורה",s:{tech:1,human:0,environment:2,society:0,entrepreneurship:0}},
-    {t:"למצוא פתרון שמקטין פסולת",s:{tech:0,human:0,environment:3,society:0,entrepreneurship:0}},
-    {t:"לשנות הרגלים בצורה חכמה",s:{tech:0,human:0,environment:2,society:1,entrepreneurship:0}},
-    {t:"לייצר רעיון שכולם יכולים לאמץ",s:{tech:0,human:0,environment:2,society:0,entrepreneurship:1}}
-  ]},
-  {text:"אם היית בוחרת נושא לחקר, זה היה:",options:[
-    {t:"אנרגיה חכמה וחיסכון",s:{tech:1,human:0,environment:2,society:0,entrepreneurship:0}},
-    {t:"זיהום פלסטיק ופתרונות",s:{tech:0,human:0,environment:3,society:0,entrepreneurship:0}},
-    {t:"מים – שימוש נכון ושמירה",s:{tech:0,human:0,environment:3,society:0,entrepreneurship:0}},
-    {t:"טבע ועיר – איך חיים יחד",s:{tech:0,human:0,environment:2,society:1,entrepreneurship:0}}
-  ]},
-  {text:"מה הכי חשוב לך בפתרון?",options:[
-    {t:"שיהיה בר-קיימא לאורך זמן",s:{tech:0,human:0,environment:3,society:0,entrepreneurship:0}},
-    {t:"שיהיה פשוט ליישום לכל אחת",s:{tech:0,human:1,environment:2,society:0,entrepreneurship:0}},
-    {t:"שיהיה חכם ויעיל",s:{tech:1,human:0,environment:2,society:0,entrepreneurship:0}},
-    {t:"שיעורר מודעות",s:{tech:0,human:0,environment:2,society:1,entrepreneurship:0}}
-  ]},
+      const q = questions[currentQuestion];
+      const opt = q.options[idx];
 
-  // ===== בלוק 4: society (5) =====
-  {text:"כשאת רואה משהו לא הוגן סביבך, את:",options:[
-    {t:"רוצה להבין למה זה קורה",s:{tech:0,human:0,environment:0,society:3,entrepreneurship:0}},
-    {t:"מדברת על זה ומנסה לשנות",s:{tech:0,human:0,environment:0,society:2,entrepreneurship:1}},
-    {t:"מחפשת דרך לעזור למי שנפגע",s:{tech:0,human:1,environment:0,society:2,entrepreneurship:0}},
-    {t:"חושבת איך להפוך את זה לקמפיין",s:{tech:0,human:0,environment:0,society:2,entrepreneurship:1}}
-  ]},
-  {text:"איזה תוכן הכי מושך אותך?",options:[
-    {t:"סיפורים על אנשים ושינוי",s:{tech:0,human:1,environment:0,society:2,entrepreneurship:0}},
-    {t:"תוכן שמייצר דיון",s:{tech:0,human:0,environment:0,society:3,entrepreneurship:0}},
-    {t:"סרטונים שמסבירים תופעות",s:{tech:1,human:0,environment:0,society:2,entrepreneurship:0}},
-    {t:"יוזמות חברתיות ברשת",s:{tech:0,human:0,environment:0,society:2,entrepreneurship:1}}
-  ]},
-  {text:"בקבוצה, איזה תפקיד הכי מתאים לך?",options:[
-    {t:"המחברת בין כולם",s:{tech:0,human:1,environment:0,society:2,entrepreneurship:0}},
-    {t:"זו שמסדרת את השיחה",s:{tech:0,human:0,environment:0,society:3,entrepreneurship:0}},
-    {t:"זו שמעלה רעיונות שמדליקים אחרים",s:{tech:0,human:0,environment:0,society:2,entrepreneurship:1}},
-    {t:"זו שמנסחת מסר חזק",s:{tech:0,human:0,environment:0,society:3,entrepreneurship:0}}
-  ]},
-  {text:"מה הכי חשוב לך בדיגיטל?",options:[
-    {t:"שיהיה מקום לקול של כולם",s:{tech:0,human:0,environment:0,society:3,entrepreneurship:0}},
-    {t:"שזה יהיה מכבד ובטוח",s:{tech:0,human:1,environment:0,society:2,entrepreneurship:0}},
-    {t:"שזה יאפשר להשפיע",s:{tech:0,human:0,environment:0,society:2,entrepreneurship:1}},
-    {t:"שזה יחבר אנשים",s:{tech:0,human:0,environment:0,society:3,entrepreneurship:0}}
-  ]},
-  {text:"אם היית בוחרת נושא לחקר, זה היה:",options:[
-    {t:"שיימינג, לחץ חברתי ומה עושים",s:{tech:0,human:1,environment:0,society:2,entrepreneurship:0}},
-    {t:"איך רשתות משפיעות על דעות",s:{tech:0,human:0,environment:0,society:3,entrepreneurship:0}},
-    {t:"איך יוצרים קהילה טובה",s:{tech:0,human:1,environment:0,society:2,entrepreneurship:0}},
-    {t:"איך מסר הופך לוויראלי",s:{tech:0,human:0,environment:0,society:2,entrepreneurship:1}}
-  ]},
+      answers.push({ questionId: q.id, optionIndex: idx });
 
-  // ===== בלוק 5: entrepreneurship (5) =====
-  {text:"כשיש לך רעיון, מה את עושה קודם?",options:[
-    {t:"מציירת/כותבת אותו כדי לדייק",s:{tech:0,human:0,environment:0,society:0,entrepreneurship:3}},
-    {t:"בודקת אם זה באמת פותר בעיה",s:{tech:0,human:0,environment:0,society:0,entrepreneurship:3}},
-    {t:"משתפת חברה כדי לקבל פידבק",s:{tech:0,human:1,environment:0,society:1,entrepreneurship:1}},
-    {t:"חושבת מה הצעד הראשון שאפשר לעשות",s:{tech:0,human:0,environment:0,society:0,entrepreneurship:3}}
-  ]},
-  {text:"מה הכי מרגש אותך בפרויקט?",options:[
-    {t:"להוביל אותו מרעיון למציאות",s:{tech:0,human:0,environment:0,society:0,entrepreneurship:3}},
-    {t:"להציג אותו ולהדליק אנשים",s:{tech:0,human:0,environment:0,society:1,entrepreneurship:2}},
-    {t:"לראות שהוא באמת עובד",s:{tech:1,human:0,environment:0,society:0,entrepreneurship:2}},
-    {t:"לראות שיש לו השפעה",s:{tech:0,human:0,environment:0,society:1,entrepreneurship:2}}
-  ]},
-  {text:"איזה אתגר את הכי אוהבת?",options:[
-    {t:"לבנות תכנית ולהוציא לפועל",s:{tech:0,human:0,environment:0,society:0,entrepreneurship:3}},
-    {t:"לשכנע ולהסביר למה זה חשוב",s:{tech:0,human:0,environment:0,society:1,entrepreneurship:2}},
-    {t:"להתמודד עם לא-נודע",s:{tech:0,human:0,environment:0,society:0,entrepreneurship:3}},
-    {t:"למצוא פתרון יצירתי תחת לחץ",s:{tech:1,human:0,environment:0,society:0,entrepreneurship:2}}
-  ]},
-  {text:"בצוות, את בדרך כלל:",options:[
-    {t:"זו שמרימה ומניעה קדימה",s:{tech:0,human:0,environment:0,society:0,entrepreneurship:3}},
-    {t:"זו שמחלקת משימות ברור",s:{tech:0,human:0,environment:0,society:0,entrepreneurship:3}},
-    {t:"זו שמדייקת את המטרה",s:{tech:0,human:0,environment:0,society:0,entrepreneurship:3}},
-    {t:"זו שמוצאת הזדמנות מתוך בלגן",s:{tech:0,human:0,environment:0,society:0,entrepreneurship:3}}
-  ]},
-  {text:"מה הכי חשוב לך בהצלחה?",options:[
-    {t:"שתהיה לזה השפעה אמיתית",s:{tech:0,human:0,environment:0,society:0,entrepreneurship:3}},
-    {t:"שזה יהיה משהו חדש ומקורי",s:{tech:0,human:0,environment:0,society:0,entrepreneurship:3}},
-    {t:"שזה יגדל ויתפתח",s:{tech:0,human:0,environment:0,society:0,entrepreneurship:3}},
-    {t:"שזה יגיע לאנשים",s:{tech:0,human:0,environment:0,society:1,entrepreneurship:2}}
-  ]},
+      if (opt.primary) {
+        scores[opt.primary] += q.weight;
+      }
+      if (opt.secondary) {
+        scores[opt.secondary] += q.weight * 0.5;
+      }
 
-  // ===== שאלה מסכמת (אחרונה) =====
-  {text:"🌟 שאלה אחרונה: אם יכולת לשנות דבר אחד בעולם, זה היה:",options:[
-    {t:"לבנות מערכות חכמות שעוזרות לכולם",s:{tech:5,human:0,environment:0,society:0,entrepreneurship:0}},
-    {t:"לעצב חוויות שמשפרות חיים של אנשים",s:{tech:0,human:5,environment:0,society:0,entrepreneurship:0}},
-    {t:"ליצור פתרונות לבעיות סביבתיות",s:{tech:0,human:0,environment:5,society:0,entrepreneurship:0}},
-    {t:"לחבר אנשים ולשנות את החברה",s:{tech:0,human:0,environment:0,society:5,entrepreneurship:0}},
-    {t:"להוביל רעיונות שמשנים את העתיד",s:{tech:0,human:0,environment:0,society:0,entrepreneurship:5}}
-  ]}
-];
+      if (opt.broadPerception) {
+        hasBroadTechPerception = true;
+      }
+      if (opt.broadScope) {
+        hasBroadTechScope = true;
+      }
 
-// --- בניית רצף שאלות חדש ---
-// מטרה: 20 שאלות רגילות + שאלה מכריעה באמצע (מס' 11) + שאלה מסכמת בסוף = 22 שאלות
+      setTimeout(() => {
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+          showQuestion();
+        } else {
+          showLoading();
+        }
+      }, 600);
+    }
 
-// שאלה מסכמת (הפריט האחרון במאגר)
-const finalDecisive = rawQuestions[rawQuestions.length-1];
+    function showLoading() {
+      document.getElementById('questionScreen').classList.remove('active');
+      document.getElementById('loadingScreen').classList.add('active');
 
-// כל השאלות הרגילות (בלי המסכמת)
-let base = rawQuestions.slice(0,-1);
+      setTimeout(() => {
+        calculateResults();
+      }, 1500);
+    }
 
-// מוחקים שאלה אחת מכל תחום (שאלת פתיחה)
-// אינדקסים מקוריים: 0,5,10,15,20
-base = base.filter((_,idx)=>![0,5,10,15,20].includes(idx));
+    function calculateResults() {
+      const digitalDomains = [2, 3, 9];
+      
+      if (hasBroadTechPerception) {
+        Object.keys(scores).forEach(id => {
+          scores[id] += 0.5;
+        });
+      }
 
-// שאלה מכריעה חדשה – מדברת לעולם של הבנות (מיקום 11)
-const midDecisive = {
-  text: "אם הייתה לך אפשרות להוביל שינוי אמיתי כבר השנה – מה הכי היה מדליק אותך?",
-  options: [
-    { t: "לפתח פתרון טכנולוגי חכם לבעיה יומיומית", s: { tech:4, human:0, environment:0, society:0, entrepreneurship:1 } },
-    { t: "לעצב חוויה או שירות שמשפרים חיים של אנשים", s: { tech:0, human:4, environment:0, society:1, entrepreneurship:0 } },
-    { t: "ליצור מיזם שעוזר לסביבה או לטבע", s: { tech:0, human:0, environment:4, society:0, entrepreneurship:1 } },
-    { t: "להוביל מהלך חברתי שמשפיע על קהילה או קבוצה", s: { tech:0, human:1, environment:0, society:4, entrepreneurship:1 } },
-    { t: "להקים רעיון חדש ולגרום לו לקרות באמת", s: { tech:1, human:0, environment:0, society:0, entrepreneurship:4 } }
-  ]
-};
+      let sorted = Object.entries(scores)
+        .map(([id, score]) => ({ id: parseInt(id), score }))
+        .sort((a, b) => b.score - a.score);
 
-// ערבוב מלא של 20 השאלות הרגילות
-for(let j=base.length-1;j>0;j--){
-  const r=Math.floor(Math.random()*(j+1));
-  [base[j],base[r]]=[base[r],base[j]];
-}
+      if (!hasBroadTechScope) {
+        sorted = sorted.map(item => {
+          if (digitalDomains.includes(item.id)) {
+            return { ...item, score: item.score + 0.3 };
+          }
+          return item;
+        }).sort((a, b) => b.score - a.score);
+      }
 
-// בניית רצף סופי:
-// 10 שאלות → שאלה מכריעה באמצע → 10 שאלות → שאלה מסכמת
-const questions = [
-  ...base.slice(0,10),
-  midDecisive,
-  ...base.slice(10),
-  finalDecisive
-];
+      const top1 = sorted[0];
+      const top2 = sorted[1];
 
-// ---------- בדיקות בסיס (test cases) ----------
-(function runTests(){
-  try{
-    console.assert(Array.isArray(rawQuestions), 'rawQuestions חייב להיות מערך');
-    console.assert(rawQuestions.length === 26, 'rawQuestions צריך להכיל 26 שאלות (25+מסכמת)');
+      const results = [top1, top2];
 
-    // בדיקת תהליך הצמצום
-    const tmp = rawQuestions.slice(0,-1).filter((_,idx)=>![0,5,10,15,20].includes(idx));
-    console.assert(tmp.length === 20, 'אחרי מחיקה של 5 שאלות צריך להישאר 20');
+      showResults(results);
+    }
 
-    console.assert(Array.isArray(questions), 'questions חייב להיות מערך');
-    console.assert(questions.length === 22, 'questions צריך להכיל 22 (20+אמצעית+מסכמת)');
-    console.assert(questions[10] && questions[10].text === midDecisive.text, 'שאלה מכריעה חייבת להיות במקום 11 (אינדקס 10)');
+    function showResults(results) {
+      document.getElementById('loadingScreen').classList.remove('active');
 
-    // בדיקת תקינות מבנה
-    questions.forEach((q)=>{
-      console.assert(typeof q.text === 'string' && q.text.trim().length>0, 'שאלה חייבת לכלול text');
-      console.assert(Array.isArray(q.options) && q.options.length>=2, 'שאלה חייבת לכלול options');
-      q.options.forEach((o)=>{
-        console.assert(typeof o.t === 'string' && o.t.trim().length>0, 'אופציה חייבת לכלול t');
-        console.assert(o.s && typeof o.s === 'object', 'אופציה חייבת לכלול s');
+      const container = document.getElementById('domainsResult');
+      container.innerHTML = '';
+
+      results.forEach(r => {
+        const domain = domains.find(d => d.id === r.id);
+        if (domain) {
+          const card = document.createElement('div');
+          card.className = 'domain-card';
+          card.innerHTML = `
+            <div class="icon">${domain.icon}</div>
+            <div class="name">${domain.name}</div>
+          `;
+          container.appendChild(card);
+        }
       });
-    });
 
-    console.assert(typeof domains.tech?.page === 'string', 'domain pages חייבים להיות מחרוזות');
+      document.getElementById('resultScreen').classList.add('active');
+    }
 
-    // בדיקת shadeColor
-    console.assert(shadeColor('#000000', 20) === '#333333', 'shadeColor: בהרה של שחור ב-20%');
-    console.assert(shadeColor('#ffffff', -20) === '#cccccc', 'shadeColor: כהיה של לבן ב-20%');
-    console.assert(/^#[0-9a-f]{6}$/i.test(shadeColor('#7c3aed', -20)), 'shadeColor מחזיר HEX תקין');
-
-    console.log('✅ Tests passed');
-  } catch(e){
-    console.error('❌ Tests failed', e);
-  }
-})();
-
-// תבנית ניקוד
-function scoresTemplate(){
-  return {tech:0,human:0,environment:0,society:0,entrepreneurship:0};
-}
-
-function getQuestionIcon(index){
-  const icons = ['💡','🧠','✨','🎯','🧩','🌈','⚡','🔍','🛠️','🚀'];
-  return icons[index % icons.length];
-}
-
-let i=0;
-let answered=false;
-let scores=scoresTemplate();
-
-function startQuiz(){
-  document.getElementById('start').style.display='none';
-  document.getElementById('progressWrap').style.display='block';
-  updateBackground(0);
-  showQuestion();
-}
-
-function showQuestion(){
-  updateBackground(i);
-  answered=false;
-  const q = questions[i];
-
-  document.getElementById('questionBox').innerHTML=`
-    <div class="question active">
-      <div class="q-text">${getQuestionIcon(i)} ${q.text}</div>
-      <div class="options">
-        ${q.options.map((o,idx)=>`<div class="option" onclick="answer(${idx})">${o.t}</div>`).join('')}
-      </div>
-    </div>`;
-
-  document.getElementById('progress').style.width=((i+1)/questions.length*100)+'%';
-}
-
-function answer(idx){
-  if(answered) return;
-  answered=true;
-
-  const opt=document.querySelectorAll('.option')[idx];
-  if(opt) opt.classList.add('selected');
-
-  const s=questions[i].options[idx].s;
-  Object.keys(scores).forEach(k=>{ scores[k] += (s[k] || 0); });
-
-  setTimeout(()=>{
-    i++;
-    i < questions.length ? showQuestion() : finish();
-  },350);
-}
-
-function finish(){
-  document.getElementById('questionBox').style.display='none';
-  document.getElementById('progressWrap').style.display='none';
-  document.getElementById('loading').classList.add('active');
-  setTimeout(showResult,1600);
-}
-
-function showResult(){
-  document.getElementById('loading').classList.remove('active');
-
-  const top=Object.keys(scores).reduce((a,b)=>scores[a]>scores[b]?a:b);
-  const d=domains[top] || domains.tech;
-
-  document.getElementById('resIcon').textContent=d.icon;
-  document.getElementById('resTitle').textContent='התחום המומלץ להתחלת החקר הוא:';
-  document.getElementById('resDesc').innerHTML=`<strong style="color:${d.color}">${d.title}</strong><div class="domain-desc">${d.desc}</div>`;
-  document.getElementById('resNote').innerHTML='זו אינה החלטה סופית.<br>בהמשך התהליך תיחשפי גם לתחומים נוספים, תוכלי לחקור, להתנסות ולדייק את הבחירה שלך.';
-
-  // צביעת כפתורים לפי צבע התחום
-  const btnRow = document.querySelector('.btn-row');
-  btnRow.style.setProperty('--btn-accent', d.color);
-  btnRow.style.setProperty('--btn-main', `linear-gradient(90deg, ${d.color}, ${shadeColor(d.color, -20)})`);
-
-  const resBtn = document.getElementById('resBtn');
-  resBtn.href=d.page;
-
-  const resultEl=document.getElementById('result');
-  resultEl.classList.add('active');
-
-  // יצירת אפקט קונפטי עדין
-  for(let k=0;k<22;k++){
-    const c=document.createElement('div');
-    c.className='confetti';
-    c.style.left=Math.random()*100+'%';
-    c.style.background=`hsl(${Math.random()*360},80%,65%)`;
-    c.style.animationDelay=(Math.random()*0.4)+'s';
-    resultEl.appendChild(c);
-    setTimeout(()=>c.remove(),2000);
-  }
-}
-</script>
+    function restartQuiz() {
+      document.getElementById('resultScreen').classList.remove('active');
+      document.querySelector('.progress-bar').classList.remove('visible');
+      document.querySelector('.progress-fill').style.width = '0%';
+      document.getElementById('startScreen').style.display = 'flex';
+    }
+  </script>
 </body>
 </html>
