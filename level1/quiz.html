@@ -126,11 +126,35 @@
       }
     }
 
+    .question-card {
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .question-card-strip {
+      height: 6px;
+      width: 100%;
+      background: linear-gradient(90deg, #8A85C6, #A5A0D6, #C4B5E0);
+      border-radius: 16px 16px 0 0;
+    }
+
+    .question-card-body {
+      padding: 32px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
     .question-text {
       font-size: 1.35em;
       font-weight: 600;
       color: #2F3A5F;
-      margin-bottom: 32px;
+      margin-bottom: 28px;
       line-height: 1.5;
     }
 
@@ -357,8 +381,13 @@
     </div>
 
     <div class="question-screen" id="questionScreen">
-      <div class="question-text" id="questionText"></div>
-      <div class="options" id="optionsContainer"></div>
+      <div class="question-card">
+        <div class="question-card-strip"></div>
+        <div class="question-card-body">
+          <div class="question-text" id="questionText"></div>
+          <div class="options" id="optionsContainer"></div>
+        </div>
+      </div>
     </div>
 
     <div class="loading-screen" id="loadingScreen">
