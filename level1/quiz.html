@@ -15,12 +15,20 @@
 
     body {
       font-family: 'Varela Round', sans-serif;
-      background: #FAFAFA;
+      background: linear-gradient(135deg, #f8f7fc 0%, #fef9fb 25%, #f7fbfe 50%, #fefbf7 75%, #f9f7fc 100%);
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 20px;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
     .container {
