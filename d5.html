@@ -195,6 +195,39 @@
       background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
       border-right: 4px solid #6366f1;
     }
+    
+    .nav-3d-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 8px 12px;
+      background: linear-gradient(180deg, #ffffff 0%, #f0fdf4 100%);
+      border-radius: 12px;
+      box-shadow: 0 4px 0 rgba(16, 185, 129, 0.3), 0 6px 12px rgba(0, 0, 0, 0.1);
+      transition: all 0.15s ease;
+      text-decoration: none;
+    }
+    
+    .nav-3d-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 rgba(16, 185, 129, 0.3), 0 10px 20px rgba(0, 0, 0, 0.12);
+    }
+    
+    .nav-3d-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 rgba(16, 185, 129, 0.3), 0 3px 6px rgba(0, 0, 0, 0.08);
+    }
+    
+    .nav-3d-btn .nav-icon {
+      font-size: 1.2rem;
+    }
+    
+    .nav-3d-btn .nav-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #059669;
+    }
   </style>
   
   
@@ -207,7 +240,12 @@
       <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-green-500 flex items-center justify-center coin-flip"><span class="text-2xl">💰</span>
       </div><span id="nav-title" class="text-xl font-bold gradient-text">כסף קטן, קניות ובחירות</span>
      </div>
-     <div class="hidden md:flex items-center gap-6 text-sm text-gray-600"><a href="#work" class="hover:text-emerald-600 transition-colors">עבודה</a> <a href="#spending" class="hover:text-emerald-600 transition-colors">בזבוז</a> <a href="#saving" class="hover:text-emerald-600 transition-colors">חיסכון</a> <a href="#desire" class="hover:text-emerald-600 transition-colors">רצון</a> <a href="#trends" class="hover:text-emerald-600 transition-colors">טרנדים</a>
+     <div class="hidden md:flex items-center gap-3">
+      <a href="#work" class="nav-3d-btn"><span class="nav-icon">💼</span><span class="nav-label">עבודה</span></a>
+      <a href="#spending" class="nav-3d-btn"><span class="nav-icon">🛒</span><span class="nav-label">בזבוז</span></a>
+      <a href="#saving" class="nav-3d-btn"><span class="nav-icon">🐷</span><span class="nav-label">חיסכון</span></a>
+      <a href="#desire" class="nav-3d-btn"><span class="nav-icon">💭</span><span class="nav-label">רצון</span></a>
+      <a href="#trends" class="nav-3d-btn"><span class="nav-icon">✨</span><span class="nav-label">טרנדים</span></a>
      </div>
     </div>
      <a href="index.html#domains" class="text-sm text-gray-500 hover:text-gray-700 transition-colors flex items-center gap-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>לתחומים</a>
