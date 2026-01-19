@@ -1,0 +1,1037 @@
+<!doctype html>
+<html lang="he" dir="rtl" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>תנועה ומרחב | נערות בעיר</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700;800&amp;family=Rubik:wght@400;500;700&amp;display=swap" rel="stylesheet">
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    * {
+      font-family: 'Assistant', 'Rubik', sans-serif;
+    }
+    
+    .gradient-text {
+      background: linear-gradient(135deg, #0891b2, #06b6d4, #22d3ee);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .hero-pattern {
+      background-image: 
+        linear-gradient(135deg, rgba(8, 145, 178, 0.05) 25%, transparent 25%),
+        linear-gradient(225deg, rgba(8, 145, 178, 0.05) 25%, transparent 25%),
+        linear-gradient(45deg, rgba(8, 145, 178, 0.05) 25%, transparent 25%),
+        linear-gradient(315deg, rgba(8, 145, 178, 0.05) 25%, transparent 25%);
+      background-position: 20px 0, 20px 0, 0 0, 0 0;
+      background-size: 40px 40px;
+      background-repeat: repeat;
+    }
+    
+    .section-card {
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .section-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #0891b2, #06b6d4, #22d3ee);
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 0.3s ease;
+    }
+    
+    .section-card:hover::before {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+    
+    .section-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px -12px rgba(8, 145, 178, 0.15);
+    }
+    
+    @keyframes move-path {
+      0%, 100% { stroke-dashoffset: 0; }
+      50% { stroke-dashoffset: 100; }
+    }
+    
+    .animated-path {
+      stroke-dasharray: 100;
+      animation: move-path 4s ease-in-out infinite;
+    }
+    
+    @keyframes float-gentle {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    .float-gentle {
+      animation: float-gentle 4s ease-in-out infinite;
+    }
+    
+    .warning-box {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      border-right: 4px solid #f59e0b;
+    }
+    
+    .safety-box {
+      background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+      border-right: 4px solid #3b82f6;
+    }
+    
+    .empowerment-box {
+      background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+      border-right: 4px solid #6366f1;
+    }
+    
+    .tip-card {
+      background: white;
+      border-right: 3px solid #0891b2;
+      transition: all 0.3s ease;
+    }
+    
+    .tip-card:hover {
+      border-right-width: 6px;
+      transform: translateX(-3px);
+    }
+    
+    @keyframes pulse-ring {
+      0% { transform: scale(1); opacity: 0.6; }
+      50% { transform: scale(1.1); opacity: 0.3; }
+      100% { transform: scale(1); opacity: 0.6; }
+    }
+    
+    .pulse-ring {
+      animation: pulse-ring 2s ease-in-out infinite;
+    }
+    
+    .mode-icon {
+      transition: all 0.3s ease;
+    }
+    
+    .mode-icon:hover {
+      transform: scale(1.1) rotate(5deg);
+    }
+    
+    .nav-link {
+      position: relative;
+      transition: color 0.3s ease;
+    }
+    
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      right: 0;
+      width: 0;
+      height: 2px;
+      background: #0891b2;
+      transition: width 0.3s ease;
+    }
+    
+    .nav-link:hover::after {
+      width: 100%;
+    }
+    
+    .intersection-visual {
+      position: relative;
+    }
+    
+    .intersection-line {
+      stroke: #0891b2;
+      stroke-width: 2;
+      fill: none;
+      opacity: 0.6;
+    }
+    
+    @keyframes slide-in {
+      from { opacity: 0; transform: translateX(20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    
+    .slide-in {
+      animation: slide-in 0.6s ease-out;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full bg-gradient-to-b from-white via-cyan-50/30 to-blue-50/30 text-gray-800 overflow-auto"><!-- Navigation -->
+  <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-cyan-100/50 shadow-sm">
+   <div class="max-w-6xl mx-auto px-6 py-4">
+    <div class="flex items-center justify-between">
+     <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center">
+       <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+       </svg>
+      </div><span id="nav-title" class="text-xl font-bold gradient-text">תנועה ומרחב</span>
+     </div>
+     <div class="hidden md:flex items-center gap-6 text-sm text-gray-600"><a href="#walking" class="nav-link hover:text-cyan-600">הליכה</a> <a href="#bus" class="nav-link hover:text-cyan-600">תחבורה ציבורית</a> <a href="#bike" class="nav-link hover:text-cyan-600">אופניים</a> <a href="#safety" class="nav-link hover:text-cyan-600">בטיחות</a> <a href="#empowerment" class="nav-link hover:text-cyan-600">העצמה</a>
+     </div>
+    </div>
+   </div>
+  </nav><!-- Hero Section -->
+  <section class="min-h-screen flex items-center justify-center px-6 py-20 relative overflow-hidden hero-pattern"><!-- Decorative elements -->
+   <div class="absolute top-20 right-10 w-72 h-72 bg-cyan-200/20 rounded-full blur-3xl float-gentle"></div>
+   <div class="absolute bottom-20 left-10 w-80 h-80 bg-blue-200/20 rounded-full blur-3xl float-gentle" style="animation-delay: 2s;"></div>
+   <div class="max-w-5xl mx-auto text-center relative z-10"><!-- City movement illustration -->
+    <div class="mb-12 flex justify-center">
+     <svg class="w-80 h-64" viewbox="0 0 300 200" fill="none"><!-- City buildings silhouette --> <rect x="20" y="120" width="30" height="60" fill="#0891b2" opacity="0.2" /> <rect x="60" y="100" width="35" height="80" fill="#06b6d4" opacity="0.25" /> <rect x="105" y="90" width="28" height="90" fill="#0891b2" opacity="0.2" /> <rect x="230" y="110" width="32" height="70" fill="#06b6d4" opacity="0.25" /> <rect x="270" y="95" width="25" height="85" fill="#0891b2" opacity="0.2" /> <!-- Street/path --> <line x1="0" y1="180" x2="300" y2="180" stroke="#cbd5e1" stroke-width="8" opacity="0.3" /> <line x1="0" y1="180" x2="300" y2="180" stroke="#0891b2" stroke-width="2" stroke-dasharray="10,5" opacity="0.4" class="animated-path" /> <!-- Walking person --> <g transform="translate(70, 155)" class="float-gentle">
+       <circle cx="0" cy="-8" r="5" fill="#0891b2" />
+       <line x1="0" y1="-3" x2="0" y2="10" stroke="#0891b2" stroke-width="2.5" />
+       <line x1="0" y1="2" x2="-5" y2="7" stroke="#0891b2" stroke-width="2" />
+       <line x1="0" y1="2" x2="5" y2="7" stroke="#0891b2" stroke-width="2" />
+       <line x1="0" y1="10" x2="-4" y2="20" stroke="#0891b2" stroke-width="2.5" />
+       <line x1="0" y1="10" x2="4" y2="20" stroke="#0891b2" stroke-width="2.5" />
+      </g> <!-- Bicycle --> <g transform="translate(180, 165)" class="float-gentle" style="animation-delay: 1s">
+       <circle cx="-8" cy="8" r="7" stroke="#06b6d4" stroke-width="2" fill="none" />
+       <circle cx="12" cy="8" r="7" stroke="#06b6d4" stroke-width="2" fill="none" />
+       <line x1="-8" y1="8" x2="2" y2="-2" stroke="#06b6d4" stroke-width="2" />
+       <line x1="2" y1="-2" x2="12" y2="8" stroke="#06b6d4" stroke-width="2" />
+       <line x1="2" y1="-2" x2="2" y2="-8" stroke="#06b6d4" stroke-width="2" />
+       <circle cx="2" cy="-11" r="3" fill="#06b6d4" />
+      </g> <!-- Bus --> <g transform="translate(240, 150)" class="float-gentle" style="animation-delay: 0.5s">
+       <rect x="-15" y="0" width="30" height="20" rx="3" fill="#22d3ee" opacity="0.8" />
+       <rect x="-12" y="3" width="8" height="6" fill="#ffffff" opacity="0.6" />
+       <rect x="-2" y="3" width="8" height="6" fill="#ffffff" opacity="0.6" />
+       <circle cx="-8" cy="20" r="2.5" fill="#0891b2" />
+       <circle cx="8" cy="20" r="2.5" fill="#0891b2" />
+      </g> <!-- Connecting paths --> <path d="M 70 175 Q 125 170 180 175" stroke="#0891b2" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.3" class="animated-path" /> <path d="M 180 175 Q 210 173 240 175" stroke="#06b6d4" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.3" class="animated-path" style="animation-delay: 1.5s" /> <!-- Location markers --> <g transform="translate(150, 50)">
+       <circle cx="0" cy="0" r="8" fill="#0891b2" opacity="0.2" class="pulse-ring" />
+       <circle cx="0" cy="0" r="5" fill="#0891b2" />
+       <path d="M 0 -5 L 0 0 L -3 3" stroke="white" stroke-width="1.5" fill="none" />
+      </g>
+     </svg>
+    </div>
+    <h1 id="hero-title" class="text-5xl md:text-7xl font-bold mb-8 leading-tight"><span class="gradient-text">תנועה ומרחב</span></h1>
+    <p id="hero-subtitle" class="text-xl md:text-2xl text-gray-600 mb-8 leading-relaxed max-w-3xl mx-auto">איך נערות נעות בעולם - על עצמאות, בטיחות, והזכות לתפוס מקום</p>
+    <div class="bg-white/70 backdrop-blur-sm rounded-2xl p-8 mb-12 shadow-lg max-w-3xl mx-auto border border-cyan-100">
+     <p class="text-lg text-gray-700 leading-relaxed mb-4">התנועה שלך בעולם היא <strong>חלק מהחופש שלך</strong>. איך את הולכת ברחוב, נוסעת באוטובוס, רוכבת על אופניים — כל אלה חלק מהעצמאות שלך, מהביטחון שלך, ומהזכות שלך לתפוס מקום.</p>
+     <p class="text-lg text-gray-700 leading-relaxed">אבל יחד עם החופש הזה, יש גם שאלות: <em>איך להישאר בטוחה? איך להרגיש בנוח? איך לא לוותר על החופש בגלל פחד?</em> בואי נחקור את זה ביחד.</p>
+    </div><a href="#walking" class="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-8 py-4 rounded-full font-semibold hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-300"> בואי נתחיל למפות את המסלול 
+     <svg class="w-5 h-5 rotate-180" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+     </svg></a>
+   </div>
+  </section><!-- Section 1: Walking -->
+  <section id="walking" class="py-24 px-6 bg-white">
+   <div class="max-w-5xl mx-auto">
+    <div class="flex items-center gap-4 mb-12">
+     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-100 to-emerald-200 flex items-center justify-center">
+      <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+      </svg>
+     </div>
+     <div><span class="text-sm font-medium text-green-500 tracking-wide uppercase">אמצעי תנועה 1</span>
+      <h2 class="text-4xl font-bold text-gray-800">הליכה ברחוב</h2>
+     </div>
+    </div>
+    <p class="text-xl text-gray-600 mb-12 max-w-3xl">ללכת ברחוב זה הדבר הכי בסיסי — וגם אחד הכי מורכבים. זה המקום שבו את לפעמים הכי חשופה.</p>
+    <div class="grid md:grid-cols-2 gap-8 mb-12">
+     <div class="section-card bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-8 border border-green-100">
+      <h3 class="text-2xl font-bold text-gray-800 mb-6">החוויה של נערות ברחוב</h3>
+      <div class="space-y-4">
+       <div class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-full bg-green-200 flex items-center justify-center mt-1 shrink-0"><span class="text-green-800 text-sm font-bold">👀</span>
+        </div>
+        <div>
+         <p class="font-semibold text-gray-800">מבטים והערות</p>
+         <p class="text-sm text-gray-600">לפעמים את מרגישה שכל העיניים עליך. הערות, שריקות, מבטים שגורמים לך לא להרגיש בנוח.</p>
+        </div>
+       </div>
+       <div class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-full bg-emerald-200 flex items-center justify-center mt-1 shrink-0"><span class="text-emerald-800 text-sm font-bold">🌙</span>
+        </div>
+        <div>
+         <p class="font-semibold text-gray-800">שעות היום משפיעות</p>
+         <p class="text-sm text-gray-600">ביום זה מרגיש אחרת מאשר בערב. רחובות מוארים מול רחובות חשוכים.</p>
+        </div>
+       </div>
+       <div class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-full bg-teal-200 flex items-center justify-center mt-1 shrink-0"><span class="text-teal-800 text-sm font-bold">👗</span>
+        </div>
+        <div>
+         <p class="font-semibold text-gray-800">מה את לובשת</p>
+         <p class="text-sm text-gray-600">לפעמים את משנה בגדים או מסלול כי <em>"זה יותר בטוח"</em> — אבל זה לא תמיד צריך להיות ככה.</p>
+        </div>
+       </div>
+       <div class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-full bg-cyan-200 flex items-center justify-center mt-1 shrink-0"><span class="text-cyan-800 text-sm font-bold">🎧</span>
+        </div>
+        <div>
+         <p class="font-semibold text-gray-800">אוזניות או לא?</p>
+         <p class="text-sm text-gray-600">מוזיקה עוזרת להרגיש פחות חשופה, אבל גם מפריעה לשים לב לסביבה.</p>
+        </div>
+       </div>
+       <div class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-full bg-blue-200 flex items-center justify-center mt-1 shrink-0"><span class="text-blue-800 text-sm font-bold">📱</span>
+        </div>
+        <div>
+         <p class="font-semibold text-gray-800">טלפון בכוננות</p>
+         <p class="text-sm text-gray-600">לפעמים את מעמידה פנים שאת מדברת בטלפון, רק כדי להרגיש בטוחה יותר.</p>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="space-y-6">
+      <div class="tip-card rounded-xl p-6 shadow-lg">
+       <h3 class="text-xl font-bold text-gray-800 mb-4">טיפים להליכה בטוחה</h3>
+       <ul class="space-y-3">
+        <li class="flex items-start gap-2">
+         <svg class="w-5 h-5 text-cyan-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+         </svg>
+         <div>
+          <p class="font-medium text-gray-800">לכי ברחובות מרכזיים ומוארים</p>
+          <p class="text-sm text-gray-600">במיוחד בלילה — סמטאות חשוכות יותר מסוכנות</p>
+         </div></li>
+        <li class="flex items-start gap-2">
+         <svg class="w-5 h-5 text-cyan-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+         </svg>
+         <div>
+          <p class="font-medium text-gray-800">בטחי במה שאת מרגישה</p>
+          <p class="text-sm text-gray-600">אם משהו מרגיש מוזר — שני כיוון, היכנסי לחנות</p>
+         </div></li>
+        <li class="flex items-start gap-2">
+         <svg class="w-5 h-5 text-cyan-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+         </svg>
+         <div>
+          <p class="font-medium text-gray-800">שתפי מיקום עם מישהי</p>
+          <p class="text-sm text-gray-600">אפליקציות כמו WhatsApp מאפשרות לשתף מיקום חי</p>
+         </div></li>
+        <li class="flex items-start gap-2">
+         <svg class="w-5 h-5 text-cyan-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+         </svg>
+         <div>
+          <p class="font-medium text-gray-800">לכי בביטחון</p>
+          <p class="text-sm text-gray-600">גוף זקוף, מבט קדימה — זה משדר "אני יודעת לאן אני הולכת"</p>
+         </div></li>
+        <li class="flex items-start gap-2">
+         <svg class="w-5 h-5 text-cyan-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+         </svg>
+         <div>
+          <p class="font-medium text-gray-800">היי ערנית אבל לא פרנואידית</p>
+          <p class="text-sm text-gray-600">איזון בין מודעות למה שקורה סביבך לבין לא להיות במתח כל הזמן</p>
+         </div></li>
+       </ul>
+      </div>
+      <div class="warning-box rounded-xl p-6">
+       <div class="flex items-start gap-3">
+        <svg class="w-6 h-6 text-amber-600 mt-1 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+        <div>
+         <h4 class="font-bold text-gray-800 mb-2">מה לעשות אם מישהו מטריד אותך?</h4>
+         <ul class="space-y-2 text-sm text-gray-700">
+          <li>• <strong>תגובה ישירה:</strong> "תעזוב אותי בשקט" בקול רם וברור</li>
+          <li>• <strong>היכנסי למקום ציבורי:</strong> חנות, קפה, תחנת דלק</li>
+          <li>• <strong>תתקשרי למישהי:</strong> אמא, חברה, משטרה (100)</li>
+          <li>• <strong>אל תרגישי אשמה:</strong> זה לא האשמה שלך. מעולם לא.</li>
+         </ul>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="empowerment-box rounded-2xl p-8">
+     <div class="flex items-start gap-4">
+      <svg class="w-8 h-8 text-indigo-600 mt-1 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+      </svg>
+      <div>
+       <h4 class="text-xl font-bold text-gray-800 mb-3">את לא צריכה "להתכווץ"</h4>
+       <p class="text-gray-700 leading-relaxed">יש נורמה שנערות צריכות להיות קטנות, שקטות, לא לתפוס מקום ברחוב. <strong>זה לא נכון.</strong> יש לך זכות ללכת ברחוב בביטחון, בלי להתנצל, בלי להסתתר. הרחוב שלך בדיוק כמו של כולם.</p>
+      </div>
+     </div>
+    </div>
+   </div>
+  </section><!-- Section 2: Bus -->
+  <section id="bus" class="py-24 px-6 bg-gradient-to-b from-white to-cyan-50/30">
+   <div class="max-w-5xl mx-auto">
+    <div class="flex items-center gap-4 mb-12">
+     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-100 to-sky-200 flex items-center justify-center">
+      <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+      </svg>
+     </div>
+     <div><span class="text-sm font-medium text-blue-500 tracking-wide uppercase">אמצעי תנועה 2</span>
+      <h2 class="text-4xl font-bold text-gray-800">תחבורה ציבורית - אוטובוס ורכבת</h2>
+     </div>
+    </div>
+    <p class="text-xl text-gray-600 mb-12 max-w-3xl">אוטובוס ורכבת הם כלי לעצמאות — אבל הם גם מרחבים שיכולים להרגיש מאיימים או לא נוחים.</p>
+    <div class="grid md:grid-cols-2 gap-8 mb-12">
+     <div class="section-card bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+      <h3 class="text-2xl font-bold text-gray-800 mb-6">אתגרים בתחבורה ציבורית</h3>
+      <div class="space-y-4">
+       <div class="bg-red-50 rounded-lg p-4 border-r-4 border-red-400">
+        <h4 class="font-semibold text-red-800 mb-2">קרבה פיזית לא רצויה</h4>
+        <p class="text-sm text-gray-700">אוטובוסים צפופים, מישהו עומד קרוב מדי, נוגע "בטעות". זה לא תמיד בטעות.</p>
+       </div>
+       <div class="bg-orange-50 rounded-lg p-4 border-r-4 border-orange-400">
+        <h4 class="font-semibold text-orange-800 mb-2">מבטים מטרידים</h4>
+        <p class="text-sm text-gray-700">מישהו בוהה בך לאורך כל הנסיעה. זה גורם לאי-נוחות עמוקה.</p>
+       </div>
+       <div class="bg-yellow-50 rounded-lg p-4 border-r-4 border-yellow-400">
+        <h4 class="font-semibold text-yellow-800 mb-2">הערות והצעות לא רצויות</h4>
+        <p class="text-sm text-gray-700">"איזה יופי", "לאן את נוסעת?", הצעות לפגישה — לפעמים אגרסיביות.</p>
+       </div>
+       <div class="bg-blue-50 rounded-lg p-4 border-r-4 border-blue-400">
+        <h4 class="font-semibold text-blue-800 mb-2">תחושת חוסר בטיחות בשעות מאוחרות</h4>
+        <p class="text-sm text-gray-700">אוטובוס ריק בלילה, תחנה חשוכה — זה מפחיד.</p>
+       </div>
+       <div class="bg-purple-50 rounded-lg p-4 border-r-4 border-purple-400">
+        <h4 class="font-semibold text-purple-800 mb-2">לא לדעת איפה לשבת</h4>
+        <p class="text-sm text-gray-700">ליד החלון או במעבר? קרוב לנהג או רחוק? כל החלטה משפיעה.</p>
+       </div>
+      </div>
+     </div>
+     <div class="space-y-6">
+      <div class="tip-card rounded-xl p-6 shadow-lg">
+       <h3 class="text-xl font-bold text-gray-800 mb-4">טיפים לנסיעה בטוחה יותר</h3>
+       <ul class="space-y-3">
+        <li class="flex items-start gap-2">
+         <svg class="w-5 h-5 text-cyan-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+         </svg>
+         <div>
+          <p class="font-medium text-gray-800">שבי קרוב לנהג</p>
+          <p class="text-sm text-gray-600">במיוחד בשעות מאוחרות — זה יותר בטוח ויש למי לפנות</p>
+         </div></li>
+        <li class="flex items-start gap-2">
+         <svg class="w-5 h-5 text-cyan-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+         </svg>
+         <div>
+          <p class="font-medium text-gray-800">שמרי על התיק בחזית</p>
+          <p class="text-sm text-gray-600">תיק גב מאחורה חשוף לגניבות — החזיקי אותו מול הגוף</p>
+         </div></li>
+        <li class="flex items-start gap-2">
+         <svg class="w-5 h-5 text-cyan-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+         </svg>
+         <div>
+          <p class="font-medium text-gray-800">אם מישהו עומד קרוב מדי</p>
+          <p class="text-sm text-gray-600">הזיזי את עצמך, תגידי "אתה עומד קרוב מדי", או פני לנהג</p>
+         </div></li>
+        <li class="flex items-start gap-2">
+         <svg class="w-5 h-5 text-cyan-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+         </svg>
+         <div>
+          <p class="font-medium text-gray-800">תכנני את המסלול מראש</p>
+          <p class="text-sm text-gray-600">דעי איזה אוטובוס, איפה לרדת — זה נותן ביטחון</p>
+         </div></li>
+        <li class="flex items-start gap-2">
+         <svg class="w-5 h-5 text-cyan-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+         </svg>
+         <div>
+          <p class="font-medium text-gray-800">בלילה — העדיפי מונית או הסעה</p>
+          <p class="text-sm text-gray-600">זה לא "להיות מפונקת" — זה להיות בטוחה</p>
+         </div></li>
+        <li class="flex items-start gap-2">
+         <svg class="w-5 h-5 text-cyan-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+         </svg>
+         <div>
+          <p class="font-medium text-gray-800">שתפי מסלול עם חברה או הורה</p>
+          <p class="text-sm text-gray-600">"אני באוטובוס 5, אגיע בעוד 20 דקות"</p>
+         </div></li>
+       </ul>
+      </div>
+      <div class="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl p-6 border border-indigo-100">
+       <h4 class="font-bold text-gray-800 mb-3 flex items-center gap-2">
+        <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+        </svg> אפליקציות שימושיות</h4>
+       <ul class="space-y-2 text-sm text-gray-700">
+        <li>• <strong>Moovit / Google Maps:</strong> תכנון מסלול ומעקב בזמן אמת</li>
+        <li>• <strong>WhatsApp Location:</strong> שיתוף מיקום חי עם מישהי</li>
+        <li>• <strong>מספר חירום 100:</strong> תמיד במהירות החייגה</li>
+       </ul>
+      </div>
+     </div>
+    </div>
+    <div class="safety-box rounded-2xl p-8 mb-8">
+     <div class="flex items-start gap-4">
+      <svg class="w-8 h-8 text-blue-600 mt-1 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+      </svg>
+      <div>
+       <h4 class="text-xl font-bold text-gray-800 mb-3">זה לא האשמה שלך</h4>
+       <p class="text-gray-700 leading-relaxed">אם מישהו הטריד אותך באוטובוס — זה לא בגלל מה שלבשת, איך שישבת, או איפה שעמדת. <strong>זו אחריות המטריד, לא שלך.</strong> את לא צריכה "להיזהר יותר" — העולם צריך להיות בטוח עבורך.</p>
+      </div>
+     </div>
+    </div>
+   </div>
+  </section><!-- Section 3: Bike -->
+  <section id="bike" class="py-24 px-6 bg-white">
+   <div class="max-w-5xl mx-auto">
+    <div class="flex items-center gap-4 mb-12">
+     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-teal-100 to-cyan-200 flex items-center justify-center">
+      <svg class="w-8 h-8 text-teal-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+      </svg>
+     </div>
+     <div><span class="text-sm font-medium text-teal-500 tracking-wide uppercase">אמצעי תנועה 3</span>
+      <h2 class="text-4xl font-bold text-gray-800">רכיבה על אופניים</h2>
+     </div>
+    </div>
+    <p class="text-xl text-gray-600 mb-12 max-w-3xl">אופניים נותנים חופש, מהירות, ועצמאות — אבל גם דורשים ביטחון ומודעות למרחב.</p>
+    <div class="grid md:grid-cols-2 gap-8 mb-12">
+     <div class="section-card bg-gradient-to-br from-teal-50 to-cyan-50 rounded-2xl p-8 border border-teal-100">
+      <h3 class="text-2xl font-bold text-gray-800 mb-6">היתרונות של רכיבה</h3>
+      <ul class="space-y-4">
+       <li class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-full bg-teal-200 flex items-center justify-center mt-1 shrink-0">
+         <svg class="w-5 h-5 text-teal-700" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+         </svg>
+        </div>
+        <div>
+         <p class="font-semibold text-gray-800">עצמאות ומהירות</p>
+         <p class="text-sm text-gray-600">את לא תלויה בהורים, באוטובוסים, או בלוחות זמנים</p>
+        </div></li>
+       <li class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-full bg-cyan-200 flex items-center justify-center mt-1 shrink-0">
+         <svg class="w-5 h-5 text-cyan-700" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+         </svg>
+        </div>
+        <div>
+         <p class="font-semibold text-gray-800">תחושת חופש</p>
+         <p class="text-sm text-gray-600">הרוח בשיער, התנועה, השליטה — זה מרגיש טוב</p>
+        </div></li>
+       <li class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-full bg-green-200 flex items-center justify-center mt-1 shrink-0">
+         <svg class="w-5 h-5 text-green-700" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+         </svg>
+        </div>
+        <div>
+         <p class="font-semibold text-gray-800">ידידותית לסביבה</p>
+         <p class="text-sm text-gray-600">אפס זיהום, פעילות גופנית, חיבור לעיר</p>
+        </div></li>
+       <li class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-full bg-blue-200 flex items-center justify-center mt-1 shrink-0">
+         <svg class="w-5 h-5 text-blue-700" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+         </svg>
+        </div>
+        <div>
+         <p class="font-semibold text-gray-800">חסכון בכסף</p>
+         <p class="text-sm text-gray-600">בלי כרטיסי אוטובוס, בלי דלק — רק השקעה חד-פעמית</p>
+        </div></li>
+      </ul>
+     </div>
+     <div class="space-y-6">
+      <div class="tip-card rounded-xl p-6 shadow-lg">
+       <h3 class="text-xl font-bold text-gray-800 mb-4">טיפים לרכיבה בטוחה</h3>
+       <ul class="space-y-3">
+        <li class="flex items-start gap-2">
+         <svg class="w-5 h-5 text-cyan-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+         </svg>
+         <div>
+          <p class="font-medium text-gray-800">קסדה תמיד!</p>
+          <p class="text-sm text-gray-600">זה לא "מגניב" — זה <strong>הצלת חיים</strong>. ראש אחד יש לך.</p>
+         </div></li>
+        <li class="flex items-start gap-2">
+         <svg class="w-5 h-5 text-cyan-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+         </svg>
+         <div>
+          <p class="font-medium text-gray-800">אורות ומשקפים</p>
+          <p class="text-sm text-gray-600">אור לבן מלפנים, אדום מאחור, והשתקפויות — שירואו אותך!</p>
+         </div></li>
+        <li class="flex items-start gap-2">
+         <svg class="w-5 h-5 text-cyan-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+         </svg>
+         <div>
+          <p class="font-medium text-gray-800">רכבי בשביל האופניים</p>
+          <p class="text-sm text-gray-600">אם יש — השתמשי בהם. אם אין — הישארי בצד ימין של הכביש</p>
+         </div></li>
+        <li class="flex items-start gap-2">
+         <svg class="w-5 h-5 text-cyan-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+         </svg>
+         <div>
+          <p class="font-medium text-gray-800">תסמני לפני פנייה</p>
+          <p class="text-sm text-gray-600">יד ימינה/שמאלה — זה מאותת לנהגים מה את עושה</p>
+         </div></li>
+        <li class="flex items-start gap-2">
+         <svg class="w-5 h-5 text-cyan-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+         </svg>
+         <div>
+          <p class="font-medium text-gray-800">היזהרי מפתחי דלתות</p>
+          <p class="text-sm text-gray-600">רכבים חונים יכולים לפתוח דלת לפתע — תני מרווח!</p>
+         </div></li>
+        <li class="flex items-start gap-2">
+         <svg class="w-5 h-5 text-cyan-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+         </svg>
+         <div>
+          <p class="font-medium text-gray-800">נעלי אופניים במנעול איכותי</p>
+          <p class="text-sm text-gray-600">אופניים נגנבים הרבה — השקיעי במנעול טוב (U-lock)</p>
+         </div></li>
+       </ul>
+      </div>
+      <div class="warning-box rounded-xl p-6">
+       <div class="flex items-start gap-3">
+        <svg class="w-6 h-6 text-amber-600 mt-1 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+        <div>
+         <h4 class="font-bold text-gray-800 mb-2">סכנות בכביש</h4>
+         <ul class="space-y-2 text-sm text-gray-700">
+          <li>• רכבים שלא רואים אותך או לא שמים לב</li>
+          <li>• רצפה רטובה או חלקה — שומן, חול, עלים</li>
+          <li>• נהיגה בלילה ללא תאורה מספקת</li>
+          <li>• אוזניות שמבודדות אותך מצלילי התנועה</li>
+         </ul>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="empowerment-box rounded-2xl p-8">
+     <div class="flex items-start gap-4">
+      <svg class="w-8 h-8 text-indigo-600 mt-1 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+      </svg>
+      <div>
+       <h4 class="text-xl font-bold text-gray-800 mb-3">אופניים = עצמאות</h4>
+       <p class="text-gray-700 leading-relaxed mb-4">רכיבה על אופניים נותנת לך כוח. את לא צריכה לבקש הסעה, לא צריכה לחכות לאוטובוס, לא תלויה באף אחד. <strong>זה מרחב של חופש.</strong></p>
+       <p class="text-gray-700 leading-relaxed">אבל חשוב גם להיות בטוחה: קסדה, תאורה, מודעות לסביבה. <em>חופש עם אחריות.</em></p>
+      </div>
+     </div>
+    </div>
+   </div>
+  </section><!-- Section 4: Safety -->
+  <section id="safety" class="py-24 px-6 bg-gradient-to-b from-white to-blue-50/30">
+   <div class="max-w-5xl mx-auto">
+    <div class="flex items-center gap-4 mb-12">
+     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-red-100 to-orange-200 flex items-center justify-center">
+      <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+      </svg>
+     </div>
+     <div><span class="text-sm font-medium text-red-500 tracking-wide uppercase">חלק מרכזי</span>
+      <h2 id="safety-title" class="text-4xl font-bold text-gray-800">בטיחות במרחב הציבורי</h2>
+     </div>
+    </div>
+    <p class="text-xl text-gray-600 mb-12 max-w-3xl">בטיחות זה לא רק להימנע מסכנות — זה גם <strong>להרגיש בטוחה להיות מי שאת</strong> במרחב הציבורי.</p>
+    <div class="grid md:grid-cols-2 gap-8 mb-12">
+     <div class="section-card bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+      <h3 class="text-2xl font-bold text-gray-800 mb-6">סכנות שנערות חוות</h3>
+      <div class="space-y-4">
+       <div class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center mt-1 shrink-0">
+         <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+         </svg>
+        </div>
+        <div>
+         <p class="font-semibold text-gray-800">הטרדה מינית ברחוב</p>
+         <p class="text-sm text-gray-600">הערות, שריקות, מבטים, עקיבה — זה קורה <strong>הרבה</strong></p>
+        </div>
+       </div>
+       <div class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center mt-1 shrink-0">
+         <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+         </svg>
+        </div>
+        <div>
+         <p class="font-semibold text-gray-800">תחושת חוסר ביטחון בלילה</p>
+         <p class="text-sm text-gray-600">רחובות חשוכים, מקומות ריקים, תחנות מבודדות</p>
+        </div>
+       </div>
+       <div class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center mt-1 shrink-0">
+         <svg class="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+         </svg>
+        </div>
+        <div>
+         <p class="font-semibold text-gray-800">מגע פיזי לא רצוי</p>
+         <p class="text-sm text-gray-600">במקומות צפופים — אוטובוס, רכבת, אירועים</p>
+        </div>
+       </div>
+       <div class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center mt-1 shrink-0">
+         <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+         </svg>
+        </div>
+        <div>
+         <p class="font-semibold text-gray-800">גניבות וכיסים</p>
+         <p class="text-sm text-gray-600">במיוחד בתחבורה ציבורית ובמקומות צפופים</p>
+        </div>
+       </div>
+       <div class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-full bg-pink-100 flex items-center justify-center mt-1 shrink-0">
+         <svg class="w-5 h-5 text-pink-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+         </svg>
+        </div>
+        <div>
+         <p class="font-semibold text-gray-800">תחושת "להיות נצפית"</p>
+         <p class="text-sm text-gray-600">מבטים מתמשכים שגורמים לאי-נוחות ופגיעה בפרטיות</p>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="space-y-6">
+      <div class="safety-box rounded-xl p-6">
+       <h3 class="text-xl font-bold text-gray-800 mb-4">כלים לבטיחות</h3>
+       <ul class="space-y-3">
+        <li class="flex items-start gap-2">
+         <svg class="w-5 h-5 text-blue-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+         </svg>
+         <div>
+          <p class="font-medium text-gray-800">בטחי באינסטינקט שלך</p>
+          <p class="text-sm text-gray-600">אם משהו מרגיש לא בסדר — <strong>זה כנראה לא בסדר</strong></p>
+         </div></li>
+        <li class="flex items-start gap-2">
+         <svg class="w-5 h-5 text-blue-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+         </svg>
+         <div>
+          <p class="font-medium text-gray-800">תכנני מראש</p>
+          <p class="text-sm text-gray-600">דעי לאן את הולכת, באיזה שעה, איך תחזרי</p>
+         </div></li>
+        <li class="flex items-start gap-2">
+         <svg class="w-5 h-5 text-blue-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+         </svg>
+         <div>
+          <p class="font-medium text-gray-800">תהיי בקשר</p>
+          <p class="text-sm text-gray-600">SMS למישהי: "יצאתי", "הגעתי", "בדרך חזרה"</p>
+         </div></li>
+        <li class="flex items-start gap-2">
+         <svg class="w-5 h-5 text-blue-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+         </svg>
+         <div>
+          <p class="font-medium text-gray-800">הליכה בקבוצה</p>
+          <p class="text-sm text-gray-600">במיוחד בלילה — יש כוח במספרים</p>
+         </div></li>
+        <li class="flex items-start gap-2">
+         <svg class="w-5 h-5 text-blue-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+         </svg>
+         <div>
+          <p class="font-medium text-gray-800">דברי בקול רם</p>
+          <p class="text-sm text-gray-600">אם מישהו מטריד: "עזוב אותי!", "אל תיגע בי!" — בקול ברור</p>
+         </div></li>
+        <li class="flex items-start gap-2">
+         <svg class="w-5 h-5 text-blue-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+         </svg>
+         <div>
+          <p class="font-medium text-gray-800">מספרי חירום בהישג יד</p>
+          <p class="text-sm text-gray-600">משטרה 100, אמבולנס 101, תחנה מרכזית ידועה לך</p>
+         </div></li>
+       </ul>
+      </div>
+      <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-6 border border-purple-100">
+       <h4 class="font-bold text-gray-800 mb-3">מה לעשות אם את מרגישה מאוימת?</h4>
+       <ol class="space-y-2 text-sm text-gray-700 list-decimal list-inside">
+        <li><strong>הגיבי מיד:</strong> אל תחכי שזה "יעבור מעצמו"</li>
+        <li><strong>פני למקום ציבורי:</strong> חנות, קפה, תחנת משטרה</li>
+        <li><strong>תתקשרי למישהי:</strong> חברה, הורה, משטרה</li>
+        <li><strong>צעקי אם צריך:</strong> "עזרה!", "תעזבו אותי!" — זה מושך תשומת לב</li>
+        <li><strong>תדווחי:</strong> גם אם זה נגמר "בסדר" — זה עוזר לעצור את זה</li>
+       </ol>
+      </div>
+     </div>
+    </div>
+    <div class="bg-gradient-to-r from-red-500 to-orange-500 rounded-2xl p-8 text-white">
+     <div class="flex items-start gap-4">
+      <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center shrink-0">
+       <svg class="w-7 h-7" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+       </svg>
+      </div>
+      <div>
+       <h4 class="text-2xl font-bold mb-4">זה לא האשמה שלך — אף פעם</h4>
+       <p class="text-lg opacity-95 leading-relaxed mb-4">אם מישהו הטריד אותך, עקב אחריך, נגע בך ללא הסכמה — <strong>זו לא אשמתך</strong>. לא משנה מה לבשת, איפה הלכת, באיזו שעה.</p>
+       <p class="text-lg opacity-95 leading-relaxed"><em>האחריות היא של המטריד, תמיד.</em> את לא צריכה "להיזהר יותר" — העולם צריך להיות בטוח עבורך.</p>
+      </div>
+     </div>
+    </div>
+   </div>
+  </section><!-- Section 5: Empowerment -->
+  <section id="empowerment" class="py-24 px-6 bg-white">
+   <div class="max-w-5xl mx-auto">
+    <div class="flex items-center gap-4 mb-12">
+     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-100 to-indigo-200 flex items-center justify-center">
+      <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+      </svg>
+     </div>
+     <div><span class="text-sm font-medium text-purple-500 tracking-wide uppercase">המסר המרכזי</span>
+      <h2 class="text-4xl font-bold text-gray-800">את שייכת למרחב הציבורי</h2>
+     </div>
+    </div>
+    <p class="text-xl text-gray-600 mb-12 max-w-3xl">המרחב הציבורי לא "שייך לגברים" ונערות רק "עוברות בו". <strong>זה גם שלך.</strong></p>
+    <div class="mb-12">
+     <div class="empowerment-box rounded-2xl p-8 mb-8">
+      <h3 class="text-2xl font-bold text-gray-800 mb-6">מה זה אומר לתפוס מקום?</h3>
+      <div class="grid md:grid-cols-2 gap-6">
+       <ul class="space-y-4">
+        <li class="flex items-start gap-3">
+         <div class="w-8 h-8 rounded-full bg-indigo-200 flex items-center justify-center mt-1 shrink-0">
+          <svg class="w-5 h-5 text-indigo-700" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+         </div>
+         <div>
+          <p class="font-semibold text-gray-800">ללכת בביטחון</p>
+          <p class="text-sm text-gray-600">גוף זקוף, צעדים ברורים — לא להתכווץ, לא להתנצל</p>
+         </div></li>
+        <li class="flex items-start gap-3">
+         <div class="w-8 h-8 rounded-full bg-purple-200 flex items-center justify-center mt-1 shrink-0">
+          <svg class="w-5 h-5 text-purple-700" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+         </div>
+         <div>
+          <p class="font-semibold text-gray-800">לא להתנצל על קיום</p>
+          <p class="text-sm text-gray-600">"סליחה" כשאת לא עשית כלום רע — זה הרגל שצריך לשבור</p>
+         </div></li>
+        <li class="flex items-start gap-3">
+         <div class="w-8 h-8 rounded-full bg-pink-200 flex items-center justify-center mt-1 shrink-0">
+          <svg class="w-5 h-5 text-pink-700" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+         </div>
+         <div>
+          <p class="font-semibold text-gray-800">ללבוש מה שבא לך</p>
+          <p class="text-sm text-gray-600">לא לשנות בגדים כי "אולי מישהו יסתכל" — הבעיה לא בך</p>
+         </div></li>
+       </ul>
+       <ul class="space-y-4">
+        <li class="flex items-start gap-3">
+         <div class="w-8 h-8 rounded-full bg-blue-200 flex items-center justify-center mt-1 shrink-0">
+          <svg class="w-5 h-5 text-blue-700" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+         </div>
+         <div>
+          <p class="font-semibold text-gray-800">לתפוס מקום פיזי</p>
+          <p class="text-sm text-gray-600">באוטובוס, בפארק, על ספסל — את לא צריכה "להצטמצם"</p>
+         </div></li>
+        <li class="flex items-start gap-3">
+         <div class="w-8 h-8 rounded-full bg-teal-200 flex items-center justify-center mt-1 shrink-0">
+          <svg class="w-5 h-5 text-teal-700" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+         </div>
+         <div>
+          <p class="font-semibold text-gray-800">להגיב להטרדה</p>
+          <p class="text-sm text-gray-600">"עזוב אותי", "זה לא בסדר" — בקול רם, ללא בושה</p>
+         </div></li>
+        <li class="flex items-start gap-3">
+         <div class="w-8 h-8 rounded-full bg-green-200 flex items-center justify-center mt-1 shrink-0">
+          <svg class="w-5 h-5 text-green-700" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+         </div>
+         <div>
+          <p class="font-semibold text-gray-800">לזוז בחופש</p>
+          <p class="text-sm text-gray-600">ללכת לאן שרוצה, מתי שרוצה (בגבולות בטיחות) — זו הזכות שלך</p>
+         </div></li>
+       </ul>
+      </div>
+     </div>
+     <div class="grid md:grid-cols-3 gap-6 mb-12">
+      <div class="section-card bg-gradient-to-br from-cyan-50 to-blue-50 rounded-xl p-6 border border-cyan-100">
+       <div class="text-4xl mb-4">
+        🚶‍♀️
+       </div>
+       <h4 class="font-bold text-gray-800 mb-3">הליכה = חופש</h4>
+       <p class="text-sm text-gray-700">כל פעם שאת יוצאת לבד, את מבטאת עצמאות. זה לא מובן מאליו — זו זכות שצריך לשמור עליה.</p>
+      </div>
+      <div class="section-card bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-6 border border-purple-100">
+       <div class="text-4xl mb-4">
+        🚌
+       </div>
+       <h4 class="font-bold text-gray-800 mb-3">נסיעה = גישה</h4>
+       <p class="text-sm text-gray-700">תחבורה ציבורית נותנת לך גישה לעבודה, לימודים, חברות, הזדמנויות. זה מפתח לעצמאות כלכלית וחברתית.</p>
+      </div>
+      <div class="section-card bg-gradient-to-br from-green-50 to-teal-50 rounded-xl p-6 border border-green-100">
+       <div class="text-4xl mb-4">
+        🚲
+       </div>
+       <h4 class="font-bold text-gray-800 mb-3">רכיבה = כוח</h4>
+       <p class="text-sm text-gray-700">אופניים הם סמל לחופש — את שולטת במהירות, בכיוון, בחוויה. אין תלות, אין המתנה.</p>
+      </div>
+     </div>
+    </div>
+    <div class="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl p-10 text-white text-center">
+     <h3 class="text-3xl font-bold mb-6">המסר האחרון</h3>
+     <p class="text-xl leading-relaxed mb-6 max-w-3xl mx-auto opacity-95"><strong>המרחב הציבורי שייך לך בדיוק כמו שהוא שייך לכולם.</strong></p>
+     <p class="text-lg leading-relaxed max-w-3xl mx-auto opacity-90">את לא צריכה להיות קטנה, שקטה, זהירה מדי. את צריכה להיות <em>בטוחה</em> — ושזה יהיה אחריות החברה, לא רק שלך. עד אז, תלכי בביטחון, תדעי את הזכויות שלך, ותזכרי: <strong>את ראויה לתפוס מקום.</strong></p>
+    </div>
+   </div>
+  </section><!-- Closing Section -->
+  <section class="py-24 px-6 bg-gradient-to-b from-white to-cyan-50">
+   <div class="max-w-4xl mx-auto text-center">
+    <div class="mb-12 flex justify-center">
+     <svg class="w-32 h-32" viewbox="0 0 120 120" fill="none"><circle cx="60" cy="60" r="50" fill="#ecfeff" opacity="0.5" /> <path d="M 30 60 Q 45 40 60 60 T 90 60" stroke="#0891b2" stroke-width="3" fill="none" class="animated-path" /> <circle cx="30" cy="60" r="6" fill="#06b6d4" /> <circle cx="60" cy="60" r="6" fill="#0891b2" /> <circle cx="90" cy="60" r="6" fill="#22d3ee" /> <path d="M 60 20 L 60 100" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="5,5" opacity="0.3" /> <path d="M 20 60 L 100 60" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="5,5" opacity="0.3" />
+     </svg>
+    </div>
+    <h2 class="text-4xl font-bold text-gray-800 mb-8"><span class="gradient-text">המסע שלך במרחב</span></h2>
+    <div class="space-y-6 mb-12">
+     <p class="text-xl text-gray-700 leading-relaxed">כל דרך שאת הולכת, כל נסיעה שאת עושה, כל רכיבה — זה חלק מהחופש שלך. <strong>התנועה שלך במרחב היא ביטוי של הזכות שלך להיות.</strong></p>
+     <p class="text-xl text-gray-700 leading-relaxed">זה לא תמיד קל. יש הטרדות, יש פחדים, יש סכנות. אבל זה לא אומר שאת צריכה לוותר על החופש שלך — זה אומר שהעולם צריך להשתנות.</p>
+     <p class="text-xl text-gray-700 leading-relaxed">עד אז: <em>תזוזי בביטחון. תדעי את הזכויות שלך. ותזכרי שאת שייכת למרחב הזה.</em></p>
+    </div>
+    <div class="bg-white rounded-2xl p-8 shadow-lg border border-cyan-100 max-w-2xl mx-auto mb-12">
+     <p class="text-lg font-medium text-gray-800 italic">"הרחוב הוא לא סכנה — הרחוב הוא הבית שלי, ושל כל אישה. אנחנו לא צריכות לברוח ממנו, אלא לדרוש שהוא יהיה בטוח עבורנו."</p>
+    </div><a href="#walking" class="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-8 py-4 rounded-full font-semibold hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-300"> לחזור להתחלה 
+     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+     </svg></a>
+   </div>
+  </section><!-- Footer -->
+  <footer class="py-12 px-6 bg-gradient-to-r from-cyan-600 to-blue-600 text-white">
+   <div class="max-w-5xl mx-auto text-center">
+    <div class="flex items-center justify-center gap-3 mb-6">
+     <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+      <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+      </svg>
+     </div><span class="text-2xl font-bold">תנועה ומרחב</span>
+    </div>
+    <p class="text-white/80 text-lg mb-4">איך נערות נעות בעולם - על עצמאות, בטיחות, והזכות לתפוס מקום</p>
+    <p class="text-white/60 text-sm">תוכנית חינוכית לנערות | בנושא תנועה במרחב הציבורי</p>
+    <div class="mt-6 pt-6 border-t border-white/20">
+     <p class="text-white/70 text-sm">מספרי חירום: משטרה 100 | אמבולנס 101 | עזרה ראשונה 1-800-HELP</p>
+    </div>
+   </div>
+  </footer>
+  <script>
+    // Element SDK initialization
+    const defaultConfig = {
+      site_title: 'תנועה ומרחב',
+      hero_subtitle: 'איך נערות נעות בעולם - על עצמאות, בטיחות, והזכות לתפוס מקום',
+      safety_header: 'בטיחות במרחב הציבורי',
+      background_color: '#ffffff',
+      primary_color: '#0891b2',
+      secondary_color: '#06b6d4',
+      text_color: '#1f2937',
+      accent_color: '#22d3ee'
+    };
+
+    let config = { ...defaultConfig };
+
+    async function onConfigChange(newConfig) {
+      config = newConfig;
+      
+      // Update nav title
+      const navTitle = document.getElementById('nav-title');
+      if (navTitle) {
+        navTitle.textContent = config.site_title || defaultConfig.site_title;
+      }
+      
+      // Update hero title
+      const heroTitle = document.getElementById('hero-title');
+      if (heroTitle) {
+        heroTitle.innerHTML = `<span class="gradient-text">${config.site_title || defaultConfig.site_title}</span>`;
+      }
+      
+      // Update hero subtitle
+      const heroSubtitle = document.getElementById('hero-subtitle');
+      if (heroSubtitle) {
+        heroSubtitle.textContent = config.hero_subtitle || defaultConfig.hero_subtitle;
+      }
+      
+      // Update safety title
+      const safetyTitle = document.getElementById('safety-title');
+      if (safetyTitle) {
+        safetyTitle.textContent = config.safety_header || defaultConfig.safety_header;
+      }
+    }
+
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [
+          {
+            get: () => config.background_color || defaultConfig.background_color,
+            set: (value) => {
+              config.background_color = value;
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            }
+          },
+          {
+            get: () => config.primary_color || defaultConfig.primary_color,
+            set: (value) => {
+              config.primary_color = value;
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ primary_color: value });
+              }
+            }
+          },
+          {
+            get: () => config.secondary_color || defaultConfig.secondary_color,
+            set: (value) => {
+              config.secondary_color = value;
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ secondary_color: value });
+              }
+            }
+          },
+          {
+            get: () => config.text_color || defaultConfig.text_color,
+            set: (value) => {
+              config.text_color = value;
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            }
+          },
+          {
+            get: () => config.accent_color || defaultConfig.accent_color,
+            set: (value) => {
+              config.accent_color = value;
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ accent_color: value });
+              }
+            }
+          }
+        ],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      };
+    }
+
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ['site_title', config.site_title || defaultConfig.site_title],
+        ['hero_subtitle', config.hero_subtitle || defaultConfig.hero_subtitle],
+        ['safety_header', config.safety_header || defaultConfig.safety_header]
+      ]);
+    }
+
+    // Initialize SDK
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
+
+    // Smooth scroll for navigation
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+
+    // Add scroll-based navigation highlight
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        if (scrollY >= sectionTop - 200) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.classList.remove('text-cyan-600');
+        if (link.getAttribute('href') === `#${current}`) {
+          link.classList.add('text-cyan-600');
+        }
+      });
+    });
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c03a85807d37da0',t:'MTc2ODc5NzY2NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
