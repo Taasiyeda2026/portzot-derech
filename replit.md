@@ -32,6 +32,18 @@ The server runs on port 5000 and serves all static files.
 - Responsive design with modern CSS
 
 ## Recent Changes
+- 2026-01-19: Smart pairing algorithm (js/pairing-algorithm.js)
+  - calculateScore() - compatibility scoring (max 110 points)
+  - Domain matching (30pts): main/secondary domain alignment
+  - Life interests (15pts): daily content preferences
+  - Work style (25pts): pace, teamwork, approach
+  - Team roles (20pts): complementary roles bonus
+  - Communication (20pts): pressure, conflict, style
+  - Importance multiplier for high-priority matches
+  - pickBestPairs() - greedy optimal pairing
+  - handleLeftovers() - creates triples for odd numbers
+  - getPairingStats() - pairing statistics
+- 2026-01-19: Back to domains button on all d1-d10 pages
 - 2026-01-18: Complete redesign of opening questionnaire (level1/quiz.html)
   - 21 questions with 4 answer options each
   - Card-based UI with soft purple colors and off-white background

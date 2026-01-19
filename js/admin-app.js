@@ -2,7 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 import { getFirestore, doc, setDoc, getDocs, collection, deleteDoc } 
 from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { firebaseConfig, COLLECTIONS, SESSION_ID } from "./config.js";
-import { generatePairs } from "./pairing-algorithm.js";
+import { generatePairs, getPairingStats } from "./pairing-algorithm.js";
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
@@ -23,7 +23,8 @@ document.getElementById("generatePairs").onclick = async () => {
   for(const p of pairs){
     await setDoc(doc(db, COLLECTIONS.pairs, p.id), p);
   }
-  status.innerText = "הזוגות נוצרו";
+  const stats = getPairingStats(pairs);
+  status.innerText = `נוצרו ${stats.pairs} זוגות, ${stats.triples} שלשות | ניקוד ממוצע: ${stats.avgScore}`;
 };
 
 document.getElementById("resetSystem").onclick = async () => {
