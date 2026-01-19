@@ -1,0 +1,997 @@
+<!doctype html>
+<html lang="he" dir="rtl" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>כסף קטן, קניות ובחירות | נערות וכלכלה</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&amp;family=Varela+Round&amp;display=swap" rel="stylesheet">
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    * {
+      font-family: 'Heebo', 'Varela Round', sans-serif;
+    }
+    
+    .gradient-text {
+      background: linear-gradient(135deg, #059669, #10b981, #34d399);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .hero-pattern {
+      background-image: 
+        radial-gradient(circle at 20% 50%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(52, 211, 153, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 20%, rgba(5, 150, 105, 0.08) 0%, transparent 50%);
+    }
+    
+    .money-card {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .money-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.1), transparent);
+      transition: left 0.6s ease;
+    }
+    
+    .money-card:hover::before {
+      left: 100%;
+    }
+    
+    .money-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 40px -12px rgba(5, 150, 105, 0.25);
+    }
+    
+    @keyframes coin-flip {
+      0%, 100% { transform: rotateY(0deg); }
+      50% { transform: rotateY(180deg); }
+    }
+    
+    .coin-flip {
+      animation: coin-flip 3s ease-in-out infinite;
+    }
+    
+    @keyframes float-money {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-15px) rotate(5deg); }
+    }
+    
+    .float-money {
+      animation: float-money 4s ease-in-out infinite;
+    }
+    
+    .price-tag {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      border-right: 4px solid #f59e0b;
+      position: relative;
+    }
+    
+    .price-tag::after {
+      content: '💰';
+      position: absolute;
+      top: 50%;
+      left: 12px;
+      transform: translateY(-50%);
+      font-size: 1.5rem;
+      opacity: 0.3;
+    }
+    
+    .savings-box {
+      background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+      border-right: 4px solid #3b82f6;
+    }
+    
+    .warning-box {
+      background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+      border-right: 4px solid #ef4444;
+    }
+    
+    .tip-card {
+      background: white;
+      border-right: 3px solid #10b981;
+      transition: all 0.3s ease;
+    }
+    
+    .tip-card:hover {
+      border-right-width: 6px;
+      transform: translateX(-3px);
+      box-shadow: 0 8px 16px -4px rgba(16, 185, 129, 0.2);
+    }
+    
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.3); }
+      50% { box-shadow: 0 0 40px rgba(16, 185, 129, 0.6); }
+    }
+    
+    .pulse-glow {
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+    
+    .calculator-display {
+      background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+      font-family: 'Courier New', monospace;
+      color: #10b981;
+      text-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+    }
+    
+    .trend-wave {
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .trend-wave::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: -100%;
+      width: 200%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.1), transparent);
+      animation: wave-move 3s linear infinite;
+    }
+    
+    @keyframes wave-move {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+    
+    .category-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      font-weight: 600;
+      font-size: 0.875rem;
+      transition: all 0.3s ease;
+    }
+    
+    .category-badge:hover {
+      transform: scale(1.05);
+    }
+    
+    .spending-bar {
+      height: 8px;
+      background: linear-gradient(90deg, #10b981, #34d399, #6ee7b7);
+      border-radius: 9999px;
+      transition: width 1s ease-out;
+    }
+    
+    @keyframes slide-in-right {
+      from { opacity: 0; transform: translateX(30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    
+    .slide-in-right {
+      animation: slide-in-right 0.6s ease-out;
+    }
+    
+    .interactive-chart {
+      transition: all 0.3s ease;
+    }
+    
+    .interactive-chart:hover {
+      transform: scale(1.05);
+    }
+    
+    .empowerment-box {
+      background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+      border-right: 4px solid #6366f1;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full bg-gradient-to-b from-white via-emerald-50/20 to-green-50/30 text-gray-800 overflow-auto"><!-- Navigation -->
+  <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-emerald-100/50 shadow-sm">
+   <div class="max-w-6xl mx-auto px-6 py-4">
+    <div class="flex items-center justify-between">
+     <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-green-500 flex items-center justify-center coin-flip"><span class="text-2xl">💰</span>
+      </div><span id="nav-title" class="text-xl font-bold gradient-text">כסף קטן, קניות ובחירות</span>
+     </div>
+     <div class="hidden md:flex items-center gap-6 text-sm text-gray-600"><a href="#work" class="hover:text-emerald-600 transition-colors">עבודה</a> <a href="#spending" class="hover:text-emerald-600 transition-colors">בזבוז</a> <a href="#saving" class="hover:text-emerald-600 transition-colors">חיסכון</a> <a href="#desire" class="hover:text-emerald-600 transition-colors">רצון</a> <a href="#trends" class="hover:text-emerald-600 transition-colors">טרנדים</a>
+     </div>
+    </div>
+   </div>
+  </nav><!-- Hero Section -->
+  <section class="min-h-screen flex items-center justify-center px-6 py-20 relative overflow-hidden hero-pattern">
+   <div class="absolute top-20 right-10 w-64 h-64 bg-emerald-200/20 rounded-full blur-3xl float-money"></div>
+   <div class="absolute bottom-20 left-10 w-72 h-72 bg-green-200/20 rounded-full blur-3xl float-money" style="animation-delay: 2s;"></div>
+   <div class="max-w-5xl mx-auto text-center relative z-10"><!-- Money illustration -->
+    <div class="mb-12 flex justify-center">
+     <svg class="w-80 h-64" viewbox="0 0 300 200" fill="none"><!-- Wallet --> <rect x="80" y="70" width="140" height="90" rx="8" fill="#059669" opacity="0.2" /> <rect x="85" y="75" width="130" height="80" rx="6" fill="#10b981" opacity="0.3" /> <line x1="85" y1="95" x2="215" y2="95" stroke="#059669" stroke-width="2" /> <!-- Cards coming out --> <rect x="100" y="50" width="50" height="30" rx="4" fill="#34d399" opacity="0.6" class="float-money" /> <rect x="160" y="45" width="50" height="30" rx="4" fill="#6ee7b7" opacity="0.6" class="float-money" style="animation-delay: 0.5s" /> <!-- Coins --> <circle cx="50" cy="120" r="15" fill="#fbbf24" opacity="0.7" class="float-money" style="animation-delay: 1s" /> <circle cx="250" cy="130" r="12" fill="#fcd34d" opacity="0.7" class="float-money" style="animation-delay: 1.5s" /> <circle cx="240" cy="100" r="10" fill="#fde68a" opacity="0.7" class="float-money" style="animation-delay: 2s" /> <!-- Shopping bags --> <g transform="translate(30, 140)" class="float-money" style="animation-delay: 0.8s">
+       <rect x="0" y="10" width="30" height="35" rx="2" fill="#10b981" opacity="0.4" />
+       <path d="M 8 10 Q 15 5 22 10" stroke="#059669" stroke-width="2" fill="none" />
+      </g> <g transform="translate(240, 150)" class="float-money" style="animation-delay: 1.2s">
+       <rect x="0" y="8" width="25" height="30" rx="2" fill="#34d399" opacity="0.4" />
+       <path d="M 6 8 Q 12.5 3 19 8" stroke="#10b981" stroke-width="2" fill="none" />
+      </g> <!-- Money symbols --> <text x="150" y="125" font-size="24" fill="#059669" opacity="0.3" text-anchor="middle" font-weight="bold">
+       ₪
+      </text> <text x="190" y="140" font-size="18" fill="#10b981" opacity="0.3" text-anchor="middle" font-weight="bold">
+       $
+      </text> <text x="110" y="135" font-size="20" fill="#34d399" opacity="0.3" text-anchor="middle" font-weight="bold">
+       €
+      </text>
+     </svg>
+    </div>
+    <h1 id="hero-title" class="text-5xl md:text-7xl font-bold mb-8 leading-tight"><span class="gradient-text">כסף קטן, קניות ובחירות</span></h1>
+    <p id="hero-subtitle" class="text-xl md:text-2xl text-gray-600 mb-8 leading-relaxed max-w-3xl mx-auto">איך להיות חכמה עם הכסף שלך - בלי לוותר על מה שחשוב</p>
+    <div class="bg-white/70 backdrop-blur-sm rounded-2xl p-8 mb-12 shadow-lg max-w-3xl mx-auto border border-emerald-100">
+     <p class="text-lg text-gray-700 leading-relaxed mb-4">הכסף שיש לך — בין אם זה דמי כיס, משכורת מעבודה, או מתנה — זה <strong>הכוח שלך</strong>. איך את מחליטה להוציא אותו, לחסוך אותו, או לא לבזבז אותו — זה משקף מי את ומה חשוב לך.</p>
+     <p class="text-lg text-gray-700 leading-relaxed">אבל יש הרבה לחצים: <em>טרנדים שמושכים אותך לקנות, פרסומות שגורמות לך להרגיש חסרה, חברות שקונות דברים שגם את רוצה.</em> איך עושים את זה נכון? בואי נחקור.</p>
+    </div><a href="#work" class="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-green-500 text-white px-8 py-4 rounded-full font-semibold hover:shadow-lg hover:shadow-emerald-500/25 transition-all duration-300 pulse-glow"> בואי נתחיל לחשב <span class="text-xl">💸</span> </a>
+   </div>
+  </section><!-- Section 1: Work & Income -->
+  <section id="work" class="py-24 px-6 bg-white">
+   <div class="max-w-5xl mx-auto">
+    <div class="flex items-center gap-4 mb-12">
+     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-100 to-indigo-200 flex items-center justify-center"><span class="text-3xl">💼</span>
+     </div>
+     <div><span class="text-sm font-medium text-blue-500 tracking-wide uppercase">חלק 1</span>
+      <h2 class="text-4xl font-bold text-gray-800">עבודה וההכנסה הראשונה</h2>
+     </div>
+    </div>
+    <p class="text-xl text-gray-600 mb-12 max-w-3xl">לעבוד זה לא רק להרוויח כסף — זה גם <strong>עצמאות, אחריות, וערך עצמי</strong>.</p>
+    <div class="grid md:grid-cols-2 gap-8 mb-12">
+     <div class="money-card bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-100">
+      <h3 class="text-2xl font-bold text-gray-800 mb-6">למה לעבוד?</h3>
+      <div class="space-y-4">
+       <div class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-full bg-blue-200 flex items-center justify-center mt-1 shrink-0"><span class="text-blue-800 text-sm font-bold">💰</span>
+        </div>
+        <div>
+         <p class="font-semibold text-gray-800">עצמאות כלכלית</p>
+         <p class="text-sm text-gray-600">לא לתלות בהורים לכל דבר קטן. את קונה מה שאת רוצה.</p>
+        </div>
+       </div>
+       <div class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-full bg-indigo-200 flex items-center justify-center mt-1 shrink-0"><span class="text-indigo-800 text-sm font-bold">💪</span>
+        </div>
+        <div>
+         <p class="font-semibold text-gray-800">תחושת הישג</p>
+         <p class="text-sm text-gray-600">להרוויח בעצמך נותן ביטחון ותחושה שאת מסוגלת.</p>
+        </div>
+       </div>
+       <div class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-full bg-purple-200 flex items-center justify-center mt-1 shrink-0"><span class="text-purple-800 text-sm font-bold">🎓</span>
+        </div>
+        <div>
+         <p class="font-semibold text-gray-800">לימוד אחריות</p>
+         <p class="text-sm text-gray-600">להגיע בזמן, לעשות עבודה טובה, להתמודד עם אתגרים.</p>
+        </div>
+       </div>
+       <div class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-full bg-pink-200 flex items-center justify-center mt-1 shrink-0"><span class="text-pink-800 text-sm font-bold">👥</span>
+        </div>
+        <div>
+         <p class="font-semibold text-gray-800">ניסיון וקשרים</p>
+         <p class="text-sm text-gray-600">כל עבודה מלמדת משהו ופותחת דלתות לעתיד.</p>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="space-y-6">
+      <div class="tip-card rounded-xl p-6 shadow-lg">
+       <h3 class="text-xl font-bold text-gray-800 mb-4">איפה נערות עובדות?</h3>
+       <ul class="space-y-3">
+        <li class="flex items-start gap-2">
+         <svg class="w-5 h-5 text-emerald-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+         </svg>
+         <div>
+          <p class="font-medium text-gray-800">בתי קפה ומסעדות</p>
+          <p class="text-sm text-gray-600">מלצרות, קופאיות, עבודה במטבח</p>
+         </div></li>
+        <li class="flex items-start gap-2">
+         <svg class="w-5 h-5 text-emerald-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+         </svg>
+         <div>
+          <p class="font-medium text-gray-800">חנויות וקניונים</p>
+          <p class="text-sm text-gray-600">מוכרות, סידור מלאי, שירות לקוחות</p>
+         </div></li>
+        <li class="flex items-start gap-2">
+         <svg class="w-5 h-5 text-emerald-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+         </svg>
+         <div>
+          <p class="font-medium text-gray-800">שמרטפות וטיפול בילדים</p>
+          <p class="text-sm text-gray-600">גמישות בשעות, קשר אישי</p>
+         </div></li>
+        <li class="flex items-start gap-2">
+         <svg class="w-5 h-5 text-emerald-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+         </svg>
+         <div>
+          <p class="font-medium text-gray-800">שיעורים פרטיים</p>
+          <p class="text-sm text-gray-600">אם את טובה במקצוע — זה יכול להיות משתלם</p>
+         </div></li>
+        <li class="flex items-start gap-2">
+         <svg class="w-5 h-5 text-emerald-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+         </svg>
+         <div>
+          <p class="font-medium text-gray-800">עבודות דיגיטליות</p>
+          <p class="text-sm text-gray-600">עיצוב גרפי, ניהול רשתות חברתיות, כתיבת תוכן</p>
+         </div></li>
+       </ul>
+      </div>
+      <div class="savings-box rounded-xl p-6">
+       <h4 class="font-bold text-gray-800 mb-3 flex items-center gap-2"><span class="text-2xl">💡</span> טיפ חשוב</h4>
+       <p class="text-sm text-gray-700 leading-relaxed"><strong>העבודה הראשונה היא לא הקריירה שלך.</strong> זה בסדר לעבוד בקופה או במטבח גם אם את רוצה להיות רופאה או מהנדסת. כל עבודה מלמדת מיומנויות חיים: אחריות, תקשורת, התמודדות עם לחץ.</p>
+      </div>
+     </div>
+    </div>
+    <div class="price-tag rounded-2xl p-8 pr-12">
+     <h3 class="text-xl font-bold text-gray-800 mb-4">ההכנסה הראשונה שלך</h3>
+     <p class="text-gray-700 leading-relaxed mb-4">הרגע הראשון שאת מקבלת משכורת או דמי כיס — זה <strong>רגע מיוחד</strong>. פתאום יש לך כוח קנייה, את יכולה להחליט לבד.</p>
+     <p class="text-gray-700 leading-relaxed">אבל זה גם רגע קריטי: <em>מה את עושה עם הכסף הזה?</em> את מוציאה הכול מיד? את חוסכת? את קונה משהו שחלמת עליו? ההחלטה הזו קובעת הרבה על ההרגלים הכלכליים שלך לעתיד.</p>
+    </div>
+   </div>
+  </section><!-- Section 2: Spending vs Wasting -->
+  <section id="spending" class="py-24 px-6 bg-gradient-to-b from-white to-red-50/20">
+   <div class="max-w-5xl mx-auto">
+    <div class="flex items-center gap-4 mb-12">
+     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-red-100 to-orange-200 flex items-center justify-center"><span class="text-3xl">🛍️</span>
+     </div>
+     <div><span class="text-sm font-medium text-red-500 tracking-wide uppercase">חלק 2</span>
+      <h2 class="text-4xl font-bold text-gray-800">הוצאה חכמה מול בזבוז</h2>
+     </div>
+    </div>
+    <p class="text-xl text-gray-600 mb-12 max-w-3xl">לא כל הוצאה היא בזבוז, ולא כל חיסכון הוא חכם. איך יודעים מה שווה?</p>
+    <div class="grid md:grid-cols-2 gap-8 mb-12">
+     <div class="money-card bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+      <h3 class="text-2xl font-bold text-emerald-600 mb-6">הוצאה חכמה ✅</h3>
+      <div class="space-y-4">
+       <div class="bg-emerald-50 rounded-lg p-4 border-r-4 border-emerald-400">
+        <h4 class="font-semibold text-emerald-800 mb-2">משהו שאת באמת צריכה</h4>
+        <p class="text-sm text-gray-700">בגדים לבית הספר, ספרים ללימודים, נעליים שהישנות נקרעו</p>
+       </div>
+       <div class="bg-blue-50 rounded-lg p-4 border-r-4 border-blue-400">
+        <h4 class="font-semibold text-blue-800 mb-2">משהו שמשרת אותך לטווח ארוך</h4>
+        <p class="text-sm text-gray-700">מחשב נייד לעבודה, אוזניות איכותיות, תיק איכותי שיחזיק שנים</p>
+       </div>
+       <div class="bg-purple-50 rounded-lg p-4 border-r-4 border-purple-400">
+        <h4 class="font-semibold text-purple-800 mb-2">חוויה שמשאירה זיכרון</h4>
+        <p class="text-sm text-gray-700">כרטיס לקונצרט, טיול עם חברות, קורס שמעניין אותך</p>
+       </div>
+       <div class="bg-teal-50 rounded-lg p-4 border-r-4 border-teal-400">
+        <h4 class="font-semibold text-teal-800 mb-2">משהו שמביע את מי שאת</h4>
+        <p class="text-sm text-gray-700">בגד שבאמת משקף אותך, חפץ שמשמעותי לך — לא רק טרנד</p>
+       </div>
+      </div>
+     </div>
+     <div class="money-card bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+      <h3 class="text-2xl font-bold text-red-600 mb-6">בזבוז ❌</h3>
+      <div class="space-y-4">
+       <div class="bg-red-50 rounded-lg p-4 border-r-4 border-red-400">
+        <h4 class="font-semibold text-red-800 mb-2">קניות אימפולסיביות</h4>
+        <p class="text-sm text-gray-700">קנית משהו רק כי זה היה במבצע, בלי לחשוב אם את צריכה אותו</p>
+       </div>
+       <div class="bg-orange-50 rounded-lg p-4 border-r-4 border-orange-400">
+        <h4 class="font-semibold text-orange-800 mb-2">דברים שלא משתמשים בהם</h4>
+        <p class="text-sm text-gray-700">בגד שקנית אבל מעולם לא לבשת, משחק שנמאס לך אחרי יומיים</p>
+       </div>
+       <div class="bg-yellow-50 rounded-lg p-4 border-r-4 border-yellow-400">
+        <h4 class="font-semibold text-yellow-800 mb-2">קניות בגלל לחץ חברתי</h4>
+        <p class="text-sm text-gray-700">"כולם קנו את זה אז גם אני" — אבל את לא באמת רוצה</p>
+       </div>
+       <div class="bg-pink-50 rounded-lg p-4 border-r-4 border-pink-400">
+        <h4 class="font-semibold text-pink-800 mb-2">הוצאות קבועות לא חשובות</h4>
+        <p class="text-sm text-gray-700">מנויים שלא משתמשים בהם, קפה יומי שמצטבר לסכום ענק</p>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="tip-card rounded-xl p-8 shadow-lg mb-8">
+     <h3 class="text-2xl font-bold text-gray-800 mb-6">כלל ה-24 שעות</h3>
+     <div class="flex items-start gap-4">
+      <div class="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
+       <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+       </svg>
+      </div>
+      <div class="flex-1">
+       <p class="text-lg text-gray-700 leading-relaxed mb-4"><strong>לפני קניה גדולה (מעל 100 ₪):</strong> חכי 24 שעות.</p>
+       <p class="text-gray-600 leading-relaxed mb-4">תשאלי את עצמך למחרת: "האם אני עדיין רוצה את זה? האם אני באמת צריכה את זה? האם זה שווה את הכסף?"</p>
+       <p class="text-sm text-gray-500 italic">רוב הקניות האימפולסיביות לא עוברות את המבחן הזה. ✋</p>
+      </div>
+     </div>
+    </div>
+    <div class="warning-box rounded-2xl p-8">
+     <div class="flex items-start gap-4">
+      <svg class="w-8 h-8 text-red-600 mt-1 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+      </svg>
+      <div>
+       <h4 class="text-xl font-bold text-gray-800 mb-3">מלכודות בזבוז נפוצות</h4>
+       <ul class="space-y-2 text-sm text-gray-700">
+        <li>• <strong>"זה במבצע!"</strong> — מבצע זה לא חיסכון אם לא היית קונה את זה מלכתחילה</li>
+        <li>• <strong>"משלוח חינם מעל X"</strong> — אל תקני דברים מיותרים רק בשביל משלוח חינם</li>
+        <li>• <strong>"כולם קונים את זה"</strong> — זה לא סיבה. את לא "כולם"</li>
+        <li>• <strong>"זה רק 20 ₪"</strong> — קניות קטנות מצטברות למאות שקלים</li>
+        <li>• <strong>"אני מגיע לזה"</strong> — קניית משהו בגלל מה שהיית רוצה להיות, לא מי שאת באמת</li>
+       </ul>
+      </div>
+     </div>
+    </div>
+   </div>
+  </section><!-- Section 3: Saving -->
+  <section id="saving" class="py-24 px-6 bg-white">
+   <div class="max-w-5xl mx-auto">
+    <div class="flex items-center gap-4 mb-12">
+     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-100 to-blue-200 flex items-center justify-center"><span class="text-3xl">🏦</span>
+     </div>
+     <div><span class="text-sm font-medium text-cyan-500 tracking-wide uppercase">חלק 3</span>
+      <h2 class="text-4xl font-bold text-gray-800">חיסכון - הכוח של "אחר כך"</h2>
+     </div>
+    </div>
+    <p class="text-xl text-gray-600 mb-12 max-w-3xl">חיסכון זה לא סתם "לא לבזבז" — זה <strong>לתת לעצמך אפשרויות בעתיד</strong>.</p>
+    <div class="grid md:grid-cols-3 gap-6 mb-12">
+     <div class="money-card bg-gradient-to-br from-emerald-50 to-green-50 rounded-xl p-6 border border-emerald-100">
+      <div class="text-4xl mb-4">
+       🎯
+      </div>
+      <h3 class="text-xl font-bold text-gray-800 mb-3">למטרה ספציפית</h3>
+      <p class="text-sm text-gray-700 mb-4">חוסכת בשביל משהו שאת רוצה: טלפון חדש, טיול, קורס שמעניין אותך</p>
+      <div class="bg-white rounded-lg p-3">
+       <p class="text-xs text-gray-600 mb-1">דוגמה:</p>
+       <p class="text-sm font-semibold text-emerald-700">1,500 ₪ עבור טלפון חדש</p>
+       <div class="mt-2 bg-gray-100 rounded-full h-2">
+        <div class="spending-bar" style="width: 60%;"></div>
+       </div>
+       <p class="text-xs text-gray-500 mt-1">60% מהיעד - עוד 600 ₪ 💪</p>
+      </div>
+     </div>
+     <div class="money-card bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-100">
+      <div class="text-4xl mb-4">
+       🚨
+      </div>
+      <h3 class="text-xl font-bold text-gray-800 mb-3">לחירום</h3>
+      <p class="text-sm text-gray-700 mb-4">כסף שנשאר בצד למקרה שצריך משהו דחוף — תיקון, החלפה, הוצאה בלתי צפויה</p>
+      <div class="bg-white rounded-lg p-3">
+       <p class="text-xs text-gray-600 mb-1">המטרה:</p>
+       <p class="text-sm font-semibold text-blue-700">500-1000 ₪ "כרית ביטחון"</p>
+       <p class="text-xs text-gray-500 mt-2">זה נותן לך שקט נפשי 😌</p>
+      </div>
+     </div>
+     <div class="money-card bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-6 border border-purple-100">
+      <div class="text-4xl mb-4">
+       🔮
+      </div>
+      <h3 class="text-xl font-bold text-gray-800 mb-3">לעתיד</h3>
+      <p class="text-sm text-gray-700 mb-4">חיסכון ארוך טווח — לימודים, נסיעה, דירה, משהו גדול שעוד לא יודעת מה זה</p>
+      <div class="bg-white rounded-lg p-3">
+       <p class="text-xs text-gray-600 mb-1">העיקרון:</p>
+       <p class="text-sm font-semibold text-purple-700">כל שקל שחוסכת עכשיו = חופש בעתיד</p>
+       <p class="text-xs text-gray-500 mt-2">את לא "מפסידה" — את משקיעה בעצמך</p>
+      </div>
+     </div>
+    </div>
+    <div class="tip-card rounded-xl p-8 shadow-lg mb-8">
+     <h3 class="text-2xl font-bold text-gray-800 mb-6">שיטת 50/30/20</h3>
+     <p class="text-gray-700 mb-6">כלל פשוט לניהול כסף — חלקי כל הכנסה ל-3 חלקים:</p>
+     <div class="grid md:grid-cols-3 gap-6">
+      <div class="bg-emerald-50 rounded-lg p-6 border-r-4 border-emerald-500">
+       <div class="text-3xl font-bold text-emerald-600 mb-2">
+        50%
+       </div>
+       <h4 class="font-bold text-gray-800 mb-2">צרכים</h4>
+       <p class="text-sm text-gray-600">דברים שאת חייבת: נסיעות, אוכל, חומרי לימוד</p>
+      </div>
+      <div class="bg-blue-50 rounded-lg p-6 border-r-4 border-blue-500">
+       <div class="text-3xl font-bold text-blue-600 mb-2">
+        30%
+       </div>
+       <h4 class="font-bold text-gray-800 mb-2">רצונות</h4>
+       <p class="text-sm text-gray-600">דברים שאת רוצה: בגדים, בילויים, תחביבים</p>
+      </div>
+      <div class="bg-purple-50 rounded-lg p-6 border-r-4 border-purple-500">
+       <div class="text-3xl font-bold text-purple-600 mb-2">
+        20%
+       </div>
+       <h4 class="font-bold text-gray-800 mb-2">חיסכון</h4>
+       <p class="text-sm text-gray-600">שמורים לעתיד — כל חודש, ללא פשרות</p>
+      </div>
+     </div>
+     <p class="text-sm text-gray-500 mt-6 italic">זה לא מושלם לכולם, אבל זו נקודת התחלה מצוינת 📊</p>
+    </div>
+    <div class="savings-box rounded-2xl p-8">
+     <h3 class="text-2xl font-bold text-gray-800 mb-6">טריקים לחיסכון קל יותר</h3>
+     <div class="grid md:grid-cols-2 gap-6">
+      <ul class="space-y-3">
+       <li class="flex items-start gap-2">
+        <svg class="w-5 h-5 text-blue-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <div>
+         <p class="font-medium text-gray-800">חשבון נפרד לחיסכון</p>
+         <p class="text-sm text-gray-600">העבירי מיד אחרי שקיבלת כסף — "מה שלא רואים לא מוציאים"</p>
+        </div></li>
+       <li class="flex items-start gap-2">
+        <svg class="w-5 h-5 text-blue-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <div>
+         <p class="font-medium text-gray-800">אתגר ה-5 שקלים</p>
+         <p class="text-sm text-gray-600">כל פעם שאת מקבלת מטבע 5 ₪ — זרקי לקופה. זה מצטבר!</p>
+        </div></li>
+       <li class="flex items-start gap-2">
+        <svg class="w-5 h-5 text-blue-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <div>
+         <p class="font-medium text-gray-800">ויזואליזציה</p>
+         <p class="text-sm text-gray-600">תלי תמונה של מה שאת חוסכת בשבילו — זה מזכיר למה</p>
+        </div></li>
+      </ul>
+      <ul class="space-y-3">
+       <li class="flex items-start gap-2">
+        <svg class="w-5 h-5 text-blue-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <div>
+         <p class="font-medium text-gray-800">הגדרת מטרות קטנות</p>
+         <p class="text-sm text-gray-600">לא 10,000 ₪ — אלא "100 ₪ השבוע הזה". זה מרגיש אפשרי</p>
+        </div></li>
+       <li class="flex items-start gap-2">
+        <svg class="w-5 h-5 text-blue-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <div>
+         <p class="font-medium text-gray-800">אפליקציות מעקב</p>
+         <p class="text-sm text-gray-600">רישום ההוצאות עוזר להבין לאן הכסף הולך</p>
+        </div></li>
+       <li class="flex items-start gap-2">
+        <svg class="w-5 h-5 text-blue-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <div>
+         <p class="font-medium text-gray-800">תגמלי את עצמך</p>
+         <p class="text-sm text-gray-600">הגעת ליעד? תני לעצמך משהו קטן כפרס 🎉</p>
+        </div></li>
+      </ul>
+     </div>
+    </div>
+   </div>
+  </section><!-- Section 4: Desire vs Need -->
+  <section id="desire" class="py-24 px-6 bg-gradient-to-b from-white to-purple-50/20">
+   <div class="max-w-5xl mx-auto">
+    <div class="flex items-center gap-4 mb-12">
+     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-100 to-purple-200 flex items-center justify-center"><span class="text-3xl">💭</span>
+     </div>
+     <div><span class="text-sm font-medium text-pink-500 tracking-wide uppercase">חלק 4</span>
+      <h2 class="text-4xl font-bold text-gray-800">רצון מול צורך</h2>
+     </div>
+    </div>
+    <p class="text-xl text-gray-600 mb-12 max-w-3xl">איך יודעים אם את <em>צריכה</em> משהו או רק <em>רוצה</em> אותו? וזה בכלל משנה?</p>
+    <div class="grid md:grid-cols-2 gap-8 mb-12">
+     <div class="money-card bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-8 border border-blue-100">
+      <h3 class="text-2xl font-bold text-blue-600 mb-6">צורך 🆘</h3>
+      <p class="text-gray-700 mb-6">משהו שאת <strong>חייבת</strong> כדי לתפקד — בלעדיו יש בעיה אמיתית.</p>
+      <div class="space-y-3">
+       <div class="bg-white rounded-lg p-4 border-r-3 border-blue-400">
+        <p class="font-semibold text-gray-800 mb-1">✅ נעליים לחורף</p>
+        <p class="text-sm text-gray-600">הישנות נקרעו, ואת צריכה נעליים כדי ללכת לבית הספר</p>
+       </div>
+       <div class="bg-white rounded-lg p-4 border-r-3 border-blue-400">
+        <p class="font-semibold text-gray-800 mb-1">✅ מחברת ללימודים</p>
+        <p class="text-sm text-gray-600">את צריכה אותה כדי לרשום שיעורים</p>
+       </div>
+       <div class="bg-white rounded-lg p-4 border-r-3 border-blue-400">
+        <p class="font-semibold text-gray-800 mb-1">✅ תיקון משקפיים</p>
+        <p class="text-sm text-gray-600">בלעדיהן את לא רואה — זה צורך ממשי</p>
+       </div>
+      </div>
+     </div>
+     <div class="money-card bg-gradient-to-br from-pink-50 to-purple-50 rounded-2xl p-8 border border-pink-100">
+      <h3 class="text-2xl font-bold text-pink-600 mb-6">רצון 💖</h3>
+      <p class="text-gray-700 mb-6">משהו שאת <strong>רוצה</strong> — זה יעשה אותך מאושרת, אבל את תשרדי בלעדיו.</p>
+      <div class="space-y-3">
+       <div class="bg-white rounded-lg p-4 border-r-3 border-pink-400">
+        <p class="font-semibold text-gray-800 mb-1">💕 נעליים במבצע</p>
+        <p class="text-sm text-gray-600">הן יפות, אבל יש לך 3 זוגות בארון</p>
+       </div>
+       <div class="bg-white rounded-lg p-4 border-r-3 border-pink-400">
+        <p class="font-semibold text-gray-800 mb-1">💕 מחברת מעוצבת</p>
+        <p class="text-sm text-gray-600">יש לך מחברות רגילות שעובדות מצוין</p>
+       </div>
+       <div class="bg-white rounded-lg p-4 border-r-3 border-pink-400">
+        <p class="font-semibold text-gray-800 mb-1">💕 משקפי שמש מותג</p>
+        <p class="text-sm text-gray-600">יש לך כבר משקפיים, אבל אלה "יותר טובים"</p>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="price-tag rounded-2xl p-8 pr-12 mb-8">
+     <h3 class="text-xl font-bold text-gray-800 mb-4">האם רצון זה רע?</h3>
+     <p class="text-gray-700 leading-relaxed mb-4"><strong>בכלל לא!</strong> זה בסדר לקנות דברים שאת <em>רוצה</em> ולא רק <em>צריכה</em>. הבעיה היא כש<strong>רצון מתחפש לצורך</strong> — כשאת משכנעת את עצמך שאת "חייבת" משהו כדי להצדיק קנייה.</p>
+     <div class="bg-white/60 rounded-lg p-4 border-r-4 border-amber-500">
+      <p class="text-sm text-gray-700"><span class="font-bold">הכלל:</span> תהיי כנה עם עצמך. אם זה רצון — תגידי "אני רוצה את זה" ותחליטי אם זה שווה לך את הכסף. אל תשכנעי את עצמך שזה "הכרחי" כשזה לא.</p>
+     </div>
+    </div>
+    <div class="tip-card rounded-xl p-8 shadow-lg">
+     <h3 class="text-2xl font-bold text-gray-800 mb-6">4 שאלות לפני כל קנייה</h3>
+     <div class="grid md:grid-cols-2 gap-6">
+      <div class="flex items-start gap-3">
+       <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center shrink-0 mt-1"><span class="text-xl">1️⃣</span>
+       </div>
+       <div>
+        <p class="font-bold text-gray-800 mb-2">האם אני באמת צריכה את זה?</p>
+        <p class="text-sm text-gray-600">או שזה סתם נחמד לקנות?</p>
+       </div>
+      </div>
+      <div class="flex items-start gap-3">
+       <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center shrink-0 mt-1"><span class="text-xl">2️⃣</span>
+       </div>
+       <div>
+        <p class="font-bold text-gray-800 mb-2">האם אני אשתמש בזה?</p>
+        <p class="text-sm text-gray-600">או שזה יישאר בארון?</p>
+       </div>
+      </div>
+      <div class="flex items-start gap-3">
+       <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center shrink-0 mt-1"><span class="text-xl">3️⃣</span>
+       </div>
+       <div>
+        <p class="font-bold text-gray-800 mb-2">האם יש לי כבר משהו דומה?</p>
+        <p class="text-sm text-gray-600">שעושה את אותו הדבר?</p>
+       </div>
+      </div>
+      <div class="flex items-start gap-3">
+       <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center shrink-0 mt-1"><span class="text-xl">4️⃣</span>
+       </div>
+       <div>
+        <p class="font-bold text-gray-800 mb-2">האם זה שווה את המחיר?</p>
+        <p class="text-sm text-gray-600">כמה שעות עבודה זה עולה?</p>
+       </div>
+      </div>
+     </div>
+     <div class="mt-6 p-4 bg-emerald-50 rounded-lg border-r-4 border-emerald-500">
+      <p class="text-sm text-gray-700"><strong>טיפ:</strong> אם ענית "כן" על 3 מתוך 4 — זו קנייה טובה. אם פחות מזה — תחשבי שוב. 🤔</p>
+     </div>
+    </div>
+   </div>
+  </section><!-- Section 5: Trends -->
+  <section id="trends" class="py-24 px-6 bg-white">
+   <div class="max-w-5xl mx-auto">
+    <div class="flex items-center gap-4 mb-12">
+     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-100 to-red-200 flex items-center justify-center"><span class="text-3xl">📈</span>
+     </div>
+     <div><span class="text-sm font-medium text-orange-500 tracking-wide uppercase">חלק 5</span>
+      <h2 class="text-4xl font-bold text-gray-800">ההשפעה של טרנדים</h2>
+     </div>
+    </div>
+    <p class="text-xl text-gray-600 mb-12 max-w-3xl">טרנדים הם חזקים — הם גורמים לך להרגיש שאת <em>חייבת</em> משהו. איך לא להיסחף?</p>
+    <div class="grid md:grid-cols-2 gap-8 mb-12">
+     <div class="money-card bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl p-8 border border-orange-100">
+      <h3 class="text-2xl font-bold text-gray-800 mb-6">איך טרנדים עובדים עליך</h3>
+      <div class="space-y-4">
+       <div class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-full bg-orange-200 flex items-center justify-center mt-1 shrink-0"><span class="text-orange-800 text-sm font-bold">👥</span>
+        </div>
+        <div>
+         <p class="font-semibold text-gray-800">לחץ חברתי</p>
+         <p class="text-sm text-gray-600">"כולם קנו את זה, אני לא רוצה להיות היחידה בלי"</p>
+        </div>
+       </div>
+       <div class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-full bg-red-200 flex items-center justify-center mt-1 shrink-0"><span class="text-red-800 text-sm font-bold">📱</span>
+        </div>
+        <div>
+         <p class="font-semibold text-gray-800">רשתות חברתיות</p>
+         <p class="text-sm text-gray-600">אינפלואנסרים וחברות מציגים דברים שנראים "חובה"</p>
+        </div>
+       </div>
+       <div class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-full bg-yellow-200 flex items-center justify-center mt-1 shrink-0"><span class="text-yellow-800 text-sm font-bold">⏳</span>
+        </div>
+        <div>
+         <p class="font-semibold text-gray-800">דחיפות מלאכותית</p>
+         <p class="text-sm text-gray-600">"זמן מוגבל!", "נגמר המלאי!" — יוצרים תחושת דחיפות</p>
+        </div>
+       </div>
+       <div class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-full bg-pink-200 flex items-center justify-center mt-1 shrink-0"><span class="text-pink-800 text-sm font-bold">✨</span>
+        </div>
+        <div>
+         <p class="font-semibold text-gray-800">הבטחה לשייכות</p>
+         <p class="text-sm text-gray-600">"אם תקני את זה, גם את תהיי חלק מהחבורה"</p>
+        </div>
+       </div>
+       <div class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-full bg-purple-200 flex items-center justify-center mt-1 shrink-0"><span class="text-purple-800 text-sm font-bold">🎭</span>
+        </div>
+        <div>
+         <p class="font-semibold text-gray-800">הבטחה לזהות</p>
+         <p class="text-sm text-gray-600">"קני את זה ותהיי מגניבה/אסתטית/טרנדית"</p>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="space-y-6">
+      <div class="warning-box rounded-xl p-6">
+       <h3 class="text-xl font-bold text-gray-800 mb-4">הבעיה עם טרנדים</h3>
+       <ul class="space-y-3">
+        <li class="flex items-start gap-2">
+         <svg class="w-5 h-5 text-red-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+         </svg>
+         <div>
+          <p class="font-medium text-gray-800">הם משתנים כל הזמן</p>
+          <p class="text-sm text-gray-600">מה שהיה "חובה" לפני חודשיים עכשיו "אאוט"</p>
+         </div></li>
+        <li class="flex items-start gap-2">
+         <svg class="w-5 h-5 text-red-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+         </svg>
+         <div>
+          <p class="font-medium text-gray-800">הם יקרים</p>
+          <p class="text-sm text-gray-600">לעקוב אחרי כל טרנד = לבזבז הרבה כסף</p>
+         </div></li>
+        <li class="flex items-start gap-2">
+         <svg class="w-5 h-5 text-red-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+         </svg>
+         <div>
+          <p class="font-medium text-gray-800">הם לא משקפים אותך</p>
+          <p class="text-sm text-gray-600">את קונה מה ש"כולם" אוהבים, לא מה שאת אוהבת</p>
+         </div></li>
+        <li class="flex items-start gap-2">
+         <svg class="w-5 h-5 text-red-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+         </svg>
+         <div>
+          <p class="font-medium text-gray-800">הם יוצרים תחושת "חוסר"</p>
+          <p class="text-sm text-gray-600">את מרגישה שחסר לך משהו כל הזמן</p>
+         </div></li>
+       </ul>
+      </div>
+      <div class="tip-card rounded-xl p-6 shadow-lg">
+       <h3 class="text-xl font-bold text-gray-800 mb-4">איך לא להיסחף?</h3>
+       <ul class="space-y-3">
+        <li class="flex items-start gap-2">
+         <svg class="w-5 h-5 text-emerald-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+         </svg>
+         <div>
+          <p class="font-medium text-gray-800">שאלי: "האם אני באמת אוהבת את זה?"</p>
+          <p class="text-sm text-gray-600">או שאני רוצה את זה כי כולם רוצים?</p>
+         </div></li>
+        <li class="flex items-start gap-2">
+         <svg class="w-5 h-5 text-emerald-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+         </svg>
+         <div>
+          <p class="font-medium text-gray-800">חכי שבוע</p>
+          <p class="text-sm text-gray-600">אם זה טרנד חולף — העניין ייעלם</p>
+         </div></li>
+        <li class="flex items-start gap-2">
+         <svg class="w-5 h-5 text-emerald-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+         </svg>
+         <div>
+          <p class="font-medium text-gray-800">פתחי "בועת מיקוד"</p>
+          <p class="text-sm text-gray-600">תעקבי אחרי דברים שמעניינים אותך, לא מה שפופולרי</p>
+         </div></li>
+        <li class="flex items-start gap-2">
+         <svg class="w-5 h-5 text-emerald-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+         </svg>
+         <div>
+          <p class="font-medium text-gray-800">זכרי: הסגנון שלך &gt; טרנד</p>
+          <p class="text-sm text-gray-600">מה שמתאים לך עדיף על מה שמתאים לכולם</p>
+         </div></li>
+       </ul>
+      </div>
+     </div>
+    </div>
+    <div class="bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl p-8 text-white mb-8">
+     <div class="flex items-start gap-4">
+      <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center shrink-0"><span class="text-3xl">💡</span>
+      </div>
+      <div>
+       <h4 class="text-2xl font-bold mb-4">הסוד של חופש כלכלי</h4>
+       <p class="text-lg opacity-95 leading-relaxed mb-4"><strong>לקנות מה שאת אוהבת, לא מה שכולם אוהבים.</strong></p>
+       <p class="text-base opacity-90 leading-relaxed">כשאת קונה דברים כי <em>את</em> רוצה אותם — לא כי זה טרנד או כי חברה קנתה — את חוסכת המון כסף, ויש לך ארון שמשקף את מי שאת באמת. זה חופש.</p>
+      </div>
+     </div>
+    </div>
+   </div>
+  </section><!-- Wisdom Section -->
+  <section id="wisdom" class="py-24 px-6 bg-gradient-to-b from-white to-emerald-50">
+   <div class="max-w-5xl mx-auto">
+    <div class="flex items-center gap-4 mb-12">
+     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-100 to-green-200 flex items-center justify-center"><span class="text-3xl">🧠</span>
+     </div>
+     <div><span class="text-sm font-medium text-emerald-500 tracking-wide uppercase">לסיכום</span>
+      <h2 id="wisdom-title" class="text-4xl font-bold text-gray-800">החוכמה הכלכלית שלך</h2>
+     </div>
+    </div>
+    <div class="grid md:grid-cols-3 gap-6 mb-12">
+     <div class="empowerment-box rounded-xl p-6">
+      <div class="text-4xl mb-4">
+       🎯
+      </div>
+      <h3 class="text-xl font-bold text-gray-800 mb-3">הכסף שלך = הכוח שלך</h3>
+      <p class="text-sm text-gray-700">כל שקל שיש לך הוא החלטה. את בוחרת לאן הוא הולך, ומה הוא עושה. זה כוח אמיתי.</p>
+     </div>
+     <div class="empowerment-box rounded-xl p-6">
+      <div class="text-4xl mb-4">
+       💪
+      </div>
+      <h3 class="text-xl font-bold text-gray-800 mb-3">להרוויח = להיות עצמאית</h3>
+      <p class="text-sm text-gray-700">כשאת עובדת ומרוויחה, את לא תלויה בהורים או באף אחד. זה חלק מהדרך להיות מי שאת רוצה להיות.</p>
+     </div>
+     <div class="empowerment-box rounded-xl p-6">
+      <div class="text-4xl mb-4">
+       🧘‍♀️
+      </div>
+      <h3 class="text-xl font-bold text-gray-800 mb-3">לא להיסחף = חופש</h3>
+      <p class="text-sm text-gray-700">כשאת לא עוקבת אחרי כל טרנד, את חוסכת כסף ומוצאת את הסגנון שלך. זה לא חיסכון — זו עצמאות.</p>
+     </div>
+    </div>
+    <div class="bg-gradient-to-r from-emerald-600 to-green-600 rounded-2xl p-10 text-white text-center mb-8">
+     <h3 class="text-3xl font-bold mb-6">המסר האחרון</h3>
+     <p class="text-xl leading-relaxed mb-6 max-w-3xl mx-auto opacity-95"><strong>הכסף לא קובע מי את — את קובעת מה הכסף אומר עליך.</strong></p>
+     <p class="text-lg leading-relaxed max-w-3xl mx-auto opacity-90">את יכולה לבחור: <em>להוציא בחוכמה, לחסוך למטרה, לא להיסחף מלחצים.</em> ככל שתתחילי מוקדם יותר — כך יהיה לך קל יותר. הכסף הקטן של היום הוא העתיד הגדול שלך. 💚</p>
+    </div>
+   </div>
+  </section><!-- Closing Section -->
+  <section class="py-24 px-6 bg-white">
+   <div class="max-w-4xl mx-auto text-center">
+    <div class="mb-12 flex justify-center">
+     <svg class="w-32 h-32" viewbox="0 0 120 120" fill="none"><circle cx="60" cy="60" r="50" fill="#d1fae5" opacity="0.3" /> <circle cx="60" cy="60" r="35" fill="#10b981" opacity="0.2" class="pulse-ring" /> <text x="60" y="72" font-size="48" text-anchor="middle" class="coin-flip">
+       💰
+      </text>
+     </svg>
+    </div>
+    <h2 class="text-4xl font-bold text-gray-800 mb-8"><span class="gradient-text">הדרך שלך לחופש כלכלי</span></h2>
+    <div class="space-y-6 mb-12">
+     <p class="text-xl text-gray-700 leading-relaxed">הכסף הוא לא רק מספרים — זה <strong>אפשרויות</strong>. כל החלטה שאת מקבלת עכשיו מעצבת את העתיד שלך.</p>
+     <p class="text-xl text-gray-700 leading-relaxed">לעבוד, לחסוך, לקנות בחוכמה, לא להיסחף — זה לא "משעמם". <em>זה כוח.</em></p>
+    </div>
+    <div class="bg-emerald-50 rounded-2xl p-8 shadow-lg border border-emerald-100 max-w-2xl mx-auto mb-12">
+     <p class="text-lg font-medium text-gray-800 italic">"הכסף הקטן שלי היום הוא החופש הגדול שלי מחר."</p>
+    </div><a href="#work" class="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-green-500 text-white px-8 py-4 rounded-full font-semibold hover:shadow-lg hover:shadow-emerald-500/25 transition-all duration-300"> לחזור להתחלה 
+     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+     </svg></a>
+   </div>
+  </section><!-- Footer -->
+  <footer class="py-12 px-6 bg-gradient-to-r from-emerald-600 to-green-600 text-white">
+   <div class="max-w-5xl mx-auto text-center">
+    <div class="flex items-center justify-center gap-3 mb-6">
+     <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center coin-flip"><span class="text-2xl">💰</span>
+     </div><span class="text-2xl font-bold">כסף קטן, קניות ובחירות</span>
+    </div>
+    <p class="text-white/80 text-lg mb-4">איך להיות חכמה עם הכסף שלך - בלי לוותר על מה שחשוב</p>
+    <p class="text-white/60 text-sm">תוכנית חינוכית לנערות | בנושא ניהול כספי חכם</p>
+   </div>
+  </footer>
+  <script>
+    // Element SDK initialization
+    const defaultConfig = {
+      site_title: 'כסף קטן, קניות ובחירות',
+      hero_subtitle: 'איך להיות חכמה עם הכסף שלך - בלי לוותר על מה שחשוב',
+      money_wisdom_header: 'החוכמה הכלכלית שלך',
+      background_color: '#ffffff',
+      primary_color: '#10b981',
+      secondary_color: '#059669',
+      text_color: '#1f2937',
+      accent_color: '#34d399'
+    };
+
+    let config = { ...defaultConfig };
+
+    async function onConfigChange(newConfig) {
+      config = newConfig;
+      
+      // Update nav title
+      const navTitle = document.getElementById('nav-title');
+      if (navTitle) {
+        navTitle.textContent = config.site_title || defaultConfig.site_title;
+      }
+      
+      // Update hero title
+      const heroTitle = document.getElementById('hero-title');
+      if (heroTitle) {
+        heroTitle.innerHTML = `<span class="gradient-text">${config.site_title || defaultConfig.site_title}</span>`;
+      }
+      
+      // Update hero subtitle
+      const heroSubtitle = document.getElementById('hero-subtitle');
+      if (heroSubtitle) {
+        heroSubtitle.textContent = config.hero_subtitle || defaultConfig.hero_subtitle;
+      }
+      
+      // Update wisdom title
+      const wisdomTitle = document.getElementById('wisdom-title');
+      if (wisdomTitle) {
+        wisdomTitle.textContent = config.money_wisdom_header || defaultConfig.money_wisdom_header;
+      }
+    }
+
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [
+          {
+            get: () => config.background_color || defaultConfig.background_color,
+            set: (value) => {
+              config.background_color = value;
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            }
+          },
+          {
+            get: () => config.primary_color || defaultConfig.primary_color,
+            set: (value) => {
+              config.primary_color = value;
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ primary_color: value });
+              }
+            }
+          },
+          {
+            get: () => config.secondary_color || defaultConfig.secondary_color,
+            set: (value) => {
+              config.secondary_color = value;
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ secondary_color: value });
+              }
+            }
+          },
+          {
+            get: () => config.text_color || defaultConfig.text_color,
+            set: (value) => {
+              config.text_color = value;
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            }
+          },
+          {
+            get: () => config.accent_color || defaultConfig.accent_color,
+            set: (value) => {
+              config.accent_color = value;
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ accent_color: value });
+              }
+            }
+          }
+        ],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      };
+    }
+
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ['site_title', config.site_title || defaultConfig.site_title],
+        ['hero_subtitle', config.hero_subtitle || defaultConfig.hero_subtitle],
+        ['money_wisdom_header', config.money_wisdom_header || defaultConfig.money_wisdom_header]
+      ]);
+    }
+
+    // Initialize SDK
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
+
+    // Smooth scroll for navigation
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c03afeca5357da0',t:'MTc2ODc5Nzk3NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

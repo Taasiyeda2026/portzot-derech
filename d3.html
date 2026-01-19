@@ -1,118 +1,791 @@
-<!DOCTYPE html>
-<html lang="he" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>בית ספר – אבל לא כמו שמלמדים | פורצות דרך</title>
-    <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        body { font-family: 'Varela Round', sans-serif; background: #fdfcfd; color: #1a2540; line-height: 1.8; text-align: right; }
-        .magazine-container { max-width: 900px; margin: 0 auto; padding: 60px 40px; background: white; }
-        .hero-section { text-align: center; margin-bottom: 60px; padding: 40px; border-radius: 40px; background: #fffbeb; box-shadow: inset 0 0 40px rgba(245, 158, 11, 0.05); }
-        .gate-icon { font-size: 5rem; margin-bottom: 20px; filter: drop-shadow(0 10px 15px rgba(245, 158, 11, 0.3)); display: inline-block; }
-        h1 { font-size: 3.5rem; background: linear-gradient(135deg, #f59e0b, #d97706); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; margin-bottom: 10px; text-align: center; }
-        h2 { font-size: 1.8rem; color: #d97706; margin-bottom: 30px; font-weight: 700; text-align: center; }
-        .intro-text { font-size: 1.4rem; font-weight: 600; color: #4b5563; margin-bottom: 50px; line-height: 1.6; border-right: 4px solid #f59e0b; padding-right: 20px; }
-        .content-section { margin-bottom: 40px; padding: 28px 26px; border-radius: 20px; transition: transform 0.3s ease; background: #fff7f9; box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06); border: none; }
-        .content-section:hover { transform: translateY(-3px); box-shadow: 0 14px 30px rgba(0,0,0,0.08); }
-        .content-section, .content-section p { font-family: 'Heebo', 'Varela Round', sans-serif; font-size: 16px; line-height: 1.9; color: #2b2b2b; font-weight: 400; }
-        .content-section p { margin-bottom: 14px; }
-        .content-section p:last-child { margin-bottom: 0; }
-        .content-section strong, .content-section em, .example-box strong, .example-box em { color: #2b2b2b; font-weight: 600; }
-        h3 { color: #d97706; font-size: 1.5rem; margin-bottom: 15px; font-weight: 900; }
-        .example-box { background: #fffbeb; padding: 25px; border-radius: 20px; margin: 40px 0; border: 2px dashed #fef3c7; cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; }
-        .example-box:hover { background: #fef3c7; transform: scale(1.02); }
-        .example-box::after { content: "לחיצה להמשך קריאה ➔"; position: absolute; left: 20px; bottom: 10px; font-size: 0.9rem; color: #d97706; font-weight: bold; opacity: 0.6; }
-        .stop-moment { background: #fffbeb; padding: 35px; border-right: 6px solid #f59e0b; margin-top: 80px; font-style: italic; border-radius: 20px; font-size: 1.2rem; }
-        .back-link { display: inline-block; margin-bottom: 40px; text-decoration: none; color: #f59e0b; font-weight: bold; transition: color 0.3s; }
-        .back-link:hover { color: #d97706; }
-        .logo-btn { display: block; margin-bottom: 30px; width: fit-content; margin-left: auto; margin-right: auto; }
-        .logo-img { width: 100px; filter: drop-shadow(0 4px 8px rgba(245, 158, 11, 0.2)); }
-    </style>
-</head>
-<body>
-    <div class="magazine-container">
-        <a href="index.html" class="logo-btn">
-            <img src="logo.png" alt="פורצות דרך" title="דף הבית" class="logo-img">
-        </a>
-        <a href="index.html" class="back-link">→ חזרה לעמוד התחומים</a>
-        
-        <div class="hero-section">
-            <div class="gate-icon">👩‍🏫</div>
-            <h1>בית ספר – אבל לא כמו שמלמדים</h1>
-            <h2>איך לומדים כשלא בא</h2>
-        </div>
-
-        <p class="intro-text">
-            אני מגיעה לבית ספר — אבל לא תמיד מצליחה ללמוד באמת.<br>
-            התחום הזה עוסק בעומס, לחץ, מוטיבציה ושאלות של רלוונטיות ואיך נראית למידה כשלא בא, כשקשה או כשמאבדים עניין.
-        </p>
-
-        <article class="content-section">
-            <h3>1. זה מתחיל ממך</h3>
-            <p>לפעמים בתוך השיעור, כשכולם מסתכלים על הלוח, את מוצאת את עצמך תוהה: "למה אני צריכה לדעת את זה?". הסקרנות שלך היא המצפן האמיתי, גם כשהיא לא מופיעה במערכת השעות.</p>
-        </article>
-
-        <article class="content-section">
-            <h3>2. איך זה מרגיש מבפנים</h3>
-            <p>זה יכול להרגיש כמו שעמום כבד, אבל מתחתיו מסתתר רצון עז להבין באמת, לחקור משהו שנוגע בחיים שלך ולא רק לשנן תשובות נכונות.</p>
-        </article>
-
-        <article class="content-section">
-            <h3>3. מה את עושה כשזה קורה</h3>
-            <p>האם את נכבית? או שאת מתחילה לצייר בשולי המחברת? אולי זה הרגע שבו המחשבות שלך בורחות למקום שבו הלמידה באמת קורית עבורך.</p>
-        </article>
-
-        <article class="content-section">
-            <h3>4. את לא היחידה</h3>
-            <p>נערות רבות מרגישות שהפוטנציאל שלהן לא בא לידי ביטוי בין כותלי הכיתה. הלמידה האמיתית קורית לעיתים קרובות דווקא במרווחים שבין השיעורים.</p>
-        </article>
-
-        <article class="content-section">
-            <h3>5. איך זה נוגע גם לאחרים</h3>
-            <p>כשהלמידה הופכת למשהו חי ורלוונטי, היא משנה את הדרך שבה את מדברת עם חברות ועם המורים. את הופכת משותפה פסיבית למישהי שיוצרת ידע.</p>
-        </article>
-
-        <article class="content-section">
-            <h3>6. נגיעה קטנה לטכנולוגיה</h3>
-            <p>היום יש גישה לכל ידע בעולם דרך המסך, אבל השאלה היא איך אנחנו משתמשים בו כדי לפתור בעיות אמיתיות שאנחנו רואות סביבנו.</p>
-        </article>
-
-        <article class="content-section">
-            <h3>7. רגע של פעולה</h3>
-            <p>חשבי על נושא אחד שלמדת עליו היום. האם יש דרך אחת שבה הוא יכול להשפיע על משהו בחיים שלך מחוץ לבית הספר?</p>
-        </article>
-
-        <div class="example-box">
-            <strong>✨ דוגמה מהשטח: למידה דרך הידיים</strong>
-            <p>ערכות למידה עצמית או משחקי קופסה חינוכיים שהופכים את התאוריה למשהו שאפשר לגעת בו ולהבין דרך הידיים.</p>
-        </div>
-
-        <div class="example-box">
-            <strong>📱 דוגמה ליישום דיגיטלי</strong>
-            <p>פלטפורמות כמו Khan Academy או קורסים מקוונים שמאפשרות לך לרכוש מיומנויות חדשות בכל רגע שבו תבחרי בכך.</p>
-        </div>
-
-        <div class="example-box">
-            <strong>🌟 אישה פורצת דרך</strong>
-            <p>נועה, שהחליטה להקים בבית הספר "מרחב למידה חופשי" שבו תלמידים מלמדים אחד את השני נושאים שהם אוהבים, מנגינה ועד תכנות.</p>
-        </div>
-
-        <article class="content-section">
-            <h3>11. חיבור למהות של תהליך הנדסי</h3>
-            <p>הנדסה היא למידה מתמדת מניסוי וטעייה. בבית הספר מלמדים לפעמים לפחד מטעויות, אבל בתהליך היצירה – הטעות היא המורה הכי טובה.</p>
-        </article>
-
-        <article class="content-section">
-            <h3>12. משפט סיום פתוח</h3>
-            <p>מה היית רוצה ללמוד היום, אם אף אחד לא היה קובע לך את המערכת?</p>
-        </article>
-
-        <div class="stop-moment">
-            <h3>רגע לעצירה</h3>
-            <p>הסקרנות שלך היא מתנה. אל תתני לה להיעלם בתוך השגרה. שהי רגע עם השאלה שבאמת מעסיקה אותך.</p>
-        </div>
+<!doctype html>
+<html lang="he" dir="rtl" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>בית ספר - אבל לא כמו שמלמדים | מרחב חקר</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Varela+Round&amp;family=Alef:wght@400;700&amp;display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    * {
+      font-family: 'Alef', 'Varela Round', sans-serif;
+    }
+    
+    .gradient-text {
+      background: linear-gradient(135deg, #f59e0b, #ec4899, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .gradient-border {
+      background: linear-gradient(135deg, #fffbeb, #fdf2f8, #faf5ff);
+      border: 1px solid transparent;
+      background-clip: padding-box;
+      position: relative;
+    }
+    
+    .gradient-border::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      padding: 1px;
+      border-radius: inherit;
+      background: linear-gradient(135deg, #fbbf24, #f472b6, #c084fc);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+    }
+    
+    .card-hover {
+      transition: all 0.3s ease;
+    }
+    
+    .card-hover:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px -12px rgba(236, 72, 153, 0.15);
+    }
+    
+    .section-divider {
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #fbbf24, #f472b6, #c084fc, transparent);
+    }
+    
+    .reflection-card {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      border-right: 4px solid #f59e0b;
+    }
+    
+    .experiment-card {
+      background: linear-gradient(135deg, #ddd6fe 0%, #c4b5fd 100%);
+      border-right: 4px solid #8b5cf6;
+    }
+    
+    .insight-card {
+      background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+      border-right: 4px solid #ec4899;
+    }
+    
+    .scroll-indicator {
+      animation: bounce 2s infinite;
+    }
+    
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-10px); }
+      60% { transform: translateY(-5px); }
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-15px) rotate(3deg); }
+    }
+    
+    .float-animation {
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    .nav-link {
+      position: relative;
+    }
+    
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      right: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #f59e0b, #ec4899);
+      transition: width 0.3s ease;
+    }
+    
+    .nav-link:hover::after {
+      width: 100%;
+    }
+    
+    .pressure-pulse {
+      animation: pressurePulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes pressurePulse {
+      0%, 100% { transform: scale(1); opacity: 0.6; }
+      50% { transform: scale(1.1); opacity: 0.8; }
+    }
+  </style>
+  
+  
+ </head>
+ <body class="h-full bg-gradient-to-b from-white via-amber-50/30 to-pink-50/30 text-gray-800 overflow-auto"><!-- Navigation -->
+  <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-amber-100/50">
+   <div class="max-w-6xl mx-auto px-6 py-4">
+    <div class="flex items-center justify-between">
+     <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-full bg-gradient-to-br from-amber-400 to-pink-500 flex items-center justify-center">
+       <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+       </svg>
+      </div><span id="nav-title" class="text-xl font-bold gradient-text">בית ספר - אבל לא כמו שמלמדים</span>
+     </div>
+     <div class="hidden md:flex items-center gap-6 text-sm text-gray-600"><a href="#reality" class="nav-link hover:text-pink-600 transition-colors">המציאות</a> <a href="#pressure" class="nav-link hover:text-pink-600 transition-colors">הלחץ</a> <a href="#motivation" class="nav-link hover:text-pink-600 transition-colors">מוטיבציה</a> <a href="#learning" class="nav-link hover:text-pink-600 transition-colors">למידה</a> <a href="#action" class="nav-link hover:text-pink-600 transition-colors">פעולה</a>
+     </div>
     </div>
-</body>
+   </div>
+  </nav><!-- Hero Section -->
+  <section class="min-h-screen flex items-center justify-center px-6 py-20 relative overflow-hidden"><!-- Decorative Elements -->
+   <div class="absolute top-20 left-10 w-64 h-64 bg-amber-200/30 rounded-full blur-3xl float-animation"></div>
+   <div class="absolute bottom-20 right-10 w-80 h-80 bg-pink-200/30 rounded-full blur-3xl float-animation" style="animation-delay: 2s;"></div>
+   <div class="absolute top-1/2 left-1/4 w-40 h-40 bg-purple-200/20 rounded-full blur-2xl float-animation" style="animation-delay: 4s;"></div>
+   <div class="max-w-4xl mx-auto text-center relative z-10"><!-- School Illustration -->
+    <div class="mb-12 flex justify-center">
+     <svg class="w-64 h-64 float-animation" viewbox="0 0 200 200" fill="none"><!-- Book --> <rect x="60" y="70" width="80" height="60" rx="4" fill="url(#book-grad)" stroke="#f59e0b" stroke-width="2" /> <line x1="100" y1="70" x2="100" y2="130" stroke="#fbbf24" stroke-width="2" /> <path d="M70 85 Q75 82 80 85" stroke="#f59e0b" stroke-width="1.5" fill="none" /> <path d="M70 95 Q77 92 84 95" stroke="#f59e0b" stroke-width="1.5" fill="none" /> <path d="M70 105 Q73 103 76 105" stroke="#f59e0b" stroke-width="1.5" fill="none" /> <!-- Question marks floating --> <text x="40" y="60" font-size="24" fill="#ec4899" opacity="0.6" font-weight="bold">
+       ?
+      </text> <text x="155" y="65" font-size="20" fill="#8b5cf6" opacity="0.7" font-weight="bold">
+       ?
+      </text> <text x="45" y="140" font-size="18" fill="#f59e0b" opacity="0.5" font-weight="bold">
+       ?
+      </text> <!-- Lightbulb idea --> <circle cx="100" cy="40" r="12" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" /> <path d="M95 47 L95 52 L105 52 L105 47" fill="#f59e0b" /> <line x1="100" y1="28" x2="100" y2="22" stroke="#fbbf24" stroke-width="2" /> <line x1="112" y1="32" x2="117" y2="27" stroke="#fbbf24" stroke-width="2" /> <line x1="88" y1="32" x2="83" y2="27" stroke="#fbbf24" stroke-width="2" /> <!-- Stress marks --> <path d="M150 90 L155 85 M152 95 L157 90 M154 100 L159 95" stroke="#ef4444" stroke-width="2" opacity="0.4" /> <path d="M45 90 L40 85 M43 95 L38 90 M41 100 L36 95" stroke="#ef4444" stroke-width="2" opacity="0.4" /> <defs>
+       <lineargradient id="book-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:#fef3c7" />
+        <stop offset="100%" style="stop-color:#fed7aa" />
+       </lineargradient>
+      </defs>
+     </svg>
+    </div>
+    <h1 id="hero-title" class="text-5xl md:text-7xl font-bold mb-8 leading-tight"><span class="gradient-text">בית ספר - אבל לא כמו שמלמדים</span></h1>
+    <p id="hero-subtitle" class="text-xl md:text-2xl text-gray-600 mb-8 leading-relaxed max-w-2xl mx-auto">מסע חקר להבנת הלמידה שלך מעבר לציונים</p>
+    <div class="bg-white/60 backdrop-blur-sm rounded-2xl p-8 mb-12 gradient-border max-w-3xl mx-auto">
+     <p class="text-lg text-gray-700 leading-relaxed">שש שעות ביום בכיתה. מבחנים, מטלות, ציונים. לפעמים את מבינה למה, לפעמים לא. לפעמים זה מעניין, לפעמים זה מרגיש כמו עבודת פרך. "תלמדי, זה בשבילך" — אומרים לך. אבל האם זה באמת?</p>
+     <p class="text-lg text-gray-700 leading-relaxed mt-4">המסע הזה לא בא לתקוף את בית הספר או את המורים. הוא בא לעזור לך להבין מה קורה בפנים — מה הלחצים, מאיפה באה (או לא באה) המוטיבציה, ואיך ללמוד בצורה שמשרתת אותך, גם כשהמערכת לא תמיד מתאימה.</p>
+    </div>
+    <div class="flex flex-col items-center gap-4"><a href="#reality" class="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-pink-500 text-white px-8 py-4 rounded-full font-medium hover:shadow-lg hover:shadow-pink-500/25 transition-all duration-300"> בואי נתחיל לחקור 
+      <svg class="w-5 h-5 rotate-180" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+      </svg></a>
+     <div class="scroll-indicator mt-8">
+      <svg class="w-6 h-6 text-pink-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+      </svg>
+     </div>
+    </div>
+   </div>
+  </section><!-- Section 1: המציאות שלא מדברים עליה -->
+  <section id="reality" class="py-24 px-6 bg-white">
+   <div class="max-w-5xl mx-auto">
+    <div class="flex items-center gap-4 mb-12">
+     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-100 to-amber-200 flex items-center justify-center">
+      <svg class="w-8 h-8 text-amber-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+      </svg>
+     </div>
+     <div><span class="text-sm font-medium text-amber-500 tracking-wide">שלב ראשון</span>
+      <h2 class="text-4xl font-bold text-gray-800">המציאות שלא מדברים עליה</h2>
+     </div>
+    </div>
+    <div class="grid md:grid-cols-2 gap-8 mb-12">
+     <div class="space-y-6">
+      <p class="text-lg text-gray-700 leading-relaxed">יש תסריט של איך בית הספר "אמור" להיות: מקום שבו לומדים, גדלים, מתפתחים. מקום שמכין אותך לעתיד. מורים מעוררי השראה, חומר מעניין, תלמידות מוטיבציות.</p>
+      <p class="text-lg text-gray-700 leading-relaxed">אבל המציאות לפעמים שונה. ישיבה ארוכה בכיתות צפופות, חומר שלא תמיד ברור למה צריך אותו, מבחנים שמעוררים יותר חרדה מעניין, והרגשה של "אני חייבת" במקום "אני רוצה". זה לא אומר שמשהו לא בסדר איתך — זה אומר שהמציאות מורכבת יותר מהתסריט.</p>
+     </div>
+     <div class="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-8">
+      <h3 class="text-xl font-semibold text-gray-800 mb-6">המחשבות השקטות</h3>
+      <ul class="space-y-4">
+       <li class="flex items-start gap-3">
+        <div class="w-6 h-6 rounded-full bg-amber-200 flex items-center justify-center mt-1 shrink-0"><span class="text-amber-700 text-xs">💭</span>
+        </div><p class="text-gray-700">"למה אני צריכה ללמוד את זה אם אני אף פעם לא אשתמש בזה?"</p></li>
+       <li class="flex items-start gap-3">
+        <div class="w-6 h-6 rounded-full bg-orange-200 flex items-center justify-center mt-1 shrink-0"><span class="text-orange-700 text-xs">💭</span>
+        </div><p class="text-gray-700">"אני מרגישה שאני לא מספיק טובה, כל הבנות נראות יותר בטוחות"</p></li>
+       <li class="flex items-start gap-3">
+        <div class="w-6 h-6 rounded-full bg-rose-200 flex items-center justify-center mt-1 shrink-0"><span class="text-rose-700 text-xs">💭</span>
+        </div><p class="text-gray-700">"המורה מסבירה מהר מדי, אני לא מספיקה להבין"</p></li>
+       <li class="flex items-start gap-3">
+        <div class="w-6 h-6 rounded-full bg-pink-200 flex items-center justify-center mt-1 shrink-0"><span class="text-pink-700 text-xs">💭</span>
+        </div><p class="text-gray-700">"זה כל כך משעמם, אין לי כוח יותר"</p></li>
+      </ul>
+     </div>
+    </div>
+    <div class="bg-white rounded-2xl p-8 border-2 border-amber-100 mb-8">
+     <h3 class="text-xl font-semibold text-gray-800 mb-6">הפער בין מה שאומרים למה שמרגישים</h3>
+     <div class="grid md:grid-cols-2 gap-6">
+      <div class="bg-green-50 rounded-xl p-6">
+       <h4 class="font-semibold text-green-800 mb-3 flex items-center gap-2"><span class="text-2xl">✓</span> <span>מה שאומרים</span></h4>
+       <ul class="space-y-2 text-gray-700 text-sm">
+        <li>"בית הספר הוא המקום הכי חשוב"</li>
+        <li>"הציונים קובעים את העתיד שלך"</li>
+        <li>"אם תשקיעי, תצליחי"</li>
+        <li>"כולם יכולים אם רק ירצו"</li>
+       </ul>
+      </div>
+      <div class="bg-rose-50 rounded-xl p-6">
+       <h4 class="font-semibold text-rose-800 mb-3 flex items-center gap-2"><span class="text-2xl">?</span> <span>מה שמרגישים</span></h4>
+       <ul class="space-y-2 text-gray-700 text-sm">
+        <li>"אבל למה זה מרגיש כזה כבד?"</li>
+        <li>"ואם אני לא רוצה את מה שהציון ייתן?"</li>
+        <li>"גם כשאני משקיעה, לפעמים זה לא מספיק"</li>
+        <li>"אני רוצה, אבל אני לא מצליחה"</li>
+       </ul>
+      </div>
+     </div>
+    </div>
+    <div class="reflection-card rounded-xl p-6">
+     <div class="flex items-start gap-4">
+      <svg class="w-6 h-6 text-amber-600 mt-1 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+      </svg>
+      <div>
+       <h4 class="font-semibold text-gray-800 mb-2">למה חשוב לדבר על זה?</h4>
+       <p class="text-gray-700">כי הפער הזה יוצר מתח פנימי עצום. מצד אחד, את יודעת מה "צריך" — לשמוע בשיעור, לעשות את המטלות, ללמוד למבחן. מצד שני, יש תחושות אמיתיות של עייפות, בלבול, חוסר רלוונטיות. כשאנחנו לא מדברות על הפער הזה, הוא רק גדל — והופך למתח כרוני, אשמה, או ויתור.</p>
+      </div>
+     </div>
+    </div>
+   </div>
+  </section>
+  <div class="section-divider mx-auto max-w-4xl"></div><!-- Section 2: העומס והלחץ -->
+  <section id="pressure" class="py-24 px-6 bg-gradient-to-b from-white to-pink-50/30">
+   <div class="max-w-5xl mx-auto">
+    <div class="flex items-center gap-4 mb-12">
+     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-red-100 to-red-200 flex items-center justify-center">
+      <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+     </div>
+     <div><span class="text-sm font-medium text-red-500 tracking-wide">שלב שני</span>
+      <h2 class="text-4xl font-bold text-gray-800">העומס והלחץ - מאיפה זה בא?</h2>
+     </div>
+    </div>
+    <p class="text-xl text-gray-600 mb-12 max-w-3xl">הלחץ בבית הספר לא בא רק מהמבחנים. הוא מורכב משכבות — כל שכבה מוסיפה עוד משקל.</p>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12"><!-- Pressure Layer 1 -->
+     <div class="bg-white rounded-2xl p-6 shadow-lg border border-red-50 card-hover">
+      <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-red-100 to-red-200 flex items-center justify-center mb-4">
+       <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+       </svg>
+      </div>
+      <h3 class="text-lg font-semibold text-gray-800 mb-3">העומס האקדמי</h3>
+      <p class="text-gray-600 text-sm leading-relaxed">שבעה-שמונה מקצועות בבת אחת. כל מורה חושבת שהמקצוע שלה הכי חשוב. מבחנים ומטלות מצטברים באותו שבוע. התחושה של "אני לא מספיקה" היא קבועה.</p>
+     </div><!-- Pressure Layer 2 -->
+     <div class="bg-white rounded-2xl p-6 shadow-lg border border-orange-50 card-hover">
+      <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-100 to-orange-200 flex items-center justify-center mb-4">
+       <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" /> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
+       </svg>
+      </div>
+      <h3 class="text-lg font-semibold text-gray-800 mb-3">הלחץ לציונים</h3>
+      <p class="text-gray-600 text-sm leading-relaxed">"הציון לא מגדיר אותך" — אבל כולם בודקים אותו. הורים, מורים, חברות. והצל של "זה ישפיע על המכללה" תלוי באוויר. הציון הופך ל"הוכחה" שאת מספיק טובה.</p>
+     </div><!-- Pressure Layer 3 -->
+     <div class="bg-white rounded-2xl p-6 shadow-lg border border-pink-50 card-hover">
+      <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-100 to-pink-200 flex items-center justify-center mb-4">
+       <svg class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+       </svg>
+      </div>
+      <h3 class="text-lg font-semibold text-gray-800 mb-3">ההשוואה החברתית</h3>
+      <p class="text-gray-600 text-sm leading-relaxed">"כמה קיבלת?" — השאלה שתמיד שואלים. ומיד המוח משווה: היא קיבלה יותר, אני פחות טובה. או להיפך: אני קיבלתי יותר, אבל עכשיו יש לחץ לשמור על זה.</p>
+     </div><!-- Pressure Layer 4 -->
+     <div class="bg-white rounded-2xl p-6 shadow-lg border border-purple-50 card-hover">
+      <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-100 to-purple-200 flex items-center justify-center mb-4">
+       <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+       </svg>
+      </div>
+      <h3 class="text-lg font-semibold text-gray-800 mb-3">המרוץ על הזמן</h3>
+      <p class="text-gray-600 text-sm leading-relaxed">בוקר עד אחר הצהריים בית ספר, אחר הצהריים חוגים או שיעורים פרטיים, ערב מטלות. איפה הזמן לנשום? לחשוב? לעשות משהו בשבילך? התחושה של ריצה קבועה.</p>
+     </div><!-- Pressure Layer 5 -->
+     <div class="bg-white rounded-2xl p-6 shadow-lg border border-indigo-50 card-hover">
+      <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-100 to-indigo-200 flex items-center justify-center mb-4">
+       <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+       </svg>
+      </div>
+      <h3 class="text-lg font-semibold text-gray-800 mb-3">חוסר הבהירות</h3>
+      <p class="text-gray-600 text-sm leading-relaxed">"למה אני לומדת את זה?" — השאלה שלפעמים אין לה תשובה משכנעת. כשלא ברור מה התכלית, קשה למצוא מוטיבציה. זה מרגיש כמו מירוץ לשום מקום.</p>
+     </div><!-- Pressure Layer 6 -->
+     <div class="bg-white rounded-2xl p-6 shadow-lg border border-rose-50 card-hover">
+      <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-rose-100 to-rose-200 flex items-center justify-center mb-4">
+       <svg class="w-6 h-6 text-rose-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+       </svg>
+      </div>
+      <h3 class="text-lg font-semibold text-gray-800 mb-3">הפחד לאכזב</h3>
+      <p class="text-gray-600 text-sm leading-relaxed">את רוצה שההורים יהיו גאים. שהמורה תגיד "כל הכבוד". שהחברות יחשבו שאת מצליחה. הפחד לאכזב אותם — ואת עצמך — מוסיף שכבת לחץ נוספת.</p>
+     </div>
+    </div>
+    <div class="bg-gradient-to-r from-red-500 to-pink-500 rounded-2xl p-8 text-white mb-8">
+     <div class="flex items-start gap-4">
+      <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center shrink-0 pressure-pulse">
+       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+       </svg>
+      </div>
+      <div>
+       <h4 class="text-xl font-semibold mb-3">תוצאה: עייפות כרונית</h4>
+       <p class="text-lg opacity-90 leading-relaxed">כשכל השכבות האלה ביחד — עומס, ציונים, השוואה, זמן, חוסר בהירות, פחד — התוצאה היא לא רק עייפות גופנית. זו עייפות נפשית. תחושה של ריצה על המקום, של אף פעם לא מספיק טוב, של רצון לסתם לעצור.</p>
+      </div>
+     </div>
+    </div>
+    <div class="insight-card rounded-xl p-6">
+     <div class="flex items-start gap-4">
+      <svg class="w-6 h-6 text-pink-600 mt-1 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <div>
+       <h4 class="font-semibold text-gray-800 mb-2">זה לא באשמתך</h4>
+       <p class="text-gray-700">אם את מרגישה לחוצה, עייפה, מוצפת — זה לא אומר שאת "חלשה" או "לא מספיק משקיעה". זה אומר שהמערכת תובענית, והלחץ הוא אמיתי. להכיר בזה זה הצעד הראשון להתמודדות.</p>
+      </div>
+     </div>
+    </div>
+   </div>
+  </section>
+  <div class="section-divider mx-auto max-w-4xl"></div><!-- Section 3: המוטיבציה - איך היא נבנית ואיך היא נעלמת -->
+  <section id="motivation" class="py-24 px-6 bg-white">
+   <div class="max-w-5xl mx-auto">
+    <div class="flex items-center gap-4 mb-12">
+     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-100 to-yellow-200 flex items-center justify-center">
+      <svg class="w-8 h-8 text-amber-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+      </svg>
+     </div>
+     <div><span class="text-sm font-medium text-amber-500 tracking-wide">שלב שלישי</span>
+      <h2 class="text-4xl font-bold text-gray-800">המוטיבציה - מאיפה היא באה?</h2>
+     </div>
+    </div>
+    <p class="text-xl text-gray-600 mb-12 max-w-3xl">"אין לי מוטיבציה" — זה לא חולשה. זו תגובה טבעית כשהתנאים לא מתאימים. בואי נבין מה דרוש כדי שמוטיבציה תהיה.</p>
+    <div class="bg-gradient-to-br from-yellow-50 to-amber-50 rounded-2xl p-8 mb-12 border border-amber-100">
+     <h3 class="text-2xl font-semibold text-gray-800 mb-6 text-center">שלושת העמודים של מוטיבציה</h3>
+     <div class="grid md:grid-cols-3 gap-6"><!-- Pillar 1: Relevance -->
+      <div class="bg-white rounded-xl p-6 shadow-sm">
+       <div class="w-14 h-14 rounded-full bg-gradient-to-br from-amber-100 to-amber-200 flex items-center justify-center mx-auto mb-4">
+        <svg class="w-7 h-7 text-amber-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+        </svg>
+       </div>
+       <h4 class="font-bold text-lg text-gray-800 text-center mb-3">רלוונטיות</h4>
+       <p class="text-gray-700 text-sm leading-relaxed text-center">"למה זה חשוב לי?" — כשיש תשובה ברורה, יש מוטיבציה. כשאין — קשה למצוא אנרגיה.</p>
+      </div><!-- Pillar 2: Capability -->
+      <div class="bg-white rounded-xl p-6 shadow-sm">
+       <div class="w-14 h-14 rounded-full bg-gradient-to-br from-pink-100 to-pink-200 flex items-center justify-center mx-auto mb-4">
+        <svg class="w-7 h-7 text-pink-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+       </div>
+       <h4 class="font-bold text-lg text-gray-800 text-center mb-3">תחושת יכולת</h4>
+       <p class="text-gray-700 text-sm leading-relaxed text-center">"אני יכולה!" — כשאת מצליחה, רוצים להמשיך. כשנכשלים שוב ושוב — המוטיבציה מתאדה.</p>
+      </div><!-- Pillar 3: Autonomy -->
+      <div class="bg-white rounded-xl p-6 shadow-sm">
+       <div class="w-14 h-14 rounded-full bg-gradient-to-br from-purple-100 to-purple-200 flex items-center justify-center mx-auto mb-4">
+        <svg class="w-7 h-7 text-purple-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+       </div>
+       <h4 class="font-bold text-lg text-gray-800 text-center mb-3">אוטונומיה</h4>
+       <p class="text-gray-700 text-sm leading-relaxed text-center">"אני בוחרת" — כשיש תחושת בחירה, יש מוטיבציה. כשהכל כפוי — המוטיבציה נעלמת.</p>
+      </div>
+     </div>
+    </div>
+    <div class="grid md:grid-cols-2 gap-8 mb-12"><!-- When Motivation Exists -->
+     <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-8 border border-green-100">
+      <div class="flex items-center gap-3 mb-6">
+       <div class="w-12 h-12 rounded-xl bg-green-200 flex items-center justify-center">
+        <svg class="w-6 h-6 text-green-700" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
+        </svg>
+       </div>
+       <h3 class="text-xl font-semibold text-gray-800">כשהמוטיבציה קיימת</h3>
+      </div>
+      <ul class="space-y-3 text-gray-700">
+       <li class="flex items-start gap-2"><span class="text-green-500 mt-1 font-bold">✓</span> <span>את מבינה <strong>למה</strong> את לומדת — יש מטרה ברורה</span></li>
+       <li class="flex items-start gap-2"><span class="text-green-500 mt-1 font-bold">✓</span> <span>את מרגישה שאת <strong>מצליחה</strong> — יש קידמה</span></li>
+       <li class="flex items-start gap-2"><span class="text-green-500 mt-1 font-bold">✓</span> <span>יש לך <strong>בחירה</strong> — איך ללמוד, מתי, באיזה קצב</span></li>
+       <li class="flex items-start gap-2"><span class="text-green-500 mt-1 font-bold">✓</span> <span>החומר <strong>מעניין</strong> או מאתגר בצורה נכונה</span></li>
+       <li class="flex items-start gap-2"><span class="text-green-500 mt-1 font-bold">✓</span> <span>יש <strong>תמיכה</strong> — מישהי שמאמינה בך</span></li>
+      </ul>
+     </div><!-- When Motivation Disappears -->
+     <div class="bg-gradient-to-br from-red-50 to-rose-50 rounded-2xl p-8 border border-red-100">
+      <div class="flex items-center gap-3 mb-6">
+       <div class="w-12 h-12 rounded-xl bg-red-200 flex items-center justify-center">
+        <svg class="w-6 h-6 text-red-700" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018a2 2 0 01.485.06l3.76.94m-7 10v5a2 2 0 002 2h.096c.5 0 .905-.405.905-.904 0-.715.211-1.413.608-2.008L17 13V4m-7 10h2m5-10h2a2 2 0 012 2v6a2 2 0 01-2 2h-2.5" />
+        </svg>
+       </div>
+       <h3 class="text-xl font-semibold text-gray-800">כשהמוטיבציה נעלמת</h3>
+      </div>
+      <ul class="space-y-3 text-gray-700">
+       <li class="flex items-start gap-2"><span class="text-red-500 mt-1 font-bold">✗</span> <span>לא ברור <strong>למה</strong> — "פשוט צריך"</span></li>
+       <li class="flex items-start gap-2"><span class="text-red-500 mt-1 font-bold">✗</span> <span>כישלונות חוזרים — "אני לא מצליחה"</span></li>
+       <li class="flex items-start gap-2"><span class="text-red-500 mt-1 font-bold">✗</span> <span>אין <strong>בחירה</strong> — הכל מוכתב</span></li>
+       <li class="flex items-start gap-2"><span class="text-red-500 mt-1 font-bold">✗</span> <span>החומר <strong>משעמם</strong> או מנותק מהחיים</span></li>
+       <li class="flex items-start gap-2"><span class="text-red-500 mt-1 font-bold">✗</span> <span>תחושת <strong>בדידות</strong> — אף אחת לא מבינה</span></li>
+      </ul>
+     </div>
+    </div>
+    <div class="reflection-card rounded-xl p-6">
+     <div class="flex items-start gap-4">
+      <svg class="w-6 h-6 text-amber-600 mt-1 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+      </svg>
+      <div>
+       <h4 class="font-semibold text-gray-800 mb-2">אז מה עושים?</h4>
+       <p class="text-gray-700 mb-3">את לא יכולה לשנות את כל המערכת. אבל את <em>יכולה</em> למצוא איזונים קטנים — לחפש רלוונטיות גם בדברים שנראים מנותקים, לחגוג הצלחות קטנות, ולמצוא רגעי בחירה גם בתוך הכפייה.</p>
+       <p class="text-gray-700">המוטיבציה לא צריכה להיות "הכל או כלום". גם מוטיבציה קטנה — "אני לומדת את זה כי אני רוצה להבין, לא בשביל הציון" — היא מוטיבציה אמיתית.</p>
+      </div>
+     </div>
+    </div>
+   </div>
+  </section>
+  <div class="section-divider mx-auto max-w-4xl"></div><!-- Section 4: איך לומדים כשלא באים -->
+  <section id="learning" class="py-24 px-6 bg-gradient-to-b from-white to-purple-50/30">
+   <div class="max-w-5xl mx-auto">
+    <div class="flex items-center gap-4 mb-12">
+     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-100 to-purple-200 flex items-center justify-center">
+      <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+      </svg>
+     </div>
+     <div><span class="text-sm font-medium text-purple-500 tracking-wide">שלב רביעי</span>
+      <h2 class="text-4xl font-bold text-gray-800">איך לומדים כשלא באים?</h2>
+     </div>
+    </div>
+    <p class="text-xl text-gray-600 mb-12 max-w-3xl">יש ימים שפשוט אין כוח. המבחן מחר, וכל התא במוח צועק "תפסיקי". איך ממשיכים כשהמוטיבציה נעלמה?</p>
+    <div class="grid md:grid-cols-2 gap-8 mb-12"><!-- Strategy 1 -->
+     <div class="bg-white rounded-2xl p-6 shadow-lg border border-purple-50">
+      <div class="flex items-center gap-3 mb-4">
+       <div class="w-10 h-10 rounded-full bg-purple-100 text-purple-700 font-bold flex items-center justify-center">
+        1
+       </div>
+       <h3 class="text-lg font-semibold text-gray-800">התחילי קטן - ממש קטן</h3>
+      </div>
+      <p class="text-gray-700 mb-3 leading-relaxed">במקום "אני צריכה ללמוד שלושה פרקים" — תגידי לעצמך: "אני אלמד רק 5 דקות". זה הכי. אחרי 5 דקות, את תחליטי אם להמשיך. לרוב, ההתחלה היא החלק הכי קשה.</p>
+      <div class="bg-purple-50 rounded-lg p-3 text-sm text-gray-700"><strong>טיפ:</strong> שימי טיימר ל-5 דקות. רק 5. זה פחות מפחיד.
+      </div>
+     </div><!-- Strategy 2 -->
+     <div class="bg-white rounded-2xl p-6 shadow-lg border border-pink-50">
+      <div class="flex items-center gap-3 mb-4">
+       <div class="w-10 h-10 rounded-full bg-pink-100 text-pink-700 font-bold flex items-center justify-center">
+        2
+       </div>
+       <h3 class="text-lg font-semibold text-gray-800">שני את הסביבה</h3>
+      </div>
+      <p class="text-gray-700 mb-3 leading-relaxed">אם את לומדת תמיד באותו מקום והוא "נשרף" — שני. תני בספרייה, בסלון, אצל חברה. לפעמים מקום חדש מביא אנרגיה חדשה.</p>
+      <div class="bg-pink-50 rounded-lg p-3 text-sm text-gray-700"><strong>טיפ:</strong> עבדי על רקע מוזיקה שונה, או בשקט מוחלט. נסי משהו אחר.
+      </div>
+     </div><!-- Strategy 3 -->
+     <div class="bg-white rounded-2xl p-6 shadow-lg border border-amber-50">
+      <div class="flex items-center gap-3 mb-4">
+       <div class="w-10 h-10 rounded-full bg-amber-100 text-amber-700 font-bold flex items-center justify-center">
+        3
+       </div>
+       <h3 class="text-lg font-semibold text-gray-800">למדי בצורה אחרת</h3>
+      </div>
+      <p class="text-gray-700 mb-3 leading-relaxed">אם קריאה לא עובדת — נסי לצייר תרשים, להסביר לחברה, לצפות בסרטון הסבר. אין דרך אחת נכונה ללמוד. מצאי את מה שמתאים לך.</p>
+      <div class="bg-amber-50 rounded-lg p-3 text-sm text-gray-700"><strong>טיפ:</strong> חלק מהמוח אוהבות צבעים וציורים. אחרות אוהבות לדבר בקול רם. גלי מה עובד לך.
+      </div>
+     </div><!-- Strategy 4 -->
+     <div class="bg-white rounded-2xl p-6 shadow-lg border border-indigo-50">
+      <div class="flex items-center gap-3 mb-4">
+       <div class="w-10 h-10 rounded-full bg-indigo-100 text-indigo-700 font-bold flex items-center justify-center">
+        4
+       </div>
+       <h3 class="text-lg font-semibold text-gray-800">פרקי והפסיקי</h3>
+      </div>
+      <p class="text-gray-700 mb-3 leading-relaxed">25 דקות לימוד, 5 דקות הפסקה (זו שיטת הפומודורו). זה עובד כי המוח יודע שיש סוף. קל יותר להתמקד כשיודעים שעוד רגע תהיה הפסקה.</p>
+      <div class="bg-indigo-50 rounded-lg p-3 text-sm text-gray-700"><strong>טיפ:</strong> בהפסקה — קומי, תזוזי, תשתי מים. אל תפתחי את הטלפון (זה לא הפסקה אמיתית).
+      </div>
+     </div><!-- Strategy 5 -->
+     <div class="bg-white rounded-2xl p-6 shadow-lg border border-teal-50">
+      <div class="flex items-center gap-3 mb-4">
+       <div class="w-10 h-10 rounded-full bg-teal-100 text-teal-700 font-bold flex items-center justify-center">
+        5
+       </div>
+       <h3 class="text-lg font-semibold text-gray-800">למדי עם מישהי</h3>
+      </div>
+      <p class="text-gray-700 mb-3 leading-relaxed">לימוד לבד יכול להיות בודד ומתיש. למידה עם חברה — אפילו בשקט, כל אחת בחומר שלה — יוצרת אחריות משותפת. קשה יותר לוותר כשמישהי מחכה לך.</p>
+      <div class="bg-teal-50 rounded-lg p-3 text-sm text-gray-700"><strong>טיפ:</strong> תקבעו "פגישת לימוד" אפילו בוידאו. רק להיות ביחד, כל אחת עושה את שלה.
+      </div>
+     </div><!-- Strategy 6 -->
+     <div class="bg-white rounded-2xl p-6 shadow-lg border border-rose-50">
+      <div class="flex items-center gap-3 mb-4">
+       <div class="w-10 h-10 rounded-full bg-rose-100 text-rose-700 font-bold flex items-center justify-center">
+        6
+       </div>
+       <h3 class="text-lg font-semibold text-gray-800">תני לעצמך אישור לא להיות מושלמת</h3>
+      </div>
+      <p class="text-gray-700 mb-3 leading-relaxed">לפעמים, "מספיק טוב" זה מספיק. את לא צריכה ללמוד הכל לעומק. לפעמים, סקירה כללית מספיקה. הפרפקציוניזם יכול לשתק — תני לעצמך לעשות את הטוב שאת יכולה היום.</p>
+      <div class="bg-rose-50 rounded-lg p-3 text-sm text-gray-700"><strong>טיפ:</strong> אם את עייפה — תעשי את המינימום. זה עדיף מאשר לא לעשות כלום.
+      </div>
+     </div>
+    </div>
+    <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-8 border border-purple-100">
+     <h3 class="text-xl font-semibold text-gray-800 mb-4">כשבאמת אין כוח</h3>
+     <p class="text-gray-700 mb-4">יש ימים שגם כל האסטרטגיות לא עוזרות. אין כוח. זה בסדר. לפעמים הגוף והנפש צריכים מנוחה. אם את מרגישה ככה לעתים קרובות — זה אולי סימן שצריך לדבר עם מישהי — מורה, יועצת, הורה.</p>
+     <p class="text-gray-700"><strong>חשוב לזכור:</strong> בריאות נפשית חשובה יותר מכל ציון. אם את מרגישה עייפות כרונית, חרדה, או חוסר תקווה — זה לא "להיות עצלנית". זה קריאה לעזרה.</p>
+    </div>
+   </div>
+  </section>
+  <div class="section-divider mx-auto max-w-4xl"></div><!-- Section 5: צעדים קטנים לנסות -->
+  <section id="action" class="py-24 px-6 bg-white">
+   <div class="max-w-5xl mx-auto">
+    <div class="flex items-center gap-4 mb-12">
+     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center">
+      <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+      </svg>
+     </div>
+     <div><span class="text-sm font-medium text-green-500 tracking-wide">שלב חמישי</span>
+      <h2 class="text-4xl font-bold text-gray-800">ניסויים קטנים לנסות</h2>
+     </div>
+    </div>
+    <p class="text-xl text-gray-600 mb-12 max-w-3xl">את לא צריכה לשנות הכל בבת אחת. צעד קטן אחד יכול לעשות הבדל. בחרי אחד, ונסי.</p>
+    <div class="grid md:grid-cols-2 gap-6 mb-12"><!-- Experiment 1 -->
+     <div class="experiment-card rounded-2xl p-8">
+      <div class="flex items-center gap-3 mb-4">
+       <div class="w-10 h-10 rounded-full bg-purple-300 flex items-center justify-center text-purple-800 font-bold">
+        1
+       </div>
+       <h3 class="text-lg font-semibold text-gray-800">ניסוי ה-5 דקות</h3>
+      </div>
+      <p class="text-gray-700 mb-4">במשך שבוע אחד, כשאת מרגישה שאין לך כוח ללמוד — התחייבי רק ל-5 דקות. אחרי 5 דקות, תבחרי אם להמשיך. רשמי כמה פעמים המשכת, וכמה פעמים עצרת.</p>
+      <div class="text-sm text-purple-700 font-medium">
+       משך: שבוע | קושי: קל
+      </div>
+     </div><!-- Experiment 2 -->
+     <div class="experiment-card rounded-2xl p-8">
+      <div class="flex items-center gap-3 mb-4">
+       <div class="w-10 h-10 rounded-full bg-purple-300 flex items-center justify-center text-purple-800 font-bold">
+        2
+       </div>
+       <h3 class="text-lg font-semibold text-gray-800">ניסוי הרלוונטיות</h3>
+      </div>
+      <p class="text-gray-700 mb-4">בחרי מקצוע אחד שנראה לך לא רלוונטי. חפשי באינטרנט או שאלי מישהי: "למה זה שימושי בחיים האמיתיים?" כתבי מה מצאת. אולי תגלי קשר מפתיע.</p>
+      <div class="text-sm text-purple-700 font-medium">
+       משך: שעה אחת | קושי: קל-בינוני
+      </div>
+     </div><!-- Experiment 3 -->
+     <div class="experiment-card rounded-2xl p-8">
+      <div class="flex items-center gap-3 mb-4">
+       <div class="w-10 h-10 rounded-full bg-purple-300 flex items-center justify-center text-purple-800 font-bold">
+        3
+       </div>
+       <h3 class="text-lg font-semibold text-gray-800">ניסוי דרכי הלמידה</h3>
+      </div>
+      <p class="text-gray-700 mb-4">למדי אותו חומר בשלוש דרכים שונות: קריאה, הסבר בקול רם לעצמך, וציור תרשים או מפת חשיבה. איזו דרך הייתה הכי קלה? הכי יעילה?</p>
+      <div class="text-sm text-purple-700 font-medium">
+       משך: מפגש לימוד אחד | קושי: בינוני
+      </div>
+     </div><!-- Experiment 4 -->
+     <div class="experiment-card rounded-2xl p-8">
+      <div class="flex items-center gap-3 mb-4">
+       <div class="w-10 h-10 rounded-full bg-purple-300 flex items-center justify-center text-purple-800 font-bold">
+        4
+       </div>
+       <h3 class="text-lg font-semibold text-gray-800">ניסוי הפומודורו</h3>
+      </div>
+      <p class="text-gray-700 mb-4">נסי טכניקת 25 דקות לימוד + 5 דקות הפסקה. עשי ארבעה מחזורים כאלה, ואז הפסקה ארוכה של 30 דקות. שימי לב - האם זה עזר לך להתמקד יותר?</p>
+      <div class="text-sm text-purple-700 font-medium">
+       משך: מפגש לימוד אחד | קושי: קל
+      </div>
+     </div><!-- Experiment 5 -->
+     <div class="experiment-card rounded-2xl p-8">
+      <div class="flex items-center gap-3 mb-4">
+       <div class="w-10 h-10 rounded-full bg-purple-300 flex items-center justify-center text-purple-800 font-bold">
+        5
+       </div>
+       <h3 class="text-lg font-semibold text-gray-808 mb-3">ניסוי קבוצת הלימוד</h3>
+      </div>
+      <p class="text-gray-700 mb-4">קבעי עם חברה אחת או שתיים "פגישת לימוד" של שעה. כל אחת לומדת את החומר שלה, בשקט, אבל ביחד. האם היה לך יותר קל להתחיל? להמשיך?</p>
+      <div class="text-sm text-purple-700 font-medium">
+       משך: מפגש אחד | קושי: בינוני
+      </div>
+     </div><!-- Experiment 6 -->
+     <div class="experiment-card rounded-2xl p-8">
+      <div class="flex items-center gap-3 mb-4">
+       <div class="w-10 h-10 rounded-full bg-purple-300 flex items-center justify-center text-purple-800 font-bold">
+        6
+       </div>
+       <h3 class="text-lg font-semibold text-gray-800">ניסוי השיחה הכנה</h3>
+      </div>
+      <p class="text-gray-700 mb-4">דברי עם מורה אחת שאת מרגישה איתה בנוח. שאלי אותה: "מה הדבר האחד שהיה עוזר לי הכי הרבה להצליח במקצוע שלך?" תקשיבי באמת. אולי תגלי משהו.</p>
+      <div class="text-sm text-purple-700 font-medium">
+       משך: שיחה אחת | קושי: בינוני-גבוה
+      </div>
+     </div>
+    </div>
+    <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-8 border border-green-100">
+     <h3 class="text-xl font-semibold text-gray-800 mb-4">אחרי הניסוי - שאלות למחשבה</h3>
+     <ul class="space-y-2 text-gray-700 mr-6">
+      <li class="flex items-start gap-2"><span class="text-green-500">•</span> <span>מה הפתיע אותי?</span></li>
+      <li class="flex items-start gap-2"><span class="text-green-500">•</span> <span>האם למדתי משהו חדש על איך אני לומדת?</span></li>
+      <li class="flex items-start gap-2"><span class="text-green-500">•</span> <span>האם יש משהו שאני רוצה לשנות בגישה שלי ללמידה?</span></li>
+      <li class="flex items-start gap-2"><span class="text-green-500">•</span> <span>מה הצעד הקטן הבא שאני יכולה לנסות?</span></li>
+     </ul>
+    </div>
+   </div>
+  </section>
+  <div class="section-divider mx-auto max-w-4xl"></div><!-- Closing Section -->
+  <section class="py-24 px-6 bg-gradient-to-b from-white to-amber-50">
+   <div class="max-w-4xl mx-auto text-center">
+    <div class="mb-12 flex justify-center">
+     <svg class="w-24 h-24 float-animation" viewbox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="35" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" /> <path d="M40 45 L48 53 L60 38" stroke="#f59e0b" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round" /> <circle cx="50" cy="50" r="30" stroke="#ec4899" stroke-width="1" fill="none" stroke-dasharray="4 4" opacity="0.5" />
+     </svg>
+    </div>
+    <h2 class="text-4xl font-bold text-gray-800 mb-8"><span class="gradient-text">את יכולה - גם כשקשה</span></h2>
+    <div class="space-y-6 mb-12">
+     <p class="text-xl text-gray-700 leading-relaxed">בית הספר לא תמיד קל. לפעמים זה מתיש, מלחיץ, ומרגיש מנותק. וזה בסדר להרגיש ככה. את לא לבד בתחושות האלה.</p>
+     <p class="text-xl text-gray-700 leading-relaxed">אבל את גם לא חסרת אונים. יש דרכים למצוא משמעות, גם כשהמערכת לא מושלמת. יש דרכים ללמוד, גם כשהמוטיבציה נמוכה. יש דרכים להתמודד, גם כשהלחץ גבוה.</p>
+     <p class="text-xl text-gray-700 leading-relaxed">זה לא יהיה פתאום מושלם. אבל כל צעד קטן — כל ניסוי, כל שיחה, כל התבוננות — מביא אותך קצת יותר קרוב להבין <em>איך את לומדת</em>, ו<em>מה את צריכה</em> כדי להצליח.</p>
+    </div>
+    <div class="bg-white rounded-2xl p-8 shadow-lg border border-amber-100 max-w-2xl mx-auto">
+     <p class="text-lg text-gray-700 mb-6"><strong>מחשבה אחרונה:</strong></p>
+     <p class="text-xl text-gray-800 font-medium italic">"הצלחה זה לא להיות מושלמת. הצלחה זה להמשיך לנסות, גם כשקשה."</p>
+    </div>
+    <div class="mt-16 flex flex-col sm:flex-row items-center justify-center gap-4"><a href="#reality" class="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-pink-500 text-white px-8 py-4 rounded-full font-medium hover:shadow-lg hover:shadow-pink-500/25 transition-all duration-300"> לחזור להתחלה 
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+      </svg></a> <a href="#action" class="inline-flex items-center gap-2 bg-white text-pink-600 px-8 py-4 rounded-full font-medium border-2 border-pink-200 hover:border-pink-300 hover:shadow-lg transition-all duration-300"> לניסויים 
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+      </svg></a>
+    </div>
+   </div>
+  </section><!-- Footer -->
+  <footer class="py-12 px-6 bg-gradient-to-r from-amber-500 to-pink-500 text-white">
+   <div class="max-w-5xl mx-auto text-center">
+    <div class="flex items-center justify-center gap-3 mb-6">
+     <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+      <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+      </svg>
+     </div><span class="text-2xl font-bold">בית ספר - אבל לא כמו שמלמדים</span>
+    </div>
+    <p class="text-white/80 text-lg mb-4">מסע חקר להבנת הלמידה שלך מעבר לציונים</p>
+    <p class="text-white/60 text-sm">תוכנית חינוכית לנערות | מתוך הבנה, מודעות וכלים ללמידה משמעותית</p>
+   </div>
+  </footer>
+  <script>
+    // Element SDK initialization
+    const defaultConfig = {
+      site_title: 'בית ספר - אבל לא כמו שמלמדים',
+      hero_subtitle: 'מסע חקר להבנת הלמידה שלך מעבר לציונים',
+      primary_color: '#f59e0b',
+      secondary_color: '#ec4899',
+      background_color: '#ffffff',
+      text_color: '#1f2937',
+      accent_color: '#8b5cf6'
+    };
+
+    let config = { ...defaultConfig };
+
+    async function onConfigChange(newConfig) {
+      config = newConfig;
+      
+      // Update nav title
+      const navTitle = document.getElementById('nav-title');
+      if (navTitle) {
+        navTitle.textContent = config.site_title || defaultConfig.site_title;
+      }
+      
+      // Update hero title
+      const heroTitle = document.getElementById('hero-title');
+      if (heroTitle) {
+        heroTitle.innerHTML = `<span class="gradient-text">${config.site_title || defaultConfig.site_title}</span>`;
+      }
+      
+      // Update hero subtitle
+      const heroSubtitle = document.getElementById('hero-subtitle');
+      if (heroSubtitle) {
+        heroSubtitle.textContent = config.hero_subtitle || defaultConfig.hero_subtitle;
+      }
+    }
+
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [
+          {
+            get: () => config.background_color || defaultConfig.background_color,
+            set: (value) => {
+              config.background_color = value;
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            }
+          },
+          {
+            get: () => config.primary_color || defaultConfig.primary_color,
+            set: (value) => {
+              config.primary_color = value;
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ primary_color: value });
+              }
+            }
+          },
+          {
+            get: () => config.secondary_color || defaultConfig.secondary_color,
+            set: (value) => {
+              config.secondary_color = value;
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ secondary_color: value });
+              }
+            }
+          },
+          {
+            get: () => config.text_color || defaultConfig.text_color,
+            set: (value) => {
+              config.text_color = value;
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            }
+          },
+          {
+            get: () => config.accent_color || defaultConfig.accent_color,
+            set: (value) => {
+              config.accent_color = value;
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ accent_color: value });
+              }
+            }
+          }
+        ],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      };
+    }
+
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ['site_title', config.site_title || defaultConfig.site_title],
+        ['hero_subtitle', config.hero_subtitle || defaultConfig.hero_subtitle]
+      ]);
+    }
+
+    // Initialize SDK
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
+
+    // Smooth scroll for navigation
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+
+    // Add scroll-based navigation highlight
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        if (scrollY >= sectionTop - 200) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.classList.remove('text-pink-600');
+        if (link.getAttribute('href') === `#${current}`) {
+          link.classList.add('text-pink-600');
+        }
+      });
+    });
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c02aced46a97da0',t:'MTc2ODc4NzM2Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
