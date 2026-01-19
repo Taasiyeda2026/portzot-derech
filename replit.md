@@ -12,6 +12,10 @@ A Hebrew-language educational course portal website. This is a static HTML/CSS/J
 - `admin.html` - Admin interface
 - `js/` - JavaScript modules (config, admin-app, pairing-app, pairing-algorithm)
 - `level1/`, `level2/` - Level-specific content
+- `exploration/` - Exploration pages (Tailwind CSS design)
+  - school.html - בית ספר exploration
+  - digital.html - עולם דיגיטלי exploration
+  - social.html - חברים וקשרים exploration
 - `styles.css`, `pairing.css` - Stylesheets
 
 ## Running the Project

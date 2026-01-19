@@ -1,0 +1,940 @@
+<!doctype html>
+<html lang="he" dir="rtl" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>חברים, קשרים ומרחבים חברתיים | מרחב חקר</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700&amp;family=Rubik:wght@400;500;700&amp;display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    * {
+      font-family: 'Assistant', 'Rubik', sans-serif;
+    }
+    
+    .gradient-text {
+      background: linear-gradient(135deg, #06b6d4, #8b5cf6, #ec4899);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .gradient-border {
+      background: linear-gradient(135deg, #ecfeff, #f5f3ff, #fce7f3);
+      border: 1px solid transparent;
+      background-clip: padding-box;
+      position: relative;
+    }
+    
+    .gradient-border::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      padding: 1px;
+      border-radius: inherit;
+      background: linear-gradient(135deg, #06b6d4, #8b5cf6, #ec4899);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+    }
+    
+    .card-hover {
+      transition: all 0.3s ease;
+    }
+    
+    .card-hover:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px -12px rgba(139, 92, 246, 0.15);
+    }
+    
+    .section-divider {
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #06b6d4, #8b5cf6, #ec4899, transparent);
+    }
+    
+    .reflection-card {
+      background: linear-gradient(135deg, #cffafe 0%, #bae6fd 100%);
+      border-right: 4px solid #06b6d4;
+    }
+    
+    .experiment-card {
+      background: linear-gradient(135deg, #e0e7ff 0%, #ddd6fe 100%);
+      border-right: 4px solid #8b5cf6;
+    }
+    
+    .insight-card {
+      background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+      border-right: 4px solid #ec4899;
+    }
+    
+    .scroll-indicator {
+      animation: bounce 2s infinite;
+    }
+    
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-10px); }
+      60% { transform: translateY(-5px); }
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-15px) rotate(3deg); }
+    }
+    
+    .float-animation {
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    .nav-link {
+      position: relative;
+    }
+    
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      right: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #06b6d4, #ec4899);
+      transition: width 0.3s ease;
+    }
+    
+    .nav-link:hover::after {
+      width: 100%;
+    }
+    
+    .circle-link {
+      animation: circlePulse 3s ease-in-out infinite;
+    }
+    
+    @keyframes circlePulse {
+      0%, 100% { transform: scale(1); opacity: 0.7; }
+      50% { transform: scale(1.05); opacity: 0.9; }
+    }
+    
+    .connection-line {
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 1000;
+      animation: drawLine 2s ease-in-out forwards;
+    }
+    
+    @keyframes drawLine {
+      to { stroke-dashoffset: 0; }
+    }
+  </style>
+  
+  
+ </head>
+ <body class="h-full bg-gradient-to-b from-white via-cyan-50/30 to-purple-50/30 text-gray-800 overflow-auto"><!-- Navigation -->
+  <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-cyan-100/50">
+   <div class="max-w-6xl mx-auto px-6 py-4">
+    <div class="flex items-center justify-between">
+     <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-400 to-purple-500 flex items-center justify-center">
+       <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+       </svg>
+      </div><span id="nav-title" class="text-xl font-bold gradient-text">חברים, קשרים ומרחבים חברתיים</span>
+     </div>
+     <div class="hidden md:flex items-center gap-6 text-sm text-gray-600"><a href="#belonging" class="nav-link hover:text-purple-600 transition-colors">שייכות</a> <a href="#pressure" class="nav-link hover:text-purple-600 transition-colors">לחצים</a> <a href="#conflicts" class="nav-link hover:text-purple-600 transition-colors">ריבים</a> <a href="#groups" class="nav-link hover:text-purple-600 transition-colors">קבוצות</a> <a href="#navigation" class="nav-link hover:text-purple-600 transition-colors">ניווט</a>
+     </div>
+    </div>
+   </div>
+  </nav><!-- Hero Section -->
+  <section class="min-h-screen flex items-center justify-center px-6 py-20 relative overflow-hidden"><!-- Decorative Elements -->
+   <div class="absolute top-20 left-10 w-64 h-64 bg-cyan-200/30 rounded-full blur-3xl float-animation"></div>
+   <div class="absolute bottom-20 right-10 w-80 h-80 bg-purple-200/30 rounded-full blur-3xl float-animation" style="animation-delay: 2s;"></div>
+   <div class="absolute top-1/2 left-1/4 w-40 h-40 bg-pink-200/20 rounded-full blur-2xl float-animation" style="animation-delay: 4s;"></div>
+   <div class="max-w-4xl mx-auto text-center relative z-10"><!-- Social Network Illustration -->
+    <div class="mb-12 flex justify-center">
+     <svg class="w-64 h-64" viewbox="0 0 200 200" fill="none"><!-- Central person (you) --> <circle cx="100" cy="100" r="18" fill="#ddd6fe" stroke="#8b5cf6" stroke-width="2.5" /> <circle cx="100" cy="95" r="6" fill="#8b5cf6" /> <path d="M88 110 Q100 105 112 110" stroke="#8b5cf6" stroke-width="2" fill="none" /> <!-- Connected friends --> <circle cx="50" cy="60" r="14" fill="#bfdbfe" stroke="#06b6d4" stroke-width="2" class="circle-link" /> <circle cx="50" cy="56" r="5" fill="#06b6d4" /> <path d="M42 68 Q50 64 58 68" stroke="#06b6d4" stroke-width="1.5" fill="none" /> <circle cx="150" cy="60" r="14" fill="#fecaca" stroke="#ef4444" stroke-width="2" class="circle-link" style="animation-delay: 0.5s" /> <circle cx="150" cy="56" r="5" fill="#ef4444" /> <path d="M142 68 Q150 64 158 68" stroke="#ef4444" stroke-width="1.5" fill="none" /> <circle cx="50" cy="140" r="14" fill="#fbcfe8" stroke="#ec4899" stroke-width="2" class="circle-link" style="animation-delay: 1s" /> <circle cx="50" cy="136" r="5" fill="#ec4899" /> <path d="M42 148 Q50 144 58 148" stroke="#ec4899" stroke-width="1.5" fill="none" /> <circle cx="150" cy="140" r="14" fill="#d9f99d" stroke="#84cc16" stroke-width="2" class="circle-link" style="animation-delay: 1.5s" /> <circle cx="150" cy="136" r="5" fill="#84cc16" /> <path d="M142 148 Q150 144 158 148" stroke="#84cc16" stroke-width="1.5" fill="none" /> <!-- Connection lines --> <line x1="82" y1="100" x2="58" y2="68" stroke="#8b5cf6" stroke-width="2" opacity="0.3" class="connection-line" /> <line x1="118" y1="100" x2="142" y2="68" stroke="#8b5cf6" stroke-width="2" opacity="0.3" class="connection-line" style="animation-delay: 0.2s" /> <line x1="82" y1="100" x2="58" y2="132" stroke="#8b5cf6" stroke-width="2" opacity="0.3" class="connection-line" style="animation-delay: 0.4s" /> <line x1="118" y1="100" x2="142" y2="132" stroke="#8b5cf6" stroke-width="2" opacity="0.3" class="connection-line" style="animation-delay: 0.6s" /> <!-- Outer disconnected person --> <circle cx="180" cy="100" r="12" fill="#fecaca" stroke="#ef4444" stroke-width="2" opacity="0.4" /> <circle cx="180" cy="96" r="4" fill="#ef4444" opacity="0.4" /> <path d="M173 106 Q180 103 187 106" stroke="#ef4444" stroke-width="1.5" fill="none" opacity="0.4" /> <line x1="162" y1="100" x2="170" y2="100" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3 3" opacity="0.3" /> <!-- Question marks --> <text x="20" y="100" font-size="20" fill="#8b5cf6" opacity="0.4" font-weight="bold">
+       ?
+      </text> <text x="175" y="35" font-size="18" fill="#ec4899" opacity="0.5" font-weight="bold">
+       ?
+      </text> <!-- Heart symbols --> <path d="M165 25 C165 22 167 20 169 20 C170 20 171 21 171 22 C171 21 172 20 173 20 C175 20 177 22 177 25 C177 28 171 32 171 32 C171 32 165 28 165 25 Z" fill="#ec4899" opacity="0.6" />
+     </svg>
+    </div>
+    <h1 id="hero-title" class="text-5xl md:text-7xl font-bold mb-8 leading-tight"><span class="gradient-text">חברים, קשרים ומרחבים חברתיים</span></h1>
+    <p id="hero-subtitle" class="text-xl md:text-2xl text-gray-600 mb-8 leading-relaxed max-w-2xl mx-auto">מסע להבנת השייכות, הלחצים, והקשרים שלך</p>
+    <div class="bg-white/60 backdrop-blur-sm rounded-2xl p-8 mb-12 gradient-border max-w-3xl mx-auto">
+     <p class="text-lg text-gray-700 leading-relaxed">להיות חלק מקבוצה. להרגיש שייכת. לדעת שיש מישהי שמבינה אותך. זה אחד הצרכים הבסיסיים ביותר שיש לנו כבני אדם — ובגיל ההתבגרות, זה הופך לעוד יותר חשוב ומורכב.</p>
+     <p class="text-lg text-gray-700 leading-relaxed mt-4">החיים החברתיים יכולים להיות מקור לשמחה, לתמיכה, ולחיבור — אבל גם מקור ללחץ עצום, לכאב, ולבלבול. השאלות "האם אני בפנים או בחוץ?", "האם אני מספיק טובה?", "למה היא כועסת עליי?" — יכולות לתפוס את המחשבות שלנו יותר מכל דבר אחר.</p>
+    </div>
+    <div class="flex flex-col items-center gap-4"><a href="#belonging" class="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-purple-500 text-white px-8 py-4 rounded-full font-medium hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300"> בואי נחקור ביחד 
+      <svg class="w-5 h-5 rotate-180" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+      </svg></a>
+     <div class="scroll-indicator mt-8">
+      <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+      </svg>
+     </div>
+    </div>
+   </div>
+  </section><!-- Section 1: השייכות - הצורך הבסיסי -->
+  <section id="belonging" class="py-24 px-6 bg-white">
+   <div class="max-w-5xl mx-auto">
+    <div class="flex items-center gap-4 mb-12">
+     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-100 to-cyan-200 flex items-center justify-center">
+      <svg class="w-8 h-8 text-cyan-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+      </svg>
+     </div>
+     <div><span class="text-sm font-medium text-cyan-500 tracking-wide">שלב ראשון</span>
+      <h2 class="text-4xl font-bold text-gray-800">השייכות - למה זה כל כך חשוב?</h2>
+     </div>
+    </div>
+    <p class="text-xl text-gray-600 mb-12 max-w-3xl">השייכות היא לא "נחמד אם יש". זה צורך בסיסי, כמעט כמו אוכל ומים. בואי נבין למה.</p>
+    <div class="grid md:grid-cols-2 gap-8 mb-12">
+     <div class="space-y-6">
+      <div class="bg-gradient-to-br from-cyan-50 to-blue-50 rounded-2xl p-6 border border-cyan-100">
+       <h3 class="text-xl font-semibold text-gray-800 mb-4">מה זה בכלל שייכות?</h3>
+       <p class="text-gray-700 mb-3">שייכות זה התחושה של "יש לי מקום". יש אנשים שמכירים אותי, שרוצים אותי פה, שאכפת להם איך אני מרגישה. זה הידיעה שאת לא לבד.</p>
+       <p class="text-gray-700">זה לא רק להיות <em>עם</em> אנשים — זה להיות <em>חלק</em> מהם. להרגיש שאת מובנת, מקובלת, ושייכת.</p>
+      </div>
+      <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-6 border border-purple-100">
+       <h3 class="text-xl font-semibold text-gray-800 mb-4">למה זה כל כך חזק בגיל שלך?</h3>
+       <p class="text-gray-700 mb-3">בגיל ההתבגרות, המוח שלך עובר שינויים עצומים. אחד הדברים שקורים זה שהחלק במוח שאחראי על "מה אחרים חושבים עליי" הופך להיות <strong>סופר רגיש</strong>.</p>
+       <p class="text-gray-700">זה לא חולשה — זו התפתחות טבעית. המוח שלך לומד איך לנווט בעולם החברתי, ולכן הוא שם הרבה תשומת לב למה שקורה בינך לבין אחרות.</p>
+      </div>
+     </div>
+     <div class="space-y-6">
+      <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+       <h3 class="text-xl font-semibold text-gray-800 mb-6">מה קורה כשיש שייכות?</h3>
+       <ul class="space-y-4">
+        <li class="flex items-start gap-3">
+         <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center mt-1 shrink-0">
+          <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+         </div>
+         <div>
+          <p class="font-medium text-gray-800">ביטחון עצמי גבוה יותר</p>
+          <p class="text-sm text-gray-600">את מאמינה בעצמך יותר כשאת מרגישה מקובלת</p>
+         </div></li>
+        <li class="flex items-start gap-3">
+         <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mt-1 shrink-0">
+          <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+         </div>
+         <div>
+          <p class="font-medium text-gray-800">אושר ורווחה נפשית</p>
+          <p class="text-sm text-gray-600">קשרים חברתיים טובים משפרים מצב רוח</p>
+         </div></li>
+        <li class="flex items-start gap-3">
+         <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center mt-1 shrink-0">
+          <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
+         </div>
+         <div>
+          <p class="font-medium text-gray-800">תחושת ביטחון</p>
+          <p class="text-sm text-gray-600">את יודעת שיש על מי לסמוך בזמנים קשים</p>
+         </div></li>
+        <li class="flex items-start gap-3">
+         <div class="w-8 h-8 rounded-full bg-pink-100 flex items-center justify-center mt-1 shrink-0">
+          <svg class="w-5 h-5 text-pink-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+         </div>
+         <div>
+          <p class="font-medium text-gray-800">אנרגיה לעשות דברים</p>
+          <p class="text-sm text-gray-600">כשאת מרגישה טוב חברתית, יש יותר כוח לכל השאר</p>
+         </div></li>
+       </ul>
+      </div>
+      <div class="bg-white rounded-2xl p-6 shadow-lg border border-red-100">
+       <h3 class="text-xl font-semibold text-gray-800 mb-6">מה קורה כשאין שייכות?</h3>
+       <ul class="space-y-4">
+        <li class="flex items-start gap-3">
+         <div class="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center mt-1 shrink-0">
+          <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+         </div>
+         <div>
+          <p class="font-medium text-gray-800">בדידות עמוקה</p>
+          <p class="text-sm text-gray-600">גם כשיש אנשים מסביב, את מרגישה לבד</p>
+         </div></li>
+        <li class="flex items-start gap-3">
+         <div class="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center mt-1 shrink-0">
+          <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+         </div>
+         <div>
+          <p class="font-medium text-gray-800">חרדה חברתית</p>
+          <p class="text-sm text-gray-600">"מה הן חושבות עליי?" תופס את כל המחשבות</p>
+         </div></li>
+        <li class="flex items-start gap-3">
+         <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center mt-1 shrink-0">
+          <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+         </div>
+         <div>
+          <p class="font-medium text-gray-800">ביקורת עצמית קשה</p>
+          <p class="text-sm text-gray-600">"משהו לא בסדר איתי, אני לא מתאימה"</p>
+         </div></li>
+       </ul>
+      </div>
+     </div>
+    </div>
+    <div class="reflection-card rounded-xl p-6">
+     <div class="flex items-start gap-4">
+      <svg class="w-6 h-6 text-cyan-600 mt-1 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <div>
+       <h4 class="font-semibold text-gray-800 mb-2">מה זה אומר?</h4>
+       <p class="text-gray-700">השייכות היא לא "יופי של". זה <strong>צורך חיוני</strong>. אם את מרגישה לבד או מנותקת, זה לא אומר שאת "מגזימה" או "רגישה מדי". זה אומר שצורך בסיסי שלך לא מתמלא — וזה לגיטימי לחלוטין לרצות לשנות את זה.</p>
+      </div>
+     </div>
+    </div>
+   </div>
+  </section>
+  <div class="section-divider mx-auto max-w-4xl"></div><!-- Section 2: הלחץ החברתי -->
+  <section id="pressure" class="py-24 px-6 bg-gradient-to-b from-white to-purple-50/30">
+   <div class="max-w-5xl mx-auto">
+    <div class="flex items-center gap-4 mb-12">
+     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-100 to-red-200 flex items-center justify-center">
+      <svg class="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+     </div>
+     <div><span class="text-sm font-medium text-orange-500 tracking-wide">שלב שני</span>
+      <h2 class="text-4xl font-bold text-gray-800">הלחץ החברתי - מאיפה הוא בא?</h2>
+     </div>
+    </div>
+    <p class="text-xl text-gray-600 mb-12 max-w-3xl">השייכות חשובה — אבל היא יכולה גם ליצור לחץ עצום. "להיות בפנים" לפעמים דורש ממך דברים שאת לא בטוחה שאת רוצה.</p>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12"><!-- Pressure Type 1 -->
+     <div class="bg-white rounded-2xl p-6 shadow-lg border border-orange-50 card-hover">
+      <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-red-100 to-red-200 flex items-center justify-center mb-4">
+       <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+       </svg>
+      </div>
+      <h3 class="text-lg font-semibold text-gray-800 mb-3">לחץ להתאמה</h3>
+      <p class="text-gray-600 text-sm leading-relaxed">להתלבש כמו כולן, לדבר כמו כולן, לאהוב את אותם דברים. הפחד להיות "שונה" גורם לך להסתיר חלקים מעצמך, רק כדי לא לבלוט.</p>
+     </div><!-- Pressure Type 2 -->
+     <div class="bg-white rounded-2xl p-6 shadow-lg border border-purple-50 card-hover">
+      <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-100 to-purple-200 flex items-center justify-center mb-4">
+       <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+       </svg>
+      </div>
+      <h3 class="text-lg font-semibold text-gray-800 mb-3">לחץ להיות זמינה</h3>
+      <p class="text-gray-600 text-sm leading-relaxed">לענות מיד בקבוצות, להיות תמיד בעניינים, לדעת מה קורה. אם לא עניית — את "מתעלמת", ואם עניית מאוחר — את "לא מספיק מעורבת".</p>
+     </div><!-- Pressure Type 3 -->
+     <div class="bg-white rounded-2xl p-6 shadow-lg border border-pink-50 card-hover">
+      <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-100 to-pink-200 flex items-center justify-center mb-4">
+       <svg class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
+       </svg>
+      </div>
+      <h3 class="text-lg font-semibold text-gray-800 mb-3">לחץ לא לעשות "דרמה"</h3>
+      <p class="text-gray-600 text-sm leading-relaxed">משהו פגע בך? "את מגזימה". משהו העליב אותך? "למה את כל כך רגישה?" יש לחץ לא להגיד כשמשהו מציק לך, כי אז את "מסובכת".</p>
+     </div><!-- Pressure Type 4 -->
+     <div class="bg-white rounded-2xl p-6 shadow-lg border border-blue-50 card-hover">
+      <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center mb-4">
+       <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+       </svg>
+      </div>
+      <h3 class="text-lg font-semibold text-gray-800 mb-3">לחץ "לצד" של מישהי</h3>
+      <p class="text-gray-600 text-sm leading-relaxed">כשיש ריב, כולם מצפים שתבחרי צד. אם את לא בוחרת — את "בוגדת". אם את בוחרת צד שלא מתאים — את "בחוץ". אין דרך לנצח.</p>
+     </div><!-- Pressure Type 5 -->
+     <div class="bg-white rounded-2xl p-6 shadow-lg border border-indigo-50 card-hover">
+      <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-100 to-indigo-200 flex items-center justify-center mb-4">
+       <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+       </svg>
+      </div>
+      <h3 class="text-lg font-semibold text-gray-800 mb-3">לחץ של שמועות</h3>
+      <p class="text-gray-600 text-sm leading-relaxed">"שמעת מה קרה ל...?" שמועות עוברות מהר, ולפעמים את לא יודעת אם הן אמיתיות. הפחד שידברו עליך — או שכבר מדברים — יכול להיות משתק.</p>
+     </div><!-- Pressure Type 6 -->
+     <div class="bg-white rounded-2xl p-6 shadow-lg border border-teal-50 card-hover">
+      <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-100 to-teal-200 flex items-center justify-center mb-4">
+       <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" /> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+       </svg>
+      </div>
+      <h3 class="text-lg font-semibold text-gray-800 mb-3">לחץ של המדיה החברתית</h3>
+      <p class="text-gray-600 text-sm leading-relaxed">מי מעלה תמונות עם מי? מי עשתה לייק למי? מי לא? החיים החברתיים המקוונים מוסיפים שכבה שלמה של מתח — "אם אני לא מתויגת בתמונה, זה אומר שאני בחוץ?"</p>
+     </div>
+    </div>
+    <div class="bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl p-8 text-white mb-8">
+     <div class="flex items-start gap-4">
+      <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center shrink-0">
+       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+       </svg>
+      </div>
+      <div>
+       <h4 class="text-xl font-semibold mb-3">המחיר של הלחץ הזה</h4>
+       <p class="text-lg opacity-90 leading-relaxed">הלחץ החברתי הזה לא נעלם כשאת הולכת הביתה. הוא נשאר במחשבות: "האם אמרתי משהו טיפשי?", "למה היא לא ענתה לי?", "האם הן עושות משהו בלעדיי?". זה יכול לגרום לחרדה, לעייפות נפשית, ולתחושה מתמדת שאת צריכה "לשמור על עצמך".</p>
+      </div>
+     </div>
+    </div>
+    <div class="insight-card rounded-xl p-6">
+     <div class="flex items-start gap-4">
+      <svg class="w-6 h-6 text-pink-600 mt-1 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+      </svg>
+      <div>
+       <h4 class="font-semibold text-gray-800 mb-2">חשוב לדעת</h4>
+       <p class="text-gray-700">הלחצים האלה הם <strong>אמיתיים</strong> — אבל חלק גדול מהם מגיע מפחד שלנו מה אחרות חושבות, ולא ממה שהן <em>באמת</em> חושבות. לרוב, כולן טרודות בדאגות שלהן, בדיוק כמוך.</p>
+      </div>
+     </div>
+    </div>
+   </div>
+  </section>
+  <div class="section-divider mx-auto max-w-4xl"></div><!-- Section 3: ריבים וקונפליקטים -->
+  <section id="conflicts" class="py-24 px-6 bg-white">
+   <div class="max-w-5xl mx-auto">
+    <div class="flex items-center gap-4 mb-12">
+     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-red-100 to-rose-200 flex items-center justify-center">
+      <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.618 5.984A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016zM12 9v2m0 4h.01" />
+      </svg>
+     </div>
+     <div><span class="text-sm font-medium text-red-500 tracking-wide">שלב שלישי</span>
+      <h2 class="text-4xl font-bold text-gray-800">ריבים וקונפליקטים - למה זה קורה?</h2>
+     </div>
+    </div>
+    <p class="text-xl text-gray-600 mb-12 max-w-3xl">גם החברויות הכי טובות עוברות קונפליקטים. זה לא אומר שהקשר נגמר — זה אומר שהוא חי ומורכב.</p>
+    <div class="grid md:grid-cols-2 gap-8 mb-12">
+     <div class="bg-gradient-to-br from-red-50 to-rose-50 rounded-2xl p-8 border border-red-100">
+      <h3 class="text-xl font-semibold text-gray-800 mb-6">למה ריבים קורים?</h3>
+      <ul class="space-y-4">
+       <li class="flex items-start gap-3">
+        <div class="w-6 h-6 rounded-full bg-red-200 flex items-center justify-center mt-1 shrink-0"><span class="text-red-700 text-xs font-bold">1</span>
+        </div>
+        <div>
+         <p class="font-medium text-gray-800">תקשורת לא ברורה</p>
+         <p class="text-sm text-gray-600">משהו שאמרת התפרש אחרת, או שלא אמרת כלום וההשתקה הובנה כעלבון</p>
+        </div></li>
+       <li class="flex items-start gap-3">
+        <div class="w-6 h-6 rounded-full bg-orange-200 flex items-center justify-center mt-1 shrink-0"><span class="text-orange-700 text-xs font-bold">2</span>
+        </div>
+        <div>
+         <p class="font-medium text-gray-800">ציפיות שונות</p>
+         <p class="text-sm text-gray-600">את חושבת שחברות זה דבר אחד, והיא חושבת שזה דבר אחר — ולא דיברתן על זה</p>
+        </div></li>
+       <li class="flex items-start gap-3">
+        <div class="w-6 h-6 rounded-full bg-rose-200 flex items-center justify-center mt-1 shrink-0"><span class="text-rose-700 text-xs font-bold">3</span>
+        </div>
+        <div>
+         <p class="font-medium text-gray-800">קנאה ותחרות</p>
+         <p class="text-sm text-gray-600">היא קיבלה משהו שרצית, או שיש לה משהו שאין לך — וזה יוצר מתח</p>
+        </div></li>
+       <li class="flex items-start gap-3">
+        <div class="w-6 h-6 rounded-full bg-red-200 flex items-center justify-center mt-1 shrink-0"><span class="text-red-700 text-xs font-bold">4</span>
+        </div>
+        <div>
+         <p class="font-medium text-gray-800">לחצים מבחוץ</p>
+         <p class="text-sm text-gray-600">דברים שקורים לה או לך מחוץ לחברות משפיעים על האופן שבו אתן מתייחסות אחת לשנייה</p>
+        </div></li>
+       <li class="flex items-start gap-3">
+        <div class="w-6 h-6 rounded-full bg-purple-200 flex items-center justify-center mt-1 shrink-0"><span class="text-purple-700 text-xs font-bold">5</span>
+        </div>
+        <div>
+         <p class="font-medium text-gray-800">שינויים וצמיחה</p>
+         <p class="text-sm text-gray-600">אנשים משתנים — ולפעמים זה יוצר פערים שקשה לגשר עליהם</p>
+        </div></li>
+      </ul>
+     </div>
+     <div class="space-y-6">
+      <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+       <h3 class="text-xl font-semibold text-gray-800 mb-4">סוגי ריבים</h3>
+       <div class="space-y-4">
+        <div class="bg-red-50 rounded-lg p-4">
+         <h4 class="font-semibold text-red-800 mb-2">🔥 הריב הגלוי</h4>
+         <p class="text-sm text-gray-700">צעקות, האשמות, כעס פתוח. כואב, אבל לפחות יודעים מה הבעיה.</p>
+        </div>
+        <div class="bg-purple-50 rounded-lg p-4">
+         <h4 class="font-semibold text-purple-800 mb-2">🧊 הקור השקט</h4>
+         <p class="text-sm text-gray-700">אף אחת לא אומרת כלום, אבל המתח באוויר. לפעמים זה יותר כואב מריב פתוח.</p>
+        </div>
+        <div class="bg-pink-50 rounded-lg p-4">
+         <h4 class="font-semibold text-pink-800 mb-2">🎭 הפאסיביות-אגרסיביות</h4>
+         <p class="text-sm text-gray-700">"אני בסדר" (אבל באמת לא). הערות עוקצניות במעטה של צחוק.</p>
+        </div>
+        <div class="bg-orange-50 rounded-lg p-4">
+         <h4 class="font-semibold text-orange-800 mb-2">👥 הריב הקבוצתי</h4>
+         <p class="text-sm text-gray-700">ריב בין שתיים שמושך עוד אנשים. פתאום כולם בעניינים ואת לא בטוחה איך הגעת לפה.</p>
+        </div>
+       </div>
+      </div>
+      <div class="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl p-6 border border-blue-100">
+       <h3 class="text-lg font-semibold text-gray-800 mb-3">מה שכואב הכי הרבה בריבים</h3>
+       <p class="text-gray-700 text-sm leading-relaxed">זה לא רק מה שנאמר — זה <strong>האי-ודאות</strong>. "האם היא עדיין רוצה להיות חברה שלי?", "האם אני אשמה?", "איך זה יסתיים?" הלא-ידיעה לפעמים כואבת יותר מהריב עצמו.</p>
+      </div>
+     </div>
+    </div>
+    <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-8 border border-gray-200 mb-8">
+     <h3 class="text-xl font-semibold text-gray-800 mb-6 text-center">איך להתמודד עם ריב?</h3>
+     <div class="grid md:grid-cols-3 gap-6">
+      <div class="bg-white rounded-xl p-6 shadow-sm">
+       <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-4">
+        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+       </div>
+       <h4 class="font-semibold text-gray-800 text-center mb-3">תני זמן לקור</h4>
+       <p class="text-sm text-gray-700 text-center">בעיצומו של הריב, רגשות גבוהים. לפעמים כדאי לחכות כמה שעות (או יום) לפני לנסות לדבר.</p>
+      </div>
+      <div class="bg-white rounded-xl p-6 shadow-sm">
+       <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mx-auto mb-4">
+        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+        </svg>
+       </div>
+       <h4 class="font-semibold text-gray-800 text-center mb-3">דברי ישירות (אם אפשר)</h4>
+       <p class="text-sm text-gray-700 text-center">"אני הרגשתי... כש..." במקום "את תמיד...". זה קשה, אבל זה הדרך היחידה לפתור באמת.</p>
+      </div>
+      <div class="bg-white rounded-xl p-6 shadow-sm">
+       <div class="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center mx-auto mb-4">
+        <svg class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+        </svg>
+       </div>
+       <h4 class="font-semibold text-gray-800 text-center mb-3">דעי מתי לוותר</h4>
+       <p class="text-sm text-gray-700 text-center">לא כל ריב נפתר. לפעמים, הדבר הבריא ביותר זה להבין שלא תמיד אפשר לתקן — וזה בסדר.</p>
+      </div>
+     </div>
+    </div>
+    <div class="reflection-card rounded-xl p-6">
+     <div class="flex items-start gap-4">
+      <svg class="w-6 h-6 text-cyan-600 mt-1 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <div>
+       <h4 class="font-semibold text-gray-800 mb-2">זכרי</h4>
+       <p class="text-gray-700">ריב אחד לא אומר שהחברות נגמרה. קשרים בריאים כוללים גם קונפליקטים — והיכולת לעבור אותם ביחד יכולה דווקא לחזק את הקשר. <strong>זה לא "או הכל או כלום"</strong>.</p>
+      </div>
+     </div>
+    </div>
+   </div>
+  </section>
+  <div class="section-divider mx-auto max-w-4xl"></div><!-- Section 4: קבוצות - "בפנים" או "בחוץ" -->
+  <section id="groups" class="py-24 px-6 bg-gradient-to-b from-white to-cyan-50/30">
+   <div class="max-w-5xl mx-auto">
+    <div class="flex items-center gap-4 mb-12">
+     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-100 to-purple-200 flex items-center justify-center">
+      <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+      </svg>
+     </div>
+     <div><span class="text-sm font-medium text-purple-500 tracking-wide">שלב רביעי</span>
+      <h2 class="text-4xl font-bold text-gray-800">הקבוצה - "בפנים" או "בחוץ"?</h2>
+     </div>
+    </div>
+    <p class="text-xl text-gray-600 mb-12 max-w-3xl">להיות "בפנים" יכול להרגיש מדהים. אבל מה עושים כשאת מרגישה "בחוץ" — או כשהקבוצה עצמה לא בריאה?</p>
+    <div class="grid md:grid-cols-2 gap-8 mb-12"><!-- Inside -->
+     <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-8 border border-green-100">
+      <div class="flex items-center gap-3 mb-6">
+       <div class="w-12 h-12 rounded-xl bg-green-200 flex items-center justify-center">
+        <svg class="w-6 h-6 text-green-700" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+       </div>
+       <h3 class="text-xl font-semibold text-gray-800">כשאת "בפנים"</h3>
+      </div>
+      <div class="space-y-4">
+       <div class="flex items-start gap-3"><span class="text-green-500 mt-1">✓</span>
+        <div>
+         <p class="font-medium text-gray-800">תחושת ביטחון</p>
+         <p class="text-sm text-gray-600">יש לך מקום, את שייכת, את חלק ממשהו</p>
+        </div>
+       </div>
+       <div class="flex items-start gap-3"><span class="text-green-500 mt-1">✓</span>
+        <div>
+         <p class="font-medium text-gray-800">זהות משותפת</p>
+         <p class="text-sm text-gray-600">"אנחנו" — יש קבוצה שאת חלק ממנה, וזה מרגיש טוב</p>
+        </div>
+       </div>
+       <div class="flex items-start gap-3"><span class="text-green-500 mt-1">✓</span>
+        <div>
+         <p class="font-medium text-gray-800">תמיכה הדדית</p>
+         <p class="text-sm text-gray-600">יש על מי לסמוך, מי לצחוק איתו, מי לשתף</p>
+        </div>
+       </div>
+       <div class="flex items-start gap-3"><span class="text-orange-500 mt-1">⚠</span>
+        <div>
+         <p class="font-medium text-orange-800">אבל... יש מחיר</p>
+         <p class="text-sm text-gray-600">לפעמים צריך "לשחק לפי החוקים" גם כשהם לא מתאימים לך</p>
+        </div>
+       </div>
+      </div>
+     </div><!-- Outside -->
+     <div class="bg-gradient-to-br from-red-50 to-rose-50 rounded-2xl p-8 border border-red-100">
+      <div class="flex items-center gap-3 mb-6">
+       <div class="w-12 h-12 rounded-xl bg-red-200 flex items-center justify-center">
+        <svg class="w-6 h-6 text-red-700" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+       </div>
+       <h3 class="text-xl font-semibold text-gray-800">כשאת "בחוץ"</h3>
+      </div>
+      <div class="space-y-4">
+       <div class="flex items-start gap-3"><span class="text-red-500 mt-1">✗</span>
+        <div>
+         <p class="font-medium text-gray-800">בדידות כואבת</p>
+         <p class="text-sm text-gray-600">רואה אותן ביחד, ואת לא שם. זה כואב</p>
+        </div>
+       </div>
+       <div class="flex items-start gap-3"><span class="text-red-500 mt-1">✗</span>
+        <div>
+         <p class="font-medium text-gray-800">ביקורת עצמית</p>
+         <p class="text-sm text-gray-600">"מה לא בסדר איתי? למה אני לא מתאימה?"</p>
+        </div>
+       </div>
+       <div class="flex items-start gap-3"><span class="text-red-500 mt-1">✗</span>
+        <div>
+         <p class="font-medium text-gray-800">תחושת דחייה</p>
+         <p class="text-sm text-gray-600">גם אם לא דחו אותך בכוונה, זה מרגיש ככה</p>
+        </div>
+       </div>
+       <div class="flex items-start gap-3"><span class="text-blue-500 mt-1">⚡</span>
+        <div>
+         <p class="font-medium text-blue-800">אבל... יש גם חופש</p>
+         <p class="text-sm text-gray-600">אין לחץ להתאים. את יכולה להיות עצמך</p>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="bg-white rounded-2xl p-8 shadow-lg border border-purple-100 mb-8">
+     <h3 class="text-xl font-semibold text-gray-800 mb-6 text-center">סוגי קבוצות</h3>
+     <div class="grid md:grid-cols-2 gap-6">
+      <div>
+       <h4 class="font-semibold text-green-700 mb-3 flex items-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg> קבוצה בריאה</h4>
+       <ul class="space-y-2 text-sm text-gray-700">
+        <li class="flex gap-2"><span>•</span>אפשר להיות עצמך ולא לפחד</li>
+        <li class="flex gap-2"><span>•</span>כבוד הדדי, גם בחילוקי דעות</li>
+        <li class="flex gap-2"><span>•</span>אפשר להיות חבר של מישהי מחוץ לקבוצה</li>
+        <li class="flex gap-2"><span>•</span>תומכים אחת בשנייה, לא מתחרים</li>
+        <li class="flex gap-2"><span>•</span>מקבלים שינויים וצמיחה אישית</li>
+       </ul>
+      </div>
+      <div>
+       <h4 class="font-semibold text-red-700 mb-3 flex items-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg> קבוצה לא בריאה</h4>
+       <ul class="space-y-2 text-sm text-gray-700">
+        <li class="flex gap-2"><span>•</span>צריך "להתאים" כל הזמן — לחץ מתמיד</li>
+        <li class="flex gap-2"><span>•</span>דרמה קבועה, רכילות על אחרות</li>
+        <li class="flex gap-2"><span>•</span>יש "מלכה" שקובעת הכל</li>
+        <li class="flex gap-2"><span>•</span>פוגעים אחת בשנייה "בצחוק"</li>
+        <li class="flex gap-2"><span>•</span>מי שיוצאת מהקו — נדחית</li>
+       </ul>
+      </div>
+     </div>
+    </div>
+    <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-8 border border-purple-100 mb-8">
+     <h3 class="text-xl font-semibold text-gray-800 mb-6">מה אם הקבוצה שלי לא בריאה?</h3>
+     <div class="space-y-4 text-gray-700">
+      <p class="leading-relaxed">זו אחת השאלות הכי קשות. מצד אחד, את רוצה להיות "בפנים" — זה הצורך לשייכות. מצד שני, הקבוצה גורמת לך לחרדה, למתח, לתחושה שאת צריכה כל הזמן להיזהר.</p>
+      <div class="bg-white rounded-lg p-6">
+       <p class="font-semibold text-purple-800 mb-3">שאלות למחשבה:</p>
+       <ul class="space-y-2 text-sm">
+        <li class="flex gap-2"><span class="text-purple-500">→</span>אחרי שאני מבלה עם הקבוצה — אני מרגישה טוב או רע?</li>
+        <li class="flex gap-2"><span class="text-purple-500">→</span>אני יכולה להיות עצמי, או שאני צריכה להתחזות?</li>
+        <li class="flex gap-2"><span class="text-purple-500">→</span>האם יש כבוד הדדי, או שיש הרבה ביקורת ופגיעה?</li>
+        <li class="flex gap-2"><span class="text-purple-500">→</span>אם אני אעזוב — האם אני אאבד חברות אמיתיות, או רק "מעמד"?</li>
+       </ul>
+      </div>
+     </div>
+    </div>
+    <div class="insight-card rounded-xl p-6">
+     <div class="flex items-start gap-4">
+      <svg class="w-6 h-6 text-pink-600 mt-1 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <div>
+       <h4 class="font-semibold text-gray-800 mb-2">דעי את זה</h4>
+       <p class="text-gray-700"><strong>את לא חייבת להישאר בקבוצה רק כי את "בפנים".</strong> אם הקבוצה פוגעת בך, גורמת לך להרגיש רע, או מכריחה אותך להיות מישהי שאת לא — זה בסדר לעזוב. זה קשה, זה מפחיד — אבל להיות "בחוץ" מקבוצה לא בריאה זה <em>יותר טוב</em> מלהיות "בפנים" ולמות מבפנים.</p>
+      </div>
+     </div>
+    </div>
+   </div>
+  </section>
+  <div class="section-divider mx-auto max-w-4xl"></div><!-- Section 5: איך לנווט את המרחב החברתי -->
+  <section id="navigation" class="py-24 px-6 bg-white">
+   <div class="max-w-5xl mx-auto">
+    <div class="flex items-center gap-4 mb-12">
+     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-100 to-cyan-200 flex items-center justify-center">
+      <svg class="w-8 h-8 text-cyan-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+      </svg>
+     </div>
+     <div><span class="text-sm font-medium text-cyan-500 tracking-wide">שלב חמישי</span>
+      <h2 class="text-4xl font-bold text-gray-800">איך לנווט את המרחב החברתי?</h2>
+     </div>
+    </div>
+    <p class="text-xl text-gray-600 mb-12 max-w-3xl">החיים החברתיים מורכבים — אבל יש כלים שיכולים לעזור לך לנווט אותם בצורה בריאה יותר.</p>
+    <div class="grid md:grid-cols-2 gap-8 mb-12"><!-- Tool 1 -->
+     <div class="bg-gradient-to-br from-cyan-50 to-blue-50 rounded-2xl p-8 border border-cyan-100 card-hover">
+      <div class="flex items-center gap-3 mb-4">
+       <div class="w-10 h-10 rounded-full bg-cyan-200 text-cyan-800 font-bold flex items-center justify-center">
+        1
+       </div>
+       <h3 class="text-lg font-semibold text-gray-800">הכירי את הצרכים שלך</h3>
+      </div>
+      <p class="text-gray-700 mb-4 leading-relaxed">לא כולן צריכות אותו דבר מחברות. יש מי שצריכה הרבה אינטראקציה חברתית, ויש מי שמספיקה לה חברה קרובה אחת או שתיים. <strong>אין נכון או לא נכון</strong> — יש מה שמתאים לך.</p>
+      <div class="bg-white rounded-lg p-4 text-sm text-gray-700"><strong>שאלי את עצמך:</strong> איזה סוג של חברות גורם לי להרגיש טוב? כמה אינטראקציה אני צריכה?
+      </div>
+     </div><!-- Tool 2 -->
+     <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-8 border border-purple-100 card-hover">
+      <div class="flex items-center gap-3 mb-4">
+       <div class="w-10 h-10 rounded-full bg-purple-200 text-purple-800 font-bold flex items-center justify-center">
+        2
+       </div>
+       <h3 class="text-lg font-semibold text-gray-800">שימי גבולות</h3>
+      </div>
+      <p class="text-gray-700 mb-4 leading-relaxed">זה בסדר לומר "לא". זה בסדר לא לענות מיד לכל הודעה. זה בסדר להגיד "אני צריכה זמן לעצמי". חברות אמיתיות מכבדות גבולות — אם מישהי לא מכבדת, זה אומר משהו על הקשר, לא עליך.</p>
+      <div class="bg-white rounded-lg p-4 text-sm text-gray-700"><strong>דוגמאות לגבולות:</strong> "אני לא עונה לטלפון אחרי 10 בערב", "אני צריכה ערב אחד בשבוע לעצמי"
+      </div>
+     </div><!-- Tool 3 -->
+     <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-8 border border-green-100 card-hover">
+      <div class="flex items-center gap-3 mb-4">
+       <div class="w-10 h-10 rounded-full bg-green-200 text-green-800 font-bold flex items-center justify-center">
+        3
+       </div>
+       <h3 class="text-lg font-semibold text-gray-800">תקשרי ישירות</h3>
+      </div>
+      <p class="text-gray-700 mb-4 leading-relaxed">הרבה קונפליקטים נובעים מאי-הבנות. במקום להניח מה היא חושבת או מרגישה — <strong>שאלי</strong>. "אני הרגשתי... כש... האם זה היה הכוונה?" זה קשה, אבל זה חוסך הרבה כאב.</p>
+      <div class="bg-white rounded-lg p-4 text-sm text-gray-700"><strong>טיפ:</strong> השתמשי ב"אני" במקום "את". "אני הרגשתי..." במקום "את תמיד..."
+      </div>
+     </div><!-- Tool 4 -->
+     <div class="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-8 border border-amber-100 card-hover">
+      <div class="flex items-center gap-3 mb-4">
+       <div class="w-10 h-10 rounded-full bg-amber-200 text-amber-800 font-bold flex items-center justify-center">
+        4
+       </div>
+       <h3 class="text-lg font-semibold text-gray-800">אל תשקיעי בחד-כיווניות</h3>
+      </div>
+      <p class="text-gray-700 mb-4 leading-relaxed">אם את <em>תמיד</em> זו שיוזמת, <em>תמיד</em> זו ששואלת איך היא, <em>תמיד</em> זו שנותנת — והיא לא — זה לא קשר מאוזן. חברות היא הדדית. את ראויה למישהי שגם משקיעה בך.</p>
+      <div class="bg-white rounded-lg p-4 text-sm text-gray-700"><strong>סימן אזהרה:</strong> אם את מפסיקה ליזום, והקשר נעלם לגמרי — זה היה חד-כיווני.
+      </div>
+     </div><!-- Tool 5 -->
+     <div class="bg-gradient-to-br from-pink-50 to-rose-50 rounded-2xl p-8 border border-pink-100 card-hover">
+      <div class="flex items-center gap-3 mb-4">
+       <div class="w-10 h-10 rounded-full bg-pink-200 text-pink-800 font-bold flex items-center justify-center">
+        5
+       </div>
+       <h3 class="text-lg font-semibold text-gray-800">זכרי - איכות על פני כמות</h3>
+      </div>
+      <p class="text-gray-700 mb-4 leading-relaxed">טוב יותר לך <strong>חברה אחת אמיתית</strong> שאיתה את יכולה להיות עצמך, מאשר עשר "חברות" שאיתן את תמיד צריכה להתאים. עומק הקשר חשוב יותר ממספר החברות.</p>
+      <div class="bg-white rounded-lg p-4 text-sm text-gray-700"><strong>שאלה:</strong> עם מי מהן את יכולה להיות באמת עצמך? מי מהן באמת מכירה אותך?
+      </div>
+     </div><!-- Tool 6 -->
+     <div class="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl p-8 border border-indigo-100 card-hover">
+      <div class="flex items-center gap-3 mb-4">
+       <div class="w-10 h-10 rounded-full bg-indigo-200 text-indigo-800 font-bold flex items-center justify-center">
+        6
+       </div>
+       <h3 class="text-lg font-semibold text-gray-800">תני לעצמך רשות לגדול</h3>
+      </div>
+      <p class="text-gray-700 mb-4 leading-relaxed">אנשים משתנים. את משתנה. ולפעמים, חברויות שהיו מתאימות בעבר — כבר לא. <strong>זה בסדר</strong>. זה לא אומר שמישהי "רעה" או שאת "בוגדת" — זה אומר שאת גדלת לכיוונים שונים.</p>
+      <div class="bg-white rounded-lg p-4 text-sm text-gray-700"><strong>זכרי:</strong> אפשר להעריך מה שהיה, ועדיין להמשיך הלאה.
+      </div>
+     </div>
+    </div>
+    <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-8 border border-gray-200 mb-8">
+     <h3 class="text-xl font-semibold text-gray-800 mb-6">מה עושים כשמרגישים לבד?</h3>
+     <div class="space-y-4 text-gray-700">
+      <p class="leading-relaxed">להרגיש לבד זה אחד הדברים הכי כואבים. אבל יש דרכים להתמודד:</p>
+      <ul class="space-y-3 mr-6">
+       <li class="flex items-start gap-3">
+        <svg class="w-5 h-5 text-cyan-500 mt-1 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+        </svg><span><strong>פתחי שיחה עם מישהי:</strong> לפעמים מספיק שיחה קטנה אחת כדי להתחיל להרגיש יותר מחוברת</span></li>
+       <li class="flex items-start gap-3">
+        <svg class="w-5 h-5 text-purple-500 mt-1 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+        </svg><span><strong>הצטרפי לפעילות או חוג:</strong> מקומות שבהם יש אנשים עם תחומי עניין משותפים הם מקום מעולה למצוא קשרים</span></li>
+       <li class="flex items-start gap-3">
+        <svg class="w-5 h-5 text-pink-500 mt-1 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+        </svg><span><strong>דברי עם מבוגרת:</strong> יועצת, מורה, או הורה — לפעמים רק לדעת שמישהי שומעת אותך יכול לעזור</span></li>
+       <li class="flex items-start gap-3">
+        <svg class="w-5 h-5 text-green-500 mt-1 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+        </svg><span><strong>זכרי שזה זמני:</strong> בדידות מרגישה נצחית כשאת בתוכה, אבל היא לא. דברים משתנים</span></li>
+      </ul>
+     </div>
+    </div>
+    <div class="experiment-card rounded-xl p-8">
+     <h3 class="text-xl font-semibold text-gray-800 mb-6">ניסוי קטן: מיפוי הקשרים שלך</h3>
+     <p class="text-gray-700 mb-4">קחי דף ועט. צירי עיגולים (כל עיגול = אדם אחד) ומקמי אותם לפי מרחק ממך במרכז:</p>
+     <ul class="space-y-2 text-gray-700 mr-6 mb-4">
+      <li><strong>מעגל ראשון (קרוב):</strong> מי שאת יכולה להיות איתם באמת עצמך</li>
+      <li><strong>מעגל שני (בינוני):</strong> חברויות טובות, אבל לא הכי עמוקות</li>
+      <li><strong>מעגל שלישי (רחוק):</strong> מכרות, מי שאת מדברת איתם אבל לא באמת קרובה</li>
+     </ul>
+     <p class="text-gray-700">עכשיו תסתכלי על המפה: <strong>מי באמת קרוב? האם את מרוצה מהמפה הזו?</strong> האם יש מישהי שאת רוצה להזיז יותר פנימה? זה יכול לעזור לך להבין מה את צריכה.</p>
+    </div>
+   </div>
+  </section>
+  <div class="section-divider mx-auto max-w-4xl"></div><!-- Closing Section -->
+  <section class="py-24 px-6 bg-gradient-to-b from-white to-cyan-50">
+   <div class="max-w-4xl mx-auto text-center">
+    <div class="mb-12 flex justify-center">
+     <svg class="w-24 h-24 float-animation" viewbox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="35" fill="#ddd6fe" stroke="#8b5cf6" stroke-width="2" /> <path d="M35 50 C35 42 40 37 45 37 C47 37 49 38 50 40 C51 38 53 37 55 37 C60 37 65 42 65 50 C65 58 50 68 50 68 C50 68 35 58 35 50 Z" fill="#ec4899" /> <circle cx="50" cy="50" r="30" stroke="#06b6d4" stroke-width="1.5" fill="none" stroke-dasharray="4 4" opacity="0.5" />
+     </svg>
+    </div>
+    <h2 class="text-4xl font-bold text-gray-800 mb-8"><span class="gradient-text">את לא לבד בזה</span></h2>
+    <div class="space-y-6 mb-12">
+     <p class="text-xl text-gray-700 leading-relaxed">החיים החברתיים של נערות הם <strong>מורכבים</strong>. השייכות חשובה, אבל היא יכולה גם ליצור לחץ. חברויות יכולות להיות מקור לשמחה עצומה — ולכאב עמוק. זה לא פשוט, וזה לא תמיד ברור.</p>
+     <p class="text-xl text-gray-700 leading-relaxed">אבל את לא צריכה לעבור את זה לבד. את לא צריכה "לדעת" תמיד מה לעשות. זה בסדר לבלבל, זה בסדר להרגיש אבודה לפעמים.</p>
+     <p class="text-xl text-gray-700 leading-relaxed">מה שחשוב זה <strong>לזכור מי את</strong> — ושקשרים אמיתיים בנויים על האמת שלך, לא על מסכה. את ראויה לחברויות שבהן את יכולה להיות <em>עצמך</em>, ולא להתאים כל הזמן.</p>
+    </div>
+    <div class="bg-white rounded-2xl p-8 shadow-lg border border-purple-100 max-w-2xl mx-auto">
+     <p class="text-lg text-gray-700 mb-6"><strong>מחשבה אחרונה:</strong></p>
+     <p class="text-xl text-gray-800 font-medium italic">"שייכות אמיתית היא לא למצוא אנשים שאתן צריך להיות מישהי אחרת. זה למצוא אנשים שאיתם את יכולה להיות בדיוק מי שאת."</p>
+    </div>
+    <div class="mt-16 flex flex-col sm:flex-row items-center justify-center gap-4"><a href="#belonging" class="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-purple-500 text-white px-8 py-4 rounded-full font-medium hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300"> לחזור להתחלה 
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+      </svg></a> <a href="#navigation" class="inline-flex items-center gap-2 bg-white text-purple-600 px-8 py-4 rounded-full font-medium border-2 border-purple-200 hover:border-purple-300 hover:shadow-lg transition-all duration-300"> לכלי ניווט 
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+      </svg></a>
+    </div>
+   </div>
+  </section><!-- Footer -->
+  <footer class="py-12 px-6 bg-gradient-to-r from-cyan-500 to-purple-500 text-white">
+   <div class="max-w-5xl mx-auto text-center">
+    <div class="flex items-center justify-center gap-3 mb-6">
+     <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+      <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+      </svg>
+     </div><span class="text-2xl font-bold">חברים, קשרים ומרחבים חברתיים</span>
+    </div>
+    <p class="text-white/80 text-lg mb-4">מסע להבנת השייכות, הלחצים, והקשרים שלך</p>
+    <p class="text-white/60 text-sm">תוכנית חינוכית לנערות | מתוך הבנה, מודעות וכלים לקשרים בריאים</p>
+   </div>
+  </footer>
+  <script>
+    // Element SDK initialization
+    const defaultConfig = {
+      site_title: 'חברים, קשרים ומרחבים חברתיים',
+      hero_subtitle: 'מסע להבנת השייכות, הלחצים, והקשרים שלך',
+      primary_color: '#8b5cf6',
+      secondary_color: '#06b6d4',
+      background_color: '#ffffff',
+      text_color: '#1f2937',
+      accent_color: '#ec4899'
+    };
+
+    let config = { ...defaultConfig };
+
+    async function onConfigChange(newConfig) {
+      config = newConfig;
+      
+      // Update nav title
+      const navTitle = document.getElementById('nav-title');
+      if (navTitle) {
+        navTitle.textContent = config.site_title || defaultConfig.site_title;
+      }
+      
+      // Update hero title
+      const heroTitle = document.getElementById('hero-title');
+      if (heroTitle) {
+        heroTitle.innerHTML = `<span class="gradient-text">${config.site_title || defaultConfig.site_title}</span>`;
+      }
+      
+      // Update hero subtitle
+      const heroSubtitle = document.getElementById('hero-subtitle');
+      if (heroSubtitle) {
+        heroSubtitle.textContent = config.hero_subtitle || defaultConfig.hero_subtitle;
+      }
+    }
+
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [
+          {
+            get: () => config.background_color || defaultConfig.background_color,
+            set: (value) => {
+              config.background_color = value;
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            }
+          },
+          {
+            get: () => config.primary_color || defaultConfig.primary_color,
+            set: (value) => {
+              config.primary_color = value;
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ primary_color: value });
+              }
+            }
+          },
+          {
+            get: () => config.secondary_color || defaultConfig.secondary_color,
+            set: (value) => {
+              config.secondary_color = value;
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ secondary_color: value });
+              }
+            }
+          },
+          {
+            get: () => config.text_color || defaultConfig.text_color,
+            set: (value) => {
+              config.text_color = value;
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            }
+          },
+          {
+            get: () => config.accent_color || defaultConfig.accent_color,
+            set: (value) => {
+              config.accent_color = value;
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ accent_color: value });
+              }
+            }
+          }
+        ],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      };
+    }
+
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ['site_title', config.site_title || defaultConfig.site_title],
+        ['hero_subtitle', config.hero_subtitle || defaultConfig.hero_subtitle]
+      ]);
+    }
+
+    // Initialize SDK
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
+
+    // Smooth scroll for navigation
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+
+    // Add scroll-based navigation highlight
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        if (scrollY >= sectionTop - 200) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.classList.remove('text-purple-600');
+        if (link.getAttribute('href') === `#${current}`) {
+          link.classList.add('text-purple-600');
+        }
+      });
+    });
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c02bb4d53827da0',t:'MTc2ODc4Nzk1NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
