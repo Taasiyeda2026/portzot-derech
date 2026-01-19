@@ -131,6 +131,28 @@
     @keyframes drawLine {
       to { stroke-dashoffset: 0; }
     }
+  .nav-3d-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 8px 12px;
+      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+      border-radius: 12px;
+      box-shadow: 0 4px 0 rgba(100, 100, 100, 0.2), 0 6px 12px rgba(0, 0, 0, 0.1);
+      transition: all 0.15s ease;
+      text-decoration: none;
+    }
+    .nav-3d-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 rgba(100, 100, 100, 0.2), 0 10px 20px rgba(0, 0, 0, 0.12);
+    }
+    .nav-3d-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 rgba(100, 100, 100, 0.2), 0 3px 6px rgba(0, 0, 0, 0.08);
+    }
+    .nav-3d-btn .nav-icon { font-size: 1.2rem; }
+    .nav-3d-btn .nav-label { font-size: 11px; font-weight: 600; color: #374151; }
   </style>
   
   
@@ -145,13 +167,18 @@
        </svg>
       </div><span id="nav-title" class="text-xl font-bold gradient-text">חברים, קשרים ומרחבים חברתיים</span>
      </div>
-     <div class="hidden md:flex items-center gap-6 text-sm text-gray-600"><a href="#belonging" class="nav-link hover:text-purple-600 transition-colors">שייכות</a> <a href="#pressure" class="nav-link hover:text-purple-600 transition-colors">לחצים</a> <a href="#conflicts" class="nav-link hover:text-purple-600 transition-colors">ריבים</a> <a href="#groups" class="nav-link hover:text-purple-600 transition-colors">קבוצות</a> <a href="#navigation" class="nav-link hover:text-purple-600 transition-colors">ניווט</a>
+     <div class="hidden md:flex items-center gap-3">
+      <a href="#belonging" class="nav-3d-btn"><span class="nav-icon">🤝</span><span class="nav-label">שייכות</span></a>
+      <a href="#pressure" class="nav-3d-btn"><span class="nav-icon">😰</span><span class="nav-label">לחצים</span></a>
+      <a href="#conflicts" class="nav-3d-btn"><span class="nav-icon">⚡</span><span class="nav-label">ריבים</span></a>
+      <a href="#groups" class="nav-3d-btn"><span class="nav-icon">👭</span><span class="nav-label">קבוצות</span></a>
+      <a href="#navigation" class="nav-3d-btn"><span class="nav-icon">🧭</span><span class="nav-label">ניווט</span></a>
+      <a href="index.html#domains" class="nav-3d-btn"><span class="nav-icon">🏠</span><span class="nav-label">לתחומים</span></a>
      </div>
     </div>
    </div>
-     <a href="index.html#domains" class="text-sm text-gray-500 hover:text-gray-700 transition-colors flex items-center gap-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>לתחומים</a>
+    </div>
    </div>
-  </div>
  </nav>
  <!-- Hero Section -->
   <section class="min-h-screen flex items-center justify-center px-6 py-20 relative overflow-hidden"><!-- Decorative Elements -->
