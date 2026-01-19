@@ -9,7 +9,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&family=Varela+Round&display=swap" rel="stylesheet" />
 
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -80,37 +80,44 @@
 
     .intro-cards {
       display: flex;
-      gap: 20px;
-      padding: 35px 40px 45px;
-      background: linear-gradient(180deg, rgba(248,250,252,0.5) 0%, rgba(241,245,249,0.8) 100%);
-      align-items: stretch;
+      justify-content: center;
+      gap: 28px;
+      padding: 40px 40px 50px;
+      background: linear-gradient(180deg, #ffffff 0%, #FDF8F9 100%);
     }
 
     .intro-card {
-      flex: 1;
-      background: linear-gradient(180deg, #fff9fb 0%, #fef7f9 100%);
-      border-radius: 16px;
-      padding: 40px;
+      width: 300px;
+      min-height: 280px;
+      background: #FBF7F8;
+      border-radius: 20px;
+      padding: 30px 24px 34px;
       text-align: right;
-      box-shadow:
-        0 2px 8px rgba(0, 0, 0, 0.04),
-        0 4px 20px rgba(0, 0, 0, 0.06);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
       display: flex;
       flex-direction: column;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .intro-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
     }
 
     .intro-card .opening {
-      font-size: 18px;
+      font-family: 'Heebo', 'Varela Round', sans-serif;
+      font-size: 17px;
       font-weight: 600;
-      line-height: 1.6;
-      color: #374151;
-      margin-bottom: 16px;
+      line-height: 1.75;
+      color: #1f1f1f;
+      margin-bottom: 14px;
     }
 
     .intro-card p {
-      font-size: 16.5px;
-      line-height: 1.7;
-      color: #4b5563;
+      font-family: 'Heebo', 'Varela Round', sans-serif;
+      font-size: 16px;
+      line-height: 1.75;
+      color: #2B2B2B;
       margin-bottom: 0;
     }
 
@@ -119,13 +126,17 @@
       font-weight: inherit;
     }
 
-    @media (max-width: 900px) {
+    @media (max-width: 1000px) {
       .intro-cards {
         flex-direction: column;
-        padding: 25px 25px 35px;
+        align-items: center;
+        gap: 24px;
+        padding: 30px 25px 40px;
       }
       .intro-card {
-        padding: 32px;
+        width: 100%;
+        max-width: 400px;
+        min-height: auto;
       }
     }
 
