@@ -30,7 +30,6 @@ The server runs on port 5000 and serves all static files.
 - Uses Firebase/Firestore for data (see `js/config.js` and `firestore.rules`)
 - RTL layout for Hebrew language support
 - Responsive design with modern CSS
-- **PWA Support**: manifest.json + service-worker.js for installable app experience
 
 ## Recent Changes
 - 2026-01-19: Smart pairing algorithm (js/pairing-algorithm.js)

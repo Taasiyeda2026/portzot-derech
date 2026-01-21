@@ -2,12 +2,6 @@
 <html lang="he" dir="rtl">
 <head>
   <link rel="icon" type="image/png" href="favicon.png">
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#ec4899">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="פורצות דרך">
-  <link rel="apple-touch-icon" href="logo.png">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>פורצות דרך | שער</title>
@@ -29,46 +23,6 @@
       justify-content: center;
       padding: 40px 20px;
       color: #1a2540;
-    }
-
-    body.locked {
-      overflow: hidden;
-      height: 100vh;
-    }
-
-    body.locked .magazine-frame {
-      max-height: 100vh;
-      overflow: hidden;
-    }
-
-    .unlock-btn {
-      position: absolute;
-      bottom: 40px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: linear-gradient(135deg, #f9a8d4 0%, #f472b6 50%, #ec4899 100%);
-      color: white;
-      border: none;
-      padding: 14px 36px;
-      border-radius: 30px;
-      font-family: 'Varela Round', sans-serif;
-      font-size: 16px;
-      font-weight: 500;
-      cursor: pointer;
-      box-shadow: 0 6px 20px rgba(244, 114, 182, 0.35);
-      transition: all 0.3s ease;
-      z-index: 100;
-      letter-spacing: 0.5px;
-    }
-
-    .unlock-btn:hover {
-      background: linear-gradient(135deg, #f472b6 0%, #ec4899 50%, #db2777 100%);
-      transform: translateX(-50%) translateY(-3px);
-      box-shadow: 0 10px 30px rgba(236, 72, 153, 0.4);
-    }
-
-    body:not(.locked) .unlock-btn {
-      display: none;
     }
 
     .magazine-frame {
@@ -103,7 +57,7 @@
       min-height: 100vh;
       padding: 40px 50px 30px;
       text-align: center;
-      background: linear-gradient(180deg, #fdf2f8 0%, #fce7f3 40%, #fbcfe8 100%);
+      background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(248,250,252,0.5) 100%);
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -111,10 +65,10 @@
     }
 
     .logo {
-      width: 130px;
+      width: 100px;
       height: auto;
-      margin-bottom: 20px;
-      filter: drop-shadow(0 6px 16px rgba(236, 72, 153, 0.3));
+      margin-bottom: 16px;
+      filter: drop-shadow(0 4px 12px rgba(139, 92, 246, 0.25));
     }
 
     h1 {
@@ -137,25 +91,6 @@
       max-width: 600px;
       margin: 0 auto;
       padding: 0 20px;
-    }
-
-    .header-entry-btn {
-      display: inline-block;
-      margin-top: 24px;
-      padding: 14px 32px;
-      background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-      color: white;
-      font-size: 16px;
-      font-weight: 600;
-      text-decoration: none;
-      border-radius: 30px;
-      box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
-      transition: all 0.2s ease;
-    }
-
-    .header-entry-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
     }
 
     .intro-cards {
@@ -459,124 +394,20 @@
     }
 
     @media (max-width: 750px) {
-      body {
-        padding: 0;
-      }
       .magazine-frame {
         min-width: auto;
         max-width: 100%;
-        border-radius: 0;
       }
-      .header-section {
-        padding: 30px 20px;
-        min-height: 100vh;
-      }
-      .logo {
-        width: 110px;
-      }
-      h1 {
-        font-size: 38px;
-        margin-bottom: 20px;
-      }
-      .header-subtitle {
-        font-size: 15px;
-        padding: 0 10px;
-      }
-      .header-subtitle span {
-        font-size: 18px !important;
-      }
-      .header-entry-btn {
-        margin-top: 20px;
-        padding: 12px 26px;
-        font-size: 14px;
-      }
-      .unlock-btn {
-        bottom: 25px;
-        padding: 12px 30px;
-        font-size: 15px;
-      }
-      .domains-section {
-        padding: 30px 15px;
-      }
-      .domains-title {
-        font-size: 22px;
-      }
-      .domains-subtitle {
-        font-size: 14px;
+      .header-section, .domains-section {
+        padding-left: 25px;
+        padding-right: 25px;
       }
       .process-section {
-        gap: 20px;
-        padding: 25px 15px;
+        gap: 30px;
+        padding: 30px 25px;
       }
       .domain-group {
-        padding: 15px 10px;
-        gap: 12px;
-      }
-      .domain-btn {
-        width: 90px;
-        height: 90px;
-        padding: 10px;
-      }
-      .domain-btn .icon {
-        font-size: 1.5rem;
-      }
-      .title-short {
-        font-size: 10px;
-      }
-      .title-full {
-        font-size: 9px;
-      }
-      .action-section {
-        padding: 25px 15px;
-      }
-      .action-card {
-        padding: 20px;
-        gap: 16px;
-      }
-      .action-card .action-btn {
-        width: 90px;
-        height: 90px;
-      }
-      .action-card .action-btn .icon {
-        font-size: 1.6rem;
-      }
-      .action-card .action-btn .label {
-        font-size: 11px;
-      }
-      .action-content h3 {
-        font-size: 18px;
-      }
-      .action-content p {
-        font-size: 14px;
-      }
-      .bottom-button-section {
-        padding: 30px 20px;
-      }
-      .bottom-btn {
-        padding: 14px 36px;
-        font-size: 16px;
-      }
-      .footer {
-        padding: 15px 20px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      h1 {
-        font-size: 32px;
-      }
-      .logo {
-        width: 100px;
-      }
-      .domain-btn {
-        width: 80px;
-        height: 80px;
-      }
-      .domain-btn .icon {
-        font-size: 1.3rem;
-      }
-      .title-short {
-        font-size: 9px;
+        padding: 20px 15px;
       }
     }
   </style>
@@ -590,8 +421,6 @@
       <h1>פורצות דרך</h1>
       <p class="header-subtitle"><span style="font-size: 22px; font-weight: 700;">ברוכה הבאה לאתר הקורס</span><br>
       מקום לעצור רגע, לנשום, להיות עם עצמך — ולגלות מה חשוב לך באמת.</p>
-      <a class="header-entry-btn" href="level1/quiz.html">📋 התחילי כאן</a>
-      <button class="unlock-btn" onclick="unlockPage()">גלי עוד ✨</button>
     </div>
 
     <div class="intro-cards">
@@ -731,32 +560,5 @@
       © 2026 פורצות דרך
     </div>
   </div>
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/service-worker.js')
-        .then(reg => console.log('SW registered'))
-        .catch(err => console.log('SW failed:', err));
-    }
-
-    const UNLOCK_DURATION = 30 * 60 * 1000;
-
-    function checkLockStatus() {
-      const unlockTime = localStorage.getItem('pageUnlockTime');
-      if (unlockTime) {
-        const timePassed = Date.now() - parseInt(unlockTime);
-        if (timePassed < UNLOCK_DURATION) {
-          return;
-        }
-      }
-      document.body.classList.add('locked');
-    }
-
-    function unlockPage() {
-      document.body.classList.remove('locked');
-      localStorage.setItem('pageUnlockTime', Date.now().toString());
-    }
-
-    checkLockStatus();
-  </script>
 </body>
 </html>
