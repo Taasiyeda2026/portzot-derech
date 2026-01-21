@@ -31,6 +31,45 @@
       color: #1a2540;
     }
 
+    body.locked {
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    body.locked .magazine-frame {
+      max-height: 100vh;
+      overflow: hidden;
+    }
+
+    .unlock-btn {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #be185d;
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 25px;
+      font-family: 'Varela Round', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(190, 24, 93, 0.4);
+      transition: all 0.2s ease;
+      z-index: 100;
+    }
+
+    .unlock-btn:hover {
+      background: #9d174d;
+      transform: translateX(-50%) translateY(-2px);
+      box-shadow: 0 6px 20px rgba(190, 24, 93, 0.5);
+    }
+
+    body:not(.locked) .unlock-btn {
+      display: none;
+    }
+
     .magazine-frame {
       width: 100%;
       max-width: 920px;
@@ -427,6 +466,7 @@
       <h1>פורצות דרך</h1>
       <p class="header-subtitle"><span style="font-size: 22px; font-weight: 700;">ברוכה הבאה לאתר הקורס</span><br>
       מקום לעצור רגע, לנשום, להיות עם עצמך — ולגלות מה חשוב לך באמת.</p>
+      <button class="unlock-btn" onclick="unlockPage()">▼ להמשיך</button>
     </div>
 
     <div class="intro-cards">
@@ -572,6 +612,26 @@
         .then(reg => console.log('SW registered'))
         .catch(err => console.log('SW failed:', err));
     }
+
+    const UNLOCK_DURATION = 30 * 60 * 1000;
+
+    function checkLockStatus() {
+      const unlockTime = localStorage.getItem('pageUnlockTime');
+      if (unlockTime) {
+        const timePassed = Date.now() - parseInt(unlockTime);
+        if (timePassed < UNLOCK_DURATION) {
+          return;
+        }
+      }
+      document.body.classList.add('locked');
+    }
+
+    function unlockPage() {
+      document.body.classList.remove('locked');
+      localStorage.setItem('pageUnlockTime', Date.now().toString());
+    }
+
+    checkLockStatus();
   </script>
 </body>
 </html>
