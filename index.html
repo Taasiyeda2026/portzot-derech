@@ -139,6 +139,25 @@
       padding: 0 20px;
     }
 
+    .header-entry-btn {
+      display: inline-block;
+      margin-top: 24px;
+      padding: 14px 32px;
+      background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 30px;
+      box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+      transition: all 0.2s ease;
+    }
+
+    .header-entry-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
+    }
+
     .intro-cards {
       display: flex;
       justify-content: center;
@@ -466,6 +485,11 @@
       .header-subtitle span {
         font-size: 18px !important;
       }
+      .header-entry-btn {
+        margin-top: 20px;
+        padding: 12px 26px;
+        font-size: 14px;
+      }
       .unlock-btn {
         bottom: 25px;
         padding: 12px 30px;
@@ -566,6 +590,7 @@
       <h1>פורצות דרך</h1>
       <p class="header-subtitle"><span style="font-size: 22px; font-weight: 700;">ברוכה הבאה לאתר הקורס</span><br>
       מקום לעצור רגע, לנשום, להיות עם עצמך — ולגלות מה חשוב לך באמת.</p>
+      <a class="header-entry-btn" href="level1/quiz.html">📋 התחילי כאן</a>
       <button class="unlock-btn" onclick="unlockPage()">גלי עוד ✨</button>
     </div>
 
