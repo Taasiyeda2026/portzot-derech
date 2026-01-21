@@ -43,27 +43,28 @@
 
     .unlock-btn {
       position: absolute;
-      bottom: 30px;
+      bottom: 40px;
       left: 50%;
       transform: translateX(-50%);
-      background: #be185d;
+      background: linear-gradient(135deg, #f9a8d4 0%, #f472b6 50%, #ec4899 100%);
       color: white;
       border: none;
-      padding: 12px 28px;
-      border-radius: 25px;
+      padding: 14px 36px;
+      border-radius: 30px;
       font-family: 'Varela Round', sans-serif;
-      font-size: 15px;
-      font-weight: 600;
+      font-size: 16px;
+      font-weight: 500;
       cursor: pointer;
-      box-shadow: 0 4px 15px rgba(190, 24, 93, 0.4);
-      transition: all 0.2s ease;
+      box-shadow: 0 6px 20px rgba(244, 114, 182, 0.35);
+      transition: all 0.3s ease;
       z-index: 100;
+      letter-spacing: 0.5px;
     }
 
     .unlock-btn:hover {
-      background: #9d174d;
-      transform: translateX(-50%) translateY(-2px);
-      box-shadow: 0 6px 20px rgba(190, 24, 93, 0.5);
+      background: linear-gradient(135deg, #f472b6 0%, #ec4899 50%, #db2777 100%);
+      transform: translateX(-50%) translateY(-3px);
+      box-shadow: 0 10px 30px rgba(236, 72, 153, 0.4);
     }
 
     body:not(.locked) .unlock-btn {
@@ -102,7 +103,7 @@
       min-height: 100vh;
       padding: 40px 50px 30px;
       text-align: center;
-      background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(248,250,252,0.5) 100%);
+      background: linear-gradient(180deg, #fdf2f8 0%, #fce7f3 40%, #fbcfe8 100%);
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -110,10 +111,10 @@
     }
 
     .logo {
-      width: 100px;
+      width: 130px;
       height: auto;
-      margin-bottom: 16px;
-      filter: drop-shadow(0 4px 12px rgba(139, 92, 246, 0.25));
+      margin-bottom: 20px;
+      filter: drop-shadow(0 6px 16px rgba(236, 72, 153, 0.3));
     }
 
     h1 {
@@ -466,7 +467,7 @@
       <h1>פורצות דרך</h1>
       <p class="header-subtitle"><span style="font-size: 22px; font-weight: 700;">ברוכה הבאה לאתר הקורס</span><br>
       מקום לעצור רגע, לנשום, להיות עם עצמך — ולגלות מה חשוב לך באמת.</p>
-      <button class="unlock-btn" onclick="unlockPage()">▼ להמשיך</button>
+      <button class="unlock-btn" onclick="unlockPage()">גלי עוד ✨</button>
     </div>
 
     <div class="intro-cards">
