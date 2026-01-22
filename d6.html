@@ -205,6 +205,18 @@
       .nav-3d-btn .nav-label { display: none; }
       #nav-title { display: none; }
     }
+    
+    /* Scroll Lock Mechanism */
+    .scroll-locked {
+      overflow: hidden !important;
+      height: 100vh !important;
+    }
+    .scroll-locked .content-locked {
+      display: none !important;
+    }
+    .scroll-unlocked .content-locked {
+      display: block;
+    }
   </style>
   
   
@@ -274,7 +286,8 @@
      <svg class="w-5 h-5 rotate-180" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
      </svg></a>
    </div>
-  </section><!-- Section 1: Walking -->
+  </section><!-- Content Sections (locked until button click) -->
+  <div id="locked-content" class="content-locked"><!-- Section 1: Walking -->
   <section id="walking" class="py-24 px-6 bg-white">
    <div class="max-w-5xl mx-auto">
     <div class="flex items-center gap-4 mb-12">
@@ -914,7 +927,7 @@
      </svg></a>
    </div>
   </section>
-
+  </div><!-- End locked-content -->
 
   <!-- Footer -->
   <footer class="py-12 px-6 bg-gradient-to-r from-cyan-600 to-blue-600 text-white">
@@ -1084,6 +1097,7 @@
       });
     });
   </script>
+<script src="js/scroll-lock.js"></script>
  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c03a85807d37da0',t:'MTc2ODc5NzY2NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></div>
 </div></body>
 </html>

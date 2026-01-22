@@ -32,6 +32,12 @@ The server runs on port 5000 and serves all static files.
 - Responsive design with modern CSS
 
 ## Recent Changes
+- 2026-01-22: Scroll-lock mechanism for all domain pages (d1-d10)
+  - js/scroll-lock.js - reusable script for hero lock/unlock
+  - Hero sections locked on page load (scroll disabled)
+  - Content unlocks when user clicks "בואי נתחיל" button
+  - CSS classes: scroll-locked, scroll-unlocked, content-locked
+  - Smooth scroll to content section after unlock
 - 2026-01-22: Styled footers for all domain pages (d1-d10)
   - Added "© 2026 פורצות דרך" copyright to all footers
   - d7-d10 footers upgraded from minimal gray to colorful gradients

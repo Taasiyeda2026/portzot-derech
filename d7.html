@@ -109,6 +109,18 @@
       .nav-3d-btn .nav-label { display: none; }
       #nav-title { display: none; }
     }
+    
+    /* Scroll Lock Mechanism */
+    .scroll-locked {
+      overflow: hidden !important;
+      height: 100vh !important;
+    }
+    .scroll-locked .content-locked {
+      display: none !important;
+    }
+    .scroll-unlocked .content-locked {
+      display: block;
+    }
   </style>
  </head>
  <body class="h-full min-h-screen bg-gray-100 overflow-x-hidden"><div class="max-w-5xl mx-auto shadow-2xl rounded-lg my-4 bg-gradient-to-b from-white via-indigo-50/20 to-violet-50/20 text-gray-800 overflow-visible">
@@ -162,8 +174,8 @@
      בואי נתחיל מהחדר <svg class="w-5 h-5 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
     </a>
    </div>
-  </section>
-
+  </section><!-- Content Sections (locked until button click) -->
+  <div id="locked-content" class="content-locked">
   <section id="room" class="py-24 px-6 bg-white">
    <div class="max-w-5xl mx-auto">
     <div class="flex items-center gap-4 mb-12">
@@ -332,7 +344,7 @@
     </div>
    </div>
   </section>
-
+  </div><!-- End locked-content -->
 
   <!-- Footer -->
   <footer class="py-12 px-6 bg-gradient-to-r from-indigo-500 to-violet-500 text-white">
@@ -348,5 +360,6 @@
    </div>
   </footer>
  </div>
+<script src="js/scroll-lock.js"></script>
 </div></body>
 </html>
