@@ -261,6 +261,135 @@
       }
     }
 
+    .three-cards-row {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      padding: 30px 40px;
+      background: linear-gradient(180deg, #e0f2fe 0%, #f0f9ff 50%, #fdf2f8 100%);
+    }
+
+    .top-card {
+      flex: 1;
+      max-width: 320px;
+      border-radius: 16px;
+      padding: 24px 20px;
+      text-align: right;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    }
+
+    .top-card .opening {
+      font-family: 'Heebo', 'Varela Round', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.7;
+      color: #1f1f1f;
+      margin-bottom: 12px;
+    }
+
+    .top-card p {
+      font-family: 'Heebo', 'Varela Round', sans-serif;
+      font-size: 14px;
+      line-height: 1.7;
+      color: #374151;
+      margin: 0;
+    }
+
+    @media (max-width: 900px) {
+      .three-cards-row {
+        flex-direction: column;
+        align-items: center;
+        padding: 24px 20px;
+      }
+      .top-card {
+        max-width: 100%;
+        width: 100%;
+      }
+    }
+
+    .start-section {
+      background: linear-gradient(135deg, #f472b6 0%, #c084fc 100%);
+      padding: 40px;
+      text-align: center;
+    }
+
+    .start-section h3 {
+      font-family: 'Heebo', 'Varela Round', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: #831843;
+      margin: 0 0 24px 0;
+    }
+
+    .start-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    .start-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100px;
+      height: 100px;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      text-decoration: none;
+      transition: transform 0.2s ease;
+    }
+
+    .start-btn:hover {
+      transform: translateY(-3px);
+    }
+
+    .start-btn .icon {
+      font-size: 32px;
+    }
+
+    .start-btn .label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #9333ea;
+    }
+
+    .start-text {
+      text-align: right;
+      color: white;
+    }
+
+    .start-text p {
+      font-size: 16px;
+      line-height: 1.8;
+      margin: 0;
+    }
+
+    .start-text .note {
+      margin-top: 16px;
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    @media (max-width: 600px) {
+      .start-section {
+        padding: 30px 20px;
+      }
+      .start-section h3 {
+        font-size: 24px;
+      }
+      .start-content {
+        flex-direction: column;
+      }
+      .start-text {
+        text-align: center;
+      }
+    }
+
     .action-section {
       display: flex;
       align-items: center;
@@ -512,31 +641,34 @@
 
     <div class="section-divider"></div>
 
-    <div class="four-cards-grid">
-      <div class="grid-card" style="background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%); border-right: 4px solid #ec4899;">
+    <div class="three-cards-row">
+      <div class="top-card" style="background: linear-gradient(180deg, #fce7f3 0%, #fdf2f8 100%);">
         <div class="opening">יש ימים שאת קמה ומרגישה טוב ויש ימים שאת קמה ומרגישה פחות טוב.</div>
         <p>יש ימים שאת עצבנית, רגישה, או סתם ככה - בלי סיבה ברורה. אלה דברים שקורים לנו כל יום, גם כשלא תמיד מדברות על זה.</p>
       </div>
 
-      <div class="grid-card" style="background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); border-right: 4px solid #3b82f6;">
+      <div class="top-card" style="background: linear-gradient(180deg, #dbeafe 0%, #eff6ff 100%);">
         <div class="opening">זה פוגש אותנו בכל תחום בחיים.</div>
         <p>איך אנחנו מרגישות עם הגוף שלנו, איך אנחנו נראות בעיני עצמנו ואיך זה משפיע על הביטחון, על המצב רוח ועל היום כולו. רוב הזמן אנחנו פשוט ממשיכות, בלי לעצור רגע לשים לב.</p>
       </div>
 
-      <div class="grid-card" style="background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%); border-right: 4px solid #a855f7;">
+      <div class="top-card" style="background: linear-gradient(180deg, #e0e7ff 0%, #eef2ff 100%);">
         <div class="opening">כתבנו את זה כדי לעצור רגע.</div>
         <p>להקשיב למה שקורה בפנים ולבדוק בשקט עם עצמך איפה זה פוגש אותך. כי כל שינוי גדול מתחיל ממשהו אישי. <strong>מכאן אפשר להתחיל לאט בדרך שלך ובבחירה שנכונה לך.</strong></p>
       </div>
+    </div>
 
-      <div class="grid-card action-grid-card" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-right: 4px solid #f59e0b;">
-        <div class="action-content">
-          <h3>איך מתחילים?</h3>
-          <p>היכנסי לשאלון הפתיחה,<br>עני על השאלות בקפידה<br>ותגלי את נקודת ההתחלה.<br><br>זו המלצה שלנו בלבד.<br>בסוף, הבחירה היא שלך 💜</p>
-        </div>
-        <a class="action-btn" href="level1/quiz.html">
+    <div class="start-section">
+      <h3>איך מתחילים?</h3>
+      <div class="start-content">
+        <a class="start-btn" href="level1/quiz.html">
           <div class="icon">📋</div>
           <div class="label">שאלון פתיחה</div>
         </a>
+        <div class="start-text">
+          <p>היכנסי לשאלון הפתיחה,<br>עני על השאלות בקפידה<br>ותגלי את נקודת ההתחלה.</p>
+          <p class="note">זו המלצה שלנו בלבד.<br>בסוף, הבחירה היא שלך 💜</p>
+        </div>
       </div>
     </div>
 
