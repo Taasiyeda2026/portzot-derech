@@ -1,0 +1,27 @@
+{
+  "name": "פורצות דרך",
+  "short_name": "פורצות דרך",
+  "description": "תוכנית חינוכית לנערות - מסע לגילוי עצמי",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#fdf2f8",
+  "theme_color": "#ec4899",
+  "orientation": "portrait-primary",
+  "dir": "rtl",
+  "lang": "he",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "categories": ["education", "lifestyle"]
+}
