@@ -30,6 +30,10 @@ The server runs on port 5000 and serves all static files.
 - Uses Firebase/Firestore for data (see `js/config.js` and `firestore.rules`)
 - RTL layout for Hebrew language support
 - Responsive design with modern CSS
+- PWA support for mobile installation and offline access
+  - manifest.json: App name, icons, theme colors (#ec4899)
+  - service-worker.js: Caches all main pages for offline navigation
+  - Apple touch icon and theme-color meta tags on all pages
 
 ## Recent Changes
 - 2026-01-22: Scroll-lock mechanism for all domain pages (d1-d10)
