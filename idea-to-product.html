@@ -1213,127 +1213,67 @@
 
       const pages = [];
 
-      pages.push(`
-        <div class="pdf-page" style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
-          <div class="pdf-gradient-bar"></div>
-          <div style="margin-bottom: 40px;">
-            <img src="${logoSrc}" style="width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 20px;" onerror="this.style.display='none'">
-          </div>
-          <h1 style="font-size: 42px; font-weight: 700; background: linear-gradient(135deg, #ec4899, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 16px;">הדרך שלנו – יחד</h1>
-          <p style="font-size: 22px; color: #6b7280; margin-bottom: 60px;">מסע משותף של נשים פורצות דרך</p>
-          <div style="background: linear-gradient(135deg, rgba(236,72,153,0.1), rgba(139,92,246,0.1)); border-radius: 20px; padding: 30px 50px; margin-bottom: 40px;">
-            <p style="font-size: 28px; font-weight: 600; color: #1f2937;">${namesStr}</p>
-          </div>
-          <p style="font-size: 16px; color: #9ca3af; margin-top: auto; padding-top: 40px;">תוכנית פורצות דרך © 2026</p>
-          <div class="pdf-bottom-bar"></div>
-        </div>
-      `);
-
-      pages.push(`
-        <div class="pdf-page">
-          <div class="pdf-gradient-bar"></div>
-          <div style="padding-top: 40px;">
-            <div style="text-align: center; margin-bottom: 50px;">
-              <div style="font-size: 48px; margin-bottom: 16px;">🤝</div>
-              <h2 style="font-size: 32px; font-weight: 700; color: #ec4899; margin-bottom: 8px;">נקודת המפגש</h2>
-              <div style="width: 80px; height: 3px; background: linear-gradient(90deg, #ec4899, #8b5cf6); margin: 0 auto;"></div>
-            </div>
-            <div style="background: #fdf4ff; border-radius: 16px; padding: 30px; margin-bottom: 30px;">
-              <h3 style="font-size: 20px; font-weight: 600; color: #1f2937; margin-bottom: 16px;">למה יצאנו למסע משותף?</h3>
-              <p style="font-size: 18px; color: #4b5563; line-height: 1.8;">כי יש דברים שאי אפשר לגלות לבד. כי כשצועדות יחד רואים יותר רחוק. כי השיח בין נשים הוא כוח שמשנה עולמות.</p>
-            </div>
-            <div style="background: white; border: 2px solid #ec4899; border-radius: 16px; padding: 30px; text-align: center;">
-              <p style="font-size: 16px; color: #9ca3af; margin-bottom: 8px;">התיבה שנבחרה</p>
-              <p style="font-size: 26px; font-weight: 700; color: #1f2937;">${topicObj.emoji} ${topicObj.title}</p>
-              <p style="font-size: 18px; color: #6b7280; margin-top: 8px;">"${topicObj.subtitle}"</p>
-            </div>
-          </div>
-          <div class="pdf-bottom-bar"></div>
-        </div>
-      `);
-
       const answersHtml = journeyData.answers.map((a, i) => `
-        <div style="background: ${i % 2 === 0 ? '#fdf4ff' : '#f5f3ff'}; border-radius: 12px; padding: 16px 20px; margin-bottom: 12px;">
-          <p style="font-size: 15px; color: #9ca3af; margin-bottom: 4px;">שאלה ${i + 1}</p>
-          <p style="font-size: 17px; color: #1f2937; margin-bottom: 6px;">${a.question}</p>
-          <p style="font-size: 17px; font-weight: 600; color: #ec4899;">← ${a.answer}</p>
+        <div style="display: flex; gap: 6px; align-items: baseline; margin-bottom: 6px;">
+          <span style="font-size: 11px; color: #ec4899; font-weight: 600;">•</span>
+          <span style="font-size: 11px; color: #6b7280;">${a.question}</span>
+          <span style="font-size: 11px; font-weight: 600; color: #1f2937;">← ${a.answer}</span>
         </div>
       `).join('');
 
       pages.push(`
-        <div class="pdf-page">
+        <div class="pdf-page" style="display: flex; flex-direction: column; padding: 40px 50px;">
           <div class="pdf-gradient-bar"></div>
-          <div style="padding-top: 40px;">
-            <div style="text-align: center; margin-bottom: 40px;">
-              <div style="font-size: 48px; margin-bottom: 16px;">🛤️</div>
-              <h2 style="font-size: 32px; font-weight: 700; color: #8b5cf6; margin-bottom: 8px;">הדרך שעברנו</h2>
-              <div style="width: 80px; height: 3px; background: linear-gradient(90deg, #8b5cf6, #ec4899); margin: 0 auto;"></div>
-            </div>
-            <p style="font-size: 18px; color: #4b5563; text-align: center; margin-bottom: 30px; line-height: 1.6;">צעדנו יחד דרך שאלות שגרמו לנו לחשוב להזדהות ולדייק. הקשבנו אחת לשנייה ומצאנו את המקום שבו כולנו נפגשות.</p>
-            ${answersHtml}
-          </div>
-          <div class="pdf-bottom-bar"></div>
-        </div>
-      `);
 
-      pages.push(`
-        <div class="pdf-page" style="display: flex; flex-direction: column;">
-          <div class="pdf-gradient-bar"></div>
-          <div style="padding-top: 60px; flex: 1; display: flex; flex-direction: column; justify-content: center;">
-            <div style="text-align: center; margin-bottom: 50px;">
-              <div style="font-size: 48px; margin-bottom: 16px;">🔍</div>
-              <h2 style="font-size: 32px; font-weight: 700; color: #ec4899; margin-bottom: 8px;">הדיוק שהגענו אליו</h2>
-              <div style="width: 80px; height: 3px; background: linear-gradient(90deg, #ec4899, #8b5cf6); margin: 0 auto;"></div>
+          <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 2px solid #f3e8ff;">
+            <img src="${logoSrc}" style="width: 50px; height: 50px; border-radius: 50%;" onerror="this.style.display='none'">
+            <div>
+              <h1 style="font-size: 26px; font-weight: 700; background: linear-gradient(135deg, #ec4899, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin: 0;">הדרך שלנו – יחד</h1>
+              <p style="font-size: 13px; color: #9ca3af; margin: 2px 0 0;">מסע משותף של נשים פורצות דרך</p>
             </div>
-            <div style="background: linear-gradient(135deg, rgba(236,72,153,0.08), rgba(139,92,246,0.08)); border-radius: 24px; padding: 50px; text-align: center; margin-bottom: 30px;">
-              <div style="font-size: 64px; margin-bottom: 20px;">${domain.emoji}</div>
-              <p style="font-size: 16px; color: #9ca3af; margin-bottom: 8px;">התחום המרכזי</p>
-              <p style="font-size: 30px; font-weight: 700; color: #1f2937; margin-bottom: 24px;">${domain.name}</p>
-              <div style="width: 60px; height: 2px; background: #ec4899; margin: 0 auto 24px;"></div>
-              <p style="font-size: 16px; color: #9ca3af; margin-bottom: 8px;">תת-תחום</p>
-              <p style="font-size: 24px; font-weight: 600; color: #8b5cf6;">${journeyData.subDomain}</p>
+            <div style="margin-right: auto; background: linear-gradient(135deg, rgba(236,72,153,0.1), rgba(139,92,246,0.1)); border-radius: 12px; padding: 8px 20px;">
+              <p style="font-size: 16px; font-weight: 600; color: #1f2937; margin: 0;">${namesStr}</p>
             </div>
-            <p style="font-size: 18px; color: #6b7280; text-align: center; line-height: 1.6;">זהו מיקוד קבוצתי שנולד מתוך שיח והקשבה הדדית. לא תיוג אישי אלא נקודת מוצא משותפת להמשך הדרך.</p>
           </div>
-          <div class="pdf-bottom-bar"></div>
-        </div>
-      `);
 
-      pages.push(`
-        <div class="pdf-page" style="display: flex; flex-direction: column;">
-          <div class="pdf-gradient-bar"></div>
-          <div style="padding-top: 60px; flex: 1; display: flex; flex-direction: column; justify-content: center;">
-            <div style="text-align: center; margin-bottom: 50px;">
-              <div style="font-size: 48px; margin-bottom: 16px;">💫</div>
-              <h2 style="font-size: 32px; font-weight: 700; color: #8b5cf6; margin-bottom: 8px;">ההחלטה</h2>
-              <div style="width: 80px; height: 3px; background: linear-gradient(90deg, #8b5cf6, #ec4899); margin: 0 auto;"></div>
+          <div style="display: flex; gap: 16px; margin-bottom: 16px;">
+            <div style="flex: 1; background: #fdf4ff; border-radius: 12px; padding: 14px 18px; text-align: center;">
+              <p style="font-size: 10px; color: #9ca3af; margin: 0 0 4px;">התיבה שנבחרה</p>
+              <p style="font-size: 18px; margin: 0 0 2px;">${topicObj.emoji}</p>
+              <p style="font-size: 14px; font-weight: 700; color: #1f2937; margin: 0;">${topicObj.title}</p>
             </div>
-            <div style="background: white; border: 3px solid #ec4899; border-radius: 24px; padding: 50px; text-align: center; margin-bottom: 40px;">
-              <p style="font-size: 18px; color: #9ca3af; margin-bottom: 16px;">ההחלטה המשותפת שלנו</p>
-              <p style="font-size: 28px; font-weight: 700; color: #1f2937;">${journeyData.decision}</p>
+            <div style="flex: 1; background: linear-gradient(135deg, rgba(236,72,153,0.08), rgba(139,92,246,0.08)); border-radius: 12px; padding: 14px 18px; text-align: center;">
+              <p style="font-size: 10px; color: #9ca3af; margin: 0 0 4px;">התחום המרכזי</p>
+              <p style="font-size: 18px; margin: 0 0 2px;">${domain.emoji}</p>
+              <p style="font-size: 14px; font-weight: 700; color: #1f2937; margin: 0;">${domain.name}</p>
             </div>
-            <div style="background: #fdf4ff; border-radius: 16px; padding: 30px; text-align: center;">
-              <p style="font-size: 18px; color: #4b5563; line-height: 1.8;">לפעמים ההחלטה הכי חשובה היא לא מה עושים אלא מה בוחרים לשים לב אליו. זה השלב שבו מתחיל שינוי אמיתי – לא בתכנון מושלם אלא בצעד ראשון יחד.</p>
+            <div style="flex: 1; background: #f5f3ff; border-radius: 12px; padding: 14px 18px; text-align: center;">
+              <p style="font-size: 10px; color: #9ca3af; margin: 0 0 4px;">תת-תחום</p>
+              <p style="font-size: 18px; margin: 0 0 2px;">🔍</p>
+              <p style="font-size: 14px; font-weight: 600; color: #8b5cf6; margin: 0;">${journeyData.subDomain}</p>
             </div>
           </div>
-          <div class="pdf-bottom-bar"></div>
-        </div>
-      `);
 
-      pages.push(`
-        <div class="pdf-page" style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
-          <div class="pdf-gradient-bar"></div>
-          <div style="max-width: 500px;">
-            <div style="font-size: 48px; margin-bottom: 30px;">✨</div>
-            <h2 style="font-size: 32px; font-weight: 700; background: linear-gradient(135deg, #ec4899, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 30px;">המסע הוא ההתחלה</h2>
-            <p style="font-size: 20px; color: #4b5563; line-height: 1.8; margin-bottom: 40px;">מנהיגות אמיתית לא מתחילה מלדעת הכל. היא מתחילה מהרגע שבו בוחרים לצעוד יחד לשאול שאלות אמיצות ולהקשיב באמת.</p>
-            <p style="font-size: 20px; color: #4b5563; line-height: 1.8; margin-bottom: 40px;">עשיתן את הצעד הזה היום. ביחד.</p>
-            <div style="background: linear-gradient(135deg, #ec4899, #8b5cf6); border-radius: 16px; padding: 24px 40px; margin-bottom: 50px;">
-              <p style="font-size: 22px; font-weight: 600; color: white;">המשיכו לפרוץ דרך 💜</p>
+          <div style="margin-bottom: 16px;">
+            <h3 style="font-size: 14px; font-weight: 700; color: #8b5cf6; margin: 0 0 10px; display: flex; align-items: center; gap: 6px;">🛤️ הדרך שעברנו</h3>
+            <div style="background: #fafafa; border-radius: 10px; padding: 12px 16px;">
+              ${answersHtml}
             </div>
-            <img src="${logoSrc}" style="width: 60px; height: 60px; border-radius: 50%; margin: 0 auto 12px;" onerror="this.style.display='none'">
-            <p style="font-size: 14px; color: #9ca3af;">תוכנית פורצות דרך © 2026</p>
           </div>
+
+          <div style="background: white; border: 2px solid #ec4899; border-radius: 12px; padding: 16px 24px; text-align: center; margin-bottom: 16px;">
+            <p style="font-size: 10px; color: #9ca3af; margin: 0 0 6px;">💫 ההחלטה המשותפת שלנו</p>
+            <p style="font-size: 18px; font-weight: 700; color: #1f2937; margin: 0;">${journeyData.decision}</p>
+          </div>
+
+          <div style="background: linear-gradient(135deg, rgba(236,72,153,0.06), rgba(139,92,246,0.06)); border-radius: 10px; padding: 14px 20px; text-align: center; margin-bottom: auto;">
+            <p style="font-size: 12px; color: #4b5563; line-height: 1.7; margin: 0;">מנהיגות אמיתית מתחילה מהרגע שבו בוחרים לצעוד יחד לשאול שאלות אמיצות ולהקשיב באמת. עשיתן את הצעד הזה היום. ביחד.</p>
+          </div>
+
+          <div style="text-align: center; padding-top: 12px; border-top: 1px solid #f3e8ff;">
+            <p style="font-size: 11px; color: #9ca3af; margin: 0;">המשיכו לפרוץ דרך 💜 &nbsp;|&nbsp; תוכנית פורצות דרך © 2026</p>
+          </div>
+
           <div class="pdf-bottom-bar"></div>
         </div>
       `);

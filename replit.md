@@ -55,8 +55,8 @@ The server runs on port 5000 and serves all static files.
   - Topics: בחירות יומיומיות, זהות ומי אני, מערכות יחסים, גבולות, קול פנימי
   - Questions: provocative, funny, relatable, empowering style
   - Smooth fade transitions between steps with step indicator dots
-  - PDF includes: cover, meeting point, journey, precision, decision, closing pages
-  - Logo (favicon.png) in PDF cover and closing pages
+  - PDF: single A4 page with header (logo + title + names), 3 info cards (topic, domain, sub-domain), journey answers, decision box, closing quote
+  - Logo preloaded as data URL for reliable PDF rendering
 - 2026-01-22: Scroll-lock mechanism for all domain pages (d1-d10)
   - js/scroll-lock.js - reusable script for hero lock/unlock
   - Hero sections locked on page load (scroll disabled)
