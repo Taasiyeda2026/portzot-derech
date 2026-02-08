@@ -615,7 +615,8 @@
       { id: 'identity', emoji: '💬', title: 'זהות ומי אני', subtitle: 'מי אני כשאף אחד לא מסתכל?' },
       { id: 'relationships', emoji: '👭', title: 'מערכות יחסים', subtitle: 'למה זה תמיד מסובך עם אנשים?' },
       { id: 'boundaries', emoji: '🚧', title: 'גבולות', subtitle: 'איפה אני נגמרת ואיפה העולם מתחיל?' },
-      { id: 'inner-voice', emoji: '🗣️', title: 'קול פנימי', subtitle: 'מה הקול בראש שלי אומר לי?' }
+      { id: 'inner-voice', emoji: '🗣️', title: 'קול פנימי', subtitle: 'מה הקול בראש שלי אומר לי?' },
+      { id: 'world', emoji: '🌍', title: 'העולם סביבי', subtitle: 'למה דברים שלא עשיתי משפיעים עליי?' }
     ];
 
     const questionTrees = {
@@ -815,6 +816,45 @@
             { text: 'מותר לך לטעות', value: 'B' }
           ]
         }
+      ],
+      world: [
+        {
+          text: 'מה יותר מבאס אותך - כשרואים בעיה ברורה ברחוב/בית ספר ואף אחד לא זז או כשאת מגלה שמשהו שהשתמשת בו כל החיים דווקא מזיק?',
+          options: [
+            { text: 'רואים ולא זזים', value: 'A', next: 'q2a' },
+            { text: 'מגלה שמשהו מזיק', value: 'B', next: 'q2b' }
+          ]
+        },
+        {
+          id: 'q2a',
+          text: 'כשאת רואה את זה - את יותר כועסת על האנשים שלא עושים או על המערכת שלא מאפשרת?',
+          options: [
+            { text: 'על האנשים', value: 'A' },
+            { text: 'על המערכת', value: 'B' }
+          ]
+        },
+        {
+          id: 'q2b',
+          text: 'כשגילית את זה - שינית הרגל מיד או שחשבת "אוקיי אבל מה זה כבר ישנה אם רק אני"?',
+          options: [
+            { text: 'שיניתי מיד', value: 'A' },
+            { text: 'מה זה ישנה רק אני', value: 'B' }
+          ]
+        },
+        {
+          text: 'מה מרגיש לך יותר אמיתי - לשנות את הסביבה הקרובה שלך (חדר בית שכונה) או להילחם על משהו גדול שמשפיע על כולם?',
+          options: [
+            { text: 'הסביבה הקרובה', value: 'A' },
+            { text: 'משהו גדול', value: 'B' }
+          ]
+        },
+        {
+          text: 'את מרגישה שהעולם סביבך הוא משהו שקורה לך או משהו שאת יכולה לעצב?',
+          options: [
+            { text: 'קורה לי', value: 'A' },
+            { text: 'יכולה לעצב', value: 'B' }
+          ]
+        }
       ]
     };
 
@@ -960,7 +1000,7 @@
               <p class="text-lg font-bold gradient-text">תור של ${name}</p>
             </div>
           </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
             ${boxesHtml}
           </div>
         `;
@@ -1099,7 +1139,8 @@
         identity:       { 'looking-forward': 3, 'leisure-creativity': 1, 'digital-life': 1 },
         relationships:  { 'social-life': 3, 'my-home': 1, 'learning-pressure': 1 },
         boundaries:     { 'space-movement': 2, 'social-life': 2, 'my-home': 1 },
-        'inner-voice':  { 'digital-life': 2, 'learning-pressure': 2, 'looking-forward': 1 }
+        'inner-voice':  { 'digital-life': 2, 'learning-pressure': 2, 'looking-forward': 1 },
+        world:          { 'living-environment': 3, 'space-movement': 2, 'my-home': 1 }
       };
 
       const base = topicBase[topic] || {};
@@ -1157,6 +1198,16 @@
             B: { 'my-home': 2, 'leisure-creativity': 2, 'living-environment': 1 } },
           { A: { 'looking-forward': 2, 'space-movement': 2, 'body-feeling': 1 },
             B: { 'living-environment': 2, 'leisure-creativity': 2, 'daily-choices': 1 } }
+        ],
+        world: [
+          { A: { 'space-movement': 2, 'social-life': 2, 'daily-choices': 1 },
+            B: { 'living-environment': 2, 'body-feeling': 2, 'digital-life': 1 } },
+          { A: { 'social-life': 2, 'looking-forward': 2, 'learning-pressure': 1 },
+            B: { 'space-movement': 2, 'daily-choices': 2, 'leisure-creativity': 1 } },
+          { A: { 'my-home': 3, 'body-feeling': 1, 'leisure-creativity': 1 },
+            B: { 'looking-forward': 3, 'digital-life': 1, 'learning-pressure': 1 } },
+          { A: { 'body-feeling': 2, 'my-home': 2, 'learning-pressure': 1 },
+            B: { 'looking-forward': 2, 'leisure-creativity': 2, 'digital-life': 1 } }
         ]
       };
 
