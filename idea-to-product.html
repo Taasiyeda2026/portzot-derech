@@ -1625,6 +1625,7 @@
         </div>
       `);
 
+      let pdfSuccess = false;
       try {
         const { jsPDF } = window.jspdf;
         const pdf = new jsPDF('p', 'mm', 'a4');
@@ -1653,6 +1654,7 @@
 
         renderArea.innerHTML = '';
         pdf.save('הדרך-שלנו-יחד.pdf');
+        pdfSuccess = true;
       } catch (err) {
         console.error('PDF generation error:', err);
         alert('אירעה שגיאה ביצירת ה-PDF. נסו שוב.');
@@ -1660,6 +1662,29 @@
 
       btn.style.display = 'inline-block';
       loading.classList.add('hidden');
+      if (pdfSuccess) showPostDownload();
+    }
+
+    function showPostDownload() {
+      const html = `
+        <div class="text-center py-8">
+          <div class="text-5xl mb-6">✅</div>
+          <div class="stem-card rounded-3xl p-10 max-w-xl mx-auto mb-8" style="background: var(--surface-color);">
+            <p class="text-2xl font-bold mb-4 gradient-text">ה-PDF שלכן ירד בהצלחה!</p>
+            <p class="text-lg leading-relaxed mb-2" style="color: var(--text-color);">עכשיו יש לכן את המפה.</p>
+            <p class="text-xl font-bold leading-relaxed" style="color: var(--primary-color);">הגיע הזמן לבנות. 💪</p>
+          </div>
+
+          <div class="stem-card rounded-3xl p-10 max-w-xl mx-auto" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));">
+            <p class="text-white text-lg mb-6 leading-relaxed">את לא צריכה לדעת הכול כדי להתחיל.<br>את רק צריכה להתחיל כדי לדעת הכול.</p>
+            <a href="next-steps.html" class="inline-block bg-white text-2xl font-bold px-12 py-5 rounded-full shadow-xl transform hover:scale-105 transition-all duration-300" style="color: var(--primary-color); letter-spacing: 2px;">
+              🔧⚙️💻🛠️🚀📐
+            </a>
+            <p class="text-white text-sm mt-4 opacity-80">לחצו להמשך →</p>
+          </div>
+        </div>
+      `;
+      transitionStep(html);
     }
 
     function updateCSSVariables(cfg) {

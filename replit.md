@@ -10,6 +10,7 @@ A Hebrew-language educational course portal website. This is a static HTML/CSS/J
 - `matching.html` - Matching activities
 - `waiting.html` - Waiting room page
 - `admin.html` - Admin interface
+- `next-steps.html` - Future steps landing page (tech tools theme)
 - `js/` - JavaScript modules (config, admin-app, pairing-app, pairing-algorithm)
 - `level1/`, `level2/` - Level-specific content
 - `exploration/` - Exploration pages (Tailwind CSS design)
@@ -43,6 +44,11 @@ The server runs on port 5000 and serves all static files.
 - Tailwind CSS for styling
 
 ## Recent Changes
+- 2026-02-09: Post-download empowerment screen + next-steps page
+  - After PDF downloads successfully, shows empowering message
+  - Button with tech/tool icons only (🔧⚙️💻🛠️🚀📐) links to next-steps.html
+  - next-steps.html: placeholder page for all future steps (coming soon)
+  - PDF success gated — post-download only shows on successful generation
 - 2026-02-09: Added inspiration step (Step 6) + PDF rebuilt to 2 rich pages
   - New Step 6: "נשים שהפכו צורך למוצר" — real product examples by women
   - 3 domain-specific examples per domain (30 total across 10 domains)
