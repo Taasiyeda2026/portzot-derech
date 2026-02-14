@@ -2,295 +2,285 @@
 <html lang="he">
 <head>
 <meta charset="UTF-8">
-<title>פורצות דרך – פרסונה</title>
+<title>פורצות דרך – בניית פרסונה</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600;700&family=Assistant:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
-
-body {
-    font-family: 'Assistant', sans-serif;
-    direction: rtl;
-    margin: 0;
-    background: #f3f4f6;
-}
-
-/* ===== טופס ===== */
-
-#formArea {
-    max-width: 900px;
-    margin: 40px auto;
-    padding: 20px;
-}
-
-input[type="text"], textarea {
-    width: 100%;
-    padding: 8px;
-    margin: 8px 0 16px;
-    font-size: 14px;
-}
-
-textarea { min-height: 60px; }
-
-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-/* ===== מסמך סופי ===== */
-
-#summaryArea { display:none; }
-
-.final-wrapper {
-    padding: 40px;
-}
-
-.final-doc {
-    display: grid;
-    grid-template-columns: 3fr 1fr;
-    gap: 50px;
-    background: white;
-    padding: 60px;
-    border-radius: 30px;
-    box-shadow: 0 30px 70px rgba(0,0,0,0.08);
-    position: relative;
-}
-
-/* פס עליון */
-.top-bar {
-    position: absolute;
-    top: 0;
-    right: 0;
-    left: 0;
-    height: 8px;
-    border-radius: 30px 30px 0 0;
-    background: linear-gradient(90deg,#e91e63,#00a7b5);
-}
-
-/* טיפוגרפיה */
-.main-title {
-    font-family: 'Rubik', sans-serif;
-    font-size: 28px;
-    font-weight: 700;
-    color: #e91e63;
-    margin-bottom: 35px;
-}
-
-.section {
-    margin-bottom: 28px;
-}
-
-.section h2 {
-    font-family: 'Rubik', sans-serif;
-    font-size: 18px;
-    color: #00a7b5;
-    margin-bottom: 8px;
-}
-
-.section p {
-    font-size: 15px;
-    color: #444;
-    line-height: 1.6;
-}
-
-.quote-box {
-    background: #fde4ec;
-    padding: 20px;
-    border-radius: 20px;
-    font-family: 'Rubik', sans-serif;
-    font-size: 18px;
-    color: #ad1457;
-    margin-top: 15px;
-}
-
-.problem-box {
-    margin-top: 20px;
-    font-weight: 700;
-    font-size: 18px;
-    color: #512da8;
-}
-
-/* דמות */
-.persona-image {
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-}
-
-.persona-image img {
-    height: 100%;
-    max-height: 260mm;
-    object-fit: contain;
-}
-
-/* ===== הדפסה ===== */
-
-@media print {
-
-    @page {
-        size: A4;
-        margin: 0;
-    }
-
     body {
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
+        font-family: 'Assistant', sans-serif;
+        direction: rtl;
+        margin: 0;
         background: #f3f4f6;
+        padding: 20px;
     }
 
-    #formArea { display:none !important; }
-    button { display:none; }
+    /* ===== עיצוב הטופס (מה שרואים במסך) ===== */
+    #formArea {
+        max-width: 850px;
+        margin: 0 auto;
+        background: white;
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
 
-    .final-wrapper {
-        padding: 20mm;
-        height: 297mm;
-        width: 210mm;
+    h1 { color: #e91e63; font-family: 'Rubik'; }
+    h2 { color: #00a7b5; border-bottom: 2px solid #eee; padding-bottom: 5px; margin-top: 30px; }
+
+    .input-group { margin-bottom: 20px; }
+    label { display: block; font-weight: 600; margin-bottom: 8px; }
+
+    input[type="text"], textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 16px;
         box-sizing: border-box;
     }
 
-    .final-doc {
-        height: 100%;
-        box-shadow: 0 30px 70px rgba(0,0,0,0.08);
+    .checkbox-list {
+        background: #f9f9f9;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 15px;
     }
-}
 
+    .checkbox-list label {
+        font-weight: normal;
+        display: block;
+        cursor: pointer;
+        margin-bottom: 5px;
+    }
+
+    button {
+        background: linear-gradient(90deg, #e91e63, #00a7b5);
+        color: white;
+        border: none;
+        padding: 18px;
+        font-size: 20px;
+        border-radius: 50px;
+        cursor: pointer;
+        font-weight: 700;
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    /* ===== הסתרה מהמסך ועיצוב PDF בלבד ===== */
+    #summaryArea { display: none; }
+
+    @media print {
+        @page { size: A4; margin: 0; }
+        body { background: white; padding: 0; }
+        #formArea { display: none !important; }
+        #summaryArea { display: block !important; }
+
+        .final-wrapper {
+            width: 210mm;
+            height: 297mm;
+            padding: 15mm;
+            box-sizing: border-box;
+        }
+
+        .final-doc {
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            gap: 30px;
+            height: 100%;
+            padding: 40px;
+            border-radius: 30px;
+            position: relative;
+            background: white;
+            border: 1px solid #eee;
+            -webkit-print-color-adjust: exact;
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 0; right: 0; left: 0;
+            height: 12px;
+            background: linear-gradient(90deg, #e91e63, #00a7b5);
+            border-radius: 30px 30px 0 0;
+        }
+
+        .main-title { font-size: 26px; color: #e91e63; font-weight: 700; margin-bottom: 25px; font-family: 'Rubik'; }
+        .section { margin-bottom: 20px; }
+        .section h2 { font-size: 17px; color: #00a7b5; margin-bottom: 5px; border: none; }
+        .section p { font-size: 15px; margin: 3px 0; line-height: 1.4; }
+
+        .quote-box {
+            background: #fde4ec !important;
+            padding: 15px;
+            border-radius: 15px;
+            color: #ad1457;
+            font-style: italic;
+            font-size: 18px;
+            margin: 15px 0;
+            font-family: 'Rubik';
+        }
+
+        .problem-box {
+            background: #f3e5f5 !important;
+            padding: 15px;
+            border-right: 5px solid #512da8;
+            font-weight: 700;
+            color: #512da8;
+            font-size: 16px;
+        }
+
+        .persona-image { display: flex; align-items: flex-end; }
+        .persona-image img { width: 100%; height: auto; }
+    }
 </style>
 </head>
 
 <body>
 
-<!-- ===== טופס ===== -->
-
 <div id="formArea">
+    <h1>בניית פרסונה – פורצות דרך 🎀</h1>
 
-<h1>בניית פרסונה – פורצות דרך</h1>
+    <h2>חלק א' – מי היא?</h2>
+    <div style="display: flex; gap: 10px;">
+        <div style="flex: 2;"><label>שם הפרסונה:</label><input type="text" id="name"></div>
+        <div style="flex: 1;"><label>גיל:</label><input type="text" id="age"></div>
+    </div>
 
-<label>שמות הצוות:</label>
-<input type="text" id="team">
+    <label>מה מאפיין את שגרת החיים שלה?</label>
+    <div class="checkbox-list">
+        <label><input type="checkbox" class="routine" value="תלמידה שמתמקדת בעיקר בלימודים"> תלמידה שמתמקדת בעיקר בלימודים</label>
+        <label><input type="checkbox" class="routine" value="משלבת לימודים עם חוגים / אימונים"> משלבת לימודים עם חוגים / אימונים</label>
+        <label><input type="checkbox" class="routine" value="פעילה בתנועת נוער / מסגרת חברתית"> פעילה בתנועת נוער / מסגרת חברתית</label>
+        <label><input type="checkbox" class="routine" value="עובדת לאחר שעות הלימודים"> עובדת לאחר שעות הלימודים</label>
+        <label><input type="checkbox" class="routine" value="לוקחת אחריות בבית"> לוקחת אחריות בבית (אחים / מטלות)</label>
+        <div style="display:flex; align-items:center; gap:5px; margin-top:5px;">
+            <span>אחר:</span><input type="text" id="routineOther" style="margin:0; height:30px;">
+        </div>
+    </div>
+    <label>כך נראית השגרה שלה בקצרה:</label>
+    <textarea id="routineText"></textarea>
 
-<h2>חלק א' – מי היא?</h2>
+    <h2>חלק ב' – הרגע שבו מופיעה הבעיה</h2>
+    <label>איפה היא נמצאת רוב היום?</label>
+    <div class="checkbox-list">
+        <label><input type="checkbox" class="location" value="בבית הספר"> בבית הספר</label>
+        <label><input type="checkbox" class="location" value="בבית"> בבית</label>
+        <label><input type="checkbox" class="location" value="בתחבורה ציבורית"> בתחבורה ציבורית</label>
+        <label><input type="checkbox" class="location" value="באימון / חוג"> באימון / חוג</label>
+        <label><input type="checkbox" class="location" value="עם חברים"> עם חברים</label>
+        <div style="display:flex; align-items:center; gap:5px; margin-top:5px;">
+            <span>אחר:</span><input type="text" id="locationOther" style="margin:0; height:30px;">
+        </div>
+    </div>
+    <label>מתי הבעיה מופיעה? (זמן + מקום + מצב):</label>
+    <textarea id="moment"></textarea>
+    <label>מה קורה בפועל באותו רגע? (תיאור התנהגותי):</label>
+    <textarea id="action"></textarea>
 
-<label>שם הפרסונה:</label>
-<input type="text" id="name">
+    <h2>חלק ג' – עומק רגשי ותפקודי</h2>
+    <label>מה היא מרגישה בסיטואציה הזו?</label>
+    <textarea id="emotion"></textarea>
+    <label>איך זה משפיע עליה?</label>
+    <div class="checkbox-list" style="display:flex; flex-wrap:wrap; gap:15px;">
+        <label><input type="checkbox" class="impactType" value="לימודית"> לימודית</label>
+        <label><input type="checkbox" class="impactType" value="חברתית"> חברתית</label>
+        <label><input type="checkbox" class="impactType" value="רגשית"> רגשית</label>
+        <label><input type="checkbox" class="impactType" value="ניהול זמן"> ניהול זמן</label>
+        <div style="display:flex; align-items:center; gap:5px;">
+            <span>אחר:</span><input type="text" id="impactOther" style="margin:0; width:150px; height:30px;">
+        </div>
+    </div>
+    <label>הסבר קצר על ההשפעה:</label>
+    <textarea id="impactText"></textarea>
 
-<label>גיל:</label>
-<input type="text" id="age">
+    <h2>חלק ד' – ניסוח יזמי מדויק</h2>
+    <label>ציטוט שמייצג אותה:</label>
+    <input type="text" id="quote" placeholder="&quot;משפט שהיא באמת הייתה אומרת...&quot;">
+    
+    <label>משפט הבעיה (השלימי את הפרטים):</label>
+    <div style="background: #f0f0f0; padding: 15px; border-radius: 8px;">
+        נערות בגיל <input type="text" id="pAge" style="width:50px; margin:0;"> אשר <input type="text" id="pWho" style="width:200px; margin:0;"><br><br>
+        מתקשות ב <input type="text" id="pDifficulty" style="width:200px; margin:0;"> כאשר <input type="text" id="pWhen" style="width:200px; margin:0;">.
+    </div>
 
-<p>מה מאפיין את שגרת החיים שלה?</p>
-
-<label><input type="checkbox" class="routine" value="תלמידה שמתמקדת בעיקר בלימודים"> תלמידה שמתמקדת בעיקר בלימודים</label><br>
-<label><input type="checkbox" class="routine" value="משלבת לימודים עם חוגים / אימונים"> משלבת לימודים עם חוגים / אימונים</label><br>
-<label><input type="checkbox" class="routine" value="פעילה בתנועת נוער / מסגרת חברתית"> פעילה בתנועת נוער / מסגרת חברתית</label><br>
-<label><input type="checkbox" class="routine" value="עובדת אחרי שעות הלימודים"> עובדת אחרי שעות הלימודים</label><br>
-<label><input type="checkbox" class="routine" value="לוקחת אחריות בבית (אחים / מטלות קבועות)"> לוקחת אחריות בבית (אחים / מטלות קבועות)</label><br>
-
-<label>כך נראית השגרה שלה בקצרה:</label>
-<textarea id="routineText"></textarea>
-
-<h2>חלק ב' – הרגע שבו מופיעה הבעיה</h2>
-
-<label>מתי הבעיה מופיעה?</label>
-<textarea id="moment"></textarea>
-
-<label>מה קורה בפועל באותו רגע?</label>
-<textarea id="action"></textarea>
-
-<h2>חלק ג' – עומק רגשי ותפקודי</h2>
-
-<label>מה היא מרגישה?</label>
-<textarea id="emotion"></textarea>
-
-<label>איך זה משפיע עליה?</label>
-<textarea id="impact"></textarea>
-
-<h2>חלק ד' – ניסוח יזמי מדויק</h2>
-
-<label>ציטוט שמייצג אותה:</label>
-<textarea id="quote"></textarea>
-
-<label>משפט הבעיה:</label>
-<textarea id="problem"></textarea>
-
-<button onclick="generatePersona()">🎀 צרי מסמך סופי</button>
-
+    <button onclick="generatePersona()">🎀 שמירה והורדה כ-PDF</button>
 </div>
-
-<!-- ===== מסמך מסכם ===== -->
 
 <div id="summaryArea"></div>
 
 <script>
-
-function getCheckedText(className) {
-    const checks = document.querySelectorAll("." + className + ":checked");
-    return Array.from(checks).map(cb => cb.value).join(", ");
+function getValues(className, otherId) {
+    let vals = Array.from(document.querySelectorAll("." + className + ":checked")).map(cb => cb.value);
+    let other = document.getElementById(otherId).value;
+    if (other) vals.push(other);
+    return vals.join(", ");
 }
 
 function generatePersona() {
+    const name = document.getElementById("name").value;
+    const age = document.getElementById("age").value;
+    const routine = getValues("routine", "routineOther");
+    const routineText = document.getElementById("routineText").value;
+    
+    const location = getValues("location", "locationOther");
+    const moment = document.getElementById("moment").value;
+    const action = document.getElementById("action").value;
+    
+    const emotion = document.getElementById("emotion").value;
+    const impactType = getValues("impactType", "impactOther");
+    const impactText = document.getElementById("impactText").value;
+    
+    const quote = document.getElementById("quote").value;
+    
+    // בניית משפט הבעיה
+    const pAge = document.getElementById("pAge").value;
+    const pWho = document.getElementById("pWho").value;
+    const pDiff = document.getElementById("pDifficulty").value;
+    const pWhen = document.getElementById("pWhen").value;
+    const problemSentence = `נערות בגיל ${pAge} אשר ${pWho} מתקשות ב-${pDiff} כאשר ${pWhen}.`;
 
-    const routineSummary = getCheckedText("routine");
-
-    summaryArea.innerHTML = `
+    document.getElementById("summaryArea").innerHTML = `
     <div class="final-wrapper">
       <div class="final-doc">
-
         <div class="top-bar"></div>
-
         <div>
-
-            <div class="main-title">
-                הגדרת הפרסונה של: ${team.value}
-            </div>
-
+            <div class="main-title">פרופיל פרסונה: ${name}</div>
+            
             <div class="section">
                 <h2>חלק א' – מי היא?</h2>
-                <p><strong>${name.value}</strong>, בת ${age.value}</p>
-                <p>${routineSummary}</p>
-                <p>${routineText.value}</p>
+                <p><strong>בת:</strong> ${age}</p>
+                <p><strong>מאפייני שגרה:</strong> ${routine}</p>
+                <p>${routineText}</p>
             </div>
 
             <div class="section">
-                <h2>חלק ב' – הרגע שבו מופיעה הבעיה</h2>
-                <p>${moment.value}</p>
-                <p>${action.value}</p>
+                <h2>חלק ב' – זיהוי הבעיה</h2>
+                <p><strong>נמצאת בעיקר:</strong> ${location}</p>
+                <p><strong>רגע הבעיה:</strong> ${moment}</p>
+                <p><strong>מה קורה בפועל:</strong> ${action}</p>
             </div>
 
             <div class="section">
                 <h2>חלק ג' – עומק רגשי ותפקודי</h2>
-                <p>${emotion.value}</p>
-                <p>${impact.value}</p>
+                <p><strong>תחושה:</strong> ${emotion}</p>
+                <p><strong>תחומי השפעה:</strong> ${impactType}</p>
+                <p>${impactText}</p>
             </div>
 
             <div class="section">
-                <h2>חלק ד' – ניסוח יזמי מדויק</h2>
-                <div class="quote-box">
-                    "${quote.value}"
-                </div>
-                <div class="problem-box">
-                    ${problem.value}
-                </div>
+                <h2>חלק ד' – ניסוח יזמי</h2>
+                <div class="quote-box">"${quote}"</div>
+                <div class="problem-box">${problemSentence}</div>
             </div>
-
         </div>
-
         <div class="persona-image">
             <img src="girl.png" alt="פורצות דרך">
         </div>
-
       </div>
-    </div>
+    </div>`;
 
-    <br>
-    <div style="text-align:center;">
-        <button onclick="window.print()">📄 הורידי כ-PDF</button>
-    </div>
-    `;
-
-    summaryArea.style.display = "block";
-    window.scrollTo(0, document.body.scrollHeight);
+    window.print();
 }
-
 </script>
 
 </body>
