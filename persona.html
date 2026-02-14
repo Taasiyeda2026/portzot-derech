@@ -4,23 +4,33 @@
 <meta charset="UTF-8">
 <title>פורצות דרך – פרסונה</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600;700&family=Assistant:wght@400;600&display=swap" rel="stylesheet">
+
 <style>
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Assistant', sans-serif;
     direction: rtl;
-    margin: 40px;
-    background: #f5f6f8;
+    margin: 0;
+    background: #f3f4f6;
 }
 
-h1 { color: #8e24aa; }
-h2 { margin-top: 30px; }
+/* ================= טופס ================= */
 
-input, textarea {
+#formArea {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+input[type="text"], textarea {
     width: 100%;
-    margin: 8px 0 16px;
     padding: 8px;
+    margin: 8px 0 16px;
     font-size: 14px;
 }
+
+textarea { min-height: 60px; }
 
 button {
     padding: 10px 20px;
@@ -28,63 +38,142 @@ button {
     cursor: pointer;
 }
 
-/* מסמך מסכם */
+/* ================= מסמך סופי ================= */
+
+#summaryArea { display:none; }
+
+.final-wrapper {
+    padding: 40px;
+}
+
 .final-doc {
-    background: #ffffff;
-    padding: 50px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-    border-radius: 18px;
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 50px;
+    background: white;
+    padding: 60px;
+    border-radius: 30px;
+    box-shadow: 0 30px 70px rgba(0,0,0,0.08);
+    position: relative;
 }
 
-.header-line {
-    font-size: 16px;
+/* פס עליון */
+.top-bar {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 8px;
+    border-radius: 30px 30px 0 0;
+    background: linear-gradient(90deg,#e91e63,#00a7b5);
+}
+
+/* טקסט */
+.main-title {
+    font-family: 'Rubik', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #e91e63;
+    margin-bottom: 35px;
+}
+
+.section {
+    margin-bottom: 28px;
+}
+
+.section h2 {
+    font-family: 'Rubik', sans-serif;
+    font-size: 18px;
+    color: #00a7b5;
+    margin-bottom: 8px;
+}
+
+.section p {
+    font-size: 15px;
     color: #444;
-    margin-bottom: 10px;
-}
-
-.title {
-    font-size: 32px;
-    color: #8e24aa;
-    margin-bottom: 30px;
-}
-
-.section-box {
-    margin-bottom: 25px;
-    padding: 20px;
-    border-right: 4px solid #d81b60;
-    background: #fafafa;
+    line-height: 1.6;
 }
 
 .quote-box {
-    font-style: italic;
-    background: #fce4ec;
+    background: #fde4ec;
     padding: 20px;
-    border-radius: 12px;
-    margin: 20px 0;
+    border-radius: 20px;
+    font-family: 'Rubik', sans-serif;
+    font-size: 18px;
+    color: #ad1457;
+    margin-top: 15px;
 }
 
 .problem-box {
-    font-weight: bold;
+    margin-top: 20px;
+    font-weight: 700;
     font-size: 18px;
-    background: #ede7f6;
-    padding: 20px;
-    border-radius: 12px;
+    color: #512da8;
 }
 
-/* בהדפסה */
-@media print {
-    body { background: white; }
-    button { display: none; }
+/* דמות */
+.persona-image {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
 }
+
+.persona-image img {
+    width: 100%;
+    object-fit: contain;
+}
+
+/* ================= הדפסה ================= */
+
+@media print {
+
+    @page {
+        size: A4;
+        margin: 0;
+    }
+
+    body {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        background: #f3f4f6;
+    }
+
+    #formArea {
+        display:none !important;
+    }
+
+    button {
+        display:none;
+    }
+
+    .final-wrapper {
+        padding: 20mm;
+        height: 297mm;
+        width: 210mm;
+        box-sizing: border-box;
+    }
+
+    .final-doc {
+        height: 100%;
+        box-shadow: 0 30px 70px rgba(0,0,0,0.08);
+    }
+}
+
 </style>
 </head>
 
 <body>
 
-<h1>בניית פרסונה</h1>
+<!-- ================= טופס ================= -->
+
+<div id="formArea">
+
+<h1>בניית פרסונה – פורצות דרך</h1>
 
 <label>שמות הצוות:</label>
 <input type="text" id="team">
+
+<h2>חלק א' – מי היא?</h2>
 
 <label>שם הפרסונה:</label>
 <input type="text" id="name">
@@ -92,14 +181,34 @@ button {
 <label>גיל:</label>
 <input type="text" id="age">
 
-<label>שגרה בקצרה:</label>
-<textarea id="routine"></textarea>
+<p>מה מאפיין את שגרת החיים שלה?</p>
 
-<label>הרגע שבו הבעיה מופיעה:</label>
+<label><input type="checkbox" class="routine" value="תלמידה שמתמקדת בעיקר בלימודים"> תלמידה שמתמקדת בעיקר בלימודים</label><br>
+<label><input type="checkbox" class="routine" value="משלבת לימודים עם חוגים / אימונים"> משלבת לימודים עם חוגים / אימונים</label><br>
+<label><input type="checkbox" class="routine" value="פעילה בתנועת נוער / מסגרת חברתית"> פעילה בתנועת נוער / מסגרת חברתית</label><br>
+<label><input type="checkbox" class="routine" value="עובדת אחרי שעות הלימודים"> עובדת אחרי שעות הלימודים</label><br>
+<label><input type="checkbox" class="routine" value="לוקחת אחריות בבית (אחים / מטלות קבועות)"> לוקחת אחריות בבית (אחים / מטלות קבועות)</label><br>
+
+<label>כך נראית השגרה שלה בקצרה:</label>
+<textarea id="routineText"></textarea>
+
+<h2>חלק ב' – הרגע שבו מופיעה הבעיה</h2>
+
+<label>מתי הבעיה מופיעה?</label>
 <textarea id="moment"></textarea>
 
-<label>מה היא מרגישה:</label>
+<label>מה קורה בפועל באותו רגע?</label>
+<textarea id="action"></textarea>
+
+<h2>חלק ג' – עומק רגשי ותפקודי</h2>
+
+<label>מה היא מרגישה?</label>
 <textarea id="emotion"></textarea>
+
+<label>איך זה משפיע עליה?</label>
+<textarea id="impact"></textarea>
+
+<h2>חלק ד' – ניסוח יזמי מדויק</h2>
 
 <label>ציטוט שמייצג אותה:</label>
 <textarea id="quote"></textarea>
@@ -107,62 +216,85 @@ button {
 <label>משפט הבעיה:</label>
 <textarea id="problem"></textarea>
 
-<button onclick="generatePersona()">🎀 צרי מסמך מסכם</button>
+<button onclick="generatePersona()">🎀 צרי מסמך סופי</button>
 
-<div id="summary" style="display:none; margin-top:50px;"></div>
+</div>
+
+<!-- ================= מסמך מסכם ================= -->
+
+<div id="summaryArea"></div>
 
 <script>
+
+function getCheckedText(className) {
+    const checks = document.querySelectorAll("." + className + ":checked");
+    return Array.from(checks).map(cb => cb.value).join(", ");
+}
+
 function generatePersona() {
 
-    const team = document.getElementById("team").value;
-    const name = document.getElementById("name").value;
-    const age = document.getElementById("age").value;
-    const routine = document.getElementById("routine").value;
-    const moment = document.getElementById("moment").value;
-    const emotion = document.getElementById("emotion").value;
-    const quote = document.getElementById("quote").value;
-    const problem = document.getElementById("problem").value;
+    const routineSummary = getCheckedText("routine");
 
-    document.getElementById("summary").innerHTML = `
-        <div class="final-doc">
-            <div class="header-line">
-                הגדרת הפרסונה של: ${team}
+    summaryArea.innerHTML = `
+    <div class="final-wrapper">
+      <div class="final-doc">
+
+        <div class="top-bar"></div>
+
+        <div>
+
+            <div class="main-title">
+                הגדרת הפרסונה של: ${team.value}
             </div>
 
-            <div class="title">
-                ${name} | גיל ${age}
+            <div class="section">
+                <h2>חלק א' – מי היא?</h2>
+                <p><strong>${name.value}</strong>, בת ${age.value}</p>
+                <p>${routineSummary}</p>
+                <p>${routineText.value}</p>
             </div>
 
-            <div class="section-box">
-                <strong>השגרה שלה</strong><br>
-                ${routine}
+            <div class="section">
+                <h2>חלק ב' – הרגע שבו מופיעה הבעיה</h2>
+                <p>${moment.value}</p>
+                <p>${action.value}</p>
             </div>
 
-            <div class="section-box">
-                <strong>הרגע שבו הקושי מופיע</strong><br>
-                ${moment}
+            <div class="section">
+                <h2>חלק ג' – עומק רגשי ותפקודי</h2>
+                <p>${emotion.value}</p>
+                <p>${impact.value}</p>
             </div>
 
-            <div class="section-box">
-                <strong>עומק רגשי</strong><br>
-                ${emotion}
+            <div class="section">
+                <h2>חלק ד' – ניסוח יזמי מדויק</h2>
+                <div class="quote-box">
+                    "${quote.value}"
+                </div>
+                <div class="problem-box">
+                    ${problem.value}
+                </div>
             </div>
 
-            <div class="quote-box">
-                "${quote}"
-            </div>
-
-            <div class="problem-box">
-                ${problem}
-            </div>
         </div>
 
-        <br>
+        <div class="persona-image">
+            <img src="logo.png">
+        </div>
+
+      </div>
+    </div>
+
+    <br>
+    <div style="text-align:center;">
         <button onclick="window.print()">📄 הורידי כ-PDF</button>
+    </div>
     `;
 
-    document.getElementById("summary").style.display = "block";
+    summaryArea.style.display = "block";
+    window.scrollTo(0, document.body.scrollHeight);
 }
+
 </script>
 
 </body>
