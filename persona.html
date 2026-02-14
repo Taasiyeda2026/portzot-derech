@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+<meta charset="UTF-8">
+<title>פורצות דרך – הגדרת פרסונה</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    direction: rtl;
+    margin: 60px;
+    position: relative;
+}
+
+h2 {
+    color: #c2185b;
+    margin-top: 40px;
+}
+
+.section {
+    margin-bottom: 30px;
+}
+
+input, textarea {
+    width: 100%;
+    margin-top: 6px;
+    margin-bottom: 12px;
+    padding: 6px;
+    font-size: 14px;
+}
+
+textarea {
+    min-height: 60px;
+}
+
+label {
+    font-weight: bold;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+/* הדמות מוסתרת במסך */
+.character {
+    display: none;
+}
+
+/* בהדפסה הדמות מופיעה */
+@media print {
+
+    button {
+        display: none;
+    }
+
+    .character {
+        display: block;
+        position: fixed;
+        left: 20px;
+        bottom: 0;
+        width: 280px;
+        opacity: 0.95;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<h2>חלק א' – מי היא?</h2>
+
+<div class="section">
+<label>שם הפרסונה:</label>
+<input type="text">
+
+<label>גיל:</label>
+<input type="text">
+
+<label>כך נראית השגרה שלה בקצרה:</label>
+<textarea></textarea>
+</div>
+
+<h2>חלק ב' – הרגע שבו מופיעה הבעיה</h2>
+
+<div class="section">
+<label>מתי הבעיה מופיעה? (זמן + מקום + מצב)</label>
+<textarea></textarea>
+
+<label>מה קורה בפועל באותו רגע?</label>
+<textarea></textarea>
+</div>
+
+<h2>חלק ג' – עומק רגשי ותפקודי</h2>
+
+<div class="section">
+<label>מה היא מרגישה בסיטואציה הזו?</label>
+<textarea></textarea>
+
+<label>איך זה משפיע עליה?</label>
+<textarea></textarea>
+</div>
+
+<h2>חלק ד' – ניסוח יזמי מדויק</h2>
+
+<div class="section">
+<label>ציטוט שמייצג אותה:</label>
+<textarea></textarea>
+
+<label>משפט הבעיה:</label>
+<textarea></textarea>
+</div>
+
+<button onclick="window.print()">ייצוא ל-PDF</button>
+
+<!-- הדמות -->
+<img src="girl.png" class="character">
+
+</body>
+</html>
