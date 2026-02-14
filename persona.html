@@ -15,7 +15,7 @@ body {
     background: #f3f4f6;
 }
 
-/* ================= טופס ================= */
+/* ===== טופס ===== */
 
 #formArea {
     max-width: 900px;
@@ -38,7 +38,7 @@ button {
     cursor: pointer;
 }
 
-/* ================= מסמך סופי ================= */
+/* ===== מסמך סופי ===== */
 
 #summaryArea { display:none; }
 
@@ -68,7 +68,7 @@ button {
     background: linear-gradient(90deg,#e91e63,#00a7b5);
 }
 
-/* טקסט */
+/* טיפוגרפיה */
 .main-title {
     font-family: 'Rubik', sans-serif;
     font-size: 28px;
@@ -119,11 +119,12 @@ button {
 }
 
 .persona-image img {
-    width: 100%;
+    height: 100%;
+    max-height: 260mm;
     object-fit: contain;
 }
 
-/* ================= הדפסה ================= */
+/* ===== הדפסה ===== */
 
 @media print {
 
@@ -138,13 +139,8 @@ button {
         background: #f3f4f6;
     }
 
-    #formArea {
-        display:none !important;
-    }
-
-    button {
-        display:none;
-    }
+    #formArea { display:none !important; }
+    button { display:none; }
 
     .final-wrapper {
         padding: 20mm;
@@ -164,7 +160,7 @@ button {
 
 <body>
 
-<!-- ================= טופס ================= -->
+<!-- ===== טופס ===== -->
 
 <div id="formArea">
 
@@ -220,7 +216,7 @@ button {
 
 </div>
 
-<!-- ================= מסמך מסכם ================= -->
+<!-- ===== מסמך מסכם ===== -->
 
 <div id="summaryArea"></div>
 
@@ -279,7 +275,7 @@ function generatePersona() {
         </div>
 
         <div class="persona-image">
-            <img src="logo.png">
+            <img src="girl.png" alt="פורצות דרך">
         </div>
 
       </div>
