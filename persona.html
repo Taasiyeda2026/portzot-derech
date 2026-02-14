@@ -277,3 +277,246 @@ function generatePDF() {
 
 </body>
 </html>
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.checkbox-list {
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 5px;
+}
+
+.checkbox-list label {
+    font-weight: normal;
+    display: block;
+    cursor: pointer;
+    margin: 5px 0;
+}
+
+button {
+    background: linear-gradient(90deg, #e91e63, #00a7b5);
+    color: white;
+    border: none;
+    padding: 18px;
+    font-size: 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 700;
+    width: 100%;
+    margin-top: 30px;
+}
+
+#summaryArea {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+}
+
+.final-wrapper {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 15mm;
+    box-sizing: border-box;
+    background: white;
+}
+
+.final-doc {
+    display: table;
+    width: 100%;
+}
+
+.text-side {
+    display: table-cell;
+    width: 65%;
+    vertical-align: top;
+    padding: 20px;
+}
+
+.image-side {
+    display: table-cell;
+    width: 35%;
+    vertical-align: bottom;
+    text-align: center;
+    padding: 20px;
+}
+
+.image-side img {
+    max-width: 100%;
+    height: auto;
+}
+</style>
+</head>
+
+<body>
+
+<div id="formArea">
+<h1>בניית פרסונה – פורצות דרך 🎀</h1>
+
+<div style="background: #fff0f5; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+<label>שמות חברות הצוות:</label>
+<input type="text" id="teamNames">
+</div>
+
+<h2>חלק א' – מי היא?</h2>
+<div style="display:flex; gap:10px;">
+<div style="flex:2;">
+<label>שם הפרסונה:</label>
+<input type="text" id="name">
+</div>
+<div style="flex:1;">
+<label>גיל:</label>
+<input type="text" id="age">
+</div>
+</div>
+
+<label>מה מאפיין את שגרת החיים שלה?</label>
+<div class="checkbox-list">
+<label><input type="checkbox" class="routine" value="תלמידה שמתמקדת בעיקר בלימודים"> תלמידה שמתמקדת בעיקר בלימודים</label>
+<label><input type="checkbox" class="routine" value="משלבת לימודים עם חוגים / אימונים"> משלבת לימודים עם חוגים / אימונים</label>
+<label><input type="checkbox" class="routine" value="פעילה בתנועת נוער / מסגרת חברתית"> פעילה בתנועת נוער / מסגרת חברתית</label>
+<label><input type="checkbox" class="routine" value="עובדת אחרי שעות הלימודים"> עובדת אחרי שעות הלימודים</label>
+<label><input type="checkbox" class="routine" value="לוקחת אחריות בבית (אחים / מטלות קבועות)"> לוקחת אחריות בבית (אחים / מטלות קבועות)</label>
+<div style="display:flex; align-items:center; gap:5px; margin-top:5px;">
+<span>אחר:</span>
+<input type="text" id="routineOther" style="margin:0; height:30px;">
+</div>
+</div>
+
+<label>כך נראית השגרה שלה בקצרה:</label>
+<textarea id="routineText"></textarea>
+
+<h2>חלק ב' – הסיטואציה שבה מופיעה הבעיה</h2>
+<label>איפה היא נמצאת רוב היום?</label>
+<div class="checkbox-list">
+<label><input type="checkbox" class="location" value="בבית הספר"> בבית הספר</label>
+<label><input type="checkbox" class="location" value="בבית"> בבית</label>
+<label><input type="checkbox" class="location" value="בתחבורה ציבורית"> בתחבורה ציבורית</label>
+<label><input type="checkbox" class="location" value="באימון / חוג"> באימון / חוג</label>
+<label><input type="checkbox" class="location" value="עם חברים"> עם חברים</label>
+<div style="display:flex; align-items:center; gap:5px; margin-top:5px;">
+<span>אחר:</span>
+<input type="text" id="locationOther" style="margin:0; height:30px;">
+</div>
+</div>
+
+<label>מתי הבעיה מופיעה? (זמן + מקום + מצב)</label>
+<textarea id="moment"></textarea>
+
+<label>מה קורה בפועל באותו רגע? (תיאור התנהגותי)</label>
+<textarea id="action"></textarea>
+
+<h2>חלק ג' – עומק רגשי ותפקודי</h2>
+<label>מה היא מרגישה בסיטואציה הזו?</label>
+<textarea id="emotion"></textarea>
+
+<label>איך זה משפיע עליה?</label>
+<div class="checkbox-list" style="display:flex; flex-wrap:wrap; gap:15px;">
+<label><input type="checkbox" class="impactType" value="לימודית"> לימודית</label>
+<label><input type="checkbox" class="impactType" value="חברתית"> חברתית</label>
+<label><input type="checkbox" class="impactType" value="רגשית"> רגשית</label>
+<label><input type="checkbox" class="impactType" value="ניהול זמן"> ניהול זמן</label>
+<div style="display:flex; align-items:center; gap:5px;">
+<span>אחר:</span>
+<input type="text" id="impactOther" style="margin:0; width:150px; height:30px;">
+</div>
+</div>
+
+<label>הסבר קצר על ההשפעה:</label>
+<textarea id="impactText"></textarea>
+
+<h2>חלק ד' – ניסוח יזמי מדויק</h2>
+<label>ציטוט שמייצג אותה:</label>
+<input type="text" id="quote">
+
+<label>משפט הבעיה:</label>
+<div style="background:#f0f0f0; padding:15px; border-radius:8px;">
+נערות בגיל <input type="text" id="pAge" style="width:50px; margin:0;"> אשר <input type="text" id="pWho" style="width:200px; margin:0;"> <br><br>
+מתקשות ב <input type="text" id="pDifficulty" style="width:200px; margin:0;"> כאשר <input type="text" id="pWhen" style="width:200px; margin:0;">.
+</div>
+
+<button onclick="generatePDF()">🎀 הורדת PDF</button>
+</div>
+
+<div id="summaryArea"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<script>
+function getValues(className, otherId) {
+    let vals = Array.from(document.querySelectorAll('.' + className + ':checked')).map(cb => cb.value);
+    let other = document.getElementById(otherId).value;
+    if (other) vals.push(other);
+    return vals.join(', ');
+}
+
+function generatePDF() {
+
+    const team = document.getElementById('teamNames').value;
+    const name = document.getElementById('name').value;
+    const age = document.getElementById('age').value;
+    const routine = getValues('routine', 'routineOther');
+    const routineText = document.getElementById('routineText').value;
+    const location = getValues('location', 'locationOther');
+    const moment = document.getElementById('moment').value;
+    const action = document.getElementById('action').value;
+    const emotion = document.getElementById('emotion').value;
+    const impactType = getValues('impactType', 'impactOther');
+    const impactText = document.getElementById('impactText').value;
+    const quote = document.getElementById('quote').value;
+
+    const problemSentence = `נערות בגיל ${document.getElementById('pAge').value} אשר ${document.getElementById('pWho').value} מתקשות ב-${document.getElementById('pDifficulty').value} כאשר ${document.getElementById('pWhen').value}.`;
+
+    const summary = document.getElementById('summaryArea');
+
+    summary.innerHTML = `
+    <div class="final-wrapper">
+        <div class="final-doc">
+            <div class="text-side">
+                <h2>הגדרת הפרסונה של: ${team}</h2>
+                <p><strong>שם:</strong> ${name} | <strong>גיל:</strong> ${age}</p>
+                <p><strong>שגרה:</strong> ${routine}</p>
+                <p>${routineText}</p>
+                <p><strong>מיקום:</strong> ${location}</p>
+                <p><strong>הסיטואציה:</strong> ${moment}</p>
+                <p><strong>בפועל:</strong> ${action}</p>
+                <p><strong>הרגשה:</strong> ${emotion}</p>
+                <p><strong>השפעה:</strong> ${impactType}</p>
+                <p>${impactText}</p>
+                <p><strong>ציטוט:</strong> "${quote}"</p>
+                <p><strong>משפט הבעיה:</strong> ${problemSentence}</p>
+            </div>
+            <div class="image-side">
+                <img src="girl.png" onerror="this.style.display='none'">
+            </div>
+        </div>
+    </div>`;
+
+    const element = document.querySelector('.final-wrapper');
+
+    if (typeof html2pdf === 'undefined') {
+        alert('ספריית PDF לא נטענה. בדוק חיבור אינטרנט.');
+        return;
+    }
+
+    // חשוב: אלמנט עם display:none לא מרונדר ל-PDF
+    // מבטיח רינדור לפני יצירת PDF
+    summary.style.position = 'static';
+    summary.style.left = '0';
+    summary.style.visibility = 'visible';
+
+    html2pdf().set({
+        margin: 0,
+        filename: 'persona.pdf',
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    }).from(element).save().then(() => {
+        summary.style.position = 'absolute';
+        summary.style.left = '-9999px';
+    });
+}
+</script>
+
+</body>
+</html>
