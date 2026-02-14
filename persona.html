@@ -65,7 +65,11 @@ button {
     margin-top: 30px;
 }
 
-#summaryArea { display: none; }
+#summaryArea {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+}
 
 .final-wrapper {
     width: 210mm;
@@ -254,7 +258,10 @@ function generatePDF() {
     }
 
     // חשוב: אלמנט עם display:none לא מרונדר ל-PDF
-    summary.style.display = 'block';
+    // מבטיח רינדור לפני יצירת PDF
+    summary.style.position = 'static';
+    summary.style.left = '0';
+    summary.style.visibility = 'visible';
 
     html2pdf().set({
         margin: 0,
@@ -262,7 +269,8 @@ function generatePDF() {
         html2canvas: { scale: 2 },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     }).from(element).save().then(() => {
-        summary.style.display = 'none';
+        summary.style.position = 'absolute';
+        summary.style.left = '-9999px';
     });
 }
 </script>
