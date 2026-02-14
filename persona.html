@@ -2,120 +2,168 @@
 <html lang="he">
 <head>
 <meta charset="UTF-8">
-<title>פורצות דרך – הגדרת פרסונה</title>
+<title>פורצות דרך – פרסונה</title>
 
 <style>
 body {
     font-family: Arial, sans-serif;
     direction: rtl;
-    margin: 60px;
-    position: relative;
+    margin: 40px;
+    background: #f5f6f8;
 }
 
-h2 {
-    color: #c2185b;
-    margin-top: 40px;
-}
-
-.section {
-    margin-bottom: 30px;
-}
+h1 { color: #8e24aa; }
+h2 { margin-top: 30px; }
 
 input, textarea {
     width: 100%;
-    margin-top: 6px;
-    margin-bottom: 12px;
-    padding: 6px;
+    margin: 8px 0 16px;
+    padding: 8px;
     font-size: 14px;
-}
-
-textarea {
-    min-height: 60px;
-}
-
-label {
-    font-weight: bold;
 }
 
 button {
     padding: 10px 20px;
     font-size: 16px;
-    margin-top: 20px;
+    cursor: pointer;
 }
 
-/* הדמות מוסתרת במסך */
-.character {
-    display: none;
+/* מסמך מסכם */
+.final-doc {
+    background: #ffffff;
+    padding: 50px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+    border-radius: 18px;
 }
 
-/* בהדפסה הדמות מופיעה */
+.header-line {
+    font-size: 16px;
+    color: #444;
+    margin-bottom: 10px;
+}
+
+.title {
+    font-size: 32px;
+    color: #8e24aa;
+    margin-bottom: 30px;
+}
+
+.section-box {
+    margin-bottom: 25px;
+    padding: 20px;
+    border-right: 4px solid #d81b60;
+    background: #fafafa;
+}
+
+.quote-box {
+    font-style: italic;
+    background: #fce4ec;
+    padding: 20px;
+    border-radius: 12px;
+    margin: 20px 0;
+}
+
+.problem-box {
+    font-weight: bold;
+    font-size: 18px;
+    background: #ede7f6;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+/* בהדפסה */
 @media print {
-
-    button {
-        display: none;
-    }
-
-    .character {
-        display: block;
-        position: fixed;
-        left: 20px;
-        bottom: 0;
-        width: 280px;
-        opacity: 0.95;
-    }
+    body { background: white; }
+    button { display: none; }
 }
 </style>
 </head>
 
 <body>
 
-<h2>חלק א' – מי היא?</h2>
+<h1>בניית פרסונה</h1>
 
-<div class="section">
+<label>שמות הצוות:</label>
+<input type="text" id="team">
+
 <label>שם הפרסונה:</label>
-<input type="text">
+<input type="text" id="name">
 
 <label>גיל:</label>
-<input type="text">
+<input type="text" id="age">
 
-<label>כך נראית השגרה שלה בקצרה:</label>
-<textarea></textarea>
-</div>
+<label>שגרה בקצרה:</label>
+<textarea id="routine"></textarea>
 
-<h2>חלק ב' – הרגע שבו מופיעה הבעיה</h2>
+<label>הרגע שבו הבעיה מופיעה:</label>
+<textarea id="moment"></textarea>
 
-<div class="section">
-<label>מתי הבעיה מופיעה? (זמן + מקום + מצב)</label>
-<textarea></textarea>
+<label>מה היא מרגישה:</label>
+<textarea id="emotion"></textarea>
 
-<label>מה קורה בפועל באותו רגע?</label>
-<textarea></textarea>
-</div>
-
-<h2>חלק ג' – עומק רגשי ותפקודי</h2>
-
-<div class="section">
-<label>מה היא מרגישה בסיטואציה הזו?</label>
-<textarea></textarea>
-
-<label>איך זה משפיע עליה?</label>
-<textarea></textarea>
-</div>
-
-<h2>חלק ד' – ניסוח יזמי מדויק</h2>
-
-<div class="section">
 <label>ציטוט שמייצג אותה:</label>
-<textarea></textarea>
+<textarea id="quote"></textarea>
 
 <label>משפט הבעיה:</label>
-<textarea></textarea>
-</div>
+<textarea id="problem"></textarea>
 
-<button onclick="window.print()">ייצוא ל-PDF</button>
+<button onclick="generatePersona()">🎀 צרי מסמך מסכם</button>
 
-<!-- הדמות -->
-<img src="girl.png" class="character">
+<div id="summary" style="display:none; margin-top:50px;"></div>
+
+<script>
+function generatePersona() {
+
+    const team = document.getElementById("team").value;
+    const name = document.getElementById("name").value;
+    const age = document.getElementById("age").value;
+    const routine = document.getElementById("routine").value;
+    const moment = document.getElementById("moment").value;
+    const emotion = document.getElementById("emotion").value;
+    const quote = document.getElementById("quote").value;
+    const problem = document.getElementById("problem").value;
+
+    document.getElementById("summary").innerHTML = `
+        <div class="final-doc">
+            <div class="header-line">
+                הגדרת הפרסונה של: ${team}
+            </div>
+
+            <div class="title">
+                ${name} | גיל ${age}
+            </div>
+
+            <div class="section-box">
+                <strong>השגרה שלה</strong><br>
+                ${routine}
+            </div>
+
+            <div class="section-box">
+                <strong>הרגע שבו הקושי מופיע</strong><br>
+                ${moment}
+            </div>
+
+            <div class="section-box">
+                <strong>עומק רגשי</strong><br>
+                ${emotion}
+            </div>
+
+            <div class="quote-box">
+                "${quote}"
+            </div>
+
+            <div class="problem-box">
+                ${problem}
+            </div>
+        </div>
+
+        <br>
+        <button onclick="window.print()">📄 הורידי כ-PDF</button>
+    `;
+
+    document.getElementById("summary").style.display = "block";
+}
+</script>
 
 </body>
 </html>
