@@ -29,10 +29,12 @@ body {
 h1 {
     font-family: 'Rubik', sans-serif;
     text-align: center;
-    color: #7c3aed;
     font-size: 32px;
     margin-bottom: 4px;
 }
+
+.go-color  { color: #16a34a; }
+.nogo-color { color: #dc2626; }
 
 .page-subtitle {
     text-align: center;
@@ -202,7 +204,7 @@ textarea {
     background-color: #f0fdf4;
 }
 
-#sectionB.go-active .section-title {
+#sectionB .section-title {
     color: #16a34a;
 }
 
@@ -357,7 +359,7 @@ button {
 <body>
 <div id="formArea">
 
-<h1>GO / NO GO</h1>
+<h1><span class="go-color">GO</span> / <span class="nogo-color">NO GO</span></h1>
 <p class="page-subtitle">בדיקת מציאות לרעיון שלנו</p>
 
 <!-- Q1 -->
@@ -429,8 +431,8 @@ button {
 <div class="question">
     <label class="question-label">8. החלטה:</label>
     <div class="options">
-        <label><input type="radio" name="decision" value="GO"> GO – מתחייבות לפתח ולהציג</label>
-        <label><input type="radio" name="decision" value="NO GO"> NO GO – מדייקות לפני שממשיכות</label>
+        <label><input type="radio" name="decision" value="GO"> <span class="go-color" style="font-weight:600;">GO</span> – מתחייבות לפתח ולהציג</label>
+        <label><input type="radio" name="decision" value="NO GO"> <span class="nogo-color" style="font-weight:600;">NO GO</span> – מדייקות לפני שממשיכות</label>
     </div>
 </div>
 
