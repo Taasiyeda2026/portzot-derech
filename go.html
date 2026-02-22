@@ -68,6 +68,7 @@ textarea {
     cursor: pointer;
 }
 
+/* GO highlight */
 #sectionB {
     border: 2px solid transparent;
     border-radius: 12px;
@@ -86,6 +87,7 @@ textarea {
     font-weight: 700;
 }
 
+/* PDF area */
 #summaryArea {
     display: none;
     direction: rtl;
@@ -93,15 +95,6 @@ textarea {
     font-family: 'Assistant', sans-serif;
     color: #111827;
     line-height: 1.7;
-}
-
-#summaryArea h3 {
-    margin: 0 0 8px;
-    color: #111827;
-}
-
-#summaryArea p {
-    margin: 0 0 10px;
 }
 
 button {
@@ -130,7 +123,7 @@ button {
 <label>1. מה הבעיה המדויקת שהמוצר פותר?</label>
 <textarea id="problem1"></textarea>
 
-<label>2. למי זה מתאים? (קהל יעד ספציפי)</label>
+<label>2. למי זה מתאים?</label>
 <textarea id="audience"></textarea>
 
 <label>3. למה זו בעיה אמיתית ולא רגעית?</label>
@@ -148,7 +141,7 @@ button {
 </div>
 
 <div id="sectionB">
-<h2>חלק ב’ – אפיון ראשוני (רק אם סימנו GO)</h2>
+<h2 id="sectionBHeading">חלק ב’ – אפיון ראשוני (רק אם סימנו GO)</h2>
 
 <label>שם מוצר (זמני):</label>
 <input type="text" id="productName">
@@ -187,69 +180,78 @@ button {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <script>
+document.addEventListener("DOMContentLoaded", function(){
+
 function val(id){
-    return document.getElementById(id).value.trim() || "לא צוין";
+    const el = document.getElementById(id);
+    return el ? el.value.trim() || "לא צוין" : "לא צוין";
 }
 
 function toggleGoHighlight(){
     const decision = document.querySelector('input[name="decision"]:checked');
     const sectionB = document.getElementById('sectionB');
-    const heading = sectionB.querySelector('h2');
+    const heading = document.getElementById('sectionBHeading');
     const isGo = decision && decision.value === 'GO';
 
     sectionB.classList.toggle('go-active', isGo);
     heading.classList.toggle('go-label', isGo);
 }
 
-document.querySelectorAll('input[name="decision"]').forEach((radio) => {
-    radio.addEventListener('change', toggleGoHighlight);
+document.querySelectorAll('input[name="decision"]').forEach(radio=>{
+    radio.addEventListener("change", toggleGoHighlight);
 });
 
 toggleGoHighlight();
 
-async function generatePDF(){
-const decision = document.querySelector('input[name="decision"]:checked');
-const summaryArea = document.getElementById('summaryArea');
-const sections = [
-    ['בעיה מדויקת', val('problem1')],
-    ['קהל יעד', val('audience')],
-    ['למה זו בעיה אמיתית', val('realProblem')],
-    ['למה Must Have', val('mustHave')],
-    ['ערך ייחודי', val('unique')],
-    ['החלטה', decision ? decision.value : 'לא סומן']
-];
+window.generatePDF = async function(){
 
-if(decision && decision.value === 'GO'){
-    sections.push(
-        ['שם מוצר', val('productName')],
-        ['בעיה סופית', val('finalProblem')],
-        ['קהל יעד סופי', val('finalAudience')],
-        ['פתרון', val('solution')],
-        ['פעולת משתמשת', val('userAction')],
-        ['מה משתנה', val('afterUse')],
-        ['שלב 1', val('step1')],
-        ['שלב 2', val('step2')],
-        ['שלב 3', val('step3')]
-    );
-}
+    const decision = document.querySelector('input[name="decision"]:checked');
+    const summaryArea = document.getElementById('summaryArea');
 
-summaryArea.innerHTML = `
-    <h3>בדיקת מציאות והגדרת מוצר (GO)</h3>
-    ${sections.map(([title, content]) => `<p><strong>${title}:</strong> ${content}</p>`).join('')}
-`;
+    const sections = [
+        ['בעיה מדויקת', val('problem1')],
+        ['קהל יעד', val('audience')],
+        ['למה זו בעיה אמיתית', val('realProblem')],
+        ['למה Must Have', val('mustHave')],
+        ['ערך ייחודי', val('unique')],
+        ['החלטה', decision ? decision.value : 'לא סומן']
+    ];
 
-summaryArea.style.display = 'block';
+    if(decision && decision.value === 'GO'){
+        sections.push(
+            ['שם מוצר', val('productName')],
+            ['בעיה סופית', val('finalProblem')],
+            ['קהל יעד סופי', val('finalAudience')],
+            ['פתרון', val('solution')],
+            ['פעולת משתמשת', val('userAction')],
+            ['מה משתנה', val('afterUse')],
+            ['שלב 1', val('step1')],
+            ['שלב 2', val('step2')],
+            ['שלב 3', val('step3')]
+        );
+    }
 
-await html2pdf().from(summaryArea).set({
-    margin: 10,
-    filename: 'GO_product_definition.pdf',
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2 },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-}).save();
+    summaryArea.innerHTML = `
+        <h3>בדיקת מציאות והגדרת מוצר (GO)</h3>
+        ${sections.map(([title, content]) => 
+            `<p><strong>${title}:</strong> ${content}</p>`
+        ).join('')}
+    `;
 
-summaryArea.style.display = 'none';
-}
+    summaryArea.style.display = 'block';
+
+    await html2pdf().from(summaryArea).set({
+        margin: 10,
+        filename: 'GO_product_definition.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    }).save();
+
+    summaryArea.style.display = 'none';
+};
+
+});
 </script>
 
 </body>
