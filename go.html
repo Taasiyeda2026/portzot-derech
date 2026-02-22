@@ -87,16 +87,6 @@ textarea {
     font-weight: 700;
 }
 
-/* PDF area */
-#summaryArea {
-    display: none;
-    direction: rtl;
-    text-align: right;
-    font-family: Arial, sans-serif;
-    color: #111827;
-    line-height: 1.7;
-}
-
 button {
     margin-top: 40px;
     width: 100%;
@@ -108,6 +98,83 @@ button {
     color: white;
     font-weight: 700;
     cursor: pointer;
+}
+
+/* ---- Print styles ---- */
+#printArea {
+    display: none;
+}
+
+@media print {
+    body { background: white; padding: 0; margin: 0; }
+    #formArea { display: none !important; }
+    #printArea {
+        display: block;
+        direction: rtl;
+        text-align: right;
+        font-family: 'Assistant', Arial, sans-serif;
+        color: #111827;
+        line-height: 1.7;
+        padding: 20px;
+    }
+    .print-header {
+        background: #7c3aed !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        color: white;
+        padding: 16px 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .print-card-a {
+        background: #f5f3ff !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        border-right: 4px solid #7c3aed;
+        padding: 10px 14px;
+        border-radius: 0 6px 6px 0;
+        margin-bottom: 10px;
+        page-break-inside: avoid;
+    }
+    .print-card-b {
+        background: #f0fdf4 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        border-right: 4px solid #16a34a;
+        padding: 10px 14px;
+        border-radius: 0 6px 6px 0;
+        margin-bottom: 10px;
+        page-break-inside: avoid;
+    }
+    .print-decision-go {
+        background: #f0fdf4 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        border: 2px solid #16a34a;
+        padding: 14px 18px;
+        border-radius: 10px;
+        margin: 18px 0;
+        text-align: center;
+        font-size: 17px;
+        font-weight: 700;
+        color: #16a34a;
+    }
+    .print-decision-refine {
+        background: #fef2f2 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        border: 2px solid #dc2626;
+        padding: 14px 18px;
+        border-radius: 10px;
+        margin: 18px 0;
+        text-align: center;
+        font-size: 17px;
+        font-weight: 700;
+        color: #dc2626;
+    }
 }
 </style>
 </head>
@@ -171,13 +238,11 @@ button {
 <textarea id="step3"></textarea>
 </div>
 
-<div id="summaryArea"></div>
+<div id="printArea"></div>
 
 <button onclick="generatePDF()">הורדת PDF</button>
 
 </div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <script>
 document.addEventListener("DOMContentLoaded", function(){
@@ -203,31 +268,10 @@ document.querySelectorAll('input[name="decision"]').forEach(radio=>{
 
 toggleGoHighlight();
 
-window.generatePDF = async function(){
-
+window.generatePDF = function(){
     const decision = document.querySelector('input[name="decision"]:checked');
-    const summaryArea = document.getElementById('summaryArea');
     const decisionValue = decision ? decision.value : 'לא סומן';
     const isGo = decisionValue === 'GO';
-
-    // Load logo as base64 so html2canvas can render it
-    let logoData = '';
-    try {
-        const img = new Image();
-        img.crossOrigin = 'anonymous';
-        await new Promise((resolve) => {
-            img.onload = () => {
-                const c = document.createElement('canvas');
-                c.width = img.width;
-                c.height = img.height;
-                c.getContext('2d').drawImage(img, 0, 0);
-                logoData = c.toDataURL('image/png');
-                resolve();
-            };
-            img.onerror = () => resolve();
-            img.src = 'logo.png';
-        });
-    } catch(e) {}
 
     const partA = [
         ['מה הבעיה המדויקת?', val('problem1')],
@@ -249,59 +293,35 @@ window.generatePDF = async function(){
         ['שלב 3', val('step3')],
     ] : [];
 
-    const decisionColor = isGo ? '#16a34a' : '#dc2626';
-    const decisionBg   = isGo ? '#f0fdf4'  : '#fef2f2';
+    const decisionClass = isGo ? 'print-decision-go' : 'print-decision-refine';
 
-    summaryArea.innerHTML = `
-        <div style="font-family:Arial,sans-serif;direction:rtl;text-align:right;width:750px;background:white;padding:30px;box-sizing:border-box;color:#111827;">
-
-            <!-- Header -->
-            <div style="background:linear-gradient(135deg,#7c3aed,#ec4899);padding:18px 24px;border-radius:12px;display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
-                <h2 style="color:white;margin:0;font-family:Arial,sans-serif;font-size:18px;">דף עבודה – בדיקת מציאות והגדרת מוצר</h2>
-                ${logoData ? `<img src="${logoData}" style="height:55px;width:auto;">` : ''}
-            </div>
-
-            <!-- Part A -->
-            <h3 style="font-family:Arial,sans-serif;color:#7c3aed;border-bottom:2px solid #e9d5ff;padding-bottom:6px;margin-bottom:14px;margin-top:0;">חלק א׳ – בדיקת מציאות</h3>
-            ${partA.map(([title, content]) => `
-                <div style="background:#f5f3ff;border-right:4px solid #7c3aed;padding:10px 14px;border-radius:0 6px 6px 0;margin-bottom:10px;">
-                    <p style="margin:0;font-family:Arial,sans-serif;font-size:13px;line-height:1.7;">
-                        <strong style="color:#6d28d9;">${title}</strong><br>${content}
-                    </p>
-                </div>
-            `).join('')}
-
-            <!-- Decision -->
-            <div style="background:${decisionBg};border:2px solid ${decisionColor};padding:14px 18px;border-radius:10px;margin:20px 0;text-align:center;">
-                <span style="font-family:Arial,sans-serif;font-size:17px;font-weight:700;color:${decisionColor};">החלטה: ${decisionValue}</span>
-            </div>
-
-            ${isGo ? `
-            <!-- Part B -->
-            <h3 style="font-family:Arial,sans-serif;color:#16a34a;border-bottom:2px solid #bbf7d0;padding-bottom:6px;margin-bottom:14px;margin-top:0;">חלק ב׳ – אפיון ראשוני</h3>
-            ${partB.map(([title, content]) => `
-                <div style="background:#f0fdf4;border-right:4px solid #16a34a;padding:10px 14px;border-radius:0 6px 6px 0;margin-bottom:10px;">
-                    <p style="margin:0;font-family:Arial,sans-serif;font-size:13px;line-height:1.7;">
-                        <strong style="color:#15803d;">${title}</strong><br>${content}
-                    </p>
-                </div>
-            `).join('')}
-            ` : ''}
+    const printArea = document.getElementById('printArea');
+    printArea.innerHTML = `
+        <div class="print-header">
+            <h2 style="color:white;margin:0;font-size:18px;">דף עבודה – בדיקת מציאות והגדרת מוצר</h2>
+            <img src="logo.png" style="height:50px;width:auto;" onerror="this.style.display='none'">
         </div>
+
+        <h3 style="color:#7c3aed;border-bottom:2px solid #e9d5ff;padding-bottom:6px;margin-bottom:14px;margin-top:0;">חלק א׳ – בדיקת מציאות</h3>
+        ${partA.map(([title, content]) => `
+            <div class="print-card-a">
+                <strong style="color:#6d28d9;">${title}</strong><br>${content}
+            </div>
+        `).join('')}
+
+        <div class="${decisionClass}">החלטה: ${decisionValue}</div>
+
+        ${isGo ? `
+        <h3 style="color:#16a34a;border-bottom:2px solid #bbf7d0;padding-bottom:6px;margin-bottom:14px;margin-top:20px;">חלק ב׳ – אפיון ראשוני</h3>
+        ${partB.map(([title, content]) => `
+            <div class="print-card-b">
+                <strong style="color:#15803d;">${title}</strong><br>${content}
+            </div>
+        `).join('')}
+        ` : ''}
     `;
 
-    summaryArea.style.display = 'block';
-    await document.fonts.ready;
-
-    await html2pdf().from(summaryArea).set({
-        margin: 10,
-        filename: 'GO_product_definition.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, letterRendering: true, logging: false, backgroundColor: '#ffffff' },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    }).save();
-
-    summaryArea.style.display = 'none';
+    window.print();
 };
 
 });
