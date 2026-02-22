@@ -2,11 +2,12 @@
 <html lang="he">
 <head>
 <meta charset="UTF-8">
-<title>בדיקת מציאות והגדרת מוצר (GO)</title>
+<title>GO / NO GO – בדיקת מציאות לרעיון</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600;700&family=Assistant:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
+/* === Base === */
 body {
     font-family: 'Assistant', sans-serif;
     direction: rtl;
@@ -24,23 +25,55 @@ body {
     box-shadow: 0 4px 20px rgba(0,0,0,0.06);
 }
 
+/* === Headers === */
 h1 {
-    font-family: 'Rubik';
+    font-family: 'Rubik', sans-serif;
     text-align: center;
     color: #7c3aed;
+    font-size: 32px;
+    margin-bottom: 4px;
 }
 
-h2 {
-    margin-top: 40px;
-    color: #111827;
-    border-bottom: 2px solid #eee;
-    padding-bottom: 6px;
-}
-
-label {
-    display: block;
+.page-subtitle {
+    text-align: center;
+    font-size: 18px;
     font-weight: 600;
-    margin: 20px 0 8px;
+    color: #374151;
+    margin-top: 0;
+    margin-bottom: 30px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #e9d5ff;
+    text-decoration: underline;
+}
+
+.section-title {
+    font-family: 'Rubik', sans-serif;
+    font-size: 24px;
+    color: #7c3aed;
+    margin-top: 36px;
+    margin-bottom: 4px;
+}
+
+.section-subtitle {
+    font-style: italic;
+    color: #6b7280;
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 14px;
+    text-decoration: underline;
+}
+
+/* === Questions === */
+.question {
+    margin-bottom: 22px;
+}
+
+.question-label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: block;
+    color: #111827;
+    font-size: 15px;
 }
 
 textarea, input[type="text"] {
@@ -50,6 +83,7 @@ textarea, input[type="text"] {
     border: 1px solid #d1d5db;
     border-radius: 6px;
     box-sizing: border-box;
+    font-family: 'Assistant', sans-serif;
 }
 
 textarea {
@@ -57,24 +91,110 @@ textarea {
     resize: vertical;
 }
 
-.checkboxArea {
-    margin-top: 20px;
+/* === Radio/Checkbox options === */
+.options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 8px;
 }
 
-.checkboxArea label {
-    font-weight: 500;
-    display: block;
-    margin: 8px 0;
+.options label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
     cursor: pointer;
+    font-size: 15px;
+    color: #374151;
 }
 
-/* GO highlight */
+.options input[type="radio"] {
+    width: 17px;
+    height: 17px;
+    cursor: pointer;
+    accent-color: #7c3aed;
+}
+
+/* Inline question with radio on same line */
+.inline-question {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+
+.inline-question .q-text {
+    font-weight: 600;
+    color: #111827;
+}
+
+.inline-question label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    color: #374151;
+}
+
+.inline-question input[type="radio"] {
+    width: 17px;
+    height: 17px;
+    cursor: pointer;
+    accent-color: #7c3aed;
+}
+
+/* === Steps === */
+.steps {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.step-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.step-num {
+    font-weight: 700;
+    color: #7c3aed;
+    min-width: 24px;
+    font-size: 15px;
+}
+
+/* === Pitch sentence === */
+.pitch-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 15px;
+    color: #111827;
+    margin-top: 8px;
+}
+
+.pitch-row input[type="text"] {
+    width: 180px;
+    display: inline-block;
+    border: none;
+    border-bottom: 2px solid #7c3aed;
+    border-radius: 0;
+    padding: 4px 6px;
+    background: transparent;
+    font-size: 15px;
+}
+
+/* === GO Section === */
 #sectionB {
     border: 2px solid transparent;
     border-radius: 12px;
-    padding: 8px 12px 16px;
-    margin-top: 20px;
-    transition: border-color 0.2s ease, background-color 0.2s ease;
+    padding: 8px 16px 16px;
+    margin-top: 30px;
+    transition: border-color 0.2s, background-color 0.2s;
 }
 
 #sectionB.go-active {
@@ -82,21 +202,26 @@ textarea {
     background-color: #f0fdf4;
 }
 
-#sectionB .go-label {
-    color: #166534;
-    font-weight: 700;
+#sectionB.go-active .section-title {
+    color: #16a34a;
 }
 
-/* PDF area */
-#summaryArea {
-    display: none;
-    direction: rtl;
-    text-align: right;
-    font-family: Arial, sans-serif;
-    color: #111827;
-    line-height: 1.7;
+/* === Clarity section === */
+.clarity-section {
+    margin-top: 28px;
+    padding-top: 18px;
+    border-top: 2px dashed #d1fae5;
 }
 
+.clarity-section h3 {
+    font-family: 'Rubik', sans-serif;
+    color: #374151;
+    font-size: 16px;
+    margin-bottom: 12px;
+    text-decoration: underline;
+}
+
+/* === Button === */
 button {
     margin-top: 40px;
     width: 100%;
@@ -109,199 +234,354 @@ button {
     font-weight: 700;
     cursor: pointer;
 }
+
+/* === Print area (hidden on screen) === */
+#printArea { display: none; }
+
+/* === PRINT STYLES === */
+@media print {
+    body { background: white; padding: 0; margin: 0; font-family: 'Assistant', Arial, sans-serif; }
+    #formArea { display: none !important; }
+    #printArea {
+        display: block;
+        direction: rtl;
+        text-align: right;
+        font-family: 'Assistant', Arial, sans-serif;
+        color: #111827;
+        line-height: 1.7;
+        padding: 24px;
+        font-size: 13px;
+    }
+    .p-header {
+        background: linear-gradient(135deg,#7c3aed,#ec4899) !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        color: white;
+        padding: 16px 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .p-section-a {
+        border-bottom: 2px solid #e9d5ff;
+        padding-bottom: 12px;
+        margin-bottom: 16px;
+    }
+    .p-q {
+        background: #f5f3ff !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        border-right: 4px solid #7c3aed;
+        padding: 8px 12px;
+        border-radius: 0 6px 6px 0;
+        margin-bottom: 8px;
+        page-break-inside: avoid;
+        font-size: 12px;
+    }
+    .p-q-go {
+        background: #f0fdf4 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        border-right: 4px solid #16a34a;
+        padding: 8px 12px;
+        border-radius: 0 6px 6px 0;
+        margin-bottom: 8px;
+        page-break-inside: avoid;
+        font-size: 12px;
+    }
+    .p-decision-go {
+        background: #f0fdf4 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        border: 2px solid #16a34a;
+        padding: 10px 16px;
+        border-radius: 10px;
+        margin: 14px 0;
+        text-align: center;
+        font-size: 16px;
+        font-weight: 700;
+        color: #16a34a;
+    }
+    .p-decision-nogo {
+        background: #fef2f2 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        border: 2px solid #dc2626;
+        padding: 10px 16px;
+        border-radius: 10px;
+        margin: 14px 0;
+        text-align: center;
+        font-size: 16px;
+        font-weight: 700;
+        color: #dc2626;
+    }
+    .p-section-b-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: #16a34a;
+        margin: 18px 0 4px;
+        border-bottom: 2px solid #bbf7d0;
+        padding-bottom: 4px;
+    }
+    .p-section-b-subtitle {
+        font-style: italic;
+        color: #6b7280;
+        font-size: 11px;
+        margin: 0 0 10px;
+        text-decoration: underline;
+    }
+    .p-clarity-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: #374151;
+        margin: 14px 0 6px;
+        text-decoration: underline;
+    }
+    .p-pitch {
+        background: #fffbeb !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        border: 2px solid #f59e0b;
+        border-radius: 10px;
+        padding: 12px 16px;
+        margin-top: 10px;
+        font-size: 13px;
+        font-weight: 600;
+    }
+}
 </style>
 </head>
 
 <body>
-
 <div id="formArea">
 
-<h1>דף עבודה – בדיקת מציאות והגדרת מוצר</h1>
+<h1>GO / NO GO</h1>
+<p class="page-subtitle">בדיקת מציאות לרעיון שלנו</p>
 
-<h2>חלק א’ – בדיקת מציאות</h2>
-
-<label>1. מה הבעיה המדויקת שהמוצר פותר?</label>
-<textarea id="problem1"></textarea>
-
-<label>2. למי זה מתאים?</label>
-<textarea id="audience"></textarea>
-
-<label>3. למה זו בעיה אמיתית ולא רגעית?</label>
-<textarea id="realProblem"></textarea>
-
-<label>4. למה זה Must Have ולא Nice To Have?</label>
-<textarea id="mustHave"></textarea>
-
-<label>5. מה מייחד אותנו ממה שכבר קיים?</label>
-<textarea id="unique"></textarea>
-
-<div class="checkboxArea">
-<label><input type="radio" name="decision" value="GO"> אנחנו מסמנות GO וממשיכות לאפיון</label>
-<label><input type="radio" name="decision" value="REFINE"> אנחנו צריכות לדייק לפני שממשיכות</label>
+<!-- Q1 -->
+<div class="question">
+    <label class="question-label">1. שם הקבוצה / שם הרעיון (אם יש):</label>
+    <input type="text" id="groupName">
 </div>
 
+<!-- Q2 -->
+<div class="question">
+    <label class="question-label">2. הבעיה – מה הבעיה שאנחנו פותרות?</label>
+    <textarea id="problem"></textarea>
+</div>
+
+<!-- Q3 -->
+<div class="question">
+    <label class="question-label">3. עוצמת הבעיה:</label>
+    <div class="options">
+        <label><input type="radio" name="strength" value="חזקה – פוגעת משמעותית ביום-יום"> חזקה – פוגעת משמעותית ביום-יום</label>
+        <label><input type="radio" name="strength" value="בינונית – חוזרת ומטרידה"> בינונית – חוזרת ומטרידה</label>
+        <label><input type="radio" name="strength" value="חלשה – לא דחופה"> חלשה – לא דחופה</label>
+    </div>
+</div>
+
+<!-- Q4 -->
+<div class="question">
+    <label class="question-label">4. הפתרון – תיאור קצר של הפתרון:</label>
+    <textarea id="solution"></textarea>
+</div>
+
+<!-- Q5 -->
+<div class="question">
+    <label class="question-label">5. האם זה:</label>
+    <div class="options">
+        <label><input type="radio" name="mustHave" value="Must Have – חייבות את זה"> Must Have – חייבות את זה</label>
+        <label><input type="radio" name="mustHave" value="Nice To Have – נחמד, אבל לא קריטי"> Nice To Have – נחמד, אבל לא קריטי</label>
+    </div>
+</div>
+
+<!-- Q6 -->
+<div class="question">
+    <label class="question-label">6. מה כבר קיים?</label>
+    <div class="inline-question">
+        <span class="q-text">האם יש פתרון דומה?</span>
+        <label><input type="radio" name="existing" value="כן"> כן</label>
+        <label><input type="radio" name="existing" value="לא"> לא</label>
+        <label><input type="radio" name="existing" value="לא בטוחות"> לא בטוחות</label>
+    </div>
+    <label class="question-label" style="font-weight:500;margin-top:8px;">אם כן – במה שלנו שונה / מדויק יותר?</label>
+    <textarea id="different"></textarea>
+</div>
+
+<!-- Q7 -->
+<div class="question">
+    <label class="question-label">7. בהירות והצגה:</label>
+    <div class="inline-question">
+        <span class="q-text">האם נוכל להסביר את הרעיון במשפט ברור אחד?</span>
+        <label><input type="radio" name="clarity1" value="כן"> כן</label>
+        <label><input type="radio" name="clarity1" value="צריך לחדד"> צריך לחדד</label>
+    </div>
+    <div class="inline-question">
+        <span class="q-text">האם נוכל להציג אותו בצורה משכנעת בפוסטר ובפיץ'?</span>
+        <label><input type="radio" name="clarity2" value="כן"> כן</label>
+        <label><input type="radio" name="clarity2" value="לא בטוחות"> לא בטוחות</label>
+    </div>
+</div>
+
+<!-- Q8 - Decision -->
+<div class="question">
+    <label class="question-label">8. החלטה:</label>
+    <div class="options">
+        <label><input type="radio" name="decision" value="GO"> GO – מתחייבות לפתח ולהציג</label>
+        <label><input type="radio" name="decision" value="NO GO"> NO GO – מדייקות לפני שממשיכות</label>
+    </div>
+</div>
+
+<!-- ===== Section B - GO ===== -->
 <div id="sectionB">
-<h2 id="sectionBHeading">חלק ב’ – אפיון ראשוני (רק אם סימנו GO)</h2>
 
-<label>שם מוצר (זמני):</label>
-<input type="text" id="productName">
+    <h2 class="section-title" id="sectionBHeading">GO</h2>
+    <p class="section-subtitle">מהרגע שסימנתן GO – זה כבר לא רעיון. זה מוצר בפיתוח.</p>
 
-<label>ניסוח סופי של הבעיה:</label>
-<textarea id="finalProblem"></textarea>
+    <!-- B1 -->
+    <div class="question">
+        <label class="question-label">1. שם המוצר:</label>
+        <input type="text" id="productName">
+    </div>
 
-<label>קהל יעד:</label>
-<textarea id="finalAudience"></textarea>
+    <!-- B2 -->
+    <div class="question">
+        <label class="question-label">2. קהל יעד: מי המשתמשת? גיל? מצב? צורך משותף?</label>
+        <textarea id="audience"></textarea>
+    </div>
 
-<label>הפתרון שלנו:</label>
-<textarea id="solution"></textarea>
+    <!-- B3 -->
+    <div class="question">
+        <label class="question-label">3. הערך שנוצר: מה משתנה למשתמשת אחרי שימוש?</label>
+        <textarea id="value"></textarea>
+    </div>
 
-<label>מה המשתמשת עושה בפועל?</label>
-<textarea id="userAction"></textarea>
+    <!-- B4 - Steps -->
+    <div class="question">
+        <label class="question-label">4. כך זה עובד (2–3 צעדים)</label>
+        <div class="steps">
+            <div class="step-row"><span class="step-num">1.</span><input type="text" id="step1"></div>
+            <div class="step-row"><span class="step-num">2.</span><input type="text" id="step2"></div>
+            <div class="step-row"><span class="step-num">3.</span><input type="text" id="step3"></div>
+        </div>
+    </div>
 
-<label>מה משתנה לה אחרי שימוש?</label>
-<textarea id="afterUse"></textarea>
+    <!-- Clarity check -->
+    <div class="clarity-section">
+        <h3>בדיקת בהירות לפני פיץ'</h3>
+        <div class="inline-question">
+            <span class="q-text">אם מישהי שלא מכירה את הרעיון תשמע אותו – היא תבין מיד מה זה?</span>
+            <label><input type="radio" name="finalClarity" value="כן"> כן</label>
+            <label><input type="radio" name="finalClarity" value="לא, צריך לדייק"> לא, צריך לדייק</label>
+        </div>
+    </div>
 
-<label>כך זה עובד – שלב 1:</label>
-<textarea id="step1"></textarea>
+    <!-- Final pitch sentence -->
+    <div class="question" style="margin-top:20px;">
+        <label class="question-label">מוכן לפיץ' – משפט מוצר סופי:</label>
+        <div class="pitch-row">
+            <span>אנחנו מפתחות</span>
+            <input type="text" id="pitch1">
+            <span>עבור</span>
+            <input type="text" id="pitch2">
+            <span>כדי</span>
+            <input type="text" id="pitch3">
+            <span>.</span>
+        </div>
+    </div>
 
-<label>שלב 2:</label>
-<textarea id="step2"></textarea>
-
-<label>שלב 3:</label>
-<textarea id="step3"></textarea>
 </div>
 
-<div id="summaryArea"></div>
+<div id="printArea"></div>
 
 <button onclick="generatePDF()">הורדת PDF</button>
 
 </div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <script>
 document.addEventListener("DOMContentLoaded", function(){
 
 function val(id){
     const el = document.getElementById(id);
-    return el ? el.value.trim() || "לא צוין" : "לא צוין";
+    return el ? (el.value.trim() || '—') : '—';
+}
+
+function radio(name){
+    const el = document.querySelector(`input[name="${name}"]:checked`);
+    return el ? el.value : 'לא סומן';
 }
 
 function toggleGoHighlight(){
-    const decision = document.querySelector('input[name="decision"]:checked');
+    const dec = document.querySelector('input[name="decision"]:checked');
     const sectionB = document.getElementById('sectionB');
-    const heading = document.getElementById('sectionBHeading');
-    const isGo = decision && decision.value === 'GO';
-
+    const isGo = dec && dec.value === 'GO';
     sectionB.classList.toggle('go-active', isGo);
-    heading.classList.toggle('go-label', isGo);
 }
 
-document.querySelectorAll('input[name="decision"]').forEach(radio=>{
-    radio.addEventListener("change", toggleGoHighlight);
+document.querySelectorAll('input[name="decision"]').forEach(r => {
+    r.addEventListener("change", toggleGoHighlight);
 });
 
 toggleGoHighlight();
 
-window.generatePDF = async function(){
-
-    const decision = document.querySelector('input[name="decision"]:checked');
-    const summaryArea = document.getElementById('summaryArea');
-    const decisionValue = decision ? decision.value : 'לא סומן';
+window.generatePDF = function(){
+    const decisionValue = radio('decision');
     const isGo = decisionValue === 'GO';
 
-    // Load logo as base64 so html2canvas can render it
-    let logoData = '';
-    try {
-        const img = new Image();
-        img.crossOrigin = 'anonymous';
-        await new Promise((resolve) => {
-            img.onload = () => {
-                const c = document.createElement('canvas');
-                c.width = img.width;
-                c.height = img.height;
-                c.getContext('2d').drawImage(img, 0, 0);
-                logoData = c.toDataURL('image/png');
-                resolve();
-            };
-            img.onerror = () => resolve();
-            img.src = 'logo.png';
-        });
-    } catch(e) {}
-
-    const partA = [
-        ['מה הבעיה המדויקת?', val('problem1')],
-        ['למי זה מתאים?', val('audience')],
-        ['למה זו בעיה אמיתית?', val('realProblem')],
-        ['למה זה Must Have?', val('mustHave')],
-        ['מה מייחד אותנו?', val('unique')],
-    ];
-
-    const partB = isGo ? [
-        ['שם מוצר', val('productName')],
-        ['ניסוח סופי של הבעיה', val('finalProblem')],
-        ['קהל יעד', val('finalAudience')],
-        ['הפתרון שלנו', val('solution')],
-        ['מה המשתמשת עושה?', val('userAction')],
-        ['מה משתנה אחרי שימוש?', val('afterUse')],
-        ['שלב 1', val('step1')],
-        ['שלב 2', val('step2')],
-        ['שלב 3', val('step3')],
-    ] : [];
-
-    const decisionColor = isGo ? '#16a34a' : '#dc2626';
-    const decisionBg   = isGo ? '#f0fdf4'  : '#fef2f2';
-
-    summaryArea.innerHTML = `
-        <div style="font-family:Arial,sans-serif;direction:rtl;text-align:right;width:750px;background:white;padding:30px;box-sizing:border-box;color:#111827;">
-
-            <!-- Header -->
-            <div style="background:linear-gradient(135deg,#7c3aed,#ec4899);padding:18px 24px;border-radius:12px;display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
-                <h2 style="color:white;margin:0;font-family:Arial,sans-serif;font-size:18px;">דף עבודה – בדיקת מציאות והגדרת מוצר</h2>
-                ${logoData ? `<img src="${logoData}" style="height:55px;width:auto;">` : ''}
+    const printArea = document.getElementById('printArea');
+    printArea.innerHTML = `
+        <div class="p-header">
+            <div>
+                <div style="font-size:22px;font-weight:700;color:white;">GO / NO GO</div>
+                <div style="font-size:13px;color:rgba(255,255,255,0.85);text-decoration:underline;">בדיקת מציאות לרעיון שלנו</div>
             </div>
-
-            <!-- Part A -->
-            <h3 style="font-family:Arial,sans-serif;color:#7c3aed;border-bottom:2px solid #e9d5ff;padding-bottom:6px;margin-bottom:14px;margin-top:0;">חלק א׳ – בדיקת מציאות</h3>
-            ${partA.map(([title, content]) => `
-                <div style="background:#f5f3ff;border-right:4px solid #7c3aed;padding:10px 14px;border-radius:0 6px 6px 0;margin-bottom:10px;">
-                    <p style="margin:0;font-family:Arial,sans-serif;font-size:13px;line-height:1.7;">
-                        <strong style="color:#6d28d9;">${title}</strong><br>${content}
-                    </p>
-                </div>
-            `).join('')}
-
-            <!-- Decision -->
-            <div style="background:${decisionBg};border:2px solid ${decisionColor};padding:14px 18px;border-radius:10px;margin:20px 0;text-align:center;">
-                <span style="font-family:Arial,sans-serif;font-size:17px;font-weight:700;color:${decisionColor};">החלטה: ${decisionValue}</span>
-            </div>
-
-            ${isGo ? `
-            <!-- Part B -->
-            <h3 style="font-family:Arial,sans-serif;color:#16a34a;border-bottom:2px solid #bbf7d0;padding-bottom:6px;margin-bottom:14px;margin-top:0;">חלק ב׳ – אפיון ראשוני</h3>
-            ${partB.map(([title, content]) => `
-                <div style="background:#f0fdf4;border-right:4px solid #16a34a;padding:10px 14px;border-radius:0 6px 6px 0;margin-bottom:10px;">
-                    <p style="margin:0;font-family:Arial,sans-serif;font-size:13px;line-height:1.7;">
-                        <strong style="color:#15803d;">${title}</strong><br>${content}
-                    </p>
-                </div>
-            `).join('')}
-            ` : ''}
+            <img src="logo.png" style="height:50px;width:auto;" onerror="this.style.display='none'">
         </div>
+
+        <div class="p-section-a">
+            <div class="p-q"><strong>1. שם הקבוצה / שם הרעיון:</strong> ${val('groupName')}</div>
+            <div class="p-q"><strong>2. הבעיה:</strong><br>${val('problem')}</div>
+            <div class="p-q"><strong>3. עוצמת הבעיה:</strong> ${radio('strength')}</div>
+            <div class="p-q"><strong>4. הפתרון:</strong><br>${val('solution')}</div>
+            <div class="p-q"><strong>5. האם זה:</strong> ${radio('mustHave')}</div>
+            <div class="p-q">
+                <strong>6. מה כבר קיים?</strong><br>
+                האם יש פתרון דומה: ${radio('existing')}<br>
+                במה שלנו שונה: ${val('different')}
+            </div>
+            <div class="p-q">
+                <strong>7. בהירות והצגה:</strong><br>
+                הסבר במשפט אחד: ${radio('clarity1')}<br>
+                הצגה בפוסטר ובפיץ': ${radio('clarity2')}
+            </div>
+        </div>
+
+        <div class="${isGo ? 'p-decision-go' : 'p-decision-nogo'}">8. החלטה: ${decisionValue}</div>
+
+        ${isGo ? `
+        <div class="p-section-b-title">GO</div>
+        <div class="p-section-b-subtitle">מהרגע שסימנתן GO – זה כבר לא רעיון. זה מוצר בפיתוח.</div>
+        <div class="p-q-go"><strong>1. שם המוצר:</strong> ${val('productName')}</div>
+        <div class="p-q-go"><strong>2. קהל יעד:</strong><br>${val('audience')}</div>
+        <div class="p-q-go"><strong>3. הערך שנוצר:</strong><br>${val('value')}</div>
+        <div class="p-q-go">
+            <strong>4. כך זה עובד:</strong><br>
+            1. ${val('step1')}<br>
+            2. ${val('step2')}<br>
+            3. ${val('step3')}
+        </div>
+        <div class="p-clarity-title">בדיקת בהירות לפני פיץ'</div>
+        <div class="p-q-go">אם מישהי שלא מכירה את הרעיון תשמע אותו – היא תבין מיד מה זה? ${radio('finalClarity')}</div>
+        <div class="p-pitch">
+            <span style="text-decoration:underline;font-size:12px;">מוכן לפיץ' – משפט מוצר סופי:</span><br>
+            אנחנו מפתחות <strong>${val('pitch1')}</strong> עבור <strong>${val('pitch2')}</strong> כדי <strong>${val('pitch3')}</strong>.
+        </div>
+        ` : ''}
     `;
 
-    summaryArea.style.display = 'block';
-    await document.fonts.ready;
-
-    await html2pdf().from(summaryArea).set({
-        margin: 10,
-        filename: 'GO_product_definition.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, letterRendering: true, logging: false, backgroundColor: '#ffffff' },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    }).save();
-
-    summaryArea.style.display = 'none';
+    window.print();
 };
 
 });
