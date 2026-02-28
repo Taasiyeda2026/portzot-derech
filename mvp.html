@@ -89,6 +89,12 @@
       margin: 1.5rem 0;
       border: 1px solid rgba(120, 113, 108, 0.15);
     }
+
+    .example-box .text-pink-300,
+    .example-box .text-cyan-300,
+    .example-box .text-green-300 {
+      color: #1f2937;
+    }
     
     .progress-indicator {
       position: fixed;
@@ -123,6 +129,104 @@
     .animate-fade-in {
       animation: fadeInUp 0.6s ease forwards;
     }
+
+    .top-header {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: rgba(250, 250, 249, 0.96);
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid rgba(120, 113, 108, 0.2);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+    }
+
+    .home-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.65rem 1rem;
+      border-radius: 999px;
+      font-weight: 700;
+      color: #fff;
+      background: linear-gradient(135deg, var(--color-primary), #be185d);
+      box-shadow: 0 8px 18px rgba(236, 72, 153, 0.3);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .home-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 20px rgba(236, 72, 153, 0.35);
+    }
+
+    .home-btn:active {
+      transform: translateY(1px);
+      box-shadow: 0 4px 10px rgba(236, 72, 153, 0.25);
+    }
+
+    .product-tree-diagram {
+      background: #ffffff;
+      border: 1px solid #d6d3d1;
+      border-radius: 0.75rem;
+      padding: 1rem 1.2rem;
+      margin: 1.25rem 0;
+    }
+
+    .product-tree-diagram ul {
+      margin-bottom: 0;
+      padding-right: 1.2rem;
+    }
+
+    .product-tree-diagram li {
+      margin-bottom: 0.35rem;
+      color: #292524;
+    }
+
+    #printArea { display: none; }
+
+    @media print {
+      body { background: white; padding: 0; margin: 0; font-family: 'Assistant', Arial, sans-serif; }
+      #formArea { display: none !important; }
+      #printArea {
+          display: block;
+          direction: rtl;
+          text-align: right;
+          font-family: 'Assistant', Arial, sans-serif;
+          color: #111827;
+          line-height: 1.7;
+          padding: 24px;
+          font-size: 13px;
+      }
+      .p-header {
+          background: linear-gradient(135deg,#7c3aed,#ec4899) !important;
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+          color: white;
+          padding: 16px 20px;
+          border-radius: 10px;
+          margin-bottom: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+      }
+      .p-q {
+          background: #f5f3ff !important;
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+          border-right: 4px solid #7c3aed;
+          padding: 8px 12px;
+          border-radius: 0 6px 6px 0;
+          margin-bottom: 8px;
+          page-break-inside: avoid;
+          font-size: 12px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .top-header-inner {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+    }
   </style>
   <style>
     *, *::before, *::after { box-sizing: border-box; }
@@ -131,7 +235,13 @@
  </head>
  <body class="h-full bg-stone-50 text-stone-800 overflow-auto">
   <div id="progress" class="progress-indicator" style="width: 0%"></div>
-  <div class="w-full min-h-full">
+  <div id="formArea" class="w-full min-h-full">
+   <div class="top-header">
+    <div class="top-header-inner max-w-4xl mx-auto px-6 py-3 flex items-center justify-between">
+      <p class="text-stone-700 font-semibold m-0">פורצות דרך</p>
+      <a href="index.html" class="home-btn" aria-label="חזרה לעמוד הבית">חזרה לעמוד הבית</a>
+    </div>
+   </div>
    <!-- Header -->
    <header class="relative overflow-hidden py-16 px-6">
     <div class="absolute inset-0 bg-gradient-to-bl from-rose-500/15 via-transparent to-sky-500/15"></div>
@@ -181,8 +291,75 @@
       </ul>
       <div class="example-box">
        <p class="text-pink-300 font-semibold mb-2">דוגמה מהתעשייה:</p>
-       <p class="mb-0">כיסא משרדי פשוט יחסית כולל בעץ המוצר שלו: מושב (פלסטיק מוזרק + ריפוד + קצף), משענת גב (מסגרת מתכת + רשת), בסיס (פלסטיק + גלגלים + ציר סיבוב), ידיות (פלסטיק + ברגים), בורגי חיבור, והוראות הרכבה. כל רכיב מפורט עם מק"ט, כמות, ספק, מחיר, ותהליך הייצור הנדרש.</p>
+       <h4 style="color: var(--color-primary); margin-top: 0.5rem;">✒️ עץ מוצר – עט (דוגמה מפורקת)</h4>
+       <h4 style="color: var(--color-primary);">רמה 1 – המוצר השלם</h4>
+       <p>עט</p>
+       <p>מתחתיו שתי מערכות עיקריות:<br>🔹 פנימי<br>🔹 חיצוני</p>
+       <p>זו כבר חשיבה מערכתית: כל מוצר מורכב מתתי־מערכות.</p>
+       <h4 style="color: var(--color-primary);">רמה 2 – מערכת פנימית</h4>
+       <p>קפיץ<br>מתכת<br>צינורית<br>דיו<br>פלסטיק<br>כדור פלדה (מתכת)</p>
+       <p>כאן נמצאת פונקציית הליבה של המוצר:<br>היכולת לכתוב.</p>
+       <p>אם אחד מהרכיבים האלה כושל – העט לא עובד.</p>
+       <h4 style="color: var(--color-primary);">רמה 2 – מערכת חיצונית</h4>
+       <p>גוף<br>תופסן<br>פלסטיק<br>פלסטיק (מעטפת)<br>כרית אחיזה<br>גומי<br>לחצן<br>פלסטיק</p>
+       <p class="mb-0">המערכת החיצונית לא אחראית לכתיבה עצמה –<br>אלא לנוחות, לארגונומיה ולחוויה.</p>
       </div>
+      <div class="product-tree-diagram" aria-label="תרשים עץ מוצר עט">
+       <p class="font-semibold">תרשים היררכי – עץ מוצר עט</p>
+       <ul>
+        <li><strong>עט</strong>
+          <ul>
+            <li><strong>↳ מערכת פנימית</strong>
+              <ul>
+                <li>קפיץ</li>
+                <li>מתכת</li>
+                <li>צינורית</li>
+                <li>דיו</li>
+                <li>פלסטיק</li>
+                <li>כדור פלדה (מתכת)</li>
+              </ul>
+            </li>
+            <li><strong>↳ מערכת חיצונית</strong>
+              <ul>
+                <li>גוף</li>
+                <li>תופסן</li>
+                <li>פלסטיק</li>
+                <li>פלסטיק (מעטפת)</li>
+                <li>כרית אחיזה</li>
+                <li>גומי</li>
+                <li>לחצן</li>
+                <li>פלסטיק</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+       </ul>
+      </div>
+      <h3>מה הדיאגרמה מלמדת יזמת?</h3>
+      <h4 style="color: var(--color-primary);">1️⃣ הפרדה בין פונקציה לחוויה</h4>
+      <p>המערכת הפנימית = ביצוע<br>המערכת החיצונית = שימושיות ומיתוג</p>
+      <h4 style="color: var(--color-primary);">2️⃣ כל תיבה היא החלטה עסקית</h4>
+      <p>לדוגמה:<br>כדור פלדה איכותי יותר → כתיבה חלקה → עלות גבוהה יותר<br>כרית אחיזה מגומי → נוחות גבוהה → תהליך ייצור נוסף<br>פחות חלקי פלסטיק → הרכבה פשוטה יותר → פחות תקלות</p>
+      <h4 style="color: var(--color-primary);">3️⃣ עומק הפירוק קובע שליטה</h4>
+      <p>אפשר לתמחר טוב יותר<br>אפשר למצוא ספקים חלופיים<br>אפשר לשפר איכות<br>אפשר להפחית עלויות</p>
+      <p>יזמת שלא מפרקת – לא שולטת.</p>
+      <h3>חשיבה מערכתית דרך הדיאגרמה</h3>
+      <p>שינוי קטן כמו:<br>👉 מעבר מכדור פלדה לכדור קרמי</p>
+      <p>ישפיע על:<br>ספק אחר<br>תהליך ייצור שונה<br>איכות כתיבה<br>מיתוג<br>מחיר לצרכן</p>
+      <p>המערכת כולה משתנה.</p>
+      <h3>נקודת מבט של תלמידה</h3>
+      <p>תלמידה לא חושבת על:<br>פלסטיק<br>מתכת<br>צינורית</p>
+      <p>היא מרגישה:<br>האם זה חלק?<br>האם זה נוח?<br>האם זה נתקע?<br>האם זה נראה טוב?</p>
+      <p>והתחושות האלו נובעות ישירות מהתיבות בדיאגרמה.</p>
+      <h3>חיבור לקורס "פורצות דרך"</h3>
+      <p>יש לשלב שאלות מנחות:</p>
+      <p>מהן שתי המערכות המרכזיות במוצר שלי?<br>מה רכיבי הליבה?<br>מה רכיבי החוויה?<br>איזה רכיב אם יכשל – המוצר יפסיק לעבוד?<br>איזה רכיב יוצר בידול תחרותי?</p>
+      <h3>שאלות חשיבה</h3>
+      <p>אם הייתן צריכות להוזיל את העט ב־20% – מאיזה רכיב הייתן מתחילות?<br>איזה חלק בעץ המוצר מייצר את הערך הנתפס הגבוה ביותר?<br>האם אפשר לאחד שני חלקים לחלק אחד?<br>האם כל רכיב הכרחי?</p>
+      <h3>מסקנה</h3>
+      <p>עץ מוצר הוא לא תרשים טכני.<br>הוא מפת חשיבה.</p>
+      <p>ברגע שאתן רואות מוצר דרך היררכיה כזו –<br>אתן לא רק משתמשות.</p>
+      <p class="mb-0">אתן מהנדסות.<br>ואתן מנהלות מוצר.</p>
       <h3>למה זה קריטי בתעשייה?</h3>
       <p>עץ המוצר משרת מספר מטרות חיוניות:</p>
       <ul>
@@ -513,13 +690,13 @@
       </div></button>
     </div>
    </div><!-- Footer -->
-   <footer class="bg-stone-100/50 py-8 px-6 border-t border-stone-200">
+   <footer class="bg-stone-100 py-4 px-6 border-t border-stone-300">
     <div class="max-w-4xl mx-auto text-center">
-     <p class="text-rose-600 font-semibold mb-2">תוכנית "פורצות דרך"</p>
-     <p class="text-stone-500 text-sm">קורס יזמות לנערות | פיתוח מיומנויות המאה ה-21</p>
+     <p class="text-stone-800 font-semibold mb-0">© 2026 פורצות דרך</p>
     </div>
    </footer>
   </div>
+  <div id="printArea"></div>
   <script>
     const defaultConfig = {
       article_title: 'מרעיון למוצר: המדריך המלא לעץ מוצר, אפיון ואבטיפוס',
@@ -1027,27 +1204,58 @@
       openModal(appendixContent, 'נספח ג׳ – טבלאות עזר');
     }
 
+    window.generatePDF = function() {
+      const modalContentForPrint = document.querySelector('[data-modal-content]');
+      if (!modalContentForPrint) {
+        return;
+      }
+
+      const printArea = document.getElementById('printArea');
+      printArea.innerHTML = `
+        <div class="p-header">
+          <div>
+            <div style="font-size:22px;font-weight:700;color:white;">${document.getElementById('article-title')?.textContent || 'פורצות דרך'}</div>
+            <div style="font-size:13px;color:rgba(255,255,255,0.85);text-decoration:underline;">${document.querySelector('[data-modal-title]')?.textContent || 'נספח להדפסה'}</div>
+          </div>
+          <img src="logo.png" style="height:50px;width:auto;" onerror="this.style.display='none'">
+        </div>
+        <div class="p-q">${modalContentForPrint.innerHTML}</div>
+      `;
+
+      window.print();
+    };
+
     function openModal(content, title) {
       const modal = document.createElement('div');
-      modal.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 9999; display: flex; align-items: center; justify-content: center; direction: rtl;';
+      modal.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 9999; display: flex; align-items: center; justify-content: center; direction: rtl; animation: fadeInUp 0.2s ease;';
       modal.setAttribute('role', 'dialog');
       modal.setAttribute('aria-modal', 'true');
       modal.setAttribute('aria-label', title);
-      
+
       const modalBox = document.createElement('div');
-      modalBox.style.cssText = 'background: white; border-radius: 0.75rem; max-width: 90vw; max-height: 85vh; overflow-y: auto; position: relative; box-shadow: 0 20px 25px rgba(0,0,0,0.15);';
-      
+      modalBox.style.cssText = 'background: white; border-radius: 0.9rem; max-width: 90vw; max-height: 85vh; overflow-y: auto; position: relative; box-shadow: 0 24px 36px rgba(0,0,0,0.2); width: min(900px, 90vw);';
+
+      const actionsRow = document.createElement('div');
+      actionsRow.style.cssText = 'position: sticky; top: 0; z-index: 10000; background: #fff; border-bottom: 1px solid #e7e5e4; display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem;';
+
+      const printBtn = document.createElement('button');
+      printBtn.textContent = 'הדפסה / PDF';
+      printBtn.style.cssText = 'background: linear-gradient(135deg, #7c3aed, #ec4899); color: white; border: none; border-radius: 0.65rem; padding: 0.55rem 0.95rem; font-size: 0.95rem; font-weight: 700; cursor: pointer; box-shadow: 0 8px 15px rgba(124,58,237,0.25);';
+      printBtn.addEventListener('click', window.generatePDF);
+
       const closeBtn = document.createElement('button');
       closeBtn.innerHTML = '✕';
-      closeBtn.style.cssText = 'position: sticky; top: 0; right: 0; z-index: 10000; background: #ec4899; color: white; border: none; padding: 0.75rem 1.5rem; font-size: 1.5rem; cursor: pointer; border-radius: 0 0 0 0.75rem; width: 100%; text-align: left;';
-      
+      closeBtn.style.cssText = 'background: #ec4899; color: white; border: none; padding: 0.45rem 0.9rem; font-size: 1.2rem; cursor: pointer; border-radius: 0.65rem;';
+
       const headerText = document.createElement('p');
       headerText.textContent = title;
-      headerText.style.cssText = 'margin: -0.75rem 0 0 1rem; font-weight: 600; color: #666;';
-      
+      headerText.setAttribute('data-modal-title', 'true');
+      headerText.style.cssText = 'margin: 0; font-weight: 700; color: #1f2937;';
+
       const contentDiv = document.createElement('div');
+      contentDiv.setAttribute('data-modal-content', 'true');
       contentDiv.innerHTML = content;
-      
+
       const previousBodyOverflow = document.body.style.overflow;
       const closeModal = () => {
         modal.remove();
@@ -1067,19 +1275,16 @@
           closeModal();
         }
       });
-      
-      modalBox.appendChild(closeBtn);
+
+      actionsRow.appendChild(printBtn);
+      actionsRow.appendChild(closeBtn);
+      modalBox.appendChild(actionsRow);
       modalBox.appendChild(headerText);
       modalBox.appendChild(contentDiv);
       modal.appendChild(modalBox);
       document.body.appendChild(modal);
       document.body.style.overflow = 'hidden';
       document.addEventListener('keydown', onEscape);
-
-      // Trigger print dialog after a brief delay for better UX
-      setTimeout(() => {
-        window.print();
-      }, 300);
     }
   </script>
  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d5121cc44dbc231',t:'MTc3MjI5NDM5Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
