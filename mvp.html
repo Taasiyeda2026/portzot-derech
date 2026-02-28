@@ -1,0 +1,1043 @@
+<!doctype html>
+<html lang="he" dir="rtl" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>מרעיון למוצר: עץ מוצר, אפיון ואבטיפוס</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&amp;family=Frank+Ruhl+Libre:wght@400;500;700&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-bg: #fafaf9;
+      --color-surface: #f5f5f4;
+      --color-text: #292524;
+      --color-primary: #ec4899;
+      --color-secondary: #0ea5e9;
+    }
+    
+    html, body {
+      font-family: 'Heebo', sans-serif;
+    }
+    
+    .font-serif {
+      font-family: 'Frank Ruhl Libre', serif;
+    }
+    
+    .gradient-text {
+      background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .article-content h2 {
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--color-primary);
+    }
+    
+    .article-content h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-top: 1.75rem;
+      margin-bottom: 0.75rem;
+      color: var(--color-secondary);
+    }
+    
+    .article-content p {
+      line-height: 1.9;
+      margin-bottom: 1.25rem;
+    }
+    
+    .article-content ul, .article-content ol {
+      margin-bottom: 1.25rem;
+      padding-right: 1.5rem;
+    }
+    
+    .article-content li {
+      line-height: 1.8;
+      margin-bottom: 0.5rem;
+    }
+    
+    .highlight-box {
+      background: linear-gradient(135deg, rgba(244, 63, 94, 0.08), rgba(14, 165, 233, 0.08));
+      border-right: 4px solid var(--color-primary);
+      padding: 1.25rem;
+      border-radius: 0.5rem;
+      margin: 1.5rem 0;
+    }
+    
+    .reflection-box {
+      background: rgba(14, 165, 233, 0.08);
+      border: 1px solid rgba(14, 165, 233, 0.2);
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      margin: 2rem 0;
+    }
+    
+    .example-box {
+      background: rgba(245, 245, 244, 1);
+      border-radius: 0.75rem;
+      padding: 1.25rem;
+      margin: 1.5rem 0;
+      border: 1px solid rgba(120, 113, 108, 0.15);
+    }
+    
+    .progress-indicator {
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+      transition: width 0.1s ease;
+      z-index: 100;
+    }
+    
+    .toc-link {
+      transition: all 0.2s ease;
+    }
+    
+    .toc-link:hover {
+      color: var(--color-primary);
+      padding-right: 0.5rem;
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .animate-fade-in {
+      animation: fadeInUp 0.6s ease forwards;
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full bg-stone-50 text-stone-800 overflow-auto">
+  <div id="progress" class="progress-indicator" style="width: 0%"></div>
+  <div class="w-full min-h-full">
+   <!-- Header -->
+   <header class="relative overflow-hidden py-16 px-6">
+    <div class="absolute inset-0 bg-gradient-to-bl from-rose-500/15 via-transparent to-sky-500/15"></div>
+    <div class="max-w-4xl mx-auto relative">
+     <div class="flex items-center gap-3 mb-6">
+      <span class="px-3 py-1 bg-rose-100 text-rose-700 text-sm rounded-full">פורצות דרך</span> <span class="text-stone-500 text-sm">זמן קריאה: 12 דקות</span>
+     </div>
+     <h1 id="article-title" class="font-serif text-4xl md:text-5xl font-bold mb-4 gradient-text leading-tight">מרעיון למוצר: המדריך המלא לעץ מוצר, אפיון ואבטיפוס</h1>
+     <p id="article-subtitle" class="text-xl text-stone-600 leading-relaxed">איך הופכים חזון מופשט למפרט מדויק שמוביל ליצירת מוצר אמיתי</p>
+    </div>
+   </header><!-- Table of Contents -->
+   <nav class="max-w-4xl mx-auto px-6 mb-12">
+    <div class="bg-white rounded-xl p-6 backdrop-blur-sm border border-stone-200 shadow-sm">
+     <h2 class="text-lg font-semibold mb-4 text-rose-600">תוכן העניינים</h2>
+     <ol class="space-y-2 text-stone-600">
+      <li><a href="#intro" class="toc-link block">1. פתיחה: למה רעיון לבדו אינו מספיק</a></li>
+      <li><a href="#product-tree" class="toc-link block">2. עץ מוצר – חשיבה מערכתית בפיתוח</a></li>
+      <li><a href="#specification" class="toc-link block">3. אפיון מוצר – מעבר מחזון למבנה</a></li>
+      <li><a href="#prototype" class="toc-link block">4. אבטיפוס – בדיקת המציאות</a></li>
+      <li><a href="#connection" class="toc-link block">5. חיבור לתהליך היזמי שלכן</a></li>
+      <li><a href="#reflection" class="toc-link block">6. שאלות רפלקטיביות לעבודה עצמית</a></li>
+      <li><a href="#summary" class="toc-link block">7. סיכום: יזמות מקצועית מתחילה בליבה</a></li>
+     </ol>
+    </div>
+   </nav><!-- Article Content -->
+   <main class="max-w-4xl mx-auto px-6 pb-16">
+    <article class="article-content">
+     <!-- Section 1: Introduction -->
+     <section id="intro" class="animate-fade-in">
+      <h2>פתיחה: למה רעיון לבדו אינו מספיק</h2>
+      <p>רעיון טוב מרגיש כמו קסם. הוא צץ בראש, מתלהב, נראה מבריק ופורץ דרך. אבל להפוך אותו למשהו שאפשר להחזיק ביד, להשתמש בו, למכור אותו? זה כבר סיפור אחר לגמרי. רעיון הוא רק נקודת התחלה — והדרך ממנו למוצר אמיתי עוברת דרך תהליכים מובנים של חשיבה, תכנון ובדיקה.</p>
+      <p>בתעשייה האמיתית, שבה מפתחים מוצרים מורכבים — ממטוסים ועד אפליקציות — אף אחד לא קופץ מרעיון ישר לייצור. יש תהליך שלם באמצע, ובמרכזו עומדים שלושה כלים מרכזיים: <strong>עץ מוצר</strong> שמפרק את המוצר לרכיביו, <strong>מסמך אפיון</strong> שמגדיר בדיוק מה המוצר עושה ואיך, ו<strong>אבטיפוס</strong> שמאפשר לבדוק את הרעיון במציאות לפני שמשקיעים בו משאבים אמיתיים.</p>
+      <div class="highlight-box">
+       <p class="mb-0"><strong>למה זה חשוב לכן?</strong> כי בתוכנית "פורצות דרך" אתן לא רק חולמות — אתן מפתחות מיזמים אמיתיים. הכאב האישי שזיהיתן, הבעיה שניסחתן, קהל היעד שהגדרתן והקונספט שבחרתן — כל אלה צריכים עכשיו להפוך למשהו מוחשי. הכלים שתלמדו במאמר הזה הם אותם כלים שמהנדסות ויזמיות משתמשות בהם בעולם האמיתי.</p>
+      </div>
+     </section><!-- Section 2: Product Tree -->
+     <section id="product-tree">
+      <h2>עץ מוצר – חשיבה מערכתית בפיתוח</h2>
+      <h3>מהו עץ מוצר בתעשייה האמיתית?</h3>
+      <p>עץ מוצר, הידוע גם בשם BOM (Bill of Materials), הוא כלי תעשייתי מרכזי שמשמש לפירוק מוצר מורכב לכל רכיביו — עד לרמת חומרי הגלם הבסיסיים ביותר. תחשבו על מטוס: הוא מורכב ממיליוני חלקים, וכל בורג, כל חוט, כל פיסת מתכת — רשומים במערכת. זה לא סתם ביורוקרטיה; זו הדרך היחידה לנהל מוצר מורכב.</p>
+      <p>עץ המוצר התעשייתי מכיל מספר רמות:</p>
+      <ul>
+       <li><strong>רמה עליונה:</strong> המוצר הסופי השלם</li>
+       <li><strong>רמה שנייה:</strong> מכלולים ותת-מערכות (לדוגמה: מנוע, כנפיים, תא הטייס)</li>
+       <li><strong>רמה שלישית:</strong> רכיבים בתוך כל מכלול</li>
+       <li><strong>רמות נוספות:</strong> פירוק המשך עד לחומרי גלם בסיסיים</li>
+      </ul>
+      <div class="example-box">
+       <p class="text-pink-300 font-semibold mb-2">דוגמה מהתעשייה:</p>
+       <p class="mb-0">כיסא משרדי פשוט יחסית כולל בעץ המוצר שלו: מושב (פלסטיק מוזרק + ריפוד + קצף), משענת גב (מסגרת מתכת + רשת), בסיס (פלסטיק + גלגלים + ציר סיבוב), ידיות (פלסטיק + ברגים), בורגי חיבור, והוראות הרכבה. כל רכיב מפורט עם מק"ט, כמות, ספק, מחיר, ותהליך הייצור הנדרש.</p>
+      </div>
+      <h3>למה זה קריטי בתעשייה?</h3>
+      <p>עץ המוצר משרת מספר מטרות חיוניות:</p>
+      <ul>
+       <li><strong>תמחור מדויק:</strong> כשיודעים בדיוק מה נכנס למוצר, אפשר לחשב את עלות הייצור האמיתית</li>
+       <li><strong>ניהול מלאי:</strong> המערכת יודעת כמה רכיבים צריך להזמין לפי הביקוש</li>
+       <li><strong>בקרת איכות:</strong> אם יש תקלה, אפשר לאתר את הרכיב הבעייתי</li>
+       <li><strong>תכנון ייצור:</strong> הבנת רצף הפעולות הנדרש להרכבה</li>
+       <li><strong>חיבור למערכות ERP:</strong> מערכות ניהול ארגוניות שמנהלות את כל המידע הזה אוטומטית</li>
+      </ul>
+      <h3>תרגום לעולם שלכן: העץ המטאפורי</h3>
+      <p>עכשיו, איך לוקחים את הכלי התעשייתי הזה ומשתמשים בו לפיתוח המיזם שלכן? התשובה היא במטאפורה של עץ אמיתי:</p>
+      <div class="bg-gradient-to-l from-pink-500/10 to-cyan-500/10 rounded-xl p-6 my-6 border border-slate-600/30">
+       <p class="text-lg font-semibold mb-4 text-center">🌳 מבנה עץ המוצר שלכן</p>
+       <div class="space-y-4">
+        <div class="flex items-start gap-4">
+         <span class="text-2xl">🪵</span>
+         <div>
+          <p class="font-semibold text-pink-300">הגזע = הליבה הקריטית</p>
+          <p class="text-sm text-slate-300">מה הדבר המרכזי ביותר שהמוצר חייב לעשות? בלי הגזע, אין עץ. בלי הליבה, אין מוצר. זו הפונקציונליות שאם תסירו אותה — המוצר מפסיק להיות המוצר.</p>
+         </div>
+        </div>
+        <div class="flex items-start gap-4">
+         <span class="text-2xl">🌿</span>
+         <div>
+          <p class="font-semibold text-cyan-300">הענפים = הפונקציות המרכזיות</p>
+          <p class="text-sm text-slate-300">כל ענף הוא פונקציה או יכולת שהמוצר מציע. ענפים יכולים להתפצל לענפים קטנים יותר — תתי-פונקציות שתומכות בפונקציה הראשית.</p>
+         </div>
+        </div>
+        <div class="flex items-start gap-4">
+         <span class="text-2xl">🍎</span>
+         <div>
+          <p class="font-semibold text-green-300">הפירות = הערך למשתמשת</p>
+          <p class="text-sm text-slate-300">מה המשתמשת מקבלת בפועל? הפירות הם התוצאות — החוויה, הפתרון, ההרגשה. זה מה שהמשתמשת "קוטפת" מהמוצר.</p>
+         </div>
+        </div>
+        <div class="flex items-start gap-4">
+         <span class="text-2xl">🌱</span>
+         <div>
+          <p class="font-semibold text-amber-300">השורשים = התשתית הנסתרת</p>
+          <p class="text-sm text-slate-300">מה נדרש מאחורי הקלעים? טכנולוגיה, מסד נתונים, שרתים, אבטחה. המשתמשת לא רואה את זה, אבל בלי שורשים — העץ נופל.</p>
+         </div>
+        </div>
+       </div>
+      </div>
+      <h3>זיהוי נקודות כשל</h3>
+      <p>אחד היתרונות המשמעותיים של עץ מוצר הוא היכולת לזהות נקודות כשל פוטנציאליות. כשרואים את כל המערכת מפורקת לרכיבים, אפשר לשאול:</p>
+      <ul>
+       <li>מה קורה אם הרכיב הזה לא עובד?</li>
+       <li>האם יש תלות קריטית בספק אחד?</li>
+       <li>איפה החוליה החלשה במערכת?</li>
+       <li>מה הסיכונים הטכנולוגיים?</li>
+      </ul>
+      <div class="highlight-box">
+       <p class="mb-0"><strong>תרגיל חשיבה:</strong> ציירו את עץ המוצר שלכן. התחילו מהגזע — מהי הליבה הקריטית? הוסיפו ענפים — מהן הפונקציות? סמנו את הפירות — מה הערך למשתמשת? ואז שאלו: איפה נקודת הכשל הכי מסוכנת?</p>
+      </div>
+     </section><!-- Section 3: Specification -->
+     <section id="specification">
+      <h2>אפיון מוצר – מעבר מחזון למבנה</h2>
+      <h3>מהו אפיון ולמה הוא הכרחי?</h3>
+      <p>אפיון מוצר (Product Specification) הוא תהליך של תרגום מחשבה מופשטת למפרט מדויק שמפתח או מהנדס יכולים לעבוד איתו. המטרה היא להגדיר בדיוק מה המוצר עושה, למי הוא מיועד, ובאילו תנאים הוא צריך לשרוד ולהצליח.</p>
+      <p><strong>רעיון ≠ מוצר.</strong> זו נקודה קריטית שחשוב להפנים. רעיון הוא תיאור כללי של משהו שיכול להיות. מוצר הוא דבר ספציפי עם מאפיינים מוגדרים. האפיון הוא הגשר בין השניים.</p>
+      <div class="example-box">
+       <p class="text-pink-300 font-semibold mb-2">דוגמה להבדל:</p>
+       <p><strong>רעיון:</strong> "אפליקציה שעוזרת לנערות להתמודד עם לחץ"</p>
+       <p class="mb-0"><strong>אפיון:</strong> "אפליקציה מבוססת iOS/Android שמציעה תרגילי נשימה מונחים באורך 3-15 דקות, עם מעקב אישי אחרי רמת הלחץ, תזכורות יומיות מותאמות אישית, וממשק צבעוני מרגיע בגווני תכלת וסגול"</p>
+      </div>
+      <h3>מרכיבי האפיון המרכזיים</h3>
+      <p>מסמך אפיון מקצועי כולל מספר מרכיבים הכרחיים:</p>
+      <h4 style="color: var(--color-primary); margin-top: 1.5rem;">1. פירוט פונקציונלי</h4>
+      <p>מה המוצר עושה בפועל? לא מה הוא "אמור" לעשות באופן כללי, אלא רשימה מדויקת של פעולות. כל פונקציה צריכה להיות ניתנת למדידה ולבדיקה.</p>
+      <h4 style="color: var(--color-primary);">2. הגדרת הפעולה הקריטית</h4>
+      <p>מתוך כל הפונקציות — מהי הפעולה הקריטית? זו הפעולה שאם היא לא עובדת, המוצר כולו נכשל. חשוב לזהות אותה מראש כי היא תקבל את מרב המשאבים בפיתוח.</p>
+      <h4 style="color: var(--color-primary);">3. חוויית משתמשת (UX)</h4>
+      <p>איך המשתמשת תרגיש? מה היא תראה? איך היא תבין מה לעשות? חוויית המשתמשת היא לא "קישוט" — היא חלק מהותי מהמוצר. מוצר עם פונקציונליות מעולה אבל חוויה גרועה — ייכשל.</p>
+      <h4 style="color: var(--color-primary);">4. זרימה (Flow)</h4>
+      <p>מה קורה משלב לשלב? איך המשתמשת עוברת מנקודה A לנקודה B? הזרימה צריכה להיות הגיונית, חלקה, וללא "מבוי סתום" שבו המשתמשת נתקעת.</p>
+      <h4 style="color: var(--color-primary);">5. אינטראקציה ופידבק מערכת</h4>
+      <p>כשהמשתמשת עושה משהו — מה המערכת מחזירה לה? פידבק הוא קריטי. אם המשתמשת לוחצת על כפתור ולא קורה כלום — היא לא יודעת אם הפעולה הצליחה או נכשלה.</p>
+      <h3>תנאי הצלחה: GO / NO GO</h3>
+      <p>כל מוצר צריך קריטריונים ברורים להצלחה. אלה לא רגשות ("אנשים יאהבו את זה") אלא מדדים מדידים:</p>
+      <ul>
+       <li><strong>GO:</strong> המוצר מוכן להתקדם לשלב הבא כאשר...</li>
+       <li><strong>NO GO:</strong> המוצר לא מוכן להתקדם אם...</li>
+      </ul>
+      <div class="example-box">
+       <p class="text-pink-300 font-semibold mb-2">דוגמה לקריטריוני GO/NO GO:</p>
+       <p><strong>GO:</strong> 80% מהמשתתפות בבדיקה הצליחו להשלים את המשימה המרכזית תוך פחות מ-2 דקות</p>
+       <p class="mb-0"><strong>NO GO:</strong> יותר מ-30% מהמשתתפות דיווחו על בלבול או תסכול</p>
+      </div>
+      <h3>MVP לעומת מוצר מלא</h3>
+      <p>MVP (Minimum Viable Product) הוא מוצר מינימלי בר-קיימא — הגרסה הכי פשוטה של המוצר שעדיין מספקת ערך ומאפשרת ללמוד מהמשתמשות. זה לא מוצר "חצי אפוי" — זה מוצר שלם, רק עם פחות פיצ'רים.</p>
+      <div class="bg-slate-800/50 rounded-xl p-6 my-6">
+       <div class="grid md:grid-cols-2 gap-6">
+        <div>
+         <p class="font-semibold text-pink-300 mb-2">MVP כולל:</p>
+         <ul class="text-sm space-y-1">
+          <li>✓ הפעולה הקריטית עובדת מצוין</li>
+          <li>✓ חוויית משתמש בסיסית וברורה</li>
+          <li>✓ פותר את הבעיה המרכזית</li>
+          <li>✓ אפשר ללמוד ממנו</li>
+         </ul>
+        </div>
+        <div>
+         <p class="font-semibold text-cyan-300 mb-2">מוצר מלא כולל גם:</p>
+         <ul class="text-sm space-y-1">
+          <li>+ כל הפיצ'רים המתוכננים</li>
+          <li>+ עיצוב מלוטש</li>
+          <li>+ אינטגרציות נוספות</li>
+          <li>+ סקיילביליות לצמיחה</li>
+         </ul>
+        </div>
+       </div>
+      </div>
+      <h3>דוגמאות אפיון לסוגי מוצרים שונים</h3>
+      <div class="example-box">
+       <p class="text-pink-300 font-semibold mb-2">🎒 מוצר פיזי: תיק גב ארגונומי לתלמידות</p>
+       <ul class="text-sm space-y-1">
+        <li>• משקל מקסימלי: 500 גרם (ריק)</li>
+        <li>• נפח: 20-25 ליטר</li>
+        <li>• חומר: בד עמיד במים, ניתן לכביסה</li>
+        <li>• רצועות מרופדות עם אפשרות התאמה</li>
+        <li>• פעולה קריטית: פיזור משקל נכון על הגב והכתפיים</li>
+       </ul>
+      </div>
+      <div class="example-box">
+       <p class="text-cyan-300 font-semibold mb-2">📱 אפליקציה: יומן רגשי לנערות</p>
+       <ul class="text-sm space-y-1">
+        <li>• פלטפורמה: iOS ו-Android</li>
+        <li>• זמן טעינה מקסימלי: 3 שניות</li>
+        <li>• הזנת רגש יומי: עד 30 שניות</li>
+        <li>• פרטיות: נתונים מוצפנים, ללא שיתוף</li>
+        <li>• פעולה קריטית: תיעוד מצב רוח בלחיצה אחת</li>
+       </ul>
+      </div>
+      <div class="example-box">
+       <p class="text-green-300 font-semibold mb-2">💻 שירות דיגיטלי: פלטפורמת חונכות בין נערות</p>
+       <ul class="text-sm space-y-1">
+        <li>• מספר משתמשות בו-זמנית: עד 100</li>
+        <li>• זמן התאמה בין חונכת לחניכה: עד 48 שעות</li>
+        <li>• אורך שיחה: 15-30 דקות</li>
+        <li>• מערכת דירוג ומשוב לאחר כל מפגש</li>
+        <li>• פעולה קריטית: חיבור איכותי ורלוונטי בין שתי נערות</li>
+       </ul>
+      </div>
+     </section><!-- Section 4: Prototype -->
+     <section id="prototype">
+      <h2>אבטיפוס – בדיקת המציאות</h2>
+      <h3>מהו אבטיפוס ולמה בונים אותו?</h3>
+      <p>אבטיפוס (Prototype) הוא גרסה ראשונית, לא-סופית של המוצר. הוא נבנה לא כדי להיות מושלם, אלא כדי לבדוק הנחות, ללמוד מהמשתמשות, ולגלות בעיות לפני שמשקיעים זמן וכסף בפיתוח המלא.</p>
+      <p><strong>למה לא לקפוץ ישר לפיתוח?</strong> כי טעויות בשלב מוקדם זולות לתקן. טעויות בשלב מאוחר — יקרות מאוד. אבטיפוס מאפשר "להיכשל מהר וללמוד מהר".</p>
+      <h3>סוגי אבטיפוסים</h3>
+      <p>לא כל אבטיפוס חייב להיות מתוחכם. הסוג נבחר לפי מה שרוצים לבדוק:</p>
+      <div class="grid md:grid-cols-2 gap-4 my-6">
+       <div class="bg-slate-800/50 rounded-lg p-4 border border-slate-700/50">
+        <p class="font-semibold text-pink-300 mb-2">✏️ סקיצה (Sketch)</p>
+        <p class="text-sm text-slate-300">ציור ביד על נייר. פשוט, מהיר, וזול. מתאים לבדיקת רעיונות ראשוניים ולקבלת פידבק מהיר על כיוון כללי.</p>
+       </div>
+       <div class="bg-slate-800/50 rounded-lg p-4 border border-slate-700/50">
+        <p class="font-semibold text-cyan-300 mb-2">📐 Wireframe</p>
+        <p class="text-sm text-slate-300">שלד של ממשק — ללא צבעים, ללא עיצוב. מתמקד במבנה ובזרימה. מתאים לאפליקציות ואתרים.</p>
+       </div>
+       <div class="bg-slate-800/50 rounded-lg p-4 border border-slate-700/50">
+        <p class="font-semibold text-green-300 mb-2">🖥️ מודל דיגיטלי</p>
+        <p class="text-sm text-slate-300">הדמיה ממוחשבת של המוצר. יכול להיות תלת-ממדי (למוצר פיזי) או אינטראקטיבי (לאפליקציה).</p>
+       </div>
+       <div class="bg-slate-800/50 rounded-lg p-4 border border-slate-700/50">
+        <p class="font-semibold text-amber-300 mb-2">🤖 הדמיה ב-AI</p>
+       </div>
+       <div class="bg-slate-800/50 rounded-lg p-4 border border-slate-700/50">
+        <p class="font-semibold text-cyan-300 mb-2">📐 Wireframe</p>
+        <p class="text-sm text-slate-300">שלד של ממשק — ללא צבעים, ללא עיצוב. מתמקד במבנה ובזרימה. מתאים לאפליקציות ואתרים.</p>
+       </div>
+       <div class="bg-slate-800/50 rounded-lg p-4 border border-slate-700/50">
+        <p class="font-semibold text-green-300 mb-2">🖥️ מודל דיגיטלי</p>
+        <p class="text-sm text-slate-300">הדמיה ממוחשבת של המוצר. יכול להיות תלת-ממדי (למוצר פיזי) או אינטראקטיבי (לאפליקציה).</p>
+       </div>
+       <div class="bg-slate-800/50 rounded-lg p-4 border border-slate-700/50">
+        <p class="font-semibold text-amber-300 mb-2">🤖 הדמיה ב-AI</p>
+        <p class="text-sm text-slate-300">שימוש בכלי AI ליצירת תמונות ווידאו של המוצר. מהיר ומרשים, טוב להצגת חזון.</p>
+       </div>
+      </div>
+      <h3>תפקיד האבטיפוס בבדיקת הנחות</h3>
+      <p>כל מיזם מבוסס על הנחות. "אני מניחה שנערות ירצו להשתמש בזה". "אני מניחה שהפתרון הזה יעבוד". הנחות הן לא עובדות — הן ניחושים מושכלים. האבטיפוס מאפשר לבדוק אותן במציאות.</p>
+      <div class="highlight-box">
+       <p class="font-semibold mb-2">שאלות שאבטיפוס עוזר לענות עליהן:</p>
+       <ul class="mb-0 space-y-1">
+        <li>• האם המשתמשת מבינה מה לעשות?</li>
+        <li>• האם הזרימה הגיונית?</li>
+        <li>• האם הפעולה הקריטית באמת פותרת את הבעיה?</li>
+        <li>• מה מבלבל? מה חסר? מה מיותר?</li>
+       </ul>
+      </div>
+      <h3>בדיקת משתמשת: איך עושים את זה?</h3>
+      <p>בדיקת משתמשת היא לא "להראות למישהי ולשאול אם היא אוהבת". זה תהליך מובנה:</p>
+      <ol>
+       <li><strong>הגדירו מה אתן רוצות ללמוד</strong> — לא "האם זה טוב" אלא שאלה ספציפית</li>
+       <li><strong>בחרו משתתפות מקהל היעד</strong> — לא חברות או משפחה (הן לא אובייקטיביות)</li>
+       <li><strong>תנו משימה ספציפית</strong> — "נסי להירשם לאפליקציה" ולא "תגידי מה את חושבת"</li>
+       <li><strong>צפו בלי להתערב</strong> — אל תעזרו, אל תסבירו. רק תצפו</li>
+       <li><strong>שאלו שאלות פתוחות</strong> — "מה חשבת כשראית את זה?" ולא "זה היה ברור, נכון?"</li>
+       <li><strong>תעדו הכל</strong> — גם מה שלא מחמיא</li>
+      </ol>
+      <h3>שיפור ואיטרציה</h3>
+      <p>אבטיפוס הוא לא חד-פעמי. התהליך הוא מעגלי: בנו → בדקו → למדו → שפרו → חזרו לבנות. כל סבב נקרא "איטרציה". מוצרים מצליחים עוברים הרבה איטרציות.</p>
+      <div class="bg-gradient-to-l from-pink-500/10 to-cyan-500/10 rounded-xl p-6 my-6 text-center">
+       <p class="text-xl font-semibold gradient-text mb-2">כשלון ככלי למידה</p>
+       <p class="text-slate-300">אבטיפוס שנכשל הוא לא כישלון — הוא הצלחה בלמידה. גיליתן משהו חשוב שחסכתן מכם בפיתוח המלא. הכישלון היחיד האמיתי הוא לא ללמוד מהטעויות.</p>
+      </div>
+     </section><!-- Section 5: Connection -->
+     <section id="connection">
+      <h2>חיבור לתהליך היזמי שלכן</h2>
+      <p>בתוכנית "פורצות דרך", אתן נמצאות בשלבים 7-9 של הסילבוס: גיבוש פתרון, אפיון, ואבטיפוס. כל מה שלמדתן עד עכשיו — זיהוי הכאב, הגדרת הבעיה, בניית פרסונה, בחירת קונספט — מתכנס עכשיו לכדי משהו מוחשי.</p>
+      <h3>איך הכלים האלה משרתים אתכן?</h3>
+      <div class="space-y-4 my-6">
+       <div class="flex items-start gap-4 bg-slate-800/30 rounded-lg p-4">
+        <span class="text-3xl">🌳</span>
+        <div>
+         <p class="font-semibold text-pink-300">עץ המוצר</p>
+         <p class="text-slate-300">עוזר לכן לראות את התמונה המלאה — מה המוצר כולל, מה הליבה, ואיפה הסיכונים. הוא מונע מכן "להתאהב" ברעיון בלי להבין את המורכבות שלו.</p>
+        </div>
+       </div>
+       <div class="flex items-start gap-4 bg-slate-800/30 rounded-lg p-4">
+        <span class="text-3xl">📋</span>
+        <div>
+         <p class="font-semibold text-cyan-300">האפיון</p>
+         <p class="text-slate-300">מכריח אתכן להיות ספציפיות. לא "אפליקציה שתעזור" אלא "אפליקציה שעושה X, ב-Y צעדים, עבור Z משתמשות". הספציפיות היא חברה של הצלחה.</p>
+        </div>
+       </div>
+       <div class="flex items-start gap-4 bg-slate-800/30 rounded-lg p-4">
+        <span class="text-3xl">🔨</span>
+        <div>
+         <p class="font-semibold text-green-300">האבטיפוס</p>
+         <p class="text-slate-300">מאפשר לכן לצאת מהראש ולבדוק במציאות. הנחות שנראות הגיוניות בישיבת צוות לפעמים מתפוררות כשפוגשות משתמשת אמיתית.</p>
+        </div>
+       </div>
+      </div>
+      <h3>השימוש ב-AI בתהליך</h3>
+      <p>ככלי חשיבה, AI יכול לעזור לכן בכל שלב: לסייע בבניית עץ מוצר, להציע שאלות לאפיון, ליצור הדמיות לאבטיפוס, ולדמות שיחה עם משתמשת. אבל זכרו — AI הוא כלי, לא תחליף לחשיבה שלכן ולא תחליף לבדיקה עם משתמשות אמיתיות.</p>
+      <div class="highlight-box">
+       <p class="font-semibold mb-2">💡 הזהות האישית שלכן במיזם</p>
+       <p class="mb-0">המיזם שלכן צמח מכאב אישי שזיהיתן. זו לא חולשה — זו עוצמה. יזמיות שמבינות את הבעיה מבפנים יוצרות פתרונות טובים יותר. כשאתן בונות עץ מוצר, מאפיינות, ובודקות אבטיפוס — זכרו למה התחלתן ומי אתן רוצות לעזור לה.</p>
+      </div>
+     </section><!-- Section 6: Reflection -->
+     <section id="reflection">
+      <h2>שאלות רפלקטיביות לעבודה עצמית</h2>
+      <p>לפני שממשיכות, קחו זמן לענות על השאלות הבאות בכתב. הן יעזרו לכן לחדד את החשיבה ולזהות פערים:</p>
+      <div class="reflection-box">
+       <p class="font-semibold text-lg text-cyan-300 mb-4">🤔 שאלות על עץ המוצר</p>
+       <ol class="space-y-3">
+        <li><p class="font-medium">מהו הגזע של המוצר שלי?</p><p class="text-sm text-slate-400">מה הדבר המרכזי שבלעדיו המוצר מפסיק להתקיים?</p></li>
+        <li><p class="font-medium">אם אמחק 80% מהפיצ'רים — מה נשאר?</p><p class="text-sm text-slate-400">זה יעזור לכן לזהות את הליבה האמיתית</p></li>
+        <li><p class="font-medium">איפה נקודת הכשל הכי מסוכנת?</p><p class="text-sm text-slate-400">מה יכול להשתבש ולהפיל את המוצר כולו?</p></li>
+       </ol>
+      </div>
+      <div class="reflection-box">
+       <p class="font-semibold text-lg text-pink-300 mb-4">📝 שאלות על האפיון</p>
+       <ol class="space-y-3">
+        <li><p class="font-medium">מהי הפעולה הקריטית במוצר שלי?</p><p class="text-sm text-slate-400">הפעולה שאם היא לא עובדת — הכל נופל</p></li>
+        <li><p class="font-medium">האם יש לי אפיון ברור או רק רעיון כללי?</p><p class="text-sm text-slate-400">האם מפתחת יכולה לבנות מזה? או שחסרים פרטים?</p></li>
+        <li><p class="font-medium">מה קריטריון ה-GO שלי?</p><p class="text-sm text-slate-400">מתי אדע שהמוצר מוכן להתקדם?</p></li>
+       </ol>
+      </div>
+      <div class="reflection-box">
+       <p class="font-semibold text-lg text-green-300 mb-4">🔬 שאלות על האבטיפוס</p>
+       <ol class="space-y-3">
+        <li><p class="font-medium">מה ההנחה המרכזית שהאבטיפוס צריך לבדוק?</p><p class="text-sm text-slate-400">לא הכל בבת אחת — מה הדבר הכי חשוב לאמת?</p></li>
+        <li><p class="font-medium">איך אדע אם האבטיפוס הצליח או נכשל?</p><p class="text-sm text-slate-400">הגדירו מדדים ברורים מראש</p></li>
+        <li><p class="font-medium">מה אני מפחדת לגלות?</p><p class="text-sm text-slate-400">לפעמים דווקא שם מסתתרת התובנה הכי חשובה</p></li>
+       </ol>
+      </div>
+     </section><!-- Section 7: Summary -->
+     <section id="summary">
+      <h2>סיכום: יזמות מקצועית מתחילה בליבה</h2>
+      <p>המסע מרעיון למוצר אמיתי עובר דרך שלושה שלבים מרכזיים שלמדנו במאמר הזה:</p>
+      <div class="bg-gradient-to-l from-pink-500/20 to-cyan-500/20 rounded-xl p-6 my-6">
+       <div class="space-y-4">
+        <div class="flex items-center gap-3">
+         <span class="w-8 h-8 rounded-full bg-pink-500 flex items-center justify-center font-bold">1</span>
+         <p><strong>עץ מוצר</strong> — חשיבה מערכתית שמפרקת את המוצר לרכיביו ומזהה את הליבה הקריטית</p>
+        </div>
+        <div class="flex items-center gap-3">
+         <span class="w-8 h-8 rounded-full bg-cyan-500 flex items-center justify-center font-bold">2</span>
+         <p><strong>אפיון</strong> — תרגום החזון למפרט מדויק עם פעולות, זרימה, ותנאי הצלחה</p>
+        </div>
+        <div class="flex items-center gap-3">
+         <span class="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center font-bold">3</span>
+         <p><strong>אבטיפוס</strong> — בדיקת הנחות במציאות, למידה מכישלונות, ושיפור מתמיד</p>
+        </div>
+       </div>
+      </div>
+      <p>בתעשייה, הכלים האלה משמשים לפיתוח מוצרים מורכבים — ממטוסים ועד אפליקציות. בתוכנית "פורצות דרך", אתן משתמשות באותם כלים כדי להפוך כאב אישי לפתרון שיכול לעזור לאחרות.</p>
+      <p>יזמות מקצועית היא לא רק יצירתיות — היא גם שיטתיות. היכולת לפרק בעיה, להגדיר פתרון, ולבדוק אותו במציאות — זו מיומנות שתשרת אתכן בכל תחום בחיים.</p>
+      <div class="text-center py-8">
+       <p class="text-2xl font-serif gradient-text mb-4">"הרעיון הוא הזרע. הפיתוח הוא הגינון. המוצר הוא הפרי."</p>
+       <p class="text-slate-400">והפרי הטוב ביותר צומח מעץ עם שורשים עמוקים וגזע חזק.</p>
+      </div>
+      <div class="bg-slate-800/50 rounded-xl p-6 mt-8 border border-pink-500/30">
+       <p class="font-semibold text-pink-300 mb-2">🚀 הצעד הבא שלכן</p>
+       <p class="mb-0">קחו את המיזם שלכן וציירו את עץ המוצר שלו. זהו את הגזע, הענפים, והפירות. כתבו אפיון ראשוני של הפעולה הקריטית. ותכננו אבטיפוס פשוט שיבדוק את ההנחה המרכזית שלכן. זה השלב שבו רעיונות הופכים למציאות.</p>
+      </div>
+     </section>
+    </article>
+   </main><!-- Navigation Buttons to Appendices -->
+   <div class="max-w-4xl mx-auto px-6 py-12 mb-8">
+    <p class="text-center text-stone-600 mb-6 font-semibold">🎯 בחרו נספח להדפסה ומילוי:</p>
+    <div class="grid md:grid-cols-3 gap-4">
+     <!-- Appendix A --> <button id="btn-appendix-a" class="group relative overflow-hidden rounded-xl p-6 text-white font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg" style="background: linear-gradient(135deg, #ec4899, #f43f5e);">
+      <div class="absolute inset-0 opacity-0 group-hover:opacity-20 bg-white transition-opacity"></div>
+      <div class="relative">
+       <p class="text-2xl mb-2">📎</p>
+       <p class="text-lg">נספח א׳</p>
+       <p class="text-sm font-normal opacity-90">עץ מוצר</p>
+       <p class="text-xs font-normal opacity-75 mt-2">דף עבודה להדפסה</p>
+      </div></button> <!-- Appendix B --> <button id="btn-appendix-b" class="group relative overflow-hidden rounded-xl p-6 text-white font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg" style="background: linear-gradient(135deg, #0ea5e9, #06b6d4);">
+      <div class="absolute inset-0 opacity-0 group-hover:opacity-20 bg-white transition-opacity"></div>
+      <div class="relative">
+       <p class="text-2xl mb-2">✔</p>
+       <p class="text-lg">נספח ב׳</p>
+       <p class="text-sm font-normal opacity-90">בדיקת UX</p>
+       <p class="text-xs font-normal opacity-75 mt-2">צ'ק ליסט מקצועי</p>
+      </div></button> <!-- Appendix C --> <button id="btn-appendix-c" class="group relative overflow-hidden rounded-xl p-6 text-white font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg" style="background: linear-gradient(135deg, #10b981, #14b8a6);">
+      <div class="absolute inset-0 opacity-0 group-hover:opacity-20 bg-white transition-opacity"></div>
+      <div class="relative">
+       <p class="text-2xl mb-2">🎯</p>
+       <p class="text-lg">נספח ג׳</p>
+       <p class="text-sm font-normal opacity-90">טבלאות עזר</p>
+       <p class="text-xs font-normal opacity-75 mt-2">חומר רפרנס</p>
+      </div></button>
+    </div>
+   </div><!-- Footer -->
+   <footer class="bg-stone-100/50 py-8 px-6 border-t border-stone-200">
+    <div class="max-w-4xl mx-auto text-center">
+     <p class="text-rose-600 font-semibold mb-2">תוכנית "פורצות דרך"</p>
+     <p class="text-stone-500 text-sm">קורס יזמות לנערות | פיתוח מיומנויות המאה ה-21</p>
+    </div>
+   </footer>
+  </div>
+  <script>
+    const defaultConfig = {
+      article_title: 'מרעיון למוצר: המדריך המלא לעץ מוצר, אפיון ואבטיפוס',
+      subtitle: 'איך הופכים חזון מופשט למפרט מדויק שמוביל ליצירת מוצר אמיתי',
+      background_color: '#fafaf9',
+      surface_color: '#f5f5f4',
+      text_color: '#292524',
+      primary_color: '#ec4899',
+      secondary_color: '#0ea5e9',
+      font_family: 'Heebo',
+      font_size: 16
+    };
+    
+    async function onConfigChange(config) {
+      const titleEl = document.getElementById('article-title');
+      const subtitleEl = document.getElementById('article-subtitle');
+      
+      if (titleEl) {
+        titleEl.textContent = config.article_title || defaultConfig.article_title;
+      }
+      if (subtitleEl) {
+        subtitleEl.textContent = config.subtitle || defaultConfig.subtitle;
+      }
+      
+      document.documentElement.style.setProperty('--color-bg', config.background_color || defaultConfig.background_color);
+      document.documentElement.style.setProperty('--color-surface', config.surface_color || defaultConfig.surface_color);
+      document.documentElement.style.setProperty('--color-text', config.text_color || defaultConfig.text_color);
+      document.documentElement.style.setProperty('--color-primary', config.primary_color || defaultConfig.primary_color);
+      document.documentElement.style.setProperty('--color-secondary', config.secondary_color || defaultConfig.secondary_color);
+      
+      document.body.style.backgroundColor = config.background_color || defaultConfig.background_color;
+      document.body.style.color = config.text_color || defaultConfig.text_color;
+      
+      const fontFamily = config.font_family || defaultConfig.font_family;
+      const fontSize = config.font_size || defaultConfig.font_size;
+      document.body.style.fontFamily = `${fontFamily}, sans-serif`;
+      document.body.style.fontSize = `${fontSize}px`;
+    }
+    
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [
+          {
+            get: () => config.background_color || defaultConfig.background_color,
+            set: (value) => { config.background_color = value; window.elementSdk.setConfig({ background_color: value }); }
+          },
+          {
+            get: () => config.surface_color || defaultConfig.surface_color,
+            set: (value) => { config.surface_color = value; window.elementSdk.setConfig({ surface_color: value }); }
+          },
+          {
+            get: () => config.text_color || defaultConfig.text_color,
+            set: (value) => { config.text_color = value; window.elementSdk.setConfig({ text_color: value }); }
+          },
+          {
+            get: () => config.primary_color || defaultConfig.primary_color,
+            set: (value) => { config.primary_color = value; window.elementSdk.setConfig({ primary_color: value }); }
+          },
+          {
+            get: () => config.secondary_color || defaultConfig.secondary_color,
+            set: (value) => { config.secondary_color = value; window.elementSdk.setConfig({ secondary_color: value }); }
+          }
+        ],
+        borderables: [],
+        fontEditable: {
+          get: () => config.font_family || defaultConfig.font_family,
+          set: (value) => { config.font_family = value; window.elementSdk.setConfig({ font_family: value }); }
+        },
+        fontSizeable: {
+          get: () => config.font_size || defaultConfig.font_size,
+          set: (value) => { config.font_size = value; window.elementSdk.setConfig({ font_size: value }); }
+        }
+      };
+    }
+    
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ['article_title', config.article_title || defaultConfig.article_title],
+        ['subtitle', config.subtitle || defaultConfig.subtitle]
+      ]);
+    }
+    
+    // Initialize SDK
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
+    
+    // Progress indicator
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (scrollTop / docHeight) * 100;
+      document.getElementById('progress').style.width = `${Math.min(progress, 100)}%`;
+    });
+    
+    // Smooth scroll for TOC
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // Appendix Navigation
+    const appendixA = document.getElementById('btn-appendix-a');
+    const appendixB = document.getElementById('btn-appendix-b');
+    const appendixC = document.getElementById('btn-appendix-c');
+
+    if (appendixA) {
+      appendixA.addEventListener('click', () => {
+        showAppendixA();
+      });
+    }
+
+    if (appendixB) {
+      appendixB.addEventListener('click', () => {
+        showAppendixB();
+      });
+    }
+
+    if (appendixC) {
+      appendixC.addEventListener('click', () => {
+        showAppendixC();
+      });
+    }
+
+    function showAppendixA() {
+      const appendixContent = `
+        <div style="page-break-after: always; padding: 2rem; background: white; min-height: 100vh; font-family: 'Heebo', sans-serif;">
+          <div style="text-align: center; margin-bottom: 2rem; border-bottom: 3px solid #ec4899; padding-bottom: 1.5rem;">
+            <h1 style="color: #ec4899; font-size: 2rem; margin: 0; font-weight: 700;">🌳 עץ המוצר שלנו</h1>
+            <p style="color: #666; font-size: 1.1rem; margin: 0.5rem 0;">מפגש 8 – דף עבודה להדפסה</p>
+          </div>
+
+          <div style="margin: 2rem 0; padding: 1.5rem; background: #fef2f2; border-right: 4px solid #ec4899; border-radius: 0.5rem;">
+            <h2 style="color: #ec4899; font-size: 1.5rem; margin-top: 0;">חלק 1 – זיהוי ליבה (הגזע)</h2>
+            <p style="font-weight: 600; margin-bottom: 0.5rem;">1. מה הפעולה המרכזית של המוצר שלנו?</p>
+            <p style="color: #999; font-size: 0.9rem; margin-bottom: 0.3rem;">(מה המשתמשת חייבת להיות מסוגלת לעשות?)</p>
+            <textarea placeholder="הקלידי את התשובה..." style="width: 100%; min-height: 80px; padding: 0.75rem; border: 2px solid #ec4899; border-radius: 0.5rem; font-family: Heebo; font-size: 0.95rem; margin-bottom: 1.5rem; resize: vertical;"></textarea>
+
+            <p style="font-weight: 600; margin-bottom: 0.5rem;">2. איזה צורך מרכזי הוא פותר?</p>
+            <textarea placeholder="הקלידי את התשובה..." style="width: 100%; min-height: 80px; padding: 0.75rem; border: 2px solid #ec4899; border-radius: 0.5rem; font-family: Heebo; font-size: 0.95rem; margin-bottom: 1rem; resize: vertical;"></textarea>
+
+            <p style="background: #fff8f8; padding: 0.75rem; border-right: 3px solid #f43f5e; border-radius: 0.25rem; font-size: 0.95rem;">
+              <strong>🎯 זהו ה-MVP שלנו (Minimum Viable Product)</strong>
+            </p>
+          </div>
+
+          <div style="margin: 2rem 0; padding: 1.5rem; background: #eff6ff; border-right: 4px solid #0ea5e9; border-radius: 0.5rem;">
+            <h2 style="color: #0ea5e9; font-size: 1.5rem; margin-top: 0;">חלק 2 – הענפים (פונקציות / רכיבים)</h2>
+            <p style="font-weight: 600; margin-bottom: 1rem;">מלאו לפחות 3 ענפים:</p>
+            
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.95rem;">
+              <tr style="background: #dbeafe; border-bottom: 2px solid #0ea5e9;">
+                <th style="padding: 0.75rem; text-align: right; border: 1px solid #0ea5e9;">ענף</th>
+                <th style="padding: 0.75rem; text-align: right; border: 1px solid #0ea5e9;">מה הוא מאפשר?</th>
+                <th style="padding: 0.75rem; text-align: center; border: 1px solid #0ea5e9;">חלק מ-MVP?</th>
+              </tr>
+              <tr style="border-bottom: 1px solid #0ea5e9;">
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9; text-align: center; font-weight: 600;">1</td>
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9;"><input type="text" placeholder="הקלידי..." style="width: 100%; border: none; padding: 0.5rem; font-family: Heebo;"/></td>
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9; text-align: center;"><select style="padding: 0.5rem; font-family: Heebo; border: 1px solid #ccc;"><option>כן</option><option>לא</option></select></td>
+              </tr>
+              <tr style="border-bottom: 1px solid #0ea5e9;">
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9; text-align: center; font-weight: 600;">2</td>
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9;"><input type="text" placeholder="הקלידי..." style="width: 100%; border: none; padding: 0.5rem; font-family: Heebo;"/></td>
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9; text-align: center;"><select style="padding: 0.5rem; font-family: Heebo; border: 1px solid #ccc;"><option>כן</option><option>לא</option></select></td>
+              </tr>
+              <tr style="border-bottom: 1px solid #0ea5e9;">
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9; text-align: center; font-weight: 600;">3</td>
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9;"><input type="text" placeholder="הקלידי..." style="width: 100%; border: none; padding: 0.5rem; font-family: Heebo;"/></td>
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9; text-align: center;"><select style="padding: 0.5rem; font-family: Heebo; border: 1px solid #ccc;"><option>כן</option><option>לא</option></select></td>
+              </tr>
+              <tr style="border-bottom: 1px solid #0ea5e9;">
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9; text-align: center; font-weight: 600;">4 (רשות)</td>
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9;"><input type="text" placeholder="הקלידי..." style="width: 100%; border: none; padding: 0.5rem; font-family: Heebo;"/></td>
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9; text-align: center;"><select style="padding: 0.5rem; font-family: Heebo; border: 1px solid #ccc;"><option>כן</option><option>לא</option></select></td>
+              </tr>
+            </table>
+          </div>
+
+          <div style="margin: 2rem 0; padding: 1.5rem; background: #f0fdf4; border-right: 4px solid #10b981; border-radius: 0.5rem;">
+            <h2 style="color: #10b981; font-size: 1.5rem; margin-top: 0;">חלק 3 – סוג המוצר</h2>
+            <p style="font-size: 0.95rem; margin-bottom: 1rem;">סמנו את סוג המוצר וענו על השאלות הרלוונטיות:</p>
+            
+            <div style="margin-bottom: 1.5rem;">
+              <p style="font-weight: 600; color: #10b981; margin-bottom: 0.75rem;">🔧 אם זה מוצר פיזי:</p>
+              <div style="padding-left: 1.5rem; space-y: 0.5rem;">
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> אילו רכיבים פיזיים קיימים? <input type="text" style="width: 250px; padding: 0.3rem; border: 1px solid #ccc; border-radius: 0.25rem;"/></p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> האם יש חיישן / מנגנון פעולה? <input type="text" style="width: 250px; padding: 0.3rem; border: 1px solid #ccc; border-radius: 0.25rem;"/></p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> האם יש חיווי (אור / צליל / מסך)? <input type="text" style="width: 250px; padding: 0.3rem; border: 1px solid #ccc; border-radius: 0.25rem;"/></p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> האם יש רכיב דיגיטלי מלווה? <input type="text" style="width: 250px; padding: 0.3rem; border: 1px solid #ccc; border-radius: 0.25rem;"/></p>
+              </div>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+              <p style="font-weight: 600; color: #10b981; margin-bottom: 0.75rem;">💻 אם זה דגם דיגיטלי (פלטפורמה / אתר):</p>
+              <div style="padding-left: 1.5rem;">
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> מה רואים במסך הראשי? <input type="text" style="width: 250px; padding: 0.3rem; border: 1px solid #ccc; border-radius: 0.25rem;"/></p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> מהי הפעולה המרכזית (CTA)? <input type="text" style="width: 250px; padding: 0.3rem; border: 1px solid #ccc; border-radius: 0.25rem;"/></p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> אילו אזורי מידע משניים קיימים? <input type="text" style="width: 250px; padding: 0.3rem; border: 1px solid #ccc; border-radius: 0.25rem;"/></p>
+              </div>
+            </div>
+
+            <div>
+              <p style="font-weight: 600; color: #10b981; margin-bottom: 0.75rem;">📱 אם זו אפליקציה:</p>
+              <div style="padding-left: 1.5rem;">
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> מסך בית – מה מופיע ראשון? <input type="text" style="width: 250px; padding: 0.3rem; border: 1px solid #ccc; border-radius: 0.25rem;"/></p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> פעולה מרכזית? <input type="text" style="width: 250px; padding: 0.3rem; border: 1px solid #ccc; border-radius: 0.25rem;"/></p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> מה קורה אחרי הלחיצה? <input type="text" style="width: 250px; padding: 0.3rem; border: 1px solid #ccc; border-radius: 0.25rem;"/></p>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin: 2rem 0; padding: 1.5rem; background: #fef3c7; border-right: 4px solid #f59e0b; border-radius: 0.5rem;">
+            <h2 style="color: #d97706; font-size: 1.5rem; margin-top: 0;">חלק 4 – פירות (הערך למשתמשת)</h2>
+            <p style="font-weight: 600; margin-bottom: 1rem;">מה המשתמשת מרוויחה בסוף התהליך?</p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
+              <p style="margin: 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> חיסכון בזמן</p>
+              <p style="margin: 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> ביטחון</p>
+              <p style="margin: 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> שליטה</p>
+              <p style="margin: 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> נוחות</p>
+              <p style="margin: 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> ידע</p>
+              <p style="margin: 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> תחושת מסוגלות</p>
+            </div>
+            <p style="margin: 0.5rem 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> אחר: <input type="text" style="width: 200px; padding: 0.3rem; border: 1px solid #ccc; border-radius: 0.25rem;"/></p>
+            <p style="font-weight: 600; margin-top: 1rem; margin-bottom: 0.5rem;">במשפט אחד:</p>
+            <p style="margin: 0.5rem 0; font-size: 0.9rem;">בסוף השימוש המשתמשת <input type="text" placeholder="הקלידי..." style="width: 400px; padding: 0.3rem; border: 1px solid #ccc; border-radius: 0.25rem;"/></p>
+            <p style="margin: 0.5rem 0; font-size: 0.9rem;">והיא מרגישה <input type="text" placeholder="הקלידי..." style="width: 400px; padding: 0.3rem; border: 1px solid #ccc; border-radius: 0.25rem;"/></p>
+          </div>
+
+          <div style="margin: 2rem 0; padding: 1.5rem; background: #f5f3ff; border-right: 4px solid #a855f7; border-radius: 0.5rem;">
+            <h2 style="color: #a855f7; font-size: 1.5rem; margin-top: 0;">חלק 5 – זיהוי חיכוך אפשרי (Friction Map)</h2>
+            <p style="font-weight: 600; margin-bottom: 1rem;">איפה המשתמשת עלולה להתבלבל?</p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
+              <p style="margin: 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> בהתחלה</p>
+              <p style="margin: 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> באמצע</p>
+              <p style="margin: 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> בסוף</p>
+              <p style="margin: 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> ברכיב פיזי</p>
+              <p style="margin: 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> במסך עמוס</p>
+              <p style="margin: 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> בכפתור לא ברור</p>
+            </div>
+            <p style="font-weight: 600; margin-bottom: 0.5rem;">הסבר קצר:</p>
+            <textarea placeholder="הקלידי את ההסבר..." style="width: 100%; min-height: 80px; padding: 0.75rem; border: 2px solid #a855f7; border-radius: 0.5rem; font-family: Heebo; font-size: 0.95rem; resize: vertical;"></textarea>
+          </div>
+
+          <div style="margin-top: 2rem; padding: 1rem; background: #f3f4f6; text-align: center; border-radius: 0.5rem;">
+            <p style="margin: 0; color: #666; font-size: 0.85rem;">📎 עץ המוצר שלנו – מפגש 8</p>
+          </div>
+        </div>
+      `;
+      openModal(appendixContent, 'נספח א׳ – עץ המוצר');
+    }
+
+    function showAppendixB() {
+      const appendixContent = `
+        <div style="page-break-after: always; padding: 2rem; background: white; min-height: 100vh; font-family: 'Heebo', sans-serif;">
+          <div style="text-align: center; margin-bottom: 2rem; border-bottom: 3px solid #0ea5e9; padding-bottom: 1.5rem;">
+            <h1 style="color: #0ea5e9; font-size: 2rem; margin: 0; font-weight: 700;">✔ בדיקת UX מקצועית</h1>
+            <p style="color: #666; font-size: 1.1rem; margin: 0.5rem 0;">צ'ק ליסט לפני שמציגות את המוצר</p>
+          </div>
+
+          <div style="margin: 2rem 0; padding: 1.5rem; background: #eff6ff; border-right: 4px solid #0ea5e9; border-radius: 0.5rem;">
+            <h2 style="color: #0ea5e9; font-size: 1.5rem; margin-top: 0;">חלק א׳ – בדיקות חובה לכל סוג מוצר</h2>
+            
+            <div style="margin: 1.5rem 0;">
+              <p style="font-weight: 600; color: #0ea5e9; margin-bottom: 0.75rem;">1. בהירות ליבה</p>
+              <div style="padding-left: 1.5rem; border-left: 2px solid #0ea5e9;">
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> ברור מה המוצר עושה תוך 5 שניות</p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> יש פעולה מרכזית אחת ברורה</p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> אין עומס מידע</p>
+              </div>
+            </div>
+
+            <div style="margin: 1.5rem 0;">
+              <p style="font-weight: 600; color: #0ea5e9; margin-bottom: 0.75rem;">2. User Flow</p>
+              <div style="padding-left: 1.5rem; border-left: 2px solid #0ea5e9;">
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> ברור איך מתחילים</p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> ברור מה קורה באמצע</p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> ברור מה התוצאה</p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> יש משוב (Feedback) לאחר פעולה</p>
+              </div>
+            </div>
+
+            <div style="margin: 1.5rem 0;">
+              <p style="font-weight: 600; color: #0ea5e9; margin-bottom: 0.75rem;">3. חיכוך (Friction)</p>
+              <div style="padding-left: 1.5rem; border-left: 2px solid #0ea5e9;">
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> אין יותר מדי שלבים</p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> אין כפילויות</p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> אין צורך בהסבר חיצוני כדי להבין</p>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin: 2rem 0; padding: 1.5rem; background: #f0fdf4; border-right: 4px solid #10b981; border-radius: 0.5rem;">
+            <h2 style="color: #10b981; font-size: 1.5rem; margin-top: 0;">חלק ב׳ – בדיקות ייעודיות לפי סוג</h2>
+            
+            <div style="margin: 1.5rem 0;">
+              <p style="font-weight: 600; color: #10b981; margin-bottom: 0.75rem;">🔧 מוצר פיזי</p>
+              <div style="padding-left: 1.5rem; border-left: 2px solid #10b981;">
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> ברור איפה נוגעים / מפעילים</p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> יש חיווי ברור (אור / צליל / תנועה)</p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> גודל ותצורה מתאימים למשתמשת</p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> אין סכנה / בלבול תפעולי</p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> אם יש אפליקציה מלווה – החיבור ברור</p>
+                <p style="margin: 1rem 0; font-size: 0.9rem; background: #f0fdf4; padding: 0.75rem; border-radius: 0.25rem; border-right: 2px solid #10b981;">
+                  <strong>שאלה מקצועית:</strong> האם המוצר מגיב לפעולה של המשתמשת בצורה מיידית וברורה?
+                  <br/><textarea placeholder="הקלידי את התשובה..." style="width: 100%; min-height: 40px; padding: 0.5rem; border: 1px solid #ccc; margin-top: 0.5rem; font-family: Heebo; border-radius: 0.25rem;"></textarea>
+                </p>
+              </div>
+            </div>
+
+            <div style="margin: 1.5rem 0;">
+              <p style="font-weight: 600; color: #10b981; margin-bottom: 0.75rem;">💻 דגם דיגיטלי (פלטפורמה / אתר)</p>
+              <div style="padding-left: 1.5rem; border-left: 2px solid #10b981;">
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> יש היררכיית מידע (מה חשוב ראשון)</p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> כפתור CTA בולט</p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> ניווט ברור</p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> אין יותר מ-3–5 אזורים מרכזיים במסך</p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> השפה הויזואלית אחידה</p>
+                <p style="margin: 1rem 0; font-size: 0.9rem; background: #f0fdf4; padding: 0.75rem; border-radius: 0.25rem; border-right: 2px solid #10b981;">
+                  <strong>שאלה מקצועית:</strong> האם המשתמשת יודעת לאן ללחוץ בלי לחשוב יותר מדי?
+                  <br/><textarea placeholder="הקלידי את התשובה..." style="width: 100%; min-height: 40px; padding: 0.5rem; border: 1px solid #ccc; margin-top: 0.5rem; font-family: Heebo; border-radius: 0.25rem;"></textarea>
+                </p>
+              </div>
+            </div>
+
+            <div style="margin: 1.5rem 0;">
+              <p style="font-weight: 600; color: #10b981; margin-bottom: 0.75rem;">📱 אפליקציה</p>
+              <div style="padding-left: 1.5rem; border-left: 2px solid #10b981;">
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> מסך בית לא עמוס</p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> הפעולה המרכזית בולטת</p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> יש מסך תוצאה ברור</p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> יש Feedback (הודעה / שינוי מצב)</p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> אין צורך ביותר מ-2–3 לחיצות לפעולה מרכזית</p>
+                <p style="margin: 1rem 0; font-size: 0.9rem; background: #f0fdf4; padding: 0.75rem; border-radius: 0.25rem; border-right: 2px solid #10b981;">
+                  <strong>שאלה מקצועית:</strong> האם ה-Flow זורם בלי קפיצות או בלבול?
+                  <br/><textarea placeholder="הקלידי את התשובה..." style="width: 100%; min-height: 40px; padding: 0.5rem; border: 1px solid #ccc; margin-top: 0.5rem; font-family: Heebo; border-radius: 0.25rem;"></textarea>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin: 2rem 0; padding: 1.5rem; background: #fef3c7; border-right: 4px solid #f59e0b; border-radius: 0.5rem;">
+            <h2 style="color: #d97706; font-size: 1.5rem; margin-top: 0;">חלק ג׳ – בדיקת ערך (Value Check)</h2>
+            <div style="padding-left: 1.5rem; border-left: 2px solid #f59e0b;">
+              <p style="margin: 0.5rem 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> המשתמשת מבינה מה הרווח שלה</p>
+              <p style="margin: 0.5rem 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> השינוי בחיים שלה ברור</p>
+              <p style="margin: 0.5rem 0; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> יש סיבה אמיתית לחזור להשתמש</p>
+              <p style="margin: 1rem 0; font-size: 0.9rem; background: #fef3c7; padding: 0.75rem; border-radius: 0.25rem; border-right: 2px solid #f59e0b;">
+                <strong>במשפט אחד – הסיבה שהמשתמשת תחזור:</strong>
+                <br/><textarea placeholder="הקלידי את התשובה..." style="width: 100%; min-height: 60px; padding: 0.5rem; border: 1px solid #ccc; margin-top: 0.5rem; font-family: Heebo; border-radius: 0.25rem; resize: vertical;"></textarea>
+              </p>
+            </div>
+          </div>
+
+          <div style="margin-top: 2rem; padding: 1rem; background: #f3f4f6; text-align: center; border-radius: 0.5rem;">
+            <p style="margin: 0; color: #666; font-size: 0.85rem;">✔ בדיקת UX מקצועית</p>
+          </div>
+        </div>
+      `;
+      openModal(appendixContent, 'נספח ב׳ – בדיקת UX');
+    }
+
+    function showAppendixC() {
+      const appendixContent = `
+        <div style="page-break-after: always; padding: 2rem; background: white; min-height: 100vh; font-family: 'Heebo', sans-serif;">
+          <div style="text-align: center; margin-bottom: 2rem; border-bottom: 3px solid #10b981; padding-bottom: 1.5rem;">
+            <h1 style="color: #10b981; font-size: 2rem; margin: 0; font-weight: 700;">🎯 טבלאות עזר וחומר רפרנס</h1>
+            <p style="color: #666; font-size: 1.1rem; margin: 0.5rem 0;">טבלאות ומידע עבור תהליך האפיון</p>
+          </div>
+
+          <div style="margin: 2rem 0; padding: 1.5rem; background: #f0fdf4; border-right: 4px solid #10b981; border-radius: 0.5rem;">
+            <h2 style="color: #10b981; font-size: 1.5rem; margin-top: 0;">טבלה 1: סוגי מוצרים – ההבדלים</h2>
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 1rem;">
+              <tr style="background: #dbeafe; border-bottom: 2px solid #0ea5e9;">
+                <th style="padding: 0.75rem; text-align: right; border: 1px solid #0ea5e9; color: #0ea5e9;">מאפיין</th>
+                <th style="padding: 0.75rem; text-align: right; border: 1px solid #0ea5e9; color: #0ea5e9;">מוצר פיזי 🔧</th>
+                <th style="padding: 0.75rem; text-align: right; border: 1px solid #0ea5e9; color: #0ea5e9;">דגם דיגיטלי 💻</th>
+                <th style="padding: 0.75rem; text-align: right; border: 1px solid #0ea5e9; color: #0ea5e9;">אפליקציה 📱</th>
+              </tr>
+              <tr style="border-bottom: 1px solid #0ea5e9;">
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9; font-weight: 600;">אפשר לגעת בו</td>
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9;">✔ כן</td>
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9;">✗ לא</td>
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9;">✗ לא</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #0ea5e9;">
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9; font-weight: 600;">צריך קישוריות</td>
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9;">? אולי</td>
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9;">✔ כן</td>
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9;">✔ כן</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #0ea5e9;">
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9; font-weight: 600;">זמן פיתוח</td>
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9;">ארוך (הטיפול בחומרים)</td>
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9;">בינוני (בדיקה)</td>
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9;">בינוני ל-קצר</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #0ea5e9;">
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9; font-weight: 600;">אפשר לעדכן אחרי השקה</td>
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9;">✗ קשה</td>
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9;">✔ קל</td>
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9;">✔ קל</td>
+              </tr>
+            </table>
+          </div>
+
+          <div style="margin: 2rem 0; padding: 1.5rem; background: #eff6ff; border-right: 4px solid #0ea5e9; border-radius: 0.5rem;">
+            <h2 style="color: #0ea5e9; font-size: 1.5rem; margin-top: 0;">טבלה 2: MVP לעומת מוצר מלא</h2>
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 1rem;">
+              <tr style="background: #dbeafe; border-bottom: 2px solid #0ea5e9;">
+                <th style="padding: 0.75rem; text-align: right; border: 1px solid #0ea5e9; color: #0ea5e9;">מאפיין</th>
+                <th style="padding: 0.75rem; text-align: right; border: 1px solid #0ea5e9; color: #0ea5e9;">MVP 🚀</th>
+                <th style="padding: 0.75rem; text-align: right; border: 1px solid #0ea5e9; color: #0ea5e9;">מוצר מלא ✨</th>
+              </tr>
+              <tr style="border-bottom: 1px solid #0ea5e9;">
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9; font-weight: 600;">מטרה</td>
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9;">ללמוד ולאמת הנחות</td>
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9;">לספק חוויה מלאה</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #0ea5e9;">
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9; font-weight: 600;">מספר פיצ'רים</td>
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9;">3–5 בסיסיים</td>
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9;">הרבה יותר</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #0ea5e9;">
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9; font-weight: 600;">עיצוב</td>
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9;">פשוט וברור</td>
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9;">מלוטש ויפה</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #0ea5e9;">
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9; font-weight: 600;">זמן לשיגור</td>
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9;">קצר (שבועות)</td>
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9;">ארוך (חודשים)</td>
+              </tr>
+            </table>
+          </div>
+
+          <div style="margin: 2rem 0; padding: 1.5rem; background: #fef2f2; border-right: 4px solid #ec4899; border-radius: 0.5rem;">
+            <h2 style="color: #ec4899; font-size: 1.5rem; margin-top: 0;">טבלה 3: סימני אזהרה (Red Flags) 🚩</h2>
+            <div style="margin-top: 1rem;">
+              <p style="margin: 0.5rem 0; font-size: 0.9rem;"><strong>⚠ אם נמצא אחד מהסימנים הללו – חזרו לשלב התכנון:</strong></p>
+              <ul style="margin-top: 1rem; padding-left: 1.5rem;">
+                <li style="margin-bottom: 0.75rem; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> 🚫 המשתמשת לא מבינה מה לעשות בשניה הראשונה</li>
+                <li style="margin-bottom: 0.75rem; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> 🚫 יותר מ-30% מהמשתמשות מתבלבלות או מרגישות חסרות אונים</li>
+                <li style="margin-bottom: 0.75rem; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> 🚫 אין משוב (Feedback) אחרי הפעולה המרכזית</li>
+                <li style="margin-bottom: 0.75rem; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> 🚫 הפעולה מרכזית לוקח יותר מ-3 לחיצות</li>
+                <li style="margin-bottom: 0.75rem; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> 🚫 המשתמשת לא מרגישה שהמוצר עונה לצורך שלה</li>
+                <li style="margin-bottom: 0.75rem; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> 🚫 הדיזיין עמוס או מבלבל</li>
+                <li style="margin-bottom: 0.75rem; font-size: 0.9rem;">☐ <input type="checkbox" style="margin: 0 0.5rem;"/> 🚫 אין סיבה שהמשתמשת תחזור</li>
+              </ul>
+            </div>
+          </div>
+
+          <div style="margin: 2rem 0; padding: 1.5rem; background: #fef3c7; border-right: 4px solid #f59e0b; border-radius: 0.5rem;">
+            <h2 style="color: #d97706; font-size: 1.5rem; margin-top: 0;">💡 השאלה המכריעה</h2>
+            <p style="font-size: 1rem; line-height: 1.6; margin-top: 1rem;">
+              אם אתן לא יכולות לענות <strong>במשפט אחד ברור</strong> על השאלה הזו — גם משתמשות לא יחזרו:
+            </p>
+            <div style="margin: 1.5rem 0; padding: 1.5rem; background: white; border: 2px solid #f59e0b; border-radius: 0.75rem;">
+              <p style="font-size: 1.1rem; font-weight: 700; color: #d97706; margin: 1rem 0; text-align: center;">
+                "בסוף השימוש במוצר שלנו, המשתמשת תהיה מסוגלת ל...?"
+              </p>
+              <textarea placeholder="הקלידי את התשובה..." style="width: 100%; min-height: 80px; padding: 0.75rem; border: 2px solid #f59e0b; border-radius: 0.5rem; font-family: Heebo; font-size: 0.95rem; resize: vertical;"></textarea>
+            </div>
+            <p style="font-size: 0.9rem; color: #666; margin-top: 1rem;">
+              אם המשפט חייב להיות יותר ממשפט אחד, או אם אתן עדיין מתנדנדות בין אופציות — המוצר לא מוכן עדיין. חזרו לעץ המוצר ואל האפיון.
+            </p>
+          </div>
+
+          <div style="margin-top: 2rem; padding: 1rem; background: #f3f4f6; text-align: center; border-radius: 0.5rem;">
+            <p style="margin: 0; color: #666; font-size: 0.85rem;">🎯 טבלאות עזר וחומר רפרנס</p>
+          </div>
+        </div>
+      `;
+      openModal(appendixContent, 'נספח ג׳ – טבלאות עזר');
+    }
+
+    function openModal(content, title) {
+      const modal = document.createElement('div');
+      modal.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 9999; display: flex; align-items: center; justify-content: center; dir: rtl;';
+      
+      const modalBox = document.createElement('div');
+      modalBox.style.cssText = 'background: white; border-radius: 0.75rem; max-width: 90vw; max-height: 85vh; overflow-y: auto; position: relative; box-shadow: 0 20px 25px rgba(0,0,0,0.15);';
+      
+      const closeBtn = document.createElement('button');
+      closeBtn.innerHTML = '✕';
+      closeBtn.style.cssText = 'position: sticky; top: 0; right: 0; z-index: 10000; background: #ec4899; color: white; border: none; padding: 0.75rem 1.5rem; font-size: 1.5rem; cursor: pointer; border-radius: 0 0 0 0.75rem; width: 100%; text-align: left;';
+      
+      const headerText = document.createElement('p');
+      headerText.textContent = title;
+      headerText.style.cssText = 'margin: -0.75rem 0 0 1rem; font-weight: 600; color: #666;';
+      
+      const contentDiv = document.createElement('div');
+      contentDiv.innerHTML = content;
+      
+      closeBtn.addEventListener('click', () => modal.remove());
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.remove();
+      });
+      
+      modalBox.appendChild(closeBtn);
+      modalBox.appendChild(contentDiv);
+      modal.appendChild(modalBox);
+      document.body.appendChild(modal);
+
+      // Trigger print dialog after a brief delay for better UX
+      setTimeout(() => {
+        window.print();
+      }, 300);
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d5121cc44dbc231',t:'MTc3MjI5NDM5Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
