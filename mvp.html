@@ -270,12 +270,13 @@
      <h2 class="text-lg font-semibold mb-4 text-rose-600">תוכן העניינים</h2>
      <ol class="space-y-2 text-stone-600">
       <li><a href="#intro" class="toc-link block">1. פתיחה: למה רעיון לבדו אינו מספיק</a></li>
-      <li><a href="#product-tree" class="toc-link block">2. עץ מוצר – חשיבה מערכתית בפיתוח</a></li>
-      <li><a href="#specification" class="toc-link block">3. אפיון מוצר – מעבר מחזון למבנה</a></li>
-      <li><a href="#prototype" class="toc-link block">4. אבטיפוס – בדיקת המציאות</a></li>
-      <li><a href="#connection" class="toc-link block">5. חיבור לתהליך היזמי שלכן</a></li>
-      <li><a href="#reflection" class="toc-link block">6. שאלות רפלקטיביות לעבודה עצמית</a></li>
-      <li><a href="#summary" class="toc-link block">7. סיכום: יזמות מקצועית מתחילה בליבה</a></li>
+      <li><a href="#product-tree" class="toc-link block">2. עץ מוצר – לראות את המערכת באמת</a></li>
+      <li><a href="#specification" class="toc-link block">3. אפיון מוצר – להפוך רעיון למשהו שאפשר לבנות</a></li>
+      <li><a href="#mvp" class="toc-link block">4. MVP – לא הכל בבת אחת</a></li>
+      <li><a href="#prototype" class="toc-link block">5. אבטיפוס – רגע האמת</a></li>
+      <li><a href="#connection" class="toc-link block">6. החיבור אלייך</a></li>
+      <li><a href="#reflection" class="toc-link block">7. שאלות שאת חייבת לשאול את עצמך</a></li>
+      <li><a href="#summary" class="toc-link block">8. סיכום: יזמות מתחילה בליבה</a></li>
      </ol>
     </div>
    </nav><!-- Article Content -->
@@ -284,382 +285,285 @@
      <!-- Section 1: Introduction -->
      <section id="intro" class="animate-fade-in">
       <h2>פתיחה: למה רעיון לבדו אינו מספיק</h2>
-      <p>רעיון טוב מרגיש כמו קסם. הוא צץ בראש, מתלהב, נראה מבריק ופורץ דרך. אבל להפוך אותו למשהו שאפשר להחזיק ביד, להשתמש בו, למכור אותו? זה כבר סיפור אחר לגמרי. רעיון הוא רק נקודת התחלה — והדרך ממנו למוצר אמיתי עוברת דרך תהליכים מובנים של חשיבה, תכנון ובדיקה.</p>
-      <p>בתעשייה האמיתית, שבה מפתחים מוצרים מורכבים — ממטוסים ועד אפליקציות — אף אחד לא קופץ מרעיון ישר לייצור. יש תהליך שלם באמצע, ובמרכזו עומדים שלושה כלים מרכזיים: <strong>עץ מוצר</strong> שמפרק את המוצר לרכיביו, <strong>מסמך אפיון</strong> שמגדיר בדיוק מה המוצר עושה ואיך, ו<strong>אבטיפוס</strong> שמאפשר לבדוק את הרעיון במציאות לפני שמשקיעים בו משאבים אמיתיים.</p>
+      <p>בואי נדבר רגע בכנות.</p>
+      <p>לכולן יש רעיונות.</p>
+      <p>באוטובוס. במקלחת. באמצע שיעור משעמם.<br>
+      <strong>"איך אף אחת עוד לא חשבה על זה?!"</strong></p>
+      <p>אבל רעיון – מבריק ככל שיהיה – הוא רק התחלה.<br>
+      הוא ניצוץ. לא מדורה.</p>
+      <p>ההבדל בין רעיון למוצר אמיתי הוא <strong>תהליך</strong>.<br>
+      ובתהליך הזה יש שלושה שלבים שכל יזמת רצינית מכירה:</p>
+      <div class="flex flex-wrap gap-3 my-6">
+       <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-rose-100 text-rose-700 font-bold text-sm">🌳 עץ מוצר</span>
+       <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-sky-100 text-sky-700 font-bold text-sm">📋 אפיון</span>
+       <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-100 text-emerald-700 font-bold text-sm">🔬 אבטיפוס</span>
+      </div>
       <div class="highlight-box">
-       <p class="mb-0"><strong>למה זה חשוב לכן?</strong> כי בתוכנית "פורצות דרך" אתן לא רק חולמות — אתן מפתחות מיזמים אמיתיים. הכאב האישי שזיהיתן, הבעיה שניסחתן, קהל היעד שהגדרתן והקונספט שבחרתן — כל אלה צריכים עכשיו להפוך למשהו מוחשי. הכלים שתלמדו במאמר הזה הם אותם כלים שמהנדסות ויזמיות משתמשות בהם בעולם האמיתי.</p>
+       <p class="font-semibold mb-1">החדשות הטובות?</p>
+       <p>אלה כלים מקצועיים לגמרי – שמשתמשים בהם בתעשייה אמיתית.</p>
+       <p class="font-semibold mb-1">החדשות המעולות?</p>
+       <p class="mb-0">את יכולה להשתמש בהם כבר עכשיו.</p>
       </div>
      </section><!-- Section 2: Product Tree -->
      <section id="product-tree">
-      <h2>עץ מוצר – חשיבה מערכתית בפיתוח</h2>
-      <h3>מהו עץ מוצר בתעשייה האמיתית?</h3>
-      <p>עץ מוצר, הידוע גם בשם BOM (Bill of Materials), הוא כלי תעשייתי מרכזי שמשמש לפירוק מוצר מורכב לכל רכיביו — עד לרמת חומרי הגלם הבסיסיים ביותר. תחשבו על מטוס: הוא מורכב ממיליוני חלקים, וכל בורג, כל חוט, כל פיסת מתכת — רשומים במערכת. זה לא סתם ביורוקרטיה; זו הדרך היחידה לנהל מוצר מורכב.</p>
-      <p>עץ המוצר התעשייתי מכיל מספר רמות:</p>
-      <ul>
-       <li><strong>רמה עליונה:</strong> המוצר הסופי השלם</li>
-       <li><strong>רמה שנייה:</strong> מכלולים ותת-מערכות (לדוגמה: מנוע, כנפיים, תא הטייס)</li>
-       <li><strong>רמה שלישית:</strong> רכיבים בתוך כל מכלול</li>
-       <li><strong>רמות נוספות:</strong> פירוק המשך עד לחומרי גלם בסיסיים</li>
-      </ul>
-      <div class="example-box">
-       <p class="text-pink-300 font-semibold mb-2">דוגמה מהתעשייה:</p>
-       <h4 style="color: var(--color-primary); margin-top: 0.5rem;">✒️ עץ מוצר – עט (דוגמה מפורקת)</h4>
-       <h4 style="color: var(--color-primary);">רמה 1 – המוצר השלם</h4>
-       <p>עט</p>
-       <p>מתחתיו שתי מערכות עיקריות:<br>🔹 פנימי<br>🔹 חיצוני</p>
-       <p>זו כבר חשיבה מערכתית: כל מוצר מורכב מתתי־מערכות.</p>
-       <h4 style="color: var(--color-primary);">רמה 2 – מערכת פנימית</h4>
-       <p>קפיץ<br>מתכת<br>צינורית<br>דיו<br>פלסטיק<br>כדור פלדה (מתכת)</p>
-       <p>כאן נמצאת פונקציית הליבה של המוצר:<br>היכולת לכתוב.</p>
-       <p>אם אחד מהרכיבים האלה כושל – העט לא עובד.</p>
-       <h4 style="color: var(--color-primary);">רמה 2 – מערכת חיצונית</h4>
-       <p>גוף<br>תופסן<br>פלסטיק<br>פלסטיק (מעטפת)<br>כרית אחיזה<br>גומי<br>לחצן<br>פלסטיק</p>
-       <p class="mb-0">המערכת החיצונית לא אחראית לכתיבה עצמה –<br>אלא לנוחות, לארגונומיה ולחוויה.</p>
+      <h2>עץ מוצר – לראות את המערכת באמת</h2>
+      <div class="text-center my-8 py-4">
+       <p class="font-serif gradient-text font-bold leading-tight" style="font-size: 2rem; -webkit-text-fill-color: transparent; background: linear-gradient(135deg, #ec4899, #0ea5e9); -webkit-background-clip: text; background-clip: text;">רגע… עט זה רק עט?</p>
+       <p class="text-stone-500 text-lg font-medium mt-2">או שאת בכלל מסתכלת על מערכת?</p>
       </div>
-      <div class="product-tree-diagram" aria-label="תרשים עץ מוצר עט">
-       <p class="font-semibold">תרשים היררכי – עץ מוצר עט</p>
-       <ul>
-        <li><strong>עט</strong>
-          <ul>
-            <li><strong>↳ מערכת פנימית</strong>
-              <ul>
-                <li>קפיץ</li>
-                <li>מתכת</li>
-                <li>צינורית</li>
-                <li>דיו</li>
-                <li>פלסטיק</li>
-                <li>כדור פלדה (מתכת)</li>
-              </ul>
-            </li>
-            <li><strong>↳ מערכת חיצונית</strong>
-              <ul>
-                <li>גוף</li>
-                <li>תופסן</li>
-                <li>פלסטיק</li>
-                <li>פלסטיק (מעטפת)</li>
-                <li>כרית אחיזה</li>
-                <li>גומי</li>
-                <li>לחצן</li>
-                <li>פלסטיק</li>
-              </ul>
-            </li>
-          </ul>
-        </li>
-       </ul>
+      <div class="highlight-box">
+       <p class="font-semibold mb-2">🧪 בואי נעשה ניסוי קטן</p>
+       <p>קחי עט. כן, עט רגיל.</p>
+       <p class="mb-0">מה את רואה? פלסטיק. דיו. אולי גומי. משהו שלוחצים עליו.<br>
+       אבל תעשייה אמיתית לא רואה "עט". היא רואה <strong>מערכת מורכבת</strong> שמורכבת מחלקים, החלטות, עלויות והשפעות.</p>
       </div>
-      <h3>מה הדיאגרמה מלמדת יזמת?</h3>
-      <h4 style="color: var(--color-primary);">1️⃣ הפרדה בין פונקציה לחוויה</h4>
-      <p>המערכת הפנימית = ביצוע<br>המערכת החיצונית = שימושיות ומיתוג</p>
-      <h4 style="color: var(--color-primary);">2️⃣ כל תיבה היא החלטה עסקית</h4>
-      <p>לדוגמה:<br>כדור פלדה איכותי יותר → כתיבה חלקה → עלות גבוהה יותר<br>כרית אחיזה מגומי → נוחות גבוהה → תהליך ייצור נוסף<br>פחות חלקי פלסטיק → הרכבה פשוטה יותר → פחות תקלות</p>
-      <h4 style="color: var(--color-primary);">3️⃣ עומק הפירוק קובע שליטה</h4>
-      <p>אפשר לתמחר טוב יותר<br>אפשר למצוא ספקים חלופיים<br>אפשר לשפר איכות<br>אפשר להפחית עלויות</p>
-      <p>יזמת שלא מפרקת – לא שולטת.</p>
-      <h3>חשיבה מערכתית דרך הדיאגרמה</h3>
-      <p>שינוי קטן כמו:<br>👉 מעבר מכדור פלדה לכדור קרמי</p>
-      <p>ישפיע על:<br>ספק אחר<br>תהליך ייצור שונה<br>איכות כתיבה<br>מיתוג<br>מחיר לצרכן</p>
-      <p>המערכת כולה משתנה.</p>
-      <h3>נקודת מבט של תלמידה</h3>
-      <p>תלמידה לא חושבת על:<br>פלסטיק<br>מתכת<br>צינורית</p>
-      <p>היא מרגישה:<br>האם זה חלק?<br>האם זה נוח?<br>האם זה נתקע?<br>האם זה נראה טוב?</p>
-      <p>והתחושות האלו נובעות ישירות מהתיבות בדיאגרמה.</p>
-      <h3>חיבור לקורס "פורצות דרך"</h3>
-      <p>יש לשלב שאלות מנחות:</p>
-      <p>מהן שתי המערכות המרכזיות במוצר שלי?<br>מה רכיבי הליבה?<br>מה רכיבי החוויה?<br>איזה רכיב אם יכשל – המוצר יפסיק לעבוד?<br>איזה רכיב יוצר בידול תחרותי?</p>
-      <h3>שאלות חשיבה</h3>
-      <p>אם הייתן צריכות להוזיל את העט ב־20% – מאיזה רכיב הייתן מתחילות?<br>איזה חלק בעץ המוצר מייצר את הערך הנתפס הגבוה ביותר?<br>האם אפשר לאחד שני חלקים לחלק אחד?<br>האם כל רכיב הכרחי?</p>
-      <h3>מסקנה</h3>
-      <p>עץ מוצר הוא לא תרשים טכני.<br>הוא מפת חשיבה.</p>
-      <p>ברגע שאתן רואות מוצר דרך היררכיה כזו –<br>אתן לא רק משתמשות.</p>
-      <p class="mb-0">אתן מהנדסות.<br>ואתן מנהלות מוצר.</p>
-      <h3>למה זה קריטי בתעשייה?</h3>
-      <p>עץ המוצר משרת מספר מטרות חיוניות:</p>
-      <ul>
-       <li><strong>תמחור מדויק:</strong> כשיודעים בדיוק מה נכנס למוצר, אפשר לחשב את עלות הייצור האמיתית</li>
-       <li><strong>ניהול מלאי:</strong> המערכת יודעת כמה רכיבים צריך להזמין לפי הביקוש</li>
-       <li><strong>בקרת איכות:</strong> אם יש תקלה, אפשר לאתר את הרכיב הבעייתי</li>
-       <li><strong>תכנון ייצור:</strong> הבנת רצף הפעולות הנדרש להרכבה</li>
-       <li><strong>חיבור למערכות ERP:</strong> מערכות ניהול ארגוניות שמנהלות את כל המידע הזה אוטומטית</li>
-      </ul>
-      <h3>תרגום לעולם שלכן: העץ המטאפורי</h3>
-      <p>עכשיו, איך לוקחים את הכלי התעשייתי הזה ומשתמשים בו לפיתוח המיזם שלכן? התשובה היא במטאפורה של עץ אמיתי:</p>
-      <div class="product-tree-section bg-gradient-to-l from-pink-500/10 to-cyan-500/10 rounded-xl p-6 my-6 border border-slate-600/30">
-       <p class="text-lg font-semibold mb-4 text-center">🌳 מבנה עץ המוצר שלכן</p>
-       <div class="space-y-4">
+      <p>כשאת מסתכלת על מוצר – את רואה משהו שלם.<br>
+      אבל בתעשייה לא רואים "משהו שלם".<br>
+      רואים <strong>מערכת</strong>.</p>
+      <p><strong>עץ מוצר (BOM – Bill of Materials)</strong> הוא הדרך לפרק מוצר לכל הרכיבים שמרכיבים אותו.</p>
+      <div class="grid grid-cols-3 gap-3 my-6 text-center text-sm">
+       <div class="bg-white rounded-xl p-4 border border-stone-200 shadow-sm">
+        <p class="text-3xl mb-2">✈️</p>
+        <p class="font-bold text-stone-800">מטוס</p>
+        <p class="text-stone-500">מיליוני חלקים</p>
+       </div>
+       <div class="bg-white rounded-xl p-4 border border-stone-200 shadow-sm">
+        <p class="text-3xl mb-2">🪑</p>
+        <p class="font-bold text-stone-800">כיסא</p>
+        <p class="text-stone-500">עשרות רכיבים</p>
+       </div>
+       <div class="bg-white rounded-xl p-4 border border-stone-200 shadow-sm">
+        <p class="text-3xl mb-2">📱</p>
+        <p class="font-bold text-stone-800">אפליקציה</p>
+        <p class="text-stone-500">מסכים, פעולות, שרתים, זרימה</p>
+       </div>
+      </div>
+      <div class="highlight-box">
+       <p class="mb-0">למה זה חשוב?<br>
+       כי אם את לא יודעת ממה המוצר שלך בנוי – <strong>את לא באמת שולטת בו</strong>.</p>
+      </div>
+      <h3>איך זה נראה בעולם שלך?</h3>
+      <p>תחשבי על עץ אמיתי:</p>
+      <div class="product-tree-section bg-gradient-to-l from-pink-500/10 to-cyan-500/10 rounded-xl p-6 my-6 border border-stone-200">
+       <p class="text-lg font-semibold mb-4 text-center text-stone-800">🌳 מבנה עץ המוצר שלך</p>
+       <div class="space-y-5">
         <div class="flex items-start gap-4">
-         <span class="text-2xl">🪵</span>
+         <span class="text-2xl mt-1">🪵</span>
          <div>
-          <p class="font-semibold text-pink-300">הגזע = הליבה הקריטית</p>
-          <p class="text-sm text-slate-300">מה הדבר המרכזי ביותר שהמוצר חייב לעשות? בלי הגזע, אין עץ. בלי הליבה, אין מוצר. זו הפונקציונליות שאם תסירו אותה — המוצר מפסיק להיות המוצר.</p>
+          <p class="font-bold text-stone-800 mb-1">הגזע – הליבה</p>
+          <p class="text-sm text-stone-700">מה הפעולה הקריטית שהמוצר <em>חייב</em> לעשות?<br>בלי זה – אין מוצר.</p>
          </div>
         </div>
         <div class="flex items-start gap-4">
-         <span class="text-2xl">🌿</span>
+         <span class="text-2xl mt-1">🌿</span>
          <div>
-          <p class="font-semibold text-cyan-300">הענפים = הפונקציות המרכזיות</p>
-          <p class="text-sm text-slate-300">כל ענף הוא פונקציה או יכולת שהמוצר מציע. ענפים יכולים להתפצל לענפים קטנים יותר — תתי-פונקציות שתומכות בפונקציה הראשית.</p>
+          <p class="font-bold text-stone-800 mb-1">הענפים – הפונקציות</p>
+          <p class="text-sm text-stone-700">כל מה שהמוצר מאפשר.<br>ענפים גדולים וקטנים. פיצ'רים.</p>
          </div>
         </div>
         <div class="flex items-start gap-4">
-         <span class="text-2xl">🍎</span>
+         <span class="text-2xl mt-1">🍎</span>
          <div>
-          <p class="font-semibold text-green-300">הפירות = הערך למשתמשת</p>
-          <p class="text-sm text-slate-300">מה המשתמשת מקבלת בפועל? הפירות הם התוצאות — החוויה, הפתרון, ההרגשה. זה מה שהמשתמשת "קוטפת" מהמוצר.</p>
+          <p class="font-bold text-stone-800 mb-1">הפירות – הערך</p>
+          <p class="text-sm text-stone-700">מה המשתמשת מרוויחה בפועל?<br>איך החיים שלה משתנים?</p>
          </div>
         </div>
         <div class="flex items-start gap-4">
-         <span class="text-2xl">🌱</span>
+         <span class="text-2xl mt-1">🌱</span>
          <div>
-          <p class="font-semibold text-amber-300">השורשים = התשתית הנסתרת</p>
-          <p class="text-sm text-slate-300">מה נדרש מאחורי הקלעים? טכנולוגיה, מסד נתונים, שרתים, אבטחה. המשתמשת לא רואה את זה, אבל בלי שורשים — העץ נופל.</p>
+          <p class="font-bold text-stone-800 mb-1">השורשים – מה שקורה מאחורי הקלעים</p>
+          <p class="text-sm text-stone-700">טכנולוגיה, לוגיסטיקה, תשתית.<br>דברים שלא רואים – אבל בלעדיהם הכל נופל.</p>
          </div>
         </div>
        </div>
       </div>
-      <h3>זיהוי נקודות כשל</h3>
-      <p>אחד היתרונות המשמעותיים של עץ מוצר הוא היכולת לזהות נקודות כשל פוטנציאליות. כשרואים את כל המערכת מפורקת לרכיבים, אפשר לשאול:</p>
-      <ul>
-       <li>מה קורה אם הרכיב הזה לא עובד?</li>
-       <li>האם יש תלות קריטית בספק אחד?</li>
-       <li>איפה החוליה החלשה במערכת?</li>
-       <li>מה הסיכונים הטכנולוגיים?</li>
-      </ul>
+      <p>ברגע שאת מציירת את העץ הזה –<br>
+      את מתחילה לחשוב <strong>מערכתית</strong>.</p>
+      <p>וזה רגע מעבר חשוב:<br>
+      את כבר לא "חולמת רעיון".<br>
+      <strong>את מתכננת מוצר.</strong></p>
+      <h3>זיהוי נקודות כשל – לחשוב כמו מקצוענית</h3>
+      <p>עץ מוצר עושה עוד משהו חשוב:<br>
+      הוא <strong>חושף חולשות</strong>.</p>
       <div class="highlight-box">
-       <p class="mb-0"><strong>תרגיל חשיבה:</strong> ציירו את עץ המוצר שלכן. התחילו מהגזע — מהי הליבה הקריטית? הוסיפו ענפים — מהן הפונקציות? סמנו את הפירות — מה הערך למשתמשת? ואז שאלו: איפה נקודת הכשל הכי מסוכנת?</p>
+       <p class="font-semibold mb-3">שאלי את עצמך:</p>
+       <ul class="space-y-2 mb-0">
+        <li>🔍 אם הרכיב הזה לא עובד – מה קורה?</li>
+        <li>🔗 איפה החוליה החלשה?</li>
+        <li>😕 איפה המשתמשת עלולה להתבלבל?</li>
+        <li>⚠️ מה הכי מסוכן למוצר שלי?</li>
+       </ul>
       </div>
+      <p>יזמות מקצועית היא לא רק התלהבות.<br>
+      היא גם <strong>ניהול סיכונים</strong>.</p>
      </section><!-- Section 3: Specification -->
      <section id="specification">
-      <h2>אפיון מוצר – מעבר מחזון למבנה</h2>
-      <h3>מהו אפיון ולמה הוא הכרחי?</h3>
-      <p>אפיון מוצר (Product Specification) הוא תהליך של תרגום מחשבה מופשטת למפרט מדויק שמפתח או מהנדס יכולים לעבוד איתו. המטרה היא להגדיר בדיוק מה המוצר עושה, למי הוא מיועד, ובאילו תנאים הוא צריך לשרוד ולהצליח.</p>
-      <p><strong>רעיון ≠ מוצר.</strong> זו נקודה קריטית שחשוב להפנים. רעיון הוא תיאור כללי של משהו שיכול להיות. מוצר הוא דבר ספציפי עם מאפיינים מוגדרים. האפיון הוא הגשר בין השניים.</p>
-      <div class="example-box">
-       <p class="text-pink-300 font-semibold mb-2">דוגמה להבדל:</p>
-       <p><strong>רעיון:</strong> "אפליקציה שעוזרת לנערות להתמודד עם לחץ"</p>
-       <p class="mb-0"><strong>אפיון:</strong> "אפליקציה מבוססת iOS/Android שמציעה תרגילי נשימה מונחים באורך 3-15 דקות, עם מעקב אישי אחרי רמת הלחץ, תזכורות יומיות מותאמות אישית, וממשק צבעוני מרגיע בגווני תכלת וסגול"</p>
-      </div>
-      <h3>מרכיבי האפיון המרכזיים</h3>
-      <p>מסמך אפיון מקצועי כולל מספר מרכיבים הכרחיים:</p>
-      <h4 style="color: var(--color-primary); margin-top: 1.5rem;">1. פירוט פונקציונלי</h4>
-      <p>מה המוצר עושה בפועל? לא מה הוא "אמור" לעשות באופן כללי, אלא רשימה מדויקת של פעולות. כל פונקציה צריכה להיות ניתנת למדידה ולבדיקה.</p>
-      <h4 style="color: var(--color-primary);">2. הגדרת הפעולה הקריטית</h4>
-      <p>מתוך כל הפונקציות — מהי הפעולה הקריטית? זו הפעולה שאם היא לא עובדת, המוצר כולו נכשל. חשוב לזהות אותה מראש כי היא תקבל את מרב המשאבים בפיתוח.</p>
-      <h4 style="color: var(--color-primary);">3. חוויית משתמשת (UX)</h4>
-      <p>איך המשתמשת תרגיש? מה היא תראה? איך היא תבין מה לעשות? חוויית המשתמשת היא לא "קישוט" — היא חלק מהותי מהמוצר. מוצר עם פונקציונליות מעולה אבל חוויה גרועה — ייכשל.</p>
-      <h4 style="color: var(--color-primary);">4. זרימה (Flow)</h4>
-      <p>מה קורה משלב לשלב? איך המשתמשת עוברת מנקודה A לנקודה B? הזרימה צריכה להיות הגיונית, חלקה, וללא "מבוי סתום" שבו המשתמשת נתקעת.</p>
-      <h4 style="color: var(--color-primary);">5. אינטראקציה ופידבק מערכת</h4>
-      <p>כשהמשתמשת עושה משהו — מה המערכת מחזירה לה? פידבק הוא קריטי. אם המשתמשת לוחצת על כפתור ולא קורה כלום — היא לא יודעת אם הפעולה הצליחה או נכשלה.</p>
-      <h3>תנאי הצלחה: GO / NO GO</h3>
-      <p>כל מוצר צריך קריטריונים ברורים להצלחה. אלה לא רגשות ("אנשים יאהבו את זה") אלא מדדים מדידים:</p>
-      <ul>
-       <li><strong>GO:</strong> המוצר מוכן להתקדם לשלב הבא כאשר...</li>
-       <li><strong>NO GO:</strong> המוצר לא מוכן להתקדם אם...</li>
-      </ul>
-      <div class="example-box">
-       <p class="text-pink-300 font-semibold mb-2">דוגמה לקריטריוני GO/NO GO:</p>
-       <p><strong>GO:</strong> 80% מהמשתתפות בבדיקה הצליחו להשלים את המשימה המרכזית תוך פחות מ-2 דקות</p>
-       <p class="mb-0"><strong>NO GO:</strong> יותר מ-30% מהמשתתפות דיווחו על בלבול או תסכול</p>
-      </div>
-      <h3>MVP לעומת מוצר מלא</h3>
-      <p>MVP (Minimum Viable Product) הוא מוצר מינימלי בר-קיימא — הגרסה הכי פשוטה של המוצר שעדיין מספקת ערך ומאפשרת ללמוד מהמשתמשות. זה לא מוצר "חצי אפוי" — זה מוצר שלם, רק עם פחות פיצ'רים.</p>
-      <div class="bg-slate-800/50 rounded-xl p-6 my-6">
-       <div class="grid md:grid-cols-2 gap-6">
-        <div>
-         <p class="font-semibold text-pink-300 mb-2">MVP כולל:</p>
-         <ul class="text-sm space-y-1">
-          <li>✓ הפעולה הקריטית עובדת מצוין</li>
-          <li>✓ חוויית משתמש בסיסית וברורה</li>
-          <li>✓ פותר את הבעיה המרכזית</li>
-          <li>✓ אפשר ללמוד ממנו</li>
-         </ul>
-        </div>
-        <div>
-         <p class="font-semibold text-cyan-300 mb-2">מוצר מלא כולל גם:</p>
-         <ul class="text-sm space-y-1">
-          <li>+ כל הפיצ'רים המתוכננים</li>
-          <li>+ עיצוב מלוטש</li>
-          <li>+ אינטגרציות נוספות</li>
-          <li>+ סקיילביליות לצמיחה</li>
-         </ul>
-        </div>
-       </div>
-      </div>
-      <h3>דוגמאות אפיון לסוגי מוצרים שונים</h3>
-      <div class="example-box">
-       <p class="text-pink-300 font-semibold mb-2">🎒 מוצר פיזי: תיק גב ארגונומי לתלמידות</p>
-       <ul class="text-sm space-y-1">
-        <li>• משקל מקסימלי: 500 גרם (ריק)</li>
-        <li>• נפח: 20-25 ליטר</li>
-        <li>• חומר: בד עמיד במים, ניתן לכביסה</li>
-        <li>• רצועות מרופדות עם אפשרות התאמה</li>
-        <li>• פעולה קריטית: פיזור משקל נכון על הגב והכתפיים</li>
-       </ul>
-      </div>
-      <div class="example-box">
-       <p class="text-cyan-300 font-semibold mb-2">📱 אפליקציה: יומן רגשי לנערות</p>
-       <ul class="text-sm space-y-1">
-        <li>• פלטפורמה: iOS ו-Android</li>
-        <li>• זמן טעינה מקסימלי: 3 שניות</li>
-        <li>• הזנת רגש יומי: עד 30 שניות</li>
-        <li>• פרטיות: נתונים מוצפנים, ללא שיתוף</li>
-        <li>• פעולה קריטית: תיעוד מצב רוח בלחיצה אחת</li>
-       </ul>
-      </div>
-      <div class="example-box">
-       <p class="text-green-300 font-semibold mb-2">💻 שירות דיגיטלי: פלטפורמת חונכות בין נערות</p>
-       <ul class="text-sm space-y-1">
-        <li>• מספר משתמשות בו-זמנית: עד 100</li>
-        <li>• זמן התאמה בין חונכת לחניכה: עד 48 שעות</li>
-        <li>• אורך שיחה: 15-30 דקות</li>
-        <li>• מערכת דירוג ומשוב לאחר כל מפגש</li>
-        <li>• פעולה קריטית: חיבור איכותי ורלוונטי בין שתי נערות</li>
-       </ul>
-      </div>
-     </section><!-- Section 4: Prototype -->
-     <section id="prototype">
-      <h2>אבטיפוס – בדיקת המציאות</h2>
-      <h3>מהו אבטיפוס ולמה בונים אותו?</h3>
-      <p>אבטיפוס (Prototype) הוא גרסה ראשונית, לא-סופית של המוצר. הוא נבנה לא כדי להיות מושלם, אלא כדי לבדוק הנחות, ללמוד מהמשתמשות, ולגלות בעיות לפני שמשקיעים זמן וכסף בפיתוח המלא.</p>
-      <p><strong>למה לא לקפוץ ישר לפיתוח?</strong> כי טעויות בשלב מוקדם זולות לתקן. טעויות בשלב מאוחר — יקרות מאוד. אבטיפוס מאפשר "להיכשל מהר וללמוד מהר".</p>
-      <h3>סוגי אבטיפוסים</h3>
-      <p>לא כל אבטיפוס חייב להיות מתוחכם. הסוג נבחר לפי מה שרוצים לבדוק:</p>
+      <h2>אפיון מוצר – להפוך רעיון למשהו שאפשר לבנות</h2>
+      <p>כאן הרבה נופלות.</p>
+      <p><em>"יש לי רעיון לאפליקציה שעוזרת לנערות בלחץ."</em><br>
+      מדהים. אבל מה זה אומר <strong>בפועל</strong>?</p>
+      <p>אפיון הוא התרגום של רעיון לשפה מדויקת.</p>
       <div class="grid md:grid-cols-2 gap-4 my-6">
-       <div class="bg-slate-800 rounded-lg p-4 border border-slate-700">
-        <p class="font-semibold text-pink-300 mb-2">✏️ סקיצה (Sketch)</p>
-        <p class="text-sm text-slate-300">ציור ביד על נייר. פשוט, מהיר, וזול. מתאים לבדיקת רעיונות ראשוניים ולקבלת פידבק מהיר על כיוון כללי.</p>
+       <div class="rounded-xl p-5 border-2 border-red-200 bg-red-50">
+        <p class="font-bold text-red-700 mb-3">❌ רעיון כללי</p>
+        <p class="text-stone-700 text-sm italic">"אפליקציה שעוזרת לנערות בלחץ."</p>
        </div>
-       <div class="bg-slate-800 rounded-lg p-4 border border-slate-700">
-        <p class="font-semibold text-cyan-300 mb-2">📐 Wireframe</p>
-        <p class="text-sm text-slate-300">שלד של ממשק — ללא צבעים, ללא עיצוב. מתמקד במבנה ובזרימה. מתאים לאפליקציות ואתרים.</p>
-       </div>
-       <div class="bg-slate-800 rounded-lg p-4 border border-slate-700">
-        <p class="font-semibold text-green-300 mb-2">🖥️ מודל דיגיטלי</p>
-        <p class="text-sm text-slate-300">הדמיה ממוחשבת של המוצר. יכול להיות תלת-ממדי (למוצר פיזי) או אינטראקטיבי (לאפליקציה).</p>
-       </div>
-       <div class="bg-slate-800 rounded-lg p-4 border border-slate-700">
-        <p class="font-semibold text-amber-300 mb-2">🤖 הדמיה ב-AI</p>
-        <p class="text-sm text-slate-300">שימוש בכלי AI ליצירת תמונות ווידאו של המוצר. מהיר ומרשים, טוב להצגת חזון.</p>
+       <div class="rounded-xl p-5 border-2 border-green-200 bg-green-50">
+        <p class="font-bold text-green-700 mb-3">✅ אפיון מדויק</p>
+        <p class="text-stone-700 text-sm">אפליקציה עם תרגילי נשימה של 3–10 דקות, מסך בית ברור, כפתור פעולה מרכזי, תזכורת יומית, ומעקב אחרי מצב רוח.</p>
        </div>
       </div>
-      <h3>תפקיד האבטיפוס בבדיקת הנחות</h3>
-      <p>כל מיזם מבוסס על הנחות. "אני מניחה שנערות ירצו להשתמש בזה". "אני מניחה שהפתרון הזה יעבוד". הנחות הן לא עובדות — הן ניחושים מושכלים. האבטיפוס מאפשר לבדוק אותן במציאות.</p>
+      <p>רואה את ההבדל?</p>
+      <p>רעיון הוא השראה.<br>
+      <strong>אפיון הוא הוראות בנייה.</strong></p>
+      <h3>מה חייב להיות באפיון?</h3>
+      <ul>
+       <li><strong>פירוט פונקציונלי</strong> – מה בדיוק קורה?</li>
+       <li><strong>הפעולה הקריטית</strong> – מה חייב לעבוד מושלם?</li>
+       <li><strong>זרימה (Flow)</strong> – מה קורה שלב אחרי שלב?</li>
+       <li><strong>חוויית משתמשת (UX)</strong> – איך זה מרגיש?</li>
+       <li><strong>קריטריוני GO / NO GO</strong> – מתי זה מוכן להתקדם?</li>
+      </ul>
       <div class="highlight-box">
-       <p class="font-semibold mb-2">שאלות שאבטיפוס עוזר לענות עליהן:</p>
-       <ul class="mb-0 space-y-1">
-        <li>• האם המשתמשת מבינה מה לעשות?</li>
-        <li>• האם הזרימה הגיונית?</li>
-        <li>• האם הפעולה הקריטית באמת פותרת את הבעיה?</li>
-        <li>• מה מבלבל? מה חסר? מה מיותר?</li>
-       </ul>
+       <p class="mb-0">יזמות אמיתית נמדדת <strong>במדדים</strong>, לא בתחושות.</p>
       </div>
-      <h3>בדיקת משתמשת: איך עושים את זה?</h3>
-      <p>בדיקת משתמשת היא לא "להראות למישהי ולשאול אם היא אוהבת". זה תהליך מובנה:</p>
+     </section><!-- Section 4: MVP -->
+     <section id="mvp">
+      <h2>MVP – לא הכל בבת אחת</h2>
+      <p>את לא צריכה לבנות הכל מיד.</p>
+      <p><strong>MVP (Minimum Viable Product)</strong> הוא הגרסה הכי פשוטה של המוצר שעדיין פותרת את הבעיה המרכזית.</p>
+      <ul>
+       <li>לא מושלם.</li>
+       <li>לא מלא פיצ'רים.</li>
+       <li>אבל <strong>ברור, חד, ועובד</strong>.</li>
+      </ul>
+      <div class="highlight-box">
+       <p class="font-semibold mb-3">השאלה שתנחה אותך:</p>
+       <p class="text-xl font-bold text-center mb-0">אם תמחקי 80% מהפיצ'רים –<br>מה נשאר?</p>
+      </div>
+      <p>זה ה-MVP שלך.</p>
+     </section><!-- Section 5: Prototype -->
+     <section id="prototype">
+      <h2>אבטיפוס – רגע האמת</h2>
+      <p>אבטיפוס הוא גרסה ראשונית לבדיקה.</p>
+      <ul>
+       <li>סקיצה על נייר.</li>
+       <li>מודל פשוט.</li>
+       <li>דגם דיגיטלי.</li>
+       <li>אפילו מצגת שמדמה שימוש.</li>
+      </ul>
+      <p>המטרה שלו?<br>
+      <strong>לבדוק הנחות.</strong></p>
+      <p>כי כל מיזם בנוי על הנחות:<br>
+      <em>"אני חושבת שירצו את זה."<br>
+      "אני מאמינה שזה יפתור."</em></p>
+      <p>אבל אמונה היא לא נתון.<br>
+      <strong>בדיקה עם משתמשות אמיתיות – כן.</strong></p>
+      <h3>איך בודקים נכון?</h3>
       <ol>
-       <li><strong>הגדירו מה אתן רוצות ללמוד</strong> — לא "האם זה טוב" אלא שאלה ספציפית</li>
-       <li><strong>בחרו משתתפות מקהל היעד</strong> — לא חברות או משפחה (הן לא אובייקטיביות)</li>
-       <li><strong>תנו משימה ספציפית</strong> — "נסי להירשם לאפליקציה" ולא "תגידי מה את חושבת"</li>
-       <li><strong>צפו בלי להתערב</strong> — אל תעזרו, אל תסבירו. רק תצפו</li>
-       <li><strong>שאלו שאלות פתוחות</strong> — "מה חשבת כשראית את זה?" ולא "זה היה ברור, נכון?"</li>
-       <li><strong>תעדו הכל</strong> — גם מה שלא מחמיא</li>
+       <li>מגדירות שאלה ברורה לבדיקה</li>
+       <li>נותנות משימה ספציפית</li>
+       <li>צופות בלי להתערב</li>
+       <li>שואלות שאלות פתוחות</li>
+       <li>מתעדות גם ביקורת</li>
       </ol>
-      <h3>שיפור ואיטרציה</h3>
-      <p>אבטיפוס הוא לא חד-פעמי. התהליך הוא מעגלי: בנו → בדקו → למדו → שפרו → חזרו לבנות. כל סבב נקרא "איטרציה". מוצרים מצליחים עוברים הרבה איטרציות.</p>
       <div class="bg-gradient-to-l from-pink-500/10 to-cyan-500/10 rounded-xl p-6 my-6 text-center">
-       <p class="text-xl font-semibold gradient-text mb-2">כשלון ככלי למידה</p>
-       <p class="text-stone-700">אבטיפוס שנכשל הוא לא כישלון — הוא הצלחה בלמידה. גיליתן משהו חשוב שחסכתן מכם בפיתוח המלא. הכישלון היחיד האמיתי הוא לא ללמוד מהטעויות.</p>
+       <p class="text-xl font-semibold gradient-text mb-2">והכי חשוב?</p>
+       <p class="text-stone-700 font-semibold text-lg mb-1">לא נעלבות.</p>
+       <p class="text-stone-600">אבטיפוס שנכשל הוא לא כישלון.<br>
+       הוא <strong>חיסכון בטעות עתידית</strong>.</p>
       </div>
-     </section><!-- Section 5: Connection -->
+     </section><!-- Section 6: Connection -->
      <section id="connection">
-      <h2>חיבור לתהליך היזמי שלכן</h2>
-      <p>בתוכנית "פורצות דרך", אתן נמצאות בשלבים 7-9 של הסילבוס: גיבוש פתרון, אפיון, ואבטיפוס. כל מה שלמדתן עד עכשיו — זיהוי הכאב, הגדרת הבעיה, בניית פרסונה, בחירת קונספט — מתכנס עכשיו לכדי משהו מוחשי.</p>
-      <h3>איך הכלים האלה משרתים אתכן?</h3>
+      <h2>החיבור אלייך</h2>
+      <p>אם את בתהליך יזמי –</p>
       <div class="space-y-4 my-6">
        <div class="flex items-start gap-4 bg-slate-800/30 rounded-lg p-4">
         <span class="text-3xl">🌳</span>
         <div>
-         <p class="font-semibold text-pink-700">עץ המוצר</p>
-         <p class="text-slate-700">עוזר לכן לראות את התמונה המלאה — מה המוצר כולל, מה הליבה, ואיפה הסיכונים. הוא מונע מכן "להתאהב" ברעיון בלי להבין את המורכבות שלו.</p>
+         <p class="font-semibold text-pink-700">עץ מוצר</p>
+         <p class="text-slate-700">יעזור לך לראות את התמונה המלאה.</p>
         </div>
        </div>
        <div class="flex items-start gap-4 bg-slate-800/30 rounded-lg p-4">
         <span class="text-3xl">📋</span>
         <div>
-         <p class="font-semibold text-cyan-700">האפיון</p>
-         <p class="text-slate-700">מכריח אתכן להיות ספציפיות. לא "אפליקציה שתעזור" אלא "אפליקציה שעושה X, ב-Y צעדים, עבור Z משתמשות". הספציפיות היא חברה של הצלחה.</p>
+         <p class="font-semibold text-cyan-700">אפיון</p>
+         <p class="text-slate-700">יכריח אותך להיות מדויקת.</p>
         </div>
        </div>
        <div class="flex items-start gap-4 bg-slate-800/30 rounded-lg p-4">
-        <span class="text-3xl">🔨</span>
+        <span class="text-3xl">🔬</span>
         <div>
-         <p class="font-semibold text-green-700">האבטיפוס</p>
-         <p class="text-slate-700">מאפשר לכן לצאת מהראש ולבדוק במציאות. הנחות שנראות הגיוניות בישיבת צוות לפעמים מתפוררות כשפוגשות משתמשת אמיתית.</p>
+         <p class="font-semibold text-green-700">אבטיפוס</p>
+         <p class="text-slate-700">יוציא אותך מהראש אל המציאות.</p>
         </div>
        </div>
       </div>
-      <h3>השימוש ב-AI בתהליך</h3>
-      <p>ככלי חשיבה, AI יכול לעזור לכן בכל שלב: לסייע בבניית עץ מוצר, להציע שאלות לאפיון, ליצור הדמיות לאבטיפוס, ולדמות שיחה עם משתמשת. אבל זכרו — AI הוא כלי, לא תחליף לחשיבה שלכן ולא תחליף לבדיקה עם משתמשות אמיתיות.</p>
-      <div class="highlight-box">
-       <p class="font-semibold mb-2">💡 הזהות האישית שלכן במיזם</p>
-       <p class="mb-0">המיזם שלכן צמח מכאב אישי שזיהיתן. זו לא חולשה — זו עוצמה. יזמיות שמבינות את הבעיה מבפנים יוצרות פתרונות טובים יותר. כשאתן בונות עץ מוצר, מאפיינות, ובודקות אבטיפוס — זכרו למה התחלתן ומי אתן רוצות לעזור לה.</p>
-      </div>
-     </section><!-- Section 6: Reflection -->
+      <p>שלושתם יחד יוצרים <strong>תהליך מקצועי</strong>.</p>
+      <p>יזמות היא לא רק יצירתיות.<br>
+      היא גם <strong>שיטתיות</strong>.</p>
+      <p>היא היכולת לקחת כאב אמיתי שזיהית –<br>
+      ולהפוך אותו למשהו שמישהי אחרת יכולה להחזיק ביד, ללחוץ עליו, להשתמש בו – ולהרגיש שינוי.</p>
+     </section><!-- Section 7: Reflection -->
      <section id="reflection">
-      <h2>שאלות רפלקטיביות לעבודה עצמית</h2>
-      <p>לפני שממשיכות, קחו זמן לענות על השאלות הבאות בכתב. הן יעזרו לכן לחדד את החשיבה ולזהות פערים:</p>
+      <h2>שאלות שאת חייבת לשאול את עצמך</h2>
+      <p>לפני שממשיכות, קחו זמן לענות על השאלות הבאות בכתב:</p>
       <div class="reflection-box">
-       <p class="font-semibold text-lg text-cyan-700 mb-4">🤔 שאלות על עץ המוצר</p>
-       <ol class="space-y-3">
-        <li><p class="font-medium">מהו הגזע של המוצר שלי?</p><p class="text-sm text-slate-600">מה הדבר המרכזי שבלעדיו המוצר מפסיק להתקיים?</p></li>
-        <li><p class="font-medium">אם אמחק 80% מהפיצ'רים — מה נשאר?</p><p class="text-sm text-slate-600">זה יעזור לכן לזהות את הליבה האמיתית</p></li>
-        <li><p class="font-medium">איפה נקודת הכשל הכי מסוכנת?</p><p class="text-sm text-slate-600">מה יכול להשתבש ולהפיל את המוצר כולו?</p></li>
+       <ol class="space-y-5 mb-0">
+        <li>
+         <p class="font-semibold">🌳 מהו הגזע של המוצר שלי?</p>
+         <p class="text-sm text-slate-600">מה הפעולה הקריטית שבלעדיה המוצר מפסיק להתקיים?</p>
+        </li>
+        <li>
+         <p class="font-semibold">📋 האם יש לי אפיון ברור או רק רעיון כללי?</p>
+         <p class="text-sm text-slate-600">האם מפתחת יכולה לבנות את המוצר מהתיאור שלי?</p>
+        </li>
+        <li>
+         <p class="font-semibold">🔬 איזו הנחה האבטיפוס שלי אמור לבדוק?</p>
+         <p class="text-sm text-slate-600">לא הכל בבת אחת – מה הדבר הכי חשוב לאמת?</p>
+        </li>
+        <li>
+         <p class="font-semibold">🎯 מתי אדע שזה מוכן להתקדם?</p>
+         <p class="text-sm text-slate-600">הגדירי מדדים ברורים מראש – לא תחושות.</p>
+        </li>
        </ol>
       </div>
-      <div class="reflection-box">
-       <p class="font-semibold text-lg text-pink-700 mb-4">📝 שאלות על האפיון</p>
-       <ol class="space-y-3">
-        <li><p class="font-medium">מהי הפעולה הקריטית במוצר שלי?</p><p class="text-sm text-slate-600">הפעולה שאם היא לא עובדת — הכל נופל</p></li>
-        <li><p class="font-medium">האם יש לי אפיון ברור או רק רעיון כללי?</p><p class="text-sm text-slate-600">האם מפתחת יכולה לבנות מזה? או שחסרים פרטים?</p></li>
-        <li><p class="font-medium">מה קריטריון ה-GO שלי?</p><p class="text-sm text-slate-600">מתי אדע שהמוצר מוכן להתקדם?</p></li>
-       </ol>
+      <p>אם אין לך תשובות ברורות –<br>
+      עוד לא סיימת את שלב החשיבה.</p>
+      <div class="highlight-box">
+       <p class="mb-0">וזה בסדר.<br>
+       זה בדיוק מה שמקצועניות עושות.</p>
       </div>
-      <div class="reflection-box">
-       <p class="font-semibold text-lg text-green-700 mb-4">🔬 שאלות על האבטיפוס</p>
-       <ol class="space-y-3">
-        <li><p class="font-medium">מה ההנחה המרכזית שהאבטיפוס צריך לבדוק?</p><p class="text-sm text-slate-600">לא הכל בבת אחת — מה הדבר הכי חשוב לאמת?</p></li>
-        <li><p class="font-medium">איך אדע אם האבטיפוס הצליח או נכשל?</p><p class="text-sm text-slate-600">הגדירו מדדים ברורים מראש</p></li>
-        <li><p class="font-medium">מה אני מפחדת לגלות?</p><p class="text-sm text-slate-600">לפעמים דווקא שם מסתתרת התובנה הכי חשובה</p></li>
-       </ol>
-      </div>
-     </section><!-- Section 7: Summary -->
+     </section><!-- Section 8: Summary -->
      <section id="summary">
-      <h2>סיכום: יזמות מקצועית מתחילה בליבה</h2>
-      <p>המסע מרעיון למוצר אמיתי עובר דרך שלושה שלבים מרכזיים שלמדנו במאמר הזה:</p>
+      <h2>סיכום: יזמות מתחילה בליבה</h2>
+      <p>המסע מרעיון למוצר עובר דרך:</p>
       <div class="bg-gradient-to-l from-pink-500/20 to-cyan-500/20 rounded-xl p-6 my-6">
        <div class="space-y-4">
         <div class="flex items-center gap-3">
-         <span class="w-8 h-8 rounded-full bg-pink-500 flex items-center justify-center font-bold">1</span>
-         <p><strong>עץ מוצר</strong> — חשיבה מערכתית שמפרקת את המוצר לרכיביו ומזהה את הליבה הקריטית</p>
+         <span class="w-8 h-8 rounded-full bg-pink-500 flex items-center justify-center font-bold text-white text-sm flex-shrink-0">1</span>
+         <p class="mb-0"><strong>עץ מוצר</strong> – להבין ממה זה בנוי</p>
         </div>
         <div class="flex items-center gap-3">
-         <span class="w-8 h-8 rounded-full bg-cyan-500 flex items-center justify-center font-bold">2</span>
-         <p><strong>אפיון</strong> — תרגום החזון למפרט מדויק עם פעולות, זרימה, ותנאי הצלחה</p>
+         <span class="w-8 h-8 rounded-full bg-cyan-500 flex items-center justify-center font-bold text-white text-sm flex-shrink-0">2</span>
+         <p class="mb-0"><strong>אפיון</strong> – להגדיר איך זה עובד</p>
         </div>
         <div class="flex items-center gap-3">
-         <span class="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center font-bold">3</span>
-         <p><strong>אבטיפוס</strong> — בדיקת הנחות במציאות, למידה מכישלונות, ושיפור מתמיד</p>
+         <span class="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center font-bold text-white text-sm flex-shrink-0">3</span>
+         <p class="mb-0"><strong>אבטיפוס</strong> – לבדוק במציאות</p>
         </div>
        </div>
       </div>
-      <p>בתעשייה, הכלים האלה משמשים לפיתוח מוצרים מורכבים — ממטוסים ועד אפליקציות. בתוכנית "פורצות דרך", אתן משתמשות באותם כלים כדי להפוך כאב אישי לפתרון שיכול לעזור לאחרות.</p>
-      <p>יזמות מקצועית היא לא רק יצירתיות — היא גם שיטתיות. היכולת לפרק בעיה, להגדיר פתרון, ולבדוק אותו במציאות — זו מיומנות שתשרת אתכן בכל תחום בחיים.</p>
       <div class="text-center py-8">
-       <p class="text-2xl font-serif gradient-text mb-4">"הרעיון הוא הזרע. הפיתוח הוא הגינון. המוצר הוא הפרי."</p>
-       <p class="text-slate-600">והפרי הטוב ביותר צומח מעץ עם שורשים עמוקים וגזע חזק.</p>
+       <p class="text-2xl font-serif gradient-text mb-3">"הרעיון הוא הזרע. האפיון הוא התכנון. האבטיפוס הוא הניסוי."</p>
+       <p class="text-xl font-semibold text-stone-700 mb-1">והמוצר?</p>
+       <p class="text-xl font-semibold gradient-text mb-6">הוא הפרי.</p>
+       <p class="text-slate-600">והפרי הכי טוב –<br>צומח מעץ עם שורשים עמוקים וגזע חזק.</p>
       </div>
       <div class="bg-slate-800 rounded-xl p-6 mt-8 border border-pink-500/50">
-       <p class="font-semibold text-pink-300 mb-2">🚀 הצעד הבא שלכן</p>
-       <p class="mb-0">קחו את המיזם שלכן וציירו את עץ המוצר שלו. זהו את הגזע, הענפים, והפירות. כתבו אפיון ראשוני של הפעולה הקריטית. ותכננו אבטיפוס פשוט שיבדוק את ההנחה המרכזית שלכן. זה השלב שבו רעיונות הופכים למציאות.</p>
+       <p class="font-semibold text-pink-300 mb-2">🚀 הצעד הבא שלך</p>
+       <p class="mb-0 text-slate-200">קחי את המיזם שלך וציירי את עץ המוצר שלו. זהי את הגזע, הענפים, והפירות. כתבי אפיון ראשוני של הפעולה הקריטית. ותכנני אבטיפוס פשוט שיבדוק את ההנחה המרכזית שלך. זה השלב שבו רעיונות הופכים למציאות.</p>
       </div>
      </section>
     </article>
