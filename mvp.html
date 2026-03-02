@@ -366,7 +366,7 @@
         <button id="header-diamond-a" title="נספח א׳ – סגירת אפיון" style="background: none; border: none; cursor: pointer; font-size: 1.3rem; color: #ec4899; padding: 0.25rem; transition: transform 0.2s; display: inline-flex; align-items: center; justify-content: center;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">◆</button>
         <button id="header-diamond-b" title="נספח ב׳ – עץ המוצר" style="background: none; border: none; cursor: pointer; font-size: 1.3rem; color: #0ea5e9; padding: 0.25rem; transition: transform 0.2s; display: inline-flex; align-items: center; justify-content: center;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">◆</button>
         <button id="header-diamond-c" title="נספח ג׳ – תכנון Flow" style="background: none; border: none; cursor: pointer; font-size: 1.3rem; color: #10b981; padding: 0.25rem; transition: transform 0.2s; display: inline-flex; align-items: center; justify-content: center;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">◆</button>
-        <button id="header-diamond-d" title="נספח ד׳ – בניית אבטיפוס" style="background: none; border: none; cursor: pointer; font-size: 1.3rem; color: #f59e0b; padding: 0.25rem; opacity: 0.5; transition: transform 0.2s; display: inline-flex; align-items: center; justify-content: center;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">◆</button>
+        <button id="header-diamond-d" title="נספח ד׳ – MVP" style="background: none; border: none; cursor: pointer; font-size: 1.3rem; color: #f59e0b; padding: 0.25rem; transition: transform 0.2s; display: inline-flex; align-items: center; justify-content: center;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">◆</button>
         <button id="header-diamond-e" title="נספח ה׳ – בדיקת אבטיפוס" style="background: none; border: none; cursor: pointer; font-size: 1.3rem; color: #8b5cf6; padding: 0.25rem; transition: transform 0.2s; display: inline-flex; align-items: center; justify-content: center;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">◆</button>
       </div>
       <a href="index.html" class="home-btn" aria-label="חזרה לעמוד הבית" style="font-size: 1.5rem; display: inline-flex; align-items: center; justify-content: center;">🏠</a>
@@ -1005,13 +1005,13 @@
        <p class="text-base">נספח ג׳</p>
        <p class="text-xs font-normal opacity-90">תכנון Flow</p>
        <p class="text-xs font-normal opacity-75 mt-1">זרימת שימוש</p>
-      </div></button> <!-- Appendix D --> <button id="btn-appendix-d" class="group relative overflow-hidden rounded-xl p-4 text-white font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg opacity-50" style="background: linear-gradient(135deg, #f59e0b, #f97316);" title="בתהליך פיתוח">
+     </div></button> <!-- Appendix D --> <button id="btn-appendix-d" class="group relative overflow-hidden rounded-xl p-4 text-white font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg" style="background: linear-gradient(135deg, #f59e0b, #f97316);">
       <div class="absolute inset-0 opacity-0 group-hover:opacity-20 bg-white transition-opacity"></div>
       <div class="relative">
        <p class="text-xl mb-2">🔧</p>
        <p class="text-base">נספח ד׳</p>
-       <p class="text-xs font-normal opacity-90">בניית אבטיפוס</p>
-       <p class="text-xs font-normal opacity-75 mt-1">בתהליך פיתוח</p>
+       <p class="text-xs font-normal opacity-90">MVP מעשי</p>
+       <p class="text-xs font-normal opacity-75 mt-1">דף עבודה דינמי</p>
       </div></button> <!-- Appendix E --> <button id="btn-appendix-e" class="group relative overflow-hidden rounded-xl p-4 text-white font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg" style="background: linear-gradient(135deg, #8b5cf6, #a78bfa);">
       <div class="absolute inset-0 opacity-0 group-hover:opacity-20 bg-white transition-opacity"></div>
       <div class="relative">
@@ -1098,12 +1098,12 @@
 
       if (appendixD) {
         appendixD.addEventListener('click', () => {
-          alert('נספח ד׳ בתהליך פיתוח - יהיה זמין בעדכון הבא');
+          showAppendixD();
         });
       }
       if (diamondD) {
         diamondD.addEventListener('click', () => {
-          alert('נספח ד׳ בתהליך פיתוח - יהיה זמין בעדכון הבא');
+          showAppendixD();
         });
       }
 
@@ -1426,6 +1426,146 @@
         </div>
       `;
       openModal(appendixContent, 'נספח ג׳ – תכנון Flow (זרימת שימוש)');
+    }
+
+    function showAppendixD() {
+      const appendixContent = `
+        <div style="page-break-after: always; padding: 2rem; background: white; min-height: 100vh; font-family: 'Heebo', sans-serif;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; border-bottom: 3px solid #f59e0b; padding-bottom: 1.5rem;">
+            <img src="logo.png" style="height: 48px; width: auto;" onerror="this.style.display='none'">
+            <div style="text-align: center; flex: 1; padding: 0 1rem;">
+              <h1 style="color: #f59e0b; font-size: 2rem; margin: 0; font-weight: 700;">✨ נספח ד׳ – MVP מעשי</h1>
+              <p style="color: #666; font-size: 1.1rem; margin: 0.5rem 0;">דף השראה + דף עבודה שניתן למלא אונליין ולהדפיס</p>
+            </div>
+            <div style="width: 48px;"></div>
+          </div>
+
+          <div style="margin: 2rem 0; padding: 1.5rem; border-radius: 1rem; background: linear-gradient(135deg, #fff7ed, #fdf2f8 45%, #eff6ff); border: 2px dashed #f59e0b; box-shadow: 0 10px 20px rgba(245,158,11,0.12);">
+            <h2 style="color: #c2410c; font-size: 1.5rem; margin-top: 0;">🎯 מטרה</h2>
+            <p style="font-size: 1rem; line-height: 1.9; margin: 0;">המשתתפות בתוכנית "פורצות דרך" יבינו את מושג ה־MVP וימלאו שבלונה מעשית עבור המוצר שלהן.</p>
+          </div>
+
+          <div style="margin: 2rem 0; padding: 1.5rem; background: #fff; border-radius: 1rem; border: 1px solid #fed7aa; box-shadow: 0 8px 14px rgba(251,113,133,0.1);">
+            <h2 style="color: #db2777; font-size: 1.45rem; margin-top: 0;">מה זה MVP?</h2>
+            <p style="font-size: 1.05rem; line-height: 1.9; margin-bottom: 0.8rem;"><strong>MVP = Minimum Viable Product</strong> (מוצר מינימלי בר־קיימא).</p>
+            <p style="font-size: 1rem; line-height: 1.9; margin: 0;">זה המינימום ההכרחי שמוכיח שהרעיון עובד. זו לא האפליקציה המושלמת — אלא הגרעין שאפשר לבדוק עם משתמשות אמיתיות.</p>
+          </div>
+
+          <div style="margin: 2rem 0; padding: 1.5rem; background: #f8fafc; border-right: 4px solid #0ea5e9; border-radius: 0.75rem;">
+            <h3 style="color: #0369a1; margin-top: 0;">🧠 דוגמה: Airbnb</h3>
+            <p style="margin: 0; line-height: 1.8;">בהתחלה לא בנו אתר ענק ומורכב. הם התחילו מגרסה בסיסית מאוד שהוכיחה שאנשים מוכנים לפרסם חדרים ושאורחים מוכנים להזמין.</p>
+          </div>
+
+          <div style="margin: 2rem 0; padding: 1.5rem; border-radius: 1rem; background: linear-gradient(135deg, rgba(236,72,153,0.08), rgba(14,165,233,0.1)); border: 1px solid rgba(236,72,153,0.25);">
+            <h3 style="color: #be185d; margin-top: 0;">פורצות דרך בונות חכם</h3>
+            <p style="line-height: 1.85; margin: 0.25rem 0;">לפני שמפתחות — מגדירות MVP.</p>
+            <p style="line-height: 1.85; margin: 0.25rem 0;">יזמות אמיצה לא מתחילה ב"מושלם". היא מתחילה בגרעין מדויק.</p>
+            <ul style="margin: 0.75rem 0 0; line-height: 1.8;">
+              <li>פותרת את הבעיה.</li>
+              <li>נותנת ערך אמיתי.</li>
+              <li>מאפשרת בדיקה עם משתמשת אמיתית.</li>
+            </ul>
+          </div>
+
+          <div style="margin: 2rem 0; padding: 1.5rem; background: #ecfeff; border-right: 4px solid #06b6d4; border-radius: 0.75rem;">
+            <h3 style="margin-top: 0; color: #0e7490;">למה זה שלב קריטי?</h3>
+            <ul style="margin: 0; line-height: 1.9;">
+              <li>לבחון האם הבנו נכון את הבעיה.</li>
+              <li>לבדוק האם הפתרון עובד בפועל.</li>
+              <li>לקבל משוב לפני שמעמיקים.</li>
+              <li>לקבל החלטות מבוססות נתונים — לא תחושות.</li>
+            </ul>
+          </div>
+
+          <div style="margin: 2rem 0; padding: 1.5rem; background: #fefce8; border-right: 4px solid #eab308; border-radius: 0.75rem;">
+            <p style="font-size: 1.05rem; margin: 0;"><strong>זכרי:</strong> מנהיגות יזמית לא נמדדת בכמה רעיונות יש לך — אלא ביכולת לבחור את העיקר ולבדוק אותו.</p>
+          </div>
+
+          <div style="margin: 2rem 0; padding: 1.5rem; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 0.75rem;">
+            <h2 style="color: #1f2937; margin-top: 0;">📝 דף עבודה – MVP</h2>
+            <p style="margin: 0 0 1rem;">בחרי סוג מוצר כדי לפתוח את הדף המתאים:</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.75rem;">
+              <label style="background:#fff; border:2px solid #f59e0b; border-radius:0.75rem; padding:0.75rem; cursor:pointer; font-weight:700;"><input type="radio" name="mvpType" value="physical" style="margin-left:0.45rem;">מוצר פיזי</label>
+              <label style="background:#fff; border:2px solid #ec4899; border-radius:0.75rem; padding:0.75rem; cursor:pointer; font-weight:700;"><input type="radio" name="mvpType" value="digital" style="margin-left:0.45rem;">מוצר דיגיטלי</label>
+              <label style="background:#fff; border:2px solid #0ea5e9; border-radius:0.75rem; padding:0.75rem; cursor:pointer; font-weight:700;"><input type="radio" name="mvpType" value="app" style="margin-left:0.45rem;">אפליקציה</label>
+            </div>
+            <p id="mvp-selection-hint" style="margin: 0.9rem 0 0; color: #b45309; font-weight: 600;">המשך הדף יופיע רק לאחר בחירה.</p>
+          </div>
+
+          <div data-mvp-section="physical" style="display:none; margin: 1.5rem 0; padding: 1.5rem; border-radius: 1rem; background: #fff7ed; border-right: 4px solid #f97316;">
+            <h3 style="color:#c2410c; margin-top:0;">דף 1 – MVP למוצר פיזי</h3>
+            <p style="margin-top:0; line-height:1.8;">במוצר פיזי ה־MVP הוא הגרסה הפשוטה ביותר שבה המנגנון המרכזי באמת פועל.</p>
+            ${renderMvpQuestions('פיזי', ['הליבה המכנית / הפונקציונלית', 'רכיבים חייבים (עד 3)', 'מה לא נכנס עכשיו', 'מדד הצלחה', 'שרטוט MVP'])}
+          </div>
+
+          <div data-mvp-section="digital" style="display:none; margin: 1.5rem 0; padding: 1.5rem; border-radius: 1rem; background: #fdf2f8; border-right: 4px solid #db2777;">
+            <h3 style="color:#be185d; margin-top:0;">דף 2 – MVP למוצר דיגיטלי (אתר / פלטפורמה)</h3>
+            <p style="margin-top:0; line-height:1.8;">במוצר דיגיטלי ה־MVP הוא המבנה המינימלי שמאפשר פעולה מרכזית אחת ברורה.</p>
+            ${renderMvpQuestions('דיגיטלי', ['הפעולה המרכזית באתר', 'מסכים חייבים (עד 3)', 'מה לא נכנס עכשיו', 'מדד הצלחה', 'תרשים זרימה קצר: מסך-פעולה-תוצאה'])}
+          </div>
+
+          <div data-mvp-section="app" style="display:none; margin: 1.5rem 0; padding: 1.5rem; border-radius: 1rem; background: #eff6ff; border-right: 4px solid #2563eb;">
+            <h3 style="color:#1d4ed8; margin-top:0;">דף 3 – MVP לאפליקציה</h3>
+            <p style="margin-top:0; line-height:1.8;">באפליקציה ה־MVP הוא הפונקציה המרכזית — ורק היא.</p>
+            ${renderMvpQuestions('אפליקציה', ['הפונקציה המרכזית', 'פונקציות ב־MVP (עד 3)', 'מה עובר לגרסה מתקדמת יותר', 'מדד הצלחה', 'סקיצה של המסך הראשי'])}
+          </div>
+
+          <div style="margin-top: 2rem; padding: 1rem; background: #f3f4f6; border-radius: 0.5rem; display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; gap: 1rem;">
+              <button onclick="document.querySelector('[data-modal-page]')?.remove(); document.body.style.overflow = 'auto'; showAppendixE();" style="background: linear-gradient(135deg, #7c3aed, #ec4899); color: white; border: none; border-radius: 0.65rem; padding: 0.55rem 1rem; font-size: 0.9rem; font-weight: 700; cursor: pointer; box-shadow: 0 8px 15px rgba(124,58,237,0.25); font-family: Heebo, sans-serif;" class="no-print">מעבר לנספח הבא ➜</button>
+            </div>
+            <p style="margin: 0; color: #666; font-size: 0.85rem;">דף העבודה ניתן למילוי אונליין ולהדפסה דרך כפתור ההדפסה למעלה.</p>
+          </div>
+        </div>
+      `;
+      openModal(appendixContent, 'נספח ד׳ – MVP מעשי');
+
+      const modalPage = document.querySelector('[data-modal-page]');
+      if (!modalPage) return;
+
+      const radios = modalPage.querySelectorAll('input[name="mvpType"]');
+      const sections = modalPage.querySelectorAll('[data-mvp-section]');
+      const hint = modalPage.querySelector('#mvp-selection-hint');
+
+      const updateSections = (value) => {
+        sections.forEach(section => {
+          section.style.display = section.getAttribute('data-mvp-section') === value ? 'block' : 'none';
+        });
+        if (hint) {
+          hint.textContent = value ? `נבחר: ${value === 'physical' ? 'מוצר פיזי' : value === 'digital' ? 'מוצר דיגיטלי' : 'אפליקציה'}. המשיכי למילוי הדף.` : 'המשך הדף יופיע רק לאחר בחירה.';
+        }
+      };
+
+      radios.forEach(radio => {
+        radio.addEventListener('change', (event) => updateSections(event.target.value));
+      });
+    }
+
+    function renderMvpQuestions(typeLabel, specificLabels) {
+      return `
+        <div style="display:grid; gap: 1rem;">
+          <div style="padding:1rem; background:#fff; border:1px solid #e5e7eb; border-radius:0.75rem;">
+            <p style="margin:0 0 0.5rem; font-weight:700;">1. הבעיה שאנחנו פותרות</p>
+            <textarea placeholder="תארי בקצרה..." style="width:100%; min-height:70px; padding:0.65rem; border:1px solid #cbd5e1; border-radius:0.5rem; font-family:Heebo; resize:vertical;"></textarea>
+          </div>
+          <div style="padding:1rem; background:#fff; border:1px solid #e5e7eb; border-radius:0.75rem;">
+            <p style="margin:0 0 0.5rem; font-weight:700;">2. המשתמשת שלנו (Persona)</p>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; margin-bottom:0.6rem;">
+              <input type="text" placeholder="שם" style="padding:0.5rem; border:1px solid #cbd5e1; border-radius:0.5rem; font-family:Heebo;">
+              <input type="text" placeholder="גיל" style="padding:0.5rem; border:1px solid #cbd5e1; border-radius:0.5rem; font-family:Heebo;">
+            </div>
+            <textarea placeholder="הכאב המרכזי שלה..." style="width:100%; min-height:70px; padding:0.65rem; border:1px solid #cbd5e1; border-radius:0.5rem; font-family:Heebo; resize:vertical;"></textarea>
+          </div>
+          <div style="padding:1rem; background:#fff; border:1px solid #e5e7eb; border-radius:0.75rem;">
+            <p style="margin:0 0 0.5rem; font-weight:700;">3. ${specificLabels[0]}</p>
+            <textarea placeholder="אם זה לא עובד — אין ${typeLabel}." style="width:100%; min-height:70px; padding:0.65rem; border:1px solid #cbd5e1; border-radius:0.5rem; font-family:Heebo; resize:vertical;"></textarea>
+          </div>
+          <div style="padding:1rem; background:#fff; border:1px solid #e5e7eb; border-radius:0.75rem;"><p style="margin:0 0 0.5rem; font-weight:700;">4. ${specificLabels[1]}</p><textarea placeholder="•" style="width:100%; min-height:70px; padding:0.65rem; border:1px solid #cbd5e1; border-radius:0.5rem; font-family:Heebo; resize:vertical;"></textarea></div>
+          <div style="padding:1rem; background:#fff; border:1px solid #e5e7eb; border-radius:0.75rem;"><p style="margin:0 0 0.5rem; font-weight:700;">5. ${specificLabels[2]}</p><textarea placeholder="•" style="width:100%; min-height:70px; padding:0.65rem; border:1px solid #cbd5e1; border-radius:0.5rem; font-family:Heebo; resize:vertical;"></textarea></div>
+          <div style="padding:1rem; background:#fff; border:1px solid #e5e7eb; border-radius:0.75rem;"><p style="margin:0 0 0.5rem; font-weight:700;">6. ${specificLabels[3]}</p><textarea placeholder="נדע שזה עובד כאשר..." style="width:100%; min-height:70px; padding:0.65rem; border:1px solid #cbd5e1; border-radius:0.5rem; font-family:Heebo; resize:vertical;"></textarea></div>
+          <div style="padding:1rem; background:#fff; border:1px solid #e5e7eb; border-radius:0.75rem;"><p style="margin:0 0 0.5rem; font-weight:700;">7. ${specificLabels[4]}</p><textarea placeholder="שרטוט/תיאור חופשי..." style="width:100%; min-height:120px; padding:0.65rem; border:1px solid #cbd5e1; border-radius:0.5rem; font-family:Heebo; resize:vertical;"></textarea></div>
+        </div>
+      `;
     }
 
     function showAppendixE() {
