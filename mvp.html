@@ -301,7 +301,7 @@
           line-height: 1.7;
           padding: 0;
           font-size: 13px;
-          page-break-inside: avoid;
+          page-break-inside: auto;
       }
 
       #printArea > div[style*="page-break-after"] {
@@ -355,9 +355,9 @@
         display: none !important;
       }
 
-      /* Prevent breaking in the middle of form sections */
+      /* Allow long sections to flow to the next page */
       div[style*="background"][style*="border"] {
-        page-break-inside: avoid;
+        page-break-inside: auto;
       }
 
       /* Ensure all content prints */
