@@ -241,10 +241,19 @@
     #printArea { display: none; }
 
     @media print {
+      html, body {
+        overflow: visible !important;
+        height: auto !important;
+      }
+
       body { background: white; padding: 0; margin: 0; font-family: 'Heebo', Arial, sans-serif; }
       #formArea { display: none !important; }
       #printArea {
           display: block;
+          position: static !important;
+          overflow: visible !important;
+          height: auto !important;
+          min-height: auto !important;
           direction: rtl;
           text-align: right;
           font-family: 'Heebo', Arial, sans-serif;
