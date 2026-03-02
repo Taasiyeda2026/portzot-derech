@@ -328,11 +328,40 @@
       }
     }
 
+    /* === PRINT STYLES FOR APPENDICES === */
+    .p-header {
+      background: linear-gradient(135deg, #7c3aed, #ec4899) !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+      color: white;
+      padding: 16px 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .p-q {
+      background: #f5f3ff !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+      border-right: 4px solid #7c3aed;
+      padding: 8px 12px;
+      border-radius: 0 6px 6px 0;
+      margin-bottom: 8px;
+      page-break-inside: avoid;
+      font-size: 12px;
+    }
+
     @media print {
       .no-print {
         display: none !important;
       }
       button[onclick*="showAppendix"] {
+        display: none !important;
+      }
+      [data-modal-page] {
         display: none !important;
       }
     }
