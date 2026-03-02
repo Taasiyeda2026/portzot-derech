@@ -968,7 +968,7 @@
           <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; border-bottom: 3px solid #ec4899; padding-bottom: 1.5rem;">
             <img src="logo.png" style="height: 48px; width: auto;" onerror="this.style.display='none'">
             <div style="text-align: center; flex: 1; padding: 0 1rem;">
-              <h1 style="color: #ec4899; font-size: 2rem; margin: 0; font-weight: 700;">🌳 עץ המוצר שלנו</h1>
+              <h1 style="color: #ec4899; font-size: 2rem; margin: 0; font-weight: 700;">🌳 עץ המוצר שלנו – מפגש 8</h1>
               <p style="color: #666; font-size: 1.1rem; margin: 0.5rem 0;">דף עבודה להדפסה</p>
             </div>
             <div style="width: 48px;"></div>
@@ -996,7 +996,7 @@
               <tr style="background: #dbeafe; border-bottom: 2px solid #0ea5e9;">
                 <th style="padding: 0.75rem; text-align: right; border: 1px solid #0ea5e9;">ענף</th>
                 <th style="padding: 0.75rem; text-align: right; border: 1px solid #0ea5e9;">מה הוא מאפשר?</th>
-                <th style="padding: 0.75rem; text-align: center; border: 1px solid #0ea5e9;">חלק מ-MVP?</th>
+                <th style="padding: 0.75rem; text-align: center; border: 1px solid #0ea5e9;">האם הוא חלק מה-MVP?</th>
               </tr>
               <tr style="border-bottom: 1px solid #0ea5e9;">
                 <td style="padding: 0.75rem; border: 1px solid #0ea5e9; text-align: center; font-weight: 600;">1</td>
@@ -1013,25 +1013,82 @@
                 <td style="padding: 0.75rem; border: 1px solid #0ea5e9;"><input type="text" placeholder="הקלידי..." style="width: 100%; border: none; padding: 0.5rem; font-family: Heebo;"/></td>
                 <td style="padding: 0.75rem; border: 1px solid #0ea5e9; text-align: center;"><select style="padding: 0.5rem; font-family: Heebo; border: 1px solid #ccc;"><option>כן</option><option>לא</option></select></td>
               </tr>
+              <tr style="border-bottom: 1px solid #0ea5e9;">
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9; text-align: center; font-weight: 600;">4 (רשות)</td>
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9;"><input type="text" placeholder="הקלידי..." style="width: 100%; border: none; padding: 0.5rem; font-family: Heebo;"/></td>
+                <td style="padding: 0.75rem; border: 1px solid #0ea5e9; text-align: center;"><select style="padding: 0.5rem; font-family: Heebo; border: 1px solid #ccc;"><option>כן</option><option>לא</option></select></td>
+              </tr>
             </table>
           </div>
 
           <div style="margin: 2rem 0; padding: 1.5rem; background: #f0fdf4; border-right: 4px solid #10b981; border-radius: 0.5rem;">
-            <h2 style="color: #10b981; font-size: 1.5rem; margin-top: 0;">חלק 3 – הערך (פירות)</h2>
+            <h2 style="color: #10b981; font-size: 1.5rem; margin-top: 0;">חלק 3 – סוג המוצר</h2>
+            <p style="font-size: 0.95rem; margin-bottom: 1rem;">סמנו את סוג המוצר וענו על השאלות הרלוונטיות:</p>
+
+            <div style="margin-bottom: 1.5rem;">
+              <p style="font-weight: 600; color: #10b981; margin-bottom: 0.75rem;">🔧 אם זה מוצר פיזי:</p>
+              <div style="padding-left: 1.5rem;">
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> אילו רכיבים פיזיים קיימים? <input type="text" style="width: 250px; padding: 0.3rem; border: 1px solid #ccc; border-radius: 0.25rem;"/></p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> האם יש חיישן / מנגנון פעולה? <input type="text" style="width: 250px; padding: 0.3rem; border: 1px solid #ccc; border-radius: 0.25rem;"/></p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> האם יש חיווי (אור / צליל / מסך)? <input type="text" style="width: 250px; padding: 0.3rem; border: 1px solid #ccc; border-radius: 0.25rem;"/></p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> האם יש רכיב דיגיטלי מלווה? <input type="text" style="width: 250px; padding: 0.3rem; border: 1px solid #ccc; border-radius: 0.25rem;"/></p>
+              </div>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+              <p style="font-weight: 600; color: #10b981; margin-bottom: 0.75rem;">💻 אם זה דגם דיגיטלי (פלטפורמה / אתר):</p>
+              <div style="padding-left: 1.5rem;">
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> מה רואים במסך הראשי? <input type="text" style="width: 250px; padding: 0.3rem; border: 1px solid #ccc; border-radius: 0.25rem;"/></p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> מהי הפעולה המרכזית (CTA)? <input type="text" style="width: 250px; padding: 0.3rem; border: 1px solid #ccc; border-radius: 0.25rem;"/></p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> אילו אזורי מידע משניים קיימים? <input type="text" style="width: 250px; padding: 0.3rem; border: 1px solid #ccc; border-radius: 0.25rem;"/></p>
+              </div>
+            </div>
+
+            <div>
+              <p style="font-weight: 600; color: #10b981; margin-bottom: 0.75rem;">📱 אם זו אפליקציה:</p>
+              <div style="padding-left: 1.5rem;">
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> מסך בית – מה מופיע ראשון? <input type="text" style="width: 250px; padding: 0.3rem; border: 1px solid #ccc; border-radius: 0.25rem;"/></p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> פעולה מרכזית? <input type="text" style="width: 250px; padding: 0.3rem; border: 1px solid #ccc; border-radius: 0.25rem;"/></p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> מה קורה אחרי הלחיצה? <input type="text" style="width: 250px; padding: 0.3rem; border: 1px solid #ccc; border-radius: 0.25rem;"/></p>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin: 2rem 0; padding: 1.5rem; background: #fef3c7; border-right: 4px solid #f59e0b; border-radius: 0.5rem;">
+            <h2 style="color: #d97706; font-size: 1.5rem; margin-top: 0;">חלק 4 – פירות (הערך למשתמשת)</h2>
             <p style="font-weight: 600; margin-bottom: 1rem;">מה המשתמשת מרוויחה בסוף התהליך?</p>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
               <p style="margin: 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> חיסכון בזמן</p>
               <p style="margin: 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> ביטחון</p>
               <p style="margin: 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> שליטה</p>
               <p style="margin: 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> נוחות</p>
+              <p style="margin: 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> ידע</p>
+              <p style="margin: 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> תחושת מסוגלות</p>
             </div>
+            <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> אחר: <input type="text" style="width: 200px; padding: 0.3rem; border: 1px solid #ccc; border-radius: 0.25rem;"/></p>
             <p style="font-weight: 600; margin-top: 1rem; margin-bottom: 0.5rem;">במשפט אחד:</p>
             <p style="margin: 0.5rem 0; font-size: 0.9rem;">בסוף השימוש המשתמשת <input type="text" placeholder="הקלידי..." style="width: 400px; padding: 0.3rem; border: 1px solid #ccc; border-radius: 0.25rem;"/></p>
+            <p style="margin: 0.5rem 0; font-size: 0.9rem;">והיא מרגישה <input type="text" placeholder="הקלידי..." style="width: 400px; padding: 0.3rem; border: 1px solid #ccc; border-radius: 0.25rem;"/></p>
+          </div>
+
+          <div style="margin: 2rem 0; padding: 1.5rem; background: #f5f3ff; border-right: 4px solid #a855f7; border-radius: 0.5rem;">
+            <h2 style="color: #a855f7; font-size: 1.5rem; margin-top: 0;">חלק 5 – זיהוי חיכוך אפשרי (Friction Map)</h2>
+            <p style="font-weight: 600; margin-bottom: 1rem;">איפה המשתמשת עלולה להתבלבל?</p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
+              <p style="margin: 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> בהתחלה</p>
+              <p style="margin: 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> באמצע</p>
+              <p style="margin: 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> בסוף</p>
+              <p style="margin: 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> ברכיב פיזי</p>
+              <p style="margin: 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> במסך עמוס</p>
+              <p style="margin: 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> בכפתור לא ברור</p>
+            </div>
+            <p style="font-weight: 600; margin-bottom: 0.5rem;">הסבר קצר:</p>
+            <textarea placeholder="הקלידי את ההסבר..." style="width: 100%; min-height: 80px; padding: 0.75rem; border: 2px solid #a855f7; border-radius: 0.5rem; font-family: Heebo; font-size: 0.95rem; resize: vertical;"></textarea>
           </div>
 
           <div style="margin-top: 2rem; padding: 1rem; background: #f3f4f6; border-radius: 0.5rem; display: flex; justify-content: space-between; align-items: center;">
             <p style="margin: 0; color: #888; font-size: 0.85rem;">© 2026 פורצות דרך</p>
-            <p style="margin: 0; color: #666; font-size: 0.85rem;">📎 עץ המוצר שלנו</p>
+            <p style="margin: 0; color: #666; font-size: 0.85rem;">📎 עץ המוצר שלנו – מפגש 8</p>
           </div>
         </div>
       `;
@@ -1051,13 +1108,14 @@
           </div>
 
           <div style="margin: 2rem 0; padding: 1.5rem; background: #eff6ff; border-right: 4px solid #0ea5e9; border-radius: 0.5rem;">
-            <h2 style="color: #0ea5e9; font-size: 1.5rem; margin-top: 0;">בדיקות חובה</h2>
+            <h2 style="color: #0ea5e9; font-size: 1.5rem; margin-top: 0;">חלק א׳ – בדיקות חובה לכל סוג מוצר</h2>
 
             <div style="margin: 1.5rem 0;">
               <p style="font-weight: 600; color: #0ea5e9; margin-bottom: 0.75rem;">1. בהירות ליבה</p>
               <div style="padding-left: 1.5rem; border-left: 2px solid #0ea5e9;">
                 <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> ברור מה המוצר עושה תוך 5 שניות</p>
                 <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> יש פעולה מרכזית אחת ברורה</p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> אין עומס מידע</p>
               </div>
             </div>
 
@@ -1065,7 +1123,9 @@
               <p style="font-weight: 600; color: #0ea5e9; margin-bottom: 0.75rem;">2. User Flow</p>
               <div style="padding-left: 1.5rem; border-left: 2px solid #0ea5e9;">
                 <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> ברור איך מתחילים</p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> ברור מה קורה באמצע</p>
                 <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> ברור מה התוצאה</p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> יש משוב (Feedback) לאחר פעולה</p>
               </div>
             </div>
 
@@ -1074,21 +1134,76 @@
               <div style="padding-left: 1.5rem; border-left: 2px solid #0ea5e9;">
                 <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> אין יותר מדי שלבים</p>
                 <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> אין כפילויות</p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> אין צורך בהסבר חיצוני כדי להבין</p>
               </div>
             </div>
           </div>
 
           <div style="margin: 2rem 0; padding: 1.5rem; background: #f0fdf4; border-right: 4px solid #10b981; border-radius: 0.5rem;">
-            <h2 style="color: #10b981; font-size: 1.5rem; margin-top: 0;">בדיקת ערך (Value Check)</h2>
-            <div style="padding-left: 1.5rem; border-left: 2px solid #10b981;">
+            <h2 style="color: #10b981; font-size: 1.5rem; margin-top: 0;">חלק ב׳ – בדיקות ייעודיות לפי סוג מוצר</h2>
+
+            <div style="margin: 1.5rem 0;">
+              <p style="font-weight: 600; color: #10b981; margin-bottom: 0.75rem;">🔧 מוצר פיזי</p>
+              <div style="padding-left: 1.5rem; border-left: 2px solid #10b981;">
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> ברור איפה נוגעים / מפעילים</p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> יש חיווי ברור (אור / צליל / תנועה)</p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> גודל ותצורה מתאימים למשתמשת</p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> אין סכנה / בלבול תפעולי</p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> אם יש אפליקציה מלווה – החיבור ברור</p>
+                <p style="margin: 1rem 0; font-size: 0.9rem; background: #f0fdf4; padding: 0.75rem; border-radius: 0.25rem; border-right: 2px solid #10b981;">
+                  <strong>שאלה מקצועית:</strong> האם המוצר מגיב לפעולה של המשתמשת בצורה מיידית וברורה?<br/>
+                  <textarea placeholder="הקלידי את התשובה..." style="width: 100%; min-height: 40px; padding: 0.5rem; border: 1px solid #ccc; margin-top: 0.5rem; font-family: Heebo; border-radius: 0.25rem;"></textarea>
+                </p>
+              </div>
+            </div>
+
+            <div style="margin: 1.5rem 0;">
+              <p style="font-weight: 600; color: #10b981; margin-bottom: 0.75rem;">💻 דגם דיגיטלי (פלטפורמה / אתר)</p>
+              <div style="padding-left: 1.5rem; border-left: 2px solid #10b981;">
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> יש היררכיית מידע (מה חשוב ראשון)</p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> כפתור CTA בולט</p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> ניווט ברור</p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> אין יותר מ-3–5 אזורים מרכזיים במסך</p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> השפה הויזואלית אחידה</p>
+                <p style="margin: 1rem 0; font-size: 0.9rem; background: #f0fdf4; padding: 0.75rem; border-radius: 0.25rem; border-right: 2px solid #10b981;">
+                  <strong>שאלה מקצועית:</strong> האם המשתמשת יודעת לאן ללחוץ בלי לחשוב יותר מדי?<br/>
+                  <textarea placeholder="הקלידי את התשובה..." style="width: 100%; min-height: 40px; padding: 0.5rem; border: 1px solid #ccc; margin-top: 0.5rem; font-family: Heebo; border-radius: 0.25rem;"></textarea>
+                </p>
+              </div>
+            </div>
+
+            <div style="margin: 1.5rem 0;">
+              <p style="font-weight: 600; color: #10b981; margin-bottom: 0.75rem;">📱 אפליקציה</p>
+              <div style="padding-left: 1.5rem; border-left: 2px solid #10b981;">
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> מסך בית לא עמוס</p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> הפעולה המרכזית בולטת</p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> יש מסך תוצאה ברור</p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> יש Feedback (הודעה / שינוי מצב)</p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> אין צורך ביותר מ-2–3 לחיצות לפעולה מרכזית</p>
+                <p style="margin: 1rem 0; font-size: 0.9rem; background: #f0fdf4; padding: 0.75rem; border-radius: 0.25rem; border-right: 2px solid #10b981;">
+                  <strong>שאלה מקצועית:</strong> האם ה-Flow זורם בלי קפיצות או בלבול?<br/>
+                  <textarea placeholder="הקלידי את התשובה..." style="width: 100%; min-height: 40px; padding: 0.5rem; border: 1px solid #ccc; margin-top: 0.5rem; font-family: Heebo; border-radius: 0.25rem;"></textarea>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin: 2rem 0; padding: 1.5rem; background: #fef3c7; border-right: 4px solid #f59e0b; border-radius: 0.5rem;">
+            <h2 style="color: #d97706; font-size: 1.5rem; margin-top: 0;">חלק ג׳ – בדיקת ערך (Value Check)</h2>
+            <div style="padding-left: 1.5rem; border-left: 2px solid #f59e0b;">
               <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> המשתמשת מבינה מה הרווח שלה</p>
+              <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> השינוי בחיים שלה ברור</p>
               <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> יש סיבה אמיתית לחזור להשתמש</p>
+              <p style="margin: 1rem 0; font-size: 0.9rem; background: #fef3c7; padding: 0.75rem; border-radius: 0.25rem; border-right: 2px solid #f59e0b;">
+                <strong>במשפט אחד – הסיבה שהמשתמשת תחזור:</strong><br/>
+                <textarea placeholder="הקלידי את התשובה..." style="width: 100%; min-height: 60px; padding: 0.5rem; border: 1px solid #ccc; margin-top: 0.5rem; font-family: Heebo; border-radius: 0.25rem; resize: vertical;"></textarea>
+              </p>
             </div>
           </div>
 
           <div style="margin-top: 2rem; padding: 1rem; background: #f3f4f6; border-radius: 0.5rem; display: flex; justify-content: space-between; align-items: center;">
             <p style="margin: 0; color: #888; font-size: 0.85rem;">© 2026 פורצות דרך</p>
-            <p style="margin: 0; color: #666; font-size: 0.85rem;">✔ בדיקת UX</p>
+            <p style="margin: 0; color: #666; font-size: 0.85rem;">✔ בדיקת UX מקצועית</p>
           </div>
         </div>
       `;
