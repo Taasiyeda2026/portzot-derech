@@ -1618,27 +1618,35 @@
       return `
         <div style="margin-top:1.5rem; padding:1rem; background:#dbeafe; border:1px solid #93c5fd; border-radius:0.75rem;">
           <h4 style="margin:0 0 0.45rem; color:#1e3a8a;">שבלונת מסכים לאפליקציה (נספח ד׳)</h4>
-          <p style="margin:0; color:#1e40af; line-height:1.8;">עדכנתי לפי הסקיצה: במסך האמצעי יש תיבה עליונה + שתי תיבות תוכן, בגודל מדויק יותר.</p>
+          <p style="margin:0; color:#1e40af; line-height:1.8;">מלאי את שלושת המסכים כמו בסקיצה: מסך פתיחה, מסך פעולה מרכזית, ומסך תוצאה.</p>
         </div>
 
-        <div style="margin-top:1rem; display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.9rem; align-items:start;">
-          ${renderMobileFrame('מסך 1', '#f8fafc', `
-            ${renderSketchBox('תוכן מרכזי במסך פתיחה', 115)}
+        <div style="margin-top:1rem; display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.9rem;">
+          ${renderMobileFrame('מסך 1 – פתיחה', '#f8fafc', `
+            <label style="display:block; font-weight:700; margin-bottom:0.4rem;">כותרת המסך</label>
+            <input type="text" placeholder="למשל: ברוכה הבאה" style="width:100%; padding:0.5rem; border:1px solid #cbd5e1; border-radius:0.45rem; font-family:Heebo; margin-bottom:0.55rem;">
+            <label style="display:block; font-weight:700; margin-bottom:0.4rem;">מה המשתמשת רואה כאן?</label>
+            <textarea placeholder="תארי את הבלוק המרכזי במסך..." style="width:100%; min-height:120px; padding:0.55rem; border:1px solid #cbd5e1; border-radius:0.45rem; font-family:Heebo; resize:vertical;"></textarea>
           `)}
 
-          ${renderMobileFrame('מסך 2', '#fefce8', `
-            ${renderSketchBox('תיבה עליונה (כותרת/חיפוש)', 28)}
-            ${renderSketchBox('תיבה מרכזית', 92)}
-            ${renderSketchBox('תיבה תחתונה', 72)}
-            <div style="margin-top:0.55rem; display:grid; gap:0.35rem;">
-              ${renderActionLine('1) פעולה/בחירה')}
-              ${renderActionLine('2) פעולה/בחירה')}
-              ${renderActionLine('3) פעולה/בחירה')}
+          ${renderMobileFrame('מסך 2 – פעולה מרכזית', '#fefce8', `
+            <label style="display:block; font-weight:700; margin-bottom:0.4rem;">כותרת / שורת חיפוש / שאלה</label>
+            <input type="text" placeholder="מה מופיע בחלק העליון?" style="width:100%; padding:0.5rem; border:1px solid #cbd5e1; border-radius:0.45rem; font-family:Heebo; margin-bottom:0.6rem;">
+            <label style="display:block; font-weight:700; margin-bottom:0.4rem;">איזה תוכן מרכזי מופיע?</label>
+            <textarea placeholder="תארי את האזור המרכזי במסך..." style="width:100%; min-height:80px; padding:0.55rem; border:1px solid #cbd5e1; border-radius:0.45rem; font-family:Heebo; resize:vertical; margin-bottom:0.6rem;"></textarea>
+            <p style="margin:0 0 0.35rem; font-weight:700;">3 פעולות / אפשרויות עיקריות:</p>
+            <div style="display:grid; gap:0.4rem;">
+              <input type="text" placeholder="1)" style="padding:0.45rem; border:1px solid #cbd5e1; border-radius:0.4rem; font-family:Heebo;">
+              <input type="text" placeholder="2)" style="padding:0.45rem; border:1px solid #cbd5e1; border-radius:0.4rem; font-family:Heebo;">
+              <input type="text" placeholder="3)" style="padding:0.45rem; border:1px solid #cbd5e1; border-radius:0.4rem; font-family:Heebo;">
             </div>
           `)}
 
-          ${renderMobileFrame('מסך 3', '#f0fdf4', `
-            ${renderSketchBox('תוכן מרכזי במסך תוצאה', 120)}
+          ${renderMobileFrame('מסך 3 – תוצאה / סיכום', '#f0fdf4', `
+            <label style="display:block; font-weight:700; margin-bottom:0.4rem;">מה התוצאה שהמשתמשת מקבלת?</label>
+            <textarea placeholder="מה מוצג בסוף התהליך?" style="width:100%; min-height:120px; padding:0.55rem; border:1px solid #cbd5e1; border-radius:0.45rem; font-family:Heebo; resize:vertical; margin-bottom:0.6rem;"></textarea>
+            <label style="display:block; font-weight:700; margin-bottom:0.4rem;">מה הפעולה הבאה?</label>
+            <input type="text" placeholder="כפתור/המשך/שיתוף..." style="width:100%; padding:0.5rem; border:1px solid #cbd5e1; border-radius:0.45rem; font-family:Heebo;">
           `)}
         </div>
       `;
@@ -1648,29 +1656,12 @@
       return `
         <div style="background:#fff; border:1px solid #cbd5e1; border-radius:1rem; box-shadow:0 4px 10px rgba(30,41,59,0.08); padding:0.85rem;">
           <p style="margin:0 0 0.6rem; font-weight:700; color:#1e3a8a; text-align:center;">${title}</p>
-          <div style="margin:0 auto; max-width:205px; border:2px solid #1f2937; border-radius:1.25rem; padding:0.5rem; background:#fff;">
-            <div style="height:14px; width:72px; margin:0 auto 0.55rem; border:1px solid #6b7280; border-radius:999px; background:#f3f4f6;"></div>
-            <div style="background:${color}; border:1px dashed #94a3b8; border-radius:0.9rem; min-height:285px; padding:0.55rem;">
+          <div style="margin:0 auto; max-width:220px; border:2px solid #1f2937; border-radius:1.25rem; padding:0.5rem; background:#fff;">
+            <div style="height:14px; width:72px; margin:0 auto 0.6rem; border:1px solid #6b7280; border-radius:999px; background:#f3f4f6;"></div>
+            <div style="background:${color}; border:1px dashed #94a3b8; border-radius:0.9rem; min-height:315px; padding:0.6rem;">
               ${contentHtml}
             </div>
           </div>
-        </div>
-      `;
-    }
-
-    function renderSketchBox(placeholder, minHeight) {
-      return `
-        <div style="border:2px solid #334155; border-radius:0.35rem; background:#fff; padding:0.25rem; margin-bottom:0.45rem;">
-          <textarea placeholder="${placeholder}" style="width:100%; min-height:${minHeight}px; border:none; outline:none; resize:vertical; font-family:Heebo; background:transparent;"></textarea>
-        </div>
-      `;
-    }
-
-    function renderActionLine(placeholder) {
-      return `
-        <div style="display:flex; align-items:center; gap:0.35rem;">
-          <span style="width:10px; height:10px; border:2px solid #1f2937; border-radius:999px; display:inline-block; flex-shrink:0;"></span>
-          <input type="text" placeholder="${placeholder}" style="flex:1; border:none; border-bottom:2px solid #334155; background:transparent; padding:0.15rem 0.2rem; font-family:Heebo;" />
         </div>
       `;
     }
