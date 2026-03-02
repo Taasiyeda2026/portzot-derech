@@ -16,6 +16,7 @@
       --color-text: #292524;
       --color-primary: #ec4899;
       --color-secondary: #0ea5e9;
+      --color-third: #8b5cf6;
     }
 
     html, body {
@@ -35,20 +36,21 @@
 
     .article-content h2 {
       font-family: 'Frank Ruhl Libre', serif;
-      font-size: 1.75rem;
+      font-size: 1.95rem;
       font-weight: 700;
-      margin-top: 2.5rem;
+      margin-top: 2.1rem;
       margin-bottom: 1rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 2px solid var(--color-primary);
+      padding-bottom: 0.55rem;
+      border-bottom: 3px solid rgba(236, 72, 153, 0.35);
+      color: #be185d;
     }
 
     .article-content h3 {
-      font-size: 1.25rem;
-      font-weight: 600;
-      margin-top: 1.75rem;
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-top: 1.5rem;
       margin-bottom: 0.75rem;
-      color: var(--color-secondary);
+      color: #0c4a6e;
     }
 
     .article-content p {
@@ -111,11 +113,21 @@
 
     .toc-link {
       transition: all 0.2s ease;
+      border-radius: 0.75rem;
+      padding: 0.55rem 0.8rem;
+      border: 1px solid transparent;
+      font-weight: 500;
     }
 
     .toc-link:hover {
       color: var(--color-primary);
-      padding-right: 0.5rem;
+      border-color: rgba(236, 72, 153, 0.25);
+      background: rgba(236, 72, 153, 0.08);
+      transform: translateX(-3px);
+    }
+
+    nav .toc-link {
+      box-shadow: 0 2px 4px rgba(15, 23, 42, 0.04);
     }
 
     @keyframes fadeInUp {
@@ -137,10 +149,38 @@
       position: sticky;
       top: 0;
       z-index: 200;
-      background: rgba(250, 250, 249, 0.96);
-      backdrop-filter: blur(6px);
-      border-bottom: 1px solid rgba(120, 113, 108, 0.2);
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(120, 113, 108, 0.12);
+      box-shadow: 0 6px 18px rgba(148, 163, 184, 0.22);
+    }
+
+    .top-header-inner {
+      gap: 0.75rem;
+    }
+
+    .appendix-launcher {
+      background: linear-gradient(160deg, #ffffff, #f8fafc);
+      border: 1px solid rgba(14, 165, 233, 0.14);
+      border-radius: 1.2rem;
+      box-shadow: 0 12px 24px rgba(14, 165, 233, 0.08);
+      padding: 1.2rem;
+    }
+
+    .appendix-launcher h3 {
+      color: #7e22ce;
+      font-size: 1.15rem;
+      letter-spacing: 0.02em;
+    }
+
+    .appendix-grid button {
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      min-height: 122px;
+      box-shadow: 0 10px 18px rgba(15, 23, 42, 0.16);
+    }
+
+    .appendix-grid button:hover {
+      box-shadow: 0 14px 24px rgba(15, 23, 42, 0.22);
     }
 
     .home-btn {
@@ -336,12 +376,17 @@
       .top-header-inner {
         padding-left: 1rem;
         padding-right: 1rem;
+        gap: 0.4rem;
       }
       .large-quote {
         font-size: 1.2rem;
       }
       .feature-list {
         grid-template-columns: 1fr;
+      }
+      .home-btn {
+        padding: 0.45rem 0.7rem;
+        font-size: 1.2rem !important;
       }
     }
 
@@ -387,7 +432,7 @@
    </header>
 
    <!-- Table of Contents -->
-   <nav class="max-w-4xl mx-auto px-6 mb-12">
+   <nav class="max-w-4xl mx-auto px-6 mb-10">
     <div class="bg-white rounded-xl p-6 backdrop-blur-sm border border-stone-200 shadow-md">
      <h2 class="text-lg font-semibold mb-4 text-rose-600">📚 תוכן העניינים</h2>
      <ol class="space-y-2 text-stone-600">
@@ -981,9 +1026,9 @@
    </main>
 
    <!-- Navigation Buttons to Appendices -->
-   <div class="max-w-6xl mx-auto px-6 py-12 mb-8">
-    <p class="text-center text-stone-600 mb-6 font-semibold">🎯 בחרו נספח להדפסה ומילוי:</p>
-    <div class="grid md:grid-cols-5 gap-3">
+   <div class="max-w-6xl mx-auto px-6 py-10 mb-8 appendix-launcher">
+    <p class="text-center text-stone-600 mb-6 font-semibold">🎯 בוחרות נספח להדפסה ומילוי:</p>
+    <div class="grid md:grid-cols-5 gap-3 appendix-grid">
      <!-- Appendix A --> <button id="btn-appendix-a" class="group relative overflow-hidden rounded-xl p-4 text-white font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg" style="background: linear-gradient(135deg, #ec4899, #f43f5e);">
       <div class="absolute inset-0 opacity-0 group-hover:opacity-20 bg-white transition-opacity"></div>
       <div class="relative">
