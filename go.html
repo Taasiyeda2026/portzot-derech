@@ -7,6 +7,29 @@
 <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600;700&family=Assistant:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
+/* === Back button === */
+.back-btn {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    width: 36px;
+    height: 36px;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #374151;
+    font-size: 20px;
+    line-height: 1;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.1);
+    z-index: 100;
+    transition: background 0.15s;
+}
+.back-btn:hover { background: #f3f4f6; }
+
 /* === Base === */
 body {
     font-family: 'Assistant', sans-serif;
@@ -357,6 +380,7 @@ button {
 </head>
 
 <body>
+<a class="back-btn" href="entrepreneurship-steps.html" title="חזרה">&#8592;</a>
 <div id="formArea">
 
 <h1><span class="go-color">GO</span> / <span class="nogo-color">NO GO</span></h1>
