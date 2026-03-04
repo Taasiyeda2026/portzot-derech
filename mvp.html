@@ -3,7 +3,7 @@
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>מרעיון למוצר: עץ מוצר ואבטיפוס</title>
+  <title>מרעיון למוצר: המדריך לאבטיפוס</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="/_sdk/element_sdk.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -408,10 +408,9 @@
     <div class="top-header-inner max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
       <p class="text-stone-700 font-semibold m-0">פורצות דרך</p>
       <div class="flex gap-1 items-center" style="flex-shrink: 0;">
-        <button id="header-diamond-b" title="נספח ב׳ – עץ המוצר" style="background: none; border: none; cursor: pointer; font-size: 1.3rem; color: #0ea5e9; padding: 0.25rem; transition: transform 0.2s; display: inline-flex; align-items: center; justify-content: center;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">◆</button>
-        <button id="header-diamond-c" title="נספח ג׳ – תכנון Flow" style="background: none; border: none; cursor: pointer; font-size: 1.3rem; color: #10b981; padding: 0.25rem; transition: transform 0.2s; display: inline-flex; align-items: center; justify-content: center;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">◆</button>
-        <button id="header-diamond-d" title="נספח ד׳ – MVP" style="background: none; border: none; cursor: pointer; font-size: 1.3rem; color: #f59e0b; padding: 0.25rem; transition: transform 0.2s; display: inline-flex; align-items: center; justify-content: center;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">◆</button>
-        <button id="header-diamond-e" title="נספח ה׳ – בדיקת אבטיפוס" style="background: none; border: none; cursor: pointer; font-size: 1.3rem; color: #8b5cf6; padding: 0.25rem; transition: transform 0.2s; display: inline-flex; align-items: center; justify-content: center;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">◆</button>
+        <button id="header-diamond-d" title="נספח – MVP מעשי" style="background: none; border: none; cursor: pointer; font-size: 1.3rem; color: #f59e0b; padding: 0.25rem; transition: transform 0.2s; display: inline-flex; align-items: center; justify-content: center;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">◆</button>
+        <button id="header-diamond-e" title="נספח – בדיקת אבטיפוס" style="background: none; border: none; cursor: pointer; font-size: 1.3rem; color: #8b5cf6; padding: 0.25rem; transition: transform 0.2s; display: inline-flex; align-items: center; justify-content: center;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">◆</button>
+        <a href="tree.html" style="display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.4rem 0.8rem; border-radius: 999px; font-weight: 700; font-size: 0.85rem; color: #ec4899; border: 1.5px solid #ec4899; background: rgba(236,72,153,0.07); text-decoration: none; transition: background 0.2s;" onmouseover="this.style.background='rgba(236,72,153,0.15)'" onmouseout="this.style.background='rgba(236,72,153,0.07)'">← עץ מוצר</a>
       </div>
       <a href="index.html" class="home-btn" aria-label="חזרה לעמוד הבית" style="font-size: 1.5rem; display: inline-flex; align-items: center; justify-content: center;">🏠</a>
     </div>
@@ -422,11 +421,11 @@
     <div class="absolute inset-0 bg-gradient-to-bl from-rose-500/15 via-transparent to-sky-500/15"></div>
     <div class="max-w-4xl mx-auto relative">
      <div class="flex items-center gap-3 mb-6">
-      <span class="px-3 py-1 bg-rose-100 text-rose-700 text-sm rounded-full font-bold">🚀 מדריך מלא</span>
-      <span class="text-stone-500 text-sm">⏱ זמן קריאה: 15 דקות</span>
+      <span class="px-3 py-1 bg-rose-100 text-rose-700 text-sm rounded-full font-bold">🔬 אבטיפוס</span>
+      <span class="text-stone-500 text-sm">⏱ זמן קריאה: 8 דקות</span>
      </div>
-     <h1 class="font-serif text-4xl md:text-5xl font-bold mb-4 gradient-text leading-tight">מרעיון למוצר: המדריך המלא לעץ מוצר ואבטיפוס</h1>
-     <p class="text-xl text-stone-600 leading-relaxed">איך הופכים חזון מופשט למפרט מדויק שמוביל ליצירת מוצר אמיתי</p>
+     <h1 id="article-title" class="font-serif text-4xl md:text-5xl font-bold mb-4 gradient-text leading-tight">מרעיון למוצר: המדריך לאבטיפוס</h1>
+     <p class="text-xl text-stone-600 leading-relaxed">איך יזמיות בודקות רעיון לפני שהן בונות אותו באמת</p>
     </div>
    </header>
 
@@ -435,13 +434,13 @@
     <div class="bg-white rounded-xl p-6 backdrop-blur-sm border border-stone-200 shadow-md">
      <h2 class="text-lg font-semibold mb-4 text-rose-600">📚 תוכן העניינים</h2>
      <ol class="space-y-2 text-stone-600">
-      <li><a href="#intro" class="toc-link block hover:text-rose-600">1. פתיחה: למה רעיון לבדו אינו מספיק</a></li>
-      <li><a href="#product-tree" class="toc-link block hover:text-rose-600">2. עץ מוצר – לראות את המערכת באמת</a></li>
-      <li><a href="#mvp" class="toc-link block hover:text-rose-600">3. MVP – לא הכל בבת אחת</a></li>
-      <li><a href="#prototype" class="toc-link block hover:text-rose-600">4. אבטיפוס – רגע האמת</a></li>
-      <li><a href="#connection" class="toc-link block hover:text-rose-600">5. החיבור אלייך</a></li>
-      <li><a href="#reflection" class="toc-link block hover:text-rose-600">6. שאלות שאת חייבת לשאול את עצמך</a></li>
-      <li><a href="#summary" class="toc-link block hover:text-rose-600">7. סיכום: יזמות מתחילה בליבה</a></li>
+      <li><a href="#intro" class="toc-link block hover:text-rose-600">1. פתיחה: הבעיה עם רעיונות</a></li>
+      <li><a href="#what-is-prototype" class="toc-link block hover:text-rose-600">2. מה זה אבטיפוס?</a></li>
+      <li><a href="#what-to-test" class="toc-link block hover:text-rose-600">3. מה בעצם בודקים?</a></li>
+      <li><a href="#how-to-test" class="toc-link block hover:text-rose-600">4. איך עושים בדיקה טובה?</a></li>
+      <li><a href="#failure-is-success" class="toc-link block hover:text-rose-600">5. אבטיפוס שנכשל הוא הצלחה</a></li>
+      <li><a href="#why-important" class="toc-link block hover:text-rose-600">6. למה זה חשוב ליזמיות צעירות</a></li>
+      <li><a href="#summary" class="toc-link block hover:text-rose-600">7. סיכום</a></li>
      </ol>
     </div>
    </nav>
@@ -452,459 +451,216 @@
 
      <!-- Section 1: Introduction -->
      <section id="intro" class="animate-fade-in">
-      <h2>פתיחה: למה רעיון לבדו אינו מספיק</h2>
+      <h2>פתיחה: הבעיה עם רעיונות</h2>
 
-      <p style="font-size: 1.1rem; font-weight: 500;">בואי נדבר רגע בכנות.</p>
+      <p style="font-size: 1.05rem;">רעיונות הם דבר מרגש.</p>
 
-      <p style="font-size: 1.1rem; margin-top: 1rem;">
-        <strong>לכולן יש רעיונות.</strong>
-      </p>
-
-      <p style="font-size: 1rem; color: #666; margin-top: 0.75rem;">
-        באוטובוס. במקלחת. באמצע שיעור משעמם.
-      </p>
+      <p style="font-size: 1.05rem;">אבל יש איתם בעיה אחת גדולה:</p>
 
       <div style="margin: 1.5rem 0; padding: 1.5rem; background: linear-gradient(135deg, rgba(236, 72, 153, 0.05), rgba(14, 165, 233, 0.05)); border-right: 4px solid #ec4899; border-radius: 0.75rem; box-shadow: 0 2px 8px rgba(236, 72, 153, 0.08);">
         <p style="font-size: 1.3rem; font-weight: 700; color: #ec4899; margin: 0;">
-          "איך אף אחת עוד לא חשבה על זה?!"
+          קל מאוד להתאהב ברעיון שלך.
         </p>
       </div>
 
       <p style="margin-top: 1.5rem; font-size: 1.05rem;">
-        אבל רעיון — <strong>מבריק ככל שיהיה</strong> — הוא רק <strong>התחלה</strong>.<br>
-        <span style="color: #ec4899;">הוא ניצוץ. לא מדורה.</span>
+        יזמיות מתחילות לחשוב:<br>
+        <em>"ברור שכולם ירצו את זה."</em><br>
+        <em>"ברור שזה יעבוד."</em>
       </p>
+
+      <div class="warning-box">
+        <p style="margin: 0; color: #1f2937;">
+          <strong>אבל בעולם האמיתי לא עובדים על תחושות.</strong><br>
+          <strong style="color: #d97706;">בודקים.</strong>
+        </p>
+      </div>
 
       <div class="highlight-box">
         <p style="font-size: 1.1rem; margin: 0;">
-          <strong>ההבדל בין רעיון למוצר אמיתי הוא תהליך.</strong>
+          והדרך לבדוק רעיון נקראת: <strong>אבטיפוס</strong>
         </p>
       </div>
 
-      <p style="margin-top: 1.25rem;">
-        ובתהליך הזה יש <strong>שני כלים</strong> שכל יזמת רצינית מכירה:
-      </p>
-
-      <div class="feature-list">
-        <div class="feature-item">
-          <div style="font-size: 2rem; margin-bottom: 0.75rem;">🌳</div>
-          <div class="feature-item-title">עץ מוצר</div>
-          <p style="font-size: 0.95rem; color: #666; margin: 0;">לראות את המערכת כולה ולהבין כל רכיב</p>
-        </div>
-        <div class="feature-item">
-          <div style="font-size: 2rem; margin-bottom: 0.75rem;">🔬</div>
-          <div class="feature-item-title">אבטיפוס</div>
-          <p style="font-size: 0.95rem; color: #666; margin: 0;">לבדוק בעולם האמיתי לפני בנייה</p>
-        </div>
-      </div>
-
-      <div class="success-box">
-        <p style="margin: 0 0 1rem 0; font-weight: 700; color: #22c55e;">✨ החדשות הטובות?</p>
-        <p style="margin: 0; color: #1f2937;">אלה כלים מקצועיים לגמרי, שמשתמשים בהם בתעשייה אמיתית.</p>
-      </div>
-
-      <div class="success-box" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(34, 197, 94, 0.08)); border-right-color: #3b82f6;">
-        <p style="margin: 0 0 1rem 0; font-weight: 700; color: #3b82f6;">🌟 החדשות המעולות?</p>
-        <p style="margin: 0; color: #1f2937;">את יכולה להשתמש בהם כבר עכשיו — גם אם את רק בתחילת הדרך.</p>
-      </div>
      </section>
 
-     <!-- Section 2: Product Tree -->
-     <section id="product-tree" class="animate-fade-in">
-      <h2>עץ מוצר – לראות את המערכת באמת</h2>
+     <!-- Section 2: What is a Prototype? -->
+     <section id="what-is-prototype" class="animate-fade-in">
+      <h2>מה זה אבטיפוס?</h2>
 
-      <div class="reflection-box">
-        <p style="margin: 0; font-size: 1.15rem; font-weight: 700; color: #0ea5e9;">רגע… עט זה רק עט?</p>
-      </div>
+      <p>אבטיפוס הוא <strong>גרסה ראשונית של מוצר</strong>.</p>
 
-      <p style="margin-top: 1.5rem;">בואי נעשה ניסוי קטן.</p>
-
-      <p style="margin-top: 1rem;">קחי עט. כן, <strong>עט רגיל</strong>.<br>
-      מה את רואה? פלסטיק, דיו, אולי גומי, משהו שלוחצים עליו.</p>
-
-      <div class="warning-box">
-        <p style="margin: 0; color: #1f2937;">
-          <strong>אבל תעשייה אמיתית לא רואה "עט".</strong><br>
-          היא רואה <strong>מערכת</strong>: חלקים, החלטות, עלויות, נקודות כשל והשפעות.
-        </p>
-      </div>
-
-      <h3 style="margin-top: 2rem;">עץ מוצר (BOM) – מה זה אומר?</h3>
-
-      <p>עץ מוצר הוא הדרך <strong>לפרק מוצר לכל הרכיבים</strong> שמרכיבים אותו.</p>
-
-      <p>בשפה מקצועית קוראים לזה גם: <strong>BOM</strong> – "Bill of Materials" (רשימת החומרים והרכיבים).</p>
-
-      <div class="example-box">
-        <p style="margin-top: 0; margin-bottom: 1rem; font-weight: 700; color: #1f2937;">דוגמאות:
-        <ul style="margin-top: 0.75rem;">
-          <li><strong>✈️ מטוס</strong> – מיליוני חלקים</li>
-          <li><strong>🪑 כיסא</strong> – עשרות רכיבים</li>
-          <li><strong>📱 אפליקציה</strong> – מסכים, פעולות, זרימות, שרתים, הרשאות</li>
-        </ul>
-      </div>
-
-      <p style="margin-top: 1.5rem;"><strong>למה זה חשוב?</strong></p>
-
-      <p>כי <strong>אם את לא יודעת ממה המוצר שלך בנוי</strong> — את לא באמת שולטת בו.</p>
-
-      <h3>דוגמה מפורקת: ✒️ עץ מוצר – עט</h3>
-
-      <div style="margin: 2rem 0; padding: 1.5rem; background: #f9fafb; border-radius: 0.75rem; border: 1px solid #e5e7eb;">
-        <div style="margin-bottom: 1.5rem;">
-          <p style="margin: 0 0 0.5rem 0; font-weight: 700; color: #ec4899; font-size: 1.1rem;">📍 רמה 1 – המוצר השלם</p>
-          <p style="margin: 0; color: #1f2937;">עט</p>
-        </div>
-
-        <div style="margin-bottom: 1.5rem; padding-top: 1rem; border-top: 1px solid #d1d5db;">
-          <p style="margin: 0 0 0.5rem 0; font-weight: 700; color: #0ea5e9; font-size: 1.1rem;">📍 רמה 2 – שתי מערכות עיקריות</p>
-          <div style="margin-top: 0.75rem; padding-right: 1rem;">
-            <p style="margin: 0.5rem 0; color: #1f2937;"><strong>🔵 מערכת פנימית</strong> – מה שגורם לעט לכתוב</p>
-            <p style="margin: 0.5rem 0; color: #1f2937;"><strong>🟡 מערכת חיצונית</strong> – מה שמחזיק את הכול ומאפשר שימוש נוח</p>
-          </div>
-        </div>
-
-        <div style="margin-bottom: 1.5rem; padding-top: 1rem; border-top: 1px solid #d1d5db;">
-          <p style="margin: 0 0 0.75rem 0; font-weight: 700; color: #22c55e; font-size: 1.1rem;">📍 רמה 3 – רכיבים</p>
-          <p style="margin: 0.5rem 0; color: #666; font-size: 0.95rem; font-weight: 600;">המערכת הפנימית:</p>
-          <ul style="margin: 0.5rem 0 1rem 0; color: #1f2937; font-size: 0.95rem;">
-            <li>צינורית דיו</li>
-            <li>דיו</li>
-            <li>כדור מתכת בקצה (החלק שמגלגל דיו אל הדף)</li>
-            <li>קפיץ</li>
-            <li>מנגנון לחיצה/סיבוב</li>
-          </ul>
-
-          <div style="padding: 1rem; background: linear-gradient(135deg, rgba(34, 197, 94, 0.05), rgba(59, 130, 246, 0.05)); border-radius: 0.5rem; margin-bottom: 1rem;">
-            <p style="margin: 0; font-size: 0.9rem; color: #1f2937;">
-              <strong>💡 כאן נמצאת הליבה:</strong> היכולת לכתוב. אם אחד מהרכיבים האלה כושל — העט לא עובד.
-            </p>
-          </div>
-
-          <p style="margin: 0.5rem 0; color: #666; font-size: 0.95rem; font-weight: 600;">המערכת החיצונית:</p>
-          <ul style="margin: 0.5rem 0 1rem 0; color: #1f2937; font-size: 0.95rem;">
-            <li>גוף/מעטפת</li>
-            <li>תופסן</li>
-            <li>כרית אחיזה (גומי/סיליקון)</li>
-            <li>לחצן עליון / מכסה</li>
-            <li>חיבורים פנימיים קטנים</li>
-          </ul>
-
-          <p style="margin: 0; color: #666; font-size: 0.9rem;">זה החלק שמגדיר: נוחות, עמידות, תחושת איכות, עיצוב, שימושיות.</p>
-        </div>
-      </div>
-
-      <h3>איך זה נראה בתעשייה באמת?</h3>
-
-      <p>במפעל אמיתי לכל רכיב יש:</p>
-
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin: 1.5rem 0;">
-        <div style="padding: 1rem; background: white; border: 1px solid #e5e7eb; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);">
-          <div style="font-weight: 700; color: #ec4899; margin-bottom: 0.5rem;">🔹 מק"ט</div>
-          <p style="font-size: 0.9rem; color: #666; margin: 0;">קוד זיהוי ייחודי</p>
-        </div>
-        <div style="padding: 1rem; background: white; border: 1px solid #e5e7eb; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);">
-          <div style="font-weight: 700; color: #0ea5e9; margin-bottom: 0.5rem;">🔹 ספק</div>
-          <p style="font-size: 0.9rem; color: #666; margin: 0;">מי מספק את הרכיב</p>
-        </div>
-        <div style="padding: 1rem; background: white; border: 1px solid #e5e7eb; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);">
-          <div style="font-weight: 700; color: #22c55e; margin-bottom: 0.5rem;">🔹 עלות</div>
-          <p style="font-size: 0.9rem; color: #666; margin: 0;">כמה זה עולה</p>
-        </div>
-        <div style="padding: 1rem; background: white; border: 1px solid #e5e7eb; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);">
-          <div style="font-weight: 700; color: #f59e0b; margin-bottom: 0.5rem;">🔹 חומר גלם</div>
-          <p style="font-size: 0.9rem; color: #666; margin: 0;">ממה הוא עשוי</p>
-        </div>
-        <div style="padding: 1rem; background: white; border: 1px solid #e5e7eb; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);">
-          <div style="font-weight: 700; color: #8b5cf6; margin-bottom: 0.5rem;">🔹 ייצור</div>
-          <p style="font-size: 0.9rem; color: #666; margin: 0;">איך מייצרים אותו</p>
-        </div>
-        <div style="padding: 1rem; background: white; border: 1px solid #e5e7eb; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);">
-          <div style="font-weight: 700; color: #ec4899; margin-bottom: 0.5rem;">🔹 בדיקה</div>
-          <p style="font-size: 0.9rem; color: #666; margin: 0;">בדיקות איכות</p>
-        </div>
-      </div>
-
-      <div class="warning-box">
-        <p style="margin: 0 0 1rem 0; font-weight: 700; color: #d97706;">⚠️ הרשימה הזאת לא "נחמדה".</p>
-        <p style="margin: 0; color: #1f2937;">היא <strong>קריטית</strong>. כי היא מאפשרת לדעת: <strong>מה מתקלקל, כמה זה עולה, מה אפשר לשפר, ומה מסוכן.</strong></p>
-      </div>
-
-      <h3>עכשיו תרגום לעולם שלך: עץ מוצר כחשיבה יזמית</h3>
-
-      <p>תחשבי על עץ אמיתי:</p>
-
-      <div style="margin: 2rem 0;">
-        <div style="margin-bottom: 1.5rem; padding: 1.25rem; background: linear-gradient(135deg, rgba(236, 72, 153, 0.08), rgba(14, 165, 233, 0.08)); border-radius: 0.75rem; border-right: 4px solid #ec4899;">
-          <div style="font-size: 1.2rem; margin-bottom: 0.5rem;"><strong>🪵 הגזע – הליבה</strong></div>
-          <p style="margin: 0; color: #1f2937; line-height: 1.6;">מה הפעולה הקריטית שהמוצר חייב לעשות? בלי זה — אין מוצר.</p>
-        </div>
-
-        <div style="margin-bottom: 1.5rem; padding: 1.25rem; background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(14, 165, 233, 0.08)); border-radius: 0.75rem; border-right: 4px solid #3b82f6;">
-          <div style="font-size: 1.2rem; margin-bottom: 0.5rem;"><strong>🌿 הענפים – הפונקציות</strong></div>
-          <p style="margin: 0; color: #1f2937; line-height: 1.6;">כל מה שהמוצר מאפשר. פיצ'רים. יכולות. ענפים יכולים להתפצל לענפים קטנים יותר.</p>
-        </div>
-
-        <div style="margin-bottom: 1.5rem; padding: 1.25rem; background: linear-gradient(135deg, rgba(34, 197, 94, 0.08), rgba(14, 165, 233, 0.08)); border-radius: 0.75rem; border-right: 4px solid #22c55e;">
-          <div style="font-size: 1.2rem; margin-bottom: 0.5rem;"><strong>🍎 הפירות – הערך</strong></div>
-          <p style="margin: 0; color: #1f2937; line-height: 1.6;">מה המשתמשת מרוויחה בפועל? מה משתנה לה בחיים?</p>
-        </div>
-
-        <div style="margin-bottom: 1.5rem; padding: 1.25rem; background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(14, 165, 233, 0.08)); border-radius: 0.75rem; border-right: 4px solid #f59e0b;">
-          <div style="font-size: 1.2rem; margin-bottom: 0.5rem;"><strong>🌱 השורשים – מה שקורה מאחורי הקלעים</strong></div>
-          <p style="margin: 0; color: #1f2937; line-height: 1.6;">טכנולוגיה, לוגיסטיקה, תשתיות, אבטחה, שירות, תפעול. דברים שלא רואים — אבל בלעדיהם הכול נופל.</p>
-        </div>
-      </div>
-
-      <div class="large-quote">
-        ברגע שאת מציירת את העץ הזה —<br>
-        את מתחילה לחשוב מערכתית.
-      </div>
-
-      <p style="margin-top: 2rem; text-align: center; color: #666; font-size: 1.05rem;">וזה רגע מעבר חשוב:<br>
-      <strong>את כבר לא "חולמת רעיון".</strong><br>
-      <strong>את מתכננת מוצר.</strong></p>
-
-      <h3>זיהוי נקודות כשל – לחשוב כמו מקצוענית</h3>
-
-      <p>עץ מוצר עושה עוד משהו חשוב: הוא <strong>חושף חולשות</strong>.</p>
-
-      <p>שאלי את עצמך:</p>
-
-      <div style="margin: 1.5rem 0; display: grid; gap: 1rem;">
-        <div style="padding: 1rem; background: white; border-right: 4px solid #ec4899; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);">
-          <p style="margin: 0; color: #1f2937;">
-            <strong>🔍 אם הרכיב הזה לא עובד</strong> — מה קורה?
-          </p>
-        </div>
-        <div style="padding: 1rem; background: white; border-right: 4px solid #0ea5e9; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);">
-          <p style="margin: 0; color: #1f2937;">
-            <strong>🔗 איפה החוליה החלשה?</strong>
-          </p>
-        </div>
-        <div style="padding: 1rem; background: white; border-right: 4px solid #f59e0b; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);">
-          <p style="margin: 0; color: #1f2937;">
-            <strong>😕 איפה המשתמשת עלולה להתבלבל?</strong>
-          </p>
-        </div>
-        <div style="padding: 1rem; background: white; border-right: 4px solid #ef4444; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);">
-          <p style="margin: 0; color: #1f2937;">
-            <strong>⚠️ מה הכי מסוכן למוצר שלי?</strong>
-          </p>
-        </div>
-      </div>
-
-      <div class="success-box">
-        <p style="margin: 0; color: #1f2937;">יזמות מקצועית היא לא רק התלהבות.<br>
-        היא גם <strong>ניהול סיכונים, עוד לפני שבנית משהו.</strong></p>
-      </div>
-     </section>
-
-     <!-- Section 3: MVP -->
-     <section id="mvp" class="animate-fade-in">
-      <h2>MVP – לא הכול בבת אחת</h2>
-
-      <p style="font-size: 1.1rem; font-weight: 600; color: #666;">את לא צריכה לבנות הכול מיד.<br>
-      ולא את כל הפיצ'רים. ולא את כל החלומות.</p>
-
-      <div class="highlight-box">
-        <p style="margin: 0; font-size: 1.1rem; font-weight: 700;">
-          <strong>MVP</strong> (Minimum Viable Product) הוא:<br>
-          <strong>הגרסה הכי פשוטה של המוצר שעדיין פותרת את הבעיה המרכזית.</strong>
-        </p>
-      </div>
-
-      <div style="margin: 2rem 0; padding: 1.5rem; background: white; border: 2px solid #e5e7eb; border-radius: 0.75rem;">
+      <div style="margin: 1.5rem 0; padding: 1.5rem; background: white; border: 2px solid #e5e7eb; border-radius: 0.75rem;">
         <p style="margin: 0.5rem 0; color: #1f2937; font-size: 1rem;">
-          <strong style="color: #ef4444;">❌ לא מושלם.</strong>
+          <strong style="color: #ef4444;">❌ לא מוצר מושלם.</strong>
         </p>
         <p style="margin: 0.5rem 0; color: #1f2937; font-size: 1rem;">
-          <strong style="color: #ef4444;">❌ לא מלא תוספות.</strong>
+          <strong style="color: #ef4444;">❌ לא מוצר סופי.</strong>
         </p>
         <p style="margin: 0; color: #1f2937; font-size: 1rem;">
-          <strong style="color: #22c55e;">✅ אבל חד, ברור, ועובד.</strong>
+          <strong style="color: #22c55e;">✅ רק גרסה שמאפשרת לבדוק משהו חשוב.</strong>
         </p>
       </div>
 
-      <div class="reflection-box">
-        <p style="margin: 0; font-weight: 700; color: #0ea5e9; font-size: 1.1rem;">🎯 השאלה המכוונת:</p>
-        <p style="margin: 1rem 0 0 0; color: #1f2937; line-height: 1.8;">
-          <strong>אם תמחקי 80% מהפיצ'רים —</strong><br>
-          <strong>מה נשאר שחייב להישאר כדי שזה עדיין יעזור?</strong>
-        </p>
-        <p style="margin: 1rem 0 0 0; color: #666; font-size: 0.95rem;">זה ה-MVP שלך.</p>
-      </div>
-     </section>
-
-     <!-- Section 5: Prototype -->
-     <section id="prototype" class="animate-fade-in">
-      <h2>אבטיפוס – רגע האמת</h2>
-
-      <p>אבטיפוס הוא <strong>גרסה ראשונית לבדיקה</strong>.</p>
+      <p>אבטיפוס יכול להיות:</p>
 
       <div style="margin: 1.5rem 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
-        <div style="padding: 1rem; background: white; border: 1px solid #e5e7eb; border-radius: 0.5rem; text-align: center; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);">
+        <div style="padding: 1rem; background: white; border: 1px solid #e5e7eb; border-radius: 0.5rem; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.04);">
           <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">📄</div>
           <p style="margin: 0; color: #1f2937; font-weight: 600; font-size: 0.95rem;">סקיצה על נייר</p>
         </div>
-        <div style="padding: 1rem; background: white; border: 1px solid #e5e7eb; border-radius: 0.5rem; text-align: center; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);">
+        <div style="padding: 1rem; background: white; border: 1px solid #e5e7eb; border-radius: 0.5rem; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.04);">
           <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">🎲</div>
-          <p style="margin: 0; color: #1f2937; font-weight: 600; font-size: 0.95rem;">מודל פשוט</p>
+          <p style="margin: 0; color: #1f2937; font-weight: 600; font-size: 0.95rem;">מודל פשוט מקרטון</p>
         </div>
-        <div style="padding: 1rem; background: white; border: 1px solid #e5e7eb; border-radius: 0.5rem; text-align: center; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);">
+        <div style="padding: 1rem; background: white; border: 1px solid #e5e7eb; border-radius: 0.5rem; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.04);">
           <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">🖥️</div>
           <p style="margin: 0; color: #1f2937; font-weight: 600; font-size: 0.95rem;">דגם דיגיטלי</p>
         </div>
-        <div style="padding: 1rem; background: white; border: 1px solid #e5e7eb; border-radius: 0.5rem; text-align: center; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);">
+        <div style="padding: 1rem; background: white; border: 1px solid #e5e7eb; border-radius: 0.5rem; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.04);">
           <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">📊</div>
-          <p style="margin: 0; color: #1f2937; font-weight: 600; font-size: 0.95rem;">מצגת מדמה</p>
+          <p style="margin: 0; color: #1f2937; font-weight: 600; font-size: 0.95rem;">מצגת שמדמה שימוש</p>
         </div>
       </div>
 
       <div class="large-quote">
-        המטרה שלו היא אחת:<br>
-        לבדוק הנחות.
+        המטרה היא אחת:<br>
+        לבדוק אם הרעיון באמת עובד.
+      </div>
+     </section>
+
+     <!-- Section 3: What to Test? -->
+     <section id="what-to-test" class="animate-fade-in">
+      <h2>מה בעצם בודקים?</h2>
+
+      <p>אבטיפוס מאפשר לראות דברים שלא רואים בראש.</p>
+
+      <p>לדוגמה:</p>
+
+      <div style="margin: 1.5rem 0; display: grid; gap: 1rem;">
+        <div style="padding: 1rem; background: white; border-right: 4px solid #ec4899; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.04);">
+          <p style="margin: 0; color: #1f2937;"><strong>🤔 האם המשתמשת מבינה מה לעשות?</strong></p>
+        </div>
+        <div style="padding: 1rem; background: white; border-right: 4px solid #0ea5e9; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.04);">
+          <p style="margin: 0; color: #1f2937;"><strong>✅ האם זה באמת פותר בעיה?</strong></p>
+        </div>
+        <div style="padding: 1rem; background: white; border-right: 4px solid #22c55e; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.04);">
+          <p style="margin: 0; color: #1f2937;"><strong>🔍 האם זה ברור או מבלבל?</strong></p>
+        </div>
+        <div style="padding: 1rem; background: white; border-right: 4px solid #f59e0b; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.04);">
+          <p style="margin: 0; color: #1f2937;"><strong>💡 האם זה מרגיש שימושי?</strong></p>
+        </div>
       </div>
 
-      <p style="margin-top: 2rem;">כי כל מיזם בנוי על הנחות:</p>
-
-      <div style="margin: 1.5rem 0; padding: 1.5rem; background: linear-gradient(135deg, rgba(244, 63, 94, 0.05), rgba(14, 165, 233, 0.05)); border-right: 4px solid #ec4899; border-radius: 0.75rem;">
-        <p style="margin: 0.5rem 0; color: #1f2937; font-size: 0.95rem;">
-          "אני חושבת שירצו את זה."
+      <div class="reflection-box">
+        <p style="margin: 0; font-size: 1.1rem; font-weight: 700; color: #0ea5e9;">הרבה פעמים מגלים משהו מפתיע:</p>
+        <p style="margin: 1rem 0 0 0; color: #1f2937; line-height: 1.8;">
+          מה שנראה ברור לנו —<br>
+          <strong>לא תמיד ברור לאחרים.</strong>
         </p>
-        <p style="margin: 0.5rem 0; color: #1f2937; font-size: 0.95rem;">
-          "אני מאמינה שזה יפתור."
-        </p>
+        <p style="margin: 0.75rem 0 0 0; color: #555; font-size: 0.95rem;">וזו בדיוק הסיבה שעושים אבטיפוס.</p>
       </div>
+     </section>
 
-      <div class="warning-box">
-        <p style="margin: 0; color: #1f2937;">
-          <strong>אבל אמונה היא לא נתון.</strong><br>
-          <strong style="color: #d97706;">בדיקה עם משתמשות אמיתיות — כן.</strong>
-        </p>
-      </div>
+     <!-- Section 4: How to Test? -->
+     <section id="how-to-test" class="animate-fade-in">
+      <h2>איך עושים בדיקה טובה?</h2>
 
-      <h3>איך בודקים נכון?</h3>
+      <p>יש דרך פשוטה לעשות את זה:</p>
 
       <div style="margin: 2rem 0; padding: 0;">
-        <div style="margin-bottom: 1rem; padding: 1rem; background: white; border-right: 4px solid #ec4899; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);">
-          <div style="font-weight: 700; color: #ec4899; margin-bottom: 0.5rem;">1️⃣ מגדירות שאלה ברורה לבדיקה</div>
-          <p style="margin: 0; color: #666; font-size: 0.95rem;">מה בדיוק רוצים לבחון?</p>
+        <div style="margin-bottom: 1rem; padding: 1rem; background: white; border-right: 4px solid #ec4899; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.04);">
+          <div style="font-weight: 700; color: #ec4899; margin-bottom: 0.5rem;">1️⃣ מגדירות שאלה</div>
+          <p style="margin: 0; color: #666; font-size: 0.95rem;">מה אנחנו רוצות לבדוק?</p>
         </div>
 
-        <div style="margin-bottom: 1rem; padding: 1rem; background: white; border-right: 4px solid #0ea5e9; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);">
-          <div style="font-weight: 700; color: #0ea5e9; margin-bottom: 0.5rem;">2️⃣ נותנות משימה ספציפית</div>
+        <div style="margin-bottom: 1rem; padding: 1rem; background: white; border-right: 4px solid #0ea5e9; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.04);">
+          <div style="font-weight: 700; color: #0ea5e9; margin-bottom: 0.5rem;">2️⃣ נותנות למישהי לנסות</div>
           <p style="margin: 0; color: #666; font-size: 0.95rem;">"תנסי לעשות X"</p>
         </div>
 
-        <div style="margin-bottom: 1rem; padding: 1rem; background: white; border-right: 4px solid #22c55e; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);">
+        <div style="margin-bottom: 1rem; padding: 1rem; background: white; border-right: 4px solid #22c55e; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.04);">
           <div style="font-weight: 700; color: #22c55e; margin-bottom: 0.5rem;">3️⃣ צופות בלי להתערב</div>
-          <p style="margin: 0; color: #666; font-size: 0.95rem;">שתיקה זהב</p>
+          <p style="margin: 0; color: #666; font-size: 0.95rem;">לא מסבירים. לא מתקנים. רק רואים מה קורה.</p>
         </div>
 
-        <div style="margin-bottom: 1rem; padding: 1rem; background: white; border-right: 4px solid #f59e0b; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);">
+        <div style="margin-bottom: 1rem; padding: 1rem; background: white; border-right: 4px solid #f59e0b; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.04);">
           <div style="font-weight: 700; color: #f59e0b; margin-bottom: 0.5rem;">4️⃣ שואלות שאלות פתוחות</div>
-          <p style="margin: 0; color: #666; font-size: 0.95rem;">"מה חשבת שיקרה?"</p>
+          <p style="margin: 0; color: #666; font-size: 0.95rem;">"מה חשבת שיקרה?" / "איפה זה היה ברור?" / "איפה הסתבכת?"</p>
         </div>
 
-        <div style="margin-bottom: 1rem; padding: 1rem; background: white; border-right: 4px solid #8b5cf6; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);">
-          <div style="font-weight: 700; color: #8b5cf6; margin-bottom: 0.5rem;">5️⃣ מתעדות גם ביקורת</div>
-          <p style="margin: 0; color: #666; font-size: 0.95rem;">המשמעותיות ביותר היא הביקורת</p>
+        <div style="padding: 1rem; background: white; border-right: 4px solid #8b5cf6; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.04);">
+          <div style="font-weight: 700; color: #8b5cf6; margin-bottom: 0.5rem;">5️⃣ לא נעלבות מביקורת</div>
+          <p style="margin: 0; color: #666; font-size: 0.95rem;">ביזמות ביקורת היא מתנה.</p>
         </div>
-
-        <div style="padding: 1rem; background: white; border-right: 4px solid #ec4899; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);">
-          <div style="font-weight: 700; color: #ec4899; margin-bottom: 0.5rem;">6️⃣ וכל הכי חשוב: לא נעלבות</div>
-          <p style="margin: 0; color: #666; font-size: 0.95rem;">זה לא אישי — זה למידה</p>
-        </div>
-      </div>
-
-      <div class="success-box">
-        <p style="margin: 0; font-weight: 700; color: #22c55e; font-size: 1.05rem;">💡 אבטיפוס שנכשל הוא לא כישלון.</p>
-        <p style="margin: 0.75rem 0 0 0; color: #1f2937;">הוא <strong>חיסכון בטעות עתידית.</strong></p>
       </div>
      </section>
 
-     <!-- Section 6: Connection -->
-     <section id="connection" class="animate-fade-in">
-      <h2>החיבור אלייך</h2>
+     <!-- Section 5: Failed Prototype is Success -->
+     <section id="failure-is-success" class="animate-fade-in">
+      <h2>אבטיפוס שנכשל הוא הצלחה</h2>
 
-      <p>אם את בתהליך יזמי:</p>
+      <p>הרבה יזמיות חושבות שאם אבטיפוס לא עובד — זה כישלון.</p>
 
-      <div class="feature-list">
-        <div class="feature-item">
-          <div style="font-size: 1.8rem; margin-bottom: 1rem;">🌳</div>
-          <div class="feature-item-title">עץ מוצר</div>
-          <p style="font-size: 0.95rem; color: #666; margin: 0;">יעזור לך לראות את התמונה המלאה</p>
+      <div class="large-quote">
+        האמת הפוכה.
+      </div>
+
+      <div class="success-box">
+        <p style="margin: 0; font-weight: 700; color: #22c55e; font-size: 1.05rem;">💡 אם גילית עכשיו שמשהו לא עובד —</p>
+        <p style="margin: 0.75rem 0 0 0; color: #1f2937;"><strong>חסכת לעצמך חודשים של עבודה.</strong></p>
+      </div>
+
+      <p style="margin-top: 1.5rem;">אבטיפוס הוא הדרך <strong>ללמוד מהר</strong><br>
+      לפני שמשקיעים זמן וכסף.</p>
+     </section>
+
+     <!-- Section 6: Why Important? -->
+     <section id="why-important" class="animate-fade-in">
+      <h2>למה זה חשוב ליזמיות צעירות</h2>
+
+      <p>אבטיפוס עושה משהו מאוד חשוב:</p>
+
+      <div class="highlight-box">
+        <p style="margin: 0; font-size: 1.1rem; font-weight: 700;">
+          הוא מוציא את הרעיון מהראש<br>
+          אל העולם האמיתי.
+        </p>
+      </div>
+
+      <p>פתאום אפשר:</p>
+
+      <div style="margin: 1.5rem 0; display: grid; gap: 0.75rem;">
+        <div style="padding: 0.85rem 1rem; background: white; border-right: 3px solid #ec4899; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.04);">
+          <p style="margin: 0; color: #1f2937;"><strong>👀 לראות אותו</strong></p>
         </div>
-        <div class="feature-item">
-          <div style="font-size: 1.8rem; margin-bottom: 1rem;">🔬</div>
-          <div class="feature-item-title">אבטיפוס</div>
-          <p style="font-size: 0.95rem; color: #666; margin: 0;">יוציא אותך מהראש אל המציאות</p>
+        <div style="padding: 0.85rem 1rem; background: white; border-right: 3px solid #0ea5e9; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.04);">
+          <p style="margin: 0; color: #1f2937;"><strong>✋ להרגיש אותו</strong></p>
+        </div>
+        <div style="padding: 0.85rem 1rem; background: white; border-right: 3px solid #22c55e; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.04);">
+          <p style="margin: 0; color: #1f2937;"><strong>⚡ ולשפר אותו</strong></p>
         </div>
       </div>
 
-      <div class="large-quote" style="margin-top: 2rem;">
-        שניהם יחד יוצרים תהליך מקצועי:<br>
-        <strong>מחלום → לבדיקה → לשיפור</strong>
-      </div>
-
-      <p style="margin-top: 2rem; text-align: center;">
-        <strong>יזמות היא לא רק יצירתיות.</strong><br>
-        היא גם <strong>שיטתיות.</strong>
+      <p style="margin-top: 1.5rem; text-align: center; font-size: 1.05rem; color: #555;">
+        וזה בדיוק השלב שבו רעיון<br>
+        <strong>מתחיל להפוך למוצר.</strong>
       </p>
-
-      <div class="success-box">
-        <p style="margin: 0; color: #1f2937; line-height: 1.8;">
-          <strong>היכולת לקחת כאב אמיתי —</strong><br>
-          <strong>ולהפוך אותו למשהו שמישהי אחרת יכולה להשתמש בו<br>ולהרגיש שינוי.</strong>
-        </p>
-      </div>
      </section>
 
-     <!-- Section 7: Reflection -->
-     <section id="reflection" class="animate-fade-in">
-      <h2>שאלות שאת חייבת לשאול את עצמך</h2>
-
-      <p style="font-size: 1rem; color: #666; margin-bottom: 2rem;">לפני שממשיכות, קחי זמן לענות בכתב:</p>
-
-      <div class="reflection-box">
-        <div style="margin-bottom: 1.5rem;">
-          <div style="font-size: 1.2rem; font-weight: 700; color: #0ea5e9; margin-bottom: 0.75rem;">🌳 מהו הגזע של המוצר שלי?</div>
-          <p style="margin: 0; color: #1f2937;">מה הפעולה הקריטית שבלעדיה המוצר מפסיק להתקיים?</p>
-        </div>
-
-        <div style="margin-bottom: 1.5rem; padding-top: 1rem; border-top: 1px solid rgba(14, 165, 233, 0.2);">
-          <div style="font-size: 1.2rem; font-weight: 700; color: #0ea5e9; margin-bottom: 0.75rem;">🔬 איזו הנחה האבטיפוס שלי אמור לבדוק?</div>
-          <p style="margin: 0; color: #1f2937;">מה הדבר הכי חשוב לאמת לפני שמתקדמים?</p>
-        </div>
-
-        <div style="padding-top: 1rem; border-top: 1px solid rgba(14, 165, 233, 0.2);">
-          <div style="font-size: 1.2rem; font-weight: 700; color: #0ea5e9; margin-bottom: 0.75rem;">🎯 מתי אדע שזה מוכן להתקדם?</div>
-          <p style="margin: 0; color: #1f2937;">מה המדדים שלי? מה התנאים? מה נחשב הצלחה?</p>
-        </div>
-      </div>
-
-      <div class="warning-box">
-        <p style="margin: 0 0 1rem 0; font-weight: 700; color: #d97706;">⚠️ אם אין תשובות ברורות —</p>
-        <p style="margin: 0; color: #1f2937;">
-          עוד לא סיימת את שלב החשיבה. וזה בסדר.<br>
-          <strong>זה בדיוק מה שמקצועניות עושות:</strong> עוצרות, מדייקות, ואז בונות.
-        </p>
-      </div>
-     </section>
-
-     <!-- Section 8: Summary -->
+     <!-- Section 7: Summary -->
      <section id="summary" class="animate-fade-in">
-      <h2>סיכום: יזמות מתחילה בליבה</h2>
+      <h2>סיכום</h2>
 
-      <p>המסע מרעיון למוצר עובר דרך:</p>
+      <p>הדרך מרעיון למוצר לא מתחילה בבנייה.<br>
+      היא מתחילה <strong>בהבנה ובבדיקה</strong>.</p>
 
       <div style="margin: 2rem 0;">
         <div style="margin-bottom: 1.5rem; padding: 1.5rem; background: linear-gradient(135deg, rgba(236, 72, 153, 0.08), rgba(14, 165, 233, 0.08)); border-radius: 0.75rem; display: flex; gap: 1rem; align-items: flex-start;">
           <div style="font-size: 1.8rem; flex-shrink: 0;">🌳</div>
           <div>
             <div style="font-weight: 700; color: #ec4899; font-size: 1.1rem; margin-bottom: 0.5rem;">עץ מוצר</div>
-            <p style="margin: 0; color: #1f2937;">להבין ממה זה בנוי</p>
+            <p style="margin: 0; color: #1f2937;">עוזר להבין <strong>ממה המוצר שלך בנוי</strong></p>
           </div>
         </div>
 
@@ -912,28 +668,31 @@
           <div style="font-size: 1.8rem; flex-shrink: 0;">🔬</div>
           <div>
             <div style="font-weight: 700; color: #22c55e; font-size: 1.1rem; margin-bottom: 0.5rem;">אבטיפוס</div>
-            <p style="margin: 0; color: #1f2937;">לבדוק במציאות</p>
+            <p style="margin: 0; color: #1f2937;">עוזר לבדוק <strong>אם הוא באמת עובד</strong></p>
           </div>
         </div>
       </div>
 
       <div style="margin: 2rem 0; padding: 2rem; background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(14, 165, 233, 0.1)); border-radius: 1rem; text-align: center;">
-        <p style="margin: 0 0 1.5rem 0; font-size: 1.15rem; font-weight: 700; color: #ec4899;">
-          הרעיון הוא הזרע.<br>
-          האבטיפוס הוא הניסוי.<br>
-          והמוצר — הוא הפרי.
+        <p style="margin: 0 0 1rem 0; font-size: 1.15rem; font-weight: 700; color: #ec4899;">
+          כשהשניים מתחברים —<br>
+          הרעיון שלך כבר לא רק מחשבה.
         </p>
+        <p style="margin: 0; font-size: 1.05rem; color: #1f2937;">
+          <strong style="color: #0ea5e9;">הוא מתחיל להפוך למציאות.</strong>
+        </p>
+      </div>
 
-        <p style="margin: 1.5rem 0 0 0; font-size: 1.05rem; color: #1f2937;">
-          <strong>והפרי הכי טוב…</strong><br>
-          <strong style="color: #0ea5e9;">צומח מעץ עם שורשים עמוקים וגזע חזק.</strong>
-        </p>
+      <div style="margin-top: 1.5rem; text-align: center;">
+        <a href="tree.html" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; border-radius: 999px; font-weight: 700; color: #fff; background: linear-gradient(135deg, #ec4899, #be185d); text-decoration: none; box-shadow: 0 8px 18px rgba(236,72,153,0.3); transition: transform 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+          🌳 חזרי לכתבת עץ המוצר ←
+        </a>
       </div>
 
       <div style="margin-top: 2rem; padding: 1.5rem; background: #f9fafb; border-radius: 0.75rem; text-align: center; border: 1px solid #e5e7eb;">
         <p style="margin: 0; color: #666; font-size: 0.95rem;">
           <strong>© 2026 פורצות דרך</strong><br>
-          🚀 מרעיון למוצר — המדריך המלא
+          🔬 מרעיון למוצר — אבטיפוס
         </p>
       </div>
      </section>
@@ -944,36 +703,25 @@
    <!-- Navigation Buttons to Appendices -->
    <div class="max-w-6xl mx-auto px-6 py-10 mb-8 appendix-launcher">
     <p class="text-center text-stone-600 mb-6 font-semibold">🎯 בוחרות נספח להדפסה ומילוי:</p>
-    <div class="grid md:grid-cols-4 gap-3 appendix-grid">
-     <!-- Appendix B --> <button id="btn-appendix-b" class="group relative overflow-hidden rounded-xl p-4 text-white font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg" style="background: linear-gradient(135deg, #0ea5e9, #06b6d4);">
-      <div class="absolute inset-0 opacity-0 group-hover:opacity-20 bg-white transition-opacity"></div>
-      <div class="relative">
-       <p class="text-xl mb-2">🌳</p>
-       <p class="text-base">נספח ב׳</p>
-       <p class="text-xs font-normal opacity-90">עץ המוצר</p>
-       <p class="text-xs font-normal opacity-75 mt-1">מבנה מוצר</p>
-      </div></button> <!-- Appendix C --> <button id="btn-appendix-c" class="group relative overflow-hidden rounded-xl p-4 text-white font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg" style="background: linear-gradient(135deg, #10b981, #14b8a6);">
-      <div class="absolute inset-0 opacity-0 group-hover:opacity-20 bg-white transition-opacity"></div>
-      <div class="relative">
-       <p class="text-xl mb-2">🎯</p>
-       <p class="text-base">נספח ג׳</p>
-       <p class="text-xs font-normal opacity-90">תכנון Flow</p>
-       <p class="text-xs font-normal opacity-75 mt-1">זרימת שימוש</p>
-     </div></button> <!-- Appendix D --> <button id="btn-appendix-d" class="group relative overflow-hidden rounded-xl p-4 text-white font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg" style="background: linear-gradient(135deg, #f59e0b, #f97316);">
+    <div class="grid md:grid-cols-2 gap-3 appendix-grid" style="max-width: 500px; margin: 0 auto;">
+     <button id="btn-appendix-d" class="group relative overflow-hidden rounded-xl p-4 text-white font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg" style="background: linear-gradient(135deg, #f59e0b, #f97316);">
       <div class="absolute inset-0 opacity-0 group-hover:opacity-20 bg-white transition-opacity"></div>
       <div class="relative">
        <p class="text-xl mb-2">🔧</p>
        <p class="text-base">נספח ד׳</p>
        <p class="text-xs font-normal opacity-90">MVP מעשי</p>
        <p class="text-xs font-normal opacity-75 mt-1">דף עבודה דינמי</p>
-      </div></button> <!-- Appendix E --> <button id="btn-appendix-e" class="group relative overflow-hidden rounded-xl p-4 text-white font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg" style="background: linear-gradient(135deg, #8b5cf6, #a78bfa);">
+      </div>
+     </button>
+     <button id="btn-appendix-e" class="group relative overflow-hidden rounded-xl p-4 text-white font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg" style="background: linear-gradient(135deg, #8b5cf6, #a78bfa);">
       <div class="absolute inset-0 opacity-0 group-hover:opacity-20 bg-white transition-opacity"></div>
       <div class="relative">
        <p class="text-xl mb-2">✅</p>
        <p class="text-base">נספח ה׳</p>
        <p class="text-xs font-normal opacity-90">בדיקת אבטיפוס</p>
        <p class="text-xs font-normal opacity-75 mt-1">צ'ק ליסט</p>
-      </div></button>
+      </div>
+     </button>
     </div>
    </div>
 
@@ -1004,38 +752,12 @@
       });
 
       // Appendix buttons
-      const appendixB = document.getElementById('btn-appendix-b');
-      const appendixC = document.getElementById('btn-appendix-c');
       const appendixD = document.getElementById('btn-appendix-d');
       const appendixE = document.getElementById('btn-appendix-e');
 
       // Header diamonds
-      const diamondB = document.getElementById('header-diamond-b');
-      const diamondC = document.getElementById('header-diamond-c');
       const diamondD = document.getElementById('header-diamond-d');
       const diamondE = document.getElementById('header-diamond-e');
-
-      if (appendixB) {
-        appendixB.addEventListener('click', () => {
-          showAppendixB();
-        });
-      }
-      if (diamondB) {
-        diamondB.addEventListener('click', () => {
-          showAppendixB();
-        });
-      }
-
-      if (appendixC) {
-        appendixC.addEventListener('click', () => {
-          showAppendixC();
-        });
-      }
-      if (diamondC) {
-        diamondC.addEventListener('click', () => {
-          showAppendixC();
-        });
-      }
 
       if (appendixD) {
         appendixD.addEventListener('click', () => {
@@ -1059,235 +781,6 @@
         });
       }
     }); // End of DOMContentLoaded
-
-    function showAppendixB() {
-      const appendixContent = `
-        <div style="page-break-after: always; padding: 2rem; background: white; min-height: 100vh; font-family: 'Heebo', sans-serif;">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; border-bottom: 3px solid #0ea5e9; padding-bottom: 1.5rem;">
-            <img src="logo.png" style="height: 48px; width: auto;" onerror="this.style.display='none'">
-            <div style="text-align: center; flex: 1; padding: 0 1rem;">
-              <h1 style="color: #0ea5e9; font-size: 2rem; margin: 0; font-weight: 700;">🌳 עץ המוצר שלנו</h1>
-              <p style="color: #666; font-size: 1.1rem; margin: 0.5rem 0;">מפרקות רעיון למבנה ברור</p>
-            </div>
-            <div style="width: 48px;"></div>
-          </div>
-
-          <div style="margin: 2rem 0; padding: 1.5rem; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 0.5rem;">
-            <h3 style="color: #1f2937; margin-top: 0; margin-bottom: 1rem;">📋 פרטי הפרויקט</h3>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-              <div>
-                <p style="margin: 0 0 0.25rem 0; font-weight: 600; color: #666; font-size: 0.9rem;">שם הקבוצה:</p>
-                <input type="text" placeholder="הקלידי..." style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 0.25rem; font-family: Heebo;"/>
-              </div>
-              <div>
-                <p style="margin: 0 0 0.25rem 0; font-weight: 600; color: #666; font-size: 0.9rem;">שמות המשתתפות:</p>
-                <input type="text" placeholder="הקלידי..." style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 0.25rem; font-family: Heebo;"/>
-              </div>
-            </div>
-          </div>
-
-          <div style="margin: 2rem 0; padding: 1.5rem; background: #eff6ff; border-right: 4px solid #0ea5e9; border-radius: 0.5rem;">
-            <h2 style="color: #0ea5e9; font-size: 1.5rem; margin-top: 0;">חלק 1 – הגזע: הליבה של המוצר</h2>
-
-            <div style="margin: 1.5rem 0;">
-              <p style="font-weight: 600; color: #0ea5e9; margin-bottom: 0.75rem;">1. בהירות ליבה</p>
-              <div style="padding-left: 1.5rem; border-left: 2px solid #0ea5e9;">
-                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> ברור מה המוצר עושה תוך 5 שניות</p>
-                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> יש פעולה מרכזית אחת ברורה</p>
-                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> אין עומס מידע</p>
-              </div>
-            </div>
-
-            <div style="margin: 1.5rem 0;">
-              <p style="font-weight: 600; color: #0ea5e9; margin-bottom: 0.75rem;">2. User Flow</p>
-              <div style="padding-left: 1.5rem; border-left: 2px solid #0ea5e9;">
-                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> ברור איך מתחילים</p>
-                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> ברור מה קורה באמצע</p>
-                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> ברור מה התוצאה</p>
-                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> יש משוב (Feedback) לאחר פעולה</p>
-              </div>
-            </div>
-
-            <div style="margin: 1.5rem 0;">
-              <p style="font-weight: 600; color: #0ea5e9; margin-bottom: 0.75rem;">3. חיכוך (Friction)</p>
-              <div style="padding-left: 1.5rem; border-left: 2px solid #0ea5e9;">
-                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> אין יותר מדי שלבים</p>
-                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> אין כפילויות</p>
-                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> אין צורך בהסבר חיצוני כדי להבין</p>
-              </div>
-            </div>
-          </div>
-
-          <div style="margin: 2rem 0; padding: 1.5rem; background: #f0fdf4; border-right: 4px solid #10b981; border-radius: 0.5rem;">
-            <h2 style="color: #10b981; font-size: 1.5rem; margin-top: 0;">חלק ב׳ – בדיקות ייעודיות לפי סוג מוצר</h2>
-
-            <div style="margin: 1.5rem 0;">
-              <p style="font-weight: 600; color: #10b981; margin-bottom: 0.75rem;">🔧 מוצר פיזי</p>
-              <div style="padding-left: 1.5rem; border-left: 2px solid #10b981;">
-                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> ברור איפה נוגעים / מפעילים</p>
-                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> יש חיווי ברור (אור / צליל / תנועה)</p>
-                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> גודל ותצורה מתאימים למשתמשת</p>
-                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> אין סכנה / בלבול תפעולי</p>
-                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> אם יש אפליקציה מלווה – החיבור ברור</p>
-                <p style="margin: 1rem 0; font-size: 0.9rem; background: #f0fdf4; padding: 0.75rem; border-radius: 0.25rem; border-right: 2px solid #10b981;">
-                  <strong>שאלה מקצועית:</strong> האם המוצר מגיב לפעולה של המשתמשת בצורה מיידית וברורה?<br/>
-                  <textarea placeholder="הקלידי את התשובה..." style="width: 100%; min-height: 40px; padding: 0.5rem; border: 1px solid #ccc; margin-top: 0.5rem; font-family: Heebo; border-radius: 0.25rem;"></textarea>
-                </p>
-              </div>
-            </div>
-
-            <div style="margin: 1.5rem 0;">
-              <p style="font-weight: 600; color: #10b981; margin-bottom: 0.75rem;">💻 דגם דיגיטלי (פלטפורמה / אתר)</p>
-              <div style="padding-left: 1.5rem; border-left: 2px solid #10b981;">
-                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> יש היררכיית מידע (מה חשוב ראשון)</p>
-                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> כפתור CTA בולט</p>
-                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> ניווט ברור</p>
-                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> אין יותר מ-3–5 אזורים מרכזיים במסך</p>
-                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> השפה הויזואלית אחידה</p>
-                <p style="margin: 1rem 0; font-size: 0.9rem; background: #f0fdf4; padding: 0.75rem; border-radius: 0.25rem; border-right: 2px solid #10b981;">
-                  <strong>שאלה מקצועית:</strong> האם המשתמשת יודעת לאן ללחוץ בלי לחשוב יותר מדי?<br/>
-                  <textarea placeholder="הקלידי את התשובה..." style="width: 100%; min-height: 40px; padding: 0.5rem; border: 1px solid #ccc; margin-top: 0.5rem; font-family: Heebo; border-radius: 0.25rem;"></textarea>
-                </p>
-              </div>
-            </div>
-
-            <div style="margin: 1.5rem 0;">
-              <p style="font-weight: 600; color: #10b981; margin-bottom: 0.75rem;">📱 אפליקציה</p>
-              <div style="padding-left: 1.5rem; border-left: 2px solid #10b981;">
-                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> מסך בית לא עמוס</p>
-                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> הפעולה המרכזית בולטת</p>
-                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> יש מסך תוצאה ברור</p>
-                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> יש Feedback (הודעה / שינוי מצב)</p>
-                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> אין צורך ביותר מ-2–3 לחיצות לפעולה מרכזית</p>
-                <p style="margin: 1rem 0; font-size: 0.9rem; background: #f0fdf4; padding: 0.75rem; border-radius: 0.25rem; border-right: 2px solid #10b981;">
-                  <strong>שאלה מקצועית:</strong> האם ה-Flow זורם בלי קפיצות או בלבול?<br/>
-                  <textarea placeholder="הקלידי את התשובה..." style="width: 100%; min-height: 40px; padding: 0.5rem; border: 1px solid #ccc; margin-top: 0.5rem; font-family: Heebo; border-radius: 0.25rem;"></textarea>
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div style="margin: 2rem 0; padding: 1.5rem; background: #fef3c7; border-right: 4px solid #f59e0b; border-radius: 0.5rem;">
-            <h2 style="color: #d97706; font-size: 1.5rem; margin-top: 0;">חלק ג׳ – בדיקת ערך (Value Check)</h2>
-            <div style="padding-left: 1.5rem; border-left: 2px solid #f59e0b;">
-              <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> המשתמשת מבינה מה הרווח שלה</p>
-              <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> השינוי בחיים שלה ברור</p>
-              <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> יש סיבה אמיתית לחזור להשתמש</p>
-              <p style="margin: 1rem 0; font-size: 0.9rem; background: #fef3c7; padding: 0.75rem; border-radius: 0.25rem; border-right: 2px solid #f59e0b;">
-                <strong>במשפט אחד – הסיבה שהמשתמשת תחזור:</strong><br/>
-                <textarea placeholder="הקלידי את התשובה..." style="width: 100%; min-height: 60px; padding: 0.5rem; border: 1px solid #ccc; margin-top: 0.5rem; font-family: Heebo; border-radius: 0.25rem; resize: vertical;"></textarea>
-              </p>
-            </div>
-          </div>
-
-          <div style="margin-top: 2rem; padding: 1rem; background: #f3f4f6; border-radius: 0.5rem; display: flex; justify-content: space-between; align-items: center;">
-            <div style="display: flex; gap: 1rem;">
-              <button onclick="document.querySelector('[data-modal-page]')?.remove(); document.body.style.overflow = 'auto'; showAppendixC();" style="background: linear-gradient(135deg, #7c3aed, #ec4899); color: white; border: none; border-radius: 0.65rem; padding: 0.55rem 1rem; font-size: 0.9rem; font-weight: 700; cursor: pointer; box-shadow: 0 8px 15px rgba(124,58,237,0.25); font-family: Heebo, sans-serif;" class="no-print">מעבר לנספח הבא ➜</button>
-            </div>
-            <div style="text-align: right;">
-              <p style="margin: 0; color: #888; font-size: 0.85rem;">© 2026 פורצות דרך</p>
-              <p style="margin: 0; color: #666; font-size: 0.85rem;">✔ בדיקת UX מקצועית</p>
-            </div>
-          </div>
-        </div>
-      `;
-      openModal(appendixContent, 'נספח ב׳ – עץ המוצר שלנו');
-    }
-
-    function showAppendixC() {
-      const appendixContent = `
-        <div style="page-break-after: always; padding: 2rem; background: white; min-height: 100vh; font-family: 'Heebo', sans-serif;">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; border-bottom: 3px solid #10b981; padding-bottom: 1.5rem;">
-            <img src="logo.png" style="height: 48px; width: auto;" onerror="this.style.display='none'">
-            <div style="text-align: center; flex: 1; padding: 0 1rem;">
-              <h1 style="color: #10b981; font-size: 2rem; margin: 0; font-weight: 700;">🎯 תכנון Flow (זרימת שימוש)</h1>
-              <p style="color: #666; font-size: 1.1rem; margin: 0.5rem 0;">תרגום של עץ המוצר לרצף שימוש ברור</p>
-            </div>
-            <div style="width: 48px;"></div>
-          </div>
-
-          <div style="margin: 2rem 0; padding: 1.5rem; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 0.5rem;">
-            <h3 style="color: #1f2937; margin-top: 0; margin-bottom: 1rem;">📋 פרטי הפרויקט</h3>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-              <div>
-                <p style="margin: 0 0 0.25rem 0; font-weight: 600; color: #666; font-size: 0.9rem;">שם הקבוצה:</p>
-                <input type="text" placeholder="הקלידי..." style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 0.25rem; font-family: Heebo;"/>
-              </div>
-              <div>
-                <p style="margin: 0 0 0.25rem 0; font-weight: 600; color: #666; font-size: 0.9rem;">שמות המשתתפות:</p>
-                <input type="text" placeholder="הקלידי..." style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 0.25rem; font-family: Heebo;"/>
-              </div>
-            </div>
-          </div>
-
-          <div style="margin: 2rem 0; padding: 1.5rem; background: #f0fdf4; border-right: 4px solid #10b981; border-radius: 0.5rem;">
-            <h2 style="color: #10b981; font-size: 1.5rem; margin-top: 0;">סוגי מוצרים – ההבדלים</h2>
-            <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 1rem;">
-              <tr style="background: #dbeafe; border-bottom: 2px solid #0ea5e9;">
-                <th style="padding: 0.75rem; text-align: right; border: 1px solid #0ea5e9; color: #0ea5e9;">מאפיין</th>
-                <th style="padding: 0.75rem; text-align: right; border: 1px solid #0ea5e9; color: #0ea5e9;">מוצר פיזי 🔧</th>
-                <th style="padding: 0.75rem; text-align: right; border: 1px solid #0ea5e9; color: #0ea5e9;">דגם דיגיטלי 💻</th>
-              </tr>
-              <tr style="border-bottom: 1px solid #0ea5e9;">
-                <td style="padding: 0.75rem; border: 1px solid #0ea5e9; font-weight: 600;">אפשר לגעת בו</td>
-                <td style="padding: 0.75rem; border: 1px solid #0ea5e9;">✔ כן</td>
-                <td style="padding: 0.75rem; border: 1px solid #0ea5e9;">✗ לא</td>
-              </tr>
-              <tr style="border-bottom: 1px solid #0ea5e9;">
-                <td style="padding: 0.75rem; border: 1px solid #0ea5e9; font-weight: 600;">צריך קישוריות</td>
-                <td style="padding: 0.75rem; border: 1px solid #0ea5e9;">? אולי</td>
-                <td style="padding: 0.75rem; border: 1px solid #0ea5e9;">✔ כן</td>
-              </tr>
-            </table>
-          </div>
-
-          <div style="margin: 2rem 0; padding: 1.5rem; background: #eff6ff; border-right: 4px solid #0ea5e9; border-radius: 0.5rem;">
-            <h2 style="color: #0ea5e9; font-size: 1.5rem; margin-top: 0;">MVP לעומת מוצר מלא</h2>
-            <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 1rem;">
-              <tr style="background: #dbeafe; border-bottom: 2px solid #0ea5e9;">
-                <th style="padding: 0.75rem; text-align: right; border: 1px solid #0ea5e9; color: #0ea5e9;">מאפיין</th>
-                <th style="padding: 0.75rem; text-align: right; border: 1px solid #0ea5e9; color: #0ea5e9;">MVP 🚀</th>
-                <th style="padding: 0.75rem; text-align: right; border: 1px solid #0ea5e9; color: #0ea5e9;">מוצר מלא ✨</th>
-              </tr>
-              <tr style="border-bottom: 1px solid #0ea5e9;">
-                <td style="padding: 0.75rem; border: 1px solid #0ea5e9; font-weight: 600;">מטרה</td>
-                <td style="padding: 0.75rem; border: 1px solid #0ea5e9;">ללמוד ולאמת</td>
-                <td style="padding: 0.75rem; border: 1px solid #0ea5e9;">חוויה מלאה</td>
-              </tr>
-              <tr style="border-bottom: 1px solid #0ea5e9;">
-                <td style="padding: 0.75rem; border: 1px solid #0ea5e9; font-weight: 600;">מספר פיצ'רים</td>
-                <td style="padding: 0.75rem; border: 1px solid #0ea5e9;">3–5 בסיסיים</td>
-                <td style="padding: 0.75rem; border: 1px solid #0ea5e9;">הרבה יותר</td>
-              </tr>
-            </table>
-          </div>
-
-          <div style="margin: 2rem 0; padding: 1.5rem; background: #fef3c7; border-right: 4px solid #f59e0b; border-radius: 0.5rem;">
-            <h2 style="color: #d97706; font-size: 1.5rem; margin-top: 0;">💡 השאלה המכריעה</h2>
-            <p style="font-size: 1rem; line-height: 1.6; margin-top: 1rem;">
-              אם אתן לא יכולות לענות <strong>במשפט אחד ברור</strong> על השאלה הזו — גם משתמשות לא יחזרו:
-            </p>
-            <div style="margin: 1.5rem 0; padding: 1.5rem; background: white; border: 2px solid #f59e0b; border-radius: 0.75rem;">
-              <p style="font-size: 1.1rem; font-weight: 700; color: #d97706; margin: 1rem 0; text-align: center;">
-                "בסוף השימוש במוצר שלנו, המשתמשת תהיה מסוגלת ל...?"
-              </p>
-              <textarea placeholder="הקלידי את התשובה..." style="width: 100%; min-height: 80px; padding: 0.75rem; border: 2px solid #f59e0b; border-radius: 0.5rem; font-family: Heebo; font-size: 0.95rem; resize: vertical;"></textarea>
-            </div>
-          </div>
-
-          <div style="margin-top: 2rem; padding: 1rem; background: #f3f4f6; border-radius: 0.5rem; display: flex; justify-content: space-between; align-items: center;">
-            <div style="display: flex; gap: 1rem;">
-              <button onclick="document.querySelector('[data-modal-page]')?.remove(); document.body.style.overflow = 'auto'; showAppendixE();" style="background: linear-gradient(135deg, #7c3aed, #ec4899); color: white; border: none; border-radius: 0.65rem; padding: 0.55rem 1rem; font-size: 0.9rem; font-weight: 700; cursor: pointer; box-shadow: 0 8px 15px rgba(124,58,237,0.25); font-family: Heebo, sans-serif;" class="no-print">מעבר לנספח הבא ➜</button>
-            </div>
-            <div style="text-align: right;">
-              <p style="margin: 0; color: #888; font-size: 0.85rem;">© 2026 פורצות דרך</p>
-              <p style="margin: 0; color: #666; font-size: 0.85rem;">🎯 טבלאות עזר</p>
-            </div>
-          </div>
-        </div>
-      `;
-      openModal(appendixContent, 'נספח ג׳ – תכנון Flow (זרימת שימוש)');
-    }
 
     function showAppendixD() {
       const appendixContent = `
