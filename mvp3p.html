@@ -67,6 +67,113 @@
      <div class="max-w-3xl mx-auto mt-16 bg-white/40 backdrop-blur rounded-2xl p-6">
       <h3 class="text-gray-800 font-bold text-lg mb-3 flex items-center gap-2"><span>💡</span> טיפ מהיר</h3>
       <p class="text-gray-700">MVP = Minimum Viable Product - הגרסה הכי פשוטה של המוצר שלך שעדיין נותנת ערך ללקוחות. אל תנסי לבנות הכל - התחילי מהבסיס! 🌟</p>
+     </div><!-- Stop & Improve Button -->
+     <div class="max-w-5xl mx-auto mt-8 flex justify-center pb-8">
+      <button onclick="openSummaryModal()" class="bg-white/15 backdrop-blur hover:bg-white/25 text-gray-700 font-medium px-5 py-2.5 rounded-full transition-all shadow border border-white/30 flex items-center gap-2 text-sm"> <span>🟣</span> <span>עצירת פיתוח – בדיקה לפני שיפור</span> </button>
+     </div>
+    </div>
+   </div><!-- Summary Modal -->
+   <div id="summary-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" dir="rtl">
+     <div class="bg-gradient-to-l from-purple-600 to-purple-800 rounded-t-3xl px-6 py-5 text-white">
+      <div class="flex items-center justify-between">
+       <div>
+        <h2 class="text-xl font-bold">🟣 עצירת פיתוח – בדיקה לפני סבב שיפור</h2>
+        <p class="text-purple-200 text-sm mt-1">⏱ זמן: 6 דקות בלבד</p>
+       </div>
+       <button onclick="closeSummaryModal()" class="text-white/70 hover:text-white text-2xl font-light leading-none">✕</button>
+      </div>
+     </div>
+     <div class="px-6 py-5 space-y-6">
+      <!-- Goal -->
+      <div class="bg-purple-50 rounded-2xl p-4 border border-purple-100">
+       <h3 class="font-bold text-gray-800 mb-2">🎯 המטרה</h3>
+       <p class="text-gray-700 text-sm">להחליט בצורה מדויקת מה אנחנו משפרות בשיעור הבא.</p>
+       <p class="text-gray-500 text-sm mt-2">לא בונות מחדש. לא מוסיפות רעיונות. <strong>מדייקות.</strong></p>
+      </div>
+      <!-- Step 1 -->
+      <div>
+       <h3 class="font-bold text-gray-800 mb-3">שלב 1 – מצב המוצר כרגע <span class="text-gray-400 font-normal text-sm">(2 דקות)</span></h3>
+       <p class="text-gray-600 text-sm mb-3">סמנו את המשפט שהכי מדויק למוצר שלכן:</p>
+       <div class="space-y-2" id="step1-options">
+        <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:border-purple-300 hover:bg-purple-50 cursor-pointer transition-all">
+         <input type="radio" name="step1" value="structure" class="accent-purple-600"> <span class="text-sm text-gray-700">יש לנו מבנה ברור אבל לא הכל זורם</span>
+        </label>
+        <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:border-purple-300 hover:bg-purple-50 cursor-pointer transition-all">
+         <input type="radio" name="step1" value="value" class="accent-purple-600"> <span class="text-sm text-gray-700">הערך טוב אבל לא מספיק ברור</span>
+        </label>
+        <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:border-purple-300 hover:bg-purple-50 cursor-pointer transition-all">
+         <input type="radio" name="step1" value="complex" class="accent-purple-600"> <span class="text-sm text-gray-700">יש שלב מסובך מדי</span>
+        </label>
+        <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:border-purple-300 hover:bg-purple-50 cursor-pointer transition-all">
+         <input type="radio" name="step1" value="clarity" class="accent-purple-600"> <span class="text-sm text-gray-700">חסרה בהירות במה שהמערכת עושה</span>
+        </label>
+        <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:border-purple-300 hover:bg-purple-50 cursor-pointer transition-all">
+         <input type="radio" name="step1" value="simplify" class="accent-purple-600"> <span class="text-sm text-gray-700">המוצר עובד אבל אפשר לפשט</span>
+        </label>
+       </div>
+       <p class="text-gray-400 text-xs mt-2">אם סימנתן יותר מאחד – בחרו רק אחד מרכזי.</p>
+      </div>
+      <!-- Step 2 -->
+      <div>
+       <h3 class="font-bold text-gray-800 mb-3">שלב 2 – נקודת השיפור <span class="text-gray-400 font-normal text-sm">(2 דקות)</span></h3>
+       <p class="text-gray-600 text-sm mb-3">באיזה שלב במוצר צריך להתמקד?</p>
+       <div class="space-y-3">
+        <div>
+         <label class="text-sm text-gray-600 block mb-1">שלב מספר / מסך:</label>
+         <input type="text" placeholder="לדוגמה: מסך 3 / שלב הרישום" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-purple-400 focus:outline-none text-sm bg-gray-50">
+        </div>
+        <div>
+         <label class="text-sm text-gray-600 block mb-1">מה בדיוק הבעיה שם? <span class="text-gray-400">(במשפט קצר וברור)</span></label>
+         <textarea placeholder="לא לכתוב כללי. לכתוב מדויק." class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-purple-400 focus:outline-none text-sm bg-gray-50 resize-none" rows="2"></textarea>
+        </div>
+       </div>
+      </div>
+      <!-- Step 3 -->
+      <div>
+       <h3 class="font-bold text-gray-800 mb-3">שלב 3 – החלטת צוות לשיעור הבא <span class="text-gray-400 font-normal text-sm">(2 דקות)</span></h3>
+       <p class="text-gray-600 text-sm mb-3">בשיעור הבא אנחנו משפרות:</p>
+       <div class="space-y-2 mb-4">
+        <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:border-purple-300 hover:bg-purple-50 cursor-pointer transition-all">
+         <input type="radio" name="step3" value="shortcut" class="accent-purple-600"> <span class="text-sm text-gray-700">קיצור מסלול</span>
+        </label>
+        <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:border-purple-300 hover:bg-purple-50 cursor-pointer transition-all">
+         <input type="radio" name="step3" value="screen" class="accent-purple-600"> <span class="text-sm text-gray-700">פישוט מסך</span>
+        </label>
+        <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:border-purple-300 hover:bg-purple-50 cursor-pointer transition-all">
+         <input type="radio" name="step3" value="value" class="accent-purple-600"> <span class="text-sm text-gray-700">חידוד ערך</span>
+        </label>
+        <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:border-purple-300 hover:bg-purple-50 cursor-pointer transition-all">
+         <input type="radio" name="step3" value="response" class="accent-purple-600"> <span class="text-sm text-gray-700">הבהרת תגובת מערכת</span>
+        </label>
+        <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:border-purple-300 hover:bg-purple-50 cursor-pointer transition-all">
+         <input type="radio" name="step3" value="load" class="accent-purple-600"> <span class="text-sm text-gray-700">הפחתת עומס</span>
+        </label>
+        <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:border-purple-300 hover:bg-purple-50 cursor-pointer transition-all" id="other-label">
+         <input type="radio" name="step3" value="other" class="accent-purple-600" onchange="toggleOtherInput()"> <span class="text-sm text-gray-700">אחר:</span>
+         <input type="text" id="other-input" placeholder="פרטי..." class="flex-1 px-3 py-1 rounded-lg border border-gray-200 focus:border-purple-400 focus:outline-none text-sm bg-white hidden">
+        </label>
+       </div>
+       <div>
+        <label class="text-sm text-gray-600 block mb-1">מטרת השיפור שלנו במשפט אחד:</label>
+        <div class="flex items-center gap-2 flex-wrap bg-gray-50 rounded-xl border border-gray-200 px-4 py-2.5 text-sm text-gray-700">
+         <span>בשיעור הבא נהפוך את המוצר ליותר</span>
+         <input type="text" id="goal-word1" placeholder="________" class="w-28 px-2 py-1 rounded-lg border border-purple-200 focus:border-purple-400 focus:outline-none text-sm bg-white text-center">
+         <span>על ידי</span>
+         <input type="text" id="goal-word2" placeholder="________" class="w-36 px-2 py-1 rounded-lg border border-purple-200 focus:border-purple-400 focus:outline-none text-sm bg-white text-center">
+         <span>.</span>
+        </div>
+       </div>
+      </div>
+      <!-- Footer -->
+      <div class="bg-purple-700 rounded-2xl p-4 text-white text-center">
+       <p class="font-bold mb-1">אנחנו לא מתחילות מחדש.</p>
+       <p class="font-bold mb-2">אנחנו משפרות גרסה קיימת.</p>
+       <p class="text-purple-200 text-sm">פיתוח מוצר הוא תהליך של גרסאות – לא של רעיון מושלם בפעם הראשונה.</p>
+      </div>
+      <div class="flex justify-center pb-2">
+       <button onclick="closeSummaryModal()" class="bg-purple-600 hover:bg-purple-700 text-white font-bold px-8 py-3 rounded-full transition-all shadow-lg">סגור</button>
+      </div>
      </div>
     </div>
    </div><!-- Physical Product Page -->
@@ -940,6 +1047,41 @@ ${metrics.map((m, i) => `${i + 1}. ${m}`).join('\n')}
     
     // Initial UI update
     updateUI();
+
+    function openSummaryModal() {
+      const modal = document.getElementById('summary-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeSummaryModal() {
+      const modal = document.getElementById('summary-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function toggleOtherInput() {
+      const input = document.getElementById('other-input');
+      const radio = document.querySelector('input[name="step3"][value="other"]');
+      if (radio.checked) {
+        input.classList.remove('hidden');
+        input.focus();
+      } else {
+        input.classList.add('hidden');
+      }
+    }
+
+    document.getElementById('summary-modal').addEventListener('click', function(e) {
+      if (e.target === this) closeSummaryModal();
+    });
+
+    document.querySelectorAll('input[name="step3"]').forEach(function(radio) {
+      radio.addEventListener('change', function() {
+        if (this.value !== 'other') {
+          document.getElementById('other-input').classList.add('hidden');
+        }
+      });
+    });
   </script>
  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d6cf01024e5c227',t:'MTc3MjU4NTk2MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
