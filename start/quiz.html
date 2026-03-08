@@ -32,6 +32,7 @@
     /* ── INTRO SECTION ─────────────────────────────────── */
 
     .site-header {
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -53,6 +54,30 @@
       letter-spacing: 0.01em;
     }
 
+    .back-btn {
+      position: absolute;
+      left: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #8A85C6;
+      font-size: 0.9em;
+      font-weight: 600;
+      text-decoration: none;
+      background: rgba(138, 133, 198, 0.1);
+      border: 1px solid rgba(138, 133, 198, 0.25);
+      border-radius: 20px;
+      padding: 7px 14px;
+      transition: background 0.2s ease;
+      cursor: pointer;
+    }
+
+    .back-btn:hover {
+      background: rgba(138, 133, 198, 0.18);
+    }
+
     .intro-section {
       display: flex;
       flex-direction: column;
@@ -70,14 +95,31 @@
     }
 
     .intro-card {
-      background: #fff;
       border-radius: 18px;
       padding: 26px 28px;
-      box-shadow: 0 4px 20px rgba(138, 133, 198, 0.12);
-      border: 1px solid rgba(138, 133, 198, 0.14);
-      color: #4a4468;
       font-size: 1.05em;
       line-height: 1.85;
+    }
+
+    .intro-card.card-1 {
+      background: linear-gradient(135deg, #f0effe, #ede9fb);
+      border: 1px solid rgba(138, 133, 198, 0.35);
+      box-shadow: 0 4px 20px rgba(138, 133, 198, 0.15);
+      color: #3d3575;
+    }
+
+    .intro-card.card-2 {
+      background: linear-gradient(135deg, #fde8f4, #fce0ef);
+      border: 1px solid rgba(236, 72, 153, 0.3);
+      box-shadow: 0 4px 20px rgba(236, 72, 153, 0.12);
+      color: #8b2460;
+    }
+
+    .intro-card.card-3 {
+      background: linear-gradient(135deg, #e6faf4, #ddf5ec);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      box-shadow: 0 4px 20px rgba(16, 185, 129, 0.12);
+      color: #0d5c40;
     }
 
     .cta-card {
@@ -493,21 +535,22 @@
   <!-- ── INTRO ─────────────────────────────────────────── -->
   <div id="introSection">
     <header class="site-header">
+      <button class="back-btn" onclick="history.back()">&#8592; חזרה</button>
       <img class="logo" src="../icon/logo.png" alt="פורצות דרך" />
       <span class="site-name">פורצות דרך</span>
     </header>
 
     <section class="intro-section">
       <div class="intro-cards">
-        <div class="intro-card">
+        <div class="intro-card card-1">
           יש ימים שאת קמה ומרגישה טוב ויש ימים שאת קמה ומרגישה פחות טוב.<br>
           יש ימים שאת עצבנית, רגישה, או סתם ככה — בלי סיבה ברורה. אלה דברים שקורים לנו כל יום, גם כשלא תמיד מדברות על זה.
         </div>
-        <div class="intro-card">
+        <div class="intro-card card-2">
           זה פוגש אותנו בכל תחום בחיים.<br>
           איך אנחנו מרגישות עם הגוף שלנו, איך אנחנו נראות בעיני עצמנו ואיך זה משפיע על הביטחון, על המצב רוח ועל היום כולו. רוב הזמן אנחנו פשוט ממשיכות, בלי לעצור רגע לשים לב.
         </div>
-        <div class="intro-card">
+        <div class="intro-card card-3">
           כתבנו את זה כדי לעצור רגע.<br>
           להקשיב למה שקורה בפנים ולבדוק בשקט עם עצמך איפה זה פוגש אותך. כי כל שינוי גדול מתחיל ממשהו אישי. מכאן אפשר להתחיל לאט בדרך שלך ובבחירה שנכונה לך.
         </div>
