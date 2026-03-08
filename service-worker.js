@@ -34,26 +34,42 @@ self.addEventListener('install', function(event) {
         console.log('Opened cache');
         return cache.addAll(urlsToCache);
       })
+      .then(function() {
+        return self.skipWaiting();
+      })
   );
 });
 
 self.addEventListener('fetch', function(event) {
+  if (event.request.method !== 'GET') {
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request)
       .then(function(response) {
         if (response) {
           return response;
         }
-        return fetch(event.request).then(function(response) {
-          if (!response || response.status !== 200 || response.type !== 'basic') {
-            return response;
+
+        return fetch(event.request).then(function(networkResponse) {
+          if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
+            return networkResponse;
           }
-          var responseToCache = response.clone();
+
+          var responseToCache = networkResponse.clone();
           caches.open(CACHE_NAME)
             .then(function(cache) {
               cache.put(event.request, responseToCache);
             });
-          return response;
+
+          return networkResponse;
+        }).catch(function() {
+          if (event.request.mode === 'navigate') {
+            return caches.match('./index.html');
+          }
+
+          return caches.match(event.request);
         });
       })
   );
@@ -69,6 +85,8 @@ self.addEventListener('activate', function(event) {
           return caches.delete(cacheName);
         })
       );
+    }).then(function() {
+      return self.clients.claim();
     })
   );
 });
