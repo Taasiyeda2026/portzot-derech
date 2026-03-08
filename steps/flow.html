@@ -153,6 +153,11 @@
       footer { display: none; }
       .fixed { position: static !important; }
       body { padding-bottom: 0; }
+      #section-1, #section-2, #section-6 { display: none !important; }
+      .section-divider, .unlock-gate, .locked-hint { display: none !important; }
+      #app-container { background: white !important; }
+      .min-h-screen { min-height: 0 !important; }
+      .gradient-blob { display: none !important; }
     }
   </style>
   <style>body { box-sizing: border-box; }</style>
@@ -168,28 +173,6 @@
 
    <!-- Home button -->
    <button onclick="window.location.href='entrepreneurship-steps.html'" class="no-print fixed top-6 left-6 z-50 bg-white hover:bg-purple-50 text-purple-600 hover:text-purple-700 w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all transform hover:scale-110" title="חזרה לעמוד הבית">🏠</button>
-
-   <div class="print-only print-sheet">
-    <div class="print-header avoid-break">
-     <div class="print-header-top">
-      <div>
-       <p class="print-brand">פורצות דרך</p>
-       <p class="print-activity">Flow &amp; Friction</p>
-      </div>
-      <img src="../icon/favicon.png" class="print-logo" alt="פורצות דרך">
-     </div>
-     <div class="print-meta">
-      <div><strong>משתתפות:</strong> ____________________</div>
-      <div><strong>קבוצה:</strong> ____________________</div>
-      <div><strong>תאריך:</strong> ____________________</div>
-     </div>
-    </div>
-    <div class="print-title-block">
-     <h1 class="print-h1">מתכנון לבנייה</h1>
-     <h2 class="print-h2">Flow + Friction</h2>
-    </div>
-    <div class="print-info-box">ממפות את מסלול המשתמשת, מזהות נקודות חיכוך ומנסחות שיפור ברור.</div>
-   </div>
 
    <!-- ═══════════════════════════════════════════
         SECTION 1 – Opening (always visible)
