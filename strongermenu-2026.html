@@ -353,6 +353,26 @@
       padding-top:14px;
     }
 
+    /* ── process-arrows row ───────────────────────────────── */
+    .proc-row{
+      display:grid;
+      grid-template-columns:1fr 4px 1fr 4px 1fr 4px 1fr 4px 1fr 4px 1fr;
+      padding:0 4px;
+      width:100%;
+      max-width:100%;
+      margin:-4px auto 0;
+      pointer-events:none;
+      user-select:none;
+    }
+
+    .proc-arr{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:rgba(200,148,188,0.38);
+      line-height:1;
+    }
+
     @media (max-width:980px){
       :root{
         --title-start-offset:44px;
@@ -391,6 +411,7 @@
       :root{
         --title-start-offset:0px;
       }
+      .proc-row{ display:none; }
 
       .page{
         padding:8px;
@@ -609,6 +630,20 @@
             </div>
           </a>
         </section>
+
+        <div class="proc-row" aria-hidden="true">
+          <span></span>
+          <span class="proc-arr"><svg viewBox="0 0 14 22" width="9" height="14" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span></span>
+          <span class="proc-arr"><svg viewBox="0 0 14 22" width="9" height="14" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span></span>
+          <span class="proc-arr"><svg viewBox="0 0 14 22" width="9" height="14" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span></span>
+          <span class="proc-arr"><svg viewBox="0 0 14 22" width="9" height="14" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span></span>
+          <span class="proc-arr"><svg viewBox="0 0 14 22" width="9" height="14" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span></span>
+        </div>
 
         <div class="closing-wrap">
           <section class="closing">
