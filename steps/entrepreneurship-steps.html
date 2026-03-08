@@ -114,8 +114,18 @@ h1 {
 }
 
 .icon {
-    font-size: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin-bottom: 14px;
+    min-height: 44px;
+}
+
+.icon img {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+    display: block;
 }
 
 .step {
@@ -174,8 +184,15 @@ h1 {
     }
 
     .icon {
-        font-size: 30px;
+        min-height: 36px;
         margin-bottom: 10px;
+    }
+
+    .icon img {
+        width: 34px;
+        height: 34px;
+        object-fit: contain;
+        display: block;
     }
 
     .step {
@@ -202,16 +219,45 @@ h1 {
     <div class="subtitle">כך רעיון הופך לפתרון אמיתי בעולם</div>
 
     <div class="container">
-        <a href="persona.html" class="card" style="text-decoration:none;"><div class="icon">🧍‍♀️</div><div class="step" style="color:#d81b60;">פרסונה</div></a>
+        <a href="persona.html" class="card" style="text-decoration:none;">
+            <div class="icon"><img src="../icon/1.svg" alt="פרסונה"></div>
+            <div class="step c11">פרסונה</div>
+        </a>
+
         <a href="go.html" class="card" style="text-decoration:none;">
-  <div class="icon">✔</div>
-  <div class="step c6">בחירת פתרון</div>
-</a>
-        <a href="prd.html" class="card" style="text-decoration:none;"><div class="icon">📐</div><div class="step c7">אפיון מוצר</div></a>
-        <a href="tree.html" class="card" style="text-decoration:none;"><div class="icon">🌳</div><div class="step c8">עץ מוצר</div></a>
-         <a href="mvp.html" class="card" style="text-decoration:none;"><div class="icon">🛠</div><div class="step c10">אב-טיפוס</div></a>        
-        <a href="flow.html" class="card" style="text-decoration:none;"><div class="icon">🔀</div><div class="step c10">Flow & Friction</div></a>    
-        <div class="card"><div class="icon">🎤</div><div class="step c12">פרזנטציה</div></div>
+            <div class="icon"><img src="../icon/2.svg" alt="בחירת פתרון"></div>
+            <div class="step c6">בחירת פתרון</div>
+        </a>
+
+        <a href="prd.html" class="card" style="text-decoration:none;">
+            <div class="icon"><img src="../icon/3.svg" alt="אפיון מוצר"></div>
+            <div class="step c4">אפיון מוצר</div>
+        </a>
+
+        <a href="tree.html" class="card" style="text-decoration:none;">
+            <div class="icon"><img src="../icon/4.svg" alt="עץ מוצר"></div>
+            <div class="step c7">עץ מוצר</div>
+        </a>
+
+        <a href="mvp.html" class="card" style="text-decoration:none;">
+            <div class="icon"><img src="../icon/5.svg" alt="אב-טיפוס"></div>
+            <div class="step c3">אב-טיפוס</div>
+        </a>
+
+        <a href="../buildingmessage.html" class="card" style="text-decoration:none;">
+            <div class="icon"><img src="../icon/6.svg" alt="Flow & Friction"></div>
+            <div class="step c12">Flow & Friction</div>
+        </a>
+
+        <a href="../buildingmessage.html" class="card" style="text-decoration:none;">
+            <div class="icon"><img src="../icon/7.svg" alt="פוסטר חקר"></div>
+            <div class="step c11">פוסטר חקר</div>
+        </a>
+
+        <a href="../buildingmessage.html" class="card" style="text-decoration:none;">
+            <div class="icon"><img src="../icon/8.svg" alt="מציגות"></div>
+            <div class="step c10">מציגות</div>
+        </a>
     </div>
 </div>
 
