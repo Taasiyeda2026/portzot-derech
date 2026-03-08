@@ -101,13 +101,17 @@ h1 {
 }
 
 .card {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: #ffffff;
     border-radius: 22px;
-    padding: 24px 16px 20px;
+    aspect-ratio: 1 / 1;
+    padding: 10px;
     box-shadow: 0 18px 30px rgba(0,0,0,0.08);
     transition: 0.3s ease;
     text-decoration: none;
+    overflow: hidden;
 }
 
 .card:hover {
@@ -116,39 +120,19 @@ h1 {
 }
 
 .icon {
+    width: 100%;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
-    min-height: 88px;
-    margin-bottom: 12px;
 }
 
 .icon img {
-    width: 76px;
-    height: 76px;
+    width: 100%;
+    height: 100%;
     object-fit: contain;
     display: block;
 }
-
-.step {
-    font-size: 17px;
-    font-weight: 700;
-    line-height: 1.3;
-}
-
-.c1 { color: #e53935; }
-.c2 { color: #8e24aa; }
-.c3 { color: #3949ab; }
-.c4 { color: #039be5; }
-.c5 { color: #00897b; }
-.c6 { color: #43a047; }
-.c7 { color: #f4511e; }
-.c8 { color: #fb8c00; }
-.c9 { color: #6d4c41; }
-.c10 { color: #5e35b1; }
-.c11 { color: #d81b60; }
-.c12 { color: #00796b; }
 
 @media (max-width: 600px) {
     .header {
@@ -183,24 +167,8 @@ h1 {
     }
 
     .card {
-        padding: 18px 10px 16px;
         border-radius: 16px;
-    }
-
-    .icon {
-        min-height: 68px;
-        margin-bottom: 10px;
-    }
-
-    .icon img {
-        width: 58px;
-        height: 58px;
-        object-fit: contain;
-        display: block;
-    }
-
-    .step {
-        font-size: 14px;
+        padding: 8px;
     }
 }
 </style>
@@ -223,42 +191,34 @@ h1 {
     <div class="container">
         <a href="persona.html" class="card">
             <div class="icon"><img src="../icon/1.svg" alt="פרסונה"></div>
-            <div class="step c11">פרסונה</div>
         </a>
 
         <a href="go.html" class="card">
             <div class="icon"><img src="../icon/2.svg" alt="בחירת פתרון"></div>
-            <div class="step c6">בחירת פתרון</div>
         </a>
 
         <a href="prd.html" class="card">
             <div class="icon"><img src="../icon/3.svg" alt="אפיון מוצר"></div>
-            <div class="step c4">אפיון מוצר</div>
         </a>
 
         <a href="tree.html" class="card">
             <div class="icon"><img src="../icon/4.svg" alt="עץ מוצר"></div>
-            <div class="step c7">עץ מוצר</div>
         </a>
 
         <a href="mvp.html" class="card">
             <div class="icon"><img src="../icon/5.svg" alt="אב-טיפוס"></div>
-            <div class="step c3">אב-טיפוס</div>
         </a>
 
         <a href="../buildingmessage.html" class="card">
             <div class="icon"><img src="../icon/6.svg" alt="Flow & Friction"></div>
-            <div class="step c12">Flow &amp; Friction</div>
         </a>
 
         <a href="../buildingmessage.html" class="card">
             <div class="icon"><img src="../icon/7.svg" alt="פוסטר חקר"></div>
-            <div class="step c11">פוסטר חקר</div>
         </a>
 
         <a href="../buildingmessage.html" class="card">
             <div class="icon"><img src="../icon/8.svg" alt="מציגות"></div>
-            <div class="step c10">מציגות</div>
         </a>
     </div>
 </div>
