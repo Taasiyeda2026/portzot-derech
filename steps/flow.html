@@ -1,0 +1,702 @@
+<!doctype html>
+<html lang="he" dir="rtl" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>פורצות דרך - Flow &amp; Friction</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;900&amp;family=Rubik:wght@400;500;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main/css/print.css" media="print">
+  <style>
+    * { font-family: 'Heebo', 'Rubik', sans-serif; }
+
+    .gradient-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.6;
+      animation: float 8s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-20px) scale(1.05); }
+    }
+
+    @keyframes sparkle {
+      0%, 100% { opacity: 0.3; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.2); }
+    }
+
+    .sparkle {
+      animation: sparkle 2s ease-in-out infinite;
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(40px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-in {
+      animation: slideDown 0.6s ease-out forwards;
+    }
+
+    .sticker {
+      transform: rotate(-3deg);
+      transition: transform 0.3s ease;
+    }
+
+    .sticker:hover {
+      transform: rotate(0deg) scale(1.05);
+    }
+
+    .highlight-box {
+      background: linear-gradient(135deg, #fff8e1 0%, #ffe0b2 100%);
+      border-right: 4px solid #ff9800;
+    }
+
+    .check-item {
+      transition: all 0.2s ease;
+    }
+
+    .check-item:hover {
+      transform: translateX(-5px);
+    }
+
+    .table-cell {
+      min-height: 60px;
+    }
+
+    input[type="text"], textarea {
+      transition: all 0.2s ease;
+    }
+
+    input[type="text"]:focus, textarea:focus {
+      transform: scale(1.01);
+    }
+
+    /* Progressive unlock */
+    .content-section {
+      display: block;
+    }
+
+    .content-section.locked {
+      display: none;
+    }
+
+    .content-section.revealing {
+      animation: slideDown 0.7s ease-out forwards;
+    }
+
+    /* Section divider */
+    .section-divider {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.5rem;
+    }
+
+    .section-divider::before,
+    .section-divider::after {
+      content: '';
+      flex: 1;
+      height: 2px;
+      background: linear-gradient(to right, transparent, #d8b4fe, transparent);
+    }
+
+    /* Unlock gate */
+    .unlock-gate {
+      text-align: center;
+      padding: 2.5rem 1rem 3rem;
+    }
+
+    .unlock-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem 2.5rem;
+      border-radius: 9999px;
+      font-weight: 700;
+      font-size: 1.125rem;
+      color: white;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      transform: scale(1);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .unlock-btn:hover {
+      transform: scale(1.06);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+    }
+
+    .unlock-btn:active {
+      transform: scale(0.97);
+    }
+
+    /* Hint beneath locked area */
+    .locked-hint {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0.4;
+      pointer-events: none;
+      padding-bottom: 1rem;
+    }
+
+    @media print {
+      footer { display: none; }
+      .fixed { position: static !important; }
+      body { padding-bottom: 0; }
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="overflow-auto pb-20">
+  <div id="app-container" class="min-h-full relative overflow-hidden" style="background: linear-gradient(135deg, #fef7ff 0%, #f0f9ff 50%, #fefce8 100%);">
+
+   <!-- Decorative Blobs -->
+   <div class="gradient-blob w-64 h-64 top-10 right-10" style="background: #e879f9; animation-delay: 0s;"></div>
+   <div class="gradient-blob w-48 h-48 top-40 left-20" style="background: #38bdf8; animation-delay: 2s;"></div>
+   <div class="gradient-blob w-56 h-56" style="background: #fcd34d; animation-delay: 4s; top: 80%; right: 25%;"></div>
+
+   <!-- Home button -->
+   <button onclick="window.location.href='main/steps/entrepreneurship-steps.html'" class="no-print fixed top-6 left-6 z-50 bg-white hover:bg-purple-50 text-purple-600 hover:text-purple-700 w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all transform hover:scale-110" title="חזרה לעמוד הבית">🏠</button>
+
+   <div class="print-only print-sheet">
+    <div class="print-header avoid-break">
+     <div class="print-header-top">
+      <div>
+       <p class="print-brand">פורצות דרך</p>
+       <p class="print-activity">Flow &amp; Friction</p>
+      </div>
+      <img src="/favicon.png" class="print-logo" alt="פורצות דרך">
+     </div>
+     <div class="print-meta">
+      <div><strong>משתתפות:</strong> ____________________</div>
+      <div><strong>קבוצה:</strong> ____________________</div>
+      <div><strong>תאריך:</strong> ____________________</div>
+     </div>
+    </div>
+    <div class="print-title-block">
+     <h1 class="print-h1">מתכנון לבנייה</h1>
+     <h2 class="print-h2">Flow + Friction</h2>
+    </div>
+    <div class="print-info-box">ממפות את מסלול המשתמשת, מזהות נקודות חיכוך ומנסחות שיפור ברור.</div>
+   </div>
+
+   <!-- ═══════════════════════════════════════════
+        SECTION 1 – Opening (always visible)
+   ══════════════════════════════════════════════ -->
+   <div id="section-1" class="content-section min-h-screen flex items-center justify-center p-6 relative">
+    <div class="max-w-2xl mx-auto text-center animate-in">
+     <!-- Main Title Sticker -->
+     <div class="sticker inline-block bg-gradient-to-br from-purple-500 to-pink-500 text-white px-8 py-4 rounded-2xl shadow-xl mb-8">
+      <h1 id="main-title" class="text-4xl md:text-5xl font-black">מתכנון לבנייה</h1>
+      <p id="subtitle" class="text-xl mt-2 font-medium opacity-90">FLOW + FRICTION</p>
+     </div>
+
+     <!-- Sparkles -->
+     <div class="absolute top-20 right-20 text-4xl sparkle" style="animation-delay: 0s;">✨</div>
+     <div class="absolute top-32 left-16 text-3xl sparkle" style="animation-delay: 0.5s;">💫</div>
+     <div class="absolute bottom-32 right-16 text-3xl sparkle" style="animation-delay: 1s;">⭐</div>
+
+     <!-- Content Card -->
+     <div class="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-lg border-2 border-purple-100">
+      <div class="inline-block bg-yellow-100 text-yellow-800 px-4 py-1 rounded-full text-sm font-bold mb-4">💬 דברי מדריכה</div>
+      <div class="space-y-4 text-lg text-gray-700 text-right">
+       <p class="font-medium">במפגש הקודם בחרתן רעיון והחלטתן שאתן הולכות עליו.</p>
+       <p class="text-purple-600 font-bold text-xl">היום אתן עוברות משלב רעיון לשלב מוצר! 🚀</p>
+       <div class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-5 mt-6">
+        <p class="font-bold text-purple-800 mb-3">לפני שבונות אבטיפוס, כל קבוצת בנייה עושה שני דברים:</p>
+        <div class="flex items-center gap-3 mb-2">
+         <span class="bg-purple-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">1</span>
+         <span>מתכננות מסלול שימוש ברור</span>
+        </div>
+        <div class="flex items-center gap-3">
+         <span class="bg-pink-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">2</span>
+         <span>בודקות איפה המשתמשת עלולה להיתקע</span>
+        </div>
+       </div>
+       <p class="text-gray-500 italic mt-4">רק אחרי זה מתחילות לבנות ✨</p>
+      </div>
+     </div>
+
+     <!-- Unlock: scroll to section 2 -->
+     <div class="unlock-gate">
+      <button onclick="scrollToSection('section-2')" class="unlock-btn" style="background: linear-gradient(to right, #a855f7, #ec4899);">
+       בואו נתחיל! →
+      </button>
+     </div>
+    </div>
+   </div>
+
+   <!-- ═══════════════════════════════════════════
+        SECTION 2 – Flow Planning Intro (always visible)
+   ══════════════════════════════════════════════ -->
+   <div id="section-2" class="content-section p-6">
+    <div class="section-divider"><span class="text-purple-400 text-sm font-bold whitespace-nowrap">✦ תכנון מסלול שימוש ✦</span></div>
+    <div class="max-w-2xl mx-auto">
+     <!-- Section Header -->
+     <div class="text-center mb-8">
+      <div class="sticker inline-block bg-gradient-to-br from-blue-500 to-cyan-400 text-white px-6 py-3 rounded-2xl shadow-lg">
+       <span class="text-3xl">🟣</span>
+       <h2 class="text-2xl font-black">תכנון מסלול שימוש</h2>
+       <p class="text-lg font-medium">FLOW</p>
+      </div>
+     </div>
+
+     <!-- Coach Words -->
+     <div class="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-lg border-2 border-blue-100 mb-6">
+      <div class="inline-block bg-blue-100 text-blue-800 px-4 py-1 rounded-full text-sm font-bold mb-4">💬 דברי מדריכה</div>
+      <div class="space-y-3 text-gray-700 text-right">
+       <p class="text-xl font-bold text-blue-600">עכשיו אתם לא מעצבים.</p>
+       <p class="text-xl font-bold text-purple-600">אתם בונים שלד לוגי של המוצר.</p>
+       <div class="highlight-box rounded-xl p-4 my-4">
+        <p class="font-bold text-orange-800">⚠️ אם השלד לא ברור – שום עיצוב לא יעזור!</p>
+       </div>
+       <div class="flex items-center gap-3 bg-green-50 rounded-xl p-4">
+        <span class="text-3xl">⏱️</span>
+        <div>
+         <p class="font-bold text-green-700">יש לכם 10-12 דקות</p>
+         <p class="text-green-600">לבנות מסלול ברור מהרגע שהמשתמש/ת נכנס/ה ועד שהוא/היא מקבל/ת ערך</p>
+        </div>
+       </div>
+      </div>
+     </div>
+
+     <!-- Instructions Card -->
+     <div class="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-3xl p-6 shadow-lg border-2 border-yellow-200">
+      <h3 class="text-xl font-bold text-yellow-800 mb-4 flex items-center gap-2"><span>📝</span> הנחיות לתלמידות</h3>
+      <div class="space-y-3 text-gray-700">
+       <div class="bg-white rounded-xl p-4">
+        <p class="font-bold text-purple-600">גרסה ראשונה של המוצר שלנו</p>
+        <p class="text-lg">כך המשתמשת מקבלת ערך ✨</p>
+       </div>
+       <div class="flex items-start gap-3">
+        <span class="bg-yellow-400 text-yellow-900 w-6 h-6 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0 mt-1">!</span>
+        <p>כתבו <strong>4-6 שלבים בלבד</strong></p>
+       </div>
+       <div class="flex items-start gap-3">
+        <span class="bg-yellow-400 text-yellow-900 w-6 h-6 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0 mt-1">!</span>
+        <p>בכל שלב חייבת להיות <strong>פעולה ותוצאה</strong></p>
+       </div>
+      </div>
+     </div>
+
+     <!-- Unlock: reveal section 3 -->
+     <div class="unlock-gate">
+      <div class="locked-hint mb-4">
+       <span class="text-2xl">🔒</span>
+       <span class="text-sm font-medium text-gray-500">לחצו לפתיחת טבלת FLOW</span>
+      </div>
+      <button onclick="unlockSection('section-3')" class="unlock-btn" style="background: linear-gradient(to right, #3b82f6, #06b6d4);">
+       לטבלת FLOW →
+      </button>
+     </div>
+    </div>
+   </div>
+
+   <!-- ═══════════════════════════════════════════
+        SECTION 3 – Flow Table (locked)
+   ══════════════════════════════════════════════ -->
+   <div id="section-3" class="content-section locked p-6">
+    <div class="section-divider"><span class="text-blue-400 text-sm font-bold whitespace-nowrap">✦ טבלת FLOW ✦</span></div>
+    <div class="max-w-5xl mx-auto">
+     <!-- Header -->
+     <div class="text-center mb-6">
+      <div class="inline-block bg-gradient-to-r from-purple-500 to-blue-500 text-white px-6 py-2 rounded-full font-bold shadow-lg">
+       📊 טבלת FLOW
+      </div>
+     </div>
+
+     <!-- Flow Table -->
+     <div class="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden border-2 border-purple-100">
+      <div class="grid grid-cols-4 bg-gradient-to-r from-purple-500 to-blue-500 text-white font-bold text-center">
+       <div class="p-3 border-l border-purple-400">שלב</div>
+       <div class="p-3 border-l border-purple-400">מה המשתמשת עושה</div>
+       <div class="p-3 border-l border-purple-400">מה קורה במוצר/מערכת</div>
+       <div class="p-3">מה הערך שהיא מקבלת</div>
+      </div>
+      <div id="flow-table-body"></div>
+     </div>
+
+     <!-- Explanation Box -->
+     <div class="mt-6 bg-gradient-to-r from-cyan-50 to-blue-50 rounded-2xl p-5 border-2 border-cyan-200">
+      <h4 class="font-bold text-cyan-800 mb-3 flex items-center gap-2"><span>💡</span> הסבר חשוב!</h4>
+      <div class="text-gray-700 space-y-2 text-sm">
+       <p><strong class="text-purple-600">מוצר דיגיטלי/אפליקציה:</strong> כתבו מה המערכת עושה - חישוב? התאמה אישית? AI? שמירה?</p>
+       <p><strong class="text-blue-600">מוצר פיזי:</strong> כתבו מה קורה בפועל - מנגנון נפתח? חיישן מגיב? חלק זז?</p>
+       <p class="bg-yellow-100 p-2 rounded-lg font-bold text-yellow-800">⚠️ אם אין תשובה ברורה בעמודה הזו - חסר שלב בתכנון!</p>
+      </div>
+     </div>
+
+     <!-- Check Before Moving -->
+     <div class="mt-6 bg-white/80 backdrop-blur-sm rounded-2xl p-5 shadow-lg border-2 border-orange-200">
+      <h4 class="font-bold text-orange-700 mb-4">✅ בדיקה לפני שממשיכים:</h4>
+      <div class="grid grid-cols-2 gap-3">
+       <label class="check-item flex items-center gap-3 bg-orange-50 p-3 rounded-xl cursor-pointer hover:bg-orange-100"><input type="checkbox" class="w-5 h-5 accent-orange-500"><span>יש שלב מיותר</span></label>
+       <label class="check-item flex items-center gap-3 bg-orange-50 p-3 rounded-xl cursor-pointer hover:bg-orange-100"><input type="checkbox" class="w-5 h-5 accent-orange-500"><span>יש שלב לא ברור</span></label>
+       <label class="check-item flex items-center gap-3 bg-orange-50 p-3 rounded-xl cursor-pointer hover:bg-orange-100"><input type="checkbox" class="w-5 h-5 accent-orange-500"><span>יש פעולה בלי תוצאה</span></label>
+       <label class="check-item flex items-center gap-3 bg-orange-50 p-3 rounded-xl cursor-pointer hover:bg-orange-100"><input type="checkbox" class="w-5 h-5 accent-orange-500"><span>יש תוצאה שלא ברור מאיפה הגיעה</span></label>
+      </div>
+      <p class="mt-3 text-orange-600 font-medium text-center">אם סימנתם – תקנו עכשיו! 🔧</p>
+     </div>
+
+     <!-- Unlock: reveal section 4 -->
+     <div class="unlock-gate">
+      <div class="locked-hint mb-4">
+       <span class="text-2xl">🔒</span>
+       <span class="text-sm font-medium text-gray-500">לחצו לפתיחת הסבר FRICTION</span>
+      </div>
+      <button onclick="unlockSection('section-4')" class="unlock-btn" style="background: linear-gradient(to right, #f97316, #ef4444);">
+       להסבר FRICTION →
+      </button>
+     </div>
+    </div>
+   </div>
+
+   <!-- ═══════════════════════════════════════════
+        SECTION 4 – Friction Intro (locked)
+   ══════════════════════════════════════════════ -->
+   <div id="section-4" class="content-section locked p-6">
+    <div class="section-divider"><span class="text-orange-400 text-sm font-bold whitespace-nowrap">✦ בדיקת חיכוך ✦</span></div>
+    <div class="max-w-3xl mx-auto">
+     <!-- Header -->
+     <div class="text-center mb-6">
+      <div class="sticker inline-block bg-gradient-to-br from-orange-500 to-red-400 text-white px-6 py-3 rounded-2xl shadow-lg">
+       <span class="text-3xl">🔥</span>
+       <h2 class="text-2xl font-black">בדיקת חיכוך</h2>
+       <p class="text-lg font-medium">FRICTION CHECK</p>
+      </div>
+     </div>
+
+     <!-- Transition Message -->
+     <div class="bg-purple-100 rounded-2xl p-4 mb-8 text-center">
+      <p class="text-purple-800">💬 <strong>עכשיו יש לכם שלד.</strong> אבל מוצר טוב לא רק עובד – הוא גם זורם!</p>
+     </div>
+
+     <!-- Coach Words -->
+     <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-5 shadow-lg border-2 border-orange-100 mb-8">
+      <div class="flex items-center gap-3 mb-4">
+       <span class="text-3xl">⏱️</span>
+       <div>
+        <p class="font-bold text-orange-700">יש לכם 5-7 דקות</p>
+        <p class="text-gray-600">המטרה: לזהות <strong>נקודת חיכוך אחת משמעותית</strong> ולשפר אותה</p>
+       </div>
+      </div>
+      <div class="bg-yellow-50 rounded-xl p-4 border-l-4 border-yellow-400">
+       <p class="font-bold text-yellow-800">💡 זכרו:</p>
+       <p class="text-yellow-700">אנחנו לא משנות הכול.<br>אנחנו מדייקות דבר אחד משמעותי.</p>
+      </div>
+     </div>
+
+     <!-- CTA Card -->
+     <div class="bg-gradient-to-br from-orange-100 to-red-100 rounded-2xl p-8 shadow-lg border-2 border-orange-300 text-center">
+      <h3 class="text-2xl font-bold text-orange-700 mb-2">🗂️ דף עבודה: בדיקת חיכוך</h3>
+      <p class="text-sm text-orange-600 font-medium mb-2">הקדישו 5-7 דקות למילוי דף עבודה מובנה</p>
+     </div>
+
+     <!-- Unlock: reveal section 5 -->
+     <div class="unlock-gate">
+      <div class="locked-hint mb-4">
+       <span class="text-2xl">🔒</span>
+       <span class="text-sm font-medium text-gray-500">לחצו לפתיחת דף העבודה</span>
+      </div>
+      <button onclick="unlockSection('section-5')" class="unlock-btn" style="background: linear-gradient(to right, #f97316, #ef4444);">
+       פתח דף עבודה 📋
+      </button>
+     </div>
+    </div>
+   </div>
+
+   <!-- ═══════════════════════════════════════════
+        SECTION 5 – Friction Worksheet (locked)
+   ══════════════════════════════════════════════ -->
+   <div id="section-5" class="content-section locked p-6">
+    <div class="section-divider"><span class="text-red-400 text-sm font-bold whitespace-nowrap">✦ דף עבודה ✦</span></div>
+    <div class="max-w-4xl mx-auto">
+     <!-- Header -->
+     <div class="text-center mb-6">
+      <div class="inline-block bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-2 rounded-full font-bold shadow-lg mb-4">
+       🗂️ דף עבודה: בדיקת חיכוך
+      </div>
+      <p class="text-lg text-gray-600">⏱️ זמן עבודה: 5-7 דקות</p>
+     </div>
+
+     <!-- Team Info -->
+     <div class="grid grid-cols-2 gap-4 mb-6">
+      <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-4 shadow-lg border-2 border-orange-100">
+       <label class="font-bold text-gray-700 block mb-2">שם הקבוצה:</label>
+       <input type="text" class="w-full p-3 rounded-lg border-2 border-orange-200 focus:border-orange-400 focus:outline-none" placeholder="כתבו כאן...">
+      </div>
+      <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-4 shadow-lg border-2 border-orange-100">
+       <label class="font-bold text-gray-700 block mb-2">שם המוצר:</label>
+       <input type="text" class="w-full p-3 rounded-lg border-2 border-orange-200 focus:border-orange-400 focus:outline-none" placeholder="כתבו כאן...">
+      </div>
+     </div>
+
+     <!-- Section 1: Identify Friction -->
+     <div class="bg-gradient-to-br from-red-50 to-orange-50 rounded-2xl p-6 shadow-lg border-2 border-red-200 mb-6">
+      <h3 class="text-2xl font-bold text-red-700 mb-6 flex items-center gap-2"><span>🔍</span> שלב 1 – זיהוי חיכוך</h3>
+      <p class="text-gray-700 mb-4 font-medium">באיזה שלב במסלול השימוש המשתמשת עלולה להתבלבל, להתעכב או לוותר?</p>
+      <div class="flex items-center gap-4 mb-6">
+       <label class="font-bold text-gray-700">שלב מספר / מסך:</label>
+       <input type="number" min="1" max="6" class="w-24 p-3 rounded-lg border-2 border-red-200 focus:border-red-400 focus:outline-none text-center text-lg font-bold">
+      </div>
+      <div>
+       <label class="font-bold text-gray-700 block mb-3">מה בדיוק הבעיה בשלב הזה? (משפט קצר וברור)</label>
+       <textarea class="w-full p-4 rounded-lg border-2 border-red-200 focus:border-red-400 focus:outline-none" rows="3" placeholder="כתבו את הבעיה..."></textarea>
+      </div>
+     </div>
+
+     <!-- Section 2: Type of Friction -->
+     <div class="bg-gradient-to-br from-orange-50 to-yellow-50 rounded-2xl p-6 shadow-lg border-2 border-orange-200 mb-6">
+      <h3 class="text-2xl font-bold text-orange-700 mb-6 flex items-center gap-2"><span>📌</span> שלב 2 – סוג החיכוך (סמנו אחד)</h3>
+      <div class="grid grid-cols-2 gap-3">
+       <label class="check-item flex items-center gap-3 bg-white p-4 rounded-xl cursor-pointer hover:bg-orange-50 transition-all border-2 border-transparent hover:border-orange-300"><input type="radio" name="friction-type" class="w-5 h-5 accent-orange-500"><span class="text-gray-700">לא ברור מה לעשות</span></label>
+       <label class="check-item flex items-center gap-3 bg-white p-4 rounded-xl cursor-pointer hover:bg-orange-50 transition-all border-2 border-transparent hover:border-orange-300"><input type="radio" name="friction-type" class="w-5 h-5 accent-orange-500"><span class="text-gray-700">יותר מדי מידע במסך</span></label>
+       <label class="check-item flex items-center gap-3 bg-white p-4 rounded-xl cursor-pointer hover:bg-orange-50 transition-all border-2 border-transparent hover:border-orange-300"><input type="radio" name="friction-type" class="w-5 h-5 accent-orange-500"><span class="text-gray-700">יותר מדי שלבים בתהליך</span></label>
+       <label class="check-item flex items-center gap-3 bg-white p-4 rounded-xl cursor-pointer hover:bg-orange-50 transition-all border-2 border-transparent hover:border-orange-300"><input type="radio" name="friction-type" class="w-5 h-5 accent-orange-500"><span class="text-gray-700">לא ברור מה קורה במערכת</span></label>
+       <label class="check-item flex items-center gap-3 bg-white p-4 rounded-xl cursor-pointer hover:bg-orange-50 transition-all border-2 border-transparent hover:border-orange-300"><input type="radio" name="friction-type" class="w-5 h-5 accent-orange-500"><span class="text-gray-700">התוצאה לא ברורה</span></label>
+       <label class="check-item flex items-center gap-3 bg-white p-4 rounded-xl cursor-pointer hover:bg-orange-50 transition-all border-2 border-transparent hover:border-orange-300"><input type="radio" name="friction-type" class="w-5 h-5 accent-orange-500"><span class="text-gray-700">הערך לא מספיק חד</span></label>
+       <label class="check-item flex items-center gap-3 bg-white p-4 rounded-xl cursor-pointer hover:bg-orange-50 transition-all border-2 border-transparent hover:border-orange-300 col-span-2"><input type="radio" name="friction-type" class="w-5 h-5 accent-orange-500"><span class="text-gray-700">אחר:</span><input type="text" class="flex-1 ml-2 p-2 rounded-lg border border-orange-200 focus:border-orange-400 focus:outline-none text-sm" placeholder="תארו..."></label>
+      </div>
+     </div>
+
+     <!-- Section 3: Focused Fix -->
+     <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6 shadow-lg border-2 border-green-200 mb-6">
+      <h3 class="text-2xl font-bold text-green-700 mb-6 flex items-center gap-2"><span>🔧</span> שלב 3 – תיקון ממוקד</h3>
+      <p class="text-gray-700 mb-4 font-medium text-lg">💡 חובה לבצע שינוי אחד משמעותי!</p>
+      <div class="space-y-6">
+       <div>
+        <label class="font-bold text-gray-700 block mb-3 flex items-center gap-2"><span class="text-2xl">📍</span> לפני התיקון:</label>
+        <textarea class="w-full p-4 rounded-lg border-2 border-green-200 focus:border-green-400 focus:outline-none" rows="3" placeholder="מה היה המצב הקודם?"></textarea>
+       </div>
+       <div>
+        <label class="font-bold text-gray-700 block mb-3 flex items-center gap-2"><span class="text-2xl">✏️</span> מה נשנה?</label>
+        <textarea class="w-full p-4 rounded-lg border-2 border-green-200 focus:border-green-400 focus:outline-none" rows="3" placeholder="מה השינוי שעשינו?"></textarea>
+       </div>
+       <div>
+        <label class="font-bold text-gray-700 block mb-3 flex items-center gap-2"><span class="text-2xl">⭐</span> אחרי התיקון – למה זה ברור / פשוט / מדויק יותר?</label>
+        <textarea class="w-full p-4 rounded-lg border-2 border-green-200 focus:border-green-400 focus:outline-none" rows="3" placeholder="הסבירו את השיפור..."></textarea>
+       </div>
+      </div>
+     </div>
+
+     <!-- Final Check -->
+     <div class="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-6 shadow-lg border-2 border-blue-200 mb-6">
+      <h3 class="text-2xl font-bold text-blue-700 mb-6 flex items-center gap-2"><span>✅</span> בדיקת סיום</h3>
+      <p class="text-gray-700 mb-4 font-medium">אחרי השינוי, המסלול שלנו:</p>
+      <div class="space-y-3">
+       <label class="check-item flex items-center gap-4 bg-white p-4 rounded-xl cursor-pointer hover:bg-blue-50 transition-all border-2 border-transparent hover:border-blue-300"><input type="checkbox" class="w-6 h-6 accent-blue-500"><span class="text-lg text-gray-700">ברור יותר</span></label>
+       <label class="check-item flex items-center gap-4 bg-white p-4 rounded-xl cursor-pointer hover:bg-blue-50 transition-all border-2 border-transparent hover:border-blue-300"><input type="checkbox" class="w-6 h-6 accent-blue-500"><span class="text-lg text-gray-700">פשוט יותר</span></label>
+       <label class="check-item flex items-center gap-4 bg-white p-4 rounded-xl cursor-pointer hover:bg-blue-50 transition-all border-2 border-transparent hover:border-blue-300"><input type="checkbox" class="w-6 h-6 accent-blue-500"><span class="text-lg text-gray-700">ממוקד יותר בערך</span></label>
+       <label class="check-item flex items-center gap-4 bg-white p-4 rounded-xl cursor-pointer hover:bg-blue-50 transition-all border-2 border-transparent hover:border-blue-300"><input type="checkbox" class="w-6 h-6 accent-blue-500"><span class="text-lg text-gray-700">זורם יותר</span></label>
+      </div>
+      <div class="mt-6 bg-yellow-100 rounded-xl p-4 border-l-4 border-yellow-400">
+       <p class="text-yellow-800 font-bold">⚠️ אם לא סימנתן לפחות אחד – חזרו וחדדו את התיקון!</p>
+      </div>
+     </div>
+
+     <!-- Unlock: reveal section 6 -->
+     <div class="unlock-gate">
+      <div class="locked-hint mb-4">
+       <span class="text-2xl">🔒</span>
+       <span class="text-sm font-medium text-gray-500">לחצו לפתיחת הסיכום הסופי</span>
+      </div>
+      <button onclick="unlockSection('section-6')" class="unlock-btn" style="background: linear-gradient(to right, #22c55e, #10b981);">
+       לסיכום סופי →
+      </button>
+     </div>
+    </div>
+   </div>
+
+   <!-- ═══════════════════════════════════════════
+        SECTION 6 – Summary (locked)
+   ══════════════════════════════════════════════ -->
+   <div id="section-6" class="content-section locked p-6">
+    <div class="section-divider"><span class="text-green-400 text-sm font-bold whitespace-nowrap">✦ סיכום ✦</span></div>
+    <div class="max-w-2xl mx-auto text-center">
+     <!-- Celebration -->
+     <div class="text-6xl mb-6">🎉</div>
+     <div class="sticker inline-block bg-gradient-to-br from-green-500 to-teal-400 text-white px-8 py-4 rounded-2xl shadow-xl mb-8">
+      <h2 class="text-3xl font-black">בדיקה אחרונה!</h2>
+     </div>
+
+     <!-- Final Check Card -->
+     <div class="bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-xl border-2 border-green-200">
+      <h3 class="text-xl font-bold text-gray-800 mb-6">עכשיו המסלול שלנו:</h3>
+      <div class="space-y-4">
+       <label class="check-item flex items-center gap-4 bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-2xl cursor-pointer hover:from-green-100 hover:to-emerald-100 transition-all"><input type="checkbox" class="w-6 h-6 accent-green-500"><span class="text-lg font-medium">קצר יותר ✂️</span></label>
+       <label class="check-item flex items-center gap-4 bg-gradient-to-r from-blue-50 to-cyan-50 p-4 rounded-2xl cursor-pointer hover:from-blue-100 hover:to-cyan-100 transition-all"><input type="checkbox" class="w-6 h-6 accent-blue-500"><span class="text-lg font-medium">ברור יותר 💎</span></label>
+       <label class="check-item flex items-center gap-4 bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-2xl cursor-pointer hover:from-purple-100 hover:to-pink-100 transition-all"><input type="checkbox" class="w-6 h-6 accent-purple-500"><span class="text-lg font-medium">מדויק יותר לערך שהבטחנו 🎯</span></label>
+      </div>
+      <div class="mt-6 bg-yellow-100 rounded-xl p-4">
+       <p class="text-yellow-800 font-medium">⚠️ אם לא סימנתם לפחות אחד – חזרו ותדייקו!</p>
+      </div>
+     </div>
+
+     <!-- Success Message -->
+     <div class="mt-8 bg-gradient-to-r from-purple-100 to-pink-100 rounded-2xl p-6">
+      <p class="text-2xl font-bold text-purple-800">מעולה! 🌟</p>
+      <p class="text-gray-700 mt-2">עכשיו אתם מוכנים לבנות אבטיפוס!</p>
+     </div>
+
+     <!-- Reset button -->
+     <div class="unlock-gate">
+      <button onclick="location.reload()" class="unlock-btn" style="background: linear-gradient(to right, #a855f7, #ec4899);">
+       חזרה להתחלה 🔄
+      </button>
+     </div>
+    </div>
+   </div>
+
+   <!-- Footer -->
+   <footer class="no-print fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-sm border-t border-purple-100 shadow-lg z-40">
+    <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+     <div class="text-sm text-gray-600 font-medium">© 2026 פורצות דרך</div>
+     <button onclick="window.print()" class="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white p-2 rounded-lg shadow-lg transform hover:scale-110 transition-all flex items-center gap-2" title="הדפסה">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4H9a2 2 0 00-2 2v2a2 2 0 002 2h10a2 2 0 002-2v-2a2 2 0 00-2-2h-2m-4-4V9m0 4v6m0-10V5a2 2 0 012-2h6a2 2 0 012 2v4"></path>
+      </svg>
+      <span class="text-sm font-bold">הדפסה</span>
+     </button>
+    </div>
+   </footer>
+   <div class="print-only print-footer">© 2026 פורצות דרך</div>
+  </div>
+
+  <script>
+    // Default configuration
+    const defaultConfig = {
+      main_title: 'מתכנון לבנייה',
+      subtitle: 'FLOW + FRICTION',
+      background_color: '#fef7ff',
+      text_color: '#1f2937',
+      primary_color: '#a855f7',
+      secondary_color: '#38bdf8',
+      accent_color: '#f97316'
+    };
+
+    // Unlock a section: reveal it and scroll into view
+    function unlockSection(sectionId) {
+      const section = document.getElementById(sectionId);
+      if (!section) return;
+
+      section.classList.remove('locked');
+      section.classList.add('revealing');
+
+      // Scroll to the newly revealed section after a short delay
+      setTimeout(() => {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 80);
+    }
+
+    // Scroll to a section that is already visible
+    function scrollToSection(sectionId) {
+      const section = document.getElementById(sectionId);
+      if (!section) return;
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // Generate flow table rows
+    function generateFlowTable() {
+      const tableBody = document.getElementById('flow-table-body');
+      if (!tableBody) return;
+      let html = '';
+
+      for (let i = 1; i <= 6; i++) {
+        const isOptional = i > 4;
+        html += `
+          <div class="border-t border-gray-200 ${isOptional ? 'bg-gray-50' : ''}">
+            <div class="grid grid-cols-4" style="cursor:pointer" onclick="toggleRow(${i})">
+              <div class="p-3 border-l border-gray-200 flex items-center justify-center gap-1">
+                <span class="bg-purple-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">${i}</span>
+                ${isOptional ? '<span class="text-xs text-gray-400">(אם צריך)</span>' : ''}
+              </div>
+              <div class="p-2 border-l border-gray-200 text-center text-gray-500 text-sm">לחץ להוספה</div>
+              <div class="p-2 border-l border-gray-200 text-center text-gray-500 text-sm">לחץ להוספה</div>
+              <div class="p-2 text-center text-gray-500 text-sm">לחץ להוספה</div>
+            </div>
+            <div class="grid grid-cols-4 bg-blue-50 hidden" id="row-expand-${i}">
+              <div class="p-2 border-l border-gray-200"></div>
+              <div class="p-2 border-l border-gray-200">
+                <textarea class="w-full min-h-14 p-2 rounded-lg border border-blue-200 focus:border-purple-400 focus:outline-none resize-none text-sm" placeholder="מה היא עושה?"></textarea>
+              </div>
+              <div class="p-2 border-l border-gray-200">
+                <textarea class="w-full min-h-14 p-2 rounded-lg border border-blue-200 focus:border-blue-400 focus:outline-none resize-none text-sm" placeholder="מה קורה במערכת?"></textarea>
+              </div>
+              <div class="p-2">
+                <textarea class="w-full min-h-14 p-2 rounded-lg border border-blue-200 focus:border-green-400 focus:outline-none resize-none text-sm" placeholder="מה הערך?"></textarea>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      tableBody.innerHTML = html;
+    }
+
+    function toggleRow(index) {
+      const expandRow = document.getElementById(`row-expand-${index}`);
+      if (expandRow) expandRow.classList.toggle('hidden');
+    }
+
+    // Element SDK integration
+    async function onConfigChange(config) {
+      const mainTitle = document.getElementById('main-title');
+      const subtitle = document.getElementById('subtitle');
+      if (mainTitle) mainTitle.textContent = config.main_title || defaultConfig.main_title;
+      if (subtitle) subtitle.textContent = config.subtitle || defaultConfig.subtitle;
+    }
+
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [
+          {
+            get: () => config.background_color || defaultConfig.background_color,
+            set: (value) => { config.background_color = value; window.elementSdk.setConfig({ background_color: value }); }
+          },
+          {
+            get: () => config.text_color || defaultConfig.text_color,
+            set: (value) => { config.text_color = value; window.elementSdk.setConfig({ text_color: value }); }
+          },
+          {
+            get: () => config.primary_color || defaultConfig.primary_color,
+            set: (value) => { config.primary_color = value; window.elementSdk.setConfig({ primary_color: value }); }
+          }
+        ],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      };
+    }
+
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ['main_title', config.main_title || defaultConfig.main_title],
+        ['subtitle', config.subtitle || defaultConfig.subtitle]
+      ]);
+    }
+
+    // Initialize
+    generateFlowTable();
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
+  </script>
+ </body>
+</html>

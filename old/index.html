@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>פורצות דרך | התחלת החקר</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Varela+Round&family=Rubik+Rounded:wght@700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    body{
+      margin:0;
+      font-family:'Varela Round', sans-serif;
+      background:#ffffff;
+      color:#1a1a1a;
+      line-height:1.6;
+      min-height:100vh;
+      overflow:hidden; /* ללא גלילה בדסקטופ */
+    }
+
+    header{
+      position:fixed;
+      top:0;
+      left:0;
+      right:0;
+      z-index:100;
+      background:linear-gradient(135deg, rgba(139,92,246,.92), rgba(236,72,153,.92));
+      padding:1rem 2rem;
+      backdrop-filter:saturate(110%) blur(2px);
+    }
+
+    .header-content{
+      max-width:1200px;
+      margin:auto;
+      display:flex;
+      justify-content:flex-start;
+      align-items:center;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:0.75rem;
+      color:white;
+      font-size:1.4rem;
+      font-weight:900;
+      font-family:'Rubik Rounded','Varela Round',sans-serif;
+      letter-spacing:0.04em;
+      text-decoration:none;
+      white-space:nowrap;
+    }
+
+    .brand-logo{
+      height:72px;
+      width:54px;
+      border-radius:16px;
+      object-fit:contain;
+      background:rgba(255,255,255,.9);
+      padding:3px;
+      box-shadow:0 6px 16px rgba(0,0,0,.18);
+    }
+
+    /* ===== HERO FULL SCREEN ===== */
+    .hero{
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding-top:110px; /* פיצוי על ההדר */
+      box-sizing:border-box;
+    }
+
+    .hero-box{
+      display:grid;
+      grid-template-columns:1.2fr 0.8fr; /* טקסט רחב, תמונה צרה */
+      gap:2rem;
+      max-width:900px;
+      width:100%;
+    }
+
+    .hero-square{
+      background:#ffffff;
+      border-radius:22px;
+      padding:2rem;
+      box-shadow:0 20px 40px rgba(0,0,0,.08);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      box-sizing:border-box;
+    }
+
+    .hero-image{
+      width:100%;
+      height:auto;
+      aspect-ratio:3 / 4; /* מלבן צר לגובה */
+      object-fit:contain;
+      border-radius:18px;
+      filter:drop-shadow(0 18px 36px rgba(139,92,246,.25));
+    }
+
+    .hero-content{
+      max-width:100%; /* הטקסט מותאם לריבוע */
+      text-align:center;
+    }
+
+    .hero-brand{
+      font-family:'Rubik Rounded','Varela Round',sans-serif;
+      font-size:clamp(2.4rem,4.5vw,3.4rem); /* מוקטן ומותאם לריבוע */
+      font-weight:900;
+      letter-spacing:0.04em;
+      margin-bottom:0.5rem;
+      background:linear-gradient(135deg,#ec4899,#8b5cf6);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+    }
+
+    .hero-title{
+      font-size:clamp(1.5rem,3.2vw,2rem); /* מוקטן */
+      font-weight:800;
+      margin-bottom:0.6rem;
+      color:#6d28d9;
+      font-family:'Rubik Rounded','Varela Round',sans-serif;
+    }
+
+    .hero-text{
+      font-size:1rem; /* מותאם לריבוע */
+      max-width:100%;
+      margin:0 auto 1.4rem;
+      color:#333;
+      line-height:1.5;
+    }
+
+    .cta-btn{
+      display:inline-block;
+      padding:0.45rem 1.2rem; /* הקטנה משמעותית */
+      font-size:0.9rem;       /* טקסט קטן יותר */
+      font-weight:600;
+      border-radius:999px;
+      text-decoration:none;
+      color:white;
+      background:linear-gradient(135deg,#8b5cf6,#ec4899);
+      box-shadow:0 6px 14px rgba(139,92,246,.25); /* צל עדין יותר */
+      transition:.25s;
+    }
+
+    .cta-btn:hover{
+      transform:translateY(-2px); /* תנועה עדינה בלבד */
+      box-shadow:0 8px 18px rgba(139,92,246,.35);
+    }
+
+    footer{
+      position:static; /* מחזיר התנהגות רגילה */
+      text-align:center;
+      padding:1rem;
+      font-size:0.85rem;
+      color:#666;
+    }
+
+    @media(max-width:900px){
+      body{
+        overflow:auto; /* במובייל כן לאפשר גלילה */
+      }
+      .hero{
+        padding-top:130px;
+      }
+      .hero-box{
+        flex-direction:column;
+        gap:1.8rem;
+      }
+      .hero-image{
+        width:100%;
+        max-width:300px;
+      }
+      footer{
+        position:static;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="header-content">
+    <div class="brand">
+      <img src="logo.png" alt="פורצות דרך" title="דף הבית" class="brand-logo">
+      פורצות דרך
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-box">
+    <div class="hero-square">
+      <div class="hero-content">
+        <div class="hero-brand">פורצות דרך</div>
+        <h1 class="hero-title">הדרך שלך לפרוץ קדימה</h1>
+        <p class="hero-text">
+          זהו מסע שמתחיל בך ומסתיים בשינוי המציאות.<br>
+          כאן לא רק לומדות על העתיד – כאן יוצרות אותו.
+        </p>
+        <a href="how.html#how" class="cta-btn">להתחלת החקר</a>
+      </div>
+    </div>
+
+    <div class="hero-square">
+      <img src="hero-image.png" alt="איור השראה – פורצות דרך" class="hero-image">
+    </div>
+  </div>
+</section>
+
+<footer>
+  © 2026 פורצות דרך
+</footer>
+
+</body>
+</html>

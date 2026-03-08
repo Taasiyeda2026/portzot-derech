@@ -1,0 +1,208 @@
+/* ==================================================
+   פורצות דרך – CSS מלא
+   סגנון: מודרני, צבעוני, חינוכי, לבנות נוער (15–16)
+   ================================================== */
+
+:root{
+  --purple:#7c3aed;
+  --pink:#ec4899;
+  --teal:#06b6d4;
+  --orange:#f59e0b;
+  --bg:#f4f6fb;
+  --white:#ffffff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --radius:24px;
+  --shadow:0 18px 40px rgba(0,0,0,.08);
+}
+
+/* ===== Reset ===== */
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+
+body{
+  font-family:'Heebo','Segoe UI',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.7;
+}
+
+img{max-width:100%;display:block}
+a{text-decoration:none;color:inherit}
+ul{list-style:none}
+
+/* ===== Layout ===== */
+.container{
+  max-width:1200px;
+  margin:0 auto;
+  padding:0 20px;
+}
+.center{text-align:center}
+
+/* ===== Accessibility ===== */
+.skip-link{
+  position:absolute;
+  top:-40px;
+  right:20px;
+  background:var(--purple);
+  color:#fff;
+  padding:8px 14px;
+  border-radius:8px;
+  z-index:1000;
+}
+.skip-link:focus{top:20px}
+
+/* ===== Header ===== */
+.site-header{
+  background:linear-gradient(135deg,var(--purple),var(--pink));
+  color:#fff;
+  padding:18px 0;
+}
+.header-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+.brand img{height:48px}
+.brand-title strong{font-size:22px;display:block}
+.brand-title span{font-size:13px;opacity:.85}
+
+.main-nav ul{
+  display:flex;
+  gap:20px;
+}
+.main-nav a{
+  font-weight:600;
+  font-size:15px;
+}
+
+.nav-toggle{display:none}
+
+/* ===== Hero ===== */
+.hero{
+  padding:90px 0 60px;
+}
+.hero h1{
+  font-size:44px;
+  font-weight:800;
+  margin-bottom:16px;
+}
+.hero-text{
+  font-size:18px;
+  max-width:560px;
+}
+
+.pill{
+  display:inline-block;
+  background:rgba(124,58,237,.15);
+  color:var(--purple);
+  font-weight:700;
+  padding:8px 18px;
+  border-radius:999px;
+  margin-bottom:18px;
+}
+
+/* ===== Sections ===== */
+.section{
+  padding:70px 0;
+}
+.section-title{
+  font-size:32px;
+  font-weight:800;
+  margin-bottom:10px;
+}
+.section-sub{
+  color:var(--muted);
+  margin-bottom:40px;
+  max-width:600px;
+}
+
+/* ===== Domain Grid ===== */
+.domains-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:32px;
+}
+
+/* ===== Domain Card ===== */
+.domain-card{
+  background:linear-gradient(180deg,#fff,#fdfdff);
+  border-radius:var(--radius);
+  padding:36px;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+.domain-card::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg,
+    rgba(124,58,237,.18),
+    rgba(236,72,153,.14));
+  opacity:.9;
+}
+.domain-card > *{position:relative;z-index:1}
+
+.domain-tag{
+  display:inline-block;
+  font-size:13px;
+  font-weight:800;
+  background:var(--purple);
+  color:#fff;
+  padding:6px 16px;
+  border-radius:999px;
+  margin-bottom:18px;
+}
+
+.domain-card h3{
+  font-size:26px;
+  margin-bottom:12px;
+}
+
+.domain-card p{
+  font-size:15px;
+  color:var(--muted);
+  margin-bottom:26px;
+}
+
+/* ===== Buttons ===== */
+.domain-btn{
+  display:inline-block;
+  padding:12px 30px;
+  border-radius:999px;
+  background:#fff;
+  color:var(--purple);
+  font-weight:800;
+  box-shadow:0 6px 18px rgba(0,0,0,.15);
+}
+.domain-btn:hover{
+  background:var(--purple);
+  color:#fff;
+}
+
+.domain-btn.big{
+  font-size:18px;
+  padding:16px 42px;
+}
+
+/* ===== Footer ===== */
+.footer{
+  background:#ebeefe;
+  padding:28px 0;
+  text-align:center;
+  font-size:14px;
+  color:var(--muted);
+}
+
+/* ===== Responsive ===== */
+@media (max-width:768px){
+  .hero h1{font-size:34px}
+  .section-title{font-size:26px}
+  .main-nav{display:none}
+}

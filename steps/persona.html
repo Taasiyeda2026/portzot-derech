@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+<meta charset="UTF-8">
+<title>פורצות דרך – בניית פרסונה</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600;700&family=Assistant:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="main/css/print.css" media="print">
+
+<style>
+body {
+    font-family: 'Assistant', sans-serif;
+    direction: rtl;
+    margin: 0;
+    background: #f3f4f6;
+    padding: 20px;
+}
+
+#formArea {
+    max-width: 850px;
+    margin: 0 auto;
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+h1 { color: #e91e63; font-family: 'Rubik'; text-align: center; }
+h2 { color: #00a7b5; border-bottom: 2px solid #eee; padding-bottom: 5px; margin-top: 30px; }
+
+label { display: block; font-weight: 600; margin-bottom: 8px; margin-top: 15px; }
+
+input[type="text"], textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.checkbox-list {
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 5px;
+}
+
+.checkbox-list label {
+    font-weight: normal;
+    display: block;
+    cursor: pointer;
+    margin: 5px 0;
+}
+
+button {
+    background: linear-gradient(90deg, #e91e63, #00a7b5);
+    color: white;
+    border: none;
+    padding: 18px;
+    font-size: 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 700;
+    width: 100%;
+    margin-top: 30px;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+</style>
+</head>
+
+<body>
+
+<div id="formArea">
+<h1>בניית פרסונה – פורצות דרך 🎀</h1>
+
+<div style="background: #fff0f5; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+<label>שמות חברות הצוות:</label>
+<input type="text" id="teamNames" placeholder="רשמו את שמות חברות הצוות">
+</div>
+
+<h2>חלק א' – מי היא?</h2>
+<div style="display:flex; gap:10px;">
+<div style="flex:2;">
+<label>שם הפרסונה:</label>
+<input type="text" id="name" placeholder="לדוגמה: נועה">
+</div>
+<div style="flex:1;">
+<label>גיל:</label>
+<input type="text" id="age" placeholder="16">
+</div>
+</div>
+
+<label>מה מאפיין את שגרת החיים שלה?</label>
+<div class="checkbox-list">
+<label><input type="checkbox" class="routine" value="תלמידה שמתמקדת בעיקר בלימודים"> תלמידה שמתמקדת בעיקר בלימודים</label>
+<label><input type="checkbox" class="routine" value="משלבת לימודים עם חוגים / אימונים"> משלבת לימודים עם חוגים / אימונים</label>
+<label><input type="checkbox" class="routine" value="פעילה בתנועת נוער / מסגרת חברתית"> פעילה בתנועת נוער / מסגרת חברתית</label>
+<label><input type="checkbox" class="routine" value="עובדת אחרי שעות הלימודים"> עובדת אחרי שעות הלימודים</label>
+<label><input type="checkbox" class="routine" value="לוקחת אחריות בבית (אחים / מטלות קבועות)"> לוקחת אחריות בבית (אחים / מטלות קבועות)</label>
+<div style="display:flex; align-items:center; gap:5px; margin-top:5px;">
+<span>אחר:</span>
+<input type="text" id="routineOther" style="margin:0; height:30px;">
+</div>
+</div>
+
+<label>כך נראית השגרה שלה בקצרה:</label>
+<textarea id="routineText" placeholder="תארו את היום שלה..."></textarea>
+
+<h2>חלק ב' – הסיטואציה שבה מופיעה הבעיה</h2>
+<label>איפה היא נמצאת רוב היום?</label>
+<div class="checkbox-list">
+<label><input type="checkbox" class="location" value="בבית הספר"> בבית הספר</label>
+<label><input type="checkbox" class="location" value="בבית"> בבית</label>
+<label><input type="checkbox" class="location" value="בתחבורה ציבורית"> בתחבורה ציבורית</label>
+<label><input type="checkbox" class="location" value="באימון / חוג"> באימון / חוג</label>
+<label><input type="checkbox" class="location" value="עם חברים"> עם חברים</label>
+<div style="display:flex; align-items:center; gap:5px; margin-top:5px;">
+<span>אחר:</span>
+<input type="text" id="locationOther" style="margin:0; height:30px;">
+</div>
+</div>
+
+<label>מתי הבעיה מופיעה? (זמן + מקום + מצב)</label>
+<textarea id="moment" placeholder="לדוגמה: כל בוקר בדרך לבית הספר..."></textarea>
+
+<label>מה קורה בפועל באותו רגע? (תיאור התנהגותי)</label>
+<textarea id="action" placeholder="תארו מה קורה..."></textarea>
+
+<h2>חלק ג' – עומק רגשי ותפקודי</h2>
+<label>מה היא מרגישה בסיטואציה הזו?</label>
+<textarea id="emotion" placeholder="לדוגמה: מתוסכלת, מבוישת..."></textarea>
+
+<label>איך זה משפיע עליה?</label>
+<div class="checkbox-list" style="display:flex; flex-wrap:wrap; gap:15px;">
+<label><input type="checkbox" class="impactType" value="לימודית"> לימודית</label>
+<label><input type="checkbox" class="impactType" value="חברתית"> חברתית</label>
+<label><input type="checkbox" class="impactType" value="רגשית"> רגשית</label>
+<label><input type="checkbox" class="impactType" value="ניהול זמן"> ניהול זמן</label>
+<div style="display:flex; align-items:center; gap:5px;">
+<span>אחר:</span>
+<input type="text" id="impactOther" style="margin:0; width:150px; height:30px;">
+</div>
+</div>
+
+<label>הסבר קצר על ההשפעה:</label>
+<textarea id="impactText" placeholder="הסבירו כיצד הבעיה משפיעה..."></textarea>
+
+<h2>חלק ד' – ניסוח יזמי מדויק</h2>
+<label>ציטוט שמייצג אותה:</label>
+<input type="text" id="quote" placeholder='"אני תמיד מאחרת..."'>
+
+<label>משפט הבעיה:</label>
+<div style="background:#f0f0f0; padding:15px; border-radius:8px;">
+נערות בגיל <input type="text" id="pAge" style="width:50px; margin:0;" placeholder="16"> אשר <input type="text" id="pWho" style="width:200px; margin:0;" placeholder="לומדות בתיכון"> <br><br>
+מתקשות ב-<input type="text" id="pDifficulty" style="width:200px; margin:0;" placeholder="ניהול זמן"> כאשר <input type="text" id="pWhen" style="width:200px; margin:0;" placeholder="משלבות פעילויות רבות">.
+</div>
+
+<button onclick="generatePDF()">🎀 הורדת PDF</button>
+</div>
+
+<!-- Hidden canvas for PDF generation -->
+<canvas id="pdfCanvas" style="display:none;"></canvas>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script>
+function getValues(className, otherId) {
+    let vals = Array.from(document.querySelectorAll('.' + className + ':checked')).map(cb => cb.value);
+    let other = document.getElementById(otherId).value.trim();
+    if (other) vals.push(other);
+    return vals.length > 0 ? vals.join(', ') : 'לא צוין';
+}
+
+async function generatePDF() {
+    const team = document.getElementById('teamNames').value.trim() || 'לא צוין';
+    const name = document.getElementById('name').value.trim() || 'לא צוין';
+    const age = document.getElementById('age').value.trim() || 'לא צוין';
+    const routine = getValues('routine', 'routineOther');
+    const routineText = document.getElementById('routineText').value.trim() || 'לא צוין';
+    const location = getValues('location', 'locationOther');
+    const moment = document.getElementById('moment').value.trim() || 'לא צוין';
+    const action = document.getElementById('action').value.trim() || 'לא צוין';
+    const emotion = document.getElementById('emotion').value.trim() || 'לא צוין';
+    const impactType = getValues('impactType', 'impactOther');
+    const impactText = document.getElementById('impactText').value.trim() || 'לא צוין';
+    const quote = document.getElementById('quote').value.trim() || 'לא צוין';
+
+    const pAge = document.getElementById('pAge').value.trim() || '___';
+    const pWho = document.getElementById('pWho').value.trim() || '___';
+    const pDifficulty = document.getElementById('pDifficulty').value.trim() || '___';
+    const pWhen = document.getElementById('pWhen').value.trim() || '___';
+
+    const problemSentence = `נערות בגיל ${pAge} אשר ${pWho} מתקשות ב-${pDifficulty} כאשר ${pWhen}.`;
+
+    // Load image as base64
+    let imgData = '';
+    try {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        await new Promise((resolve, reject) => {
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0);
+                imgData = canvas.toDataURL('image/png');
+                resolve();
+            };
+            img.onerror = () => {
+                console.log('Could not load image');
+                resolve(); // Continue without image
+            };
+            img.src = 'girl.png';
+        });
+    } catch(e) {
+        console.log('Image error:', e);
+    }
+
+    // Create PDF content div
+    const pdfDiv = document.createElement('div');
+    pdfDiv.style.width = '800px';
+    pdfDiv.style.padding = '40px';
+    pdfDiv.style.background = 'white';
+    pdfDiv.style.fontFamily = 'Arial, sans-serif';
+    pdfDiv.style.direction = 'rtl';
+    pdfDiv.style.position = 'absolute';
+    pdfDiv.style.right = '0';
+    pdfDiv.style.top = '0';
+
+    pdfDiv.innerHTML = `
+      <div style="direction:rtl;color:#1f2937;font-family:'Assistant',Arial,sans-serif;font-size:14px;line-height:1.55;">
+        <div style="background:linear-gradient(135deg,#fbcfe8,#f5d0fe 45%,#bae6fd);border:1px solid #d8b4fe;border-radius:10px;padding:12px 14px;margin-bottom:12px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px;">
+            <div>
+              <div style="color:#1e3a8a;font-size:24px;font-weight:800;">פורצות דרך</div>
+              <div style="color:#c026d3;font-size:14px;font-weight:700;">פרסונה — דף עבודה</div>
+            </div>
+            <img src="/favicon.png" style="width:42px;height:42px;border-radius:50%;border:2px solid white;background:white;" alt="פורצות דרך" />
+          </div>
+          <div style="background:rgba(255,255,255,.8);border:1px solid #f9a8d4;border-radius:8px;padding:8px 10px;color:#334155;font-size:12px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+            <div><strong>משתתפות:</strong> ${team}</div>
+            <div><strong>קבוצה:</strong> ____________________</div>
+            <div><strong>תאריך:</strong> ____________________</div>
+          </div>
+        </div>
+
+        <div style="border:1px solid #fbcfe8;border-right:5px solid #ec4899;border-radius:10px;padding:12px 14px;margin-bottom:12px;">
+          <h1 style="margin:0 0 6px;color:#1e3a8a;font-size:24px;line-height:1.25;font-weight:800;">הגדרת פרסונה</h1>
+          <h2 style="margin:0;color:#c026d3;font-size:18px;font-weight:700;">${name} | גיל: ${age}</h2>
+        </div>
+
+        <div style="background:#e0f2fe;border:1px solid #cbd5e1;border-right:4px solid #38bdf8;border-radius:10px;padding:12px;margin-bottom:10px;">
+          <strong style="color:#1e3a8a;">הסבר:</strong> מחדדות מי המשתמשת שלנו, מה הקושי שלה, ומה המשפט היזמי המדויק שמכוון לפתרון.
+        </div>
+
+        <div style="background:#fdf4ff;border:1px solid #cbd5e1;border-right:4px solid #c026d3;border-radius:10px;padding:12px;margin-bottom:10px;">
+          <div style="color:#ec4899;font-weight:700;margin-bottom:6px;">שאלה / משימה: שגרה ואתגר</div>
+          <p style="margin:0 0 6px;"><strong>שגרת חיים:</strong> ${routine}</p>
+          <p style="margin:0;">${routineText}</p>
+        </div>
+
+        <div style="background:#fdf4ff;border:1px solid #cbd5e1;border-right:4px solid #c026d3;border-radius:10px;padding:12px;margin-bottom:10px;">
+          <div style="color:#ec4899;font-weight:700;margin-bottom:6px;">שאלה / משימה: הקשר הבעיה</div>
+          <p style="margin:0 0 6px;"><strong>מיקומים:</strong> ${location}</p>
+          <p style="margin:0 0 6px;"><strong>מתי:</strong> ${moment}</p>
+          <p style="margin:0;"><strong>מה קורה בפועל:</strong> ${action}</p>
+        </div>
+
+        <div style="background:#f8fafc;border:1.5px solid #94a3b8;border-radius:10px;padding:12px;min-height:52px;margin-bottom:10px;">
+          <div style="color:#ec4899;font-weight:700;margin-bottom:6px;">תיבת תשובה קצרה</div>
+          <p style="margin:0;"><strong>רגש:</strong> ${emotion} | <strong>השפעה:</strong> ${impactType}</p>
+        </div>
+
+        <div style="background:#f8fafc;border:1.5px solid #94a3b8;border-radius:10px;padding:12px;min-height:120px;margin-bottom:10px;">
+          <div style="color:#ec4899;font-weight:700;margin-bottom:6px;">תיבת תשובה ארוכה</div>
+          <p style="margin:0 0 6px;">${impactText}</p>
+          <p style="margin:0;font-style:italic;">"${quote}"</p>
+        </div>
+
+        <div style="background:#ffedd5;border:1px solid #fdba74;border-right:4px solid #fb923c;border-radius:10px;padding:10px 12px;margin-bottom:10px;">
+          <strong style="color:#1e3a8a;">מסר חשוב:</strong> ${problemSentence}
+        </div>
+
+        <div style="display:flex;gap:20px;align-items:flex-end;">
+          <div style="flex:1;"></div>
+          <div style="width:210px;text-align:center;">${imgData ? `<img src="${imgData}" style="max-width:100%;height:auto;max-height:260px;">` : ''}</div>
+        </div>
+
+        <div style="text-align:center;color:#64748b;font-size:11px;margin-top:12px;padding-top:8px;border-top:1px solid #e2e8f0;">© 2026 פורצות דרך</div>
+      </div>
+    `;
+
+    document.body.appendChild(pdfDiv);
+
+    try {
+        const canvas = await html2canvas(pdfDiv, {
+            scale: 2,
+            useCORS: true,
+            allowTaint: true,
+            backgroundColor: '#ffffff',
+            windowWidth: 800
+        });
+
+        const imgWidth = 210; // A4 width in mm
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        
+        const imgDataUrl = canvas.toDataURL('image/png');
+        pdf.addImage(imgDataUrl, 'PNG', 0, 0, imgWidth, imgHeight);
+        
+        pdf.save(`persona_${name}_${Date.now()}.pdf`);
+        
+        document.body.removeChild(pdfDiv);
+    } catch (err) {
+        console.error('Error generating PDF:', err);
+        alert('שגיאה ביצירת PDF: ' + err.message);
+        document.body.removeChild(pdfDiv);
+    }
+}
+</script>
+
+</body>
+</html>

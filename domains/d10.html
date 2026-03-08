@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="he" dir="rtl" class="h-full">
+ <head>
+  <link rel="icon" type="image/png" href="../icon/favicon.png">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#ec4899">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="apple-touch-icon" href="/main/icon/favicon.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>מחשבות על עתיד | מרחב חקר</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&amp;family=Varela+Round&amp;display=swap" rel="stylesheet">
+  <style>
+    body { box-sizing: border-box; }
+    * { font-family: 'Heebo', 'Varela Round', sans-serif; }
+    .gradient-text {
+      background: linear-gradient(135deg, #6366f1, #8b5cf6, #a855f7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-pattern {
+      background-image: 
+        radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 20%, rgba(168, 85, 247, 0.08) 0%, transparent 50%);
+    }
+    .future-card {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .future-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 40px -12px rgba(99, 102, 241, 0.25);
+    }
+    @keyframes float-stars {
+      0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.6; }
+      50% { transform: translateY(-10px) rotate(10deg); opacity: 1; }
+    }
+    .float-stars { animation: float-stars 3s ease-in-out infinite; }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.3); }
+    }
+    .twinkle { animation: twinkle 2s ease-in-out infinite; }
+    .reflection-card {
+      background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+      border-right: 4px solid #6366f1;
+    }
+    .experiment-card {
+      background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+      border-right: 4px solid #8b5cf6;
+    }
+    .insight-card {
+      background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+      border-right: 4px solid #a855f7;
+    }
+    .fear-card {
+      background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+      border-right: 4px solid #ef4444;
+    }
+    .dream-card {
+      background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+      border-right: 4px solid #10b981;
+    }
+    .scroll-indicator { animation: bounce 2s infinite; }
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-10px); }
+      60% { transform: translateY(-5px); }
+    }
+    .nav-link { position: relative; }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      right: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #6366f1, #a855f7);
+      transition: width 0.3s ease;
+    }
+    .nav-link:hover::after { width: 100%; }
+    .tip-card {
+      background: white;
+      border-right: 3px solid #8b5cf6;
+      transition: all 0.3s ease;
+    }
+    .tip-card:hover {
+      border-right-width: 6px;
+      transform: translateX(-3px);
+      box-shadow: 0 8px 16px -4px rgba(139, 92, 246, 0.2);
+    }
+  .nav-3d-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      width: 70px;
+      height: 54px;
+      padding: 6px 4px;
+      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+      border-radius: 12px;
+      box-shadow: 0 4px 0 rgba(100, 100, 100, 0.2), 0 6px 12px rgba(0, 0, 0, 0.1);
+      transition: all 0.15s ease;
+      text-decoration: none;
+    }
+    .nav-3d-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 rgba(100, 100, 100, 0.2), 0 10px 20px rgba(0, 0, 0, 0.12);
+    }
+    .nav-3d-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 rgba(100, 100, 100, 0.2), 0 3px 6px rgba(0, 0, 0, 0.08);
+    }
+    .nav-3d-btn .nav-icon { font-size: 1.2rem; }
+    .nav-3d-btn .nav-label { font-size: 11px; font-weight: 600; color: #374151; }
+    
+    @media (max-width: 768px) {
+      .nav-3d-btn { width: 48px; height: 42px; padding: 4px 2px; gap: 2px; }
+      .nav-3d-btn .nav-icon { font-size: 1rem; }
+      .nav-3d-btn .nav-label { font-size: 9px; }
+      #nav-title { font-size: 14px !important; }
+    }
+    @media (max-width: 480px) {
+      .nav-3d-btn { width: 40px; height: 36px; }
+      .nav-3d-btn .nav-label { display: none; }
+      #nav-title { display: none; }
+    }
+    
+    /* Scroll Lock Mechanism */
+    .scroll-locked {
+      overflow: hidden !important;
+      height: 100vh !important;
+    }
+    .scroll-locked .content-locked {
+      display: none !important;
+    }
+    .scroll-unlocked .content-locked {
+      display: block;
+    }
+  </style>
+ </head>
+ <body class="h-full min-h-screen bg-gray-100 overflow-x-hidden"><div class="max-w-5xl mx-auto shadow-2xl rounded-lg my-4 bg-gradient-to-b from-white via-indigo-50/20 to-violet-50/20 text-gray-800 overflow-visible">
+  <nav class="fixed top-0 left-1/2 transform -translate-x-1/2 w-full max-w-5xl z-50 bg-white/80 backdrop-blur-md border-b border-indigo-100/50">
+   <div class="max-w-6xl mx-auto px-6 py-4">
+    <div class="flex items-center justify-between">
+     <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-400 to-violet-500 flex items-center justify-center"><span class="text-2xl">🔮</span></div>
+      <span class="text-xl font-bold gradient-text">מחשבות על עתיד</span>
+     </div>
+     <div class="flex items-center gap-1 md:gap-3">
+      <a href="#confusion" class="nav-3d-btn"><span class="nav-icon">🤔</span><span class="nav-label">בלבול</span></a>
+      <a href="#fears" class="nav-3d-btn"><span class="nav-icon">😰</span><span class="nav-label">פחדים</span></a>
+      <a href="#dreams" class="nav-3d-btn"><span class="nav-icon">✨</span><span class="nav-label">חלומות</span></a>
+      <a href="#pressure" class="nav-3d-btn"><span class="nav-icon">⏰</span><span class="nav-label">לחץ</span></a>
+      <a href="#present" class="nav-3d-btn"><span class="nav-icon">🌸</span><span class="nav-label">ההווה</span></a>
+      <a href="main/domains/alldomains.html" class="nav-3d-btn"><span class="nav-icon">🏠</span><span class="nav-label">לתחומים</span></a>
+     </div>
+    </div>
+   </div>
+    </div>
+   </div>
+ </nav>
+ 
+
+  <section class="h-screen flex items-center justify-center px-6 pt-16 pb-8 relative overflow-hidden hero-pattern">
+   <div class="absolute top-20 right-10 w-64 h-64 bg-indigo-200/30 rounded-full blur-3xl float-stars"></div>
+   <div class="absolute bottom-20 left-10 w-80 h-80 bg-violet-200/30 rounded-full blur-3xl float-stars" style="animation-delay: 2s;"></div>
+   <div class="max-w-4xl mx-auto text-center relative z-10">
+    <div class="mb-6 flex justify-center">
+     <svg class="w-40 h-40 md:w-48 md:h-48" viewBox="0 0 200 200" fill="none">
+      <circle cx="100" cy="100" r="70" fill="#e0e7ff" opacity="0.4"/>
+      <path d="M100 30 L100 170" stroke="#6366f1" stroke-width="2" stroke-dasharray="5,5" opacity="0.3"/>
+      <circle cx="100" cy="50" r="15" fill="#c7d2fe" stroke="#6366f1" stroke-width="2"/>
+      <text x="100" y="55" font-size="12" fill="#4f46e5" text-anchor="middle">עכשיו</text>
+      <circle cx="100" cy="100" r="20" fill="#a5b4fc" stroke="#6366f1" stroke-width="2"/>
+      <text x="100" y="105" font-size="11" fill="#4338ca" text-anchor="middle">קרוב</text>
+      <circle cx="100" cy="155" r="25" fill="#818cf8" stroke="#6366f1" stroke-width="2"/>
+      <text x="100" y="160" font-size="12" fill="#fff" text-anchor="middle">עתיד</text>
+      <circle cx="50" cy="70" r="4" fill="#fbbf24" class="twinkle"/>
+      <circle cx="150" cy="80" r="3" fill="#f472b6" class="twinkle" style="animation-delay: 0.5s"/>
+      <circle cx="45" cy="130" r="3" fill="#34d399" class="twinkle" style="animation-delay: 1s"/>
+      <circle cx="160" cy="140" r="4" fill="#a855f7" class="twinkle" style="animation-delay: 1.5s"/>
+      <path d="M70 90 Q60 100 70 110" stroke="#8b5cf6" stroke-width="2" fill="none" opacity="0.5"/>
+      <path d="M130 85 Q140 100 130 115" stroke="#8b5cf6" stroke-width="2" fill="none" opacity="0.5"/>
+     </svg>
+    </div>
+    <h1 class="text-4xl md:text-6xl font-bold mb-4 leading-tight"><span class="gradient-text">מחשבות על עתיד</span></h1>
+    <p class="text-lg md:text-xl text-gray-600 mb-6 leading-relaxed max-w-2xl mx-auto">על עבודה, לימודים, פחדים, חלומות והבלבול שביניהם</p>
+    <div class="bg-white/60 backdrop-blur-sm rounded-2xl p-5 mb-6 shadow-lg max-w-3xl mx-auto border border-indigo-100">
+     <p class="text-lg text-gray-700 leading-relaxed">"מה את רוצה להיות כשתגדלי?" שאלה שאת כנראה שומעת הרבה. לפעמים יש תשובה ברורה, לפעמים אין מושג, <strong>ולפעמים יש יותר מדי אפשרויות</strong>.</p>
+     <p class="text-lg text-gray-700 leading-relaxed mt-4">העתיד יכול להרגיש מרגש ומפחיד באותו זמן. <em>חלומות גדולים, פחדים מחלחלים, לחץ להחליט, ובלבול עמוק.</em> בואי נדבר על כל אלה — בלי לחץ, בלי ציפיות.</p>
+    </div>
+    <a href="#confusion" class="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-500 to-violet-500 text-white px-8 py-4 rounded-full font-medium hover:shadow-lg hover:shadow-indigo-500/25 transition-all duration-300">
+     בואי נחקור ביחד <svg class="w-5 h-5 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+    </a>
+   </div>
+  </section><!-- Content Sections (locked until button click) -->
+  <div id="locked-content" class="content-locked">
+  <section id="confusion" class="py-24 px-6 bg-white">
+   <div class="max-w-5xl mx-auto">
+    <div class="flex items-center gap-4 mb-12">
+     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-gray-100 to-slate-200 flex items-center justify-center"><span class="text-3xl">🌫️</span></div>
+     <div>
+      <span class="text-sm font-medium text-gray-500 tracking-wide">שלב ראשון</span>
+      <h2 class="text-4xl font-bold text-gray-800">הבלבול — זה נורמלי</h2>
+     </div>
+    </div>
+    <p class="text-xl text-gray-600 mb-12 max-w-3xl">"אני לא יודעת מה אני רוצה לעשות בחיים" — אם זה מה שאת מרגישה, את בחברה טובה. רוב האנשים מרגישים ככה.</p>
+    <div class="grid md:grid-cols-2 gap-8 mb-12">
+     <div class="future-card bg-gradient-to-br from-slate-50 to-gray-50 rounded-2xl p-8 border border-gray-100">
+      <h3 class="text-2xl font-bold text-gray-800 mb-6">למה יש בלבול?</h3>
+      <ul class="space-y-4">
+       <li class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-full bg-indigo-200 flex items-center justify-center mt-1 shrink-0"><span class="text-indigo-800 text-sm">🌍</span></div>
+        <div><p class="font-medium text-gray-800">יותר מדי אפשרויות</p><p class="text-sm text-gray-600">פעם היו פחות מקצועות, פחות אופציות. היום יש אינסוף — וזה מבלבל.</p></div>
+       </li>
+       <li class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-full bg-violet-200 flex items-center justify-center mt-1 shrink-0"><span class="text-violet-800 text-sm">🔄</span></div>
+        <div><p class="font-medium text-gray-800">העולם משתנה</p><p class="text-sm text-gray-600">מקצועות חדשים נוצרים, ישנים נעלמים. קשה לתכנן כשהמפה משתנה.</p></div>
+       </li>
+       <li class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-full bg-purple-200 flex items-center justify-center mt-1 shrink-0"><span class="text-purple-800 text-sm">🧠</span></div>
+        <div><p class="font-medium text-gray-800">את עדיין מתפתחת</p><p class="text-sm text-gray-600">בגיל שלך, הזהות עדיין נבנית. איך להחליט על עתיד כשעוד לא ברור מי את?</p></div>
+       </li>
+      </ul>
+     </div>
+     <div class="space-y-6">
+      <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+       <h3 class="text-xl font-semibold text-gray-800 mb-4">חדשות טובות</h3>
+       <p class="text-gray-700 mb-3">רוב האנשים לא יודעים מה הם רוצים לעשות עד שהם עושים את זה. <strong>הדרך מגלה את המטרה</strong> — לא להפך.</p>
+       <p class="text-gray-700">לא צריך לדעת הכל עכשיו. את צריכה רק את הצעד הבא.</p>
+      </div>
+      <div class="reflection-card rounded-xl p-6">
+       <div class="flex items-start gap-4"><span class="text-2xl">💭</span><div><h4 class="font-bold text-gray-800 mb-2">שאלה לחשיבה</h4><p class="text-gray-700">מה מעניין אותך עכשיו — לא מה שאת "אמורה" לרצות, אלא מה באמת מושך אותך?</p></div></div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </section>
+
+  <section id="fears" class="py-24 px-6 bg-gradient-to-br from-rose-50/50 to-red-50/50">
+   <div class="max-w-5xl mx-auto">
+    <div class="flex items-center gap-4 mb-12">
+     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-red-100 to-rose-200 flex items-center justify-center"><span class="text-3xl">😰</span></div>
+     <div>
+      <span class="text-sm font-medium text-red-500 tracking-wide">שלב שני</span>
+      <h2 class="text-4xl font-bold text-gray-800">הפחדים — בואי נדבר עליהם</h2>
+     </div>
+    </div>
+    <div class="grid md:grid-cols-2 gap-6 mb-12">
+     <div class="fear-card rounded-xl p-6"><h4 class="font-bold text-gray-800 mb-3">😟 הפחד לא להצליח</h4><p class="text-gray-700">"מה אם אני לא מספיק טובה? מה אם אני אכשל?" — פחד נפוץ, אבל הצלחה לא נראית אותו דבר לכולם.</p></div>
+     <div class="fear-card rounded-xl p-6"><h4 class="font-bold text-gray-800 mb-3">😣 הפחד לבחור לא נכון</h4><p class="text-gray-700">"מה אם אני אתחרט?" — אבל כמעט כל בחירה ניתנת לשינוי. הדרך לא חייבת להיות ישרה.</p></div>
+     <div class="fear-card rounded-xl p-6"><h4 class="font-bold text-gray-800 mb-3">😔 הפחד לאכזב אחרים</h4><p class="text-gray-700">"מה ההורים יגידו? מה אנשים יחשבו?" — הציפיות של אחרים יכולות להכביד מאוד.</p></div>
+     <div class="fear-card rounded-xl p-6"><h4 class="font-bold text-gray-800 mb-3">😨 הפחד מהלא נודע</h4><p class="text-gray-700">"אני לא יודעת מה מחכה לי" — וזה נכון. אף אחד לא יודע. וזה גם יכול להיות מרגש.</p></div>
+    </div>
+    <div class="bg-white rounded-2xl p-8 shadow-lg">
+     <h3 class="text-2xl font-bold text-gray-800 mb-6">מה עושים עם הפחד?</h3>
+     <p class="text-lg text-gray-700 leading-relaxed mb-4">פחד הוא לא אויב — הוא אות שמשהו חשוב לך. הבעיה היא כשהפחד <strong>משתק</strong> במקום להניע.</p>
+     <p class="text-lg text-gray-700 leading-relaxed">הטריק הוא לא להמתין שהפחד ייעלם, אלא <em>לעשות דברים למרות הפחד</em>. צעדים קטנים, בלי לחכות לוודאות מלאה.</p>
+    </div>
+   </div>
+  </section>
+
+  <section id="dreams" class="py-24 px-6 bg-white">
+   <div class="max-w-5xl mx-auto">
+    <div class="flex items-center gap-4 mb-12">
+     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-100 to-teal-200 flex items-center justify-center"><span class="text-3xl">✨</span></div>
+     <div>
+      <span class="text-sm font-medium text-emerald-500 tracking-wide">שלב שלישי</span>
+      <h2 class="text-4xl font-bold text-gray-800">החלומות — מה שמושך אותך</h2>
+     </div>
+    </div>
+    <div class="grid md:grid-cols-2 gap-8 mb-12">
+     <div class="space-y-6">
+      <p class="text-lg text-gray-700 leading-relaxed">חלומות יכולים להיות גדולים ("אני רוצה לשנות את העולם") או קטנים ("אני רוצה עבודה שמאפשרת לי לטייל"). <strong>שניהם לגיטימיים</strong>.</p>
+      <p class="text-lg text-gray-700 leading-relaxed">לפעמים החלום ברור, לפעמים הוא עדיין ערפילי. שניהם בסדר. החלום יכול להתבהר תוך כדי תנועה.</p>
+      <div class="dream-card rounded-xl p-6">
+       <div class="flex items-start gap-4"><span class="text-2xl">🌱</span><div><h4 class="font-bold text-gray-800 mb-2">תובנה חשובה</h4><p class="text-gray-700">חלום לא חייב להיות "מה אני רוצה להיות". הוא יכול להיות "איך אני רוצה לחיות" — איזה סוג חיים, איזה ערכים, איזו הרגשה.</p></div></div>
+      </div>
+     </div>
+     <div class="future-card bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-8 border border-emerald-100">
+      <h3 class="text-xl font-bold text-gray-800 mb-6">שאלות לגילוי חלומות</h3>
+      <ul class="space-y-4">
+       <li class="flex items-start gap-3"><span class="text-xl">🎯</span><p class="text-gray-700">מה היית עושה אם ידעת שאי אפשר להיכשל?</p></li>
+       <li class="flex items-start gap-3"><span class="text-xl">💫</span><p class="text-gray-700">במה את יכולה להיות שקועה שעות בלי לשים לב לזמן?</p></li>
+       <li class="flex items-start gap-3"><span class="text-xl">🌟</span><p class="text-gray-700">מי האנשים שאת מקנאה בהם (קצת)? מה יש להם שאת רוצה?</p></li>
+       <li class="flex items-start gap-3"><span class="text-xl">💭</span><p class="text-gray-700">אילו בעיות בעולם את הכי רוצה לפתור?</p></li>
+      </ul>
+     </div>
+    </div>
+   </div>
+  </section>
+
+  <section id="pressure" class="py-24 px-6 bg-gradient-to-br from-amber-50/50 to-orange-50/50">
+   <div class="max-w-5xl mx-auto">
+    <div class="flex items-center gap-4 mb-12">
+     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-100 to-orange-200 flex items-center justify-center"><span class="text-3xl">⏰</span></div>
+     <div>
+      <span class="text-sm font-medium text-amber-500 tracking-wide">שלב רביעי</span>
+      <h2 class="text-4xl font-bold text-gray-800">הלחץ להחליט</h2>
+     </div>
+    </div>
+    <div class="bg-white rounded-2xl p-8 shadow-lg mb-8">
+     <p class="text-lg text-gray-700 leading-relaxed mb-4">"את צריכה להחליט עכשיו." "את צריכה לדעת מה את רוצה." "את מבזבזת זמן." — הודעות כאלה מגיעות מכל הכיוונים.</p>
+     <p class="text-lg text-gray-700 leading-relaxed mb-4"><strong>אבל האמת היא:</strong> את לא חייבת להחליט הכל היום. ואת לא מבזבזת זמן אם את חוקרת, מנסה, משתנה.</p>
+     <p class="text-lg text-gray-700 leading-relaxed">הדור של ההורים שלך חי בעולם אחר. היום, רוב האנשים משנים כיוון כמה פעמים בחיים. <em>זה הנורמל החדש</em>.</p>
+    </div>
+    <div class="grid md:grid-cols-3 gap-6">
+     <div class="tip-card rounded-xl p-6"><span class="text-3xl mb-4 block">🎓</span><h4 class="font-bold text-gray-800 mb-2">לימודים</h4><p class="text-gray-600 text-sm">אפשר ללמוד דבר אחד ולעבוד במשהו אחר. אפשר לשנות כיוון. אפשר ללמוד מאוחר יותר.</p></div>
+     <div class="tip-card rounded-xl p-6"><span class="text-3xl mb-4 block">💼</span><h4 class="font-bold text-gray-800 mb-2">עבודה</h4><p class="text-gray-600 text-sm">עבודה ראשונה לא חייבת להיות עבודת החלומות. היא יכולה להיות ניסיון, לימוד, צעד בדרך.</p></div>
+     <div class="tip-card rounded-xl p-6"><span class="text-3xl mb-4 block">🛤️</span><h4 class="font-bold text-gray-800 mb-2">הדרך</h4><p class="text-gray-600 text-sm">הדרך לא צריכה להיות ישרה. עקומות, סיבובים, ונסיגות — כולם חלק מהמסע.</p></div>
+    </div>
+   </div>
+  </section>
+
+  <section id="present" class="py-24 px-6 bg-white">
+   <div class="max-w-5xl mx-auto">
+    <div class="flex items-center gap-4 mb-12">
+     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-100 to-blue-200 flex items-center justify-center"><span class="text-3xl">🌸</span></div>
+     <div>
+      <span class="text-sm font-medium text-cyan-500 tracking-wide">שלב חמישי</span>
+      <h2 class="text-4xl font-bold text-gray-800">להיות בהווה</h2>
+     </div>
+    </div>
+    <div class="grid md:grid-cols-2 gap-8 mb-12">
+     <div class="space-y-6">
+      <p class="text-lg text-gray-700 leading-relaxed">העתיד חשוב, אבל את חיה <strong>עכשיו</strong>. ואם את כל הזמן מודאגת מהעתיד — את מפספסת את ההווה.</p>
+      <p class="text-lg text-gray-700 leading-relaxed">הדבר הכי חשוב שאת יכולה לעשות לעתיד שלך הוא <em>לחיות טוב את ההווה</em>: ללמוד דברים שמעניינים אותך, לטפח קשרים, לנסות דברים חדשים.</p>
+      <div class="insight-card rounded-xl p-6">
+       <div class="flex items-start gap-4"><span class="text-2xl">✨</span><div><h4 class="font-bold text-gray-800 mb-2">מילה אחרונה</h4><p class="text-gray-700">העתיד שלך לא צריך להיות מושלם מתוכנן. הוא צריך להיות <strong>שלך</strong> — מתגלה צעד אחר צעד, עם סקרנות ופתיחות.</p></div></div>
+      </div>
+     </div>
+     <div class="bg-gradient-to-br from-cyan-50 to-blue-50 rounded-2xl p-8 border border-cyan-100">
+      <h3 class="text-xl font-bold text-gray-800 mb-6">מה לעשות עכשיו?</h3>
+      <ul class="space-y-4">
+       <li class="flex items-start gap-3"><span class="text-xl">🔍</span><p class="text-gray-700">לחקור — לקרוא, לשאול, לנסות דברים חדשים</p></li>
+       <li class="flex items-start gap-3"><span class="text-xl">💬</span><p class="text-gray-700">לדבר עם אנשים שעושים דברים מעניינים</p></li>
+       <li class="flex items-start gap-3"><span class="text-xl">📝</span><p class="text-gray-700">לכתוב את המחשבות שלך — בלי לחפש תשובות</p></li>
+       <li class="flex items-start gap-3"><span class="text-xl">🌱</span><p class="text-gray-700">לאפשר לעצמך לא לדעת — ולהמשיך בכל זאת</p></li>
+      </ul>
+     </div>
+    </div>
+    <div class="bg-gradient-to-r from-indigo-500 to-violet-500 rounded-2xl p-8 text-white text-center">
+     <h3 class="text-2xl font-bold mb-4">המשימה שלך השבוע</h3>
+     <p class="text-lg opacity-90 mb-6">שאלי מישהי בוגרת — אמא, דודה, מורה — איך נראתה הדרך שלה לעבודה שלה היום. רוב הסיכויים שתשמעי סיפור מפתיע, עם הרבה סיבובים לא מתוכננים.</p>
+     <a href="index.html" class="inline-flex items-center gap-2 bg-white text-indigo-600 px-6 py-3 rounded-full font-medium hover:bg-indigo-50 transition-colors">חזרה לדף הבית <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg></a>
+    </div>
+   </div>
+  </section>
+  </div><!-- End locked-content -->
+
+  <!-- Footer -->
+  <footer class="py-12 px-6 bg-gradient-to-r from-indigo-500 to-purple-500 text-white">
+   <div class="max-w-5xl mx-auto text-center">
+    <div class="flex items-center justify-center gap-3 mb-6">
+     <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+      <span class="text-2xl">🔮</span>
+     </div><span class="text-2xl font-bold">מחשבות על עתיד</span>
+    </div>
+    <p class="text-white/80 text-lg mb-4">מסע חקר להבנת החלומות והשאיפות שלך</p>
+    <p class="text-white/60 text-sm">תוכנית חינוכית לנערות | מתוך סקרנות, אומץ וחלומות</p>
+    <p class="text-white/50 text-xs mt-4">© 2026 פורצות דרך</p>
+   </div>
+  </footer>
+ </div>
+<script src="js/scroll-lock.js"></script>
+</div></body>
+</html>

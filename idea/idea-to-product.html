@@ -1,0 +1,1752 @@
+<!doctype html>
+<html lang="he" dir="rtl" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>זה התחיל ממשהו קטן</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    * {
+      font-family: 'Rubik', sans-serif;
+    }
+    
+    .gradient-text {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .stem-card {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .stem-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    }
+    
+    .floating-emoji {
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    .pulse-btn {
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(236, 72, 153, 0.4); }
+      50% { box-shadow: 0 0 0 15px rgba(236, 72, 153, 0); }
+    }
+    
+    .section-divider {
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--primary-color), var(--secondary-color), transparent);
+    }
+    
+    :root {
+      --primary-color: #ec4899;
+      --secondary-color: #8b5cf6;
+      --bg-color: #fdf4ff;
+      --text-color: #1f2937;
+      --surface-color: #ffffff;
+    }
+  </style>
+ </head>
+ <body class="h-full">
+  <!-- Navigation Header -->
+  <nav class="fixed top-0 left-1/2 transform -translate-x-1/2 w-full max-w-5xl z-50 bg-white/80 backdrop-blur-md border-b border-pink-100/50">
+   <div class="max-w-6xl mx-auto px-6 py-4">
+    <div class="flex items-center justify-between">
+     <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-full bg-gradient-to-br from-pink-500 to-purple-500 flex items-center justify-center">
+       <span class="text-xl">💡</span>
+      </div>
+      <span class="text-xl font-bold gradient-text">מרעיון למוצר</span>
+     </div>
+     <div class="flex items-center gap-1 md:gap-3">
+      <a href="index.html" class="nav-3d-btn"><span class="nav-icon">🏠</span><span class="nav-label">לדף הבית</span></a>
+     </div>
+    </div>
+   </div>
+  </nav>
+  <style>
+    .nav-3d-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 12px;
+      background: linear-gradient(145deg, #ffffff, #f3e8ff);
+      border-radius: 12px;
+      box-shadow: 3px 3px 6px rgba(0,0,0,0.1), -2px -2px 5px rgba(255,255,255,0.8);
+      transition: all 0.2s ease;
+      text-decoration: none;
+      min-width: 60px;
+    }
+    .nav-3d-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 4px 4px 10px rgba(0,0,0,0.15), -2px -2px 6px rgba(255,255,255,0.9);
+    }
+    .nav-icon { font-size: 1.2rem; }
+    .nav-label { font-size: 0.7rem; color: #6b7280; margin-top: 2px; }
+    @media (max-width: 768px) {
+      .nav-label { display: none; }
+      .nav-3d-btn { min-width: 44px; padding: 6px 10px; }
+    }
+    
+    /* Mobile Optimizations */
+    @media (max-width: 640px) {
+      .min-h-screen { min-height: auto; padding-top: 2rem; padding-bottom: 2rem; }
+      .text-4xl { font-size: 1.75rem; }
+      .text-3xl { font-size: 1.5rem; }
+      .text-2xl { font-size: 1.25rem; }
+      .text-xl { font-size: 1.1rem; }
+      .text-6xl { font-size: 2.5rem; }
+      .text-5xl { font-size: 2rem; }
+      .p-8 { padding: 1.25rem; }
+      .p-10 { padding: 1.5rem; }
+      .py-12 { padding-top: 2rem; padding-bottom: 2rem; }
+      .py-16 { padding-top: 2.5rem; padding-bottom: 2.5rem; }
+      .mb-12 { margin-bottom: 2rem; }
+      .mb-8 { margin-bottom: 1.5rem; }
+      .gap-6 { gap: 1rem; }
+      .floating-emoji { display: none; }
+      .stem-card { margin-left: 0.5rem; margin-right: 0.5rem; }
+      .topic-box { padding: 1rem; }
+      .topic-box .text-5xl { font-size: 2rem; }
+      .answer-btn { padding: 1rem; }
+      .subdomain-btn { padding: 1rem; }
+      .step-indicator { margin-bottom: 1rem; }
+      .step-dot { width: 10px; height: 10px; }
+      .journey-input { font-size: 1rem; padding: 12px 14px; }
+    }
+  </style>
+  <div id="app-wrapper" class="w-full h-full overflow-auto pt-16" style="background: var(--bg-color);"><!-- Main Content (Article) -->
+   <div id="main-content"><!-- Hero Section -->
+    <section class="min-h-screen flex flex-col justify-center items-center px-6 py-16 relative overflow-hidden">
+     <div class="absolute top-20 right-10 text-6xl floating-emoji opacity-30">💡</div>
+     <div class="absolute bottom-32 left-10 text-5xl floating-emoji opacity-30" style="animation-delay: 1s;">🚀</div>
+     <div class="absolute top-40 left-20 text-4xl floating-emoji opacity-20" style="animation-delay: 0.5s;">✨</div>
+     <div class="absolute bottom-48 right-20 text-4xl floating-emoji opacity-20" style="animation-delay: 1.5s;">🎯</div>
+     <div class="max-w-3xl text-center relative z-10">
+      <h1 id="main-title" class="text-4xl md:text-6xl font-bold mb-6 gradient-text leading-tight">זה התחיל ממשהו קטן</h1>
+      <p class="text-xl md:text-2xl mb-8 font-light" style="color: var(--text-color); opacity: 0.8;">(וככה מתחילים לשנות את העולם)</p>
+      <div class="stem-card rounded-2xl p-8 max-w-xl mx-auto mb-12" style="background: var(--surface-color);">
+       <p class="text-lg leading-relaxed" style="color: var(--text-color);">יש רגעים קטנים ביום-יום שגורמים לך לעצור.<br><br>
+        <span class="text-2xl">📱</span> ההודעה שהגיעה בזמן הכי לא מתאים.<br>
+        <span class="text-2xl">🔋</span> אחוז אחד בסוללה ואת באמצע סטורי.<br>
+        <span class="text-2xl">🎧</span> האוזנייה השמאלית שוב הפסיקה לעבוד.<br>
+        <span class="text-2xl">😤</span> כשמישהו לוקח את המקום שלך בקפיטריה.</p>
+      </div>
+      <p class="text-lg" style="color: var(--text-color); opacity: 0.7;">לא דרמה גדולה. לא "בעיה גלובלית".<br>
+        רק תחושה קטנה ש: <strong class="gradient-text text-2xl">למה זה ככה בעצם?</strong></p>
+     </div>
+     <div class="absolute bottom-8 animate-bounce" style="filter: drop-shadow(0 4px 6px rgba(236, 72, 153, 0.4));">
+      <svg class="w-8 h-8" style="color: var(--primary-color);" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+     </div>
+    </section>
+
+    <!-- Did You Know Ticker -->
+    <section class="py-6 px-6 overflow-hidden" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));">
+     <div class="max-w-4xl mx-auto">
+      <div class="flex flex-wrap justify-center gap-4 text-white text-center">
+       <div class="bg-white/15 backdrop-blur-sm rounded-xl px-5 py-3 flex-shrink-0">
+        <p class="text-sm font-bold">🤯 ידעת ש-?</p>
+        <p class="text-xs opacity-90">אינסטגרם התחיל כאפליקציה לוויסקי</p>
+       </div>
+       <div class="bg-white/15 backdrop-blur-sm rounded-xl px-5 py-3 flex-shrink-0">
+        <p class="text-sm font-bold">💡 ידעת ש-?</p>
+        <p class="text-xs opacity-90">את Canva הקימה בת 19 שנדחתה 100 פעם</p>
+       </div>
+       <div class="bg-white/15 backdrop-blur-sm rounded-xl px-5 py-3 flex-shrink-0">
+        <p class="text-sm font-bold">🔥 ידעת ש-?</p>
+        <p class="text-xs opacity-90">TikTok הומצא כי מישהו שאל "למה וידאו חייב להיות ארוך?"</p>
+       </div>
+      </div>
+     </div>
+    </section>
+
+    <!-- The Spark Section -->
+    <section class="py-12 px-6">
+     <div class="max-w-4xl mx-auto">
+      <div class="section-divider mb-10"></div>
+      <div class="text-center mb-8"><span class="text-5xl mb-4 block">🌱</span>
+       <h2 class="text-3xl md:text-4xl font-bold mb-4" style="color: var(--text-color);">רוב האנשים ממשיכים הלאה</h2>
+       <p class="text-2xl gradient-text font-bold bg-white/50 rounded-xl px-6 py-4 inline-block">אבל את? את עוצרת ושואלת למה.</p>
+      </div>
+      <div class="stem-card rounded-3xl p-10 text-center" style="background: var(--surface-color); border: 3px solid; border-image: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) 1;">
+       <h3 class="text-2xl font-bold mb-4" style="color: var(--text-color);">הבנות שיזמו את Bumble, Spanx ו-23andMe</h3>
+       <p class="text-lg mb-6" style="color: var(--text-color); opacity: 0.8;">לא התחילו עם תואר או עם כסף. הן התחילו עם רגע של "זה מעצבן אותי ואני הולכת לשנות את זה".</p>
+       <p class="text-3xl gradient-text font-bold">וזה בדיוק מה שאנחנו עושות פה.</p>
+      </div>
+     </div>
+    </section>
+
+    <!-- Real Talk Section -->
+    <section class="py-12 px-6" style="background: linear-gradient(180deg, transparent, rgba(139, 92, 246, 0.05));">
+     <div class="max-w-4xl mx-auto">
+      <div class="text-center mb-10"><span class="text-5xl mb-4 block">💬</span>
+       <h2 class="text-3xl md:text-4xl font-bold mb-4" style="color: var(--text-color);">רגע של אמת</h2>
+       <p class="text-xl" style="color: var(--text-color); opacity: 0.8;">דברים שבנות אומרות לעצמן (ולמה הן טועות)</p>
+      </div>
+      <div class="space-y-4 mb-8">
+       <div class="stem-card rounded-2xl p-6 flex items-start gap-4" style="background: var(--surface-color);">
+        <span class="text-3xl flex-shrink-0">🙄</span>
+        <div>
+         <p class="font-bold text-lg mb-1" style="color: var(--text-color);">"אני לא טכנולוגית"</p>
+         <p style="color: var(--text-color); opacity: 0.8;">את משתמשת בטלפון 6 שעות ביום, עורכת סרטונים, מנהלת קבוצות ויודעת לגרום לפילטר לעבוד בצורה מושלמת. את טכנולוגית. פשוט אף אחד לא קרא לזה ככה.</p>
+        </div>
+       </div>
+       <div class="stem-card rounded-2xl p-6 flex items-start gap-4" style="background: var(--surface-color);">
+        <span class="text-3xl flex-shrink-0">😬</span>
+        <div>
+         <p class="font-bold text-lg mb-1" style="color: var(--text-color);">"יזמות זה לא בשבילי, זה לאנשים עם רעיונות גאוניים"</p>
+         <p style="color: var(--text-color); opacity: 0.8;">YouTube התחיל כאתר הכרויות. הרעיון הראשון כמעט אף פעם לא נשאר. מה שנשאר זה הבת שלא ויתרה.</p>
+        </div>
+       </div>
+       <div class="stem-card rounded-2xl p-6 flex items-start gap-4" style="background: var(--surface-color);">
+        <span class="text-3xl flex-shrink-0">😅</span>
+        <div>
+         <p class="font-bold text-lg mb-1" style="color: var(--text-color);">"אני לא יודעת מספיק"</p>
+         <p style="color: var(--text-color); opacity: 0.8;">מעולה. כי מי שחושבת שהיא יודעת הכל — לא שואלת שאלות. ומי שלא שואלת שאלות — לא ממציאה כלום.</p>
+        </div>
+       </div>
+      </div>
+     </div>
+    </section>
+
+    <!-- What is STEM Section -->
+    <section class="py-12 px-6">
+     <div class="max-w-4xl mx-auto">
+      <div class="text-center mb-10"><span class="text-5xl mb-4 block">🔬</span>
+       <h2 class="text-3xl md:text-4xl font-bold mb-6" style="color: var(--text-color);">STEM? זה לא מה שאת חושבת</h2>
+       <p class="text-xl" style="color: var(--text-color); opacity: 0.8;">תשכחי מהמעבדה. זה מתחיל בחיים שלך.</p>
+      </div>
+      <div class="grid md:grid-cols-2 gap-6 mb-8">
+       <div class="stem-card rounded-2xl p-6" style="background: var(--surface-color);">
+        <div class="text-3xl mb-3">🧪</div>
+        <h3 class="font-bold text-lg mb-2" style="color: var(--text-color);">מדע</h3>
+        <p style="color: var(--text-color); opacity: 0.7;">כשאת שואלת "למה הקרם הזה עובד ככה על העור שלי?" — זה מדע.</p>
+       </div>
+       <div class="stem-card rounded-2xl p-6" style="background: var(--surface-color);">
+        <div class="text-3xl mb-3">💻</div>
+        <h3 class="font-bold text-lg mb-2" style="color: var(--text-color);">טכנולוגיה</h3>
+        <p style="color: var(--text-color); opacity: 0.7;">כשאת בונה עולם ב-Minecraft או עורכת סרטון ב-CapCut — זו טכנולוגיה.</p>
+       </div>
+       <div class="stem-card rounded-2xl p-6" style="background: var(--surface-color);">
+        <div class="text-3xl mb-3">⚙️</div>
+        <h3 class="font-bold text-lg mb-2" style="color: var(--text-color);">הנדסה</h3>
+        <p style="color: var(--text-color); opacity: 0.7;">כשאת מארגנת את הארון שלך כדי שהכל ייכנס — זו הנדסה.</p>
+       </div>
+       <div class="stem-card rounded-2xl p-6" style="background: var(--surface-color);">
+        <div class="text-3xl mb-3">📐</div>
+        <h3 class="font-bold text-lg mb-2" style="color: var(--text-color);">מתמטיקה</h3>
+        <p style="color: var(--text-color); opacity: 0.7;">כשאת מחשבת כמה זמן יש לך לפני שאמא שולחת הודעה שנייה — זו מתמטיקה.</p>
+       </div>
+      </div>
+      <div class="text-center">
+       <div class="stem-card rounded-2xl p-6 inline-block" style="background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(139, 92, 246, 0.1));">
+        <p class="text-lg font-bold gradient-text">את כבר עושה STEM כל יום. עכשיו נלמד להשתמש בזה כדי לבנות משהו אמיתי.</p>
+       </div>
+      </div>
+     </div>
+    </section>
+
+    <!-- Stop & Ask Section -->
+    <section class="py-12 px-6">
+     <div class="max-w-4xl mx-auto">
+      <div class="stem-card rounded-3xl p-10 md:p-16" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));">
+       <div class="text-center text-white"><span class="text-5xl mb-6 block">✋</span>
+        <h2 class="text-3xl md:text-4xl font-bold mb-6">רגע. עוצרים. לא פותרים.</h2>
+        <p class="text-lg opacity-90 mb-4 max-w-2xl mx-auto">אנחנו יודעות — את כבר רוצה להגיד "בואו נעשה אפליקציה!"</p>
+        <p class="text-lg opacity-90 mb-8 max-w-2xl mx-auto">אבל הסוד של כל מוצר מטורף שאת מכירה? הוא לא התחיל מפתרון. הוא התחיל משאלה.</p>
+        <div class="bg-white/20 rounded-2xl p-6 backdrop-blur-sm max-w-md mx-auto mb-6">
+         <p class="font-bold text-xl mb-4">השאלות שפותחות הכל:</p>
+         <p class="text-lg text-right">📍 איפה זה קורה? (בבית? בבית ספר? באינסטגרם?)<br>
+           👤 למי זה הכי מפריע?<br>
+           🚫 מה זה מונע ממנה לעשות?</p>
+        </div>
+        <p class="text-base opacity-80 italic">הבנות שמצליחות — הן לא הכי חכמות. הן הכי סקרניות.</p>
+       </div>
+      </div>
+     </div>
+    </section>
+
+    <!-- The Magic Section -->
+    <section class="py-12 px-6" style="background: var(--surface-color);">
+     <div class="max-w-4xl mx-auto text-center"><span class="text-5xl mb-6 block">✨</span>
+      <h2 class="text-3xl md:text-4xl font-bold mb-6" style="color: var(--text-color);">הרגע שבו הכל משתנה</h2>
+      <p class="text-lg mb-8" style="color: var(--text-color); opacity: 0.8;">יש רגע אחד שבו עוברים מלהתלונן — לעשות משהו עם זה:</p>
+      <div class="flex flex-col md:flex-row items-center justify-center gap-6 mb-8">
+       <div class="stem-card rounded-2xl p-6 flex-1" style="background: var(--bg-color);">
+        <p class="text-lg" style="color: var(--text-color);">מ<strong>רגש</strong></p>
+        <p class="text-2xl mt-2">"זה מעצבן אותי" 😤</p>
+        <p class="text-sm mt-2 opacity-60">(כל אחת מכירה)</p>
+       </div>
+       <div class="text-4xl">⬅️</div>
+       <div class="stem-card rounded-2xl p-6 flex-1" style="background: var(--bg-color);">
+        <p class="text-lg" style="color: var(--text-color);">ל<strong>הגדרה של בעיה</strong></p>
+        <p class="text-2xl mt-2 gradient-text font-bold">משהו שאפשר לפתור 💡</p>
+        <p class="text-sm mt-2 opacity-60">(וזו הנקודה שבה את הופכת ליזמת)</p>
+       </div>
+      </div>
+      <div class="stem-card rounded-2xl p-8 max-w-xl mx-auto" style="background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(139, 92, 246, 0.15)); border: 2px solid rgba(236, 72, 153, 0.3);">
+       <h3 class="text-xl font-bold mb-4" style="color: var(--text-color);">בעיה ≠ פתרון</h3>
+       <p class="text-3xl font-bold gradient-text">בעיה → צורך</p>
+       <p class="mt-4 text-base" style="color: var(--text-color); opacity: 0.9;"><strong>צורך הוא לא אפליקציה. לא שם מגניב. לא רעיון סגור.</strong><br>
+         צורך הוא הבנה עמוקה של מה צריך להשתנות בשביל שמישהי תרגיש אחרת.</p>
+      </div>
+     </div>
+    </section>
+
+    <!-- Girls Who Did It Section -->
+    <section class="py-12 px-6" style="background: linear-gradient(180deg, rgba(236, 72, 153, 0.03), rgba(139, 92, 246, 0.06));">
+     <div class="max-w-4xl mx-auto">
+      <div class="text-center mb-10"><span class="text-5xl mb-4 block">👑</span>
+       <h2 class="text-3xl md:text-4xl font-bold mb-4" style="color: var(--text-color);">בנות שעשו את זה</h2>
+       <p class="text-lg" style="color: var(--text-color); opacity: 0.8;">לא סיפורים מהספר. בנות אמיתיות שהתחילו בדיוק כמוך.</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-6">
+       <div class="stem-card rounded-2xl p-6 text-center" style="background: var(--surface-color);">
+        <div class="text-4xl mb-3">🧴</div>
+        <h3 class="font-bold text-lg mb-2 gradient-text">מלאני פרקינס</h3>
+        <p class="text-sm font-semibold mb-2" style="color: var(--text-color);">Canva</p>
+        <p class="text-sm" style="color: var(--text-color); opacity: 0.7;">הייתה סטודנטית שנשבר לה שקשה לעצב. היום Canva שווה 40 מיליארד דולר. היא נדחתה מעל 100 פעם לפני שקיבלה מימון.</p>
+       </div>
+       <div class="stem-card rounded-2xl p-6 text-center" style="background: var(--surface-color);">
+        <div class="text-4xl mb-3">💛</div>
+        <h3 class="font-bold text-lg mb-2 gradient-text">וויטני וולף הרד</h3>
+        <p class="text-sm font-semibold mb-2" style="color: var(--text-color);">Bumble</p>
+        <p class="text-sm" style="color: var(--text-color); opacity: 0.7;">הקימה אפליקציית הכרויות שבה רק בנות עושות את הצעד הראשון. בגיל 31 הפכה למיליארדרית הצעירה בעולם.</p>
+       </div>
+       <div class="stem-card rounded-2xl p-6 text-center" style="background: var(--surface-color);">
+        <div class="text-4xl mb-3">🎮</div>
+        <h3 class="font-bold text-lg mb-2 gradient-text">גיטנגלי ראו</h3>
+        <p class="text-sm font-semibold mb-2" style="color: var(--text-color);">יזמת בגיל 15</p>
+        <p class="text-sm" style="color: var(--text-color); opacity: 0.7;">בגיל 15 פיתחה אפליקציה שמזהה מחלות עיניים מתמונה. לא המתינה שמישהו ייתן לה רשות.</p>
+       </div>
+      </div>
+      <div class="text-center mt-8">
+       <div class="stem-card rounded-xl p-4 inline-block" style="background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(139, 92, 246, 0.1));">
+        <p class="text-lg font-bold" style="color: var(--text-color);">מה משותף לכולן? 🤔 הן לא חיכו שיגידו להן שהן מספיק טובות.</p>
+       </div>
+      </div>
+     </div>
+    </section>
+
+    <!-- Process Section -->
+    <section class="py-12 px-6">
+     <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-10"><span class="text-5xl mb-4 block">🛠️</span>
+       <h2 class="text-3xl md:text-4xl font-bold mb-4" style="color: var(--text-color);">8 שלבים. מרעיון למוצר אמיתי.</h2>
+       <p class="text-lg" style="color: var(--text-color); opacity: 0.8;">לא צריך להיות גאונית. צריך להיות מוכנה ללכלך את הידיים.</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+       <div class="stem-card rounded-2xl p-6 flex flex-col" style="background: var(--surface-color);">
+        <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold mb-4 mx-auto" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));">1</div>
+        <h3 class="font-bold text-lg mb-3 gradient-text text-center">מאתרות אתגר</h3>
+        <p class="text-sm flex-grow" style="color: var(--text-color); opacity: 0.8;">מה מעצבן אותך? למי זה קורה? למה אף אחד עדיין לא פתר את זה? פה זה מתחיל.</p>
+       </div>
+       <div class="stem-card rounded-2xl p-6 flex flex-col" style="background: var(--surface-color);">
+        <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold mb-4 mx-auto" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));">2</div>
+        <h3 class="font-bold text-lg mb-3 gradient-text text-center">חושבות אחרת</h3>
+        <p class="text-sm flex-grow" style="color: var(--text-color); opacity: 0.8;">חוקרות לעומק ועושות סיעור מוחות. הרעיונות הכי מטורפים? אלה שבסוף עובדים.</p>
+       </div>
+       <div class="stem-card rounded-2xl p-6 flex flex-col" style="background: var(--surface-color);">
+        <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold mb-4 mx-auto" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));">3</div>
+        <h3 class="font-bold text-lg mb-3 gradient-text text-center">מגבשות פתרון</h3>
+        <p class="text-sm flex-grow" style="color: var(--text-color); opacity: 0.8;">בוחרות רעיון אחד ובודקות: זה באמת פותר משהו? למי? GO או NO-GO?</p>
+       </div>
+       <div class="stem-card rounded-2xl p-6 flex flex-col" style="background: var(--surface-color);">
+        <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold mb-4 mx-auto" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));">4</div>
+        <h3 class="font-bold text-lg mb-3 gradient-text text-center">מעצבות אבטיפוס</h3>
+        <p class="text-sm flex-grow" style="color: var(--text-color); opacity: 0.8;">הרעיון מקבל צורה. לא מושלם — ניסיוני. כמו טיוטה ראשונה שאפשר לשפר.</p>
+       </div>
+       <div class="stem-card rounded-2xl p-6 flex flex-col" style="background: var(--surface-color);">
+        <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold mb-4 mx-auto" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));">5</div>
+        <h3 class="font-bold text-lg mb-3 gradient-text text-center">מדייקות מיזם</h3>
+        <p class="text-sm flex-grow" style="color: var(--text-color); opacity: 0.8;">מקבלות פידבק ומשתפרות. ביקורת היא לא עלבון — היא סופרפאואר.</p>
+       </div>
+       <div class="stem-card rounded-2xl p-6 flex flex-col" style="background: var(--surface-color);">
+        <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold mb-4 mx-auto" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));">6</div>
+        <h3 class="font-bold text-lg mb-3 gradient-text text-center">ממתגות ומבססות</h3>
+        <p class="text-sm flex-grow" style="color: var(--text-color); opacity: 0.8;">בונות סיפור מוצר וסרטון. לומדות לשווק רעיון כאילו זה הפוסט הכי חשוב שפרסמתן.</p>
+       </div>
+       <div class="stem-card rounded-2xl p-6 flex flex-col" style="background: var(--surface-color);">
+        <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold mb-4 mx-auto" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));">7</div>
+        <h3 class="font-bold text-lg mb-3 gradient-text text-center">מציגות ומשכנעות</h3>
+        <p class="text-sm flex-grow" style="color: var(--text-color); opacity: 0.8;">פיץ' של 3 דקות. מספרות תהליך ומשכנעות חדר מלא. כן, גם את יכולה.</p>
+       </div>
+       <div class="stem-card rounded-2xl p-6 flex flex-col" style="background: var(--surface-color);">
+        <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold mb-4 mx-auto" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));">8</div>
+        <h3 class="font-bold text-lg mb-3 gradient-text text-center">משיקות ומשפיעות</h3>
+        <p class="text-sm flex-grow" style="color: var(--text-color); opacity: 0.8;">המיזם יוצא לעולם. לא "מתישהו". עכשיו. ואת מסתכלת אחורה ואומרת "וואלה, עשיתי את זה".</p>
+       </div>
+      </div>
+     </div>
+    </section>
+
+    <!-- Where Are You Now Section -->
+    <section class="py-12 px-6" style="background: linear-gradient(180deg, rgba(236, 72, 153, 0.05), rgba(139, 92, 246, 0.1));">
+     <div class="max-w-4xl mx-auto text-center"><span class="text-6xl mb-6 block">📍</span>
+      <h2 class="text-3xl md:text-4xl font-bold mb-6" style="color: var(--text-color);">אז איפה אתן עכשיו?</h2>
+      <p class="text-xl mb-6 gradient-text font-semibold">בדיוק בתחילת הדרך.</p>
+      <div class="stem-card rounded-3xl p-10 max-w-2xl mx-auto mb-8" style="background: var(--surface-color); border: 3px solid; border-image: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) 1;">
+       <p class="text-lg mb-6" style="color: var(--text-color);">אנחנו היום בשלב הראשון: <strong class="text-2xl gradient-text">איתור בעיה</strong>.</p>
+       <p style="color: var(--text-color); opacity: 0.8;">עוד לא בונות.<br>
+         עוד לא מפתחות.<br><strong class="text-lg gradient-text">רק מתבוננות, שואלות ומדייקות.</strong></p>
+       <p class="mt-6 font-bold gradient-text text-xl">וזה אחד השלבים הכי חשובים בתהליך.</p>
+       <p class="mt-4 text-sm" style="color: var(--text-color); opacity: 0.6;">(כי בלי שלב 1 — כל השאר זה בניין על חול)</p>
+      </div>
+     </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-16 px-6">
+     <div class="max-w-3xl mx-auto text-center">
+      <div class="stem-card rounded-2xl p-8 mb-10" style="background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(139, 92, 246, 0.1)); border: 2px solid var(--primary-color);">
+       <p class="text-xl font-bold mb-6" style="color: var(--text-color);">✨ לפני שמתחילות — שלוש שאלות:</p>
+       <div class="text-right space-y-4" style="color: var(--text-color);">
+        <p class="text-lg">✓ זה קורה לך בעצמך? (לא רק למישהי אחרת)</p>
+        <p class="text-lg">✓ זה חוזר על עצמו? (לא סתם יום רע)</p>
+        <p class="text-lg">✓ זה גורם לך להגיד "אוף" בפנים? (כן? מעולה.)</p>
+       </div>
+      </div>
+      <span class="text-6xl mb-6 block">👇</span>
+      <button id="cta-button" class="pulse-btn text-white text-xl font-bold px-12 py-5 rounded-full shadow-2xl transform hover:scale-105 transition-all duration-300" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));"> יאללה, מתחילות 🚀 </button>
+      <div class="mt-12 stem-card rounded-2xl p-8" style="background: var(--surface-color); border: 2px solid; border-image: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) 1;">
+       <p class="text-xl font-bold mb-4" style="color: var(--text-color);">כי כל שינוי גדול</p>
+       <p class="text-2xl gradient-text font-bold">מתחיל מבעיה קטנה אחת,<br>שבת אחת החליטה שהיא לא נותנת לה לעבור.</p>
+      </div>
+      <div class="mt-16 flex justify-center gap-4">
+       <span class="text-3xl floating-emoji">💪</span>
+       <span class="text-3xl floating-emoji" style="animation-delay: 0.3s;">🌟</span>
+       <span class="text-3xl floating-emoji" style="animation-delay: 0.6s;">🚀</span>
+      </div>
+     </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 px-6 bg-gradient-to-r from-pink-500 to-purple-500 text-white">
+     <div class="max-w-5xl mx-auto text-center">
+      <div class="flex items-center justify-center gap-3 mb-6">
+       <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+        <span class="text-xl">💡</span>
+       </div>
+       <span class="text-2xl font-bold">מרעיון למוצר</span>
+      </div>
+      <p class="text-white/80 text-lg mb-4">זה התחיל ממשהו קטן</p>
+      <p class="text-white/60 text-sm">נבנה עבור בנות שישנו את העולם</p>
+      <p class="text-white/50 text-xs mt-4">© 2026 פורצות דרך</p>
+     </div>
+    </footer>
+   </div><!-- Journey View -->
+   <div id="journey-view" style="display: none;">
+    <section class="min-h-screen py-16 px-6">
+     <div class="max-w-3xl mx-auto">
+      <div id="journey-step-container" class="journey-fade-in"></div>
+      <div class="text-center mt-8">
+       <button id="back-to-article-btn" onclick="showMainView()" class="text-lg font-bold px-8 py-4 rounded-full transition-all duration-300" style="background: var(--surface-color); color: var(--text-color); border: 2px solid var(--primary-color);">← חזרה למאמר</button>
+      </div>
+     </div>
+    </section>
+   </div>
+  </div>
+  <div id="pdf-render-area" style="position: absolute; left: -9999px; top: 0; width: 794px;"></div>
+  <style>
+    .pdf-page {
+      width: 794px;
+      min-height: 1123px;
+      padding: 60px;
+      box-sizing: border-box;
+      font-family: 'Rubik', sans-serif;
+      direction: rtl;
+      background: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+    .pdf-page .pdf-gradient-bar {
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      height: 8px;
+      background: linear-gradient(90deg, #ec4899, #8b5cf6);
+    }
+    .pdf-page .pdf-bottom-bar {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      height: 8px;
+      background: linear-gradient(90deg, #8b5cf6, #ec4899);
+    }
+    .journey-fade-in {
+      animation: journeyFadeIn 0.5s ease-out;
+    }
+    @keyframes journeyFadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .journey-input {
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 16px;
+      border: 2px solid rgba(236, 72, 153, 0.3);
+      background: var(--surface-color);
+      color: var(--text-color);
+      font-size: 1.1rem;
+      font-family: 'Rubik', sans-serif;
+      outline: none;
+      transition: border-color 0.3s;
+      text-align: right;
+    }
+    .journey-input:focus {
+      border-color: var(--primary-color);
+    }
+    .journey-input::placeholder {
+      color: #aaa;
+    }
+    .topic-box {
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 3px solid transparent;
+    }
+    .topic-box:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+    }
+    .topic-box.selected {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.2);
+    }
+    .answer-btn {
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid rgba(236, 72, 153, 0.2);
+    }
+    .answer-btn:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary-color);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    }
+    .step-indicator {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 2rem;
+    }
+    .step-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(236, 72, 153, 0.2);
+      transition: all 0.3s;
+    }
+    .step-dot.active {
+      background: var(--primary-color);
+      transform: scale(1.3);
+    }
+    .step-dot.completed {
+      background: var(--secondary-color);
+    }
+    .subdomain-btn {
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+    .subdomain-btn:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary-color);
+    }
+    .subdomain-btn.selected {
+      border-color: var(--primary-color);
+      background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(139, 92, 246, 0.1)) !important;
+    }
+    .inspiration-card {
+      background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(253,244,255,0.9)) !important;
+      border: 1px solid rgba(236, 72, 153, 0.15);
+      transition: all 0.3s ease;
+    }
+    .inspiration-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 40px rgba(236, 72, 153, 0.15);
+      border-color: rgba(236, 72, 153, 0.3);
+    }
+    .inspiration-card .text-5xl {
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+    }
+  </style>
+  <script>
+    const defaultConfig = {
+      primary_color: '#ec4899',
+      secondary_color: '#8b5cf6',
+      background_color: '#fdf4ff',
+      text_color: '#1f2937',
+      surface_color: '#ffffff',
+      font_family: 'Rubik',
+      font_size: 18,
+      main_title: 'זה התחיל ממשהו קטן',
+      button_text: 'התחילי את הפעילות'
+    };
+
+    let config = { ...defaultConfig };
+
+    const journeyData = {
+      names: [],
+      topicChoices: {},
+      primaryTopic: null,
+      answers: [],
+      domain: null,
+      subDomain: null,
+      decision: null,
+      currentStep: 1,
+      currentQuestionIndex: 0,
+      questionPath: []
+    };
+
+    const topicBoxes = [
+      { id: 'daily', emoji: '🪞', title: 'בחירות יומיומיות', subtitle: 'הדברים הקטנים שמעצבנים אותנו כל יום' },
+      { id: 'identity', emoji: '💬', title: 'זהות ומי אני', subtitle: 'מי אני כשאף אחד לא מסתכל?' },
+      { id: 'relationships', emoji: '👭', title: 'מערכות יחסים', subtitle: 'למה זה תמיד מסובך עם אנשים?' },
+      { id: 'boundaries', emoji: '🚧', title: 'גבולות', subtitle: 'איפה אני נגמרת ואיפה העולם מתחיל?' },
+      { id: 'inner-voice', emoji: '🗣️', title: 'קול פנימי', subtitle: 'מה הקול בראש שלי אומר לי?' },
+      { id: 'world', emoji: '🌍', title: 'העולם סביבי', subtitle: 'למה דברים שלא עשיתי משפיעים עליי?' }
+    ];
+
+    const questionTrees = {
+      daily: [
+        {
+          text: 'מה יותר גורם לך להשתגע - כשאת יודעת מה הבעיה ואף אחד לא עושה שום דבר או כשאת מרגישה שמשהו לא בסדר אבל לא יכולה לשים את האצבע על מה?',
+          options: [
+            { text: 'יודעת ולא עושים', value: 'A', next: 'q2a' },
+            { text: 'מרגישה אבל לא מדייקת', value: 'B', next: 'q2b' }
+          ]
+        },
+        {
+          id: 'q2a',
+          text: 'את שמה לב שמשהו שבור - ואף אחד מסביב לא קולט. מה את עושה?',
+          options: [
+            { text: 'מנסה לתקן לבד', value: 'A' },
+            { text: 'מחפשת מישהי שתקלוט איתי', value: 'B' }
+          ]
+        },
+        {
+          id: 'q2b',
+          text: 'מתי זה הכי תופס אותך - בבוקר כשהכל מתחיל באמצע היום כשכבר אין כוח או בלילה כשהמחשבות לא עוזבות?',
+          options: [
+            { text: 'בבוקר', value: 'A' },
+            { text: 'באמצע היום', value: 'B' },
+            { text: 'בלילה', value: 'C' }
+          ]
+        },
+        {
+          text: 'תדמייני שיש לך כוח-על אחד: לראות בעיות שאף אחד לא רואה או להמציא פתרונות שאף אחד לא חשב עליהם?',
+          options: [
+            { text: 'לראות בעיות', value: 'A' },
+            { text: 'להמציא פתרונות', value: 'B' }
+          ]
+        },
+        {
+          text: 'מה יותר חשוב לך - שהפתרון יעבוד מושלם לאדם אחד או שיעבוד בסבירות לכולם?',
+          options: [
+            { text: 'מושלם לאחת', value: 'A' },
+            { text: 'בסבירות לכולם', value: 'B' }
+          ]
+        }
+      ],
+      identity: [
+        {
+          text: 'מתי הרגשת הכי חזקה - כשעשית משהו שאף אחד לא ציפה ממך או כשעשית בדיוק מה שרצית למרות שאמרו לך לא?',
+          options: [
+            { text: 'הפתעתי את כולם', value: 'A', next: 'q2a' },
+            { text: 'עשיתי למרות ה\'לא\'', value: 'B', next: 'q2b' }
+          ]
+        },
+        {
+          id: 'q2a',
+          text: 'את יותר מהסוג שמשנה חוקים או מהסוג שממציא משחק חדש לגמרי?',
+          options: [
+            { text: 'משנה חוקים', value: 'A' },
+            { text: 'ממציאה משחק חדש', value: 'B' }
+          ]
+        },
+        {
+          id: 'q2b',
+          text: 'הה\'לא\' שאמרו לך - הוא הגיע ממישהו שחשוב לך או ממישהו שבכלל לא מכיר אותך?',
+          options: [
+            { text: 'ממישהו חשוב', value: 'A' },
+            { text: 'ממישהו שלא מכיר אותי', value: 'B' }
+          ]
+        },
+        {
+          text: 'אם היית צריכה לבחור סופר-פאוור: להבין מה אנשים באמת מרגישים או לדעת לתרגם רגשות למילים מדויקות?',
+          options: [
+            { text: 'להבין רגשות', value: 'A' },
+            { text: 'לתרגם למילים', value: 'B' }
+          ]
+        },
+        {
+          text: 'מה מרגישה לך יותר כמו \'את\' - לעמוד מול כולם ולהוביל או לפעול מאחורי הקלעים ולהזיז את העולם בשקט?',
+          options: [
+            { text: 'להוביל מלפנים', value: 'A' },
+            { text: 'להזיז מאחורה', value: 'B' }
+          ]
+        }
+      ],
+      relationships: [
+        {
+          text: 'מה יותר קשה - כשחברה טובה לא מבינה אותך בכלל או כשמישהי זרה מבינה אותך יותר מדי?',
+          options: [
+            { text: 'חברה לא מבינה', value: 'A', next: 'q2a' },
+            { text: 'זרה מבינה יותר מדי', value: 'B', next: 'q2b' }
+          ]
+        },
+        {
+          id: 'q2a',
+          text: 'את מאלה שמדברות על מה שכואב או מאלה שמראות שהכל בסדר עד שמתפוצצות?',
+          options: [
+            { text: 'מדברת על זה', value: 'A' },
+            { text: 'מראה שהכל בסדר', value: 'B' }
+          ]
+        },
+        {
+          id: 'q2b',
+          text: 'למה זה מרגיש מוזר כשמישהי \'רואה\' אותך - כי את לא רגילה או כי את לא בטוחה שמה שהיא רואה זה באמת את?',
+          options: [
+            { text: 'לא רגילה', value: 'A' },
+            { text: 'לא בטוחה שזו אני', value: 'B' }
+          ]
+        },
+        {
+          text: 'מה יותר חשוב לך בחברות - שתהיה כיף או שתהיה אמיתית?',
+          options: [
+            { text: 'כיף', value: 'A' },
+            { text: 'אמיתית', value: 'B' }
+          ]
+        },
+        {
+          text: 'את יותר מאלה שנותנות ומחכות שיחזירו או מאלה שנותנות ושוכחות שגם מגיע להן?',
+          options: [
+            { text: 'נותנת ומחכה', value: 'A' },
+            { text: 'נותנת ושוכחת', value: 'B' }
+          ]
+        }
+      ],
+      boundaries: [
+        {
+          text: 'מתי הגבול שלך הכי נבדק - כשמישהו מבקש ממך משהו שלא בא לך או כשאת בעצמך לא יודעת מה הגבולות שלך?',
+          options: [
+            { text: 'מבקשים ממני', value: 'A', next: 'q2a' },
+            { text: 'לא יודעת מה הגבולות שלי', value: 'B', next: 'q2b' }
+          ]
+        },
+        {
+          id: 'q2a',
+          text: 'את מהסוג שאומר \'כן\' ואז מתחרטת או מהסוג שאומר \'לא\' ואז מרגישה אשמה?',
+          options: [
+            { text: 'אומרת כן ומתחרטת', value: 'A' },
+            { text: 'אומרת לא ומרגישה אשמה', value: 'B' }
+          ]
+        },
+        {
+          id: 'q2b',
+          text: 'את חושבת שגבולות הם דבר שמגלים לבד או דבר שמישהו צריך ללמד אותך?',
+          options: [
+            { text: 'מגלים לבד', value: 'A' },
+            { text: 'מישהו צריך ללמד', value: 'B' }
+          ]
+        },
+        {
+          text: 'הגבול הכי קשה לך לשמור - מול חברות מול הורים או מול עצמך?',
+          options: [
+            { text: 'מול חברות', value: 'A' },
+            { text: 'מול הורים', value: 'B' },
+            { text: 'מול עצמי', value: 'C' }
+          ]
+        },
+        {
+          text: 'מה מרגיש יותר חזק - לגלות גבול חדש שלא ידעת שיש לך או להצליח לשמור על גבול שתמיד נכשלת בו?',
+          options: [
+            { text: 'לגלות גבול חדש', value: 'A' },
+            { text: 'להצליח לשמור', value: 'B' }
+          ]
+        }
+      ],
+      'inner-voice': [
+        {
+          text: 'הקול בראש שלך - הוא יותר ביקורתי (\'למה עשית ככה?\') או יותר מפחיד (\'מה אם זה ייכשל?\')?',
+          options: [
+            { text: 'ביקורתי', value: 'A', next: 'q2a' },
+            { text: 'מפחיד', value: 'B', next: 'q2b' }
+          ]
+        },
+        {
+          id: 'q2a',
+          text: 'הביקורת הפנימית שלך - היא בקול של מישהו שאת מכירה או היא סתם קול שלך?',
+          options: [
+            { text: 'בקול של מישהו', value: 'A' },
+            { text: 'הקול שלי', value: 'B' }
+          ]
+        },
+        {
+          id: 'q2b',
+          text: 'את יותר מפחדת ממה שיגידו עליך או ממה שאת תגידי לעצמך?',
+          options: [
+            { text: 'ממה שיגידו', value: 'A' },
+            { text: 'ממה שאגיד לעצמי', value: 'B' }
+          ]
+        },
+        {
+          text: 'תדמייני שהקול הפנימי שלך הוא דמות - היא יותר דומה לעורכת דין שמחפשת טעויות או לאמא דואגנית שמנסה להגן עליך?',
+          options: [
+            { text: 'עורכת דין', value: 'A' },
+            { text: 'אמא דואגנית', value: 'B' }
+          ]
+        },
+        {
+          text: 'מה היית רוצה שהקול הפנימי שלך יגיד לך יותר - \'את מספיק טובה\' או \'את יכולה להרשות לעצמך לטעות\'?',
+          options: [
+            { text: 'את מספיק טובה', value: 'A' },
+            { text: 'מותר לך לטעות', value: 'B' }
+          ]
+        }
+      ],
+      world: [
+        {
+          text: 'מה יותר מבאס אותך - כשרואים בעיה ברורה ברחוב/בית ספר ואף אחד לא זז או כשאת מגלה שמשהו שהשתמשת בו כל החיים דווקא מזיק?',
+          options: [
+            { text: 'רואים ולא זזים', value: 'A', next: 'q2a' },
+            { text: 'מגלה שמשהו מזיק', value: 'B', next: 'q2b' }
+          ]
+        },
+        {
+          id: 'q2a',
+          text: 'כשאת רואה את זה - את יותר כועסת על האנשים שלא עושים או על המערכת שלא מאפשרת?',
+          options: [
+            { text: 'על האנשים', value: 'A' },
+            { text: 'על המערכת', value: 'B' }
+          ]
+        },
+        {
+          id: 'q2b',
+          text: 'כשגילית את זה - שינית הרגל מיד או שחשבת "אוקיי אבל מה זה כבר ישנה אם רק אני"?',
+          options: [
+            { text: 'שיניתי מיד', value: 'A' },
+            { text: 'מה זה ישנה רק אני', value: 'B' }
+          ]
+        },
+        {
+          text: 'מה מרגיש לך יותר אמיתי - לשנות את הסביבה הקרובה שלך (חדר בית שכונה) או להילחם על משהו גדול שמשפיע על כולם?',
+          options: [
+            { text: 'הסביבה הקרובה', value: 'A' },
+            { text: 'משהו גדול', value: 'B' }
+          ]
+        },
+        {
+          text: 'את מרגישה שהעולם סביבך הוא משהו שקורה לך או משהו שאת יכולה לעצב?',
+          options: [
+            { text: 'קורה לי', value: 'A' },
+            { text: 'יכולה לעצב', value: 'B' }
+          ]
+        }
+      ]
+    };
+
+    const domainData = {
+      'body-feeling': { name: 'תחושת גוף', emoji: '💪', subs: ['שינה ואנרגיה', 'תזונה ולחץ', 'תנועה ומוטיבציה', 'תדמית גוף'] },
+      'digital-life': { name: 'חיים דיגיטליים', emoji: '📱', subs: ['זמן מסך', 'בטיחות ברשת', 'השוואה חברתית', 'פרטיות'] },
+      'learning-pressure': { name: 'למידה בלחץ', emoji: '📚', subs: ['ניהול זמן', 'מוטיבציה', 'לחץ מבחנים', 'קשיי ריכוז'] },
+      'social-life': { name: 'חיים חברתיים', emoji: '👭', subs: ['חברויות חדשות', 'קונפליקטים', 'שייכות', 'תקשורת'] },
+      'daily-choices': { name: 'בחירות יום-יומיות', emoji: '🤔', subs: ['ניהול כסף', 'ניהול זמן', 'צריכה מודעת', 'סדר עדיפויות'] },
+      'space-movement': { name: 'מרחב ותנועה', emoji: '🚶‍♀️', subs: ['בטיחות', 'נגישות', 'מרחבים ירוקים', 'תחבורה'] },
+      'my-home': { name: 'הבית שלי', emoji: '🏠', subs: ['פרטיות', 'סביבת למידה', 'יחסים בבית', 'סדר ואווירה'] },
+      'living-environment': { name: 'סביבה חיה', emoji: '🌱', subs: ['מיחזור', 'חיבור לטבע', 'זיהום', 'צריכת משאבים'] },
+      'leisure-creativity': { name: 'פנאי ויצירה', emoji: '🎨', subs: ['גישה לתחביבים', 'זמן פנוי', 'יצירה', 'פעילויות חברתיות'] },
+      'looking-forward': { name: 'מבט קדימה', emoji: '🔮', subs: ['בחירת מסלול', 'חששות', 'כישורים חדשים', 'יזמות'] }
+    };
+
+    const inspirationExamples = {
+      'body-feeling': [
+        { name: 'Flo', creator: 'אלנה בירמן', emoji: '🩸', story: 'היא הייתה סטודנטית שהרגישה שאף אפליקציה לא באמת מבינה את הגוף שלה. אז היא בנתה את Flo — אפליקציה שעוזרת למיליוני נשים להבין את המחזור שלהן ואת הגוף שלהן. היום יש לה 380 מיליון משתמשות.' },
+        { name: 'Girlfriend Collective', creator: 'אלי דינג', emoji: '👟', story: 'היא חיפשה ביגוד ספורט שמרגיש טוב על הגוף ולא הורס את הפלנטה. לא מצאה? אז יצרה בעצמה — בגדי ספורט מבקבוקי פלסטיק ממוחזרים. היום זה אחד המותגים הכי מבוקשים.' },
+        { name: 'Megababe', creator: 'קייטי סטורינו', emoji: '✨', story: 'כבלוגרית אופנה שלא התאימה למידות הסטנדרטיות היא נלחמה בבושה. יצרה קו מוצרי גוף לדברים שאף אחד לא מדבר עליהם — כמו זיעה וחיכוך. היום זה נמכר בכל רשת.' }
+      ],
+      'digital-life': [
+        { name: 'Bumble', creator: 'וויטני וולף הרד', emoji: '🐝', story: 'היא עבדה באפליקציית היכרויות והרגישה שבנות לא מרגישות בטוחות שם. אז היא בנתה את Bumble — שם רק הבנות פותחות שיחה. היום יש לה מיליארדים.' },
+        { name: 'Shine', creator: 'מרבי שין ונאומי הירבלו', emoji: '💛', story: 'שתי חברות שהרגישו שכל אפליקציות הבריאות הנפשית לא מדברות אליהן. בנו את Shine — אפליקציה שמדברת על חרדה ולחץ בשפה של בנות. מיליוני הורדות.' },
+        { name: 'Canva', creator: 'מלאני פרקינס', emoji: '🎨', story: 'בגיל 19 היא תיכננה ספר שנתון לבית הספר ונעצבה מכמה קשה לעצב. אז בנתה את Canva — כלי עיצוב שכל אחת יכולה להשתמש בו. היום זה שווה 40 מיליארד דולר.' }
+      ],
+      'learning-pressure': [
+        { name: 'Photomath', creator: 'דניקה פרסקנדר', emoji: '📸', story: 'מורה למתמטיקה שראתה תלמידות נתקעות על שיעורי בית ולא יודעות איך להתקדם. יצרה אפליקציה שמצלמת תרגיל ומסבירה את הפתרון צעד אחר צעד. 220 מיליון הורדות.' },
+        { name: 'Studyblr/Notion Templates', creator: 'קהילת בנות לומדות', emoji: '📓', story: 'בנות בגיל שלכן שנמאס להן מלמידה משעממת התחילו לשתף שיטות למידה יפות ויעילות ברשתות. מזה נולד תנועה שלמה של "ללמוד יפה" — עם תבניות צבעוניות וסיכומים מעוצבים.' },
+        { name: 'Brainly', creator: 'מיכאלינה יורצ\'יק (שותפה מייסדת)', emoji: '🧠', story: 'למה ללמוד לבד כשאפשר ביחד? פלטפורמה שבה תלמידות עוזרות אחת לשנייה עם שיעורי בית. 350 מיליון משתמשות כי לפעמים חברה מסבירה יותר טוב מהמורה.' }
+      ],
+      'social-life': [
+        { name: 'Hey! VINA', creator: 'אוליביה ג\'ון פונטיל', emoji: '👯', story: 'היא עברה לעיר חדשה ולא הכירה אף אחת. אפליקציות היכרויות? מלא. אפליקציות למצוא חברה? אפס. אז יצרה Hey! VINA — טינדר לחברויות בין בנות.' },
+        { name: 'Naya', creator: 'דניאלה יעקובוביץ\'', emoji: '🤝', story: 'ראתה חברות שמתמודדות עם בדידות ולא מוצאות עם מי לדבר. יצרה פלטפורמה שמחברת בין נשים שעוברות דברים דומים בחיים — כי לפעמים מישהי שמבינה שווה יותר ממאה מילים.' },
+        { name: 'Peanut', creator: 'מישל קנדי', emoji: '💬', story: 'אחרי שהפכה לאמא הרגישה לבד לגמרי. שום אפליקציה לא עזרה לה למצוא חברות חדשות. אז בנתה את Peanut — מקום שמחבר נשים לפי שלב בחיים.' }
+      ],
+      'daily-choices': [
+        { name: 'Rent the Runway', creator: 'ג\'ן היימן', emoji: '👗', story: 'למה לקנות שמלה יקרה ללבוש פעם אחת? היא יצרה שירות שמאפשר לשכור בגדי מעצבים. שינתה את הדרך שבה נשים חושבות על קניות ואופנה.' },
+        { name: 'Hint Water', creator: 'קארה גולדין', emoji: '💧', story: 'רצתה לשתות מים בטעם בלי סוכר. לא מצאה? עשתה בעצמה. היום Hint Water נמכר בכל סופרמרקט בארה"ב ושווה מאות מיליוני דולרים.' },
+        { name: 'Depop', creator: 'סימון ברטאצ\'ה (בהשראת שוק הוינטג\')', emoji: '♻️', story: 'אפליקציה שבה בנות מוכרות וקונות בגדים יד שנייה — כמו אינסטגרם של אופנה משומשת. הפכה קניות משומשות למגניבות ולאקולוגיות. מיליוני בנות משתמשות בה כל יום.' }
+      ],
+      'space-movement': [
+        { name: 'Safetipin', creator: 'קלפנה וישוונת', emoji: '📍', story: 'היא הסתכלה על ערים מהעיניים של נשים ושאלה: איפה מרגישים בטוחות? יצרה אפליקציה שמדרגת רחובות לפי בטיחות לנשים — עם תאורה נגישות ועוברי אורח.' },
+        { name: 'Hollaback!', creator: 'אמילי מיי', emoji: '✊', story: 'נמאס לה מהטרדות ברחוב. יצרה אפליקציה שבה נשים מדווחות על הטרדות ומסמנות מקומות לא בטוחים על מפה. הפכה כעס ופחד לכלי שמשנה רחובות בערים שלמות.' },
+        { name: 'Swvl', creator: 'דינה אל-שינאוי (מנהלת בכירה)', emoji: '🚌', story: 'בקהיר התחבורה הציבורית הייתה סיוט — במיוחד לנשים. נולד שירות שמאפשר להזמין מיניבוס בטוח ואמין באפליקציה. שינה את הדרך שנשים נעות בערים גדולות.' }
+      ],
+      'my-home': [
+        { name: 'The Home Edit', creator: 'קליה שפרר וג\'ואנה טפלין', emoji: '🏡', story: 'שתי חברות שאהבו סדר הפכו את זה לעסק. ארגון בתים בצבעי קשת שנראה כמו אמנות. מתוכנית בנטפליקס ועד מוצרים בכל חנות — הכול התחיל מאהבה לסדר.' },
+        { name: 'Boy Smells', creator: 'מתיו הרמן ודיוויד קין', emoji: '🕯️', story: 'רצו נרות שלא ריחניים מדי ולא "נשיים" מדי. יצרו נרות עם ריחות מיוחדים שמתאימים לכל אחת — והפכו את "להדליק נר" לחוויה שמשנה את האווירה בחדר.' },
+        { name: 'Havenly', creator: 'לי מאיר', emoji: '🛋️', story: 'רצתה לעצב את הדירה שלה אבל מעצבת פנים עלתה הון. יצרה שירות שמחבר אותך למעצבת אונליין במחיר שפוי. עכשיו כל אחת יכולה לגרום לחדר שלה להיראות מושלם.' }
+      ],
+      'living-environment': [
+        { name: 'Who Gives a Crap', creator: 'ג\'סיקה שור', emoji: '🧻', story: 'נייר טואלט ממוחזר שתורם 50% מהרווחים למים נקיים. ההוכחה שגם המוצר הכי משעמם בעולם יכול לשנות את העולם.' },
+        { name: 'S\'well', creator: 'שרה קאוס', emoji: '🍶', story: 'רצתה להפסיק להשתמש בבקבוקי פלסטיק חד-פעמיים. עיצבה בקבוק רב-פעמי שגם יפה וגם שומר על טמפרטורה. היום S\'well נמצא בתיק של כל בת שנייה — ומנע מיליוני בקבוקים מלהגיע לזבל.' },
+        { name: 'Too Good To Go', creator: 'לואיזה בייך דלבאק', emoji: '🍽️', story: 'מסעדות זורקות אוכל בסוף היום. היא יצרה אפליקציה שמוכרת את האוכל הזה בזול במקום לזרוק. חוסכת כסף מזון ואשמה — בפעולה אחת.' }
+      ],
+      'leisure-creativity': [
+        { name: 'Brit + Co', creator: 'ברית מורין', emoji: '🎨', story: 'אהבה ליצור דברים ביד אבל לא מצאה מקום אחד ללמוד הכול. יצרה פלטפורמה עם סדנאות DIY — מציור ועד אפייה ועד עיצוב. הפכה את "אני רוצה לנסות" ל"אני יודעת לעשות".' },
+        { name: 'Etsy', creator: 'קהילת יוצרות (מיליוני מוכרות)', emoji: '🧶', story: 'המקום שבו כל אחת יכולה למכור מה שהיא יוצרת — תכשיטים סטיקרים בגדים אמנות. מיליוני נשים הפכו תחביב לעסק אמיתי. הוכחה שיצירתיות יכולה להיות מקצוע.' },
+        { name: 'Skillshare', creator: 'מלינדה ליבמן (מנהלת תוכן)', emoji: '✏️', story: 'פלטפורמה שבה כל אחת יכולה ללמד וכל אחת יכולה ללמוד. רוצה ללמוד לצייר? לערוך סרטונים? לכתוב? אלפי קורסים חינמיים שמלמדים את מה שבית הספר לא.' }
+      ],
+      'looking-forward': [
+        { name: 'Spanx', creator: 'סארה בלייקלי', emoji: '👙', story: 'עמדה מול המראה עם מכנסיים לבנים ושום דבר שנראה טוב מתחת. גזרה את הרגליים של גרביון ולבשה. עבד. הלכה עם זה עד הסוף — ומכרה ב-5 מיליארד דולר. בלי משקיעים ובלי קשרים.' },
+        { name: 'Glossier', creator: 'אמילי וייס', emoji: '💄', story: 'התחילה מבלוג יופי בו שאלה בנות מה הן באמת רוצות. הקשיבה. ויצרה מותג איפור שנראה כמו "בלי איפור". בגיל 29 זה כבר היה שווה מיליארד.' },
+        { name: 'GoldieBlox', creator: 'דבי סטרלינג', emoji: '🔧', story: 'למה כל הצעצועים ההנדסיים רק לבנים? היא יצרה צעצועי בנייה שמיועדים לבנות — ושמו אותם על מדפים ליד הלגו. שינתה את מה שילדות חולמות להיות.' }
+      ]
+    };
+
+    function getStepIndicator(current, total) {
+      let dots = '';
+      for (let i = 1; i <= total; i++) {
+        let cls = 'step-dot';
+        if (i === current) cls += ' active';
+        else if (i < current) cls += ' completed';
+        dots += `<div class="${cls}"></div>`;
+      }
+      return `<div class="step-indicator">${dots}</div>`;
+    }
+
+    function transitionStep(html) {
+      const container = document.getElementById('journey-step-container');
+      container.style.opacity = '0';
+      container.style.transform = 'translateY(20px)';
+      setTimeout(() => {
+        container.innerHTML = html;
+        container.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        container.style.opacity = '1';
+        container.style.transform = 'translateY(0)';
+        document.getElementById('app-wrapper').scrollTo({ top: 0, behavior: 'smooth' });
+      }, 300);
+    }
+
+    function getParticipantForQuestion(qIndex) {
+      const names = journeyData.names;
+      return names[qIndex % names.length];
+    }
+
+    function showMainView() {
+      document.getElementById('main-content').style.display = 'block';
+      document.getElementById('journey-view').style.display = 'none';
+    }
+
+    function showJourneyStep1() {
+      document.getElementById('main-content').style.display = 'none';
+      document.getElementById('journey-view').style.display = 'block';
+      journeyData.currentStep = 1;
+      renderStep1();
+    }
+
+    function renderStep1() {
+      const html = `
+        ${getStepIndicator(1, 9)}
+        <div class="text-center mb-8">
+          <div class="text-6xl mb-4">👋</div>
+          <h2 class="text-3xl md:text-4xl font-bold mb-4 gradient-text">מי יוצאת למסע?</h2>
+          <p class="text-lg" style="color: var(--text-color); opacity: 0.8;">הכניסו את השמות של המשתתפות</p>
+        </div>
+        <div class="space-y-4 max-w-md mx-auto mb-8">
+          <div>
+            <label class="block text-sm font-bold mb-2" style="color: var(--text-color);">משתתפת 1 *</label>
+            <input type="text" id="name1" class="journey-input" placeholder="השם של משתתפת 1" required>
+          </div>
+          <div>
+            <label class="block text-sm font-bold mb-2" style="color: var(--text-color);">משתתפת 2 *</label>
+            <input type="text" id="name2" class="journey-input" placeholder="השם של משתתפת 2" required>
+          </div>
+          <div>
+            <label class="block text-sm font-bold mb-2" style="color: var(--text-color);">משתתפת 3 (לא חובה)</label>
+            <input type="text" id="name3" class="journey-input" placeholder="השם של משתתפת 3">
+          </div>
+        </div>
+        <div class="text-center">
+          <button onclick="submitNames()" class="pulse-btn text-white text-xl font-bold px-10 py-4 rounded-full shadow-2xl transform hover:scale-105 transition-all duration-300" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));">
+            יוצאות לדרך! 🚀
+          </button>
+        </div>
+      `;
+      transitionStep(html);
+    }
+
+    function submitNames() {
+      const n1 = document.getElementById('name1').value.trim();
+      const n2 = document.getElementById('name2').value.trim();
+      const n3 = document.getElementById('name3').value.trim();
+      if (!n1 || !n2) {
+        alert('חובה להכניס שמות לשתי משתתפות לפחות');
+        return;
+      }
+      journeyData.names = [n1, n2];
+      if (n3) journeyData.names.push(n3);
+
+      const namesStr = journeyData.names.join(' ו');
+      const html = `
+        ${getStepIndicator(1, 9)}
+        <div class="text-center">
+          <div class="text-6xl mb-6">✨</div>
+          <div class="stem-card rounded-3xl p-10 max-w-xl mx-auto" style="background: var(--surface-color);">
+            <h2 class="text-2xl font-bold mb-4 gradient-text">${namesStr}</h2>
+            <p class="text-lg mb-6" style="color: var(--text-color);">יצאתן למסע משותף. במהלך הדרך נצעד יחד ובכל שלב השאלה תפנה למישהי אחרת.</p>
+            <button onclick="renderStep2()" class="text-white text-lg font-bold px-8 py-4 rounded-full shadow-xl transform hover:scale-105 transition-all duration-300" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));">
+              המשיכו →
+            </button>
+          </div>
+        </div>
+      `;
+      transitionStep(html);
+    }
+
+    function renderStep2() {
+      journeyData.currentStep = 2;
+      journeyData.topicChoices = {};
+      let currentPickerIndex = 0;
+
+      function renderPicker() {
+        const name = journeyData.names[currentPickerIndex];
+        const boxesHtml = topicBoxes.map(box => {
+          const alreadyChosen = Object.values(journeyData.topicChoices).includes(box.id);
+          const dimClass = alreadyChosen ? 'opacity-40 pointer-events-none' : '';
+          return `
+            <div class="topic-box stem-card rounded-2xl p-6 text-center ${dimClass}" style="background: var(--surface-color);" onclick="pickTopic('${box.id}')">
+              <div class="text-5xl mb-3">${box.emoji}</div>
+              <h3 class="text-lg font-bold mb-2" style="color: var(--text-color);">${box.title}</h3>
+              <p class="text-sm" style="color: var(--text-color); opacity: 0.7;">"${box.subtitle}"</p>
+            </div>
+          `;
+        }).join('');
+
+        const html = `
+          ${getStepIndicator(2, 9)}
+          <div class="text-center mb-6">
+            <div class="text-5xl mb-4">📦</div>
+            <h2 class="text-3xl font-bold mb-3 gradient-text">בחירת תיבת נושא</h2>
+            <p class="text-base mb-4" style="color: var(--text-color); opacity: 0.8;">כל אחת בתורה בוחרת תיבה שמסקרנת אותה. לא מה שצריך – אלא מה שמושך עכשיו.</p>
+            <div class="stem-card rounded-full px-6 py-3 inline-block" style="background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(139, 92, 246, 0.15));">
+              <p class="text-lg font-bold gradient-text">תור של ${name}</p>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+            ${boxesHtml}
+          </div>
+        `;
+        transitionStep(html);
+      }
+
+      window.pickTopic = function(topicId) {
+        journeyData.topicChoices[journeyData.names[currentPickerIndex]] = topicId;
+        currentPickerIndex++;
+        if (currentPickerIndex < journeyData.names.length) {
+          renderPicker();
+        } else {
+          const counts = {};
+          Object.values(journeyData.topicChoices).forEach(t => { counts[t] = (counts[t] || 0) + 1; });
+          let maxCount = 0; let primary = null;
+          for (const [t, c] of Object.entries(counts)) { if (c > maxCount) { maxCount = c; primary = t; } }
+          if (!primary) primary = Object.values(journeyData.topicChoices)[0];
+          journeyData.primaryTopic = primary;
+
+          const topicObj = topicBoxes.find(b => b.id === primary);
+          const html = `
+            ${getStepIndicator(2, 9)}
+            <div class="text-center">
+              <div class="text-6xl mb-6">${topicObj.emoji}</div>
+              <div class="stem-card rounded-3xl p-10 max-w-xl mx-auto" style="background: var(--surface-color);">
+                <h2 class="text-2xl font-bold mb-4 gradient-text">${topicObj.title}</h2>
+                <p class="text-lg mb-6" style="color: var(--text-color);">מהנקודה הזו נתחיל להתפצל בשאלות כדי להגיע לדיוק משותף.</p>
+                <button onclick="startQuestions()" class="text-white text-lg font-bold px-8 py-4 rounded-full shadow-xl transform hover:scale-105 transition-all duration-300" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));">
+                  בואו נתחיל! 🎯
+                </button>
+              </div>
+            </div>
+          `;
+          transitionStep(html);
+        }
+      };
+
+      renderPicker();
+    }
+
+    function startQuestions() {
+      journeyData.currentStep = 3;
+      journeyData.answers = [];
+      journeyData.currentQuestionIndex = 0;
+      journeyData.questionPath = [];
+
+      const tree = questionTrees[journeyData.primaryTopic];
+      journeyData.questionPath.push(0);
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      const tree = questionTrees[journeyData.primaryTopic];
+      const qIdx = journeyData.questionPath[journeyData.questionPath.length - 1];
+      const question = tree[qIdx];
+      const name = getParticipantForQuestion(journeyData.currentQuestionIndex);
+
+      const optionsHtml = question.options.map((opt, i) => `
+        <div class="answer-btn stem-card rounded-2xl p-5 text-center" style="background: var(--surface-color);" onclick="answerQuestion(${i})">
+          <p class="text-lg font-semibold" style="color: var(--text-color);">${opt.text}</p>
+        </div>
+      `).join('');
+
+      const html = `
+        ${getStepIndicator(3, 9)}
+        <div class="text-center mb-6">
+          <div class="text-5xl mb-4">💭</div>
+          <div class="stem-card rounded-full px-6 py-3 inline-block mb-4" style="background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(139, 92, 246, 0.15));">
+            <p class="text-lg font-bold gradient-text">שאלה ל-${name}</p>
+          </div>
+          <div class="stem-card rounded-2xl p-8 mb-6" style="background: var(--surface-color);">
+            <p class="text-xl leading-relaxed" style="color: var(--text-color);">${question.text}</p>
+          </div>
+        </div>
+        <div class="space-y-4 max-w-lg mx-auto">
+          ${optionsHtml}
+        </div>
+        <div class="text-center mt-6">
+          <p class="text-sm" style="color: var(--text-color); opacity: 0.5;">שאלה ${journeyData.currentQuestionIndex + 1}</p>
+        </div>
+      `;
+      transitionStep(html);
+    }
+
+    function answerQuestion(optionIndex) {
+      const tree = questionTrees[journeyData.primaryTopic];
+      const qIdx = journeyData.questionPath[journeyData.questionPath.length - 1];
+      const question = tree[qIdx];
+      const chosen = question.options[optionIndex];
+
+      journeyData.answers.push({ question: question.text, answer: chosen.text, value: chosen.value });
+      journeyData.currentQuestionIndex++;
+
+      if (chosen.next) {
+        const nextIdx = tree.findIndex(q => q.id === chosen.next);
+        if (nextIdx !== -1) {
+          journeyData.questionPath.push(nextIdx);
+          renderQuestion();
+          return;
+        }
+      }
+
+      const lastLinearIdx = journeyData.questionPath[journeyData.questionPath.length - 1];
+      let nextLinearIdx = -1;
+      for (let i = lastLinearIdx + 1; i < tree.length; i++) {
+        if (!tree[i].id) { nextLinearIdx = i; break; }
+      }
+
+      if (nextLinearIdx !== -1 && journeyData.currentQuestionIndex < 4) {
+        journeyData.questionPath.push(nextLinearIdx);
+        renderQuestion();
+      } else {
+        renderStep4();
+      }
+    }
+
+    function determineDomain() {
+      const topic = journeyData.primaryTopic;
+      const answers = journeyData.answers.map(a => a.value);
+
+      const scores = {
+        'body-feeling': 0,
+        'digital-life': 0,
+        'learning-pressure': 0,
+        'social-life': 0,
+        'daily-choices': 0,
+        'space-movement': 0,
+        'my-home': 0,
+        'living-environment': 0,
+        'leisure-creativity': 0,
+        'looking-forward': 0
+      };
+
+      const topicBase = {
+        daily:          { 'daily-choices': 3, 'body-feeling': 1, 'living-environment': 1 },
+        identity:       { 'looking-forward': 3, 'leisure-creativity': 1, 'digital-life': 1 },
+        relationships:  { 'social-life': 3, 'my-home': 1, 'learning-pressure': 1 },
+        boundaries:     { 'space-movement': 2, 'social-life': 2, 'my-home': 1 },
+        'inner-voice':  { 'digital-life': 2, 'learning-pressure': 2, 'looking-forward': 1 },
+        world:          { 'living-environment': 3, 'space-movement': 2, 'my-home': 1 }
+      };
+
+      const base = topicBase[topic] || {};
+      for (const [d, pts] of Object.entries(base)) scores[d] += pts;
+
+      const answerWeights = {
+        daily: [
+          { A: { 'daily-choices': 3, 'space-movement': 1, 'learning-pressure': 1 },
+            B: { 'body-feeling': 3, 'my-home': 1, 'digital-life': 1 } },
+          { A: { 'daily-choices': 2, 'looking-forward': 2, 'space-movement': 1 },
+            B: { 'social-life': 2, 'my-home': 2, 'leisure-creativity': 1 },
+            C: { 'body-feeling': 3, 'digital-life': 2 } },
+          { A: { 'looking-forward': 3, 'space-movement': 1, 'learning-pressure': 1 },
+            B: { 'leisure-creativity': 3, 'living-environment': 1, 'digital-life': 1 } },
+          { A: { 'body-feeling': 2, 'my-home': 2, 'learning-pressure': 1 },
+            B: { 'living-environment': 2, 'social-life': 2, 'space-movement': 1 } }
+        ],
+        identity: [
+          { A: { 'looking-forward': 2, 'leisure-creativity': 2, 'daily-choices': 1 },
+            B: { 'space-movement': 2, 'social-life': 2, 'body-feeling': 1 } },
+          { A: { 'daily-choices': 2, 'looking-forward': 2, 'learning-pressure': 1 },
+            B: { 'leisure-creativity': 3, 'digital-life': 1, 'living-environment': 1 } },
+          { A: { 'my-home': 2, 'social-life': 2, 'body-feeling': 1 },
+            B: { 'digital-life': 2, 'space-movement': 2, 'living-environment': 1 } },
+          { A: { 'social-life': 2, 'looking-forward': 2, 'space-movement': 1 },
+            B: { 'leisure-creativity': 2, 'my-home': 2, 'living-environment': 1 } }
+        ],
+        relationships: [
+          { A: { 'social-life': 2, 'my-home': 2, 'body-feeling': 1 },
+            B: { 'digital-life': 2, 'looking-forward': 2, 'leisure-creativity': 1 } },
+          { A: { 'social-life': 2, 'space-movement': 2, 'looking-forward': 1 },
+            B: { 'body-feeling': 2, 'my-home': 2, 'learning-pressure': 1 } },
+          { A: { 'leisure-creativity': 2, 'daily-choices': 2, 'living-environment': 1 },
+            B: { 'learning-pressure': 2, 'digital-life': 2, 'looking-forward': 1 } },
+          { A: { 'my-home': 2, 'living-environment': 2, 'space-movement': 1 },
+            B: { 'daily-choices': 2, 'leisure-creativity': 2, 'body-feeling': 1 } }
+        ],
+        boundaries: [
+          { A: { 'social-life': 2, 'daily-choices': 2, 'body-feeling': 1 },
+            B: { 'looking-forward': 2, 'learning-pressure': 2, 'digital-life': 1 } },
+          { A: { 'daily-choices': 2, 'body-feeling': 2, 'living-environment': 1 },
+            B: { 'social-life': 2, 'my-home': 2, 'leisure-creativity': 1 } },
+          { A: { 'space-movement': 2, 'body-feeling': 2, 'living-environment': 1 },
+            B: { 'my-home': 2, 'learning-pressure': 2, 'digital-life': 1 },
+            C: { 'looking-forward': 2, 'leisure-creativity': 2, 'daily-choices': 1 } },
+          { A: { 'space-movement': 2, 'living-environment': 2, 'leisure-creativity': 1 },
+            B: { 'learning-pressure': 2, 'digital-life': 2, 'looking-forward': 1 } }
+        ],
+        'inner-voice': [
+          { A: { 'learning-pressure': 2, 'digital-life': 2, 'daily-choices': 1 },
+            B: { 'body-feeling': 2, 'looking-forward': 2, 'social-life': 1 } },
+          { A: { 'my-home': 2, 'social-life': 2, 'body-feeling': 1 },
+            B: { 'digital-life': 2, 'leisure-creativity': 2, 'living-environment': 1 } },
+          { A: { 'learning-pressure': 2, 'space-movement': 2, 'daily-choices': 1 },
+            B: { 'my-home': 2, 'leisure-creativity': 2, 'living-environment': 1 } },
+          { A: { 'looking-forward': 2, 'space-movement': 2, 'body-feeling': 1 },
+            B: { 'living-environment': 2, 'leisure-creativity': 2, 'daily-choices': 1 } }
+        ],
+        world: [
+          { A: { 'space-movement': 2, 'social-life': 2, 'daily-choices': 1 },
+            B: { 'living-environment': 2, 'body-feeling': 2, 'digital-life': 1 } },
+          { A: { 'social-life': 2, 'looking-forward': 2, 'learning-pressure': 1 },
+            B: { 'space-movement': 2, 'daily-choices': 2, 'leisure-creativity': 1 } },
+          { A: { 'my-home': 3, 'body-feeling': 1, 'leisure-creativity': 1 },
+            B: { 'looking-forward': 3, 'digital-life': 1, 'learning-pressure': 1 } },
+          { A: { 'body-feeling': 2, 'my-home': 2, 'learning-pressure': 1 },
+            B: { 'looking-forward': 2, 'leisure-creativity': 2, 'digital-life': 1 } }
+        ]
+      };
+
+      const weights = answerWeights[topic] || [];
+      answers.forEach((ans, i) => {
+        if (i < weights.length && weights[i][ans]) {
+          for (const [d, pts] of Object.entries(weights[i][ans])) {
+            scores[d] += pts;
+          }
+        }
+      });
+
+      let best = 'daily-choices';
+      let bestScore = -1;
+      for (const [d, s] of Object.entries(scores)) {
+        if (s > bestScore) { bestScore = s; best = d; }
+      }
+      return best;
+    }
+
+    function renderStep4() {
+      journeyData.currentStep = 4;
+      const domainId = determineDomain();
+      journeyData.domain = domainId;
+      const domain = domainData[domainId];
+
+      const html = `
+        ${getStepIndicator(4, 9)}
+        <div class="text-center">
+          <div class="text-7xl mb-6">${domain.emoji}</div>
+          <div class="stem-card rounded-3xl p-10 max-w-xl mx-auto" style="background: var(--surface-color);">
+            <p class="text-lg mb-4" style="color: var(--text-color);">כשמחברים את כל הבחירות שלכן עולה כאן נושא מרכזי:</p>
+            <h2 class="text-3xl font-bold mb-4 gradient-text">${domain.name} ${domain.emoji}</h2>
+            <p class="text-base mb-6" style="color: var(--text-color); opacity: 0.7;">זהו מיקוד קבוצתי לא תיוג אישי.</p>
+            <button onclick="renderStep5()" class="text-white text-lg font-bold px-8 py-4 rounded-full shadow-xl transform hover:scale-105 transition-all duration-300" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));">
+              בואו נדייק עוד 🔍
+            </button>
+          </div>
+        </div>
+      `;
+      transitionStep(html);
+    }
+
+    function renderStep5() {
+      journeyData.currentStep = 5;
+      const domain = domainData[journeyData.domain];
+      const namesStr = journeyData.names.join(' ו');
+
+      const subsHtml = domain.subs.map((sub, i) => `
+        <div class="subdomain-btn stem-card rounded-2xl p-5 text-center" style="background: var(--surface-color);" onclick="pickSubdomain(${i})">
+          <p class="text-lg font-semibold" style="color: var(--text-color);">${sub}</p>
+        </div>
+      `).join('');
+
+      const html = `
+        ${getStepIndicator(5, 9)}
+        <div class="text-center mb-6">
+          <div class="text-5xl mb-4">${domain.emoji}</div>
+          <h2 class="text-2xl font-bold mb-3 gradient-text">${domain.name}</h2>
+          <div class="stem-card rounded-full px-6 py-3 inline-block mb-4" style="background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(139, 92, 246, 0.15));">
+            <p class="text-lg font-bold gradient-text">🤝 החלטה משותפת של ${namesStr}</p>
+          </div>
+          <p class="text-lg mb-6" style="color: var(--text-color);">דברו ביניכן — בתוך התחום הזה מה הכי מדויק למקום שאתן נמצאות בו עכשיו?</p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-lg mx-auto">
+          ${subsHtml}
+        </div>
+      `;
+      transitionStep(html);
+    }
+
+    function pickSubdomain(index) {
+      const domain = domainData[journeyData.domain];
+      journeyData.subDomain = domain.subs[index];
+
+      const cards = document.querySelectorAll('.subdomain-btn');
+      cards.forEach((c, i) => {
+        if (i === index) c.classList.add('selected');
+        else c.classList.remove('selected');
+      });
+
+      setTimeout(() => renderStep6Inspiration(), 600);
+    }
+
+    function renderStep6Inspiration() {
+      journeyData.currentStep = 6;
+      const examples = inspirationExamples[journeyData.domain] || [];
+      const cardsHtml = examples.map(ex => `
+        <div class="inspiration-card stem-card rounded-2xl p-6 text-center" style="background: var(--surface-color);">
+          <div class="text-5xl mb-4">${ex.emoji}</div>
+          <h3 class="text-lg font-bold mb-1" style="color: var(--text-color);">${ex.name}</h3>
+          <p class="text-sm font-medium mb-3" style="color: var(--primary-color); opacity: 0.85;">${ex.creator}</p>
+          <p class="text-sm leading-relaxed" style="color: var(--text-color); opacity: 0.8;">${ex.story}</p>
+        </div>
+      `).join('');
+
+      const html = `
+        ${getStepIndicator(6, 9)}
+        <div class="text-center mb-8">
+          <div class="text-5xl mb-4">💡</div>
+          <h2 class="text-2xl md:text-3xl font-bold mb-4 gradient-text">נשים שהפכו צורך למוצר 💡</h2>
+          <p class="text-lg" style="color: var(--text-color); opacity: 0.8;">מוצרים אמיתיים שנולדו מרגע של "למה אין דבר כזה?"</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 inspiration-grid">
+          ${cardsHtml}
+        </div>
+        <div class="text-center mb-6">
+          <div class="stem-card rounded-2xl p-6 inline-block max-w-xl" style="background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(139, 92, 246, 0.1));">
+            <p class="text-lg font-bold" style="color: var(--text-color);">כל אחת מהן התחילה מרגע של "למה אין דבר כזה?" — בדיוק כמוכן.</p>
+          </div>
+        </div>
+        <div class="text-center">
+          <button onclick="renderStep7()" class="pulse-btn text-white text-xl font-bold px-10 py-4 rounded-full shadow-2xl transform hover:scale-105 transition-all duration-300" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));">
+            עכשיו תורכן! →
+          </button>
+        </div>
+      `;
+      transitionStep(html);
+    }
+
+    function renderStep7() {
+      journeyData.currentStep = 7;
+      const options = [
+        { emoji: '👀', text: 'לשים לב למשהו', value: 'notice' },
+        { emoji: '💬', text: 'לדבר עליו יותר', value: 'talk' },
+        { emoji: '👣', text: 'לנסות צעד קטן', value: 'step' }
+      ];
+
+      const optionsHtml = options.map(opt => `
+        <div class="answer-btn stem-card rounded-2xl p-6 text-center" style="background: var(--surface-color);" onclick="pickDecision('${opt.value}', '${opt.emoji} ${opt.text}')">
+          <div class="text-4xl mb-3">${opt.emoji}</div>
+          <p class="text-lg font-semibold" style="color: var(--text-color);">${opt.text}</p>
+        </div>
+      `).join('');
+
+      const html = `
+        ${getStepIndicator(7, 9)}
+        <div class="text-center mb-6">
+          <div class="text-5xl mb-4">🤝</div>
+          <h2 class="text-2xl font-bold mb-4 gradient-text">החלטה משותפת</h2>
+          <p class="text-lg mb-6" style="color: var(--text-color);">מתוך כל מה שעלה כאן מה נבחר לקחת איתנו הלאה?</p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto">
+          ${optionsHtml}
+        </div>
+      `;
+      transitionStep(html);
+    }
+
+    function pickDecision(value, label) {
+      journeyData.decision = label;
+
+      const html = `
+        ${getStepIndicator(7, 9)}
+        <div class="text-center">
+          <div class="text-6xl mb-6">💫</div>
+          <div class="stem-card rounded-3xl p-10 max-w-xl mx-auto" style="background: var(--surface-color);">
+            <h2 class="text-2xl font-bold mb-4 gradient-text">ההחלטה המשותפת שלכן</h2>
+            <p class="text-xl mb-6" style="color: var(--text-color);">${label}</p>
+            <button onclick="renderStep8()" class="text-white text-lg font-bold px-8 py-4 rounded-full shadow-xl transform hover:scale-105 transition-all duration-300" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));">
+              המשיכו →
+            </button>
+          </div>
+        </div>
+      `;
+      transitionStep(html);
+    }
+
+    function renderStep8() {
+      journeyData.currentStep = 8;
+      const html = `
+        ${getStepIndicator(8, 9)}
+        <div class="text-center">
+          <div class="text-6xl mb-6">🌟</div>
+          <div class="stem-card rounded-3xl p-10 max-w-xl mx-auto" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));">
+            <div class="text-white">
+              <p class="text-xl mb-6 leading-relaxed">לא פתרתן הכול. אבל בחרתן לצעוד יחד לדייק ולקבל החלטה.</p>
+              <button onclick="renderStep9()" class="bg-white text-lg font-bold px-10 py-4 rounded-full shadow-xl transform hover:scale-105 transition-all duration-300" style="color: var(--primary-color);">
+                הדרך שלנו – יחד 💜
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+      transitionStep(html);
+    }
+
+    function renderStep9() {
+      journeyData.currentStep = 9;
+      const domain = domainData[journeyData.domain];
+      const topicObj = topicBoxes.find(b => b.id === journeyData.primaryTopic);
+      const namesStr = journeyData.names.join(' ו');
+
+      const html = `
+        ${getStepIndicator(9, 9)}
+        <div class="text-center mb-6">
+          <div class="text-6xl mb-4">📄</div>
+          <h2 class="text-3xl font-bold mb-2 gradient-text">הדרך שלנו – יחד</h2>
+          <p class="text-base mb-6" style="color: var(--text-color); opacity: 0.7;">הסיכום שלכן מוכן!</p>
+        </div>
+        <div class="stem-card rounded-3xl p-8 mb-6" style="background: var(--surface-color);">
+          <div class="space-y-4 text-center">
+            <p class="text-lg" style="color: var(--text-color);"><strong>משתתפות:</strong> ${namesStr}</p>
+            <p class="text-lg" style="color: var(--text-color);"><strong>תיבת נושא:</strong> ${topicObj.emoji} ${topicObj.title}</p>
+            <p class="text-lg" style="color: var(--text-color);"><strong>תחום:</strong> ${domain.emoji} ${domain.name}</p>
+            <p class="text-lg" style="color: var(--text-color);"><strong>תת-תחום:</strong> ${journeyData.subDomain}</p>
+            <p class="text-lg" style="color: var(--text-color);"><strong>החלטה:</strong> ${journeyData.decision}</p>
+          </div>
+        </div>
+        <div class="text-center">
+          <button id="generate-pdf-btn" onclick="generatePDF()" class="pulse-btn text-white text-xl font-bold px-10 py-4 rounded-full shadow-2xl transform hover:scale-105 transition-all duration-300" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));">
+            הורידו את ה-PDF 📥
+          </button>
+          <p id="pdf-loading" class="mt-4 text-base hidden" style="color: var(--text-color); opacity: 0.7;">⏳ מכינות את ה-PDF שלכן...</p>
+        </div>
+      `;
+      transitionStep(html);
+    }
+
+    let logoDataUrl = null;
+    (function preloadLogo() {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = function() {
+        const c = document.createElement('canvas');
+        c.width = img.width; c.height = img.height;
+        c.getContext('2d').drawImage(img, 0, 0);
+        try { logoDataUrl = c.toDataURL('image/png'); } catch(e) {}
+      };
+      img.src = '/favicon.png';
+    })();
+
+    async function generatePDF() {
+      const btn = document.getElementById('generate-pdf-btn');
+      const loading = document.getElementById('pdf-loading');
+      btn.style.display = 'none';
+      loading.classList.remove('hidden');
+
+      const domain = domainData[journeyData.domain];
+      const topicObj = topicBoxes.find(b => b.id === journeyData.primaryTopic);
+      const namesStr = journeyData.names.join(' ו');
+      const renderArea = document.getElementById('pdf-render-area');
+      const logoSrc = logoDataUrl || '/favicon.png';
+
+      const pages = [];
+
+      const today = new Date();
+      const dateStr = today.toLocaleDateString('he-IL', { year: 'numeric', month: 'long', day: 'numeric' });
+
+      pages.push(`
+        <div class="pdf-page" style="display: flex; flex-direction: column; padding: 50px 55px;">
+          <div class="pdf-gradient-bar"></div>
+
+          <div style="text-align: center; margin-bottom: 30px; padding-top: 10px;">
+            <img src="${logoSrc}" style="width: 70px; height: 70px; border-radius: 50%; margin-bottom: 14px; box-shadow: 0 4px 15px rgba(236,72,153,0.2);" onerror="this.style.display='none'">
+            <h1 style="font-size: 36px; font-weight: 800; color: #ec4899; margin: 0 0 6px; letter-spacing: -0.5px;">הדרך שלנו – יחד</h1>
+            <p style="font-size: 15px; color: #9ca3af; margin: 0;">מסע משותף של נשים פורצות דרך</p>
+          </div>
+
+          <div style="background: linear-gradient(135deg, rgba(236,72,153,0.08), rgba(139,92,246,0.08)); border-radius: 16px; padding: 18px 30px; text-align: center; margin-bottom: 28px;">
+            <p style="font-size: 11px; color: #9ca3af; margin: 0 0 6px; text-transform: uppercase; letter-spacing: 1px;">המשתתפות</p>
+            <p style="font-size: 22px; font-weight: 700; color: #1f2937; margin: 0;">${namesStr}</p>
+            <p style="font-size: 12px; color: #9ca3af; margin: 6px 0 0;">${dateStr}</p>
+          </div>
+
+          <div style="height: 2px; background: linear-gradient(90deg, transparent, #ec4899, #8b5cf6, transparent); margin-bottom: 28px; border-radius: 2px;"></div>
+
+          <div style="display: flex; gap: 20px; margin-bottom: 30px;">
+            <div style="flex: 1; background: linear-gradient(135deg, #fdf4ff, #fce7f3); border-radius: 16px; padding: 28px 20px; text-align: center; border: 1px solid rgba(236,72,153,0.15);">
+              <p style="font-size: 11px; color: #9ca3af; margin: 0 0 12px; letter-spacing: 0.5px;">🎯 התיבה שנבחרה</p>
+              <p style="font-size: 40px; margin: 0 0 10px;">${topicObj.emoji}</p>
+              <p style="font-size: 20px; font-weight: 700; color: #1f2937; margin: 0;">${topicObj.title}</p>
+            </div>
+            <div style="flex: 1; background: linear-gradient(135deg, #faf5ff, #ede9fe); border-radius: 16px; padding: 28px 20px; text-align: center; border: 1px solid rgba(139,92,246,0.15);">
+              <p style="font-size: 11px; color: #9ca3af; margin: 0 0 12px; letter-spacing: 0.5px;">🌟 התחום המרכזי</p>
+              <p style="font-size: 40px; margin: 0 0 10px;">${domain.emoji}</p>
+              <p style="font-size: 20px; font-weight: 700; color: #1f2937; margin: 0;">${domain.name}</p>
+            </div>
+            <div style="flex: 1; background: linear-gradient(135deg, #f5f3ff, #e0e7ff); border-radius: 16px; padding: 28px 20px; text-align: center; border: 1px solid rgba(99,102,241,0.15);">
+              <p style="font-size: 11px; color: #9ca3af; margin: 0 0 12px; letter-spacing: 0.5px;">🔍 תת-תחום</p>
+              <p style="font-size: 40px; margin: 0 0 10px;">✨</p>
+              <p style="font-size: 20px; font-weight: 600; color: #6366f1; margin: 0;">${journeyData.subDomain}</p>
+            </div>
+          </div>
+
+          <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
+            <div style="text-align: center; max-width: 500px;">
+              <div style="height: 2px; background: linear-gradient(90deg, transparent, #ec4899, #8b5cf6, transparent); margin-bottom: 30px; border-radius: 2px;"></div>
+              <p style="font-size: 36px; margin: 0 0 16px;">🌟</p>
+              <p style="font-size: 16px; color: #4b5563; line-height: 1.9; margin: 0; font-style: italic;">"הדרך הכי ארוכה מתחילה בצעד הראשון — ואת כבר עשית אותו."</p>
+              <div style="height: 2px; background: linear-gradient(90deg, transparent, #8b5cf6, #ec4899, transparent); margin-top: 30px; border-radius: 2px;"></div>
+            </div>
+          </div>
+
+          <div style="text-align: center; padding-top: 16px; border-top: 1px solid #f3e8ff; margin-top: 20px;">
+            <p style="font-size: 11px; color: #9ca3af; margin: 0;">עמוד 1 מתוך 2 &nbsp;|&nbsp; תוכנית פורצות דרך © 2026</p>
+          </div>
+
+          <div class="pdf-bottom-bar"></div>
+        </div>
+      `);
+
+      const answersHtml = journeyData.answers.map((a, i) => `
+        <div style="display: flex; gap: 10px; align-items: flex-start; margin-bottom: 10px; padding: 10px 14px; background: ${i % 2 === 0 ? '#fafafa' : '#ffffff'}; border-radius: 10px; border-right: 3px solid ${i % 2 === 0 ? '#ec4899' : '#8b5cf6'};">
+          <div style="min-width: 24px; height: 24px; background: linear-gradient(135deg, #ec4899, #8b5cf6); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 11px; font-weight: 700; flex-shrink: 0;">${i + 1}</div>
+          <div style="flex: 1;">
+            <p style="font-size: 11px; color: #6b7280; margin: 0 0 3px; line-height: 1.4;">${a.question}</p>
+            <p style="font-size: 13px; font-weight: 600; color: #1f2937; margin: 0; line-height: 1.4;">${a.answer}</p>
+          </div>
+        </div>
+      `).join('');
+
+      pages.push(`
+        <div class="pdf-page" style="display: flex; flex-direction: column; padding: 50px 55px;">
+          <div class="pdf-gradient-bar"></div>
+
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid #f3e8ff;">
+            <img src="${logoSrc}" style="width: 36px; height: 36px; border-radius: 50%;" onerror="this.style.display='none'">
+            <h2 style="font-size: 20px; font-weight: 700; color: #ec4899; margin: 0;">הדרך שלנו – יחד</h2>
+            <p style="font-size: 12px; color: #9ca3af; margin: 0; margin-right: auto;">${namesStr}</p>
+          </div>
+
+          <div style="margin-bottom: 18px;">
+            <h3 style="font-size: 16px; font-weight: 700; color: #8b5cf6; margin: 0 0 12px; display: flex; align-items: center; gap: 8px;">🛤️ המסע שעברנו יחד</h3>
+            <div>
+              ${answersHtml}
+            </div>
+          </div>
+
+          <div style="height: 2px; background: linear-gradient(90deg, transparent, #ec4899, #8b5cf6, transparent); margin-bottom: 18px; border-radius: 2px;"></div>
+
+          <div style="background: white; border: 2px solid #ec4899; border-radius: 16px; padding: 20px 28px; text-align: center; margin-bottom: 18px; box-shadow: 0 4px 15px rgba(236,72,153,0.1);">
+            <p style="font-size: 11px; color: #9ca3af; margin: 0 0 8px; letter-spacing: 0.5px;">💫 ההחלטה המשותפת שלנו</p>
+            <p style="font-size: 20px; font-weight: 700; color: #1f2937; margin: 0; line-height: 1.5;">${journeyData.decision}</p>
+          </div>
+
+          <div style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
+            <div style="background: linear-gradient(135deg, rgba(236,72,153,0.05), rgba(139,92,246,0.05)); border-radius: 14px; padding: 22px 30px; text-align: center;">
+              <p style="font-size: 14px; color: #4b5563; line-height: 1.9; margin: 0;">את לא צריכה לדעת בדיוק לאן את הולכת כדי להתחיל ללכת. מספיק שבחרת לצעוד — ושעשית את זה עם מישהי לידך. זה כבר הכוח שלך.</p>
+              <p style="font-size: 28px; margin: 14px 0 0;">🌸</p>
+            </div>
+          </div>
+
+          <div style="text-align: center; padding-top: 16px; border-top: 1px solid #f3e8ff; margin-top: 20px;">
+            <p style="font-size: 11px; color: #9ca3af; margin: 0;">עמוד 2 מתוך 2 &nbsp;|&nbsp; המשיכו לפרוץ דרך 💜 &nbsp;|&nbsp; תוכנית פורצות דרך © 2026</p>
+          </div>
+
+          <div class="pdf-bottom-bar"></div>
+        </div>
+      `);
+
+      let pdfSuccess = false;
+      try {
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const pdfWidth = 210;
+        const pdfHeight = 297;
+
+        for (let i = 0; i < pages.length; i++) {
+          renderArea.innerHTML = pages[i];
+          const pageEl = renderArea.firstElementChild;
+
+          await new Promise(r => setTimeout(r, 200));
+
+          const canvas = await html2canvas(pageEl, {
+            scale: 2,
+            useCORS: true,
+            allowTaint: true,
+            backgroundColor: '#ffffff',
+            width: 794,
+            height: 1123
+          });
+
+          const imgData = canvas.toDataURL('image/jpeg', 0.95);
+          if (i > 0) pdf.addPage();
+          pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+        }
+
+        renderArea.innerHTML = '';
+        pdf.save('הדרך-שלנו-יחד.pdf');
+        pdfSuccess = true;
+      } catch (err) {
+        console.error('PDF generation error:', err);
+        alert('אירעה שגיאה ביצירת ה-PDF. נסו שוב.');
+      }
+
+      btn.style.display = 'inline-block';
+      loading.classList.add('hidden');
+      if (pdfSuccess) showPostDownload();
+    }
+
+    function showPostDownload() {
+      const html = `
+        <div class="text-center py-8">
+          <div class="text-5xl mb-6">✅</div>
+          <div class="stem-card rounded-3xl p-10 max-w-xl mx-auto mb-8" style="background: var(--surface-color);">
+            <p class="text-2xl font-bold mb-4 gradient-text">ה-PDF שלכן ירד בהצלחה!</p>
+            <p class="text-lg leading-relaxed mb-2" style="color: var(--text-color);">עכשיו יש לכן את המפה.</p>
+            <p class="text-xl font-bold leading-relaxed" style="color: var(--primary-color);">הגיע הזמן לבנות. 💪</p>
+          </div>
+
+          <div class="stem-card rounded-3xl p-10 max-w-xl mx-auto" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));">
+            <p class="text-white text-lg mb-6 leading-relaxed">את לא צריכה לדעת הכול כדי להתחיל.<br>את רק צריכה להתחיל כדי לדעת הכול.</p>
+            <a href="next-steps.html" class="inline-block bg-white text-2xl font-bold px-12 py-5 rounded-full shadow-xl transform hover:scale-105 transition-all duration-300" style="color: var(--primary-color); letter-spacing: 2px;">
+              🔧⚙️💻🛠️🚀📐
+            </a>
+            <p class="text-white text-sm mt-4 opacity-80">לחצו להמשך →</p>
+          </div>
+        </div>
+      `;
+      transitionStep(html);
+    }
+
+    function updateCSSVariables(cfg) {
+      document.documentElement.style.setProperty('--primary-color', cfg.primary_color || defaultConfig.primary_color);
+      document.documentElement.style.setProperty('--secondary-color', cfg.secondary_color || defaultConfig.secondary_color);
+      document.documentElement.style.setProperty('--bg-color', cfg.background_color || defaultConfig.background_color);
+      document.documentElement.style.setProperty('--text-color', cfg.text_color || defaultConfig.text_color);
+      document.documentElement.style.setProperty('--surface-color', cfg.surface_color || defaultConfig.surface_color);
+    }
+
+    async function onConfigChange(cfg) {
+      config = { ...defaultConfig, ...cfg };
+      updateCSSVariables(config);
+
+      const fontFamily = config.font_family || defaultConfig.font_family;
+      document.querySelectorAll('*').forEach(el => {
+        if (el.style) el.style.fontFamily = `'${fontFamily}', sans-serif`;
+      });
+
+      const baseSize = config.font_size || defaultConfig.font_size;
+      document.documentElement.style.fontSize = `${baseSize}px`;
+
+      const mainTitle = document.getElementById('main-title');
+      if (mainTitle) mainTitle.textContent = config.main_title || defaultConfig.main_title;
+
+      const ctaButton = document.getElementById('cta-button');
+      if (ctaButton) {
+        ctaButton.textContent = config.button_text || defaultConfig.button_text;
+        ctaButton.style.background = `linear-gradient(135deg, ${config.primary_color || defaultConfig.primary_color}, ${config.secondary_color || defaultConfig.secondary_color})`;
+      }
+    }
+
+    function mapToCapabilities(cfg) {
+      return {
+        recolorables: [
+          { get: () => cfg.background_color || defaultConfig.background_color, set: (value) => { config.background_color = value; window.elementSdk.setConfig({ background_color: value }); } },
+          { get: () => cfg.surface_color || defaultConfig.surface_color, set: (value) => { config.surface_color = value; window.elementSdk.setConfig({ surface_color: value }); } },
+          { get: () => cfg.text_color || defaultConfig.text_color, set: (value) => { config.text_color = value; window.elementSdk.setConfig({ text_color: value }); } },
+          { get: () => cfg.primary_color || defaultConfig.primary_color, set: (value) => { config.primary_color = value; window.elementSdk.setConfig({ primary_color: value }); } },
+          { get: () => cfg.secondary_color || defaultConfig.secondary_color, set: (value) => { config.secondary_color = value; window.elementSdk.setConfig({ secondary_color: value }); } }
+        ],
+        borderables: [],
+        fontEditable: { get: () => cfg.font_family || defaultConfig.font_family, set: (value) => { config.font_family = value; window.elementSdk.setConfig({ font_family: value }); } },
+        fontSizeable: { get: () => cfg.font_size || defaultConfig.font_size, set: (value) => { config.font_size = value; window.elementSdk.setConfig({ font_size: value }); } }
+      };
+    }
+
+    function mapToEditPanelValues(cfg) {
+      return new Map([
+        ['main_title', cfg.main_title || defaultConfig.main_title],
+        ['button_text', cfg.button_text || defaultConfig.button_text]
+      ]);
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({ defaultConfig, onConfigChange, mapToCapabilities, mapToEditPanelValues });
+    }
+
+    document.getElementById('cta-button').addEventListener('click', () => {
+      showJourneyStep1();
+      document.getElementById('app-wrapper').scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  </script>
+ </body>
+</html>

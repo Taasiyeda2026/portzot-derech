@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>פורצות דרך - ניווט</title>
+
+  <script>
+    const SESSION_KEY = "stronger_gate_2026";
+    if (sessionStorage.getItem(SESSION_KEY) !== "ok") {
+      window.location.replace("index.html");
+    }
+  </script>
+
+  <style>
+    @font-face {
+      font-family: "Choco";
+      src: url("main/fonts/Choco.otf") format("opentype");
+      font-weight: 400;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: "Alef";
+      src: url("main/fonts/Alef-regular.woff") format("woff");
+      font-weight: 400;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: "Alef";
+      src: url("main/fonts/Alef-bold.woff") format("woff");
+      font-weight: 700;
+      font-style: normal;
+    }
+
+    :root{
+      --bg-dark:#0f1738;
+      --bg-dark-2:#1a2555;
+      --bg-bottom:#0a1028;
+      --page-top:#efd3df;
+      --page-main:#f8f8fb;
+      --pink:#d94c95;
+      --pink-dark:#c73f88;
+      --purple:#7c4c91;
+      --text:#616274;
+      --shadow-main:0 22px 54px rgba(0,0,0,0.20);
+      --radius:28px;
+    }
+
+    *{
+      box-sizing:border-box;
+    }
+
+    html, body{
+      margin:0;
+      width:100%;
+      height:100%;
+      overflow:hidden;
+    }
+
+    body{
+      font-family:"Alef", Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top, var(--bg-dark-2) 0%, var(--bg-dark) 48%, var(--bg-bottom) 100%);
+    }
+
+    img{
+      display:block;
+      max-width:100%;
+    }
+
+    .page{
+      width:100%;
+      height:100svh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:10px;
+      overflow:hidden;
+    }
+
+    .frame{
+      width:min(1120px, 100%);
+      height:min(96svh, 900px);
+      display:flex;
+      flex-direction:column;
+      overflow:hidden;
+      position:relative;
+      border-radius:var(--radius);
+      border:1px solid rgba(255,255,255,0.20);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.20) 0%, rgba(255,255,255,0.05) 12%, rgba(255,255,255,0) 22%),
+        linear-gradient(to bottom, var(--page-top) 0 188px, var(--page-main) 188px 100%);
+      box-shadow:
+        var(--shadow-main),
+        inset 0 1px 0 rgba(255,255,255,0.5);
+    }
+
+    .topbar{
+      flex:0 0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      padding:16px 22px 12px;
+      border-bottom:4px solid rgba(217,76,149,0.18);
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
+    }
+
+    .brand img{
+      width:46px;
+      height:46px;
+      object-fit:contain;
+      filter:drop-shadow(0 8px 16px rgba(122,76,145,0.14));
+    }
+
+    .brand-title{
+      margin:0;
+      font-family:"Choco", Arial, sans-serif;
+      font-size:33px;
+      line-height:1.05;
+      font-weight:700;
+      color:var(--pink-dark);
+    }
+
+    .logout-btn{
+      border:none;
+      border-radius:999px;
+      padding:9px 16px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(249,245,249,0.96) 100%);
+      color:var(--purple);
+      font-family:"Alef", Arial, sans-serif;
+      font-size:14px;
+      font-weight:700;
+      cursor:pointer;
+      box-shadow:
+        0 10px 18px rgba(24,27,54,0.10),
+        0 3px 8px rgba(217,76,149,0.06),
+        inset 0 1px 0 rgba(255,255,255,0.92),
+        inset 0 -1px 0 rgba(223,210,224,0.75);
+      transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;
+      flex:0 0 auto;
+    }
+
+    .logout-btn:hover{
+      transform:translateY(-1px);
+      filter:saturate(1.02);
+      box-shadow:
+        0 14px 22px rgba(24,27,54,0.13),
+        0 5px 10px rgba(217,76,149,0.08),
+        inset 0 1px 0 rgba(255,255,255,0.96),
+        inset 0 -1px 0 rgba(223,210,224,0.8);
+    }
+
+    .logout-btn:active{
+      transform:translateY(1px);
+    }
+
+    .hero{
+      flex:1 1 auto;
+      min-height:0;
+      display:grid;
+      grid-template-rows:auto 1fr auto auto;
+      gap:10px;
+      padding:10px 18px 12px;
+    }
+
+    .intro-wrap{
+      width:100%;
+      display:flex;
+      justify-content:flex-end;
+      align-items:flex-start;
+      margin-top:0;
+    }
+
+    .intro{
+      width:min(790px, 100%);
+      margin-right:0;
+      margin-left:auto;
+      padding:0;
+      text-align:right;
+    }
+
+    .intro p{
+      margin:0;
+      color:#66697a;
+      font-size:18px;
+      line-height:1.6;
+      font-weight:400;
+      text-align:right;
+    }
+
+    .menu-grid{
+      min-height:0;
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:16px 18px;
+      max-width:900px;
+      width:100%;
+      margin:0 auto;
+      align-content:center;
+      justify-items:center;
+      padding:0;
+    }
+
+    .menu-item{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:flex-start;
+      width:100%;
+      max-width:235px;
+      padding:10px 8px 10px;
+      text-align:center;
+      text-decoration:none;
+      color:inherit;
+      position:relative;
+      overflow:hidden;
+      border-radius:24px;
+      border:1px solid rgba(255,255,255,0.34);
+      background:linear-gradient(180deg, rgba(255,255,255,0.26) 0%, rgba(255,255,255,0.12) 100%);
+      box-shadow:
+        0 12px 24px rgba(32,33,61,0.08),
+        0 4px 10px rgba(217,76,149,0.05),
+        inset 0 1px 0 rgba(255,255,255,0.4);
+      transition:transform .18s ease, filter .18s ease, box-shadow .18s ease;
+    }
+
+    .menu-item::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 40%);
+      pointer-events:none;
+    }
+
+    .menu-item:hover{
+      transform:translateY(-3px);
+      filter:saturate(1.02);
+      box-shadow:
+        0 18px 30px rgba(32,33,61,0.12),
+        0 8px 14px rgba(217,76,149,0.08),
+        inset 0 1px 0 rgba(255,255,255,0.5);
+    }
+
+    .menu-item h4{
+      margin:0 0 2px;
+      min-height:46px;
+      display:flex;
+      align-items:flex-end;
+      justify-content:center;
+      position:relative;
+      z-index:1;
+      color:var(--pink);
+      font-family:"Choco", Arial, sans-serif;
+      font-size:25px;
+      line-height:1.1;
+      font-weight:700;
+    }
+
+    .menu-item p{
+      margin:0 0 4px;
+      min-height:32px;
+      position:relative;
+      z-index:1;
+      color:#75788b;
+      font-size:14px;
+      line-height:1.35;
+      font-weight:400;
+    }
+
+    .icon-box{
+      width:114px;
+      height:114px;
+      margin:0 auto;
+      padding:14px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+      z-index:1;
+      overflow:hidden;
+      border-radius:20px;
+      border:1px solid rgba(255,255,255,0.82);
+      background:linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(250,250,253,0.94) 100%);
+      box-shadow:
+        0 18px 28px rgba(31,35,70,0.18),
+        0 8px 16px rgba(217,76,149,0.10),
+        inset 0 2px 0 rgba(255,255,255,0.95),
+        inset 0 -3px 0 rgba(207,214,235,0.62);
+      transition:transform .18s ease, box-shadow .18s ease;
+    }
+
+    .icon-box::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius:inherit;
+      background:linear-gradient(180deg, rgba(255,255,255,0.38) 0%, rgba(255,255,255,0) 42%);
+      pointer-events:none;
+    }
+
+    .icon-box img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      position:relative;
+      z-index:1;
+      filter:drop-shadow(0 6px 10px rgba(50,42,84,0.12));
+    }
+
+    .menu-item:hover .icon-box{
+      transform:translateY(-2px) scale(1.02);
+      box-shadow:
+        0 24px 36px rgba(31,35,70,0.22),
+        0 10px 18px rgba(217,76,149,0.13),
+        inset 0 2px 0 rgba(255,255,255,0.96),
+        inset 0 -3px 0 rgba(207,214,235,0.68);
+    }
+
+    .closing-wrap{
+      display:flex;
+      justify-content:center;
+      width:100%;
+      flex:0 0 auto;
+    }
+
+    .closing{
+      width:min(620px, 100%);
+      margin-left:120px;
+      margin-right:auto;
+      padding:0 2px;
+      text-align:right;
+    }
+
+    .closing p{
+      margin:0;
+      color:#6b5f7f;
+      font-size:15px;
+      line-height:1.5;
+      font-weight:400;
+      text-align:right;
+    }
+
+    .footer{
+      width:100%;
+      text-align:center;
+      font-size:13px;
+      line-height:1.2;
+      color:var(--pink-dark);
+      padding-top:2px;
+    }
+
+    @media (max-width:980px){
+      .intro{
+        width:100%;
+      }
+
+      .intro p{
+        font-size:16px;
+      }
+
+      .menu-grid{
+        grid-template-columns:repeat(2, 1fr);
+        gap:14px 16px;
+        max-width:720px;
+      }
+
+      .menu-item h4{
+        font-size:23px;
+        min-height:42px;
+      }
+
+      .icon-box{
+        width:106px;
+        height:106px;
+      }
+
+      .closing{
+        width:min(560px, 100%);
+        margin-left:60px;
+      }
+
+      .closing p{
+        font-size:14px;
+      }
+    }
+
+    @media (max-width:640px){
+      .page{
+        padding:8px;
+      }
+
+      .frame{
+        height:96svh;
+        border-radius:20px;
+      }
+
+      .topbar{
+        padding:12px 14px 10px;
+      }
+
+      .brand img{
+        width:38px;
+        height:38px;
+      }
+
+      .brand-title{
+        font-size:25px;
+      }
+
+      .logout-btn{
+        font-size:12px;
+        padding:7px 12px;
+      }
+
+      .hero{
+        padding:10px 10px 10px;
+        gap:10px;
+      }
+
+      .intro p{
+        font-size:13px;
+        line-height:1.45;
+      }
+
+      .menu-grid{
+        grid-template-columns:repeat(2, 1fr);
+        gap:12px 10px;
+        max-width:100%;
+      }
+
+      .menu-item{
+        max-width:none;
+        padding:8px 6px 8px;
+      }
+
+      .menu-item h4{
+        font-size:18px;
+        min-height:34px;
+      }
+
+      .menu-item p{
+        font-size:12px;
+        min-height:28px;
+      }
+
+      .icon-box{
+        width:88px;
+        height:88px;
+        border-radius:16px;
+        padding:10px;
+      }
+
+      .closing{
+        width:min(460px, 100%);
+        margin-left:20px;
+      }
+
+      .closing p,
+      .footer{
+        font-size:12px;
+        line-height:1.4;
+      }
+    }
+
+    @media (max-height:760px){
+      .topbar{
+        padding:14px 20px 10px;
+      }
+
+      .brand-title{
+        font-size:30px;
+      }
+
+      .hero{
+        gap:10px;
+        padding:10px 16px 10px;
+      }
+
+      .intro p{
+        font-size:14px;
+        line-height:1.4;
+      }
+
+      .menu-grid{
+        gap:12px 14px;
+      }
+
+      .menu-item{
+        padding:8px 6px 8px;
+      }
+
+      .menu-item h4{
+        font-size:22px;
+        min-height:38px;
+      }
+
+      .menu-item p{
+        font-size:12px;
+        min-height:24px;
+      }
+
+      .icon-box{
+        width:96px;
+        height:96px;
+        padding:12px;
+      }
+
+      .closing{
+        width:min(560px, 100%);
+        margin-left:80px;
+      }
+
+      .closing p{
+        font-size:13px;
+        line-height:1.4;
+      }
+
+      .footer{
+        font-size:12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="frame">
+      <header class="topbar">
+        <div class="brand">
+          <img src="main/icon/logo.png" alt="פורצות דרך" />
+          <h1 class="brand-title">פורצות דרך</h1>
+        </div>
+
+        <button class="logout-btn" id="logoutBtn" type="button">יציאה</button>
+      </header>
+
+      <main class="hero">
+        <div class="intro-wrap">
+          <section class="intro">
+            <p>
+              המסע של פורצות דרך מתחיל כאן, באתר הקורס שילווה אותנו לאורך כל הדרך.<br>
+              בכל שלב בתהליך נצמח, נתחזק, נאמין בעצמנו, נלמד, נחקור וניצור<br>
+              ונגלה איך טכנולוגיה יכולה להפוך לכלי לביטוי עצמי, ליוזמה ולהשפעה חברתית.
+            </p>
+          </section>
+        </div>
+
+        <section class="menu-grid">
+          <a class="menu-item" href="main/start/quiz.html">
+            <h4>יוצאות לדרך</h4>
+            <p>נקודת הפתיחה שלך לתהליך</p>
+            <div class="icon-box">
+              <img src="main/icon/start.svg" alt="יוצאות לדרך" />
+            </div>
+          </a>
+
+          <a class="menu-item" href="main/domains/alldomains.html">
+            <h4>מאתרות אתגר</h4>
+            <p>מגלות מה מעורר בך עניין</p>
+            <div class="icon-box">
+              <img src="main/icon/sub.svg" alt="מאתרות אתגר" />
+            </div>
+          </a>
+
+          <a class="menu-item" href="main/pairing/main/pairing/pairing.html">
+            <h4>שותפה לדרך</h4>
+            <p>לא צועדות לבד בתהליך</p>
+            <div class="icon-box">
+              <img src="main/icon/partner.svg" alt="שותפה לדרך" />
+            </div>
+          </a>
+
+          <a class="menu-item" href="main/idea/main/idea/idea-to-product.html">
+            <h4>מרעיון למוצר</h4>
+            <p>מחשבה ראשונה לכיוון יצירתי</p>
+            <div class="icon-box">
+              <img src="main/icon/idea.svg" alt="מרעיון למוצר" />
+            </div>
+          </a>
+
+          <a class="menu-item" href="main/steps/main/steps/entrepreneurship-steps.html">
+            <h4>בונות טכנולוגיה</h4>
+            <p>מבינות איך רעיון הופך לפתרון</p>
+            <div class="icon-box">
+              <img src="main/icon/stem.svg" alt="בונות טכנולוגיה" />
+            </div>
+          </a>
+
+          <a class="menu-item" href="main/final/final.html">
+            <h4>מציגות ומשכנעות</h4>
+            <p>נותנות קול ברור לרעיון שלך</p>
+            <div class="icon-box">
+              <img src="main/icon/brand.svg" alt="מציגות ומשכנעות" />
+            </div>
+          </a>
+        </section>
+
+        <div class="closing-wrap">
+          <section class="closing">
+            <p>
+              כל צעד בדרך הוא הזדמנות לפרוץ גבולות, להאמין בעצמך ולגלות כמה רחוק את יכולה להגיע.<br>
+              הכוח שלך כבר נמצא בך — עכשיו זה הזמן לתת לו מקום, להשפיע ולהוביל.
+            </p>
+          </section>
+        </div>
+
+        <footer class="footer">© 2026 פורצות דרך</footer>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    logoutBtn.addEventListener("click", function () {
+      const shouldLogout = confirm("האם לצאת מהאתר?");
+      if (!shouldLogout) return;
+
+      sessionStorage.removeItem(SESSION_KEY);
+      window.location.href = "index.html";
+    });
+  </script>
+</body>
+</html>

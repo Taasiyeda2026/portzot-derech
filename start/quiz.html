@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>שאלון פתיחה | פורצות דרך</title>
+  <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet" />
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Varela Round', sans-serif;
+      background: linear-gradient(135deg, #f8f7fc 0%, #fef9fb 25%, #f7fbfe 50%, #fefbf7 75%, #f9f7fc 100%);
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .container {
+      background: #fff;
+      border-radius: 24px;
+      max-width: 680px;
+      width: 100%;
+      padding: 48px 42px;
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
+      min-height: 420px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .progress-bar {
+      height: 4px;
+      background: #E5E7EB;
+      border-radius: 4px;
+      margin-bottom: 40px;
+      overflow: hidden;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .progress-bar.visible {
+      opacity: 1;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, #8A85C6, #A5A0D6);
+      border-radius: 4px;
+      transition: width 0.4s ease;
+    }
+
+    .start-screen {
+      text-align: center;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .start-screen h1 {
+      font-size: 1.8em;
+      color: #2F3A5F;
+      margin-bottom: 16px;
+    }
+
+    .start-screen p {
+      color: #555;
+      line-height: 1.8;
+      margin-bottom: 32px;
+      max-width: 420px;
+    }
+
+    .start-btn {
+      background: linear-gradient(135deg, #8A85C6, #A5A0D6);
+      color: #fff;
+      border: none;
+      border-radius: 30px;
+      padding: 16px 48px;
+      font-size: 1.1em;
+      font-family: inherit;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .start-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(138, 133, 198, 0.3);
+    }
+
+    .question-screen {
+      display: none;
+      flex: 1;
+      flex-direction: column;
+    }
+
+    .question-screen.active {
+      display: flex;
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateX(-15px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .question-card {
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .question-card-header {
+      background: linear-gradient(135deg, #ec4899, #db2777);
+      padding: 24px 28px;
+      border-radius: 16px 16px 0 0;
+    }
+
+    .question-text {
+      font-size: 1.3em;
+      font-weight: 600;
+      color: #fff;
+      line-height: 1.5;
+      text-align: center;
+      margin: 0;
+    }
+
+    .question-card-body {
+      padding: 28px 32px 32px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #fff;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      flex: 1;
+    }
+
+    .option {
+      padding: 18px 22px;
+      border-radius: 14px;
+      background: #fff;
+      border: 2px solid #E0E0E0;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      font-size: 1.05em;
+      color: #333;
+    }
+
+    .option:hover {
+      background: #F0F1F5;
+      border-color: #C5C3E0;
+    }
+
+    .option.selected {
+      background: #E6E4F2;
+      border-color: #8A85C6;
+      color: #2F3A5F;
+    }
+
+    .result-screen {
+      display: none;
+      text-align: center;
+      flex: 1;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px 0;
+    }
+
+    .result-screen.active {
+      display: flex;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .result-intro {
+      font-size: 1.3em;
+      font-weight: 600;
+      color: #2F3A5F;
+      margin-bottom: 24px;
+      line-height: 1.7;
+    }
+
+    .domains-result {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+
+    .domain-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 120px;
+      height: 120px;
+      padding: 14px;
+      border-radius: 18px;
+      background: #ffffff;
+      box-shadow:
+        0 6px 0 rgba(0, 0, 0, 0.05),
+        0 10px 25px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .domain-card:hover {
+      transform: translateY(-4px);
+      box-shadow:
+        0 10px 0 rgba(0, 0, 0, 0.05),
+        0 16px 35px rgba(0, 0, 0, 0.12);
+    }
+
+    .domain-card .icon {
+      font-size: 1.8rem;
+      margin-bottom: 6px;
+      filter: drop-shadow(0 3px 5px rgba(0,0,0,0.1));
+    }
+
+    .domain-card .name {
+      font-size: 13px;
+      font-weight: 900;
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    .result-note {
+      color: #666;
+      font-size: 0.95em;
+      line-height: 1.7;
+      max-width: 400px;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 28px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 28px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #8A85C6, #A5A0D6);
+      color: #fff;
+      text-decoration: none;
+      font-size: 1em;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(138, 133, 198, 0.3);
+    }
+
+    .btn.secondary {
+      background: #f5f5f5;
+      color: #555;
+    }
+
+    .btn.secondary:hover {
+      background: #eee;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .loading-screen {
+      display: none;
+      text-align: center;
+      flex: 1;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .loading-screen.active {
+      display: flex;
+    }
+
+    .loading-dots {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .loading-dots span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #8A85C6;
+      animation: pulse 1.4s infinite;
+    }
+
+    .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.3; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1); }
+    }
+
+    .loading-text {
+      color: #666;
+      font-size: 1em;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 32px 24px;
+      }
+
+      .question-text {
+        font-size: 1.2em;
+      }
+
+      .option {
+        padding: 16px 18px;
+        font-size: 1em;
+      }
+
+      .domains-result {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .domain-card {
+        width: 100%;
+        max-width: 200px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="progress-bar">
+      <div class="progress-fill"></div>
+    </div>
+
+    <div class="start-screen" id="startScreen">
+      <h1>שאלון פתיחה</h1>
+      <p>
+        השאלון הזה יעזור לך לגלות אילו תחומים מדברים אלייך עכשיו.
+        <br><br>
+        אין תשובות נכונות או לא נכונות – פשוט בחרי את מה שמרגיש הכי קרוב.
+      </p>
+      <button class="start-btn" onclick="startQuiz()">בואי נתחיל</button>
+    </div>
+
+    <div class="question-screen" id="questionScreen">
+      <div class="question-card">
+        <div class="question-card-header">
+          <div class="question-text" id="questionText"></div>
+        </div>
+        <div class="question-card-body">
+          <div class="options" id="optionsContainer"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="loading-screen" id="loadingScreen">
+      <div class="loading-dots">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div class="loading-text">מעבדת את התשובות שלך...</div>
+    </div>
+
+    <div class="result-screen" id="resultScreen">
+      <div class="result-intro">
+        לפי התשובות שלך, נראה ששני תחומים מדברים אלייך במיוחד:
+      </div>
+      <div class="domains-result" id="domainsResult"></div>
+      <div class="result-note">
+        זו רק המלצה. הבחירה הסופית תמיד שלך.
+      </div>
+      <div class="btn-row">
+        <a class="btn" href="../index.html#domains">לעמוד התחומים</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const domains = [
+      { id: 1, name: 'תחושת גוף', icon: '🧘‍♀️', color: '#8b5cf6' },
+      { id: 2, name: 'חיים דיגיטליים', icon: '📱', color: '#0ea5e9' },
+      { id: 3, name: 'למידה בלחץ', icon: '👩‍🏫', color: '#f59e0b' },
+      { id: 4, name: 'חיים חברתיים', icon: '👩‍❤️‍👩', color: '#ec4899' },
+      { id: 5, name: 'בחירות יומיומיות', icon: '💸', color: '#10b981' },
+      { id: 6, name: 'מרחב ותנועה', icon: '🏃‍♀️', color: '#f97316' },
+      { id: 7, name: 'המרחב האישי', icon: '🏠', color: '#6366f1' },
+      { id: 8, name: 'סביבה חיה', icon: '🌿', color: '#22c55e' },
+      { id: 9, name: 'פנאי ויצירה', icon: '🎨', color: '#f43f5e' },
+      { id: 10, name: 'מבט קדימה', icon: '🔮', color: '#8b5cf6' }
+    ];
+
+    const questions = [
+      {
+        id: 1,
+        text: 'כשאני עייפה או חסרת אנרגיה…',
+        weight: 1.0,
+        options: [
+          { text: 'זה מעצבן אותי ממש', primary: 1, secondary: 9 },
+          { text: 'זה מדאיג אותי קצת', primary: 1, secondary: 10 },
+          { text: 'אני מתעלמת וממשיכה', primary: 3, secondary: 5 },
+          { text: 'זה גורם לי לחשוב', primary: 1, secondary: 7 }
+        ]
+      },
+      {
+        id: 2,
+        text: 'כשאני גוללת ברשת ורואה אחרות…',
+        weight: 1.0,
+        options: [
+          { text: 'אני צוחקת וממשיכה', primary: 2, secondary: 9 },
+          { text: 'אני משווה את עצמי', primary: 2, secondary: 1 },
+          { text: 'אני מתעצבנת מבפנים', primary: 2, secondary: 4 },
+          { text: 'זה משפיע עליי', primary: 2, secondary: 1 }
+        ]
+      },
+      {
+        id: 3,
+        text: 'כששיעור לא מעניין אותי…',
+        weight: 1.0,
+        options: [
+          { text: 'אני מתנתקת לגמרי', primary: 3, secondary: 2 },
+          { text: 'אני סופרת דקות', primary: 3, secondary: 9 },
+          { text: 'אני שואלת למה', primary: 3, secondary: 10 },
+          { text: 'אני מדמיינת אחרת', primary: 9, secondary: 10 }
+        ]
+      },
+      {
+        id: 4,
+        text: 'כשאני עם חברות…',
+        weight: 1.0,
+        options: [
+          { text: 'אני מרגישה בפנים', primary: 4, secondary: null },
+          { text: 'אני חצי בפנים', primary: 4, secondary: 7 },
+          { text: 'אני מרגישה בצד', primary: 4, secondary: 1 },
+          { text: 'זה מאוד משתנה', primary: 4, secondary: 10 }
+        ]
+      },
+      {
+        id: 5,
+        text: 'כשאני רוצה לקנות משהו…',
+        weight: 1.0,
+        options: [
+          { text: 'אני קונה בלי לחשוב', primary: 5, secondary: 2 },
+          { text: 'אני מתלבטת הרבה', primary: 5, secondary: 10 },
+          { text: 'אני מושפעת מסביבה', primary: 5, secondary: 4 },
+          { text: 'אני שואלת למה', primary: 5, secondary: 10 }
+        ]
+      },
+      {
+        id: 6,
+        text: 'כשאני הולכת לבד ברחוב…',
+        weight: 1.0,
+        options: [
+          { text: 'אני לא חושבת על זה', primary: 6, secondary: null },
+          { text: 'אני בודקת סביבי', primary: 6, secondary: 7 },
+          { text: 'אני דרוכה ושקטה', primary: 6, secondary: 1 },
+          { text: 'זה תלוי בזמן', primary: 6, secondary: 10 }
+        ]
+      },
+      {
+        id: 7,
+        text: 'בבית שלי…',
+        weight: 1.0,
+        options: [
+          { text: 'יש לי מקום משלי', primary: 7, secondary: null },
+          { text: 'לפעמים יש ולפעמים לא', primary: 7, secondary: 4 },
+          { text: 'קשה לי למצוא שקט', primary: 7, secondary: 1 },
+          { text: 'זה ממש חסר לי', primary: 7, secondary: 9 }
+        ]
+      },
+      {
+        id: 8,
+        text: 'כשאני רואה טבע או חיות בעיר…',
+        weight: 1.0,
+        options: [
+          { text: 'זה מרגש אותי', primary: 8, secondary: 9 },
+          { text: 'אני כמעט לא שמה לב', primary: 2, secondary: 3 },
+          { text: 'אני שואלת מה קורה', primary: 8, secondary: 10 },
+          { text: 'זה גורם לי לחשוב', primary: 8, secondary: 10 }
+        ]
+      },
+      {
+        id: 9,
+        text: 'כשיש לי זמן פנוי…',
+        weight: 1.0,
+        options: [
+          { text: 'אני שמחה ומרוצה', primary: 9, secondary: null },
+          { text: 'אני משתעממת מהר', primary: 9, secondary: 2 },
+          { text: 'אני בורחת למסך', primary: 2, secondary: 9 },
+          { text: 'אני רוצה ליצור', primary: 9, secondary: 10 }
+        ]
+      },
+      {
+        id: 10,
+        text: 'כשאני חושבת על העתיד…',
+        weight: 1.0,
+        options: [
+          { text: 'זה מרגש אותי', primary: 10, secondary: 9 },
+          { text: 'זה מלחיץ אותי', primary: 10, secondary: 3 },
+          { text: 'אני די מבולבלת', primary: 10, secondary: 5 },
+          { text: 'הכול ביחד', primary: 10, secondary: 1 }
+        ]
+      },
+      {
+        id: 11,
+        text: 'כשמשהו מפריע לי ביומיום…',
+        weight: 1.5,
+        options: [
+          { text: 'אני מתעלמת', primary: 5, secondary: 3 },
+          { text: 'אני מתלוננת', primary: 4, secondary: 7 },
+          { text: 'אני מדברת על זה', primary: 4, secondary: 10 },
+          { text: 'אני רוצה לשנות', primary: 10, secondary: 5 }
+        ]
+      },
+      {
+        id: 12,
+        text: 'המשפט שמתאים לי עכשיו…',
+        weight: 1.5,
+        options: [
+          { text: 'זה מה שיש', primary: 5, secondary: 3 },
+          { text: 'למה זה ככה', primary: 10, secondary: 3 },
+          { text: 'צריך לעשות משהו', primary: 10, secondary: 6 },
+          { text: 'אולי אני יכולה', primary: 10, secondary: 9 }
+        ]
+      },
+      {
+        id: 13,
+        text: 'כשאני רואה בעיה סביבי…',
+        weight: 1.5,
+        options: [
+          { text: 'אני עוברת הלאה', primary: 5, secondary: 2 },
+          { text: 'זה מעצבן אותי', primary: 4, secondary: 1 },
+          { text: 'זה לא הוגן', primary: 4, secondary: 10 },
+          { text: 'אני חושבת פתרון', primary: 10, secondary: 8 }
+        ]
+      },
+      {
+        id: 14,
+        text: 'אם הייתה לי אפשרות להשפיע…',
+        weight: 1.5,
+        options: [
+          { text: 'הייתי מתחילה בקטן', primary: 5, secondary: 7 },
+          { text: 'הייתי משנה קרוב', primary: 7, secondary: 4 },
+          { text: 'הייתי עוזרת לאחרות', primary: 4, secondary: 10 },
+          { text: 'הייתי רוצה הקשבה', primary: 4, secondary: 1 }
+        ]
+      },
+      {
+        id: 15,
+        text: 'כשאני מרגישה שלא רואים אותי…',
+        weight: 1.0,
+        options: [
+          { text: 'אני שותקת', primary: 1, secondary: 4 },
+          { text: 'אני מתרחקת', primary: 4, secondary: 7 },
+          { text: 'אני מתעצבנת', primary: 1, secondary: 4 },
+          { text: 'אני בונה לעצמי מקום', primary: 7, secondary: 9 }
+        ]
+      },
+      {
+        id: 16,
+        text: 'מהי טכנולוגיה בעינייך?',
+        weight: 2.0,
+        isTechPerception: true,
+        options: [
+          { text: 'דרך לפתור בעיות מהחיים', primary: 10, secondary: 5, broadPerception: true },
+          { text: 'כל מה שיש בו מסך', primary: 2, secondary: 9 },
+          { text: 'אפליקציות ורשתות', primary: 2, secondary: 4 },
+          { text: 'מחשבים ואינטרנט', primary: 2, secondary: 3 }
+        ]
+      },
+      {
+        id: 17,
+        text: 'האם טכנולוגיה נמצאת בכל מקום?',
+        weight: 2.0,
+        isTechScope: true,
+        options: [
+          { text: 'כן, כמעט בכל תחום', primary: 10, secondary: 2, broadScope: true },
+          { text: 'רק כשיש אינטרנט', primary: 2, secondary: null },
+          { text: 'בעיקר במסכים', primary: 2, secondary: 9 },
+          { text: 'רק בדברים מתקדמים', primary: 2, secondary: 3 }
+        ]
+      },
+      {
+        id: 18,
+        text: 'אם הייתי בוחרת פרויקט…',
+        weight: 1.5,
+        options: [
+          { text: 'הוא היה אישי', primary: 1, secondary: 7 },
+          { text: 'הוא היה חברתי', primary: 4, secondary: 10 },
+          { text: 'הוא היה יומיומי', primary: 5, secondary: 6 },
+          { text: 'הוא היה פותר בעיה', primary: 10, secondary: 8 }
+        ]
+      },
+      {
+        id: 19,
+        text: 'כשאני חושבת על שינוי…',
+        weight: 1.5,
+        options: [
+          { text: 'זה מרגש', primary: 10, secondary: 9 },
+          { text: 'זה מפחיד', primary: 10, secondary: 1 },
+          { text: 'זה מאתגר', primary: 10, secondary: 3 },
+          { text: 'זה נותן תקווה', primary: 10, secondary: 8 }
+        ]
+      },
+      {
+        id: 20,
+        text: 'המשפט שהכי מדבר אליי עכשיו…',
+        weight: 1.5,
+        options: [
+          { text: 'משהו צריך לזוז', primary: 6, secondary: 10 },
+          { text: 'אני רוצה להבין', primary: 3, secondary: 10 },
+          { text: 'אני לא היחידה', primary: 4, secondary: 10 },
+          { text: 'אני מוכנה להתחיל', primary: 10, secondary: 9 }
+        ]
+      },
+      {
+        id: 21,
+        text: 'כשאני מדמיינת את עצמי בעוד כמה שנים…',
+        weight: 1.5,
+        options: [
+          { text: 'אני רוצה ביטחון', primary: 5, secondary: 7 },
+          { text: 'אני רוצה משמעות', primary: 10, secondary: 4 },
+          { text: 'אני רוצה חופש', primary: 6, secondary: 9 },
+          { text: 'אני רוצה להשפיע', primary: 10, secondary: 4 }
+        ]
+      }
+    ];
+
+    let currentQuestion = 0;
+    let answers = [];
+    let scores = {};
+    let hasBroadTechPerception = false;
+    let hasBroadTechScope = false;
+
+    function initScores() {
+      scores = {};
+      domains.forEach(d => scores[d.id] = 0);
+      hasBroadTechPerception = false;
+      hasBroadTechScope = false;
+    }
+
+    function startQuiz() {
+      document.getElementById('startScreen').style.display = 'none';
+      document.querySelector('.progress-bar').classList.add('visible');
+      initScores();
+      currentQuestion = 0;
+      answers = [];
+      showQuestion();
+    }
+
+    function showQuestion() {
+      const q = questions[currentQuestion];
+      const screen = document.getElementById('questionScreen');
+      const textEl = document.getElementById('questionText');
+      const optionsEl = document.getElementById('optionsContainer');
+
+      screen.classList.remove('active');
+
+      setTimeout(() => {
+        textEl.textContent = q.text;
+        optionsEl.innerHTML = '';
+
+        q.options.forEach((opt, idx) => {
+          const div = document.createElement('div');
+          div.className = 'option';
+          div.textContent = opt.text;
+          div.onclick = () => selectOption(idx);
+          optionsEl.appendChild(div);
+        });
+
+        screen.classList.add('active');
+        updateProgress();
+      }, 50);
+    }
+
+    function updateProgress() {
+      const pct = ((currentQuestion + 1) / questions.length) * 100;
+      document.querySelector('.progress-fill').style.width = pct + '%';
+    }
+
+    function selectOption(idx) {
+      const options = document.querySelectorAll('.option');
+      options.forEach(o => o.classList.remove('selected'));
+      options[idx].classList.add('selected');
+
+      const q = questions[currentQuestion];
+      const opt = q.options[idx];
+
+      answers.push({ questionId: q.id, optionIndex: idx });
+
+      if (opt.primary) {
+        scores[opt.primary] += q.weight;
+      }
+      if (opt.secondary) {
+        scores[opt.secondary] += q.weight * 0.5;
+      }
+
+      if (opt.broadPerception) {
+        hasBroadTechPerception = true;
+      }
+      if (opt.broadScope) {
+        hasBroadTechScope = true;
+      }
+
+      setTimeout(() => {
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+          showQuestion();
+        } else {
+          showLoading();
+        }
+      }, 600);
+    }
+
+    function showLoading() {
+      document.getElementById('questionScreen').classList.remove('active');
+      document.getElementById('loadingScreen').classList.add('active');
+
+      setTimeout(() => {
+        calculateResults();
+      }, 1500);
+    }
+
+    function calculateResults() {
+      const digitalDomains = [2, 3, 9];
+      
+      if (hasBroadTechPerception) {
+        Object.keys(scores).forEach(id => {
+          scores[id] += 0.5;
+        });
+      }
+
+      let sorted = Object.entries(scores)
+        .map(([id, score]) => ({ id: parseInt(id), score }))
+        .sort((a, b) => b.score - a.score);
+
+      if (!hasBroadTechScope) {
+        sorted = sorted.map(item => {
+          if (digitalDomains.includes(item.id)) {
+            return { ...item, score: item.score + 0.3 };
+          }
+          return item;
+        }).sort((a, b) => b.score - a.score);
+      }
+
+      const top1 = sorted[0];
+      const top2 = sorted[1];
+
+      const results = [top1, top2];
+
+      showResults(results);
+    }
+
+    function showResults(results) {
+      document.getElementById('loadingScreen').classList.remove('active');
+
+      const container = document.getElementById('domainsResult');
+      container.innerHTML = '';
+
+      results.forEach(r => {
+        const domain = domains.find(d => d.id === r.id);
+        if (domain) {
+          const card = document.createElement('div');
+          card.className = 'domain-card';
+          card.innerHTML = `
+            <div class="icon">${domain.icon}</div>
+            <div class="name" style="color: ${domain.color};">${domain.name}</div>
+          `;
+          container.appendChild(card);
+        }
+      });
+
+      document.getElementById('resultScreen').classList.add('active');
+    }
+
+    function restartQuiz() {
+      document.getElementById('resultScreen').classList.remove('active');
+      document.querySelector('.progress-bar').classList.remove('visible');
+      document.querySelector('.progress-fill').style.width = '0%';
+      document.getElementById('startScreen').style.display = 'flex';
+    }
+  </script>
+</body>
+</html>

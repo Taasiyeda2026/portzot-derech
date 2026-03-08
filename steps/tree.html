@@ -1,0 +1,889 @@
+<!doctype html>
+<html lang="he" dir="rtl" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>מרעיון למוצר: המדריך לעץ מוצר</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&family=Frank+Ruhl+Libre:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main/css/print.css" media="print">
+  <style>
+    :root {
+      --color-bg: #fafaf9;
+      --color-surface: #f5f5f4;
+      --color-text: #292524;
+      --color-primary: #ec4899;
+      --color-secondary: #0ea5e9;
+      --color-third: #8b5cf6;
+    }
+
+    html, body {
+      font-family: 'Heebo', sans-serif;
+    }
+
+    .font-serif {
+      font-family: 'Frank Ruhl Libre', serif;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .article-content h2 {
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: 1.95rem;
+      font-weight: 700;
+      margin-top: 2.1rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.55rem;
+      border-bottom: 3px solid rgba(236, 72, 153, 0.35);
+      color: #be185d;
+    }
+
+    .article-content h3 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-top: 1.5rem;
+      margin-bottom: 0.75rem;
+      color: #0c4a6e;
+    }
+
+    .article-content p {
+      line-height: 1.9;
+      margin-bottom: 1.25rem;
+    }
+
+    .article-content ul, .article-content ol {
+      margin-bottom: 1.25rem;
+      padding-right: 1.5rem;
+    }
+
+    .article-content li {
+      line-height: 1.8;
+      margin-bottom: 0.5rem;
+    }
+
+    .highlight-box {
+      background: linear-gradient(135deg, rgba(244, 63, 94, 0.08), rgba(14, 165, 233, 0.08));
+      border-right: 4px solid var(--color-primary);
+      padding: 1.25rem;
+      border-radius: 0.5rem;
+      margin: 1.5rem 0;
+      box-shadow: 0 2px 8px rgba(236, 72, 153, 0.12);
+    }
+
+    .reflection-box {
+      background: rgba(14, 165, 233, 0.08);
+      border: 1px solid rgba(14, 165, 233, 0.2);
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      margin: 2rem 0;
+      box-shadow: 0 2px 6px rgba(14, 165, 233, 0.08);
+    }
+
+    .example-box {
+      background: rgba(245, 245, 244, 1);
+      border-radius: 0.75rem;
+      padding: 1.25rem;
+      margin: 1.5rem 0;
+      border: 1px solid rgba(120, 113, 108, 0.15);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    }
+
+    .progress-indicator {
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+      transition: width 0.1s ease;
+      z-index: 100;
+    }
+
+    .toc-link {
+      transition: all 0.2s ease;
+      border-radius: 0.75rem;
+      padding: 0.55rem 0.8rem;
+      border: 1px solid transparent;
+      font-weight: 500;
+    }
+
+    .toc-link:hover {
+      color: var(--color-primary);
+      border-color: rgba(236, 72, 153, 0.25);
+      background: rgba(236, 72, 153, 0.08);
+      transform: translateX(-3px);
+    }
+
+    nav .toc-link {
+      box-shadow: 0 2px 4px rgba(15, 23, 42, 0.04);
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fade-in {
+      animation: fadeInUp 0.6s ease forwards;
+    }
+
+    .top-header {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(120, 113, 108, 0.12);
+      box-shadow: 0 6px 18px rgba(148, 163, 184, 0.22);
+    }
+
+    .top-header-inner {
+      gap: 0.75rem;
+    }
+
+    .appendix-launcher {
+      background: linear-gradient(160deg, #ffffff, #f8fafc);
+      border: 1px solid rgba(14, 165, 233, 0.14);
+      border-radius: 1.2rem;
+      box-shadow: 0 12px 24px rgba(14, 165, 233, 0.08);
+      padding: 1.2rem;
+    }
+
+    .appendix-launcher h3 {
+      color: #7e22ce;
+      font-size: 1.15rem;
+      letter-spacing: 0.02em;
+    }
+
+    .appendix-grid button {
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      min-height: 122px;
+      box-shadow: 0 10px 18px rgba(15, 23, 42, 0.16);
+    }
+
+    .appendix-grid button:hover {
+      box-shadow: 0 14px 24px rgba(15, 23, 42, 0.22);
+    }
+
+    .home-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.65rem 1rem;
+      border-radius: 999px;
+      font-weight: 700;
+      color: #fff;
+      background: linear-gradient(135deg, var(--color-primary), #be185d);
+      box-shadow: 0 8px 18px rgba(236, 72, 153, 0.3);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .home-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 20px rgba(236, 72, 153, 0.35);
+    }
+
+    .home-btn:active {
+      transform: translateY(1px);
+      box-shadow: 0 4px 10px rgba(236, 72, 153, 0.25);
+    }
+
+    .success-box {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.08), rgba(59, 130, 246, 0.08));
+      border-right: 4px solid #22c55e;
+      padding: 1.5rem;
+      border-radius: 0.75rem;
+      margin: 1.5rem 0;
+      box-shadow: 0 2px 8px rgba(34, 197, 94, 0.1);
+    }
+
+    .warning-box {
+      background: linear-gradient(135deg, rgba(244, 63, 94, 0.08), rgba(245, 158, 11, 0.08));
+      border-right: 4px solid #f59e0b;
+      padding: 1.5rem;
+      border-radius: 0.75rem;
+      margin: 1.5rem 0;
+      box-shadow: 0 2px 8px rgba(245, 158, 11, 0.1);
+    }
+
+    .large-quote {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin: 2rem 0;
+      text-align: center;
+      padding: 2rem;
+      background: linear-gradient(135deg, rgba(236, 72, 153, 0.05), rgba(14, 165, 233, 0.05));
+      border-radius: 1rem;
+      line-height: 2;
+      box-shadow: 0 4px 12px rgba(236, 72, 153, 0.1);
+    }
+
+    .feature-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .feature-item {
+      padding: 1.5rem;
+      background: white;
+      border: 1px solid rgba(120, 113, 108, 0.15);
+      border-radius: 0.75rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .feature-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(236, 72, 153, 0.12);
+    }
+
+    .feature-item-title {
+      font-weight: 700;
+      color: var(--color-primary);
+      font-size: 1.1rem;
+      margin-bottom: 0.75rem;
+    }
+
+    #printArea { display: none; }
+
+    @media print {
+      html, body {
+        overflow: visible !important;
+        height: auto !important;
+      }
+
+      body { background: white; padding: 0; margin: 0; font-family: 'Heebo', Arial, sans-serif; }
+      #formArea { display: none !important; }
+      #printArea {
+          display: block;
+          position: static !important;
+          overflow: visible !important;
+          height: auto !important;
+          min-height: auto !important;
+          direction: rtl;
+          text-align: right;
+          font-family: 'Heebo', Arial, sans-serif;
+          color: #111827;
+          line-height: 1.7;
+          padding: 0;
+          font-size: 13px;
+          page-break-inside: auto;
+      }
+
+      #printArea > div[style*="page-break-after"] {
+        margin: 0;
+        padding: 2rem;
+      }
+
+      div[style*="page-break-after"] {
+        page-break-after: always !important;
+        page-break-inside: auto !important;
+        min-height: auto !important;
+        height: auto !important;
+        overflow: visible !important;
+        background: white !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        display: block !important;
+      }
+
+      h1, h2, h3 {
+        page-break-after: avoid !important;
+      }
+
+      table {
+        page-break-inside: auto !important;
+      }
+
+      textarea, input {
+        page-break-inside: auto !important;
+        page-break-before: auto !important;
+        border: 1px solid #999 !important;
+        background: white !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      div[style*="background"] {
+        page-break-inside: auto !important;
+      }
+
+      @page {
+        size: A4;
+        margin: 2cm;
+      }
+
+      div[style*="position: sticky"] {
+        display: none !important;
+      }
+
+      div[style*="background"][style*="border"] {
+        page-break-inside: auto;
+      }
+
+      body {
+        background: white;
+        color: #000;
+      }
+
+      div[style*="min-height"] {
+        min-height: auto !important;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .top-header-inner {
+        padding-left: 1rem;
+        padding-right: 1rem;
+        gap: 0.4rem;
+      }
+      .large-quote {
+        font-size: 1.2rem;
+      }
+      .feature-list {
+        grid-template-columns: 1fr;
+      }
+      .home-btn {
+        padding: 0.45rem 0.7rem;
+        font-size: 1.2rem !important;
+      }
+    }
+
+    @media print {
+      .no-print {
+        display: none !important;
+      }
+      button[onclick*="showAppendix"] {
+        display: none !important;
+      }
+    }
+  </style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full bg-stone-50 text-stone-800 overflow-auto">
+  <div id="progress" class="progress-indicator" style="width: 0%"></div>
+  <div id="formArea" class="w-full min-h-full">
+   <div class="top-header">
+    <div class="top-header-inner max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
+      <p class="text-stone-700 font-semibold m-0">פורצות דרך</p>
+      <div class="flex gap-1 items-center" style="flex-shrink: 0;">
+        <button id="header-diamond-b" title="עץ המוצר" style="background: none; border: none; cursor: pointer; font-size: 1.3rem; color: #0ea5e9; padding: 0.25rem; transition: transform 0.2s; display: inline-flex; align-items: center; justify-content: center;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">◆</button>
+        <a href="mvp.html" style="display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.4rem 0.8rem; border-radius: 999px; font-weight: 700; font-size: 0.85rem; color: #0ea5e9; border: 1.5px solid #0ea5e9; background: rgba(14,165,233,0.07); text-decoration: none; transition: background 0.2s;" onmouseover="this.style.background='rgba(14,165,233,0.15)'" onmouseout="this.style.background='rgba(14,165,233,0.07)'">← אבטיפוס</a>
+      </div>
+      <a href="index.html" class="home-btn" aria-label="חזרה לעמוד הבית" style="font-size: 1.5rem; display: inline-flex; align-items: center; justify-content: center;">🏠</a>
+    </div>
+   </div>
+
+   <!-- Header -->
+   <header class="relative overflow-hidden py-16 px-6">
+    <div class="absolute inset-0 bg-gradient-to-bl from-rose-500/15 via-transparent to-sky-500/15"></div>
+    <div class="max-w-4xl mx-auto relative">
+     <div class="flex items-center gap-3 mb-6">
+      <span class="px-3 py-1 bg-rose-100 text-rose-700 text-sm rounded-full font-bold">🌳 עץ מוצר</span>
+      <span class="text-stone-500 text-sm">⏱ זמן קריאה: 8 דקות</span>
+     </div>
+     <h1 id="article-title" class="font-serif text-4xl md:text-5xl font-bold mb-4 gradient-text leading-tight">מרעיון למוצר: המדריך לעץ מוצר</h1>
+     <p class="text-xl text-stone-600 leading-relaxed">איך יזמיות אמיתיות מפרקות רעיון למשהו שאפשר באמת לבנות</p>
+    </div>
+   </header>
+
+   <!-- Table of Contents -->
+   <nav class="max-w-4xl mx-auto px-6 mb-10">
+    <div class="bg-white rounded-xl p-6 backdrop-blur-sm border border-stone-200 shadow-md">
+     <h2 class="text-lg font-semibold mb-4 text-rose-600">📚 תוכן העניינים</h2>
+     <ol class="space-y-2 text-stone-600">
+      <li><a href="#intro" class="toc-link block hover:text-rose-600">1. פתיחה: לכולן יש רעיונות</a></li>
+      <li><a href="#what-is-tree" class="toc-link block hover:text-rose-600">2. מה זה עץ מוצר?</a></li>
+      <li><a href="#pen-example" class="toc-link block hover:text-rose-600">3. בואו נפרק מוצר פשוט: עט</a></li>
+      <li><a href="#tree-thinking" class="toc-link block hover:text-rose-600">4. איך חושבים על עץ מוצר כמו יזמיות</a></li>
+      <li><a href="#why-important" class="toc-link block hover:text-rose-600">5. למה זה חשוב ביזמות?</a></li>
+     </ol>
+    </div>
+   </nav>
+
+   <!-- Article Content -->
+   <main class="max-w-4xl mx-auto px-6 pb-16">
+    <article class="article-content">
+
+     <!-- Section 1: Introduction -->
+     <section id="intro" class="animate-fade-in">
+      <h2>פתיחה: לכולן יש רעיונות</h2>
+
+      <p style="font-size: 1.05rem;">כמעט לכל אחת יש רגע כזה.</p>
+
+      <p style="font-size: 1.05rem;">פתאום עולה רעיון:</p>
+
+      <div style="margin: 1.5rem 0; padding: 1.5rem; background: linear-gradient(135deg, rgba(236, 72, 153, 0.05), rgba(14, 165, 233, 0.05)); border-right: 4px solid #ec4899; border-radius: 0.75rem; box-shadow: 0 2px 8px rgba(236, 72, 153, 0.08);">
+        <p style="font-size: 1.3rem; font-weight: 700; color: #ec4899; margin: 0;">
+          "איך אף אחד לא חשב על זה קודם?"
+        </p>
+      </div>
+
+      <p style="font-size: 1rem; color: #555; margin-top: 0.75rem;">
+        זה יכול לקרות באמצע שיעור, בשיחה עם חברה, או כשמשהו מציק לך ואת חושבת איך לפתור אותו.
+      </p>
+
+      <p style="margin-top: 1.5rem; font-size: 1.05rem;">
+        אבל כאן מגיע ההבדל הגדול:
+      </p>
+
+      <div style="margin: 1.5rem 0; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div style="padding: 1.25rem; background: white; border: 1px solid rgba(120,113,108,0.15); border-radius: 0.75rem; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
+          <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">💭</div>
+          <p style="margin: 0; font-weight: 600; color: #9ca3af;">רוב הרעיונות</p>
+          <p style="margin: 0.25rem 0 0; font-size: 0.9rem; color: #9ca3af;">נשארים בראש</p>
+        </div>
+        <div style="padding: 1.25rem; background: linear-gradient(135deg, rgba(236,72,153,0.07), rgba(14,165,233,0.07)); border: 1px solid rgba(236,72,153,0.2); border-radius: 0.75rem; box-shadow: 0 2px 6px rgba(236,72,153,0.1);">
+          <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">⚡</div>
+          <p style="margin: 0; font-weight: 700; color: #ec4899;">יזמיות אמיתיות</p>
+          <p style="margin: 0.25rem 0 0; font-size: 0.9rem; color: #be185d;">מתחילות לפרק אותם</p>
+        </div>
+      </div>
+
+      <div class="highlight-box">
+        <p style="margin: 0; font-size: 1.1rem;">
+          השלב הראשון בדרך להפוך רעיון למוצר נקרא: <strong>עץ מוצר</strong> —<br>
+          וזה בדיוק הכלי שעוזר להבין <strong>ממה המוצר שלך באמת בנוי</strong>.
+        </p>
+      </div>
+     </section>
+
+     <!-- Section 2: What is a Product Tree? -->
+     <section id="what-is-tree" class="animate-fade-in">
+      <h2>מה זה עץ מוצר?</h2>
+
+      <p>עץ מוצר הוא דרך לראות מוצר לא כרעיון — אלא <strong>כמערכת</strong>.</p>
+
+      <div class="reflection-box">
+        <p style="margin: 0; font-size: 1.15rem; font-weight: 700; color: #0ea5e9;">
+          במקום לשאול "יש לי רעיון למוצר"<br>
+          שואלים: "ממה המוצר הזה מורכב?"
+        </p>
+      </div>
+
+      <p>בתעשייה קוראים לזה:</p>
+
+      <div style="margin: 1.5rem 0; padding: 1.5rem; background: #f9fafb; border-radius: 0.75rem; border: 1px solid #e5e7eb; text-align: center;">
+        <p style="font-size: 1.4rem; font-weight: 700; color: #0ea5e9; margin: 0;">BOM – Bill of Materials</p>
+        <p style="color: #666; font-size: 0.95rem; margin: 0.5rem 0 0;">כלומר — רשימת כל הרכיבים שמרכיבים מוצר</p>
+      </div>
+
+      <p style="margin-top: 1.5rem;">זה קיים כמעט בכל מוצר בעולם:</p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin: 1.5rem 0;">
+        <div style="padding: 1rem; background: white; border: 1px solid #e5e7eb; border-radius: 0.5rem; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.04);">
+          <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">✈️</div>
+          <p style="font-weight: 700; color: #1f2937; margin: 0;">מטוס</p>
+          <p style="font-size: 0.85rem; color: #666; margin: 0.25rem 0 0;">מיליוני חלקים</p>
+        </div>
+        <div style="padding: 1rem; background: white; border: 1px solid #e5e7eb; border-radius: 0.5rem; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.04);">
+          <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">📱</div>
+          <p style="font-weight: 700; color: #1f2937; margin: 0;">טלפון</p>
+          <p style="font-size: 0.85rem; color: #666; margin: 0.25rem 0 0;">אלפי רכיבים</p>
+        </div>
+        <div style="padding: 1rem; background: white; border: 1px solid #e5e7eb; border-radius: 0.5rem; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.04);">
+          <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">🪑</div>
+          <p style="font-weight: 700; color: #1f2937; margin: 0;">כיסא</p>
+          <p style="font-size: 0.85rem; color: #666; margin: 0.25rem 0 0;">עשרות רכיבים</p>
+        </div>
+        <div style="padding: 1rem; background: white; border: 1px solid #e5e7eb; border-radius: 0.5rem; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.04);">
+          <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">📲</div>
+          <p style="font-weight: 700; color: #1f2937; margin: 0;">אפליקציה</p>
+          <p style="font-size: 0.85rem; color: #666; margin: 0.25rem 0 0;">מסכים, פעולות ומערכות</p>
+        </div>
+      </div>
+     </section>
+
+     <!-- Section 3: Pen Example -->
+     <section id="pen-example" class="animate-fade-in">
+      <h2>בואו נפרק מוצר פשוט: עט ✒️</h2>
+
+      <p>כשאת מסתכלת על עט, הוא נראה דבר אחד.<br>
+      אבל אם מפרקים אותו, רואים <strong>מערכת שלמה</strong>.</p>
+
+      <div style="margin: 2rem 0; padding: 1.5rem; background: #f9fafb; border-radius: 0.75rem; border: 1px solid #e5e7eb;">
+
+        <div style="margin-bottom: 1.5rem;">
+          <p style="margin: 0 0 1rem 0; font-weight: 700; color: #ec4899; font-size: 1.1rem;">🔵 המערכת הפנימית</p>
+          <p style="margin: 0 0 0.75rem 0; color: #555; font-size: 0.95rem;">החלק שגורם לעט לכתוב:</p>
+          <ul style="margin: 0; color: #1f2937; font-size: 0.95rem; line-height: 1.9;">
+            <li>צינורית דיו</li>
+            <li>דיו</li>
+            <li>כדור מתכת קטן שמגלגל את הדיו</li>
+            <li>קפיץ</li>
+            <li>מנגנון לחיצה</li>
+          </ul>
+          <div style="margin-top: 1rem; padding: 0.75rem; background: rgba(236,72,153,0.06); border-right: 3px solid #ec4899; border-radius: 0.5rem;">
+            <p style="margin: 0; font-size: 0.9rem; color: #1f2937;">
+              <strong>⚠️ אם אחד מהרכיבים האלה לא עובד — העט לא כותב.</strong>
+            </p>
+          </div>
+        </div>
+
+        <div style="padding-top: 1.5rem; border-top: 1px solid #d1d5db;">
+          <p style="margin: 0 0 1rem 0; font-weight: 700; color: #0ea5e9; font-size: 1.1rem;">🟡 המערכת החיצונית</p>
+          <p style="margin: 0 0 0.75rem 0; color: #555; font-size: 0.95rem;">החלק שמאפשר להשתמש בעט:</p>
+          <ul style="margin: 0; color: #1f2937; font-size: 0.95rem; line-height: 1.9;">
+            <li>גוף העט</li>
+            <li>כרית אחיזה</li>
+            <li>תופסן</li>
+            <li>מכסה או לחצן</li>
+            <li>חיבורים פנימיים</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="large-quote">
+        פתאום מבינים משהו חשוב:<br>
+        <strong>מוצר הוא לא רעיון. מוצר הוא מערכת.</strong>
+      </div>
+     </section>
+
+     <!-- Section 4: Tree Thinking -->
+     <section id="tree-thinking" class="animate-fade-in">
+      <h2>איך חושבים על עץ מוצר כמו יזמיות</h2>
+
+      <p>אפשר לדמיין את זה כמו עץ אמיתי:</p>
+
+      <div style="margin: 2rem 0;">
+        <div style="margin-bottom: 1.5rem; padding: 1.25rem; background: linear-gradient(135deg, rgba(236, 72, 153, 0.08), rgba(14, 165, 233, 0.08)); border-radius: 0.75rem; border-right: 4px solid #ec4899;">
+          <div style="font-size: 1.2rem; margin-bottom: 0.5rem;"><strong>🪵 הגזע – הליבה</strong></div>
+          <p style="margin: 0; color: #1f2937; line-height: 1.6;">הפעולה המרכזית שהמוצר <strong>חייב</strong> לעשות. בלי זה — אין מוצר.</p>
+        </div>
+
+        <div style="margin-bottom: 1.5rem; padding: 1.25rem; background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(14, 165, 233, 0.08)); border-radius: 0.75rem; border-right: 4px solid #3b82f6;">
+          <div style="font-size: 1.2rem; margin-bottom: 0.5rem;"><strong>🌿 הענפים – הפונקציות</strong></div>
+          <p style="margin: 0; color: #1f2937; line-height: 1.6;">מה עוד המוצר מאפשר לעשות.</p>
+        </div>
+
+        <div style="margin-bottom: 1.5rem; padding: 1.25rem; background: linear-gradient(135deg, rgba(34, 197, 94, 0.08), rgba(14, 165, 233, 0.08)); border-radius: 0.75rem; border-right: 4px solid #22c55e;">
+          <div style="font-size: 1.2rem; margin-bottom: 0.5rem;"><strong>🍎 הפירות – הערך</strong></div>
+          <p style="margin: 0; color: #1f2937; line-height: 1.6;">מה המשתמשת מרוויחה ממנו.</p>
+        </div>
+
+        <div style="margin-bottom: 1.5rem; padding: 1.25rem; background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(14, 165, 233, 0.08)); border-radius: 0.75rem; border-right: 4px solid #f59e0b;">
+          <div style="font-size: 1.2rem; margin-bottom: 0.5rem;"><strong>🌱 השורשים – מאחורי הקלעים</strong></div>
+          <p style="margin: 0; color: #1f2937; line-height: 1.6;">טכנולוגיה, חומרים, שירות, לוגיסטיקה.<br>
+          דברים שלא רואים — אבל בלעדיהם הכול קורס.</p>
+        </div>
+      </div>
+
+      <div class="large-quote">
+        ברגע שמציירים את העץ הזה —<br>
+        מתחילים לחשוב מערכתית.
+      </div>
+
+      <p style="margin-top: 2rem; text-align: center; color: #666; font-size: 1.05rem;">וזה רגע מעבר חשוב:<br>
+      <strong>כבר לא "חולמים רעיון".</strong><br>
+      <strong>מתכננים מוצר.</strong></p>
+     </section>
+
+     <!-- Section 5: Why Important? -->
+     <section id="why-important" class="animate-fade-in">
+      <h2>למה זה חשוב ביזמות?</h2>
+
+      <p>עץ מוצר עושה משהו מאוד חשוב:</p>
+
+      <div class="highlight-box">
+        <p style="margin: 0; font-size: 1.1rem; font-weight: 700;">הוא מכריח אותנו לחשוב בצורה חכמה.</p>
+      </div>
+
+      <p>במקום לשאול <em>"האם הרעיון שלי מגניב?"</em></p>
+
+      <p>אנחנו שואלות:</p>
+
+      <div style="margin: 1.5rem 0; display: grid; gap: 1rem;">
+        <div style="padding: 1rem; background: white; border-right: 4px solid #ec4899; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.04);">
+          <p style="margin: 0; color: #1f2937;"><strong>🔍 אם זה מתקלקל — איפה זה קורה?</strong></p>
+        </div>
+        <div style="padding: 1rem; background: white; border-right: 4px solid #0ea5e9; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.04);">
+          <p style="margin: 0; color: #1f2937;"><strong>🔗 מה הרכיב הכי חשוב?</strong></p>
+        </div>
+        <div style="padding: 1rem; background: white; border-right: 4px solid #f59e0b; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.04);">
+          <p style="margin: 0; color: #1f2937;"><strong>😕 איפה המשתמשת יכולה להסתבך?</strong></p>
+        </div>
+      </div>
+
+      <div class="success-box">
+        <p style="margin: 0; color: #1f2937; line-height: 1.8;">
+          יזמות מקצועית היא לא רק יצירתיות.<br>
+          היא גם <strong>להבין איך דברים באמת עובדים</strong>.<br><br>
+          וברגע שמפרקים רעיון לעץ מוצר —<br>
+          <strong>הרעיון הופך למשהו שאפשר באמת לבנות.</strong>
+        </p>
+      </div>
+
+      <div style="margin-top: 2rem; padding: 2rem; background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(14, 165, 233, 0.1)); border-radius: 1rem; text-align: center;">
+        <p style="margin: 0 0 1rem 0; font-size: 1.1rem; font-weight: 700; color: #ec4899;">
+          רוצה לבדוק איך הרעיון שלך עובד בפועל?
+        </p>
+        <a href="mvp.html" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; border-radius: 999px; font-weight: 700; color: #fff; background: linear-gradient(135deg, #0ea5e9, #06b6d4); text-decoration: none; box-shadow: 0 8px 18px rgba(14,165,233,0.3); transition: transform 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+          🔬 המשיכי לכתבת האבטיפוס ←
+        </a>
+      </div>
+
+      <div style="margin-top: 2rem; padding: 1.5rem; background: #f9fafb; border-radius: 0.75rem; text-align: center; border: 1px solid #e5e7eb;">
+        <p style="margin: 0; color: #666; font-size: 0.95rem;">
+          <strong>© 2026 פורצות דרך</strong><br>
+          🌳 מרעיון למוצר — עץ מוצר
+        </p>
+      </div>
+     </section>
+
+    </article>
+   </main>
+
+   <!-- Navigation Buttons to Appendices -->
+   <div class="max-w-6xl mx-auto px-6 py-10 mb-8 appendix-launcher">
+    <p class="text-center text-stone-600 mb-6 font-semibold">🎯 בוחרות דף להדפסה ומילוי:</p>
+    <div class="grid md:grid-cols-1 gap-3 appendix-grid" style="max-width: 300px; margin: 0 auto;">
+     <button id="btn-appendix-b" class="group relative overflow-hidden rounded-xl p-4 text-white font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg" style="background: linear-gradient(135deg, #0ea5e9, #06b6d4);">
+      <div class="absolute inset-0 opacity-0 group-hover:opacity-20 bg-white transition-opacity"></div>
+      <div class="relative">
+       <p class="text-xl mb-2">🌳</p>
+       <p class="text-base">עץ המוצר</p>
+       <p class="text-xs font-normal opacity-90">מבנה מוצר</p>
+       <p class="text-xs font-normal opacity-75 mt-1">דף עבודה</p>
+      </div>
+     </button>
+    </div>
+   </div>
+
+  </div>
+
+  <div id="printArea" style="display:none;"></div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Progress bar
+      window.addEventListener('scroll', () => {
+        const winScroll = document.documentElement.scrollTop + document.body.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        document.getElementById('progress').style.width = scrolled + '%';
+      });
+
+      // Smooth scroll for TOC links
+      document.querySelectorAll('.toc-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const target = document.querySelector(link.getAttribute('href'));
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth' });
+          }
+        });
+      });
+
+      const appendixB = document.getElementById('btn-appendix-b');
+      const diamondB = document.getElementById('header-diamond-b');
+
+      if (appendixB) {
+        appendixB.addEventListener('click', () => { showAppendixB(); });
+      }
+      if (diamondB) {
+        diamondB.addEventListener('click', () => { showAppendixB(); });
+      }
+    });
+
+    function showAppendixB() {
+      const appendixContent = `
+        <div style="page-break-after: always; padding: 2rem; background: white; min-height: 100vh; font-family: 'Heebo', sans-serif;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; border-bottom: 3px solid #0ea5e9; padding-bottom: 1.5rem;">
+            <img src="main/icon/logo.png" style="height: 48px; width: auto;" onerror="this.style.display='none'">
+            <div style="text-align: center; flex: 1; padding: 0 1rem;">
+              <h1 style="color: #0ea5e9; font-size: 2rem; margin: 0; font-weight: 700;">🌳 עץ המוצר שלנו</h1>
+              <p style="color: #666; font-size: 1.1rem; margin: 0.5rem 0;">מפרקות רעיון למבנה ברור</p>
+            </div>
+            <div style="width: 48px;"></div>
+          </div>
+
+          <div style="margin: 2rem 0; padding: 1.5rem; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 0.5rem;">
+            <h3 style="color: #1f2937; margin-top: 0; margin-bottom: 1rem;">📋 פרטי הפרויקט</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+              <div>
+                <p style="margin: 0 0 0.25rem 0; font-weight: 600; color: #666; font-size: 0.9rem;">שם הקבוצה:</p>
+                <input type="text" placeholder="הקלידי..." style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 0.25rem; font-family: Heebo;"/>
+              </div>
+              <div>
+                <p style="margin: 0 0 0.25rem 0; font-weight: 600; color: #666; font-size: 0.9rem;">שמות המשתתפות:</p>
+                <input type="text" placeholder="הקלידי..." style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 0.25rem; font-family: Heebo;"/>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin: 2rem 0; padding: 1.5rem; background: #eff6ff; border-right: 4px solid #0ea5e9; border-radius: 0.5rem;">
+            <h2 style="color: #0ea5e9; font-size: 1.5rem; margin-top: 0;">חלק 1 – הגזע: הליבה של המוצר</h2>
+
+            <div style="margin: 1.5rem 0;">
+              <p style="font-weight: 600; color: #0ea5e9; margin-bottom: 0.75rem;">שם המוצר:</p>
+              <input type="text" placeholder="הקלידי את שם המוצר..." style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 0.25rem; font-family: Heebo; margin-bottom: 1rem;"/>
+
+              <p style="font-weight: 600; color: #0ea5e9; margin-bottom: 0.75rem;">הפעולה המרכזית שהמוצר חייב לעשות:</p>
+              <textarea placeholder="בלי זה — אין מוצר..." style="width: 100%; min-height: 70px; padding: 0.5rem; border: 1px solid #ccc; border-radius: 0.25rem; font-family: Heebo; resize: vertical;"></textarea>
+            </div>
+
+            <div style="margin: 1.5rem 0;">
+              <p style="font-weight: 600; color: #0ea5e9; margin-bottom: 0.75rem;">בדיקת ליבה</p>
+              <div style="padding-left: 1.5rem; border-left: 2px solid #0ea5e9;">
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> ברור מה המוצר עושה תוך 5 שניות</p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> יש פעולה מרכזית אחת ברורה</p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem;"><input type="checkbox" style="margin: 0 0.5rem;"/> אין עומס מידע</p>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin: 2rem 0; padding: 1.5rem; background: #f0fdf4; border-right: 4px solid #22c55e; border-radius: 0.5rem;">
+            <h2 style="color: #22c55e; font-size: 1.5rem; margin-top: 0;">חלק 2 – הענפים: פונקציות המוצר</h2>
+            <p style="font-size: 0.95rem; color: #555; margin-bottom: 1rem;">מה עוד המוצר מאפשר לעשות? (עד 5 פונקציות)</p>
+            <div style="display: grid; gap: 0.75rem;">
+              <input type="text" placeholder="פונקציה 1:" style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 0.25rem; font-family: Heebo;"/>
+              <input type="text" placeholder="פונקציה 2:" style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 0.25rem; font-family: Heebo;"/>
+              <input type="text" placeholder="פונקציה 3:" style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 0.25rem; font-family: Heebo;"/>
+              <input type="text" placeholder="פונקציה 4:" style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 0.25rem; font-family: Heebo;"/>
+              <input type="text" placeholder="פונקציה 5:" style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 0.25rem; font-family: Heebo;"/>
+            </div>
+          </div>
+
+          <div style="margin: 2rem 0; padding: 1.5rem; background: #fef3c7; border-right: 4px solid #f59e0b; border-radius: 0.5rem;">
+            <h2 style="color: #d97706; font-size: 1.5rem; margin-top: 0;">חלק 3 – הפירות: הערך למשתמשת</h2>
+            <p style="font-weight: 600; color: #d97706; margin-bottom: 0.75rem;">מה המשתמשת מרוויחה מהמוצר?</p>
+            <textarea placeholder="מה משתנה לה בחיים אחרי שימוש במוצר..." style="width: 100%; min-height: 80px; padding: 0.5rem; border: 1px solid #ccc; border-radius: 0.25rem; font-family: Heebo; resize: vertical;"></textarea>
+          </div>
+
+          <div style="margin: 2rem 0; padding: 1.5rem; background: #fef2f2; border-right: 4px solid #ec4899; border-radius: 0.5rem;">
+            <h2 style="color: #ec4899; font-size: 1.5rem; margin-top: 0;">חלק 4 – השורשים: מאחורי הקלעים</h2>
+            <p style="font-size: 0.95rem; color: #555; margin-bottom: 1rem;">טכנולוגיה, חומרים, שירות, לוגיסטיקה — דברים שלא רואים אבל קריטיים:</p>
+            <textarea placeholder="אילו מערכות, חומרים או שירותים נדרשים כדי שהמוצר יעבוד..." style="width: 100%; min-height: 80px; padding: 0.5rem; border: 1px solid #ccc; border-radius: 0.25rem; font-family: Heebo; resize: vertical;"></textarea>
+          </div>
+
+          <div style="margin: 2rem 0; padding: 1.5rem; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 0.5rem;">
+            <h2 style="color: #1f2937; font-size: 1.3rem; margin-top: 0;">🔍 זיהוי נקודות כשל</h2>
+            <p style="font-size: 0.95rem; color: #555; margin-bottom: 1rem;">איפה הרכיב הכי חלש? מה יכול להתקלקל?</p>
+            <textarea placeholder="אם הרכיב הזה לא עובד — המוצר לא עובד..." style="width: 100%; min-height: 70px; padding: 0.5rem; border: 1px solid #ccc; border-radius: 0.25rem; font-family: Heebo; resize: vertical;"></textarea>
+          </div>
+
+          <div style="margin-top: 2rem; padding: 1rem; background: #f3f4f6; border-radius: 0.5rem; display: flex; justify-content: space-between; align-items: center;">
+            <div style="text-align: right;">
+              <p style="margin: 0; color: #888; font-size: 0.85rem;">© 2026 פורצות דרך</p>
+              <p style="margin: 0; color: #666; font-size: 0.85rem;">🌳 עץ המוצר שלנו</p>
+            </div>
+          </div>
+        </div>
+      `;
+      openModal(appendixContent, 'עץ המוצר שלנו');
+    }
+
+    window.generatePDF = function() {
+      const modalContentForPrint = document.querySelector('[data-modal-content]');
+      if (!modalContentForPrint) {
+        return;
+      }
+
+      const printArea = document.getElementById('printArea');
+      printArea.innerHTML = `
+        <div class="print-sheet">
+          <div class="print-header avoid-break">
+            <div class="print-header-top">
+              <div>
+                <p class="print-brand">פורצות דרך</p>
+                <p class="print-activity">${document.querySelector('[data-modal-title]')?.textContent || 'עץ מוצר'}</p>
+              </div>
+              <img src="/favicon.png" class="print-logo" alt="פורצות דרך">
+            </div>
+            <div class="print-meta">
+              <div><strong>משתתפות:</strong> ____________________</div>
+              <div><strong>קבוצה:</strong> ____________________</div>
+              <div><strong>תאריך:</strong> ____________________</div>
+            </div>
+          </div>
+          <div class="print-title-block avoid-break">
+            <h1 class="print-h1">${document.getElementById('article-title')?.textContent || 'עץ מוצר'}</h1>
+            <h2 class="print-h2">דף עבודה למיפוי מבנה המוצר</h2>
+          </div>
+          <div class="print-info-box">מפרקות את הרעיון לחלקים ברורים, מזהות רכיבים קריטיים ומוסיפות משימות לשיפור.</div>
+          <div class="print-task-box">${modalContentForPrint.innerHTML}</div>
+          <div class="print-footer">© 2026 פורצות דרך</div>
+        </div>
+      `;
+
+      window.print();
+    };
+
+    function openModal(content, title) {
+      const page = document.createElement('div');
+      page.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #fafaf9; z-index: 9999; overflow-y: auto; direction: rtl; print-color-adjust: exact; -webkit-print-color-adjust: exact;';
+      page.setAttribute('role', 'dialog');
+      page.setAttribute('aria-modal', 'true');
+      page.setAttribute('aria-label', title);
+      page.setAttribute('data-modal-page', 'true');
+
+      const actionsRow = document.createElement('div');
+      actionsRow.style.cssText = 'position: sticky; top: 0; z-index: 10000; background: rgba(250,250,249,0.97); backdrop-filter: blur(6px); border-bottom: 1px solid #e7e5e4; display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; padding: 0.75rem 1.5rem; box-sizing: border-box; print-color-adjust: exact; -webkit-print-color-adjust: exact;';
+
+      const backBtn = document.createElement('button');
+      backBtn.innerHTML = '&#8592; חזרה למאמר';
+      backBtn.style.cssText = 'background: #e7e5e4; color: #292524; border: none; border-radius: 0.65rem; padding: 0.55rem 1rem; font-size: 0.9rem; font-weight: 700; cursor: pointer; font-family: Heebo, sans-serif;';
+
+      const headerText = document.createElement('p');
+      headerText.textContent = title;
+      headerText.setAttribute('data-modal-title', 'true');
+      headerText.style.cssText = 'margin: 0; font-weight: 700; color: #1f2937; font-size: 1rem;';
+
+      const printBtn = document.createElement('button');
+      printBtn.textContent = '🖨 הדפסה / PDF';
+      printBtn.style.cssText = 'background: linear-gradient(135deg, #7c3aed, #ec4899); color: white; border: none; border-radius: 0.65rem; padding: 0.55rem 0.95rem; font-size: 0.95rem; font-weight: 700; cursor: pointer; box-shadow: 0 8px 15px rgba(124,58,237,0.25); font-family: Heebo, sans-serif;';
+      printBtn.addEventListener('click', window.generatePDF);
+
+      const contentBox = document.createElement('div');
+      contentBox.style.cssText = 'max-width: 900px; margin: 0 auto; padding: 0 1.5rem 4rem;';
+
+      const contentDiv = document.createElement('div');
+      contentDiv.setAttribute('data-modal-content', 'true');
+      contentDiv.innerHTML = content;
+
+      const previousBodyOverflow = document.body.style.overflow;
+      const closePage = () => {
+        page.remove();
+        document.body.style.overflow = previousBodyOverflow;
+        document.removeEventListener('keydown', onEscape);
+      };
+
+      const onEscape = (event) => {
+        if (event.key === 'Escape') {
+          closePage();
+        }
+      };
+
+      backBtn.addEventListener('click', closePage);
+      document.addEventListener('keydown', onEscape);
+
+      actionsRow.appendChild(backBtn);
+      actionsRow.appendChild(headerText);
+      actionsRow.appendChild(printBtn);
+      contentBox.appendChild(contentDiv);
+      page.appendChild(actionsRow);
+      page.appendChild(contentBox);
+
+      document.body.style.overflow = 'hidden';
+      document.body.appendChild(page);
+      page.focus();
+    }
+  </script>
+ </body>
+</html>

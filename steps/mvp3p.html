@@ -1,0 +1,1087 @@
+<!doctype html>
+<html lang="he" dir="rtl" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MVP Planner - תכנון המוצר שלך</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Heebo', sans-serif; }
+    
+    .gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    }
+  </style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <style>body { box-sizing: border-box; }</style>
+ </head>
+ <body class="h-full">
+  <div id="app" class="h-full overflow-auto"><!-- Landing Page -->
+   <div id="landing-page" class="min-h-full gradient-bg relative overflow-hidden"><!-- Decorative sparkles -->
+    <div class="sparkle top-20 left-10" style="animation-delay: 0s;"></div>
+    <div class="sparkle top-40 right-20" style="animation-delay: 0.5s;"></div>
+    <div class="sparkle bottom-32 left-1/4" style="animation-delay: 1s;"></div>
+    <div class="sparkle top-1/3 right-1/3" style="animation-delay: 0.3s;"></div>
+    <div class="sparkle bottom-20 right-10" style="animation-delay: 0.8s;"></div>
+    <div class="container mx-auto px-4 py-12 relative z-10"><!-- Home Icon -->
+     <div class="flex justify-end mb-4">
+      <a href="https://portzot-derech.org/main/steps/entrepreneurship-steps.html" title="חזרה לדף הבית" class="bg-white/80 backdrop-blur hover:bg-white text-gray-700 hover:text-purple-700 rounded-full p-3 shadow-lg transition-all hover:shadow-xl flex items-center gap-2 font-semibold text-sm border border-white/60">
+       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+       </svg>
+       <span>בית</span>
+      </a>
+     </div><!-- Header -->
+     <div class="text-center mb-16">
+      <div class="inline-block mb-6 float-animation">
+       <span class="text-7xl">⚙️</span>
+      </div>
+      <h1 id="main-title" class="text-5xl md:text-6xl font-black mb-4 drop-shadow-xl" style="color: #ff1493; text-shadow: 0 8px 16px rgba(255, 20, 147, 0.3), 0 4px 8px rgba(0, 0, 0, 0.1);">חוקרות. יוצרות. מפתחות.</h1>
+      <p id="subtitle" class="text-3xl md:text-5xl text-gray-800 font-black max-w-2xl mx-auto drop-shadow-lg" style="color: #ff1493; text-shadow: 0 4px 12px rgba(255, 20, 147, 0.4);">פורצות דרך</p>
+     </div><!-- Product Type Selection -->
+     <div class="max-w-5xl mx-auto">
+      <h2 class="text-2xl font-bold text-gray-800 text-center mb-8">🎯 איזה סוג מוצר את רוצה ליצור?</h2>
+      <div class="grid md:grid-cols-3 gap-8"><!-- Physical Product Card --> <button onclick="selectProduct('physical')" class="card-hover bg-white/95 backdrop-blur rounded-3xl p-8 text-center pulse-glow" style="box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 15px 25px -5px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.3) inset;">
+        <div class="text-6xl mb-4">
+         📦
+        </div><h3 class="text-2xl font-bold text-gray-800 mb-3">מוצר פיזי</h3><p class="text-gray-600 mb-4">משהו שאפשר לגעת בו - מוצר אמיתי!</p>
+        <div class="flex flex-wrap justify-center gap-2"><span class="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm">🔧 מנגנון</span> <span class="bg-pink-100 text-pink-700 px-3 py-1 rounded-full text-sm">✏️ סקיצה</span>
+        </div></button> <!-- Digital Product Card --> <button onclick="selectProduct('digital')" class="card-hover bg-white/95 backdrop-blur rounded-3xl p-8 text-center pulse-glow" style="animation-delay: 0.2s; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.3) inset;">
+        <div class="text-6xl mb-4">
+         💻
+        </div><h3 class="text-2xl font-bold text-gray-800 mb-3">מוצר דיגיטלי</h3><p class="text-gray-600 mb-4">אתר, פלטפורמה או שירות אונליין</p>
+        <div class="flex flex-wrap justify-center gap-2"><span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">🔄 תרשים זרימה</span> <span class="bg-cyan-100 text-cyan-700 px-3 py-1 rounded-full text-sm">📱 מסכים</span>
+        </div></button> <!-- App Product Card --> <button onclick="selectProduct('app')" class="card-hover bg-white/95 backdrop-blur rounded-3xl p-8 text-center pulse-glow" style="animation-delay: 0.4s; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 15px 25px -5px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.3) inset;">
+        <div class="text-6xl mb-4">
+         📱
+        </div><h3 class="text-2xl font-bold text-gray-800 mb-3">אפליקציה</h3><p class="text-gray-600 mb-4">אפליקציה לטלפון הנייד</p>
+        <div class="flex flex-wrap justify-center gap-2"><span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">📲 מסכים</span> <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm">🎯 UI/UX</span>
+        </div></button>
+      </div>
+     </div><!-- Prompt Generator Button -->
+     <div class="max-w-5xl mx-auto mt-12 flex justify-center">
+      <button onclick="openPromptGenerator()" class="bg-white/20 backdrop-blur hover:bg-white/30 text-gray-800 font-bold px-8 py-4 rounded-full transition-all shadow-lg border border-white/40 flex items-center gap-3 hover:shadow-xl"> <span class="text-2xl">✨</span> <span>מחולל פרומפטים</span> <span class="text-2xl">→</span> </button>
+     </div><!-- Tips Section -->
+     <div class="max-w-3xl mx-auto mt-16 bg-white/40 backdrop-blur rounded-2xl p-6">
+      <h3 class="text-gray-800 font-bold text-lg mb-3 flex items-center gap-2"><span>💡</span> טיפ מהיר</h3>
+      <p class="text-gray-700">MVP = Minimum Viable Product - הגרסה הכי פשוטה של המוצר שלך שעדיין נותנת ערך ללקוחות. אל תנסי לבנות הכל - התחילי מהבסיס! 🌟</p>
+     </div><!-- Stop & Improve Button -->
+     <div class="max-w-5xl mx-auto mt-8 flex justify-center pb-8">
+      <button onclick="openSummaryModal()" class="bg-white/15 backdrop-blur hover:bg-white/25 text-gray-700 font-medium px-5 py-2.5 rounded-full transition-all shadow-lg hover:shadow-xl border border-white/30 flex items-center gap-2 text-sm ring-1 ring-white/20"> <span>🟣</span> <span>עצירת פיתוח – בדיקה לפני שיפור</span> </button>
+     </div>
+    </div>
+   </div><!-- Summary Modal -->
+   <div id="summary-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" dir="rtl">
+     <div class="bg-gradient-to-l from-purple-600 to-purple-800 rounded-t-3xl px-6 py-5 text-white">
+      <div class="flex items-center justify-between">
+       <div>
+        <h2 class="text-xl font-bold">🟣 עצירת פיתוח – בדיקה לפני סבב שיפור</h2>
+        <p class="text-purple-200 text-sm mt-1">⏱ זמן: 6 דקות בלבד</p>
+       </div>
+       <button onclick="closeSummaryModal()" class="text-white/70 hover:text-white text-2xl font-light leading-none">✕</button>
+      </div>
+     </div>
+     <div class="px-6 py-5 space-y-6">
+      <!-- Goal -->
+      <div class="bg-purple-50 rounded-2xl p-4 border border-purple-100">
+       <h3 class="font-bold text-gray-800 mb-2">🎯 המטרה</h3>
+       <p class="text-gray-700 text-sm">להחליט בצורה מדויקת מה אנחנו משפרות בשיעור הבא.</p>
+       <p class="text-gray-500 text-sm mt-2">לא בונות מחדש. לא מוסיפות רעיונות. <strong>מדייקות.</strong></p>
+      </div>
+      <!-- Step 1 -->
+      <div>
+       <h3 class="font-bold text-gray-800 mb-3">שלב 1 – מצב המוצר כרגע <span class="text-gray-400 font-normal text-sm">(2 דקות)</span></h3>
+       <p class="text-gray-600 text-sm mb-3">סמנו את המשפט שהכי מדויק למוצר שלכן:</p>
+       <div class="space-y-2" id="step1-options">
+        <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:border-purple-300 hover:bg-purple-50 cursor-pointer transition-all">
+         <input type="radio" name="step1" value="structure" class="accent-purple-600"> <span class="text-sm text-gray-700">יש לנו מבנה ברור אבל לא הכל זורם</span>
+        </label>
+        <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:border-purple-300 hover:bg-purple-50 cursor-pointer transition-all">
+         <input type="radio" name="step1" value="value" class="accent-purple-600"> <span class="text-sm text-gray-700">הערך טוב אבל לא מספיק ברור</span>
+        </label>
+        <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:border-purple-300 hover:bg-purple-50 cursor-pointer transition-all">
+         <input type="radio" name="step1" value="complex" class="accent-purple-600"> <span class="text-sm text-gray-700">יש שלב מסובך מדי</span>
+        </label>
+        <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:border-purple-300 hover:bg-purple-50 cursor-pointer transition-all">
+         <input type="radio" name="step1" value="clarity" class="accent-purple-600"> <span class="text-sm text-gray-700">חסרה בהירות במה שהמערכת עושה</span>
+        </label>
+        <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:border-purple-300 hover:bg-purple-50 cursor-pointer transition-all">
+         <input type="radio" name="step1" value="simplify" class="accent-purple-600"> <span class="text-sm text-gray-700">המוצר עובד אבל אפשר לפשט</span>
+        </label>
+       </div>
+       <p class="text-gray-400 text-xs mt-2">אם סימנתן יותר מאחד – בחרו רק אחד מרכזי.</p>
+      </div>
+      <!-- Step 2 -->
+      <div>
+       <h3 class="font-bold text-gray-800 mb-3">שלב 2 – נקודת השיפור <span class="text-gray-400 font-normal text-sm">(2 דקות)</span></h3>
+       <p class="text-gray-600 text-sm mb-3">באיזה שלב במוצר צריך להתמקד?</p>
+       <div class="space-y-3">
+        <div>
+         <label class="text-sm text-gray-600 block mb-1">שלב מספר / מסך:</label>
+         <input type="text" placeholder="לדוגמה: מסך 3 / שלב הרישום" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-purple-400 focus:outline-none text-sm bg-gray-50">
+        </div>
+        <div>
+         <label class="text-sm text-gray-600 block mb-1">מה בדיוק הבעיה שם? <span class="text-gray-400">(במשפט קצר וברור)</span></label>
+         <textarea placeholder="לא לכתוב כללי. לכתוב מדויק." class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-purple-400 focus:outline-none text-sm bg-gray-50 resize-none" rows="2"></textarea>
+        </div>
+       </div>
+      </div>
+      <!-- Step 3 -->
+      <div>
+       <h3 class="font-bold text-gray-800 mb-3">שלב 3 – החלטת צוות לשיעור הבא <span class="text-gray-400 font-normal text-sm">(2 דקות)</span></h3>
+       <p class="text-gray-600 text-sm mb-3">בשיעור הבא אנחנו משפרות:</p>
+       <div class="space-y-2 mb-4">
+        <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:border-purple-300 hover:bg-purple-50 cursor-pointer transition-all">
+         <input type="radio" name="step3" value="shortcut" class="accent-purple-600"> <span class="text-sm text-gray-700">קיצור מסלול</span>
+        </label>
+        <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:border-purple-300 hover:bg-purple-50 cursor-pointer transition-all">
+         <input type="radio" name="step3" value="screen" class="accent-purple-600"> <span class="text-sm text-gray-700">פישוט מסך</span>
+        </label>
+        <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:border-purple-300 hover:bg-purple-50 cursor-pointer transition-all">
+         <input type="radio" name="step3" value="value" class="accent-purple-600"> <span class="text-sm text-gray-700">חידוד ערך</span>
+        </label>
+        <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:border-purple-300 hover:bg-purple-50 cursor-pointer transition-all">
+         <input type="radio" name="step3" value="response" class="accent-purple-600"> <span class="text-sm text-gray-700">הבהרת תגובת מערכת</span>
+        </label>
+        <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:border-purple-300 hover:bg-purple-50 cursor-pointer transition-all">
+         <input type="radio" name="step3" value="load" class="accent-purple-600"> <span class="text-sm text-gray-700">הפחתת עומס</span>
+        </label>
+        <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:border-purple-300 hover:bg-purple-50 cursor-pointer transition-all" id="other-label">
+         <input type="radio" name="step3" value="other" class="accent-purple-600" onchange="toggleOtherInput()"> <span class="text-sm text-gray-700">אחר:</span>
+         <input type="text" id="other-input" placeholder="פרטי..." class="flex-1 px-3 py-1 rounded-lg border border-gray-200 focus:border-purple-400 focus:outline-none text-sm bg-white hidden">
+        </label>
+       </div>
+       <div>
+        <label class="text-sm text-gray-600 block mb-1">מטרת השיפור שלנו במשפט אחד:</label>
+        <div class="flex items-center gap-2 flex-wrap bg-gray-50 rounded-xl border border-gray-200 px-4 py-2.5 text-sm text-gray-700">
+         <span>בשיעור הבא נהפוך את המוצר ליותר</span>
+         <input type="text" id="goal-word1" placeholder="________" class="w-28 px-2 py-1 rounded-lg border border-purple-200 focus:border-purple-400 focus:outline-none text-sm bg-white text-center">
+         <span>על ידי</span>
+         <input type="text" id="goal-word2" placeholder="________" class="w-36 px-2 py-1 rounded-lg border border-purple-200 focus:border-purple-400 focus:outline-none text-sm bg-white text-center">
+         <span>.</span>
+        </div>
+       </div>
+      </div>
+      <!-- Footer -->
+      <div class="bg-purple-700 rounded-2xl p-4 text-white text-center">
+       <p class="font-bold mb-1">אנחנו לא מתחילות מחדש.</p>
+       <p class="font-bold mb-2">אנחנו משפרות גרסה קיימת.</p>
+       <p class="text-purple-200 text-sm">פיתוח מוצר הוא תהליך של גרסאות – לא של רעיון מושלם בפעם הראשונה.</p>
+      </div>
+      <div class="flex justify-center gap-3 pb-2">
+       <button onclick="closeSummaryModal()" class="bg-purple-600 hover:bg-purple-700 text-white font-bold px-8 py-3 rounded-full transition-all shadow-lg">סגור</button> <button onclick="printPage()" class="bg-white text-purple-700 font-bold px-8 py-3 rounded-full transition-all shadow-lg border border-purple-200 hover:bg-purple-50 flex items-center gap-2"> <span>🖨️</span> הדפסה </button>
+      </div>
+     </div>
+    </div>
+   </div><!-- Physical Product Page -->
+   <div id="physical-page" class="min-h-full hidden" style="background: linear-gradient(135deg, #fff5f7 0%, #fafafa 50%, #e6f5ff 100%);">
+    <div class="container mx-auto px-4 py-8">
+     <div class="flex items-center justify-between mb-8"><button onclick="goBack()" class="bg-gray-800/30 hover:bg-gray-800/50 text-gray-800 px-6 py-3 rounded-full font-bold flex items-center gap-2 transition-all"> <span>→</span> חזרה </button>
+      <h1 class="text-3xl font-bold text-gray-800 flex items-center gap-3"><span>📦</span> תכנון ה-MVP של המוצר הפיזי</h1><button onclick="printPage()" class="bg-gray-800/30 hover:bg-gray-800/50 text-gray-800 px-4 py-3 rounded-full font-bold flex items-center gap-2 transition-all text-sm"> <span>🖨️</span> הדפס </button>
+     </div>
+     <div class="max-w-4xl mx-auto space-y-6"><!-- Product Name -->
+      <div class="mb-8"><input type="text" placeholder="📦 שם המוצר שלך" class="w-full px-6 py-4 rounded-2xl border-2 border-pink-400 bg-white/60 text-gray-800 placeholder-gray-600 focus:border-pink-500 focus:outline-none text-2xl text-center font-bold">
+      </div><!-- MVP Form -->
+      <div class="space-y-6"><!-- 1. The Problem -->
+       <div class="bg-white rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all border-l-4 border-pink-500" style="box-shadow: 0 10px 30px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.05);">
+        <h3 class="text-xl font-bold text-gray-900 mb-3 flex items-center gap-2"><span>🎯</span> 1. הבעיה שאנחנו פותרות</h3><textarea placeholder="תארי את הבעיה בצורה מדויקת וממוקדת..." class="w-full px-4 py-3 rounded-lg text-gray-800 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-pink-400 bg-pink-50" rows="3"></textarea>
+       </div><!-- 2. User Persona -->
+       <div class="bg-white rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all border-l-4 border-rose-500" style="box-shadow: 0 10px 30px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.05);">
+        <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2"><span>👤</span> 2. המשתמשת שלנו (Persona)</h3>
+        <div class="grid md:grid-cols-3 gap-4"><input type="text" placeholder="שם" class="px-4 py-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-rose-400 bg-rose-50 shadow-sm"> <input type="number" placeholder="גיל" class="px-4 py-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-rose-400 bg-rose-50 shadow-sm"> <input type="text" placeholder="עיסוק" class="px-4 py-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-rose-400 bg-rose-50 shadow-sm">
+        </div><textarea placeholder="הכאב המרכזי שלה / בעיתה..." class="w-full px-4 py-3 rounded-lg text-gray-800 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-rose-400 mt-3 bg-rose-50" rows="2"></textarea>
+       </div><!-- 3. Core Mechanism -->
+       <div class="bg-white rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all border-l-4 border-purple-500" style="box-shadow: 0 10px 30px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.05);">
+        <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2"><span>⚙️</span> 3. הליבה המכנית</h3>
+        <p class="text-gray-800 mb-4 text-sm">מה המנגנון הקריטי? מה חייב לפעול בפועל?</p>
+        <div class="grid md:grid-cols-3 gap-3 mb-4">
+         <div class="bg-white/10 rounded-lg p-3 border border-gray-400/20"><label class="text-gray-700 text-xs">Input</label> <input type="text" placeholder="מה נכנס?" class="w-full px-2 py-2 rounded text-gray-800 text-xs focus:outline-none focus:ring-1 focus:ring-pink-400 mt-1">
+         </div>
+         <div class="bg-white/10 rounded-lg p-3 border border-gray-400/20"><label class="text-gray-700 text-xs">Mechanism</label> <input type="text" placeholder="מה קורה?" class="w-full px-2 py-2 rounded text-gray-800 text-xs focus:outline-none focus:ring-1 focus:ring-pink-400 mt-1">
+         </div>
+         <div class="bg-white/10 rounded-lg p-3 border border-gray-400/20"><label class="text-gray-700 text-xs">Output</label> <input type="text" placeholder="מה יוצא?" class="w-full px-2 py-2 rounded text-gray-800 text-xs focus:outline-none focus:ring-1 focus:ring-pink-400 mt-1">
+         </div>
+        </div><textarea placeholder="תיאור מפורט של הזרימה..." class="w-full px-4 py-3 rounded-lg text-gray-800 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-pink-400" rows="2"></textarea>
+       </div><!-- 4. Must-Have Components -->
+       <div class="bg-white/10 backdrop-blur rounded-2xl p-6 border border-white/20">
+        <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2"><span>✅</span> 4. רכיבים חייבים (עד 3 בלבד)</h3>
+        <p class="text-gray-800 mb-4 text-sm">רק מה שבלעדיו המוצר לא מתפקד</p>
+        <div class="space-y-3"><input type="text" placeholder="• רכיב 1" class="w-full px-4 py-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-400"> <input type="text" placeholder="• רכיב 2" class="w-full px-4 py-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-400"> <input type="text" placeholder="• רכיב 3" class="w-full px-4 py-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-400">
+        </div>
+       </div><!-- 5. Colors & Materials -->
+       <div class="bg-white/20 backdrop-blur rounded-2xl p-6 border border-gray-400/30">
+        <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2"><span>🎨</span> 5. צבעים וחומרים</h3><!-- Color Selection -->
+        <div class="mb-6">
+         <h4 class="text-gray-900 font-semibold mb-3">בחירת צבעים:</h4>
+         <div class="grid md:grid-cols-6 gap-3"><label class="flex items-center gap-2 cursor-pointer"> <input type="checkbox" class="w-4 h-4 rounded accent-pink-500"> <span class="text-gray-800 text-sm">אדום</span> </label> <label class="flex items-center gap-2 cursor-pointer"> <input type="checkbox" class="w-4 h-4 rounded accent-pink-500"> <span class="text-gray-800 text-sm">כחול</span> </label> <label class="flex items-center gap-2 cursor-pointer"> <input type="checkbox" class="w-4 h-4 rounded accent-pink-500"> <span class="text-gray-800 text-sm">שחור</span> </label> <label class="flex items-center gap-2 cursor-pointer"> <input type="checkbox" class="w-4 h-4 rounded accent-pink-500"> <span class="text-gray-800 text-sm">לבן</span> </label> <label class="flex items-center gap-2 cursor-pointer"> <input type="checkbox" class="w-4 h-4 rounded accent-pink-500"> <span class="text-gray-800 text-sm">ירוק</span> </label> <label class="flex items-center gap-2 cursor-pointer"> <input type="checkbox" class="w-4 h-4 rounded accent-pink-500"> <span class="text-gray-800 text-sm">צהוב</span> </label> <label class="flex items-center gap-2 cursor-pointer"> <input type="checkbox" class="w-4 h-4 rounded accent-pink-500"> <span class="text-gray-800 text-sm">כתום</span> </label> <label class="flex items-center gap-2 cursor-pointer"> <input type="checkbox" class="w-4 h-4 rounded accent-pink-500"> <span class="text-gray-800 text-sm">סגול</span> </label> <label class="flex items-center gap-2 cursor-pointer"> <input type="checkbox" class="w-4 h-4 rounded accent-pink-500"> <span class="text-gray-800 text-sm">וורוד</span> </label> <label class="flex items-center gap-2 cursor-pointer"> <input type="checkbox" class="w-4 h-4 rounded accent-pink-500"> <span class="text-gray-800 text-sm">טורקיז</span> </label> <label class="flex items-center gap-2 cursor-pointer"> <input type="checkbox" class="w-4 h-4 rounded accent-pink-500"> <span class="text-gray-800 text-sm">זהב</span> </label> <label class="flex items-center gap-2 cursor-pointer"> <input type="checkbox" class="w-4 h-4 rounded accent-pink-500"> <span class="text-gray-800 text-sm">כסף</span> </label> <label class="flex items-center gap-2 cursor-pointer"> <input type="checkbox" class="w-4 h-4 rounded accent-pink-500"> <span class="text-gray-800 text-sm">חום</span> </label> <label class="flex items-center gap-2 cursor-pointer"> <input type="checkbox" class="w-4 h-4 rounded accent-pink-500"> <span class="text-gray-800 text-sm">ורוד בהיר</span> </label> <label class="flex items-center gap-2 cursor-pointer"> <input type="checkbox" class="w-4 h-4 rounded accent-pink-500"> <span class="text-gray-800 text-sm">כחול כהה</span> </label> <label class="flex items-center gap-2 cursor-pointer"> <input type="checkbox" class="w-4 h-4 rounded accent-pink-500"> <span class="text-gray-800 text-sm">ירוק כהה</span> </label> <label class="flex items-center gap-2 cursor-pointer"> <input type="checkbox" class="w-4 h-4 rounded accent-pink-500"> <span class="text-gray-800 text-sm">אדום כהה</span> </label> <label class="flex items-center gap-2 cursor-pointer"> <input type="checkbox" class="w-4 h-4 rounded accent-pink-500"> <span class="text-gray-800 text-sm">ספרי כחול</span> </label> <label class="flex items-center gap-2 cursor-pointer"> <input type="checkbox" class="w-4 h-4 rounded accent-pink-500"> <span class="text-gray-800 text-sm">אור סגול</span> </label> <label class="flex items-center gap-2 cursor-pointer"> <input type="checkbox" class="w-4 h-4 rounded accent-pink-500"> <span class="text-gray-800 text-sm">צחום בהיר</span> </label> <label class="flex items-center gap-2 cursor-pointer"> <input type="checkbox" class="w-4 h-4 rounded accent-pink-500"> <span class="text-gray-800 text-sm">ירוק בהיר</span> </label>
+         </div>
+        </div><!-- Materials Selection -->
+        <div class="mb-6">
+         <h4 class="text-gray-900 font-semibold mb-3">בחירת חומרים:</h4>
+         <div class="grid md:grid-cols-3 gap-3"><label class="flex items-center gap-2 cursor-pointer"> <input type="checkbox" class="w-4 h-4 rounded accent-pink-500"> <span class="text-gray-800 text-sm">פלסטיק</span> </label> <label class="flex items-center gap-2 cursor-pointer"> <input type="checkbox" class="w-4 h-4 rounded accent-pink-500"> <span class="text-gray-800 text-sm">מתכת</span> </label> <label class="flex items-center gap-2 cursor-pointer"> <input type="checkbox" class="w-4 h-4 rounded accent-pink-500"> <span class="text-gray-800 text-sm">עץ</span> </label> <label class="flex items-center gap-2 cursor-pointer"> <input type="checkbox" class="w-4 h-4 rounded accent-pink-500"> <span class="text-gray-800 text-sm">בד</span> </label> <label class="flex items-center gap-2 cursor-pointer"> <input type="checkbox" class="w-4 h-4 rounded accent-pink-500"> <span class="text-gray-800 text-sm">סיליקון</span> </label> <label class="flex items-center gap-2 cursor-pointer"> <input type="checkbox" class="w-4 h-4 rounded accent-pink-500"> <span class="text-gray-800 text-sm">זכוכית</span> </label>
+         </div>
+        </div><!-- Parts Selection -->
+        <div>
+         <h4 class="text-gray-800 font-semibold mb-3">רכיבים ראשיים:</h4>
+         <div class="space-y-2"><label class="flex items-center gap-2 cursor-pointer"> <input type="checkbox" class="w-4 h-4 rounded accent-pink-500"> <span class="text-gray-800 text-sm">גוף ראשי</span> </label> <label class="flex items-center gap-2 cursor-pointer"> <input type="checkbox" class="w-4 h-4 rounded accent-pink-500"> <span class="text-gray-800 text-sm">מנגנון הנעה</span> </label> <label class="flex items-center gap-2 cursor-pointer"> <input type="checkbox" class="w-4 h-4 rounded accent-pink-500"> <span class="text-gray-800 text-sm">ידית / אחיזה</span> </label> <label class="flex items-center gap-2 cursor-pointer"> <input type="checkbox" class="w-4 h-4 rounded accent-pink-500"> <span class="text-gray-800 text-sm">מסך / תצוגה</span> </label> <label class="flex items-center gap-2 cursor-pointer"> <input type="checkbox" class="w-4 h-4 rounded accent-pink-500"> <span class="text-gray-800 text-sm">סוללה / חשמל</span> </label> <label class="flex items-center gap-2 cursor-pointer"> <input type="checkbox" class="w-4 h-4 rounded accent-pink-500"> <span class="text-gray-800 text-sm">חיישנים</span> </label>
+         </div>
+        </div>
+       </div><!-- 6. Success Metrics -->
+       <div class="bg-white/20 backdrop-blur rounded-2xl p-6 border border-gray-400/30">
+        <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2"><span>📊</span> 6. מדדי הצלחה</h3>
+        <p class="text-gray-800/80 mb-4 text-sm">נדע שזה עובד כאשר:</p>
+        <div class="space-y-3"><input type="text" placeholder="✔ מדד 1" class="w-full px-4 py-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-400"> <input type="text" placeholder="✔ מדד 2" class="w-full px-4 py-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-400"> <input type="text" placeholder="✔ מדד 3" class="w-full px-4 py-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-400">
+        </div>
+       </div><!-- 7. Technical Sketch with Canvas -->
+       <div class="bg-white/20 backdrop-blur rounded-2xl p-6 border border-gray-400/30">
+        <h3 class="text-xl font-bold text-gray-900 mb-3 flex items-center gap-2"><span>🎨</span> 7. שרטוט מבני טכני</h3>
+        <p class="text-gray-800/80 mb-4 text-sm">תרשים מערכת - ציור חופשי של המנגנון</p><!-- View Selection -->
+        <div class="flex gap-3 mb-4 flex-wrap">
+         <button onclick="selectPhysicalView('side')" class="physical-view-btn bg-pink-400 hover:bg-pink-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all active" data-view="side">צד</button> <button onclick="selectPhysicalView('top')" class="physical-view-btn bg-pink-300 hover:bg-pink-400 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all" data-view="top">מלמעלה</button> <button onclick="selectPhysicalView('front')" class="physical-view-btn bg-pink-300 hover:bg-pink-400 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all" data-view="front">חזיתי</button>
+        </div><!-- Canvas for Drawing -->
+        <div class="bg-white rounded-lg overflow-hidden mb-4 border-2 border-pink-400">
+         <canvas id="physical-sketch-canvas" width="600" height="300" class="w-full bg-white cursor-crosshair" style="touch-action: none;"></canvas>
+        </div><!-- Canvas Controls -->
+        <div class="flex gap-3 mb-4 flex-wrap">
+         <button onclick="clearPhysicalSketch()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all">🗑️ נקה את השרטוט</button> <button onclick="downloadPhysicalSketch()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all">⬇️ הורד תמונה</button>
+        </div><!-- Description --> <textarea placeholder="תיאור של השרטוט: סימון תנועה, נקודות עומס, מנגנון..." class="w-full px-4 py-3 rounded-lg text-gray-800 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-pink-400" rows="3"></textarea>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div><!-- Digital Product Page -->
+   <div id="digital-page" class="min-h-full bg-gradient-to-br from-slate-50 to-blue-50 hidden">
+    <div class="container mx-auto px-4 py-8">
+     <div class="flex items-center justify-between mb-8"><button onclick="goBack()" class="bg-blue-300 hover:bg-blue-400 text-gray-800 px-6 py-3 rounded-full font-bold flex items-center gap-2 transition-all shadow-lg"> <span>→</span> חזרה </button>
+      <h1 class="text-3xl font-bold text-gray-800 flex items-center gap-3"><span>💻</span> תכנון ה-MVP של הפלטפורמה הדיגיטלית</h1><button onclick="printPage()" class="bg-blue-300 hover:bg-blue-400 text-gray-800 px-4 py-3 rounded-full font-bold flex items-center gap-2 transition-all text-sm shadow-lg"> <span>🖨️</span> הדפס </button>
+     </div>
+     <div class="max-w-4xl mx-auto space-y-6"><!-- Product Name -->
+      <div class="mb-8"><input type="text" placeholder="💻 שם הפלטפורמה שלך" class="w-full px-6 py-4 rounded-2xl border-2 border-blue-400 bg-white text-gray-800 placeholder-gray-500 focus:border-cyan-400 focus:outline-none text-2xl text-center font-bold shadow-lg">
+      </div><!-- MVP Form -->
+      <div class="space-y-6"><!-- 1. The Problem -->
+       <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow border-l-4 border-blue-500">
+        <h3 class="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2"><span>🎯</span> 1. הבעיה שאנחנו פותרות</h3><textarea placeholder="תארי בקצרה את הבעיה שהפלטפורמה פותרת..." class="w-full px-4 py-3 rounded-lg text-gray-800 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-400 bg-blue-50" rows="2"></textarea>
+       </div><!-- 2. User Persona -->
+       <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow border-l-4 border-cyan-500">
+        <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2"><span>👤</span> 2. המשתמשת שלנו (Persona)</h3>
+        <div class="grid md:grid-cols-3 gap-4"><input type="text" placeholder="שם" class="px-4 py-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-cyan-400 bg-cyan-50 shadow-sm"> <input type="number" placeholder="גיל" class="px-4 py-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-cyan-400 bg-cyan-50 shadow-sm"> <input type="text" placeholder="תפקיד / תחום" class="px-4 py-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-cyan-400 bg-cyan-50 shadow-sm">
+        </div><textarea placeholder="הכאב המרכזי שלה..." class="w-full px-4 py-3 rounded-lg text-gray-800 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-cyan-400 mt-3 bg-cyan-50" rows="2"></textarea>
+       </div><!-- 3. Core Action -->
+       <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow border-l-4 border-purple-500">
+        <h3 class="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2"><span>⚡</span> 3. הפעולה המרכזית</h3>
+        <p class="text-gray-700 mb-3 text-sm">אם זה לא עובד — אין דיגיטלי. מה חייב להצליח?</p><textarea placeholder="תאר את הפעולה המרכזית שהמשתמשת עושה..." class="w-full px-4 py-3 rounded-lg text-gray-800 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-purple-400 bg-purple-50" rows="2"></textarea>
+       </div><!-- 4. Required Screens -->
+       <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow border-l-4 border-indigo-500">
+        <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2"><span>📱</span> 4. מסכים חייבים (עד 3)</h3>
+        <p class="text-gray-700 mb-4 text-sm">רק המסכים ההכרחיים לביצוע הפעולה</p>
+        <div class="space-y-3">
+         <div class="bg-indigo-50 rounded-lg p-4 border-l-2 border-indigo-400 shadow-sm">
+          <label class="text-gray-700 text-xs font-semibold">מסך 1 - פתיחה</label> <input type="text" placeholder="תיאור מסך הפתיחה..." class="w-full px-3 py-2 rounded text-gray-800 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-400 mt-2 bg-white shadow-sm">
+         </div>
+         <div class="bg-indigo-50 rounded-lg p-4 border-l-2 border-indigo-400 shadow-sm">
+          <label class="text-gray-700 text-xs font-semibold">מסך 2 - פעולה מרכזית</label> <input type="text" placeholder="תיאור מסך הפעולה..." class="w-full px-3 py-2 rounded text-gray-800 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-400 mt-2 bg-white shadow-sm">
+         </div>
+         <div class="bg-indigo-50 rounded-lg p-4 border-l-2 border-indigo-400 shadow-sm">
+          <label class="text-gray-700 text-xs font-semibold">מסך 3 - תוצאה</label> <input type="text" placeholder="תיאור מסך התוצאה..." class="w-full px-3 py-2 rounded text-gray-800 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-400 mt-2 bg-white shadow-sm">
+         </div>
+        </div>
+       </div><!-- 5. What's Out -->
+       <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow border-l-4 border-orange-500">
+        <h3 class="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2"><span>🚀</span> 5. מה לא נכנס עכשיו</h3>
+        <p class="text-gray-700 mb-3 text-sm">פיצ'רים שחוסכים לגרסה הבאה</p><textarea placeholder="פיצ'רים נוספים, מסכים נוספים, עיצוב מתקדם..." class="w-full px-4 py-3 rounded-lg text-gray-800 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-orange-400 bg-orange-50" rows="2"></textarea>
+       </div><!-- 6. Success Metric -->
+       <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow border-l-4 border-green-500">
+        <h3 class="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2"><span>📊</span> 6. מדד הצלחה</h3>
+        <p class="text-gray-700 mb-3 text-sm">נדע שזה עובד כאשר:</p><textarea placeholder="המשתמשת מצליחה לבצע את הפעולה המרכזית ולקבל תוצאה ברורה..." class="w-full px-4 py-3 rounded-lg text-gray-800 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-green-400 bg-green-50" rows="2"></textarea>
+       </div><!-- 7. User Flow Diagram with 5 Screens -->
+       <div class="bg-white/10 backdrop-blur rounded-2xl p-6 border border-white/20">
+        <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2"><span>🔄</span> 7. תרשים הזרימה - 5 מסכים</h3>
+        <p class="text-gray-800 mb-6 text-sm">תרשים המסכים והפעולות בינהם - כל אחד עם תיאור מפורט</p>
+        <div class="space-y-4 overflow-x-auto">
+         <!-- Screen 1 -->
+         <div class="flex flex-col items-center gap-2">
+          <div class="bg-blue-500/30 border-2 border-blue-400/50 rounded-lg p-4 w-full max-w-xs">
+           <div class="text-gray-900 font-bold text-center mb-2 text-sm">
+            📱 מסך 1: כניסה
+           </div><textarea placeholder="תארי את מסך הכניסה הראשי..." class="w-full px-3 py-2 rounded text-gray-800 text-xs focus:outline-none focus:ring-2 focus:ring-blue-300 resize-none" rows="3"></textarea>
+          </div>
+          <div class="text-gray-900 text-2xl font-bold">
+           ↓
+          </div>
+         </div><!-- Screen 2 -->
+         <div class="flex flex-col items-center gap-2">
+          <div class="bg-cyan-500/30 border-2 border-cyan-400/50 rounded-lg p-4 w-full max-w-xs">
+           <div class="text-gray-900 font-bold text-center mb-2 text-sm">
+            📋 מסך 2: בחירה/קלט
+           </div><textarea placeholder="תארי את מסך הבחירה או הקלט..." class="w-full px-3 py-2 rounded text-gray-800 text-xs focus:outline-none focus:ring-2 focus:ring-cyan-300 resize-none" rows="3"></textarea>
+          </div>
+          <div class="text-gray-900 text-2xl font-bold">
+           ↓
+          </div>
+         </div><!-- Screen 3 -->
+         <div class="flex flex-col items-center gap-2">
+          <div class="bg-purple-500/30 border-2 border-purple-400/50 rounded-lg p-4 w-full max-w-xs">
+           <div class="text-gray-900 font-bold text-center mb-2 text-sm">
+            ⚙️ מסך 3: עיבוד/פעולה
+           </div><textarea placeholder="תארי את מסך הפעולה המרכזית..." class="w-full px-3 py-2 rounded text-gray-800 text-xs focus:outline-none focus:ring-2 focus:ring-purple-300 resize-none" rows="3"></textarea>
+          </div>
+          <div class="text-gray-900 text-2xl font-bold">
+           ↓
+          </div>
+         </div><!-- Screen 4 -->
+         <div class="flex flex-col items-center gap-2">
+          <div class="bg-yellow-500/30 border-2 border-yellow-400/50 rounded-lg p-4 w-full max-w-xs">
+           <div class="text-gray-900 font-bold text-center mb-2 text-sm">
+            📊 מסך 4: תוצאה ביניים
+           </div><textarea placeholder="תארי את מסך התוצאה או המידע הביניים..." class="w-full px-3 py-2 rounded text-gray-800 text-xs focus:outline-none focus:ring-2 focus:ring-yellow-300 resize-none" rows="3"></textarea>
+          </div>
+          <div class="text-gray-900 text-2xl font-bold">
+           ↓
+          </div>
+         </div><!-- Screen 5 -->
+         <div class="flex flex-col items-center gap-2">
+          <div class="bg-green-500/30 border-2 border-green-400/50 rounded-lg p-4 w-full max-w-xs">
+           <div class="text-gray-900 font-bold text-center mb-2 text-sm">
+            ✅ מסך 5: סיום/הצלחה
+           </div><textarea placeholder="תארי את מסך ההצלחה הסופי..." class="w-full px-3 py-2 rounded text-gray-800 text-xs focus:outline-none focus:ring-2 focus:ring-green-300 resize-none" rows="3"></textarea>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div><!-- App Product Page - MVP Planning -->
+   <div id="app-page" class="min-h-full bg-gradient-to-br from-slate-50 to-purple-50 hidden">
+    <div class="container mx-auto px-4 py-8">
+     <div class="flex items-center justify-between mb-8"><button onclick="goBack()" class="bg-purple-300 hover:bg-purple-400 text-gray-800 px-6 py-3 rounded-full font-bold flex items-center gap-2 transition-all"> <span>→</span> חזרה </button>
+      <h1 class="text-3xl font-bold text-gray-900 flex items-center gap-3"><span>📱</span> תכנון ה-MVP של האפליקציה</h1><button onclick="printPage()" class="bg-purple-300 hover:bg-purple-400 text-gray-800 px-4 py-3 rounded-full font-bold flex items-center gap-2 transition-all text-sm"> <span>🖨️</span> הדפס </button>
+     </div>
+     <div class="max-w-4xl mx-auto mb-8 flex gap-2 flex-wrap justify-center"><button onclick="switchAppTab('mvp')" class="tab-btn-app bg-purple-200 hover:bg-purple-300 text-gray-800 px-6 py-2 rounded-full font-semibold transition-all active" data-tab="mvp">📋 תכנון MVP</button> <button onclick="switchAppTab('screens')" class="tab-btn-app bg-purple-100 hover:bg-purple-200 text-gray-800 px-6 py-2 rounded-full font-semibold transition-all" data-tab="screens">📱 עיצוב המסכים</button>
+     </div><!-- MVP Planning Tab -->
+     <div id="app-mvp-tab" class="tab-content-app">
+      <div class="max-w-4xl mx-auto">
+       <div class="mb-8"><input type="text" id="app-name" placeholder="📱 שם האפליקציה שלך" class="w-full px-6 py-4 rounded-2xl border-2 border-purple-400 bg-white/60 text-gray-900 placeholder-gray-600 focus:border-pink-400 focus:outline-none text-2xl text-center font-bold">
+       </div>
+       <div class="space-y-6"><!-- 1. The Problem -->
+        <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all border-l-4 border-purple-500">
+         <h3 class="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2"><span>🎯</span> 1. הבעיה שאנחנו פותרות</h3><textarea placeholder="תארי בקצרה את הבעיה שהאפליקציה פותרת..." class="w-full px-4 py-3 rounded-lg text-gray-800 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-purple-400 bg-purple-50" rows="3"></textarea>
+        </div><!-- 2. User Persona -->
+        <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all border-l-4 border-violet-500">
+         <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2"><span>👤</span> 2. המשתמשת שלנו (Persona)</h3>
+         <div class="grid md:grid-cols-3 gap-4"><input type="text" placeholder="שם" class="px-4 py-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-violet-400 bg-violet-50 shadow-sm"> <input type="number" placeholder="גיל" class="px-4 py-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-violet-400 bg-violet-50 shadow-sm"> <input type="text" placeholder="עיסוק" class="px-4 py-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-violet-400 bg-violet-50 shadow-sm">
+         </div><textarea placeholder="הכאב המרכזי שלה / בעיתה..." class="w-full px-4 py-3 rounded-lg text-gray-800 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-violet-400 mt-3 bg-violet-50" rows="2"></textarea>
+        </div><!-- 3. Core Function -->
+        <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all border-l-4 border-indigo-500">
+         <h3 class="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2"><span>⚡</span> 3. הפונקציה המרכזית</h3><textarea placeholder="אם זה לא עובד — אין אפליקציה. מה זה?" class="w-full px-4 py-3 rounded-lg text-gray-800 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-indigo-50" rows="2"></textarea>
+        </div><!-- 4. MVP Features -->
+        <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all border-l-4 border-blue-500">
+         <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2"><span>✅</span> 4. פונקציות ב-MVP (עד 3)</h3>
+         <div class="space-y-3"><input type="text" placeholder="• פונקציה 1" class="w-full px-4 py-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-blue-50 shadow-sm"> <input type="text" placeholder="• פונקציה 2" class="w-full px-4 py-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-blue-50 shadow-sm"> <input type="text" placeholder="• פונקציה 3" class="w-full px-4 py-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-blue-50 shadow-sm">
+         </div>
+        </div><!-- 5. Future Features -->
+        <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all border-l-4 border-cyan-500">
+         <h3 class="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2"><span>🚀</span> 5. מה עובר לגרסה מתקדמת יותר?</h3><textarea placeholder="תארי כאן פונקציות שחוסכות לגרסה הבאה..." class="w-full px-4 py-3 rounded-lg text-gray-800 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-cyan-400 bg-cyan-50" rows="2"></textarea>
+        </div><!-- 6. Success Metric -->
+        <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all border-l-4 border-teal-500">
+         <h3 class="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2"><span>📊</span> 6. מדד הצלחה</h3><textarea placeholder="נדע שזה עובד כאשר..." class="w-full px-4 py-3 rounded-lg text-gray-800 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-teal-400 bg-teal-50" rows="2"></textarea>
+        </div><!-- 7. Main Screen Sketch -->
+        <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all border-l-4 border-green-500">
+         <h3 class="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2"><span>🎨</span> 7. סקיצה של המסך הראשי</h3><textarea placeholder="שרטוט חופשי או תיאור של המסך המרכזי..." class="w-full px-4 py-3 rounded-lg text-gray-800 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-green-400 bg-green-50" rows="3"></textarea>
+        </div>
+       </div>
+      </div>
+     </div><!-- Screens Design Tab -->
+     <div id="app-screens-tab" class="tab-content-app hidden">
+      <div class="max-w-6xl mx-auto space-y-8">
+       <h2 class="text-2xl font-bold text-gray-800 text-center">📱 עיצוב המסכים</h2>
+       <p class="text-gray-700 text-center text-sm">3 תבניות מובייל - כל אחת מייצגת מסך אחר בזרימה</p><!-- Mobile Frames Grid -->
+       <div class="grid md:grid-cols-3 gap-8"><!-- Screen 1: Opening -->
+        <div class="flex flex-col items-center">
+         <!-- Phone Frame -->
+         <div class="relative w-full max-w-xs">
+          <!-- Phone Bezel/Frame -->
+          <div class="bg-black rounded-3xl p-2 shadow-2xl">
+           <!-- Notch -->
+           <div class="absolute top-2 left-1/2 transform -translate-x-1/2 w-32 h-6 bg-black rounded-full z-10 flex items-center justify-center border border-gray-900">
+            <div class="w-1 h-1 bg-gray-700 rounded-full mx-0.5"></div>
+            <div class="w-1 h-1 bg-gray-700 rounded-full mx-0.5"></div>
+           </div><!-- Screen -->
+           <div class="bg-gradient-to-b from-purple-400 to-purple-600 rounded-2xl overflow-hidden">
+            <!-- Status Bar -->
+            <div class="bg-purple-600 h-7 px-4 flex items-center justify-between text-white text-xs">
+             <span>9:41</span>
+             <div class="flex gap-1">
+              <span>📶</span><span>📡</span><span>🔋</span>
+             </div>
+            </div><!-- Screen Content -->
+            <div class="aspect-[9/16] bg-white p-6 flex flex-col items-center justify-center text-center">
+             <div class="text-4xl mb-2">
+              📱
+             </div><input type="text" placeholder="כותרת המסך (מ.ל. ברוכה הבאה)" class="w-full text-sm font-bold text-gray-800 text-center bg-purple-50 rounded-lg px-2 py-1 border border-purple-300 focus:outline-none focus:ring-1 focus:ring-purple-500 placeholder-gray-400 mb-3">
+             <div class="bg-purple-50 rounded-lg p-3 mb-3 border border-purple-200 text-left"><label class="text-xs font-semibold text-gray-700 block mb-1">🖼️ בלוק מרכזי</label> <textarea placeholder="תארי את התוכן הראשי שהמשתמשת רואה..." class="w-full text-xs px-2 py-2 rounded bg-white border border-purple-200 focus:outline-none focus:ring-1 focus:ring-purple-400 resize-none" rows="4"></textarea>
+             </div><button class="w-full bg-purple-500 hover:bg-purple-600 text-white rounded-lg py-2 font-semibold text-sm">🚀 התחילי</button>
+            </div>
+           </div>
+          </div><!-- Phone Bottom Bezel -->
+          <div class="h-8 bg-black rounded-b-3xl"></div>
+         </div>
+         <h4 class="font-semibold mt-6" style="color: #ff1493;">מסך 1 – פתיחה</h4>
+         <p class="text-xs mt-1" style="color: #9ca3af;">הרושם הראשון</p>
+        </div><!-- Screen 2: Main Action -->
+        <div class="flex flex-col items-center">
+         <!-- Phone Frame -->
+         <div class="relative w-full max-w-xs">
+          <!-- Phone Bezel/Frame -->
+          <div class="bg-black rounded-3xl p-2 shadow-2xl">
+           <!-- Notch -->
+           <div class="absolute top-2 left-1/2 transform -translate-x-1/2 w-32 h-6 bg-black rounded-full z-10 flex items-center justify-center border border-gray-900">
+            <div class="w-1 h-1 bg-gray-700 rounded-full mx-0.5"></div>
+            <div class="w-1 h-1 bg-gray-700 rounded-full mx-0.5"></div>
+           </div><!-- Screen -->
+           <div class="bg-gradient-to-b from-cyan-400 to-cyan-600 rounded-2xl overflow-hidden">
+            <!-- Status Bar -->
+            <div class="bg-cyan-600 h-7 px-4 flex items-center justify-between text-white text-xs">
+             <span>9:41</span>
+             <div class="flex gap-1">
+              <span>📶</span><span>📡</span><span>🔋</span>
+             </div>
+            </div><!-- Screen Content -->
+            <div class="aspect-[9/16] bg-white p-4 flex flex-col overflow-y-auto"><!-- Header Section -->
+             <div class="mb-4"><input type="text" placeholder="כותרת / שאלה (מ.ל. חפשי מוצר)" class="w-full text-sm font-bold text-gray-800 text-center bg-cyan-50 rounded-lg px-2 py-1 border border-cyan-300 focus:outline-none focus:ring-1 focus:ring-cyan-500 placeholder-gray-400">
+             </div><!-- Main Content Area -->
+             <div class="bg-cyan-50 rounded-lg p-3 mb-3 border border-cyan-200"><label class="text-xs font-semibold text-gray-700 block mb-1">💡 תוכן מרכזי</label> <textarea placeholder="תארי את האזור המרכזי - רשימה, טופס, תוכן..." class="w-full text-xs px-2 py-2 rounded bg-white border border-cyan-200 focus:outline-none focus:ring-1 focus:ring-cyan-400 resize-none" rows="3"></textarea>
+             </div><!-- Three Main Actions -->
+             <div class="space-y-2 flex-1"><label class="text-xs font-semibold text-gray-700 block">🎯 3 אפשרויות עיקריות:</label> <button class="w-full bg-cyan-400 hover:bg-cyan-500 text-white rounded-lg py-2 px-2 font-semibold text-xs">1️⃣</button> <input type="text" placeholder="תיאור פעולה ראשונה" class="w-full text-xs px-2 py-1 rounded bg-cyan-50 border border-cyan-200 focus:outline-none focus:ring-1 focus:ring-cyan-400"> <button class="w-full bg-cyan-400 hover:bg-cyan-500 text-white rounded-lg py-2 px-2 font-semibold text-xs">2️⃣</button> <input type="text" placeholder="תיאור פעולה שנייה" class="w-full text-xs px-2 py-1 rounded bg-cyan-50 border border-cyan-200 focus:outline-none focus:ring-1 focus:ring-cyan-400"> <button class="w-full bg-cyan-400 hover:bg-cyan-500 text-white rounded-lg py-2 px-2 font-semibold text-xs">3️⃣</button> <input type="text" placeholder="תיאור פעולה שלישית" class="w-full text-xs px-2 py-1 rounded bg-cyan-50 border border-cyan-200 focus:outline-none focus:ring-1 focus:ring-cyan-400">
+             </div>
+            </div>
+           </div>
+          </div><!-- Phone Bottom Bezel -->
+          <div class="h-8 bg-black rounded-b-3xl"></div>
+         </div>
+         <h4 class="font-semibold mt-6" style="color: #1e40af;">מסך 2 – פעולה</h4>
+         <p class="text-xs mt-1" style="color: #9ca3af;">הפונקציה המרכזית</p>
+        </div><!-- Screen 3: Results -->
+        <div class="flex flex-col items-center">
+         <!-- Phone Frame -->
+         <div class="relative w-full max-w-xs">
+          <!-- Phone Bezel/Frame -->
+          <div class="bg-black rounded-3xl p-2 shadow-2xl">
+           <!-- Notch -->
+           <div class="absolute top-2 left-1/2 transform -translate-x-1/2 w-32 h-6 bg-black rounded-full z-10 flex items-center justify-center border border-gray-900">
+            <div class="w-1 h-1 bg-gray-700 rounded-full mx-0.5"></div>
+            <div class="w-1 h-1 bg-gray-700 rounded-full mx-0.5"></div>
+           </div><!-- Screen -->
+           <div class="bg-gradient-to-b from-green-400 to-green-600 rounded-2xl overflow-hidden">
+            <!-- Status Bar -->
+            <div class="bg-green-600 h-7 px-4 flex items-center justify-between text-white text-xs">
+             <span>9:41</span>
+             <div class="flex gap-1">
+              <span>📶</span><span>📡</span><span>🔋</span>
+             </div>
+            </div><!-- Screen Content -->
+            <div class="aspect-[9/16] bg-white p-4 flex flex-col overflow-y-auto"><!-- Result Header -->
+             <div class="text-center mb-4">
+              <div class="text-5xl mb-2">
+               ✅
+              </div>
+              <h3 class="text-lg font-bold text-green-700 mb-1">תוצאה!</h3><input type="text" placeholder="כותרת התוצאה (מ.ל. התוצאה שלך מוכנה)" class="w-full text-sm font-semibold text-gray-800 text-center bg-green-50 rounded-lg px-2 py-1 border border-green-300 focus:outline-none focus:ring-1 focus:ring-green-500 placeholder-gray-400">
+             </div><!-- Result Details -->
+             <div class="bg-green-50 rounded-lg p-3 mb-3 border border-green-200"><label class="text-xs font-semibold text-gray-700 block mb-1">📊 מה התוצאה?</label> <textarea placeholder="תארי את התוצאה שהמשתמשת מקבלת..." class="w-full text-xs px-2 py-2 rounded bg-white border border-green-200 focus:outline-none focus:ring-1 focus:ring-green-400 resize-none" rows="3"></textarea>
+             </div><!-- What's Next -->
+             <div class="bg-amber-50 rounded-lg p-3 mb-3 border border-amber-200"><label class="text-xs font-semibold text-gray-700 block mb-1">➡️ מה בהמשך?</label> <input type="text" placeholder="כפתור הבא או פעולה נוספת..." class="w-full text-xs px-2 py-1 rounded bg-white border border-amber-200 focus:outline-none focus:ring-1 focus:ring-amber-400">
+             </div><!-- Action Buttons -->
+             <div class="space-y-2 mt-auto"><button class="w-full bg-green-500 hover:bg-green-600 text-white rounded-lg py-2 font-semibold text-sm">✨ שוב!</button> <button class="w-full bg-blue-500 hover:bg-blue-600 text-white rounded-lg py-2 font-semibold text-sm">📤 שתפי</button>
+             </div>
+            </div>
+           </div>
+          </div><!-- Phone Bottom Bezel -->
+          <div class="h-8 bg-black rounded-b-3xl"></div>
+         </div>
+         <h4 class="font-semibold mt-6" style="color: #6b21a8;">מסך 3 – תוצאה</h4>
+         <p class="text-xs mt-1" style="color: #9ca3af;">הסיכום והצלחה</p>
+        </div>
+       </div><!-- Design Tips -->
+       <div class="bg-white/10 backdrop-blur rounded-2xl p-6 border border-white/20">
+        <h3 class="text-lg font-bold text-gray-800 mb-4">💡 טיפים לעיצוב</h3>
+        <div class="grid md:grid-cols-3 gap-4">
+         <div class="bg-purple-500/20 rounded-lg p-4 border border-purple-400/30">
+          <h4 class="text-fuchsia-600 font-bold text-sm mb-2">✨ מסך 1</h4>
+          <p class="text-white/80 text-xs">הרושם הראשון חשוב! לוגו, כותרת, כפתור התחלה ברור</p>
+         </div>
+         <div class="bg-cyan-500/20 rounded-lg p-4 border border-cyan-400/30">
+          <h4 class="text-blue-600 font-bold text-sm mb-2">⚡ מסך 2</h4>
+          <p class="text-white/80 text-xs">זה המרכזי - פשוט, ברור, לא יותר מ-3 כפתורים ראשיים</p>
+         </div>
+         <div class="bg-green-500/20 rounded-lg p-4 border border-green-400/30">
+          <h4 class="text-purple-600 font-bold text-sm mb-2">✅ מסך 3</h4>
+          <p class="text-white/80 text-xs">חגיגה! תוצאה ברורה, כפתור למה הלאה</p>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div><!-- Prompt Generator Modal -->
+   <div id="prompt-generator-modal" class="fixed inset-0 bg-black/50 backdrop-blur hidden z-50 flex items-center justify-center p-4" onclick="if(event.target === this) closePromptGenerator()">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+     <!-- Header -->
+     <div class="sticky top-0 bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 p-6 flex items-center justify-between rounded-t-3xl">
+      <h2 class="text-2xl font-black text-white flex items-center gap-2"><span>✨</span> מחולל פרומפטים</h2><button onclick="closePromptGenerator()" class="text-white hover:bg-white/20 rounded-full p-2 transition-all text-2xl">✕</button>
+     </div><!-- Content -->
+     <div class="p-8 space-y-6">
+      <p class="text-gray-700 text-lg font-semibold">בחרי את סוג המוצר שלך לקבלת פרומפטים מותאמים:</p>
+      <div class="grid md:grid-cols-3 gap-4">
+       <!-- Physical Prompts --> <button onclick="generatePhysicalPrompts()" class="bg-gradient-to-br from-pink-100 to-pink-50 hover:from-pink-200 hover:to-pink-100 border-2 border-pink-300 rounded-2xl p-6 text-center transition-all shadow-md hover:shadow-lg">
+        <div class="text-4xl mb-3">
+         📦
+        </div><h3 class="font-bold text-gray-800 mb-2">מוצר פיזי</h3><p class="text-sm text-gray-600">פרומפטים לתכנון מנגנוני חומרה</p></button> <!-- Digital Prompts --> <button onclick="generateDigitalPrompts()" class="bg-gradient-to-br from-blue-100 to-blue-50 hover:from-blue-200 hover:to-blue-100 border-2 border-blue-300 rounded-2xl p-6 text-center transition-all shadow-md hover:shadow-lg">
+        <div class="text-4xl mb-3">
+         💻
+        </div><h3 class="font-bold text-gray-800 mb-2">מוצר דיגיטלי</h3><p class="text-sm text-gray-600">פרומפטים לפלטפורמות ואתרים</p></button> <!-- App Prompts --> <button onclick="generateAppPrompts()" class="bg-gradient-to-br from-purple-100 to-purple-50 hover:from-purple-200 hover:to-purple-100 border-2 border-purple-300 rounded-2xl p-6 text-center transition-all shadow-md hover:shadow-lg">
+        <div class="text-4xl mb-3">
+         📱
+        </div><h3 class="font-bold text-gray-800 mb-2">אפליקציה</h3><p class="text-sm text-gray-600">פרומפטים לפיתוח אפליקציות</p></button>
+      </div>
+     </div>
+    </div>
+   </div><!-- Prompts Display Modal -->
+   <div id="prompts-display-modal" class="fixed inset-0 bg-black/50 backdrop-blur hidden z-50 flex items-center justify-center p-4" onclick="if(event.target === this) closePromptsDisplay()">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+     <!-- Header -->
+     <div class="sticky top-0 bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 p-6 flex items-center justify-between rounded-t-3xl">
+      <h2 class="text-2xl font-black text-white">🎯 פרומפטים מוכנים</h2><button onclick="closePromptsDisplay()" class="text-white hover:bg-white/20 rounded-full p-2 transition-all text-2xl">✕</button>
+     </div><!-- Prompts Content -->
+     <div id="prompts-content" class="p-8 space-y-4">
+      <!-- Filled dynamically by JavaScript -->
+     </div><!-- Footer -->
+     <div class="sticky bottom-0 bg-gray-50 border-t p-6 flex gap-3 justify-end rounded-b-3xl">
+      <button onclick="closePromptsDisplay()" class="px-6 py-3 rounded-lg bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold transition-all">סגור</button> <button onclick="copyAllPrompts()" class="px-6 py-3 rounded-lg bg-purple-500 hover:bg-purple-600 text-white font-semibold transition-all flex items-center gap-2"> <span>📋</span> העתק הכל </button>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+    let isDrawing = false;
+    let physicalCanvas, physicalCtx;
+    let currentPhysicalView = 'side';
+    
+    // Prompt Generator Functions
+    function openPromptGenerator() {
+      document.getElementById('prompt-generator-modal').classList.remove('hidden');
+    }
+    
+    function closePromptGenerator() {
+      document.getElementById('prompt-generator-modal').classList.add('hidden');
+    }
+    
+    function closePromptsDisplay() {
+      document.getElementById('prompts-display-modal').classList.add('hidden');
+    }
+    
+    function generatePhysicalPrompts() {
+      // Collect ALL data from physical page form fields
+      const inputs = document.querySelectorAll('#physical-page input, #physical-page textarea');
+      const productName = inputs[0]?.value || 'המוצר שלך';
+      const problem = inputs[1]?.value || 'בעיה ספציפית';
+      const personaName = inputs[2]?.value || 'המשתמשת';
+      const personaAge = inputs[3]?.value || '';
+      const personaProfession = inputs[4]?.value || '';
+      const personaPain = inputs[5]?.value || 'כאב ספציפי';
+      const mechanismInput = inputs[6]?.value || '';
+      const mechanismProcess = inputs[7]?.value || '';
+      const mechanismOutput = inputs[8]?.value || '';
+      const mechanismDesc = inputs[9]?.value || '';
+      const component1 = inputs[10]?.value || '';
+      const component2 = inputs[11]?.value || '';
+      const component3 = inputs[12]?.value || '';
+      
+      // Get selected colors and materials
+      const colorCheckboxes = document.querySelectorAll('#physical-page input[type="checkbox"]');
+      const selectedColors = Array.from(colorCheckboxes).slice(0, 22).filter(cb => cb.checked).map(cb => cb.parentElement.textContent.trim());
+      const selectedMaterials = Array.from(colorCheckboxes).slice(22, 28).filter(cb => cb.checked).map(cb => cb.parentElement.textContent.trim());
+      const selectedParts = Array.from(colorCheckboxes).slice(28, 34).filter(cb => cb.checked).map(cb => cb.parentElement.textContent.trim());
+      
+      const metric1 = inputs[13]?.value || '';
+      const metric2 = inputs[14]?.value || '';
+      const metric3 = inputs[15]?.value || '';
+      const metrics = [metric1, metric2, metric3].filter(v => v);
+      const sketchDesc = inputs[16]?.value || '';
+      
+      const componentsText = [component1, component2, component3].filter(c => c).join(', ') || 'רכיבים ראשיים';
+      const colorsText = selectedColors.length > 0 ? selectedColors.join(', ') : 'צבעים שנבחרו';
+      const materialsText = selectedMaterials.length > 0 ? selectedMaterials.join(', ') : 'חומרים שנבחרו';
+      
+      const prompts = [
+        `📦 דיזן מנגנון מלא: צור דיזן 3D מפורט של "${productName}" שפותר את: "${problem}". 
+בנות בגיל ${personaAge} שסובלות מ"${personaPain}" זקוקות לזה.
+זרימה: ${mechanismInput} → ${mechanismProcess} → ${mechanismOutput}
+חומרים: ${materialsText}
+רכיבים: ${componentsText}
+צבעים: ${colorsText}`,
+        
+        `⚙️ סקיצה הנדסית: צייר תרשים טכני של "${productName}" שמראה:
+- את הכוחות בכל רכיב (${componentsText})
+- נקודות עומס קריטיות
+- זרימה מדויקת: ${mechanismDesc || 'כמתואר'}
+לשימוש של בנות בגיל ${personaAge}`,
+        
+        `🎯 ניתוח לפתרון בעיה: ${personaName} בת ${personaAge} סובלת מ"${personaPain}".
+"${productName}" פותר זאת על ידי: ${problem}
+בנו ויזואל המראה איך כל רכיב (${componentsText}) תורם לפתרון הבעיה שלה.`,
+        
+        `🏭 תוכנית ייצור MVP: תנו הוראות צעד-בצעד ליצירת "${productName}" בסדנה ביתית.
+רכיבים: ${componentsText}
+חומרים: ${materialsText}
+כלים: אומדן מלא וברור של הכמות הנדרשת`,
+        
+        `📊 מדדי הצלחה: ל"${productName}" עבור בנות כמו ${personaName}, נדע שזה עובד כאשר:
+${metrics.map((m, i) => `${i + 1}. ${m}`).join('\n')}
+תארו בדיוק איך מודדים כל מדד בפועל.`,
+        
+        `🎨 ריפוד וחומרים: "${productName}" בצבעים ${colorsText} עם חומרים ${materialsText}
+צרו פלטת עיצוב מלאה - כל צירוף צבע וחומר עם גימור מדויק.
+מתאים לבנות בגיל ${personaAge}`,
+        
+        `🔬 בדיקת עמידות: "${productName}" משמש בנות בגיל ${personaAge} בשימוש יומיומי ל"${personaPain}".
+תכננו בדיקה שמדמה 6 חודשים של שימוש (1000 מחזורים).
+מה יכול להישבר? איך למנוע?`,
+        
+        `🎁 אריזה וגרפיקה: עיצוב אריזה למוצר "${productName}" שמסביר:
+- למה בנות בגיל ${personaAge} זקוקות לזה
+- איך זה פותר את "${personaPain}" 
+- צבעים: ${colorsText}
+תגית מוצר ברורה וקחרדונה עם QR קוד להדרכה.`
+      ];
+      displayPrompts(prompts);
+    }
+    
+    function generateDigitalPrompts() {
+      // Collect ALL data from digital page form fields
+      const inputs = document.querySelectorAll('#digital-page input, #digital-page textarea');
+      const platformName = inputs[0]?.value || 'הפלטפורמה שלך';
+      const problem = inputs[1]?.value || 'בעיה ספציפית';
+      const personaName = inputs[2]?.value || 'המשתמש';
+      const personaAge = inputs[3]?.value || '';
+      const personaRole = inputs[4]?.value || '';
+      const personaPain = inputs[5]?.value || 'כאב ספציפי';
+      const coreAction = inputs[6]?.value || 'פעולה מרכזית';
+      const futureFeatures = inputs[7]?.value || 'פיצ\'רים עתידיים';
+      const successMetric = inputs[8]?.value || 'מדד הצלחה';
+      
+      // Get screen descriptions
+      const screen1Desc = inputs[9]?.value || 'מסך כניסה';
+      const screen2Desc = inputs[10]?.value || 'מסך בחירה';
+      const screen3Desc = inputs[11]?.value || 'מסך עיבוד';
+      const screen4Desc = inputs[12]?.value || 'מסך תוצאה';
+      const screen5Desc = inputs[13]?.value || 'מסך הצלחה';
+      
+      const prompts = [
+        `💻 דיזן UI/UX: צור פרוטוטיפ אינטראקטיבי של "${platformName}" שפותר: "${problem}".
+        זרימה של 5 מסכים:
+        1️⃣ ${screen1Desc}
+        2️⃣ ${screen2Desc}  
+        3️⃣ ${screen3Desc}
+        4️⃣ ${screen4Desc}
+        5️⃣ ${screen5Desc}
+        פעולה מרכזית: "${coreAction}"`,
+        
+        `🎯 יוזר ג'רני: "${personaName}" (${personaRole}, בן/ת ${personaAge}) רוצה: "${coreAction}".
+        הוא/היא סובל/ת מ: "${personaPain}".
+        תכננו את מסלול המשתמש המדויק - כל לחיצה, כל מילה, כל משוב.`,
+        
+        `🔄 אדריכלות מידע: מיפוי זרימת הנתונים בין 5 המסכים של "${platformName}":
+        - מה מסך 1 שולח למסך 2?
+        - איזה נתונים נאגרים בכל שלב?
+        - איך מסך 5 מחזיר משוב?`,
+        
+        `📱 עיצוב מגע ניידי: צור עיצוב ל-"${platformName}" המותאם לטלפון (מסך 6x9).
+        כל כפתור לא קטן מ-44x44px. כל טקסט קריא בקל. ניווט אינטואיטיבי.
+        הדגש: "${coreAction}"`,
+        
+        `🚀 תכנית השקה: "$(platformName}" תושק בשבוע הבא.
+        - ערוצי גיוס: 3 ערוצים ספציפיים להגעה לאנשים שסובלים מ"${personaPain}"
+        - הודעה הליבה: בשורה אחת, איך "${platformName}" פותר את"${problem}"
+        - KPI ליום ראשון: כמה משתמשים פעילים?`,
+        
+        `📊 מדדי הצלחה: ל-"${platformName}" נדע שזה עובד כאשר:
+        ✓ ${successMetric}
+        ✓ המשתמש מצליח לביצוע: "${coreAction}" בפחות מ-2 דקות
+        ✓ ${personaAge > 40 ? 'אפילו סבתא/סבא מצליחים להשתמש' : 'משתמשים חדשים מצליחים ללא הנמקה'}
+        בנה דשבורד ניטור ל-3 מדדים אלה.`,
+        
+        `🎨 ברנדינג: צור מיתוג ל-"${platformName}" שמעביר את הערך: "${problem}".
+        פלטת צבעים, שפט טיפוגרפיה, טון וקול. כל קשור להיות פתרון ל: "${personaPain}".`,
+        
+        `🔮 גרסה 2.0: "${platformName}" הצליחה! עכשיו בנו את הגרסה הבאה.
+        פיצ'רים חדשים שרק עכשיו אנחנו מוסיפים:
+        ${futureFeatures}
+        תוך שמירה על הפשטות של ה-MVP הנוכחי.`
+      ];
+      displayPrompts(prompts);
+    }
+    
+    function generateAppPrompts() {
+      // Collect ALL data from app page form fields
+      const inputs = document.querySelectorAll('#app-page input, #app-page textarea');
+      const appName = inputs[0]?.value || 'האפליקציה שלך';
+      const problem = inputs[1]?.value || 'בעיה ספציפית';
+      const personaName = inputs[2]?.value || 'המשתמש';
+      const personaAge = inputs[3]?.value || '';
+      const personaJob = inputs[4]?.value || '';
+      const personaPain = inputs[5]?.value || 'כאב ספציפי';
+      const coreFunction = inputs[6]?.value || 'פונקציה מרכזית';
+      const feature1 = inputs[7]?.value || 'פונקציה 1';
+      const feature2 = inputs[8]?.value || 'פונקציה 2';
+      const feature3 = inputs[9]?.value || 'פונקציה 3';
+      const futureFeatures = inputs[10]?.value || 'פיצ\'רים עתידיים';
+      const successMetric = inputs[11]?.value || 'מדד הצלחה';
+      const mainScreenDesc = inputs[12]?.value || 'תיאור מסך';
+      
+      const features = [feature1, feature2, feature3].filter(f => f && f !== 'פונקציה');
+      
+      const prompts = [
+        `📱 עיצוב אפליקציה: צור ממשק מלא ל-"${appName}" עם 3 מסכים ראשיים:
+        1️⃣ ברוכה הבאה - להקדמה של: "${problem}"
+        2️⃣ הפעולה המרכזית - "${coreFunction}"
+        3️⃣ תוצאות - הצגת "${successMetric}"
+        צבעים טוב, אייקונים, ניווט ברור.`,
+        
+        `🎯 יוזר ג'רני: "${personaName}" (${personaAge}, ${personaJob}) רוצה: "${coreFunction}".
+        הבעיה שלו/שלה: "${personaPain}".
+        תכננו את 10 לחיצות הראשונות שלו/שלה בדיוק - כל אחת חייבת להיות משמעותית.`,
+        
+        `⚙️ ארכיטקטורה דיגיטלית: הגדרו את ה-backend ל-"${appName}":
+        - איזה מידע נשמר בעלאות?
+        - איך משתמשים מחברים?
+        - איך פעולה ב-מסך 2 משפיעה על מסך 3?`,
+        
+        `🎨 UI Kit: צרו ערכה מלאה לעיצוב של "${appName}" שמגדירה:
+        - 3 גדלים של כפתורים (large, medium, small)
+        - 4 מצבים (default, hover, active, disabled)
+        - פלטת 5 צבעים + גרדיאנטים
+        - 2 סוגי טקסט (עדכוני טקסט + עדכוני קישורים)`,
+        
+        `🚀 MVP + v2 מפה: "$(appName}" לשבוע הבא:
+        MVP (שבוע 1): "${coreFunction}" + ${features.slice(0, 2).join(', ')}
+        V2 (חודש 2): ${futureFeatures}
+        V3 (חודש 3): ?
+        הגדרו milestones ברורות וקו"ד בר-סדר.`,
+        
+        `👥 אסטרטגיית גיוס: איך מקבלים 1000 בנות פעילות לחודש ל"${appName}":
+        - 3 ערוצים ספציפיים (TikTok, Instagram, Snapchat)
+        - הודעה לב (בשורה אחת: למה בנות בגיל ${personaAge} זקוקות ל"${appName}"?)
+        - incentive (למה להתקין היום? - תו הישג? מדבקה? כנס חברי?)`,
+        
+        `📊 דשבורד analytics: בנו מערכת מעקב ל-"${appName}" שמודדת:
+        ✓ Daily Active Users (DAU)
+        ✓ הצלחת ביצוע "${coreFunction}"
+        ✓ Time to completion (בממוצע כמה זמן ביצוע)
+        ✓ ${successMetric}
+        רכזו הכל בדשבורד אחד.`,
+        
+        `🎁 Onboarding: רצף של עד 5 מסכים ל-"${appName}" שמלמד משתמשים חדשים:
+        1. מי אתם? (persona)
+        2. מה המטרה? (problem)
+        3. איך זה עובד? (דמו של "${coreFunction}")
+        4. בואו נתחיל (טריגר פעולה)
+        5. כל הצלחה (חגיגה!)`,
+        
+        `🔐 בטיחות + פרטיות: הגדרות חשובות ל-"${appName}":
+        - אימות משתמש (סיסמה / OAuth)
+        - הצפנת נתונים
+        - מחיקת חשבון
+        - GDPR compliance
+        כתוב policy פשוטה עבור משתמשים.`
+      ];
+      displayPrompts(prompts);
+    }
+    
+    function displayPrompts(prompts) {
+      const content = document.getElementById('prompts-content');
+      content.innerHTML = prompts.map((prompt, index) => `
+        <div class="bg-gradient-to-r from-purple-50 to-pink-50 border-l-4 border-purple-400 rounded-lg p-4 hover:shadow-md transition-all">
+          <div class="flex items-start gap-3">
+            <span class="text-2xl font-bold text-purple-500 flex-shrink-0 w-8 h-8 flex items-center justify-center bg-white rounded-full">${index + 1}</span>
+            <div class="flex-1">
+              <p class="text-gray-800">${prompt}</p>
+              <button onclick="copyPrompt('${prompt.replace(/'/g, "\\'")}', this)" class="mt-2 text-sm px-3 py-1 bg-white hover:bg-purple-100 text-purple-600 border border-purple-300 rounded transition-all">📋 העתק</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+      
+      document.getElementById('prompt-generator-modal').classList.add('hidden');
+      document.getElementById('prompts-display-modal').classList.remove('hidden');
+    }
+    
+    function copyPrompt(text, button) {
+      navigator.clipboard.writeText(text).then(() => {
+        const originalText = button.textContent;
+        button.textContent = '✅ הועתק!';
+        button.classList.add('bg-green-100', 'text-green-600', 'border-green-300');
+        button.classList.remove('bg-white', 'text-purple-600', 'border-purple-300', 'hover:bg-purple-100');
+        setTimeout(() => {
+          button.textContent = originalText;
+          button.classList.remove('bg-green-100', 'text-green-600', 'border-green-300');
+          button.classList.add('bg-white', 'text-purple-600', 'border-purple-300', 'hover:bg-purple-100');
+        }, 2000);
+      });
+    }
+    
+    function copyAllPrompts() {
+      const prompts = Array.from(document.querySelectorAll('#prompts-content p')).map(p => p.textContent).join('\n\n');
+      navigator.clipboard.writeText(prompts).then(() => {
+        const button = event.target;
+        const originalText = button.innerHTML;
+        button.innerHTML = '<span>✅</span> הועתקו!';
+        button.disabled = true;
+        setTimeout(() => {
+          button.innerHTML = originalText;
+          button.disabled = false;
+        }, 2000);
+      });
+    }
+    
+    // Physical Product Sketch Canvas
+    function initPhysicalSketchCanvas() {
+      physicalCanvas = document.getElementById('physical-sketch-canvas');
+      if (!physicalCanvas) return;
+      physicalCtx = physicalCanvas.getContext('2d');
+      physicalCtx.strokeStyle = '#333';
+      physicalCtx.lineWidth = 2;
+      physicalCtx.lineCap = 'round';
+      physicalCtx.lineJoin = 'round';
+      
+      // Mouse events
+      physicalCanvas.addEventListener('mousedown', (e) => {
+        isDrawing = true;
+        const rect = physicalCanvas.getBoundingClientRect();
+        physicalCtx.beginPath();
+        physicalCtx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+      });
+      
+      physicalCanvas.addEventListener('mousemove', (e) => {
+        if (!isDrawing) return;
+        const rect = physicalCanvas.getBoundingClientRect();
+        physicalCtx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+        physicalCtx.stroke();
+      });
+      
+      physicalCanvas.addEventListener('mouseup', () => { isDrawing = false; });
+      physicalCanvas.addEventListener('mouseout', () => { isDrawing = false; });
+      
+      // Touch events for mobile
+      physicalCanvas.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        isDrawing = true;
+        const rect = physicalCanvas.getBoundingClientRect();
+        const touch = e.touches[0];
+        physicalCtx.beginPath();
+        physicalCtx.moveTo(touch.clientX - rect.left, touch.clientY - rect.top);
+      });
+      
+      physicalCanvas.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+        if (!isDrawing) return;
+        const rect = physicalCanvas.getBoundingClientRect();
+        const touch = e.touches[0];
+        physicalCtx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
+        physicalCtx.stroke();
+      });
+      
+      physicalCanvas.addEventListener('touchend', () => { isDrawing = false; });
+    }
+    
+    function selectPhysicalView(view) {
+      currentPhysicalView = view;
+      const buttons = document.querySelectorAll('.physical-view-btn');
+      buttons.forEach(btn => btn.classList.remove('active', 'bg-orange-400', 'hover:bg-orange-500'));
+      buttons.forEach(btn => btn.classList.add('bg-orange-300', 'hover:bg-orange-400'));
+      event.target.classList.add('active', 'bg-orange-400', 'hover:bg-orange-500');
+      event.target.classList.remove('bg-orange-300', 'hover:bg-orange-400');
+    }
+    
+    function clearPhysicalSketch() {
+      if (physicalCtx && physicalCanvas) {
+        physicalCtx.clearRect(0, 0, physicalCanvas.width, physicalCanvas.height);
+      }
+    }
+    
+    function downloadPhysicalSketch() {
+      if (!physicalCanvas) return;
+      const link = document.createElement('a');
+      link.href = physicalCanvas.toDataURL();
+      link.download = `physical-sketch-${currentPhysicalView}.png`;
+      link.click();
+    }
+    
+    // Page navigation
+    function selectProduct(type) {
+      document.getElementById('landing-page').classList.add('hidden');
+      
+      if (type === 'physical') {
+        document.getElementById('physical-page').classList.remove('hidden');
+        setTimeout(initPhysicalSketchCanvas, 100);
+      } else if (type === 'digital') {
+        document.getElementById('digital-page').classList.remove('hidden');
+      } else if (type === 'app') {
+        document.getElementById('app-page').classList.remove('hidden');
+      }
+    }
+    
+    function goBack() {
+      document.getElementById('physical-page').classList.add('hidden');
+      document.getElementById('digital-page').classList.add('hidden');
+      document.getElementById('app-page').classList.add('hidden');
+      document.getElementById('landing-page').classList.remove('hidden');
+    }
+    
+    function printPage() {
+      window.print();
+    }
+    
+    // App page tab switching
+    function switchAppTab(tabName) {
+      const tabs = document.querySelectorAll('.tab-content-app');
+      const buttons = document.querySelectorAll('.tab-btn-app');
+      
+      tabs.forEach(tab => tab.classList.add('hidden'));
+      buttons.forEach(btn => btn.classList.remove('active', 'bg-white/50'));
+      buttons.forEach(btn => btn.classList.add('bg-white/20'));
+      
+      document.getElementById(`app-${tabName}-tab`).classList.remove('hidden');
+      event.target.classList.add('active', 'bg-white/50');
+      event.target.classList.remove('bg-white/20');
+      
+      if (tabName === 'screens') {
+        setTimeout(initSketchCanvas, 100);
+      }
+    }
+    
+    // Default configuration
+    const defaultConfig = {
+      main_title: 'חוקרות. יוצרות. מפתחות.',
+      subtitle: 'פורצות דרך',
+      background_color: '#667eea',
+      text_color: '#ffffff',
+      accent_color: '#f093fb',
+      font_family: 'Heebo'
+    };
+    
+    let config = { ...defaultConfig };
+    
+    // Initialize SDK
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange: async (newConfig) => {
+          config = { ...defaultConfig, ...newConfig };
+          updateUI();
+        },
+        mapToCapabilities: (cfg) => ({
+          recolorables: [
+            {
+              get: () => cfg.background_color || defaultConfig.background_color,
+              set: (value) => {
+                cfg.background_color = value;
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            },
+            {
+              get: () => cfg.text_color || defaultConfig.text_color,
+              set: (value) => {
+                cfg.text_color = value;
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            },
+            {
+              get: () => cfg.accent_color || defaultConfig.accent_color,
+              set: (value) => {
+                cfg.accent_color = value;
+                window.elementSdk.setConfig({ accent_color: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: {
+            get: () => cfg.font_family || defaultConfig.font_family,
+            set: (value) => {
+              cfg.font_family = value;
+              window.elementSdk.setConfig({ font_family: value });
+            }
+          },
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (cfg) => new Map([
+          ['main_title', cfg.main_title || defaultConfig.main_title],
+          ['subtitle', cfg.subtitle || defaultConfig.subtitle]
+        ])
+      });
+    }
+    
+    function updateUI() {
+      const mainTitle = document.getElementById('main-title');
+      const subtitle = document.getElementById('subtitle');
+      const landingPage = document.getElementById('landing-page');
+      
+      if (mainTitle) {
+        mainTitle.textContent = config.main_title || defaultConfig.main_title;
+        mainTitle.style.fontFamily = `${config.font_family || defaultConfig.font_family}, sans-serif`;
+      }
+      if (subtitle) {
+        subtitle.textContent = config.subtitle || defaultConfig.subtitle;
+        subtitle.style.fontFamily = `${config.font_family || defaultConfig.font_family}, sans-serif`;
+      }
+      
+      // Update gradient background
+      if (landingPage) {
+        const bgColor = config.background_color || defaultConfig.background_color;
+        const accentColor = config.accent_color || defaultConfig.accent_color;
+        landingPage.style.background = `linear-gradient(135deg, #fff5f7 0%, #fafafa 50%, #e6f5ff 100%)`;
+      }
+    }
+    
+    // Initial UI update
+    updateUI();
+
+    function openSummaryModal() {
+      const modal = document.getElementById('summary-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeSummaryModal() {
+      const modal = document.getElementById('summary-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function toggleOtherInput() {
+      const input = document.getElementById('other-input');
+      const radio = document.querySelector('input[name="step3"][value="other"]');
+      if (radio.checked) {
+        input.classList.remove('hidden');
+        input.focus();
+      } else {
+        input.classList.add('hidden');
+      }
+    }
+
+    document.getElementById('summary-modal').addEventListener('click', function(e) {
+      if (e.target === this) closeSummaryModal();
+    });
+
+    document.querySelectorAll('input[name="step3"]').forEach(function(radio) {
+      radio.addEventListener('change', function() {
+        if (this.value !== 'other') {
+          document.getElementById('other-input').classList.add('hidden');
+        }
+      });
+    });
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d6cf01024e5c227',t:'MTc3MjU4NTk2MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

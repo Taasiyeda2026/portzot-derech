@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="he" dir="rtl" class="h-full">
+ <head>
+  <link rel="icon" type="image/png" href="../icon/favicon.png">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#ec4899">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="apple-touch-icon" href="/main/icon/favicon.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>זמן פנוי ויצירה | מרחב חקר</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&amp;family=Varela+Round&amp;display=swap" rel="stylesheet">
+  <style>
+    body { box-sizing: border-box; }
+    * { font-family: 'Heebo', 'Varela Round', sans-serif; }
+    .gradient-text {
+      background: linear-gradient(135deg, #c026d3, #a855f7, #6366f1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-pattern {
+      background-image: 
+        radial-gradient(circle at 20% 50%, rgba(168, 85, 247, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(192, 38, 211, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 20%, rgba(99, 102, 241, 0.08) 0%, transparent 50%);
+    }
+    .creative-card {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .creative-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 40px -12px rgba(168, 85, 247, 0.25);
+    }
+    @keyframes float-creative {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-15px) rotate(5deg); }
+    }
+    .float-creative { animation: float-creative 4s ease-in-out infinite; }
+    @keyframes sparkle {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.2); }
+    }
+    .sparkle { animation: sparkle 2s ease-in-out infinite; }
+    .reflection-card {
+      background: linear-gradient(135deg, #fae8ff 0%, #e9d5ff 100%);
+      border-right: 4px solid #a855f7;
+    }
+    .experiment-card {
+      background: linear-gradient(135deg, #fdf4ff 0%, #fae8ff 100%);
+      border-right: 4px solid #c026d3;
+    }
+    .insight-card {
+      background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+      border-right: 4px solid #6366f1;
+    }
+    .scroll-indicator { animation: bounce 2s infinite; }
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-10px); }
+      60% { transform: translateY(-5px); }
+    }
+    .nav-link { position: relative; }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      right: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #c026d3, #6366f1);
+      transition: width 0.3s ease;
+    }
+    .nav-link:hover::after { width: 100%; }
+    .tip-card {
+      background: white;
+      border-right: 3px solid #a855f7;
+      transition: all 0.3s ease;
+    }
+    .tip-card:hover {
+      border-right-width: 6px;
+      transform: translateX(-3px);
+      box-shadow: 0 8px 16px -4px rgba(168, 85, 247, 0.2);
+    }
+  .nav-3d-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      width: 70px;
+      height: 54px;
+      padding: 6px 4px;
+      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+      border-radius: 12px;
+      box-shadow: 0 4px 0 rgba(100, 100, 100, 0.2), 0 6px 12px rgba(0, 0, 0, 0.1);
+      transition: all 0.15s ease;
+      text-decoration: none;
+    }
+    .nav-3d-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 rgba(100, 100, 100, 0.2), 0 10px 20px rgba(0, 0, 0, 0.12);
+    }
+    .nav-3d-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 rgba(100, 100, 100, 0.2), 0 3px 6px rgba(0, 0, 0, 0.08);
+    }
+    .nav-3d-btn .nav-icon { font-size: 1.2rem; }
+    .nav-3d-btn .nav-label { font-size: 11px; font-weight: 600; color: #374151; }
+    
+    @media (max-width: 768px) {
+      .nav-3d-btn { width: 48px; height: 42px; padding: 4px 2px; gap: 2px; }
+      .nav-3d-btn .nav-icon { font-size: 1rem; }
+      .nav-3d-btn .nav-label { font-size: 9px; }
+      #nav-title { font-size: 14px !important; }
+    }
+    @media (max-width: 480px) {
+      .nav-3d-btn { width: 40px; height: 36px; }
+      .nav-3d-btn .nav-label { display: none; }
+      #nav-title { display: none; }
+    }
+    
+    /* Scroll Lock Mechanism */
+    .scroll-locked {
+      overflow: hidden !important;
+      height: 100vh !important;
+    }
+    .scroll-locked .content-locked {
+      display: none !important;
+    }
+    .scroll-unlocked .content-locked {
+      display: block;
+    }
+  </style>
+ </head>
+ <body class="h-full min-h-screen bg-gray-100 overflow-x-hidden"><div class="max-w-5xl mx-auto shadow-2xl rounded-lg my-4 bg-gradient-to-b from-white via-purple-50/20 to-fuchsia-50/20 text-gray-800 overflow-visible">
+  <nav class="fixed top-0 left-1/2 transform -translate-x-1/2 w-full max-w-5xl z-50 bg-white/80 backdrop-blur-md border-b border-purple-100/50">
+   <div class="max-w-6xl mx-auto px-6 py-4">
+    <div class="flex items-center justify-between">
+     <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-full bg-gradient-to-br from-fuchsia-400 to-purple-500 flex items-center justify-center"><span class="text-2xl">🎨</span></div>
+      <span class="text-xl font-bold gradient-text">זמן פנוי ויצירה</span>
+     </div>
+     <div class="flex items-center gap-1 md:gap-3">
+      <a href="#boredom" class="nav-3d-btn"><span class="nav-icon">😐</span><span class="nav-label">שעמום</span></a>
+      <a href="#creativity" class="nav-3d-btn"><span class="nav-icon">🎨</span><span class="nav-label">יצירתיות</span></a>
+      <a href="#watching" class="nav-3d-btn"><span class="nav-icon">📺</span><span class="nav-label">צפייה</span></a>
+      <a href="#meaning" class="nav-3d-btn"><span class="nav-icon">💫</span><span class="nav-label">משמעות</span></a>
+      <a href="#balance" class="nav-3d-btn"><span class="nav-icon">⚖️</span><span class="nav-label">איזון</span></a>
+      <a href="main/domains/alldomains.html" class="nav-3d-btn"><span class="nav-icon">🏠</span><span class="nav-label">לתחומים</span></a>
+     </div>
+    </div>
+   </div>
+    </div>
+   </div>
+ </nav>
+ 
+
+  <section class="h-screen flex items-center justify-center px-6 pt-16 pb-8 relative overflow-hidden hero-pattern">
+   <div class="absolute top-20 right-10 w-64 h-64 bg-purple-200/30 rounded-full blur-3xl float-creative"></div>
+   <div class="absolute bottom-20 left-10 w-80 h-80 bg-fuchsia-200/30 rounded-full blur-3xl float-creative" style="animation-delay: 2s;"></div>
+   <div class="max-w-4xl mx-auto text-center relative z-10">
+    <div class="mb-6 flex justify-center">
+     <svg class="w-40 h-40 md:w-48 md:h-48" viewBox="0 0 200 200" fill="none">
+      <circle cx="100" cy="100" r="70" fill="#fae8ff" opacity="0.4"/>
+      <rect x="70" y="60" width="60" height="80" rx="5" fill="#e9d5ff" stroke="#a855f7" stroke-width="2"/>
+      <line x1="80" y1="80" x2="120" y2="80" stroke="#c026d3" stroke-width="2" opacity="0.5"/>
+      <line x1="80" y1="95" x2="110" y2="95" stroke="#c026d3" stroke-width="2" opacity="0.5"/>
+      <line x1="80" y1="110" x2="115" y2="110" stroke="#c026d3" stroke-width="2" opacity="0.5"/>
+      <circle cx="50" cy="50" r="12" fill="#fbbf24" opacity="0.6" class="sparkle"/>
+      <circle cx="155" cy="70" r="8" fill="#f472b6" opacity="0.6" class="sparkle" style="animation-delay: 0.5s"/>
+      <circle cx="45" cy="140" r="10" fill="#34d399" opacity="0.6" class="sparkle" style="animation-delay: 1s"/>
+      <path d="M150 130 L160 120 L170 140 L150 130" fill="#a855f7" opacity="0.5" class="float-creative"/>
+      <circle cx="160" cy="150" r="15" stroke="#6366f1" stroke-width="2" fill="none" opacity="0.4"/>
+     </svg>
+    </div>
+    <h1 class="text-4xl md:text-6xl font-bold mb-4 leading-tight"><span class="gradient-text">זמן פנוי ויצירה</span></h1>
+    <p class="text-lg md:text-xl text-gray-600 mb-6 leading-relaxed max-w-2xl mx-auto">על שעמום, יצירתיות, צפייה, עשייה ומציאת משמעות</p>
+    <div class="bg-white/60 backdrop-blur-sm rounded-2xl p-5 mb-6 shadow-lg max-w-3xl mx-auto border border-purple-100">
+     <p class="text-lg text-gray-700 leading-relaxed">מה את עושה כשאין לך מה לעשות? כשאין שיעורים, אין חובות, אין תוכניות? <strong>הזמן הפנוי הזה הוא לא ריק</strong> — הוא מלא באפשרויות.</p>
+     <p class="text-lg text-gray-700 leading-relaxed mt-4">לפעמים אנחנו ממלאות אותו בגלילה אינסופית, לפעמים ביצירה. לפעמים בצפייה בסדרות, לפעמים בשעמום. <em>כל הבחירות האלה אומרות משהו</em> — בואי נבין מה.</p>
+    </div>
+    <a href="#boredom" class="inline-flex items-center gap-2 bg-gradient-to-r from-fuchsia-500 to-purple-500 text-white px-8 py-4 rounded-full font-medium hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300">
+     בואי נחקור את הזמן <svg class="w-5 h-5 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+    </a>
+   </div>
+  </section><!-- Content Sections (locked until button click) -->
+  <div id="locked-content" class="content-locked">
+  <section id="boredom" class="py-24 px-6 bg-white">
+   <div class="max-w-5xl mx-auto">
+    <div class="flex items-center gap-4 mb-12">
+     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center"><span class="text-3xl">😐</span></div>
+     <div>
+      <span class="text-sm font-medium text-gray-500 tracking-wide">שלב ראשון</span>
+      <h2 class="text-4xl font-bold text-gray-800">שעמום — האויב או החבר?</h2>
+     </div>
+    </div>
+    <p class="text-xl text-gray-600 mb-12 max-w-3xl">שעמום מרגיש לא נעים. אנחנו רגילות לברוח ממנו מיד — לפתוח את הטלפון, לחפש משהו לעשות. אבל מה אם נתעכב רגע?</p>
+    <div class="grid md:grid-cols-2 gap-8 mb-12">
+     <div class="creative-card bg-gradient-to-br from-gray-50 to-slate-50 rounded-2xl p-8 border border-gray-100">
+      <h3 class="text-2xl font-bold text-gray-800 mb-6">למה שעמום הוא בעצם טוב?</h3>
+      <ul class="space-y-4">
+       <li class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-full bg-purple-200 flex items-center justify-center mt-1 shrink-0"><span class="text-purple-800 text-sm">💡</span></div>
+        <div><p class="font-medium text-gray-800">מקור ליצירתיות</p><p class="text-sm text-gray-600">כשהמוח משועמם, הוא מתחיל לשוטט ולייצר רעיונות חדשים.</p></div>
+       </li>
+       <li class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-full bg-fuchsia-200 flex items-center justify-center mt-1 shrink-0"><span class="text-fuchsia-800 text-sm">🔋</span></div>
+        <div><p class="font-medium text-gray-800">טעינה מחדש</p><p class="text-sm text-gray-600">לא לעשות כלום זה לפעמים בדיוק מה שהגוף והנפש צריכים.</p></div>
+       </li>
+       <li class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-full bg-indigo-200 flex items-center justify-center mt-1 shrink-0"><span class="text-indigo-800 text-sm">🪞</span></div>
+        <div><p class="font-medium text-gray-800">הכרות עצמית</p><p class="text-sm text-gray-600">בשעמום אנחנו לפעמים מגלות מה באמת חשוב לנו.</p></div>
+       </li>
+      </ul>
+     </div>
+     <div class="space-y-6">
+      <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+       <h3 class="text-xl font-semibold text-gray-800 mb-4">הבעיה עם בריחה מהשעמום</h3>
+       <p class="text-gray-700 mb-3">כשאנחנו תמיד בורחות לטלפון או לבידור — אנחנו מפספסות את ההזדמנות לשמוע את עצמנו.</p>
+       <p class="text-gray-700">שעמום הוא אות שאומר: <strong>"יש כאן מרחב. מה תעשי איתו?"</strong></p>
+      </div>
+      <div class="reflection-card rounded-xl p-6">
+       <div class="flex items-start gap-4">
+        <span class="text-2xl">💭</span>
+        <div><h4 class="font-bold text-gray-800 mb-2">שאלה לחשיבה</h4><p class="text-gray-700">מתי היתה הפעם האחרונה שנתת לעצמך להשתעמם באמת — בלי למלא את הזמן במשהו?</p></div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </section>
+
+  <section id="creativity" class="py-24 px-6 bg-gradient-to-br from-purple-50/50 to-fuchsia-50/50">
+   <div class="max-w-5xl mx-auto">
+    <div class="flex items-center gap-4 mb-12">
+     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-fuchsia-100 to-pink-200 flex items-center justify-center"><span class="text-3xl">✨</span></div>
+     <div>
+      <span class="text-sm font-medium text-fuchsia-500 tracking-wide">שלב שני</span>
+      <h2 class="text-4xl font-bold text-gray-800">היצירתיות שבתוכך</h2>
+     </div>
+    </div>
+    <div class="grid md:grid-cols-3 gap-6 mb-12">
+     <div class="tip-card rounded-xl p-6"><span class="text-3xl mb-4 block">🎵</span><h4 class="font-bold text-gray-800 mb-2">מוזיקה</h4><p class="text-gray-600 text-sm">לנגן, לשיר, לכתוב שירים, או סתם להקשיב ולהרגיש.</p></div>
+     <div class="tip-card rounded-xl p-6"><span class="text-3xl mb-4 block">✍️</span><h4 class="font-bold text-gray-800 mb-2">כתיבה</h4><p class="text-gray-600 text-sm">יומן, סיפורים, שירה — מילים שיוצאות מבפנים החוצה.</p></div>
+     <div class="tip-card rounded-xl p-6"><span class="text-3xl mb-4 block">🖌️</span><h4 class="font-bold text-gray-800 mb-2">אמנות</h4><p class="text-gray-600 text-sm">ציור, צילום, יצירה בחומרים — להביע בלי מילים.</p></div>
+    </div>
+    <div class="bg-white rounded-2xl p-8 shadow-lg">
+     <h3 class="text-2xl font-bold text-gray-800 mb-6">יצירתיות זה לא רק "כישרון"</h3>
+     <p class="text-lg text-gray-700 leading-relaxed mb-4">הרבה בנות חושבות "אני לא יצירתית" כי הן משוות את עצמן לאמנים מפורסמים. אבל <strong>יצירתיות זה פשוט לעשות משהו שהוא שלך</strong>.</p>
+     <p class="text-lg text-gray-700 leading-relaxed">זה יכול להיות לסדר את החדר בצורה חדשה, לבשל מתכון משלך, לערבב בגדים בצורה מעניינת, או לכתוב רשימה של מחשבות. <em>כל ביטוי אישי הוא יצירה</em>.</p>
+    </div>
+   </div>
+  </section>
+
+  <section id="watching" class="py-24 px-6 bg-white">
+   <div class="max-w-5xl mx-auto">
+    <div class="flex items-center gap-4 mb-12">
+     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-100 to-indigo-200 flex items-center justify-center"><span class="text-3xl">📺</span></div>
+     <div>
+      <span class="text-sm font-medium text-blue-500 tracking-wide">שלב שלישי</span>
+      <h2 class="text-4xl font-bold text-gray-800">צפייה לעומת עשייה</h2>
+     </div>
+    </div>
+    <div class="grid md:grid-cols-2 gap-8 mb-12">
+     <div class="space-y-6">
+      <p class="text-lg text-gray-700 leading-relaxed">יש הבדל גדול בין להיות <strong>צופה</strong> לבין להיות <strong>עושה</strong>. שניהם בסדר — אבל האיזון ביניהם חשוב.</p>
+      <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-100">
+       <h4 class="font-bold text-gray-800 mb-4">צפייה — הצד הטוב</h4>
+       <ul class="space-y-2 text-gray-700">
+        <li>• מנוחה ובריחה לגיטימית</li>
+        <li>• השראה וחשיפה לעולמות חדשים</li>
+        <li>• חיבור לתרבות ולחברות</li>
+       </ul>
+      </div>
+      <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-6 border border-purple-100">
+       <h4 class="font-bold text-gray-800 mb-4">עשייה — הצד הטוב</h4>
+       <ul class="space-y-2 text-gray-700">
+        <li>• תחושת הישג ומשמעות</li>
+        <li>• פיתוח כישורים ויכולות</li>
+        <li>• ביטוי עצמי וסיפוק עמוק</li>
+       </ul>
+      </div>
+     </div>
+     <div class="creative-card bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-8 border border-amber-100">
+      <h3 class="text-xl font-bold text-gray-800 mb-6">שאלות לשאול את עצמך</h3>
+      <ul class="space-y-4">
+       <li class="flex items-start gap-3"><span class="text-xl">🤔</span><p class="text-gray-700">איך אני מרגישה <em>אחרי</em> שעה של גלילה/צפייה?</p></li>
+       <li class="flex items-start gap-3"><span class="text-xl">💪</span><p class="text-gray-700">איך אני מרגישה אחרי שעה של עשייה או יצירה?</p></li>
+       <li class="flex items-start gap-3"><span class="text-xl">⚖️</span><p class="text-gray-700">מה האיזון שנכון לי בין השניים?</p></li>
+       <li class="flex items-start gap-3"><span class="text-xl">🎯</span><p class="text-gray-700">מה אני באמת רוצה לעשות עם הזמן הפנוי שלי?</p></li>
+      </ul>
+     </div>
+    </div>
+   </div>
+  </section>
+
+  <section id="meaning" class="py-24 px-6 bg-gradient-to-br from-indigo-50/50 to-purple-50/50">
+   <div class="max-w-5xl mx-auto">
+    <div class="flex items-center gap-4 mb-12">
+     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-100 to-violet-200 flex items-center justify-center"><span class="text-3xl">💫</span></div>
+     <div>
+      <span class="text-sm font-medium text-indigo-500 tracking-wide">שלב רביעי</span>
+      <h2 class="text-4xl font-bold text-gray-800">למצוא משמעות</h2>
+     </div>
+    </div>
+    <div class="bg-white rounded-2xl p-8 shadow-lg mb-8">
+     <p class="text-lg text-gray-700 leading-relaxed mb-4">לפעמים בזמן פנוי יש תחושה של ריקנות. "מה אני עושה עם החיים שלי?" זו שאלה שעולה דווקא כשאין מה לעשות.</p>
+     <p class="text-lg text-gray-700 leading-relaxed mb-4"><strong>זה נורמלי</strong>. השאלות האלה הן חלק מהגדילה. הן לא אויבות — הן מורות דרך.</p>
+     <p class="text-lg text-gray-700 leading-relaxed">משמעות לא תמיד באה מדברים גדולים. לפעמים היא במעשים הקטנים: לעזור למישהו, ללמוד משהו חדש, ליצור משהו יפה.</p>
+    </div>
+    <div class="grid md:grid-cols-2 gap-6">
+     <div class="experiment-card rounded-xl p-6">
+      <div class="flex items-start gap-4"><span class="text-2xl">🧪</span><div><h4 class="font-bold text-gray-800 mb-2">ניסוי: יומן משמעות</h4><p class="text-gray-700">בסוף כל יום, כתבי דבר אחד שעשית והרגיש משמעותי. גם אם הוא קטן מאוד. אחרי שבוע — תראי מה מצטבר.</p></div></div>
+     </div>
+     <div class="insight-card rounded-xl p-6">
+      <div class="flex items-start gap-4"><span class="text-2xl">✨</span><div><h4 class="font-bold text-gray-800 mb-2">תובנה</h4><p class="text-gray-700">משמעות לא מחכה שימצאו אותה. היא נוצרת כשאנחנו עושות דברים שחשובים לנו, גם אם הם קטנים.</p></div></div>
+     </div>
+    </div>
+   </div>
+  </section>
+
+  <section id="balance" class="py-24 px-6 bg-white">
+   <div class="max-w-5xl mx-auto">
+    <div class="flex items-center gap-4 mb-12">
+     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-100 to-rose-200 flex items-center justify-center"><span class="text-3xl">⚖️</span></div>
+     <div>
+      <span class="text-sm font-medium text-pink-500 tracking-wide">שלב חמישי</span>
+      <h2 class="text-4xl font-bold text-gray-800">למצוא את האיזון שלך</h2>
+     </div>
+    </div>
+    <div class="grid md:grid-cols-2 gap-8 mb-12">
+     <div class="space-y-6">
+      <p class="text-lg text-gray-700 leading-relaxed">אין נוסחה אחת נכונה לזמן פנוי. מה שעובד לחברה שלך לא בהכרח יעבוד לך. <strong>האיזון הוא אישי</strong>.</p>
+      <p class="text-lg text-gray-700 leading-relaxed">הדבר החשוב הוא להיות מודעת לבחירות שלך. לא לתת לזמן "לקרות" סתם — אלא לבחור איך את רוצה לבלות אותו.</p>
+      <div class="reflection-card rounded-xl p-6">
+       <div class="flex items-start gap-4"><span class="text-2xl">💭</span><div><h4 class="font-bold text-gray-800 mb-2">שאלת סיכום</h4><p class="text-gray-700">אם היה לך יום פנוי לגמרי מחר — יום בלי שום חובות — מה היית רוצה לעשות איתו? (לא מה שהיית עושה, אלא מה שהיית <em>רוצה</em>)</p></div></div>
+      </div>
+     </div>
+     <div class="bg-gradient-to-br from-rose-50 to-pink-50 rounded-2xl p-8 border border-rose-100">
+      <h3 class="text-xl font-bold text-gray-800 mb-6">רעיונות לזמן פנוי משמעותי</h3>
+      <ul class="space-y-3">
+       <li class="flex items-center gap-3"><span class="text-xl">📚</span><span class="text-gray-700">לקרוא ספר שתמיד רצית</span></li>
+       <li class="flex items-center gap-3"><span class="text-xl">🎨</span><span class="text-gray-700">ללמוד משהו חדש (אפילו מיוטיוב)</span></li>
+       <li class="flex items-center gap-3"><span class="text-xl">🚶‍♀️</span><span class="text-gray-700">לצאת להליכה בלי מטרה</span></li>
+       <li class="flex items-center gap-3"><span class="text-xl">💬</span><span class="text-gray-700">לדבר באמת עם מישהי שאת אוהבת</span></li>
+       <li class="flex items-center gap-3"><span class="text-xl">🌱</span><span class="text-gray-700">לעשות משהו שמפחיד אותך קצת</span></li>
+      </ul>
+     </div>
+    </div>
+    <div class="bg-gradient-to-r from-fuchsia-500 to-purple-500 rounded-2xl p-8 text-white text-center">
+     <h3 class="text-2xl font-bold mb-4">המשימה שלך השבוע</h3>
+     <p class="text-lg opacity-90 mb-6">הקדישי שעה אחת השבוע לעשות משהו שאת באמת רוצה — לא חובה, לא צפייה פסיבית, משהו שאת בוחרת בכוונה. ראי איך זה מרגיש.</p>
+     <a href="index.html" class="inline-flex items-center gap-2 bg-white text-purple-600 px-6 py-3 rounded-full font-medium hover:bg-purple-50 transition-colors">חזרה לדף הבית <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg></a>
+    </div>
+   </div>
+  </section>
+  </div><!-- End locked-content -->
+
+  <!-- Footer -->
+  <footer class="py-12 px-6 bg-gradient-to-r from-fuchsia-500 to-purple-500 text-white">
+   <div class="max-w-5xl mx-auto text-center">
+    <div class="flex items-center justify-center gap-3 mb-6">
+     <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+      <span class="text-2xl">🎨</span>
+     </div><span class="text-2xl font-bold">זמן פנוי ויצירה</span>
+    </div>
+    <p class="text-white/80 text-lg mb-4">מסע חקר להבנת הזמן שלך ומה את בוחרת לעשות בו</p>
+    <p class="text-white/60 text-sm">תוכנית חינוכית לנערות | מתוך יצירתיות, סקרנות ומשחק</p>
+    <p class="text-white/50 text-xs mt-4">© 2026 פורצות דרך</p>
+   </div>
+  </footer>
+ </div>
+<script src="js/scroll-lock.js"></script>
+</div></body>
+</html>

@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="he" dir="rtl" class="h-full">
+ <head>
+  <link rel="icon" type="image/png" href="../icon/favicon.png">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#ec4899">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="apple-touch-icon" href="/main/icon/favicon.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>טבע וחיות בסביבה שלי | מרחב חקר</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&amp;family=Varela+Round&amp;display=swap" rel="stylesheet">
+  <style>
+    body { box-sizing: border-box; }
+    * { font-family: 'Heebo', 'Varela Round', sans-serif; }
+    .gradient-text {
+      background: linear-gradient(135deg, #059669, #10b981, #14b8a6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-pattern {
+      background-image: 
+        radial-gradient(circle at 20% 50%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(20, 184, 166, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 20%, rgba(5, 150, 105, 0.08) 0%, transparent 50%);
+    }
+    .nature-card {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .nature-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 40px -12px rgba(5, 150, 105, 0.25);
+    }
+    @keyframes float-leaf {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-15px) rotate(10deg); }
+    }
+    .float-leaf { animation: float-leaf 4s ease-in-out infinite; }
+    @keyframes sway {
+      0%, 100% { transform: rotate(-3deg); }
+      50% { transform: rotate(3deg); }
+    }
+    .sway { animation: sway 3s ease-in-out infinite; transform-origin: bottom center; }
+    .reflection-card {
+      background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+      border-right: 4px solid #10b981;
+    }
+    .experiment-card {
+      background: linear-gradient(135deg, #ccfbf1 0%, #99f6e4 100%);
+      border-right: 4px solid #14b8a6;
+    }
+    .insight-card {
+      background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+      border-right: 4px solid #059669;
+    }
+    .scroll-indicator { animation: bounce 2s infinite; }
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-10px); }
+      60% { transform: translateY(-5px); }
+    }
+    .nav-link { position: relative; }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      right: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #059669, #14b8a6);
+      transition: width 0.3s ease;
+    }
+    .nav-link:hover::after { width: 100%; }
+    .tip-card {
+      background: white;
+      border-right: 3px solid #10b981;
+      transition: all 0.3s ease;
+    }
+    .tip-card:hover {
+      border-right-width: 6px;
+      transform: translateX(-3px);
+      box-shadow: 0 8px 16px -4px rgba(16, 185, 129, 0.2);
+    }
+  .nav-3d-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      width: 70px;
+      height: 54px;
+      padding: 6px 4px;
+      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+      border-radius: 12px;
+      box-shadow: 0 4px 0 rgba(100, 100, 100, 0.2), 0 6px 12px rgba(0, 0, 0, 0.1);
+      transition: all 0.15s ease;
+      text-decoration: none;
+    }
+    .nav-3d-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 rgba(100, 100, 100, 0.2), 0 10px 20px rgba(0, 0, 0, 0.12);
+    }
+    .nav-3d-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 rgba(100, 100, 100, 0.2), 0 3px 6px rgba(0, 0, 0, 0.08);
+    }
+    .nav-3d-btn .nav-icon { font-size: 1.2rem; }
+    .nav-3d-btn .nav-label { font-size: 11px; font-weight: 600; color: #374151; }
+    
+    @media (max-width: 768px) {
+      .nav-3d-btn { width: 48px; height: 42px; padding: 4px 2px; gap: 2px; }
+      .nav-3d-btn .nav-icon { font-size: 1rem; }
+      .nav-3d-btn .nav-label { font-size: 9px; }
+      #nav-title { font-size: 14px !important; }
+    }
+    @media (max-width: 480px) {
+      .nav-3d-btn { width: 40px; height: 36px; }
+      .nav-3d-btn .nav-label { display: none; }
+      #nav-title { display: none; }
+    }
+    
+    /* Scroll Lock Mechanism */
+    .scroll-locked {
+      overflow: hidden !important;
+      height: 100vh !important;
+    }
+    .scroll-locked .content-locked {
+      display: none !important;
+    }
+    .scroll-unlocked .content-locked {
+      display: block;
+    }
+  </style>
+ </head>
+ <body class="h-full min-h-screen bg-gray-100 overflow-x-hidden"><div class="max-w-5xl mx-auto shadow-2xl rounded-lg my-4 bg-gradient-to-b from-white via-emerald-50/20 to-teal-50/20 text-gray-800 overflow-visible">
+  <nav class="fixed top-0 left-1/2 transform -translate-x-1/2 w-full max-w-5xl z-50 bg-white/80 backdrop-blur-md border-b border-emerald-100/50">
+   <div class="max-w-6xl mx-auto px-6 py-4">
+    <div class="flex items-center justify-between">
+     <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center">
+       <span class="text-2xl">🌿</span>
+      </div>
+      <span class="text-xl font-bold gradient-text">טבע וחיות בסביבה שלי</span>
+     </div>
+     <div class="flex items-center gap-1 md:gap-3">
+      <a href="#city-nature" class="nav-3d-btn"><span class="nav-icon">🏙️</span><span class="nav-label">טבע בעיר</span></a>
+      <a href="#animals" class="nav-3d-btn"><span class="nav-icon">🐕</span><span class="nav-label">חיות</span></a>
+      <a href="#plants" class="nav-3d-btn"><span class="nav-icon">🌱</span><span class="nav-label">צמחים</span></a>
+      <a href="#seasons" class="nav-3d-btn"><span class="nav-icon">🍂</span><span class="nav-label">עונות</span></a>
+      <a href="#connection" class="nav-3d-btn"><span class="nav-icon">🌿</span><span class="nav-label">חיבור</span></a>
+      <a href="main/domains/alldomains.html" class="nav-3d-btn"><span class="nav-icon">🏠</span><span class="nav-label">לתחומים</span></a>
+     </div>
+    </div>
+   </div>
+    </div>
+   </div>
+ </nav>
+ 
+
+  <section class="h-screen flex items-center justify-center px-6 pt-16 pb-8 relative overflow-hidden hero-pattern">
+   <div class="absolute top-20 right-10 w-64 h-64 bg-emerald-200/30 rounded-full blur-3xl float-leaf"></div>
+   <div class="absolute bottom-20 left-10 w-80 h-80 bg-teal-200/30 rounded-full blur-3xl float-leaf" style="animation-delay: 2s;"></div>
+   <div class="max-w-4xl mx-auto text-center relative z-10">
+    <div class="mb-6 flex justify-center">
+     <svg class="w-40 h-40 md:w-48 md:h-48" viewBox="0 0 200 200" fill="none">
+      <circle cx="100" cy="100" r="70" fill="#d1fae5" opacity="0.4"/>
+      <ellipse cx="100" cy="150" rx="50" ry="10" fill="#059669" opacity="0.2"/>
+      <g class="sway">
+       <path d="M100 150 Q95 100 85 70" stroke="#059669" stroke-width="3" fill="none"/>
+       <ellipse cx="75" cy="60" rx="20" ry="12" fill="#10b981" opacity="0.8" transform="rotate(-30 75 60)"/>
+      </g>
+      <g class="sway" style="animation-delay: 0.5s">
+       <path d="M100 150 Q105 90 120 55" stroke="#059669" stroke-width="3" fill="none"/>
+       <ellipse cx="130" cy="45" rx="22" ry="14" fill="#34d399" opacity="0.8" transform="rotate(20 130 45)"/>
+      </g>
+      <g class="sway" style="animation-delay: 1s">
+       <path d="M100 150 Q100 110 100 80" stroke="#059669" stroke-width="4" fill="none"/>
+       <ellipse cx="100" cy="65" rx="18" ry="25" fill="#10b981" opacity="0.9"/>
+      </g>
+      <circle cx="55" cy="130" r="8" fill="#fbbf24" opacity="0.6" class="float-leaf"/>
+      <circle cx="150" cy="120" r="6" fill="#f472b6" opacity="0.6" class="float-leaf" style="animation-delay: 1.5s"/>
+     </svg>
+    </div>
+    <h1 class="text-4xl md:text-6xl font-bold mb-4 leading-tight"><span class="gradient-text">טבע וחיות בסביבה שלי</span></h1>
+    <p class="text-lg md:text-xl text-gray-600 mb-6 leading-relaxed max-w-2xl mx-auto">מסע לגילוי העולם הטבעי שמקיף אותך — גם בלב העיר</p>
+    <div class="bg-white/60 backdrop-blur-sm rounded-2xl p-5 mb-6 shadow-lg max-w-3xl mx-auto border border-emerald-100">
+     <p class="text-lg text-gray-700 leading-relaxed">גם אם את גרה בעיר גדולה ולא רואה יערות או שדות — <strong>הטבע נמצא סביבך</strong>. בעצים ברחוב, בציפורים על החוטים, בחתול השכונה, בפרחים שצומחים בין האבנים.</p>
+     <p class="text-lg text-gray-700 leading-relaxed mt-4">הקשר שלנו לטבע הוא חלק ממי שאנחנו. כשאנחנו שמות לב לעולם סביבנו — <em>לעונות שמשתנות, לחיות שחולפות, לצמחים שגדלים</em> — אנחנו מתחברות למשהו גדול יותר מאיתנו.</p>
+    </div>
+    <a href="#city-nature" class="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-8 py-4 rounded-full font-medium hover:shadow-lg hover:shadow-emerald-500/25 transition-all duration-300">
+     בואי נצא לחקור <svg class="w-5 h-5 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+    </a>
+   </div>
+  </section><!-- Content Sections (locked until button click) -->
+  <div id="locked-content" class="content-locked">
+  <section id="city-nature" class="py-24 px-6 bg-white">
+   <div class="max-w-5xl mx-auto">
+    <div class="flex items-center gap-4 mb-12">
+     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-100 to-emerald-200 flex items-center justify-center"><span class="text-3xl">🏙️</span></div>
+     <div>
+      <span class="text-sm font-medium text-emerald-500 tracking-wide">שלב ראשון</span>
+      <h2 class="text-4xl font-bold text-gray-800">טבע בעיר — הוא קיים!</h2>
+     </div>
+    </div>
+    <p class="text-xl text-gray-600 mb-12 max-w-3xl">הרבה פעמים אנחנו חושבות שטבע זה רק יערות ונהרות. אבל הטבע מסתתר בכל פינה — גם בעיר הכי עמוסה.</p>
+    <div class="grid md:grid-cols-2 gap-8 mb-12">
+     <div class="nature-card bg-gradient-to-br from-emerald-50 to-green-50 rounded-2xl p-8 border border-emerald-100">
+      <h3 class="text-2xl font-bold text-gray-800 mb-6">איפה למצוא טבע בעיר?</h3>
+      <ul class="space-y-4">
+       <li class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-full bg-emerald-200 flex items-center justify-center mt-1 shrink-0"><span class="text-emerald-800 text-sm">🌳</span></div>
+        <div><p class="font-medium text-gray-800">עצים ברחובות</p><p class="text-sm text-gray-600">שימי לב לעצים שאת עוברת ליד כל יום. יש להם עלים? פרחים? פירות?</p></div>
+       </li>
+       <li class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-full bg-teal-200 flex items-center justify-center mt-1 shrink-0"><span class="text-teal-800 text-sm">🐦</span></div>
+        <div><p class="font-medium text-gray-800">ציפורים בכל מקום</p><p class="text-sm text-gray-600">דרורים, יונים, עורבים — הם חיים איתנו בעיר ומתאימים את עצמם לסביבה.</p></div>
+       </li>
+       <li class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-full bg-green-200 flex items-center justify-center mt-1 shrink-0"><span class="text-green-800 text-sm">🌺</span></div>
+        <div><p class="font-medium text-gray-800">פרחים בין הסדקים</p><p class="text-sm text-gray-600">צמחים שצומחים במקומות הכי לא צפויים — על מדרכות ובין אבנים.</p></div>
+       </li>
+       <li class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-full bg-lime-200 flex items-center justify-center mt-1 shrink-0"><span class="text-lime-800 text-sm">🐱</span></div>
+        <div><p class="font-medium text-gray-800">חיות רחוב</p><p class="text-sm text-gray-600">חתולים, כלבים, ולפעמים גם שועלים ודורבנים — חיות שהפכו לשכנים שלנו.</p></div>
+       </li>
+      </ul>
+     </div>
+     <div class="space-y-6">
+      <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+       <h3 class="text-xl font-semibold text-gray-800 mb-4">למה זה חשוב?</h3>
+       <p class="text-gray-700 mb-3">מחקרים מראים שקשר עם הטבע — גם טבע עירוני — <strong>משפר את מצב הרוח</strong>, מפחית לחץ ועוזר להתרכז.</p>
+       <p class="text-gray-700">כשאנחנו שמות לב לטבע סביבנו, אנחנו יוצאות מהראש לרגע ומתחברות להווה.</p>
+      </div>
+      <div class="reflection-card rounded-xl p-6">
+       <div class="flex items-start gap-4">
+        <span class="text-2xl">💭</span>
+        <div><h4 class="font-bold text-gray-800 mb-2">רגע של התבוננות</h4><p class="text-gray-700">מה הדבר הראשון מהטבע שאת רואה כשאת יוצאת מהבית? עץ? ציפור? שמיים? נסי לשים לב מחר בבוקר.</p></div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </section>
+
+  <section id="animals" class="py-24 px-6 bg-gradient-to-br from-teal-50/50 to-emerald-50/50">
+   <div class="max-w-5xl mx-auto">
+    <div class="flex items-center gap-4 mb-12">
+     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-100 to-orange-200 flex items-center justify-center"><span class="text-3xl">🐾</span></div>
+     <div>
+      <span class="text-sm font-medium text-amber-500 tracking-wide">שלב שני</span>
+      <h2 class="text-4xl font-bold text-gray-800">הקשר שלנו עם חיות</h2>
+     </div>
+    </div>
+    <div class="grid md:grid-cols-3 gap-6 mb-12">
+     <div class="tip-card rounded-xl p-6"><span class="text-3xl mb-4 block">🐕</span><h4 class="font-bold text-gray-800 mb-2">חיות מחמד</h4><p class="text-gray-600 text-sm">כלב או חתול בבית זה לא רק "חיית מחמד" — זה חבר, משפחה ומקור לאהבה ללא תנאי.</p></div>
+     <div class="tip-card rounded-xl p-6"><span class="text-3xl mb-4 block">🐈</span><h4 class="font-bold text-gray-800 mb-2">חתולי רחוב</h4><p class="text-gray-600 text-sm">לתת אוכל לחתולים ברחוב, לשים להם מים — זו דרך קטנה להראות אכפתיות לעולם.</p></div>
+     <div class="tip-card rounded-xl p-6"><span class="text-3xl mb-4 block">🦎</span><h4 class="font-bold text-gray-800 mb-2">חיות פרא</h4><p class="text-gray-600 text-sm">לוטרות, קיפודים, לטאות — לפעמים נתקלות בהם בהפתעה. זה רגע קסום של מפגש עם הטבע.</p></div>
+    </div>
+    <div class="bg-white rounded-2xl p-8 shadow-lg">
+     <h3 class="text-2xl font-bold text-gray-800 mb-6">מה חיות מלמדות אותנו?</h3>
+     <div class="grid md:grid-cols-2 gap-6">
+      <div class="flex items-start gap-3"><div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center shrink-0"><span class="text-emerald-600">❤️</span></div><div><p class="font-medium text-gray-800">אמפתיה ורגישות</p><p class="text-sm text-gray-600">לשים לב לצרכים של יצור אחר, להבין שפת גוף שונה משלנו.</p></div></div>
+      <div class="flex items-start gap-3"><div class="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center shrink-0"><span class="text-teal-600">🎯</span></div><div><p class="font-medium text-gray-800">אחריות</p><p class="text-sm text-gray-600">לדאוג לחיה זה ללמוד מה זה להיות אחראית על מישהו אחר.</p></div></div>
+      <div class="flex items-start gap-3"><div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center shrink-0"><span class="text-green-600">🧘</span></div><div><p class="font-medium text-gray-800">נוכחות</p><p class="text-sm text-gray-600">חיות חיות ברגע הזה. הן לא דואגות למחר או מתחרטות על אתמול.</p></div></div>
+      <div class="flex items-start gap-3"><div class="w-10 h-10 rounded-full bg-lime-100 flex items-center justify-center shrink-0"><span class="text-lime-600">💚</span></div><div><p class="font-medium text-gray-800">אהבה פשוטה</p><p class="text-sm text-gray-600">הקשר עם חיה הוא ישיר ופשוט — בלי משחקים או ציפיות מורכבות.</p></div></div>
+     </div>
+    </div>
+   </div>
+  </section>
+
+  <section id="plants" class="py-24 px-6 bg-white">
+   <div class="max-w-5xl mx-auto">
+    <div class="flex items-center gap-4 mb-12">
+     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-100 to-lime-200 flex items-center justify-center"><span class="text-3xl">🌱</span></div>
+     <div>
+      <span class="text-sm font-medium text-green-500 tracking-wide">שלב שלישי</span>
+      <h2 class="text-4xl font-bold text-gray-800">צמחים — הגידול האיטי</h2>
+     </div>
+    </div>
+    <div class="grid md:grid-cols-2 gap-8 mb-12">
+     <div class="space-y-6">
+      <p class="text-lg text-gray-700 leading-relaxed">לגדל צמח זה לימוד בסבלנות. צמחים גדלים לאט, בקצב שלהם. הם מלמדים אותנו שלא הכל צריך לקרות <strong>עכשיו</strong>.</p>
+      <p class="text-lg text-gray-700 leading-relaxed">גם אם אין לך גינה — עציץ קטן על אדן החלון יכול להביא טבע לחדר שלך. ויש משהו מיוחד בלראות משהו שאת גידלת פורח.</p>
+      <div class="experiment-card rounded-xl p-6">
+       <div class="flex items-start gap-4"><span class="text-2xl">🧪</span><div><h4 class="font-bold text-gray-800 mb-2">ניסוי קטן</h4><p class="text-gray-700">קני שקית זרעי בזיליקום ועציץ קטן. זרעי ותשקי. צלמי תמונה כל שבוע ותראי איך הוא גדל. זה יפתיע אותך.</p></div></div>
+      </div>
+     </div>
+     <div class="nature-card bg-gradient-to-br from-lime-50 to-green-50 rounded-2xl p-8 border border-lime-100">
+      <h3 class="text-xl font-bold text-gray-800 mb-6">צמחים קלים לגידול</h3>
+      <ul class="space-y-3">
+       <li class="flex items-center gap-3"><span class="text-xl">🌵</span><span class="text-gray-700">סוקולנטים — כמעט בלתי אפשרי להרוג</span></li>
+       <li class="flex items-center gap-3"><span class="text-xl">🌿</span><span class="text-gray-700">נענע — גדלה מהר ואפשר להוסיף לתה</span></li>
+       <li class="flex items-center gap-3"><span class="text-xl">🪴</span><span class="text-gray-700">פוטוס — מטפס יפה שמתאים לחדר</span></li>
+       <li class="flex items-center gap-3"><span class="text-xl">🌻</span><span class="text-gray-700">חמניות — גדלות מהר ומרשימות</span></li>
+      </ul>
+     </div>
+    </div>
+   </div>
+  </section>
+
+  <section id="seasons" class="py-24 px-6 bg-gradient-to-br from-amber-50/50 to-orange-50/50">
+   <div class="max-w-5xl mx-auto">
+    <div class="flex items-center gap-4 mb-12">
+     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-100 to-amber-200 flex items-center justify-center"><span class="text-3xl">🍂</span></div>
+     <div>
+      <span class="text-sm font-medium text-orange-500 tracking-wide">שלב רביעי</span>
+      <h2 class="text-4xl font-bold text-gray-800">העונות — מחזור החיים</h2>
+     </div>
+    </div>
+    <div class="grid md:grid-cols-4 gap-4 mb-12">
+     <div class="bg-white rounded-xl p-6 text-center shadow-md hover:shadow-lg transition-shadow"><span class="text-4xl mb-3 block">🌸</span><h4 class="font-bold text-pink-600 mb-2">אביב</h4><p class="text-sm text-gray-600">התחלות חדשות, פריחה, אנרגיה מתחדשת</p></div>
+     <div class="bg-white rounded-xl p-6 text-center shadow-md hover:shadow-lg transition-shadow"><span class="text-4xl mb-3 block">☀️</span><h4 class="font-bold text-amber-600 mb-2">קיץ</h4><p class="text-sm text-gray-600">שפע, חום, זמן של פעילות ואור</p></div>
+     <div class="bg-white rounded-xl p-6 text-center shadow-md hover:shadow-lg transition-shadow"><span class="text-4xl mb-3 block">🍁</span><h4 class="font-bold text-orange-600 mb-2">סתיו</h4><p class="text-sm text-gray-600">שינוי, הרפיה, הכנה לקראת מנוחה</p></div>
+     <div class="bg-white rounded-xl p-6 text-center shadow-md hover:shadow-lg transition-shadow"><span class="text-4xl mb-3 block">❄️</span><h4 class="font-bold text-blue-600 mb-2">חורף</h4><p class="text-sm text-gray-600">מנוחה, התבוננות פנימה, ציפייה</p></div>
+    </div>
+    <div class="bg-white rounded-2xl p-8 shadow-lg">
+     <p class="text-lg text-gray-700 leading-relaxed mb-4">גם אנחנו עוברות עונות. יש תקופות של אנרגיה ופריחה, ויש תקופות שבהן צריך לנוח ולהיטען. <strong>זה בסדר</strong>. זה טבעי.</p>
+     <p class="text-lg text-gray-700 leading-relaxed">לשים לב לעונות בחוץ עוזר לנו להבין שגם אנחנו חלק מהמחזור הזה. אנחנו לא אמורות להיות באותה רמת אנרגיה כל הזמן.</p>
+    </div>
+   </div>
+  </section>
+
+  <section id="connection" class="py-24 px-6 bg-white">
+   <div class="max-w-5xl mx-auto">
+    <div class="flex items-center gap-4 mb-12">
+     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-teal-100 to-cyan-200 flex items-center justify-center"><span class="text-3xl">🌍</span></div>
+     <div>
+      <span class="text-sm font-medium text-teal-500 tracking-wide">שלב חמישי</span>
+      <h2 class="text-4xl font-bold text-gray-800">החיבור הגדול</h2>
+     </div>
+    </div>
+    <div class="grid md:grid-cols-2 gap-8 mb-12">
+     <div class="space-y-6">
+      <p class="text-lg text-gray-700 leading-relaxed">כשאנחנו מתחברות לטבע, אנחנו מבינות שאנחנו חלק ממשהו גדול יותר. לא לבד, לא מנותקות — <strong>חלק מרשת החיים</strong>.</p>
+      <p class="text-lg text-gray-700 leading-relaxed">זה יכול להיות מנחם בזמנים קשים. לדעת שהשמש תזרח מחר, שהעונות ימשיכו להתחלף, שהעולם ממשיך — זה נותן פרספקטיבה.</p>
+      <div class="insight-card rounded-xl p-6">
+       <div class="flex items-start gap-4"><span class="text-2xl">✨</span><div><h4 class="font-bold text-gray-800 mb-2">תובנה</h4><p class="text-gray-700">הטבע לא שופט. הוא פשוט קיים. לפעמים זה בדיוק מה שאנחנו צריכות — מקום להיות בלי ציפיות.</p></div></div>
+      </div>
+     </div>
+     <div class="bg-gradient-to-br from-teal-50 to-cyan-50 rounded-2xl p-8 border border-teal-100">
+      <h3 class="text-xl font-bold text-gray-800 mb-6">דרכים להתחבר לטבע</h3>
+      <ul class="space-y-4">
+       <li class="flex items-start gap-3"><span class="text-xl">👣</span><p class="text-gray-700">לצאת להליכה בלי טלפון — רק להסתכל, לשמוע, להריח</p></li>
+       <li class="flex items-start gap-3"><span class="text-xl">📝</span><p class="text-gray-700">לכתוב מה את רואה בטבע סביבך — יומן טבע קטן</p></li>
+       <li class="flex items-start gap-3"><span class="text-xl">📸</span><p class="text-gray-700">לצלם דברים קטנים — פרח, ענן, חרק מעניין</p></li>
+       <li class="flex items-start gap-3"><span class="text-xl">🧘</span><p class="text-gray-700">לשבת בחוץ כמה דקות ופשוט לנשום</p></li>
+      </ul>
+     </div>
+    </div>
+    <div class="bg-gradient-to-r from-emerald-500 to-teal-500 rounded-2xl p-8 text-white text-center">
+     <h3 class="text-2xl font-bold mb-4">המשימה שלך השבוע</h3>
+     <p class="text-lg opacity-90 mb-6">בחרי דבר אחד מהטבע בסביבתך — עץ, חתול, ציפור — ושימי לב אליו כל יום. צפי בו, ראי מה משתנה, מה נשאר אותו דבר. זה הכל.</p>
+     <a href="index.html" class="inline-flex items-center gap-2 bg-white text-emerald-600 px-6 py-3 rounded-full font-medium hover:bg-emerald-50 transition-colors">חזרה לדף הבית <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg></a>
+    </div>
+   </div>
+  </section>
+  </div><!-- End locked-content -->
+
+  <!-- Footer -->
+  <footer class="py-12 px-6 bg-gradient-to-r from-emerald-500 to-teal-500 text-white">
+   <div class="max-w-5xl mx-auto text-center">
+    <div class="flex items-center justify-center gap-3 mb-6">
+     <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+      <span class="text-2xl">🌿</span>
+     </div><span class="text-2xl font-bold">טבע וחיות בסביבה שלי</span>
+    </div>
+    <p class="text-white/80 text-lg mb-4">מסע חקר להבנת הקשר שלך עם הטבע והחיים סביבך</p>
+    <p class="text-white/60 text-sm">תוכנית חינוכית לנערות | מתוך הבנה, חיבור והתבוננות בטבע</p>
+    <p class="text-white/50 text-xs mt-4">© 2026 פורצות דרך</p>
+   </div>
+  </footer>
+ </div>
+<script src="js/scroll-lock.js"></script>
+</div></body>
+</html>
