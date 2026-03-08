@@ -27,6 +27,23 @@
       }
       .gradient-bg { background: white !important; }
       .sparkle { display: none !important; }
+
+      body.printing-summary > #app > :not(#summary-modal) {
+        display: none !important;
+      }
+
+      body.printing-summary #summary-modal {
+        position: static !important;
+        inset: auto !important;
+        display: flex !important;
+        background: transparent !important;
+        padding: 0 !important;
+      }
+
+      body.printing-summary #summary-modal > div {
+        box-shadow: none !important;
+        max-height: none !important;
+      }
     }
   </style>
   <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
@@ -956,7 +973,18 @@ ${metrics.map((m, i) => `${i + 1}. ${m}`).join('\n')}
     }
     
     function printPage() {
+      const summaryModal = document.getElementById('summary-modal');
+      const isSummaryOpen = summaryModal && !summaryModal.classList.contains('hidden');
+
+      if (isSummaryOpen) {
+        document.body.classList.add('printing-summary');
+      }
+
       window.print();
+
+      if (isSummaryOpen) {
+        document.body.classList.remove('printing-summary');
+      }
     }
     
     // App page tab switching
