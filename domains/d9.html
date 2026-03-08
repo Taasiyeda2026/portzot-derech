@@ -2,10 +2,10 @@
 <html lang="he" dir="rtl" class="h-full">
  <head>
   <link rel="icon" type="image/png" href="../icon/favicon.png">
-  <link rel="manifest" href="/manifest.json">
+  <link rel="manifest" href="../manifest.json">
   <meta name="theme-color" content="#ec4899">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <link rel="apple-touch-icon" href="/icon/favicon.png">
+  <link rel="apple-touch-icon" href="../icon/favicon.png">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>זמן פנוי ויצירה | מרחב חקר</title>
@@ -377,5 +377,16 @@
   </footer>
  </div>
 <script src="../js/scroll-lock.js"></script>
-</div></body>
+</div>
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function() {
+      navigator.serviceWorker.register("../service-worker.js").catch(function(error) {
+        console.error("Service worker registration failed:", error);
+      });
+    });
+  }
+</script>
+
+</body>
 </html>

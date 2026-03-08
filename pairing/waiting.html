@@ -505,5 +505,16 @@
             document.getElementById('teamMembers').style.display = 'none';
         }
     </script>
+
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function() {
+      navigator.serviceWorker.register("../service-worker.js").catch(function(error) {
+        console.error("Service worker registration failed:", error);
+      });
+    });
+  }
+</script>
+
 </body>
 </html>
