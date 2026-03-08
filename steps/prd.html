@@ -8,7 +8,7 @@
   <script src="/_sdk/element_sdk.js"></script>
   <script src="/_sdk/data_sdk.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&amp;family=Secular+One&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="main/css/print.css" media="print">
+  <link rel="stylesheet" href="../css/print.css" media="print">
   <style>
     * { font-family: 'Heebo', sans-serif; }
     .title-font { font-family: 'Secular One', sans-serif; }
@@ -226,6 +226,12 @@
   <style>body { box-sizing: border-box; }</style>
  </head>
  <body class="h-full bg-gradient-to-br from-slate-50 via-purple-50 to-pink-50 text-slate-800 overflow-auto">
+  <header class="no-print sticky top-0 z-50 bg-white/90 backdrop-blur-sm border-b border-pink-100 shadow-sm">
+   <div class="max-w-4xl mx-auto px-6 py-3 flex items-center justify-between">
+    <img src="../icon/logo.png" alt="פורצות דרך" class="h-10 w-auto">
+    <a href="../strongermenu-2026.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-pink-50 hover:bg-pink-100 text-pink-700 font-medium transition-all text-sm border border-pink-200"> <span>🏠</span> <span>דף הבית</span> </a>
+   </div>
+  </header>
   <div class="min-h-full w-full relative"><!-- Floating Decorative Elements -->
    <div class="fixed inset-0 pointer-events-none overflow-hidden">
     <div class="absolute top-20 right-10 w-32 h-32 bg-gradient-to-br from-pink-300/30 to-purple-300/30 blob float-animation"></div>
@@ -237,7 +243,7 @@
    </div><!-- HOME PAGE -->
    <div id="page-home" class="page active relative z-10 max-w-4xl mx-auto px-6 py-12"><!-- Header Navigation -->
     <header class="mb-12 flex items-center justify-between">
-     <a href="https://portzot-derech.org/main/steps/entrepreneurship-steps.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/60 hover:bg-white text-pink-600 font-medium transition-all shadow-sm hover:shadow-md backdrop-blur-sm border border-white/50"> <span class="text-xl">🏠</span> <span>חזרה לדף הבית</span> </a>
+     <a href="entrepreneurship-steps.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/60 hover:bg-white text-pink-600 font-medium transition-all shadow-sm hover:shadow-md backdrop-blur-sm border border-white/50"> <span class="text-xl">🏠</span> <span>חזרה לדף הבית</span> </a>
     </header><!-- Hero Section -->
     <header class="text-center mb-16 slide-up">
      <h1 id="main-title" class="title-font text-4xl md:text-6xl mb-4 text-transparent bg-clip-text bg-gradient-to-r from-pink-600 via-purple-600 to-pink-700 leading-tight">אפיון מוצר</h1>
@@ -414,7 +420,7 @@
         <p class="print-brand">פורצות דרך</p>
         <p class="print-activity">אפיון מוצר</p>
        </div>
-       <img src="/favicon.png" class="print-logo" alt="פורצות דרך">
+       <img src="../icon/logo.png" class="print-logo" alt="פורצות דרך">
       </div>
       <div class="print-meta">
        <div><strong>משתתפות:</strong> ____________________</div>

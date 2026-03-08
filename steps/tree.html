@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&family=Frank+Ruhl+Libre:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="main/css/print.css" media="print">
+  <link rel="stylesheet" href="../css/print.css" media="print">
   <style>
     :root {
       --color-bg: #fafaf9;
@@ -386,7 +386,7 @@
         <button id="header-diamond-b" title="עץ המוצר" style="background: none; border: none; cursor: pointer; font-size: 1.3rem; color: #0ea5e9; padding: 0.25rem; transition: transform 0.2s; display: inline-flex; align-items: center; justify-content: center;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">◆</button>
         <a href="mvp.html" style="display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.4rem 0.8rem; border-radius: 999px; font-weight: 700; font-size: 0.85rem; color: #0ea5e9; border: 1.5px solid #0ea5e9; background: rgba(14,165,233,0.07); text-decoration: none; transition: background 0.2s;" onmouseover="this.style.background='rgba(14,165,233,0.15)'" onmouseout="this.style.background='rgba(14,165,233,0.07)'">← אבטיפוס</a>
       </div>
-      <a href="index.html" class="home-btn" aria-label="חזרה לעמוד הבית" style="font-size: 1.5rem; display: inline-flex; align-items: center; justify-content: center;">🏠</a>
+      <a href="../index.html" class="home-btn" aria-label="חזרה לעמוד הבית" style="font-size: 1.5rem; display: inline-flex; align-items: center; justify-content: center;">🏠</a>
     </div>
    </div>
 
@@ -705,7 +705,7 @@
       const appendixContent = `
         <div style="page-break-after: always; padding: 2rem; background: white; min-height: 100vh; font-family: 'Heebo', sans-serif;">
           <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; border-bottom: 3px solid #0ea5e9; padding-bottom: 1.5rem;">
-            <img src="main/icon/logo.png" style="height: 48px; width: auto;" onerror="this.style.display='none'">
+            <img src="../icon/logo.png" style="height: 48px; width: auto;" onerror="this.style.display='none'">
             <div style="text-align: center; flex: 1; padding: 0 1rem;">
               <h1 style="color: #0ea5e9; font-size: 2rem; margin: 0; font-weight: 700;">🌳 עץ המוצר שלנו</h1>
               <p style="color: #666; font-size: 1.1rem; margin: 0.5rem 0;">מפרקות רעיון למבנה ברור</p>
@@ -804,7 +804,7 @@
                 <p class="print-brand">פורצות דרך</p>
                 <p class="print-activity">${document.querySelector('[data-modal-title]')?.textContent || 'עץ מוצר'}</p>
               </div>
-              <img src="/favicon.png" class="print-logo" alt="פורצות דרך">
+              <img src="../icon/favicon.png" class="print-logo" alt="פורצות דרך">
             </div>
             <div class="print-meta">
               <div><strong>משתתפות:</strong> ____________________</div>

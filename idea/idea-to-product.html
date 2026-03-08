@@ -82,7 +82,7 @@
       <span class="text-xl font-bold gradient-text">מרעיון למוצר</span>
      </div>
      <div class="flex items-center gap-1 md:gap-3">
-      <a href="index.html" class="nav-3d-btn"><span class="nav-icon">🏠</span><span class="nav-label">לדף הבית</span></a>
+      <a href="../index.html" class="nav-3d-btn"><span class="nav-icon">🏠</span><span class="nav-label">לדף הבית</span></a>
      </div>
     </div>
    </div>
@@ -1503,7 +1503,7 @@
         c.getContext('2d').drawImage(img, 0, 0);
         try { logoDataUrl = c.toDataURL('image/png'); } catch(e) {}
       };
-      img.src = '/favicon.png';
+      img.src = '/icon/favicon.png';
     })();
 
     async function generatePDF() {
@@ -1516,7 +1516,7 @@
       const topicObj = topicBoxes.find(b => b.id === journeyData.primaryTopic);
       const namesStr = journeyData.names.join(' ו');
       const renderArea = document.getElementById('pdf-render-area');
-      const logoSrc = logoDataUrl || '/favicon.png';
+      const logoSrc = logoDataUrl || '/icon/favicon.png';
 
       const pages = [];
 
@@ -1677,7 +1677,7 @@
 
           <div class="stem-card rounded-3xl p-10 max-w-xl mx-auto" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));">
             <p class="text-white text-lg mb-6 leading-relaxed">את לא צריכה לדעת הכול כדי להתחיל.<br>את רק צריכה להתחיל כדי לדעת הכול.</p>
-            <a href="next-steps.html" class="inline-block bg-white text-2xl font-bold px-12 py-5 rounded-full shadow-xl transform hover:scale-105 transition-all duration-300" style="color: var(--primary-color); letter-spacing: 2px;">
+            <a href="../buildingmessage.html" class="inline-block bg-white text-2xl font-bold px-12 py-5 rounded-full shadow-xl transform hover:scale-105 transition-all duration-300" style="color: var(--primary-color); letter-spacing: 2px;">
               🔧⚙️💻🛠️🚀📐
             </a>
             <p class="text-white text-sm mt-4 opacity-80">לחצו להמשך →</p>

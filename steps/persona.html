@@ -5,7 +5,7 @@
 <title>פורצות דרך – בניית פרסונה</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600;700&family=Assistant:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="main/css/print.css" media="print">
+<link rel="stylesheet" href="../css/print.css" media="print">
 
 <style>
 body {
@@ -221,7 +221,7 @@ async function generatePDF() {
                 console.log('Could not load image');
                 resolve(); // Continue without image
             };
-            img.src = 'girl.png';
+            img.src = '../icon/girl.png';
         });
     } catch(e) {
         console.log('Image error:', e);
@@ -246,7 +246,7 @@ async function generatePDF() {
               <div style="color:#1e3a8a;font-size:24px;font-weight:800;">פורצות דרך</div>
               <div style="color:#c026d3;font-size:14px;font-weight:700;">פרסונה — דף עבודה</div>
             </div>
-            <img src="/favicon.png" style="width:42px;height:42px;border-radius:50%;border:2px solid white;background:white;" alt="פורצות דרך" />
+            <img src="../icon/favicon.png" style="width:42px;height:42px;border-radius:50%;border:2px solid white;background:white;" alt="פורצות דרך" />
           </div>
           <div style="background:rgba(255,255,255,.8);border:1px solid #f9a8d4;border-radius:8px;padding:8px 10px;color:#334155;font-size:12px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
             <div><strong>משתתפות:</strong> ${team}</div>

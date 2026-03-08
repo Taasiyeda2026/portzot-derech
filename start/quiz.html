@@ -20,15 +20,180 @@
       animation: gradientShift 15s ease infinite;
       min-height: 100vh;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
+      flex-direction: column;
     }
 
     @keyframes gradientShift {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
+    }
+
+    /* ── INTRO SECTION ─────────────────────────────────── */
+
+    .site-header {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 28px 24px 20px;
+    }
+
+    .site-header .logo {
+      width: 52px;
+      height: 52px;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 10px rgba(138, 133, 198, 0.22));
+    }
+
+    .site-header .site-name {
+      font-size: 1.5em;
+      font-weight: 700;
+      color: #2F3A5F;
+      letter-spacing: 0.01em;
+    }
+
+    .back-btn {
+      position: absolute;
+      left: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #8A85C6;
+      font-size: 0.9em;
+      font-weight: 600;
+      text-decoration: none;
+      background: rgba(138, 133, 198, 0.1);
+      border: 1px solid rgba(138, 133, 198, 0.25);
+      border-radius: 20px;
+      padding: 7px 14px;
+      transition: background 0.2s ease;
+      cursor: pointer;
+    }
+
+    .back-btn:hover {
+      background: rgba(138, 133, 198, 0.18);
+    }
+
+    .intro-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 20px 48px;
+    }
+
+    .intro-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 680px;
+      width: 100%;
+      margin-bottom: 28px;
+    }
+
+    .intro-card {
+      border-radius: 18px;
+      padding: 26px 28px;
+      font-size: 1.05em;
+      line-height: 1.85;
+    }
+
+    .intro-card.card-1 {
+      background: linear-gradient(135deg, #f0effe, #ede9fb);
+      border: 1px solid rgba(138, 133, 198, 0.35);
+      box-shadow: 0 4px 20px rgba(138, 133, 198, 0.15);
+      color: #3d3575;
+    }
+
+    .intro-card.card-2 {
+      background: linear-gradient(135deg, #fde8f4, #fce0ef);
+      border: 1px solid rgba(236, 72, 153, 0.3);
+      box-shadow: 0 4px 20px rgba(236, 72, 153, 0.12);
+      color: #8b2460;
+    }
+
+    .intro-card.card-3 {
+      background: linear-gradient(135deg, #e6faf4, #ddf5ec);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      box-shadow: 0 4px 20px rgba(16, 185, 129, 0.12);
+      color: #0d5c40;
+    }
+
+    .cta-card {
+      background: #fff;
+      border-radius: 18px;
+      padding: 30px 32px;
+      box-shadow: 0 6px 28px rgba(138, 133, 198, 0.16);
+      border: 1.5px solid rgba(138, 133, 198, 0.22);
+      max-width: 680px;
+      width: 100%;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .cta-how {
+      font-size: 1em;
+      color: #8A85C6;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .cta-icon {
+      font-size: 2em;
+      line-height: 1;
+    }
+
+    .cta-title {
+      font-size: 1.3em;
+      font-weight: 700;
+      color: #2F3A5F;
+    }
+
+    .cta-desc {
+      color: #666;
+      font-size: 0.97em;
+      line-height: 1.7;
+      max-width: 360px;
+    }
+
+    .cta-btn {
+      background: linear-gradient(135deg, #8A85C6, #A5A0D6);
+      color: #fff;
+      border: none;
+      border-radius: 30px;
+      padding: 15px 44px;
+      font-size: 1.1em;
+      font-family: inherit;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      margin-top: 6px;
+    }
+
+    .cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(138, 133, 198, 0.35);
+    }
+
+    .cta-note {
+      font-size: 0.88em;
+      color: #999;
+      margin-top: 4px;
+    }
+
+    /* ── QUIZ WRAPPER ────────────────────────────────────── */
+
+    #quizWrapper {
+      display: none;
+      flex: 1;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
     }
 
     .container {
@@ -366,12 +531,54 @@
   </style>
 </head>
 <body>
+
+  <!-- ── INTRO ─────────────────────────────────────────── -->
+  <div id="introSection">
+    <header class="site-header">
+      <button class="back-btn" onclick="history.back()">&#8592; חזרה</button>
+      <img class="logo" src="../icon/logo.png" alt="פורצות דרך" />
+      <span class="site-name">פורצות דרך</span>
+    </header>
+
+    <section class="intro-section">
+      <div class="intro-cards">
+        <div class="intro-card card-1">
+          יש ימים שאת קמה ומרגישה טוב ויש ימים שאת קמה ומרגישה פחות טוב.<br>
+          יש ימים שאת עצבנית, רגישה, או סתם ככה — בלי סיבה ברורה. אלה דברים שקורים לנו כל יום, גם כשלא תמיד מדברות על זה.
+        </div>
+        <div class="intro-card card-2">
+          זה פוגש אותנו בכל תחום בחיים.<br>
+          איך אנחנו מרגישות עם הגוף שלנו, איך אנחנו נראות בעיני עצמנו ואיך זה משפיע על הביטחון, על המצב רוח ועל היום כולו. רוב הזמן אנחנו פשוט ממשיכות, בלי לעצור רגע לשים לב.
+        </div>
+        <div class="intro-card card-3">
+          כתבנו את זה כדי לעצור רגע.<br>
+          להקשיב למה שקורה בפנים ולבדוק בשקט עם עצמך איפה זה פוגש אותך. כי כל שינוי גדול מתחיל ממשהו אישי. מכאן אפשר להתחיל לאט בדרך שלך ובבחירה שנכונה לך.
+        </div>
+      </div>
+
+      <div class="cta-card">
+        <div class="cta-how">איך מתחילים?</div>
+        <div class="cta-icon">📋</div>
+        <div class="cta-title">שאלון פתיחה</div>
+        <p class="cta-desc">
+          היכנסי לשאלון הפתיחה,<br>
+          עני על השאלות בקפידה<br>
+          ותגלי את נקודת ההתחלה.
+        </p>
+        <button class="cta-btn" onclick="showQuiz()">בואי נתחיל</button>
+        <div class="cta-note">זו המלצה שלנו בלבד. בסוף, הבחירה היא שלך 💜</div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ── QUIZ ──────────────────────────────────────────── -->
+  <div id="quizWrapper">
   <div class="container">
     <div class="progress-bar">
       <div class="progress-fill"></div>
     </div>
 
-    <div class="start-screen" id="startScreen">
+    <div class="start-screen" id="startScreen" style="display:none;">
       <h1>שאלון פתיחה</h1>
       <p>
         השאלון הזה יעזור לך לגלות אילו תחומים מדברים אלייך עכשיו.
@@ -410,12 +617,20 @@
         זו רק המלצה. הבחירה הסופית תמיד שלך.
       </div>
       <div class="btn-row">
-        <a class="btn" href="../index.html#domains">לעמוד התחומים</a>
+        <a class="btn" href="/domains/alldomains.html">לעמוד התחומים</a>
       </div>
     </div>
   </div>
+  </div><!-- /quizWrapper -->
 
   <script>
+    function showQuiz() {
+      document.getElementById('introSection').style.display = 'none';
+      const wrapper = document.getElementById('quizWrapper');
+      wrapper.style.display = 'flex';
+      startQuiz();
+    }
+
     const domains = [
       { id: 1, name: 'תחושת גוף', icon: '🧘‍♀️', color: '#8b5cf6' },
       { id: 2, name: 'חיים דיגיטליים', icon: '📱', color: '#0ea5e9' },

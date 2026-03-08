@@ -39,6 +39,7 @@
   .home-btn,
   .fixed,
   footer:not(.print-footer),
+  [data-modal-page='true'],
   [data-modal-page='true'] [style*='position: sticky'],
   [role='alert'],
   .alert,

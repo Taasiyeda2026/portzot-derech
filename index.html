@@ -3,11 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#ec4899" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="פורצות דרך" />
+  <link rel="apple-touch-icon" href="icon/favicon.png" />
   <title>פורצות דרך</title>
   <style>
     @font-face {
       font-family: 'Choco';
-      src: url('main/fonts/Choco.otf') format('opentype');
+      src: url('fonts/Choco.otf') format('opentype');
       font-weight: 400;
       font-style: normal;
     }
@@ -387,7 +393,7 @@
     <main class="shell">
       <section class="card">
         <div class="content">
-          <img class="hero-img" src="main/icon/logo.png" alt="פורצות דרך" />
+          <img class="hero-img" src="icon/logo.png" alt="פורצות דרך" />
 
           <h1>פורצות דרך</h1>
 
@@ -487,6 +493,14 @@
         closeModal();
       }
     });
+
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", function() {
+        navigator.serviceWorker.register("./service-worker.js").catch(function(error) {
+          console.error("Service worker registration failed:", error);
+        });
+      });
+    }
   </script>
 </body>
 </html>
