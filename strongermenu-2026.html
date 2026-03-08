@@ -53,8 +53,6 @@
       --text:#616274;
       --shadow-main:0 22px 54px rgba(0,0,0,0.20);
       --radius:28px;
-
-      /* יישור הפתיחה לתחילת המילה "פורצות דרך" */
       --title-start-offset:58px;
     }
 
@@ -102,7 +100,7 @@
       border:1px solid rgba(255,255,255,0.20);
       background:
         linear-gradient(180deg, rgba(255,255,255,0.20) 0%, rgba(255,255,255,0.05) 12%, rgba(255,255,255,0) 22%),
-        linear-gradient(to bottom, var(--page-top) 0 188px, var(--page-main) 188px 100%);
+        linear-gradient(to bottom, var(--page-top) 0 220px, var(--page-main) 220px 100%);
       box-shadow:
         var(--shadow-main),
         inset 0 1px 0 rgba(255,255,255,0.5);
@@ -180,8 +178,8 @@
       min-height:0;
       display:grid;
       grid-template-rows:auto 1fr auto auto;
-      gap:12px;
-      padding:14px 18px 12px;
+      gap:14px;
+      padding:16px 18px 12px;
     }
 
     .intro-wrap{
@@ -193,7 +191,7 @@
     }
 
     .intro{
-      width:min(790px, 100%);
+      width:min(860px, 100%);
       margin-right:0;
       margin-left:auto;
       padding-right:var(--title-start-offset);
@@ -203,8 +201,8 @@
     .intro p{
       margin:0;
       color:#7e3255;
-      font-size:22px;
-      line-height:1.65;
+      font-size:24px;
+      line-height:1.75;
       font-weight:400;
       text-align:right;
     }
@@ -213,8 +211,8 @@
       min-height:0;
       display:grid;
       grid-template-columns:repeat(3, 1fr);
-      gap:12px 14px;
-      max-width:900px;
+      gap:18px;
+      max-width:760px;
       width:100%;
       margin:0 auto;
       align-content:center;
@@ -226,9 +224,11 @@
       display:flex;
       flex-direction:column;
       align-items:center;
-      justify-content:flex-start;
+      justify-content:space-between;
       width:100%;
-      max-width:235px810px;
+      max-width:210px;
+      aspect-ratio:1 / 1;
+      padding:14px 12px 12px;
       text-align:center;
       text-decoration:none;
       color:inherit;
@@ -262,8 +262,8 @@
     }
 
     .menu-item h4{
-      margin:0 0 2px;
-      min-height:46px;
+      margin:0;
+      min-height:48px;
       display:flex;
       align-items:flex-end;
       justify-content:center;
@@ -271,39 +271,39 @@
       z-index:1;
       color:var(--pink);
       font-family:"Choco", Arial, sans-serif;
-      font-size:25px;
+      font-size:24px;
       line-height:1.1;
       font-weight:700;
     }
 
     .menu-item p{
-      margin:0 0 4px;
-      min-height:32px;
+      margin:0;
+      min-height:34px;
       position:relative;
       z-index:1;
       color:#75788b;
       font-size:14px;
       line-height:1.35;
       font-weight:400;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
     }
 
-    /* מסגרת אייקון נקייה ועדינה */
     .icon-box{
-      width:114px;
-      height:114px;
+      width:84px;
+      height:84px;
       margin:0 auto;
-      padding:10px;
       display:flex;
       align-items:center;
       justify-content:center;
       position:relative;
       z-index:1;
-      overflow:hidden;
-      border-radius:20px;
-      border:1px solid rgba(217,76,149,0.22);
-      background:rgba(255,255,255,0.92);
+      overflow:visible;
+      border:none;
+      background:transparent;
       box-shadow:none;
-      transition:transform .18s ease, border-color .18s ease, background .18s ease;
+      padding:0;
     }
 
     .icon-box::before{
@@ -317,13 +317,14 @@
       position:relative;
       z-index:1;
       filter:none;
+      background:transparent;
     }
 
     .menu-item:hover .icon-box{
       transform:translateY(-1px);
-      border-color:rgba(217,76,149,0.34);
-      background:rgba(255,255,255,0.98);
+      background:transparent;
       box-shadow:none;
+      border:none;
     }
 
     .closing-wrap{
@@ -331,7 +332,7 @@
       justify-content:center;
       width:100%;
       flex:0 0 auto;
-      margin-top:4px;
+      margin-top:6px;
     }
 
     .closing{
@@ -346,8 +347,8 @@
       margin:0;
       color:#0d7b87;
       font-family:"FtPilKahol2", "Alef", Arial, sans-serif;
-      font-size:20px;
-      line-height:1.65;
+      font-size:23px;
+      line-height:1.7;
       font-weight:400;
       text-align:right;
     }
@@ -358,12 +359,18 @@
       font-size:13px;
       line-height:1.2;
       color:var(--pink-dark);
-      padding-top:2px;
+      padding-top:4px;
     }
 
     @media (max-width:980px){
       :root{
-        --title-start-offset:58px;
+        --title-start-offset:50px;
+      }
+
+      .frame{
+        background:
+          linear-gradient(180deg, rgba(255,255,255,0.20) 0%, rgba(255,255,255,0.05) 12%, rgba(255,255,255,0) 22%),
+          linear-gradient(to bottom, var(--page-top) 0 230px, var(--page-main) 230px 100%);
       }
 
       .intro{
@@ -371,24 +378,27 @@
       }
 
       .intro p{
-        font-size:18px;
-        line-height:1.7;
+        font-size:20px;
+        line-height:1.75;
       }
 
       .menu-grid{
         grid-template-columns:repeat(2, 1fr);
-        gap:12px 14px;
-        max-width:720px;
+        gap:14px;
+        max-width:500px;
+      }
+
+      .menu-item{
+        max-width:220px;
       }
 
       .menu-item h4{
-        font-size:23px;
-        min-height:42px;
+        font-size:22px;
       }
 
       .icon-box{
-        width:106px;
-        height:106px;
+        width:80px;
+        height:80px;
       }
 
       .closing{
@@ -397,13 +407,13 @@
       }
 
       .closing p{
-        font-size:17px;
+        font-size:20px;
       }
     }
 
     @media (max-width:640px){
       :root{
-        --title-start-offset:48px;
+        --title-start-offset:0px;
       }
 
       .page{
@@ -413,6 +423,9 @@
       .frame{
         height:96svh;
         border-radius:20px;
+        background:
+          linear-gradient(180deg, rgba(255,255,255,0.20) 0%, rgba(255,255,255,0.05) 12%, rgba(255,255,255,0) 22%),
+          linear-gradient(to bottom, var(--page-top) 0 250px, var(--page-main) 250px 100%);
       }
 
       .topbar{
@@ -442,20 +455,25 @@
         gap:10px;
       }
 
+      .intro{
+        padding-right:0;
+      }
+
       .intro p{
-        font-size:15px;
-        line-height:1.65;
+        font-size:16px;
+        line-height:1.7;
       }
 
       .menu-grid{
         grid-template-columns:repeat(2, 1fr);
-        gap:10px 8px;
+        gap:10px;
         max-width:100%;
       }
 
       .menu-item{
         max-width:none;
-        padding:8px 6px 8px;
+        padding:10px 8px;
+        border-radius:18px;
       }
 
       .menu-item h4{
@@ -469,10 +487,8 @@
       }
 
       .icon-box{
-        width:88px;
-        height:88px;
-        border-radius:16px;
-        padding:8px;
+        width:66px;
+        height:66px;
       }
 
       .closing{
@@ -481,8 +497,8 @@
       }
 
       .closing p{
-        font-size:15px;
-        line-height:1.55;
+        font-size:18px;
+        line-height:1.6;
       }
 
       .footer{
@@ -506,20 +522,22 @@
       }
 
       .intro p{
-        font-size:16px;
-        line-height:1.55;
+        font-size:18px;
+        line-height:1.6;
       }
 
       .menu-grid{
-        gap:12px 14px;
+        gap:12px;
+        max-width:720px;
       }
 
       .menu-item{
-        padding:8px 6px 8px;
+        max-width:190px;
+        padding:10px 10px;
       }
 
       .menu-item h4{
-        font-size:22px;
+        font-size:21px;
         min-height:38px;
       }
 
@@ -529,9 +547,8 @@
       }
 
       .icon-box{
-        width:96px;
-        height:96px;
-        padding:12px;
+        width:72px;
+        height:72px;
       }
 
       .closing{
@@ -540,8 +557,8 @@
       }
 
       .closing p{
-        font-size:18px;
-        line-height:1.5;
+        font-size:20px;
+        line-height:1.55;
       }
 
       .footer{
