@@ -16,8 +16,15 @@
     }
 
     @media print {
+      html, body {
+        height: auto !important;
+        overflow: visible !important;
+      }
       body { background: white !important; }
-      #landing-page { display: none !important; }
+      #app {
+        height: auto !important;
+        overflow: visible !important;
+      }
       .gradient-bg { background: white !important; }
       .sparkle { display: none !important; }
     }

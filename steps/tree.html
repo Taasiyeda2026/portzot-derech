@@ -271,7 +271,7 @@
       body { background: white; padding: 0; margin: 0; font-family: 'Heebo', Arial, sans-serif; }
       #formArea { display: none !important; }
       #printArea {
-          display: block;
+          display: block !important;
           position: static !important;
           overflow: visible !important;
           height: auto !important;
@@ -286,21 +286,33 @@
           page-break-inside: auto;
       }
 
-      #printArea > div[style*="page-break-after"] {
-        margin: 0;
-        padding: 2rem;
-      }
-
-      div[style*="page-break-after"] {
-        page-break-after: always !important;
-        page-break-inside: auto !important;
+      #printArea .print-sheet {
+        margin: 0 !important;
+        padding: 0 !important;
         min-height: auto !important;
         height: auto !important;
         overflow: visible !important;
-        background: white !important;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-        display: block !important;
+      }
+
+      #printArea [style*="page-break-after"] {
+        page-break-after: auto !important;
+        break-after: auto !important;
+        page-break-before: auto !important;
+        break-before: auto !important;
+      }
+
+      #printArea .print-task-box > div:last-child,
+      #printArea .print-footer:last-child {
+        margin-bottom: 0 !important;
+        padding-bottom: 0 !important;
+        page-break-after: auto !important;
+        break-after: auto !important;
+        page-break-before: auto !important;
+        break-before: auto !important;
+      }
+
+      #printArea [style*="min-height"] {
+        min-height: auto !important;
       }
 
       h1, h2, h3 {
@@ -342,8 +354,8 @@
         color: #000;
       }
 
-      div[style*="min-height"] {
-        min-height: auto !important;
+      #printArea :empty {
+        display: none !important;
       }
     }
 
@@ -667,7 +679,7 @@
 
   </div>
 
-  <div id="printArea" style="display:none;"></div>
+  <div id="printArea"></div>
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -703,7 +715,7 @@
 
     function showAppendixB() {
       const appendixContent = `
-        <div style="page-break-after: always; padding: 2rem; background: white; min-height: 100vh; font-family: 'Heebo', sans-serif;">
+        <div style="padding: 2rem; background: white; font-family: 'Heebo', sans-serif;">
           <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; border-bottom: 3px solid #0ea5e9; padding-bottom: 1.5rem;">
             <img src="../icon/logo.png" style="height: 48px; width: auto;" onerror="this.style.display='none'">
             <div style="text-align: center; flex: 1; padding: 0 1rem;">
@@ -796,6 +808,28 @@
       }
 
       const printArea = document.getElementById('printArea');
+      const printTaskContent = document.createElement('div');
+      printTaskContent.innerHTML = modalContentForPrint.innerHTML;
+
+      printTaskContent.querySelectorAll('[style]').forEach((element) => {
+        element.style.pageBreakAfter = 'auto';
+        element.style.breakAfter = 'auto';
+        element.style.pageBreakBefore = 'auto';
+        element.style.breakBefore = 'auto';
+        element.style.minHeight = 'auto';
+        element.style.height = 'auto';
+        element.style.overflow = 'visible';
+      });
+
+      const allContentBlocks = printTaskContent.querySelectorAll('div');
+      const lastContentBlock = allContentBlocks[allContentBlocks.length - 1];
+      if (lastContentBlock) {
+        lastContentBlock.style.pageBreakAfter = 'auto';
+        lastContentBlock.style.breakAfter = 'auto';
+        lastContentBlock.style.marginBottom = '0';
+        lastContentBlock.style.paddingBottom = '0';
+      }
+
       printArea.innerHTML = `
         <div class="print-sheet">
           <div class="print-header avoid-break">
@@ -817,7 +851,7 @@
             <h2 class="print-h2">דף עבודה למיפוי מבנה המוצר</h2>
           </div>
           <div class="print-info-box">מפרקות את הרעיון לחלקים ברורים, מזהות רכיבים קריטיים ומוסיפות משימות לשיפור.</div>
-          <div class="print-task-box">${modalContentForPrint.innerHTML}</div>
+          <div class="print-task-box">${printTaskContent.innerHTML}</div>
           <div class="print-footer">© 2026 פורצות דרך</div>
         </div>
       `;
