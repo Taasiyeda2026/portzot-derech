@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&family=Frank+Ruhl+Libre:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="print.css" media="print">
   <style>
     :root {
       --color-bg: #fafaf9;
@@ -291,7 +292,7 @@
       }
 
       div[style*="page-break-after"] {
-        page-break-after: always !important;
+        page-break-after: auto !important;
         page-break-inside: auto !important;
         min-height: auto !important;
         height: auto !important;
@@ -300,6 +301,11 @@
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
         display: block !important;
+      }
+
+      #printArea > div[style*="page-break-after"]:last-child {
+        page-break-after: auto !important;
+        break-after: auto !important;
       }
 
       h1, h2, h3 {
@@ -796,14 +802,29 @@
 
       const printArea = document.getElementById('printArea');
       printArea.innerHTML = `
-        <div class="p-header">
-          <div>
-            <div style="font-size:22px;font-weight:700;color:white;">${document.getElementById('article-title')?.textContent || 'פורצות דרך'}</div>
-            <div style="font-size:13px;color:rgba(255,255,255,0.85);text-decoration:underline;">${document.querySelector('[data-modal-title]')?.textContent || 'להדפסה'}</div>
+        <div class="print-sheet">
+          <div class="print-header avoid-break">
+            <div class="print-header-top">
+              <div>
+                <p class="print-brand">פורצות דרך</p>
+                <p class="print-activity">${document.querySelector('[data-modal-title]')?.textContent || 'עץ מוצר'}</p>
+              </div>
+              <img src="/favicon.png" class="print-logo" alt="פורצות דרך">
+            </div>
+            <div class="print-meta">
+              <div><strong>משתתפות:</strong> ____________________</div>
+              <div><strong>קבוצה:</strong> ____________________</div>
+              <div><strong>תאריך:</strong> ____________________</div>
+            </div>
           </div>
-          <img src="logo.png" style="height:50px;width:auto;" onerror="this.style.display='none'">
+          <div class="print-title-block avoid-break">
+            <h1 class="print-h1">${document.getElementById('article-title')?.textContent || 'עץ מוצר'}</h1>
+            <h2 class="print-h2">דף עבודה למיפוי מבנה המוצר</h2>
+          </div>
+          <div class="print-info-box">מפרקות את הרעיון לחלקים ברורים, מזהות רכיבים קריטיים ומוסיפות משימות לשיפור.</div>
+          <div class="print-task-box">${modalContentForPrint.innerHTML}</div>
+          <div class="print-footer">© 2026 פורצות דרך</div>
         </div>
-        <div class="p-q">${modalContentForPrint.innerHTML}</div>
       `;
 
       window.print();

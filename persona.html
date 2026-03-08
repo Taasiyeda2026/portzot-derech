@@ -5,6 +5,7 @@
 <title>פורצות דרך – בניית פרסונה</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600;700&family=Assistant:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="print.css" media="print">
 
 <style>
 body {
@@ -238,46 +239,66 @@ async function generatePDF() {
     pdfDiv.style.top = '0';
 
     pdfDiv.innerHTML = `
-        <div style="display: flex; gap: 30px;">
-            <div style="flex: 2;">
-                <h2 style="color: #e91e63; font-size: 24px; margin-bottom: 20px; border-bottom: 3px solid #00a7b5; padding-bottom: 10px;">הגדרת הפרסונה של: ${team}</h2>
-                
-                <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin: 15px 0; border-right: 4px solid #e91e63;">
-                    <p style="margin: 8px 0; line-height: 1.6; font-size: 14px;"><strong style="color: #00a7b5;">שם:</strong> ${name} | <strong style="color: #00a7b5;">גיל:</strong> ${age}</p>
-                </div>
-                
-                <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin: 15px 0; border-right: 4px solid #e91e63;">
-                    <p style="margin: 8px 0; line-height: 1.6; font-size: 13px;"><strong style="color: #00a7b5;">שגרת חיים:</strong> ${routine}</p>
-                    <p style="margin: 8px 0; line-height: 1.6; font-size: 13px;">${routineText}</p>
-                </div>
-                
-                <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin: 15px 0; border-right: 4px solid #e91e63;">
-                    <p style="margin: 8px 0; line-height: 1.6; font-size: 13px;"><strong style="color: #00a7b5;">מיקומים עיקריים:</strong> ${location}</p>
-                </div>
-                
-                <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin: 15px 0; border-right: 4px solid #e91e63;">
-                    <p style="margin: 8px 0; line-height: 1.6; font-size: 13px;"><strong style="color: #00a7b5;">מתי הבעיה מופיעה:</strong> ${moment}</p>
-                    <p style="margin: 8px 0; line-height: 1.6; font-size: 13px;"><strong style="color: #00a7b5;">מה קורה בפועל:</strong> ${action}</p>
-                </div>
-                
-                <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin: 15px 0; border-right: 4px solid #e91e63;">
-                    <p style="margin: 8px 0; line-height: 1.6; font-size: 13px;"><strong style="color: #00a7b5;">הרגשה:</strong> ${emotion}</p>
-                    <p style="margin: 8px 0; line-height: 1.6; font-size: 13px;"><strong style="color: #00a7b5;">תחומי השפעה:</strong> ${impactType}</p>
-                    <p style="margin: 8px 0; line-height: 1.6; font-size: 13px;">${impactText}</p>
-                </div>
-                
-                <div style="background: #fff0f5; padding: 15px; border-radius: 8px; font-style: italic; text-align: center; margin: 20px 0; font-size: 15px;">
-                    "${quote}"
-                </div>
-                
-                <div style="background: #e91e63; color: white; padding: 20px; border-radius: 10px; margin: 20px 0; font-size: 14px; font-weight: 600; text-align: center; line-height: 1.8;">
-                    ${problemSentence}
-                </div>
+      <div style="direction:rtl;color:#1f2937;font-family:'Assistant',Arial,sans-serif;font-size:14px;line-height:1.55;">
+        <div style="background:linear-gradient(135deg,#fbcfe8,#f5d0fe 45%,#bae6fd);border:1px solid #d8b4fe;border-radius:10px;padding:12px 14px;margin-bottom:12px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px;">
+            <div>
+              <div style="color:#1e3a8a;font-size:24px;font-weight:800;">פורצות דרך</div>
+              <div style="color:#c026d3;font-size:14px;font-weight:700;">פרסונה — דף עבודה</div>
             </div>
-            <div id="imageContainer" style="flex: 1; display: flex; align-items: flex-end; justify-content: center;">
-                ${imgData ? `<img src="${imgData}" style="max-width: 100%; height: auto; max-height: 400px;">` : ''}
-            </div>
+            <img src="/favicon.png" style="width:42px;height:42px;border-radius:50%;border:2px solid white;background:white;" alt="פורצות דרך" />
+          </div>
+          <div style="background:rgba(255,255,255,.8);border:1px solid #f9a8d4;border-radius:8px;padding:8px 10px;color:#334155;font-size:12px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+            <div><strong>משתתפות:</strong> ${team}</div>
+            <div><strong>קבוצה:</strong> ____________________</div>
+            <div><strong>תאריך:</strong> ____________________</div>
+          </div>
         </div>
+
+        <div style="border:1px solid #fbcfe8;border-right:5px solid #ec4899;border-radius:10px;padding:12px 14px;margin-bottom:12px;">
+          <h1 style="margin:0 0 6px;color:#1e3a8a;font-size:24px;line-height:1.25;font-weight:800;">הגדרת פרסונה</h1>
+          <h2 style="margin:0;color:#c026d3;font-size:18px;font-weight:700;">${name} | גיל: ${age}</h2>
+        </div>
+
+        <div style="background:#e0f2fe;border:1px solid #cbd5e1;border-right:4px solid #38bdf8;border-radius:10px;padding:12px;margin-bottom:10px;">
+          <strong style="color:#1e3a8a;">הסבר:</strong> מחדדות מי המשתמשת שלנו, מה הקושי שלה, ומה המשפט היזמי המדויק שמכוון לפתרון.
+        </div>
+
+        <div style="background:#fdf4ff;border:1px solid #cbd5e1;border-right:4px solid #c026d3;border-radius:10px;padding:12px;margin-bottom:10px;">
+          <div style="color:#ec4899;font-weight:700;margin-bottom:6px;">שאלה / משימה: שגרה ואתגר</div>
+          <p style="margin:0 0 6px;"><strong>שגרת חיים:</strong> ${routine}</p>
+          <p style="margin:0;">${routineText}</p>
+        </div>
+
+        <div style="background:#fdf4ff;border:1px solid #cbd5e1;border-right:4px solid #c026d3;border-radius:10px;padding:12px;margin-bottom:10px;">
+          <div style="color:#ec4899;font-weight:700;margin-bottom:6px;">שאלה / משימה: הקשר הבעיה</div>
+          <p style="margin:0 0 6px;"><strong>מיקומים:</strong> ${location}</p>
+          <p style="margin:0 0 6px;"><strong>מתי:</strong> ${moment}</p>
+          <p style="margin:0;"><strong>מה קורה בפועל:</strong> ${action}</p>
+        </div>
+
+        <div style="background:#f8fafc;border:1.5px solid #94a3b8;border-radius:10px;padding:12px;min-height:52px;margin-bottom:10px;">
+          <div style="color:#ec4899;font-weight:700;margin-bottom:6px;">תיבת תשובה קצרה</div>
+          <p style="margin:0;"><strong>רגש:</strong> ${emotion} | <strong>השפעה:</strong> ${impactType}</p>
+        </div>
+
+        <div style="background:#f8fafc;border:1.5px solid #94a3b8;border-radius:10px;padding:12px;min-height:120px;margin-bottom:10px;">
+          <div style="color:#ec4899;font-weight:700;margin-bottom:6px;">תיבת תשובה ארוכה</div>
+          <p style="margin:0 0 6px;">${impactText}</p>
+          <p style="margin:0;font-style:italic;">"${quote}"</p>
+        </div>
+
+        <div style="background:#ffedd5;border:1px solid #fdba74;border-right:4px solid #fb923c;border-radius:10px;padding:10px 12px;margin-bottom:10px;">
+          <strong style="color:#1e3a8a;">מסר חשוב:</strong> ${problemSentence}
+        </div>
+
+        <div style="display:flex;gap:20px;align-items:flex-end;">
+          <div style="flex:1;"></div>
+          <div style="width:210px;text-align:center;">${imgData ? `<img src="${imgData}" style="max-width:100%;height:auto;max-height:260px;">` : ''}</div>
+        </div>
+
+        <div style="text-align:center;color:#64748b;font-size:11px;margin-top:12px;padding-top:8px;border-top:1px solid #e2e8f0;">© 2026 פורצות דרך</div>
+      </div>
     `;
 
     document.body.appendChild(pdfDiv);

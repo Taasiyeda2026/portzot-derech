@@ -5,6 +5,7 @@
 <title>GO / NO GO – בדיקת מציאות לרעיון</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600;700&family=Assistant:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="print.css" media="print">
 
 <style>
 /* === Back button === */
@@ -381,7 +382,7 @@ button {
 </head>
 
 <body>
-<a class="back-btn" href="entrepreneurship-steps.html" title="חזרה">&#8592;</a>
+<a class="back-btn no-print" href="entrepreneurship-steps.html" title="חזרה">&#8592;</a>
 <div id="formArea">
 
 <h1><span class="go-color">GO</span> / <span class="nogo-color">NO GO</span></h1>
@@ -521,7 +522,7 @@ button {
 
 </div>
 
-<button onclick="generatePDF()">הורדת PDF</button>
+<button class="no-print" onclick="generatePDF()">הורדת PDF</button>
 
 </div>
 
@@ -559,53 +560,50 @@ window.generatePDF = function(){
 
     const printArea = document.getElementById('printArea');
     printArea.innerHTML = `
-        <div class="p-header">
+      <div class="print-sheet">
+        <div class="print-header avoid-break">
+          <div class="print-header-top">
             <div>
-                <div style="font-size:22px;font-weight:700;color:white;">GO / NO GO</div>
-                <div style="font-size:13px;color:rgba(255,255,255,0.85);text-decoration:underline;">בדיקת מציאות לרעיון שלנו</div>
+              <p class="print-brand">פורצות דרך</p>
+              <p class="print-activity">GO / NO GO — בדיקת מציאות לרעיון שלנו</p>
             </div>
-            <img src="logo.png" style="height:50px;width:auto;" onerror="this.style.display='none'">
+            <img src="/favicon.png" class="print-logo" alt="פורצות דרך" />
+          </div>
+          <div class="print-meta">
+            <div><strong>משתתפות:</strong> ____________________</div>
+            <div><strong>קבוצה:</strong> ${val('groupName')}</div>
+            <div><strong>תאריך:</strong> ____________________</div>
+          </div>
         </div>
 
-        <div class="p-section-a">
-            <div class="p-q"><strong>1. שם הקבוצה / שם הרעיון:</strong> ${val('groupName')}</div>
-            <div class="p-q"><strong>2. הבעיה:</strong><br>${val('problem')}</div>
-            <div class="p-q"><strong>3. עוצמת הבעיה:</strong> ${radio('strength')}</div>
-            <div class="p-q"><strong>4. הפתרון:</strong><br>${val('solution')}</div>
-            <div class="p-q"><strong>5. האם זה:</strong> ${radio('mustHave')}</div>
-            <div class="p-q">
-                <strong>6. מה כבר קיים?</strong><br>
-                האם יש פתרון דומה: ${radio('existing')}<br>
-                במה שלנו שונה: ${val('different')}
-            </div>
-            <div class="p-q">
-                <strong>7. בהירות והצגה:</strong><br>
-                הסבר במשפט אחד: ${radio('clarity1')}<br>
-                הצגה בפוסטר ובפיץ': ${radio('clarity2')}
-            </div>
+        <div class="print-title-block avoid-break">
+          <h1 class="print-h1">דף החלטה: GO / NO GO</h1>
+          <h2 class="print-h2">האם הרעיון שלנו מוכן להתקדם לפיתוח?</h2>
         </div>
 
-        <div class="${isGo ? 'p-decision-go' : 'p-decision-nogo'}">8. החלטה: ${decisionValue}</div>
+        <div class="print-info-box"><strong>הסבר:</strong> הדף עוזר לנו לבדוק צורך, בהירות, ערך ותוכנית פעולה לפני פיץ'.</div>
+
+        <div class="print-task-box"><span class="print-label">הגדרת הבעיה</span> ${val('problem')}</div>
+        <div class="print-task-box"><span class="print-label">הפתרון</span> ${val('solution')}</div>
+        <div class="print-task-box"><span class="print-label">עוצמת הבעיה</span> ${radio('strength')}</div>
+        <div class="print-task-box"><span class="print-label">פתרונות קיימים ומה שונה אצלנו</span> ${radio('existing')} | ${val('different')}</div>
+        <div class="print-task-box"><span class="print-label">בדיקת בהירות</span> ${radio('clarity1')} | ${radio('clarity2')}</div>
+
+        <div class="print-note avoid-break"><strong>החלטה:</strong> ${decisionValue}</div>
 
         ${isGo ? `
-        <div class="p-section-b-title">GO</div>
-        <div class="p-section-b-subtitle">מהרגע שסימנתן GO – זה כבר לא רעיון. זה מוצר בפיתוח.</div>
-        <div class="p-q-go"><strong>1. שם המוצר:</strong> ${val('productName')}</div>
-        <div class="p-q-go"><strong>2. קהל יעד:</strong><br>${val('audience')}</div>
-        <div class="p-q-go"><strong>3. הערך שנוצר:</strong><br>${val('value')}</div>
-        <div class="p-q-go">
-            <strong>4. כך זה עובד:</strong><br>
-            1. ${val('step1')}<br>
-            2. ${val('step2')}<br>
-            3. ${val('step3')}
-        </div>
-        <div class="p-clarity-title">בדיקת בהירות לפני פיץ'</div>
-        <div class="p-q-go">אם מישהי שלא מכירה את הרעיון תשמע אותו – היא תבין מיד מה זה? ${radio('finalClarity')}</div>
-        <div class="p-pitch">
-            <span style="text-decoration:underline;font-size:12px;">מוכן לפיץ' – משפט מוצר סופי:</span><br>
-            אנחנו מפתחות <strong>${val('pitch1')}</strong> עבור <strong>${val('pitch2')}</strong> כדי <strong>${val('pitch3')}</strong>.
-        </div>
-        ` : ''}
+          <div class="print-task-box"><span class="print-label">שם המוצר</span> ${val('productName')}</div>
+          <div class="print-task-box"><span class="print-label">קהל יעד</span> ${val('audience')}</div>
+          <div class="print-task-box"><span class="print-label">הערך שנוצר</span> ${val('value')}</div>
+          <div class="print-task-box"><span class="print-label">כך זה עובד</span> 1) ${val('step1')}<br>2) ${val('step2')}<br>3) ${val('step3')}</div>
+          <div class="print-answer-box print-answer-short"><span class="print-label">בדיקת בהירות סופית</span>${radio('finalClarity')}</div>
+          <div class="print-answer-box print-answer-long"><span class="print-label">משפט מוצר סופי</span>אנחנו מפתחות <strong>${val('pitch1')}</strong> עבור <strong>${val('pitch2')}</strong> כדי <strong>${val('pitch3')}</strong>.</div>
+        ` : `
+          <div class="print-answer-box print-answer-long"><span class="print-label">מה מדייקים לפני המשך?</span>__________________________________________</div>
+        `}
+
+        <div class="print-footer">© 2026 פורצות דרך</div>
+      </div>
     `;
 
     window.print();

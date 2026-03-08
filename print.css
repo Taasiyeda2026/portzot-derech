@@ -1,0 +1,246 @@
+:root {
+  --pd-navy: #1e3a8a;
+  --pd-fuchsia: #c026d3;
+  --pd-pink: #ec4899;
+  --pd-sky: #e0f2fe;
+  --pd-peach: #ffedd5;
+  --pd-text: #1f2937;
+  --pd-border: #cbd5e1;
+}
+
+.print-only { display: none !important; }
+
+@media print {
+  @page {
+    size: A4;
+    margin: 14mm;
+  }
+
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    box-shadow: none !important;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    color: var(--pd-text) !important;
+    font-family: 'Heebo', 'Rubik', 'Assistant', Arial, sans-serif !important;
+    line-height: 1.55;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .no-print,
+  nav,
+  button,
+  .back-btn,
+  .home-btn,
+  .fixed,
+  footer:not(.print-footer),
+  [data-modal-page='true'] [style*='position: sticky'],
+  [role='alert'],
+  .alert,
+  .sparkle,
+  .gradient-blob,
+  .progress-indicator {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  .print-sheet {
+    direction: rtl;
+    text-align: right;
+    color: var(--pd-text);
+    font-size: 13px;
+  }
+
+  .print-header {
+    background: linear-gradient(135deg, #fbcfe8, #f5d0fe 45%, #bae6fd);
+    border: 1px solid #d8b4fe;
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+  }
+
+  .print-header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+  .print-brand {
+    color: var(--pd-navy);
+    font-weight: 800;
+    font-size: 20px;
+    margin: 0;
+  }
+
+  .print-activity {
+    color: var(--pd-fuchsia);
+    font-weight: 700;
+    font-size: 14px;
+    margin: 2px 0 0;
+  }
+
+  .print-logo {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    background: #fff;
+  }
+
+  .print-meta {
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid #f9a8d4;
+    border-radius: 8px;
+    padding: 8px 10px;
+    color: #334155;
+    font-size: 12px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+  }
+
+  .print-title-block {
+    border-right: 5px solid var(--pd-pink);
+    background: #fff;
+    border: 1px solid #fbcfe8;
+    border-right-width: 5px;
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+  }
+
+  h1,
+  .print-h1 {
+    margin: 0 0 6px;
+    font-size: 24px;
+    line-height: 1.25;
+    color: var(--pd-navy) !important;
+    font-weight: 800;
+    page-break-after: avoid;
+  }
+
+  h2,
+  .print-h2 {
+    margin: 10px 0 6px;
+    font-size: 18px;
+    line-height: 1.35;
+    color: var(--pd-fuchsia) !important;
+    font-weight: 700;
+    page-break-after: avoid;
+  }
+
+  p,
+  li,
+  label,
+  span,
+  div {
+    color: inherit;
+  }
+
+  .print-info-box,
+  .print-task-box,
+  .print-answer-box {
+    border-radius: 10px;
+    border: 1px solid var(--pd-border);
+    padding: 12px;
+    margin-bottom: 10px;
+    page-break-inside: auto;
+    break-inside: auto;
+  }
+
+  .print-info-box {
+    background: var(--pd-sky) !important;
+    border-right: 4px solid #38bdf8;
+  }
+
+  .print-task-box {
+    background: #fdf4ff !important;
+    border-right: 4px solid var(--pd-fuchsia);
+  }
+
+  .print-answer-box {
+    background: #f8fafc !important;
+    border: 1.5px solid #94a3b8;
+  }
+
+  .print-answer-short {
+    min-height: 44px;
+  }
+
+  .print-answer-long {
+    min-height: 110px;
+  }
+
+  .print-label {
+    color: var(--pd-pink);
+    font-weight: 700;
+    margin-bottom: 4px;
+    display: block;
+  }
+
+  .print-note {
+    background: var(--pd-peach) !important;
+    border-right: 4px solid #fb923c;
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 10px;
+  }
+
+  input,
+  textarea,
+  select,
+  .print-field {
+    width: 100%;
+    border: 1.5px solid #94a3b8 !important;
+    background: #f8fafc !important;
+    border-radius: 8px;
+    min-height: 42px;
+    padding: 8px 10px !important;
+    box-sizing: border-box;
+  }
+
+  textarea {
+    min-height: 110px;
+  }
+
+  .print-break-before {
+    break-before: page;
+    page-break-before: always;
+  }
+
+  .print-break-after {
+    break-after: page;
+    page-break-after: always;
+  }
+
+  .avoid-break {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .print-footer {
+    display: block !important;
+    text-align: center;
+    color: #64748b;
+    font-size: 11px;
+    margin-top: 12px;
+    padding-top: 8px;
+    border-top: 1px solid #e2e8f0;
+  }
+
+  a,
+  a:visited {
+    color: inherit !important;
+    text-decoration: none !important;
+  }
+}
