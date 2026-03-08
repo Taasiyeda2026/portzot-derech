@@ -355,12 +355,12 @@
 
     /* ── process-arrows row ───────────────────────────────── */
     .proc-row{
-      display:grid;
-      grid-template-columns:1fr 4px 1fr 4px 1fr 4px 1fr 4px 1fr 4px 1fr;
-      padding:0 4px;
+      display:flex;
+      justify-content:space-between;
+      padding:0 calc(100% / 14);
       width:100%;
       max-width:100%;
-      margin:-4px auto 0;
+      margin:2px auto 0;
       pointer-events:none;
       user-select:none;
     }
@@ -369,7 +369,7 @@
       display:flex;
       align-items:center;
       justify-content:center;
-      color:rgba(200,148,188,0.38);
+      color:rgba(175,105,155,0.62);
       line-height:1;
     }
 
@@ -632,17 +632,11 @@
         </section>
 
         <div class="proc-row" aria-hidden="true">
-          <span></span>
-          <span class="proc-arr"><svg viewBox="0 0 14 22" width="9" height="14" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <span></span>
-          <span class="proc-arr"><svg viewBox="0 0 14 22" width="9" height="14" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <span></span>
-          <span class="proc-arr"><svg viewBox="0 0 14 22" width="9" height="14" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <span></span>
-          <span class="proc-arr"><svg viewBox="0 0 14 22" width="9" height="14" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <span></span>
-          <span class="proc-arr"><svg viewBox="0 0 14 22" width="9" height="14" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <span></span>
+          <span class="proc-arr"><svg viewBox="0 0 14 22" width="13" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="proc-arr"><svg viewBox="0 0 14 22" width="13" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="proc-arr"><svg viewBox="0 0 14 22" width="13" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="proc-arr"><svg viewBox="0 0 14 22" width="13" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="proc-arr"><svg viewBox="0 0 14 22" width="13" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </div>
 
         <div class="closing-wrap">
