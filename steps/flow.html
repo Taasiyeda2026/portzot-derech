@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FLOW + FRICTION – דף אינטראקטיבי</title>
+  <title>FLOW + FRICTION</title>
   <style>
     :root {
       --bg: #fffafc;
@@ -484,6 +484,11 @@
       .compact-btn {
         width: 100%;
       }
+      .home-btn,
+      .print-btn {
+        width: auto;
+        align-self: flex-end;
+      }
     }
 
     @media print {
@@ -491,12 +496,15 @@
         margin: 12mm;
         size: auto;
       }
+
       html, body {
         background: white !important;
       }
+
       body {
         background: white;
       }
+
       .hero,
       .grid,
       .tip,
@@ -514,28 +522,43 @@
       #summaryResult {
         display: none !important;
       }
+
+      #frictionSection[style*="display:none"],
+      #frictionSection[style*="display: none"],
+      #frictionWorksheet[style*="display:none"],
+      #frictionWorksheet[style*="display: none"],
+      #summarySection[style*="display:none"],
+      #summarySection[style*="display: none"] {
+        display: none !important;
+      }
+
       .site-header,
       .site-footer {
         display: block !important;
         visibility: visible !important;
       }
+
       .site-header {
         padding: 0 0 10px;
       }
+
       .site-footer {
         padding: 10px 0 0;
       }
+
       .header-bar,
       .footer-bar {
         box-shadow: none !important;
         background: white !important;
         border: 1px solid #ddd;
       }
+
       .page {
         max-width: 100%;
         padding: 0;
         margin: 0;
       }
+
       .identity-card,
       .card {
         box-shadow: none !important;
@@ -544,23 +567,28 @@
         page-break-inside: avoid;
         break-inside: avoid;
       }
+
       .identity-card h2,
       .card h2 {
         font-size: 20px;
         margin-bottom: 10px;
       }
+
       .mini-step {
         background: transparent !important;
         border: 1px solid #ddd;
       }
+
       .checks {
         gap: 6px;
       }
+
       label.check {
         background: transparent !important;
         border: 1px solid #ddd;
         padding: 8px 10px;
       }
+
       textarea {
         border: 1px solid #ccc;
         min-height: 54px;
@@ -784,6 +812,7 @@
           <strong>אם זה מוצר דיגיטלי</strong> — חשבו על תהליך לא ברור, מידע שלא מוסבר מספיק, או מערכת שלא נותנת תחושת התקדמות ברורה.<br>
           <strong>אם זה מוצר פיזי</strong> — חשבו על שימוש לא ברור, שלב מסורבל, תגובה לא מובנת של המוצר או תוצאה שלא מורגשת מספיק.
         </div>
+
         <div class="mini-step print-keep" style="margin-top:18px; grid-template-columns:1fr;">
           <div>
             <strong>🔍 הבעיה</strong><br>
