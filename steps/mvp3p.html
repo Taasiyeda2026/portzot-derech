@@ -28,18 +28,10 @@
       .gradient-bg { background: white !important; }
       .sparkle { display: none !important; }
 
-      body.printing-main #summary-modal,
-      body.printing-main #prompt-generator-modal,
-      body.printing-main #prompts-display-modal {
+      #summary-modal,
+      #prompt-generator-modal,
+      #prompts-display-modal {
         display: none !important;
-      }
-
-      body.printing-main > #app > :not(.print-active) {
-        display: none !important;
-      }
-
-      body.printing-main > #app > .print-active {
-        display: block !important;
       }
     }
   </style>
@@ -981,38 +973,12 @@ ${metrics.map((m, i) => `${i + 1}. ${m}`).join('\n')}
       return document.getElementById('landing-page');
     }
 
-    let printCleanupTimer = null;
-
-    function cleanupMainPrintState() {
-      const currentPrintTarget = document.querySelector('#app > .print-active');
-      if (currentPrintTarget) {
-        currentPrintTarget.classList.remove('print-active');
-      }
-      document.body.classList.remove('printing-main');
-
-      if (printCleanupTimer) {
-        clearTimeout(printCleanupTimer);
-        printCleanupTimer = null;
-      }
-    }
-
-    window.addEventListener('afterprint', cleanupMainPrintState);
-
     function printPage() {
       const summaryModal = document.getElementById('summary-modal');
       const wasSummaryOpen = summaryModal && !summaryModal.classList.contains('hidden');
-      const activePage = getActiveMainPage();
 
       if (wasSummaryOpen) {
         closeSummaryModal();
-      }
-
-      if (activePage) {
-        activePage.classList.add('print-active');
-        document.body.classList.add('printing-main');
-
-        // Fallback for browsers where afterprint is unreliable.
-        printCleanupTimer = setTimeout(cleanupMainPrintState, 1500);
       }
 
       window.print();
