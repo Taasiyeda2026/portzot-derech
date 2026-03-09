@@ -981,6 +981,23 @@ ${metrics.map((m, i) => `${i + 1}. ${m}`).join('\n')}
       return document.getElementById('landing-page');
     }
 
+    let printCleanupTimer = null;
+
+    function cleanupMainPrintState() {
+      const currentPrintTarget = document.querySelector('#app > .print-active');
+      if (currentPrintTarget) {
+        currentPrintTarget.classList.remove('print-active');
+      }
+      document.body.classList.remove('printing-main');
+
+      if (printCleanupTimer) {
+        clearTimeout(printCleanupTimer);
+        printCleanupTimer = null;
+      }
+    }
+
+    window.addEventListener('afterprint', cleanupMainPrintState);
+
     function printPage() {
       const summaryModal = document.getElementById('summary-modal');
       const wasSummaryOpen = summaryModal && !summaryModal.classList.contains('hidden');
@@ -993,14 +1010,15 @@ ${metrics.map((m, i) => `${i + 1}. ${m}`).join('\n')}
       if (activePage) {
         activePage.classList.add('print-active');
         document.body.classList.add('printing-main');
+
+        // Fallback for browsers where afterprint is unreliable.
+        printCleanupTimer = setTimeout(cleanupMainPrintState, 1500);
       }
 
       window.print();
 
-      if (activePage) {
-        activePage.classList.remove('print-active');
-        document.body.classList.remove('printing-main');
-      }
+      // Browsers that block on print will run this only after closing dialog.
+      cleanupMainPrintState();
 
       if (wasSummaryOpen) {
         openSummaryModal();
