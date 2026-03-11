@@ -1,4 +1,4 @@
-const CACHE_NAME = 'portzot-derech-v2';
+const CACHE_NAME = 'portzot-derech-v3';
 const urlsToCache = [
   './',
   './index.html',
@@ -21,6 +21,7 @@ const urlsToCache = [
   './pairing/questionnaire.html',
   './pairing/waiting.html',
   './icon/favicon.png',
+  './icon/generated-icon.png',
   './icon/logo.png',
   './js/scroll-lock.js',
   './js/config.js',
