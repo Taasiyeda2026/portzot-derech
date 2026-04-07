@@ -5,27 +5,27 @@ export const POSTER_SIZES = {
 
 export const BACKGROUNDS = [
   { id: 'none', name: 'ללא רקע', path: null },
-  { id: 'bg-tech1', name: 'רקע 1', path: '../assets/backgrounds/bg-tech1.png' },
-  { id: 'bg-tech2', name: 'רקע 2', path: '../assets/backgrounds/bg-tech2.png' },
-  { id: 'bg-tech3', name: 'רקע 3', path: '../assets/backgrounds/bg-tech3.png' },
-  { id: 'bg-tech4', name: 'רקע 4', path: '../assets/backgrounds/bg-tech4.png' },
-  { id: 'bg-tech5', name: 'רקע 5', path: '../assets/backgrounds/bg-tech5.png' },
-  { id: 'bg-tech6', name: 'רקע 6', path: '../assets/backgrounds/bg-tech6.png' }
+  { id: 'bg-tech1', name: 'רקע 1', path: '/poster-builder/assets/backgrounds/bg-tech1.png' },
+  { id: 'bg-tech2', name: 'רקע 2', path: '/poster-builder/assets/backgrounds/bg-tech2.png' },
+  { id: 'bg-tech3', name: 'רקע 3', path: '/poster-builder/assets/backgrounds/bg-tech3.png' },
+  { id: 'bg-tech4', name: 'רקע 4', path: '/poster-builder/assets/backgrounds/bg-tech4.png' },
+  { id: 'bg-tech5', name: 'רקע 5', path: '/poster-builder/assets/backgrounds/bg-tech5.png' },
+  { id: 'bg-tech6', name: 'רקע 6', path: '/poster-builder/assets/backgrounds/bg-tech6.png' }
 ];
 
 export const ELEMENTS = Array.from({ length: 56 }, (_, index) => ({
   id: `icon${index + 1}`,
   name: `אלמנט ${index + 1}`,
-  path: `../assets/elements/icon${index + 1}.png`
+  path: `/poster-builder/assets/elements/icon${index + 1}.png`
 }));
 
 export const FONT_OPTIONS = [
-  { id: 'ibm-regular', label: 'IBM Plex Sans Hebrew', family: 'IBMPlexSansHebrew', weight: 400, file: '../assets/fonts/IBMPlexSansHebrew-Regular.ttf' },
-  { id: 'ibm-medium', label: 'IBM Plex Sans Hebrew Medium', family: 'IBMPlexSansHebrew', weight: 500, file: '../assets/fonts/IBMPlexSansHebrew-Medium.ttf' },
-  { id: 'ibm-bold', label: 'IBM Plex Sans Hebrew Bold', family: 'IBMPlexSansHebrew', weight: 700, file: '../assets/fonts/IBMPlexSansHebrew-Bold.ttf' },
-  { id: 'alef-regular', label: 'Alef', family: 'Alef', weight: 400, file: '../assets/fonts/Alef-regular.ttf' },
-  { id: 'alef-bold', label: 'Alef Bold', family: 'Alef', weight: 700, file: '../assets/fonts/Alef-bold.ttf' },
-  { id: 'gveret', label: 'GveretLevin (עיצובי)', family: 'GveretLevin', weight: 400, file: '../assets/fonts/GveretLevin-Regular.ttf' }
+  { id: 'ibm-regular', label: 'IBM Plex Sans Hebrew', family: 'IBMPlexSansHebrew', weight: 400, file: '/poster-builder/assets/fonts/IBMPlexSansHebrew-Regular.ttf' },
+  { id: 'ibm-medium', label: 'IBM Plex Sans Hebrew Medium', family: 'IBMPlexSansHebrew', weight: 500, file: '/poster-builder/assets/fonts/IBMPlexSansHebrew-Medium.ttf' },
+  { id: 'ibm-bold', label: 'IBM Plex Sans Hebrew Bold', family: 'IBMPlexSansHebrew', weight: 700, file: '/poster-builder/assets/fonts/IBMPlexSansHebrew-Bold.ttf' },
+  { id: 'alice-regular', label: 'Alice', family: 'Alice', weight: 400, file: '/poster-builder/assets/fonts/Alice-Regular.ttf' },
+  { id: 'choco-regular', label: 'Choco', family: 'Choco', weight: 400, file: '/poster-builder/assets/fonts/Choco.otf' },
+  { id: 'gveret', label: 'GveretLevin (עיצובי)', family: 'GveretLevin', weight: 400, file: '/poster-builder/assets/fonts/GveretLevin-Regular.ttf' }
 ];
 
 export const PALETTES = [

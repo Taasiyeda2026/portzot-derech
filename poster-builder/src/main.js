@@ -19,7 +19,8 @@ import {
 import { saveProject, loadProject, clearProject, hasSavedProject } from './utils/storage.js';
 import { exportPNG, exportPDF } from './utils/export.js';
 
-const { useEffect, useMemo, useRef, useState, h } = React;
+const { useEffect, useMemo, useRef, useState } = React;
+const h = React.createElement;
 
 function App() {
   const canvasRef = useRef(null);

@@ -1,4 +1,4 @@
-const { h } = React;
+const h = React.createElement;
 
 export function Header({ posterSize, onSizeChange, onNew, onSave, onReset, onExportPng, onExportPdf }) {
   return h('header', { className: 'header' },
