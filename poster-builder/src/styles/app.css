@@ -1,0 +1,136 @@
+@font-face {
+  font-family: 'IBMPlexSansHebrew';
+  src: url('../../assets/fonts/IBMPlexSansHebrew-Regular.ttf') format('truetype');
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'IBMPlexSansHebrew';
+  src: url('../../assets/fonts/IBMPlexSansHebrew-Medium.ttf') format('truetype');
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: 'IBMPlexSansHebrew';
+  src: url('../../assets/fonts/IBMPlexSansHebrew-Bold.ttf') format('truetype');
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: 'Alef';
+  src: url('../../assets/fonts/Alef-regular.ttf') format('truetype');
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'Alef';
+  src: url('../../assets/fonts/Alef-bold.ttf') format('truetype');
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: 'GveretLevin';
+  src: url('../../assets/fonts/GveretLevin-Regular.ttf') format('truetype');
+  font-weight: 400;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: 'IBMPlexSansHebrew', sans-serif;
+  background: #f3f6fb;
+  color: #223;
+}
+
+.app { min-height: 100vh; }
+
+.header {
+  height: 72px;
+  background: #fff;
+  border-bottom: 1px solid #e4e8f0;
+  padding: 0 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-title { font-size: 26px; font-weight: 700; color: #1F3A5F; }
+.header-actions { display: flex; gap: 8px; align-items: center; }
+
+.btn, .select {
+  border: 1px solid #d5ddea;
+  background: #fff;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-family: inherit;
+  cursor: pointer;
+}
+.btn-primary { background: #1f3a5f; color: #fff; border-color: #1f3a5f; }
+.btn-small { padding: 6px 10px; font-size: 14px; }
+
+.layout { display: grid; grid-template-columns: 320px 1fr; min-height: calc(100vh - 72px); }
+
+.sidebar {
+  background: #fff;
+  border-left: 1px solid #e4e8f0;
+  padding: 14px;
+  overflow: auto;
+}
+
+.tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.tab { border: 1px solid #d5ddea; background: #fff; border-radius: 999px; padding: 6px 10px; cursor: pointer; }
+.tab.active { background: #eef4fb; border-color: #8fb7e8; }
+
+.panel { display: flex; flex-direction: column; gap: 12px; }
+.grid { display: grid; gap: 10px; }
+.grid-2 { grid-template-columns: 1fr 1fr; }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+
+.thumb-btn, .icon-btn {
+  border: 1px solid #d5ddea;
+  background: #fff;
+  border-radius: 12px;
+  padding: 4px;
+  cursor: pointer;
+  min-height: 70px;
+}
+.thumb, .icon { width: 100%; height: 64px; object-fit: contain; }
+.none-bg { font-size: 14px; color: #495057; }
+
+.palette { background: #fbfcff; border: 1px solid #e5ebf6; border-radius: 12px; padding: 8px; }
+.palette-name { font-size: 13px; margin-bottom: 6px; }
+.palette-colors { display: flex; gap: 6px; }
+.swatch { width: 28px; height: 28px; border-radius: 999px; border: 1px solid #ced4da; cursor: pointer; }
+
+.list { display: flex; flex-direction: column; gap: 8px; }
+.list-title { margin-top: 8px; font-size: 13px; color: #566; }
+.list-item { border: 1px solid #d5ddea; background: #fff; border-radius: 10px; text-align: right; padding: 10px; cursor: pointer; font-family: inherit; }
+
+.canvas-area { padding: 16px; display: flex; flex-direction: column; gap: 10px; overflow: auto; }
+.object-toolbar { display: flex; flex-wrap: wrap; gap: 8px; background: #fff; border: 1px solid #e4e8f0; border-radius: 12px; padding: 8px; }
+.canvas-wrapper { display: flex; justify-content: center; align-items: flex-start; padding: 18px; }
+
+canvas { box-shadow: 0 14px 30px rgba(31, 58, 95, 0.16); border-radius: 6px; }
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(12, 18, 34, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+}
+
+.modal {
+  background: #fff;
+  border-radius: 16px;
+  width: min(520px, 92vw);
+  padding: 28px;
+  text-align: center;
+}
+
+.modal h2 { margin: 0 0 18px; font-size: 24px; }
+.modal-actions { display: flex; gap: 10px; justify-content: center; }
+.mobile-msg { display: grid; place-items: center; min-height: 70vh; font-size: 24px; }
