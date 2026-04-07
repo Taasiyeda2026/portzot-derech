@@ -1,6 +1,7 @@
 import {
   SAFE_MARGIN,
   POSTER_SIZES,
+  normalizePosterSize,
   FONT_OPTIONS,
   TEXT_PRESETS,
   CONTENT_BOXES,
@@ -61,7 +62,8 @@ export function registerFonts() {
 }
 
 export function createEditor(element, sizeKey) {
-  const size = POSTER_SIZES[sizeKey];
+  const safeSizeKey = normalizePosterSize(sizeKey);
+  const size = POSTER_SIZES[safeSizeKey];
   element.width = size.width;
   element.height = size.height;
 
@@ -167,7 +169,8 @@ function fitCanvasToViewport(canvas) {
 }
 
 export function resizeCanvas(canvas, sizeKey) {
-  const size = POSTER_SIZES[sizeKey];
+  const safeSizeKey = normalizePosterSize(sizeKey);
+  const size = POSTER_SIZES[safeSizeKey];
   canvas.setDimensions({ width: size.width, height: size.height });
   fitCanvasToViewport(canvas);
   canvas.renderAll();

@@ -1,7 +1,7 @@
 import { Header } from './components/Header.js';
 import { Sidebar } from './components/Sidebar.js';
 import { ObjectToolbar } from './components/ObjectToolbar.js';
-import { POSTER_SIZES } from './data/config.js';
+import { normalizePosterSize, isBackgroundCompatibleWithSize } from './data/config.js';
 import {
   createEditor,
   addTextPreset,
@@ -89,7 +89,7 @@ function App() {
   const hydrate = (saved, canvas = fabricRef.current) => {
     if (!canvas || !saved) return;
 
-    const nextSize = saved.posterSize || 'A4';
+    const nextSize = normalizePosterSize(saved.posterSize || 'A4');
     const nextMode = saved.mode || 'blank';
     const nextBackground = saved.background || null;
 
@@ -214,14 +214,23 @@ function App() {
   };
 
   const handleSizeChange = (sizeKey) => {
-    setPosterSize(sizeKey);
-    posterSizeRef.current = sizeKey;
+    const nextSize = normalizePosterSize(sizeKey);
+
+    setPosterSize(nextSize);
+    posterSizeRef.current = nextSize;
 
     const canvas = fabricRef.current;
     if (!canvas) return;
 
-    resizeCanvas(canvas, sizeKey);
-    applyBackground(canvas, currentBackgroundRef.current);
+    resizeCanvas(canvas, nextSize);
+
+    const backgroundToApply = isBackgroundCompatibleWithSize(currentBackgroundRef.current, nextSize)
+      ? currentBackgroundRef.current
+      : null;
+
+    currentBackgroundRef.current = backgroundToApply;
+    setCurrentBackground(backgroundToApply);
+    applyBackground(canvas, backgroundToApply);
     saveNow();
   };
 
@@ -316,6 +325,7 @@ function App() {
           h(Sidebar, {
             activeTab,
             setActiveTab,
+            posterSize,
             onBackground,
             onColor: (color) =>
               applyToSelection((obj) => {
