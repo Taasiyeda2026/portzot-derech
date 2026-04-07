@@ -1,4 +1,4 @@
-const { h } = React;
+const h = React.createElement;
 
 export function StartupModal({ hasSaved, onResume, onStart }) {
   return h('div', { className: 'overlay' },

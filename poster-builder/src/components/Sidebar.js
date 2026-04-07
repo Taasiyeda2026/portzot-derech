@@ -1,6 +1,6 @@
 import { BACKGROUNDS, PALETTES, FONT_OPTIONS, TEXT_PRESETS, ELEMENTS, CONTENT_BOXES } from '../data/config.js';
 
-const { h } = React;
+const h = React.createElement;
 
 const TABS = [
   { id: 'backgrounds', label: 'רקעים' },
