@@ -1,36 +1,36 @@
 @font-face {
   font-family: 'IBMPlexSansHebrew';
-  src: url('../../assets/fonts/IBMPlexSansHebrew-Regular.ttf') format('truetype');
+  src: url('/poster-builder/assets/fonts/IBMPlexSansHebrew-Regular.ttf') format('truetype');
   font-weight: 400;
 }
 
 @font-face {
   font-family: 'IBMPlexSansHebrew';
-  src: url('../../assets/fonts/IBMPlexSansHebrew-Medium.ttf') format('truetype');
+  src: url('/poster-builder/assets/fonts/IBMPlexSansHebrew-Medium.ttf') format('truetype');
   font-weight: 500;
 }
 
 @font-face {
   font-family: 'IBMPlexSansHebrew';
-  src: url('../../assets/fonts/IBMPlexSansHebrew-Bold.ttf') format('truetype');
+  src: url('/poster-builder/assets/fonts/IBMPlexSansHebrew-Bold.ttf') format('truetype');
   font-weight: 700;
 }
 
 @font-face {
-  font-family: 'Alef';
-  src: url('../../assets/fonts/Alef-regular.ttf') format('truetype');
+  font-family: 'Alice';
+  src: url('/poster-builder/assets/fonts/Alice-Regular.ttf') format('truetype');
   font-weight: 400;
 }
 
 @font-face {
-  font-family: 'Alef';
-  src: url('../../assets/fonts/Alef-bold.ttf') format('truetype');
-  font-weight: 700;
+  font-family: 'Choco';
+  src: url('/poster-builder/assets/fonts/Choco.otf') format('opentype');
+  font-weight: 400;
 }
 
 @font-face {
   font-family: 'GveretLevin';
-  src: url('../../assets/fonts/GveretLevin-Regular.ttf') format('truetype');
+  src: url('/poster-builder/assets/fonts/GveretLevin-Regular.ttf') format('truetype');
   font-weight: 400;
 }
 
