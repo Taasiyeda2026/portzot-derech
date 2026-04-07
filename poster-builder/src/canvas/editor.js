@@ -49,6 +49,7 @@ function keepInside(canvas, obj) {
   if (bounds.top < minY) top += minY - bounds.top;
   if (bounds.left + bounds.width > maxX) left -= bounds.left + bounds.width - maxX;
   if (bounds.top + bounds.height > maxY) top -= bounds.top + bounds.height - maxY;
+
   obj.set({ left, top });
 }
 
@@ -63,6 +64,7 @@ export function createEditor(element, sizeKey) {
   const size = POSTER_SIZES[sizeKey];
   element.width = size.width;
   element.height = size.height;
+
   const canvas = new fabric.Canvas(element, {
     width: size.width,
     height: size.height,
@@ -83,33 +85,46 @@ export function createEditor(element, sizeKey) {
     evented: false,
     excludeFromExport: true
   });
-  canvas.add(safeRect);
-  safeRect.sendToBack();
 
-  const centerV = new fabric.Line([size.width / 2, SAFE_MARGIN, size.width / 2, size.height - SAFE_MARGIN], {
-    stroke: '#EEF2F8',
-    strokeWidth: 2,
-    selectable: false,
-    evented: false,
-    excludeFromExport: true
-  });
-  const centerH = new fabric.Line([SAFE_MARGIN, size.height / 2, size.width - SAFE_MARGIN, size.height / 2], {
-    stroke: '#EEF2F8',
-    strokeWidth: 2,
-    selectable: false,
-    evented: false,
-    excludeFromExport: true
-  });
-  canvas.add(centerV, centerH);
-  centerH.sendToBack();
+  const centerV = new fabric.Line(
+    [size.width / 2, SAFE_MARGIN, size.width / 2, size.height - SAFE_MARGIN],
+    {
+      stroke: '#EEF2F8',
+      strokeWidth: 2,
+      selectable: false,
+      evented: false,
+      excludeFromExport: true
+    }
+  );
+
+  const centerH = new fabric.Line(
+    [SAFE_MARGIN, size.height / 2, size.width - SAFE_MARGIN, size.height / 2],
+    {
+      stroke: '#EEF2F8',
+      strokeWidth: 2,
+      selectable: false,
+      evented: false,
+      excludeFromExport: true
+    }
+  );
+
+  canvas.add(safeRect, centerV, centerH);
+  safeRect.sendToBack();
   centerV.sendToBack();
+  centerH.sendToBack();
 
   canvas.on('object:moving', (e) => {
+    if (!e.target) return;
     keepInside(canvas, e.target);
-    if (Math.abs(e.target.left - size.width / 2) < 35) e.target.set({ left: size.width / 2 });
+    if (Math.abs(e.target.left - size.width / 2) < 35) {
+      e.target.set({ left: size.width / 2 });
+    }
   });
 
-  canvas.on('object:scaling', (e) => keepInside(canvas, e.target));
+  canvas.on('object:scaling', (e) => {
+    if (!e.target) return;
+    keepInside(canvas, e.target);
+  });
 
   canvas.renderAll();
   return canvas;
@@ -125,85 +140,107 @@ export function applyBackground(canvas, path) {
   const resolvedPath = resolveAssetPath(path);
   console.log('background image resolved', resolvedPath);
 
-  if (!path) {
+  if (!resolvedPath) {
     canvas.setBackgroundImage(null, () => {
       console.log('background applied');
-      renderCanvas(canvas);
-    });
-    return;
-  }
-  fabric.Image.fromURL(resolvedPath, (img) => {
-    if (!img) return;
-    const scale = Math.max(canvas.width / img.width, canvas.height / img.height);
-    img.set({
-      canvas.renderAll();
       console.info('[PosterBuilder] background loaded', { path: null });
-      console.info('[PosterBuilder] canvas rendered');
+      renderCanvas(canvas);
     });
     return;
   }
-  fabric.Image.fromURL(path, (img) => {
-    img.scaleToWidth(canvas.width);
-    img.scaleToHeight(canvas.height);
-    canvas.setBackgroundImage(img, () => {
-      canvas.renderAll();
-      console.info('[PosterBuilder] background loaded', { path });
-      console.info('[PosterBuilder] canvas rendered');
-    }, {
-      originX: 'left',
-      originY: 'top',
-      left: 0,
-      top: 0,
-      scaleX: scale,
-      scaleY: scale
-    });
-    canvas.setBackgroundImage(img, () => {
-      console.log('background applied');
-      renderCanvas(canvas);
-    });
-  }, { crossOrigin: 'anonymous' });
+
+  fabric.Image.fromURL(
+    resolvedPath,
+    (img) => {
+      if (!img) return;
+
+      const scale = Math.max(
+        canvas.width / img.width,
+        canvas.height / img.height
+      );
+
+      const scaledWidth = img.width * scale;
+      const scaledHeight = img.height * scale;
+
+      canvas.setBackgroundImage(
+        img,
+        () => {
+          console.log('background applied');
+          console.info('[PosterBuilder] background loaded', { path: resolvedPath });
+          renderCanvas(canvas);
+        },
+        {
+          originX: 'left',
+          originY: 'top',
+          left: (canvas.width - scaledWidth) / 2,
+          top: (canvas.height - scaledHeight) / 2,
+          scaleX: scale,
+          scaleY: scale
+        }
+      );
+    },
+    { crossOrigin: 'anonymous' }
+  );
 }
 
 export function addTextPreset(canvas, presetId) {
   const preset = TEXT_PRESETS.find((p) => p.id === presetId);
-  const text = new fabric.IText(preset.text, textBase(preset, {
-    left: canvas.width - SAFE_MARGIN - 40,
-    top: SAFE_MARGIN + 80
-  }));
+  if (!preset) return;
+
+  const text = new fabric.IText(
+    preset.text,
+    textBase(preset, {
+      left: canvas.width - SAFE_MARGIN - 40,
+      top: SAFE_MARGIN + 80
+    })
+  );
+
   text.setControlsVisibility({ mtr: false });
   canvas.add(text);
   canvas.setActiveObject(text);
-  canvas.renderAll();
+  renderCanvas(canvas);
 }
 
 export function addElement(canvas, path) {
   const resolvedPath = resolveAssetPath(path);
-  fabric.Image.fromURL(resolvedPath, (img) => {
-    if (!img) return;
-    img.set({
-      left: canvas.width / 2,
-      top: canvas.height / 2,
-      originX: 'center',
-      originY: 'center',
-      selectable: true,
-      evented: true,
-      hasControls: true,
-      hasBorders: true,
-      lockScalingX: false,
-      lockScalingY: false
-    });
-    img.scaleToWidth(Math.min(440, canvas.width / 4));
-    img.setCoords();
-    canvas.add(img);
-    canvas.setActiveObject(img);
-    console.log('icon added', resolvedPath);
-    console.log('icon controls enabled');
-    renderCanvas(canvas);
-  }, { crossOrigin: 'anonymous' });
+
+  fabric.Image.fromURL(
+    resolvedPath,
+    (img) => {
+      if (!img) return;
+
+      img.set({
+        left: canvas.width / 2,
+        top: canvas.height / 2,
+        originX: 'center',
+        originY: 'center',
+        selectable: true,
+        evented: true,
+        hasControls: true,
+        hasBorders: true,
+        lockScalingX: false,
+        lockScalingY: false
+      });
+
+      img.scaleToWidth(Math.min(440, canvas.width / 4));
+      img.setCoords();
+
+      canvas.add(img);
+      canvas.setActiveObject(img);
+
+      console.log('icon added', resolvedPath);
+      console.log('icon controls enabled');
+
+      renderCanvas(canvas);
+    },
+    { crossOrigin: 'anonymous' }
+  );
 }
 
 export function addContentBox(canvas, boxId, color = '#FAF8FE') {
   const config = CONTENT_BOXES.find((box) => box.id === boxId);
+  if (!config) return;
+
   const width = 940;
   const height = 420;
 
@@ -218,8 +255,22 @@ export function addContentBox(canvas, boxId, color = '#FAF8FE') {
     originX: 'center',
     originY: 'center'
   });
-  const title = new fabric.IText(config.title, textBase({ size: 56, weight: 700 }, { top: -height / 2 + 40, left: width / 2 - 40 }));
-  const body = new fabric.IText(config.text, textBase({ size: 38, weight: 400 }, { top: -height / 2 + 130, left: width / 2 - 40 }));
+
+  const title = new fabric.IText(
+    config.title,
+    textBase(
+      { size: 56, weight: 700 },
+      { top: -height / 2 + 40, left: width / 2 - 40 }
+    )
+  );
+
+  const body = new fabric.IText(
+    config.text,
+    textBase(
+      { size: 38, weight: 400 },
+      { top: -height / 2 + 130, left: width / 2 - 40 }
+    )
+  );
 
   [title, body].forEach((item) => item.setControlsVisibility({ mtr: false }));
 
@@ -229,26 +280,33 @@ export function addContentBox(canvas, boxId, color = '#FAF8FE') {
     originX: 'center',
     originY: 'center'
   });
+
   group.set({ subTargetCheck: true });
+
   canvas.add(group);
   canvas.setActiveObject(group);
-  canvas.renderAll();
+  renderCanvas(canvas);
 }
 
 export function duplicateActiveObject(canvas) {
   const active = canvas.getActiveObject();
   if (!active) return;
+
   active.clone((cloned) => {
-    cloned.set({ left: active.left - 40, top: active.top + 40 });
+    cloned.set({
+      left: active.left - 40,
+      top: active.top + 40
+    });
     canvas.add(cloned);
     canvas.setActiveObject(cloned);
-    canvas.renderAll();
+    renderCanvas(canvas);
   });
 }
 
 export function setLock(canvas, locked) {
   const active = canvas.getActiveObject();
   if (!active) return;
+
   active.set({
     lockMovementX: locked,
     lockMovementY: locked,
@@ -257,28 +315,39 @@ export function setLock(canvas, locked) {
     lockRotation: locked,
     hasControls: !locked
   });
-  canvas.renderAll();
+
+  renderCanvas(canvas);
 }
 
 export function removeActiveObject(canvas) {
   const active = canvas.getActiveObject();
   if (!active) return;
+
   canvas.remove(active);
   canvas.discardActiveObject();
-  canvas.renderAll();
+  renderCanvas(canvas);
 }
 
 export function buildTemplate(canvas) {
-  canvas.getObjects().forEach((obj) => {
-    if (!obj.excludeFromExport) canvas.remove(obj);
+  canvas.getObjects().slice().forEach((obj) => {
+    if (!obj.excludeFromExport) {
+      canvas.remove(obj);
+    }
   });
 
   TEMPLATE_LAYOUT.forEach((item) => {
     if (item.type === 'title' || item.type === 'subtitle' || item.type === 'footer') {
-      const text = new fabric.IText(item.text, textBase({ size: item.size, weight: item.type === 'title' ? 700 : 500 }, {
-        left: item.left,
-        top: item.top
-      }));
+      const text = new fabric.IText(
+        item.text,
+        textBase(
+          { size: item.size, weight: item.type === 'title' ? 700 : 500 },
+          {
+            left: item.left,
+            top: item.top
+          }
+        )
+      );
+
       text.setControlsVisibility({ mtr: false });
       canvas.add(text);
     }
@@ -295,17 +364,34 @@ export function buildTemplate(canvas) {
         originX: 'right',
         originY: 'top'
       });
-      const title = new fabric.IText(item.title, textBase({ size: 52, weight: 700 }, { left: item.width - 40, top: 35 }));
-      const body = new fabric.IText(item.text, textBase({ size: 34, weight: 400 }, { left: item.width - 40, top: 120 }));
+
+      const title = new fabric.IText(
+        item.title,
+        textBase(
+          { size: 52, weight: 700 },
+          { left: item.width - 40, top: 35 }
+        )
+      );
+
+      const body = new fabric.IText(
+        item.text,
+        textBase(
+          { size: 34, weight: 400 },
+          { left: item.width - 40, top: 120 }
+        )
+      );
+
       const group = new fabric.Group([rect, title, body], {
         left: item.left,
         top: item.top,
         originX: 'right',
         originY: 'top'
       });
+
       canvas.add(group);
     }
   });
-  canvas.renderAll();
+
+  renderCanvas(canvas);
   console.info('[PosterBuilder] canvas rendered');
 }
