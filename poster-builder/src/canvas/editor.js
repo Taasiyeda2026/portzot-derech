@@ -61,6 +61,8 @@ export function registerFonts() {
 
 export function createEditor(element, sizeKey) {
   const size = POSTER_SIZES[sizeKey];
+  element.width = size.width;
+  element.height = size.height;
   const canvas = new fabric.Canvas(element, {
     width: size.width,
     height: size.height,
@@ -109,6 +111,7 @@ export function createEditor(element, sizeKey) {
 
   canvas.on('object:scaling', (e) => keepInside(canvas, e.target));
 
+  canvas.renderAll();
   return canvas;
 }
 
@@ -133,6 +136,20 @@ export function applyBackground(canvas, path) {
     if (!img) return;
     const scale = Math.max(canvas.width / img.width, canvas.height / img.height);
     img.set({
+      canvas.renderAll();
+      console.info('[PosterBuilder] background loaded', { path: null });
+      console.info('[PosterBuilder] canvas rendered');
+    });
+    return;
+  }
+  fabric.Image.fromURL(path, (img) => {
+    img.scaleToWidth(canvas.width);
+    img.scaleToHeight(canvas.height);
+    canvas.setBackgroundImage(img, () => {
+      canvas.renderAll();
+      console.info('[PosterBuilder] background loaded', { path });
+      console.info('[PosterBuilder] canvas rendered');
+    }, {
       originX: 'left',
       originY: 'top',
       left: 0,
@@ -290,4 +307,5 @@ export function buildTemplate(canvas) {
     }
   });
   canvas.renderAll();
+  console.info('[PosterBuilder] canvas rendered');
 }

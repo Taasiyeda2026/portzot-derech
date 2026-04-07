@@ -1,6 +1,5 @@
 import { Header } from './components/Header.js';
 import { Sidebar } from './components/Sidebar.js';
-import { StartupModal } from './components/StartupModal.js';
 import { ObjectToolbar } from './components/ObjectToolbar.js';
 import { POSTER_SIZES } from './data/config.js';
 import {
@@ -16,7 +15,7 @@ import {
   setLock,
   registerFonts
 } from './canvas/editor.js';
-import { saveProject, loadProject, clearProject, hasSavedProject } from './utils/storage.js';
+import { saveProject, loadProject, clearProject } from './utils/storage.js';
 import { exportPNG, exportPDF } from './utils/export.js';
 
 const { useEffect, useMemo, useRef, useState } = React;
@@ -27,8 +26,6 @@ function App() {
   const fabricRef = useRef(null);
   const [posterSize, setPosterSize] = useState('A4');
   const [activeTab, setActiveTab] = useState('backgrounds');
-  const [showStart, setShowStart] = useState(true);
-  const [hasSaved] = useState(hasSavedProject());
   const [selectedObject, setSelectedObject] = useState(null);
   const [selectedLocked, setSelectedLocked] = useState(false);
   const [currentBackground, setCurrentBackground] = useState(null);
@@ -43,7 +40,11 @@ function App() {
   useEffect(() => {
     if (!canvasRef.current || fabricRef.current) return;
     const canvas = createEditor(canvasRef.current, posterSize);
+    if (!canvas) return;
     fabricRef.current = canvas;
+    console.info('[PosterBuilder] canvas initialized', { width: canvas.width, height: canvas.height });
+    canvas.renderAll();
+    console.info('[PosterBuilder] canvas rendered');
 
     const autoSave = () => {
       const state = {
@@ -75,6 +76,19 @@ function App() {
     return () => canvas.dispose();
   }, [posterSize, currentBackground, initialMode]);
 
+  useEffect(() => {
+    const saved = loadProject();
+    if (saved?.canvas) {
+      hydrate(saved);
+      return;
+    }
+    const canvas = fabricRef.current;
+    if (!canvas) return;
+    resizeCanvas(canvas, posterSize);
+    canvas.renderAll();
+    console.info('[PosterBuilder] canvas rendered');
+  }, []);
+
   const scaleStyle = useMemo(() => {
     const size = POSTER_SIZES[posterSize];
     const ratio = Math.min(0.24, window.innerHeight / (size.height + 600));
@@ -97,7 +111,6 @@ function App() {
   const start = (mode) => {
     const canvas = fabricRef.current;
     if (!canvas) return;
-    setShowStart(false);
     setInitialMode(mode || 'blank');
     if (mode === 'template') {
       buildTemplate(canvas);
@@ -106,6 +119,7 @@ function App() {
         if (!obj.excludeFromExport) canvas.remove(obj);
       });
       canvas.renderAll();
+      console.info('[PosterBuilder] canvas rendered');
     }
     saveNow();
   };
@@ -142,7 +156,8 @@ function App() {
   const onNew = () => {
     if (!confirm('לפתוח עבודה חדשה?')) return;
     clearProject();
-    setShowStart(true);
+    setCurrentBackground(null);
+    start('blank');
   };
 
   const onReset = () => {
@@ -156,6 +171,7 @@ function App() {
         if (!obj.excludeFromExport) canvas.remove(obj);
       });
       canvas.renderAll();
+      console.info('[PosterBuilder] canvas rendered');
     }
     saveNow();
   };
@@ -164,6 +180,7 @@ function App() {
     const canvas = fabricRef.current;
     if (!canvas) return;
     console.log('background click received', path);
+    console.info('[PosterBuilder] background clicked', { path });
     setCurrentBackground(path);
     applyBackground(canvas, path);
     saveNow();
@@ -185,14 +202,6 @@ function App() {
   const desktopOnly = window.innerWidth < 900;
 
   return h('div', { className: 'app' },
-    showStart && h(StartupModal, {
-      hasSaved,
-      onResume: () => {
-        hydrate(loadProject());
-        setShowStart(false);
-      },
-      onStart: start
-    }),
     h(Header, {
       posterSize,
       onSizeChange: handleSizeChange,
