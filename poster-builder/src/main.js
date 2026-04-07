@@ -58,6 +58,17 @@ function App() {
   }, [initialMode]);
 
   useEffect(() => {
+    const onResize = () => {
+      const canvas = fabricRef.current;
+      if (!canvas) return;
+      resizeCanvas(canvas, posterSizeRef.current);
+    };
+
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+
+  useEffect(() => {
     registerFonts();
     document.documentElement.lang = 'he';
     document.documentElement.dir = 'rtl';

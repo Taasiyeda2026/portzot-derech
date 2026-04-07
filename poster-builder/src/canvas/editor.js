@@ -126,13 +126,50 @@ export function createEditor(element, sizeKey) {
     keepInside(canvas, e.target);
   });
 
+  fitCanvasToViewport(canvas);
   canvas.renderAll();
   return canvas;
+}
+
+function fitCanvasToViewport(canvas) {
+  const container = canvas.wrapperEl?.parentElement;
+  if (!container) return;
+
+  const availableWidth = Math.max(320, container.clientWidth - 32);
+  const availableHeight = Math.max(320, window.innerHeight - 220);
+
+  const scale = Math.min(
+    1,
+    availableWidth / canvas.width,
+    availableHeight / canvas.height
+  );
+
+  const cssWidth = Math.round(canvas.width * scale);
+  const cssHeight = Math.round(canvas.height * scale);
+
+  if (canvas.wrapperEl) {
+    canvas.wrapperEl.style.width = `${cssWidth}px`;
+    canvas.wrapperEl.style.height = `${cssHeight}px`;
+    canvas.wrapperEl.style.margin = '0 auto';
+  }
+
+  if (canvas.lowerCanvasEl) {
+    canvas.lowerCanvasEl.style.width = `${cssWidth}px`;
+    canvas.lowerCanvasEl.style.height = `${cssHeight}px`;
+  }
+
+  if (canvas.upperCanvasEl) {
+    canvas.upperCanvasEl.style.width = `${cssWidth}px`;
+    canvas.upperCanvasEl.style.height = `${cssHeight}px`;
+  }
+
+  canvas.calcOffset();
 }
 
 export function resizeCanvas(canvas, sizeKey) {
   const size = POSTER_SIZES[sizeKey];
   canvas.setDimensions({ width: size.width, height: size.height });
+  fitCanvasToViewport(canvas);
   canvas.renderAll();
 }
 
