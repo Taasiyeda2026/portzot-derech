@@ -59,10 +59,12 @@ function App() {
     canvas.on('selection:created', ({ selected }) => {
       setSelectedObject(selected?.[0] ?? null);
       setSelectedLocked(Boolean(selected?.[0]?.lockMovementX));
+      if (selected?.[0]) console.log('icon selected');
     });
     canvas.on('selection:updated', ({ selected }) => {
       setSelectedObject(selected?.[0] ?? null);
       setSelectedLocked(Boolean(selected?.[0]?.lockMovementX));
+      if (selected?.[0]) console.log('icon selected');
     });
     canvas.on('selection:cleared', () => {
       setSelectedObject(null);
@@ -177,6 +179,7 @@ function App() {
   const onBackground = (path) => {
     const canvas = fabricRef.current;
     if (!canvas) return;
+    console.log('background click received', path);
     console.info('[PosterBuilder] background clicked', { path });
     setCurrentBackground(path);
     applyBackground(canvas, path);

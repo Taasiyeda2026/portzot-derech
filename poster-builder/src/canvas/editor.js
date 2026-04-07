@@ -9,6 +9,18 @@ import {
 
 const DEFAULT_TEXT_FONT = 'IBMPlexSansHebrew';
 
+function resolveAssetPath(path) {
+  if (!path) return null;
+  if (/^https?:\/\//.test(path)) return path;
+  if (path.startsWith('/poster-builder/')) return path.replace('/poster-builder/', './');
+  return path;
+}
+
+function renderCanvas(canvas) {
+  canvas.requestRenderAll();
+  console.log('canvas rendered');
+}
+
 function textBase(preset, overrides = {}) {
   return {
     originX: 'right',
@@ -110,8 +122,20 @@ export function resizeCanvas(canvas, sizeKey) {
 }
 
 export function applyBackground(canvas, path) {
+  const resolvedPath = resolveAssetPath(path);
+  console.log('background image resolved', resolvedPath);
+
   if (!path) {
     canvas.setBackgroundImage(null, () => {
+      console.log('background applied');
+      renderCanvas(canvas);
+    });
+    return;
+  }
+  fabric.Image.fromURL(resolvedPath, (img) => {
+    if (!img) return;
+    const scale = Math.max(canvas.width / img.width, canvas.height / img.height);
+    img.set({
       canvas.renderAll();
       console.info('[PosterBuilder] background loaded', { path: null });
       console.info('[PosterBuilder] canvas rendered');
@@ -127,7 +151,15 @@ export function applyBackground(canvas, path) {
       console.info('[PosterBuilder] canvas rendered');
     }, {
       originX: 'left',
-      originY: 'top'
+      originY: 'top',
+      left: 0,
+      top: 0,
+      scaleX: scale,
+      scaleY: scale
+    });
+    canvas.setBackgroundImage(img, () => {
+      console.log('background applied');
+      renderCanvas(canvas);
     });
   }, { crossOrigin: 'anonymous' });
 }
@@ -145,12 +177,28 @@ export function addTextPreset(canvas, presetId) {
 }
 
 export function addElement(canvas, path) {
-  fabric.Image.fromURL(path, (img) => {
-    img.set({ left: canvas.width / 2, top: canvas.height / 2, originX: 'center', originY: 'center' });
+  const resolvedPath = resolveAssetPath(path);
+  fabric.Image.fromURL(resolvedPath, (img) => {
+    if (!img) return;
+    img.set({
+      left: canvas.width / 2,
+      top: canvas.height / 2,
+      originX: 'center',
+      originY: 'center',
+      selectable: true,
+      evented: true,
+      hasControls: true,
+      hasBorders: true,
+      lockScalingX: false,
+      lockScalingY: false
+    });
     img.scaleToWidth(Math.min(440, canvas.width / 4));
+    img.setCoords();
     canvas.add(img);
     canvas.setActiveObject(img);
-    canvas.renderAll();
+    console.log('icon added', resolvedPath);
+    console.log('icon controls enabled');
+    renderCanvas(canvas);
   }, { crossOrigin: 'anonymous' });
 }
 
