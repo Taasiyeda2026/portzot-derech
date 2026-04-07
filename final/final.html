@@ -1,35 +1,204 @@
-<!doctype html>
-<html lang="he" dir="rtl" class="h-full">
- <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>השלבים הבאים – פורצות דרך</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/png" href="/icon/favicon.png">
-  <link rel="apple-touch-icon" href="/icon/favicon.png">
-  <meta name="theme-color" content="#ec4899">
-  <style>
-    * { font-family: 'Rubik', sans-serif; box-sizing: border-box; }
-    body { margin: 0; background: #faf5ff; min-height: 100vh; }
-    .gradient-text {
-      background: linear-gradient(135deg, #ec4899, #8b5cf6);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>שלבי תהליך היזמות לפיתוח מוצר</title>
+<link rel="icon" type="image/png" href="../icon/favicon.png">
+<link rel="apple-touch-icon" href="../icon/favicon.png">
+<meta name="theme-color" content="#ec4899">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Rubik', sans-serif;
+}
+
+body {
+    background: #f5f6f8;
+    direction: rtl;
+    text-align: center;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 30px;
+    background: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.header-logo img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.header-logo span {
+    font-size: 18px;
+    font-weight: 700;
+    color: #ec4899;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 18px;
+    background: linear-gradient(135deg, #ec4899, #8b5cf6);
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 20px;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.back-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(236,72,153,0.4);
+}
+
+.page-wrapper {
+    max-width: 840px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+}
+
+h1 {
+    font-size: 34px;
+    font-weight: 800;
+    color: #8e24aa;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: #666;
+    font-size: 17px;
+    margin-bottom: 40px;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 30px;
+}
+
+.card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    border-radius: 22px;
+    aspect-ratio: 1 / 1;
+    padding: 10px;
+    box-shadow: 0 18px 30px rgba(0,0,0,0.08);
+    transition: 0.3s ease;
+    text-decoration: none;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 25px 40px rgba(0,0,0,0.12);
+}
+
+.icon {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+@media (max-width: 600px) {
+    .header {
+        padding: 12px 16px;
     }
-  </style>
- </head>
- <body>
-  <div class="min-h-screen flex flex-col items-center justify-center p-6 text-center">
-    <div class="text-6xl mb-8 tracking-widest">🔧⚙️💻🛠️🚀📐</div>
-    <h1 class="text-4xl font-extrabold gradient-text mb-4">בקרוב כאן</h1>
-    <p class="text-xl text-gray-600 max-w-md leading-relaxed mb-10">העמוד הזה עוד נבנה — וזה בדיוק העניין.<br>גם המוצר שלכן התחיל ממשהו קטן.</p>
-    <a href="../idea/idea-to-product.html" class="inline-block text-white text-lg font-bold px-8 py-4 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300" style="background: linear-gradient(135deg, #ec4899, #8b5cf6);">
-      חזרה למסע ←
+
+    .header-logo span {
+        font-size: 15px;
+    }
+
+    .back-btn {
+        padding: 7px 14px;
+        font-size: 13px;
+    }
+
+    .page-wrapper {
+        padding: 24px 14px 60px;
+    }
+
+    h1 {
+        font-size: 26px;
+    }
+
+    .subtitle {
+        font-size: 15px;
+        margin-bottom: 28px;
+    }
+
+    .container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+
+    .card {
+        border-radius: 16px;
+        padding: 8px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <a href="../index.html" class="header-logo">
+        <img src="../icon/favicon.png" alt="פורצות דרך">
+        <span>פורצות דרך</span>
     </a>
-  </div>
- </body>
+    <a href="../index.html" class="back-btn">→ דף הבית</a>
+</div>
+
+<div class="page-wrapper">
+<h1>מציגות ומשכנעות</h1>
+<div class="subtitle">כך הופכים רעיון להצגה ברורה, מקצועית ומשכנעת</div>
+
+    <div class="container">
+
+        <a href="../poster-builder/index.html" class="card">
+            <div class="icon"><img src="../icon/7.svg" alt="פוסטר חקר"></div>
+        </a>
+
+        <a href="../buildingmessage.html" class="card">
+            <div class="icon"><img src="../icon/8.svg" alt="מציגות"></div>
+        </a>
+    </div>
+</div>
+
+</body>
 </html>
