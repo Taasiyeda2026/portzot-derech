@@ -1,3 +1,5 @@
+import { POSTER_SIZES } from '../data/config.js';
+
 const h = React.createElement;
 
 export function Header({ posterSize, onSizeChange, onNew, onSave, onReset, onExportPng, onExportPdf }) {
@@ -9,8 +11,9 @@ export function Header({ posterSize, onSizeChange, onNew, onSave, onReset, onExp
         value: posterSize,
         onChange: (e) => onSizeChange(e.target.value)
       },
-      h('option', { value: 'A4' }, 'A4 לאורך'),
-      h('option', { value: 'A3' }, 'A3 לאורך')),
+      Object.entries(POSTER_SIZES).map(([key, size]) =>
+        h('option', { key, value: key }, size.label)
+      )),
       h('button', { className: 'btn', onClick: onNew }, 'חדש'),
       h('button', { className: 'btn', onClick: onSave }, 'שמור'),
       h('button', { className: 'btn', onClick: onReset }, 'איפוס'),

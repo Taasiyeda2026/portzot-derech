@@ -1,17 +1,39 @@
 export const POSTER_SIZES = {
   A4: { label: 'A4 לאורך', width: 2480, height: 3508 },
-  A3: { label: 'A3 לאורך', width: 3508, height: 4961 }
+  A4_LANDSCAPE: { label: 'A4 לרוחב', width: 3508, height: 2480 }
 };
 
+export function normalizePosterSize(sizeKey) {
+  return POSTER_SIZES[sizeKey] ? sizeKey : 'A4';
+}
+
+export function getPosterOrientation(sizeKey) {
+  const size = POSTER_SIZES[normalizePosterSize(sizeKey)];
+  return size.width >= size.height ? 'landscape' : 'portrait';
+}
+
 export const BACKGROUNDS = [
-  { id: 'none', name: 'ללא רקע', path: null },
-  { id: 'bg-tech1', name: 'רקע 1', path: '/poster-builder/assets/backgrounds/bg-tech1.png' },
-  { id: 'bg-tech2', name: 'רקע 2', path: '/poster-builder/assets/backgrounds/bg-tech2.png' },
-  { id: 'bg-tech3', name: 'רקע 3', path: '/poster-builder/assets/backgrounds/bg-tech3.png' },
-  { id: 'bg-tech4', name: 'רקע 4', path: '/poster-builder/assets/backgrounds/bg-tech4.png' },
-  { id: 'bg-tech5', name: 'רקע 5', path: '/poster-builder/assets/backgrounds/bg-tech5.png' },
-  { id: 'bg-tech6', name: 'רקע 6', path: '/poster-builder/assets/backgrounds/bg-tech6.png' }
+  { id: 'none', name: 'ללא רקע', path: null, orientation: 'any' },
+  { id: 'bg-tech1', name: 'רקע 1', path: '/poster-builder/assets/backgrounds/bg-tech1.png', orientation: 'portrait' },
+  { id: 'bg-tech2', name: 'רקע 2', path: '/poster-builder/assets/backgrounds/bg-tech2.png', orientation: 'portrait' },
+  { id: 'bg-tech3', name: 'רקע 3', path: '/poster-builder/assets/backgrounds/bg-tech3.png', orientation: 'portrait' },
+  { id: 'bg-tech4', name: 'רקע 4', path: '/poster-builder/assets/backgrounds/bg-tech4.png', orientation: 'portrait' },
+  { id: 'bg-tech5', name: 'רקע 5', path: '/poster-builder/assets/backgrounds/bg-tech5.png', orientation: 'portrait' },
+  { id: 'bg-tech6', name: 'רקע 6', path: '/poster-builder/assets/backgrounds/bg-tech6.png', orientation: 'portrait' },
+  { id: 'bg-tech-lan1', name: 'רקע רוחבי 1', path: '/poster-builder/assets/backgrounds/bg-tech-lan1.png.png', orientation: 'landscape' },
+  { id: 'bg-tech-lan2', name: 'רקע רוחבי 2', path: '/poster-builder/assets/backgrounds/bg-tech-lan2.png.png', orientation: 'landscape' },
+  { id: 'bg-tech-lan3', name: 'רקע רוחבי 3', path: '/poster-builder/assets/backgrounds/bg-tech-lan3.png.png', orientation: 'landscape' },
+  { id: 'bg-tech-lan4', name: 'רקע רוחבי 4', path: '/poster-builder/assets/backgrounds/bg-tech-lan4.png.png', orientation: 'landscape' },
+  { id: 'bg-tech-lan5', name: 'רקע רוחבי 5', path: '/poster-builder/assets/backgrounds/bg-tech-lan5.png.png', orientation: 'landscape' },
+  { id: 'bg-tech-lan6', name: 'רקע רוחבי 6', path: '/poster-builder/assets/backgrounds/bg-tech-lan6.png.png', orientation: 'landscape' }
 ];
+
+export function isBackgroundCompatibleWithSize(path, sizeKey) {
+  if (!path) return true;
+  const bg = BACKGROUNDS.find((item) => item.path === path);
+  if (!bg || bg.orientation === 'any') return true;
+  return bg.orientation === getPosterOrientation(sizeKey);
+}
 
 export const ELEMENTS = Array.from({ length: 56 }, (_, index) => ({
   id: `icon${index + 1}`,

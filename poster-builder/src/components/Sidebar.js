@@ -1,4 +1,4 @@
-import { BACKGROUNDS, PALETTES, FONT_OPTIONS, TEXT_PRESETS, ELEMENTS, CONTENT_BOXES } from '../data/config.js';
+import { BACKGROUNDS, PALETTES, FONT_OPTIONS, TEXT_PRESETS, ELEMENTS, CONTENT_BOXES, getPosterOrientation } from '../data/config.js';
 
 const h = React.createElement;
 
@@ -10,7 +10,10 @@ const TABS = [
   { id: 'elements', label: 'אלמנטים' }
 ];
 
-export function Sidebar({ activeTab, setActiveTab, onBackground, onColor, onFont, onText, onElement, onBox }) {
+export function Sidebar({ activeTab, setActiveTab, posterSize, onBackground, onColor, onFont, onText, onElement, onBox }) {
+  const orientation = getPosterOrientation(posterSize);
+  const visibleBackgrounds = BACKGROUNDS.filter((bg) => bg.orientation === 'any' || bg.orientation === orientation);
+
   return h('aside', { className: 'sidebar' },
     h('div', { className: 'tabs' }, TABS.map((tab) =>
       h('button', {
@@ -21,7 +24,7 @@ export function Sidebar({ activeTab, setActiveTab, onBackground, onColor, onFont
     )),
     h('div', { className: 'panel' },
       activeTab === 'backgrounds' && h('div', { className: 'grid grid-2' },
-        BACKGROUNDS.map((bg) => h('button', {
+        visibleBackgrounds.map((bg) => h('button', {
           key: bg.id,
           className: 'thumb-btn',
           onClick: () => onBackground(bg.path)
