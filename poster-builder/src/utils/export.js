@@ -4,14 +4,11 @@ export function exportPNG(canvas, sizeKey) {
   const active = canvas.getActiveObject();
   if (active) canvas.discardActiveObject();
   canvas.renderAll();
+  const zoom = canvas.getZoom() || 1;
   const dataUrl = canvas.toDataURL({
     format: 'png',
     quality: 1,
-    multiplier: 1,
-    width: POSTER_SIZES[sizeKey].width,
-    height: POSTER_SIZES[sizeKey].height,
-    left: 0,
-    top: 0
+    multiplier: 1 / zoom
   });
   const link = document.createElement('a');
   link.href = dataUrl;
@@ -24,7 +21,8 @@ export function exportPDF(canvas, sizeKey) {
   const active = canvas.getActiveObject();
   if (active) canvas.discardActiveObject();
   canvas.renderAll();
-  const dataUrl = canvas.toDataURL({ format: 'png', quality: 1, multiplier: 1 });
+  const zoom = canvas.getZoom() || 1;
+  const dataUrl = canvas.toDataURL({ format: 'png', quality: 1, multiplier: 1 / zoom });
   const pdf = new jsPDF({
     orientation: 'portrait',
     unit: 'px',
