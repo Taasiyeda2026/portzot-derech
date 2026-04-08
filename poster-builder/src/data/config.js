@@ -20,12 +20,12 @@ export const BACKGROUNDS = [
   { id: 'bg-tech4', name: 'רקע 4', path: '/poster-builder/assets/backgrounds/bg-tech4.png', orientation: 'portrait' },
   { id: 'bg-tech5', name: 'רקע 5', path: '/poster-builder/assets/backgrounds/bg-tech5.png', orientation: 'portrait' },
   { id: 'bg-tech6', name: 'רקע 6', path: '/poster-builder/assets/backgrounds/bg-tech6.png', orientation: 'portrait' },
-  { id: 'bg-tech-lan1', name: 'רקע רוחבי 1', path: '/poster-builder/assets/backgrounds/bg-tech-lan1.png.png', orientation: 'landscape' },
-  { id: 'bg-tech-lan2', name: 'רקע רוחבי 2', path: '/poster-builder/assets/backgrounds/bg-tech-lan2.png.png', orientation: 'landscape' },
-  { id: 'bg-tech-lan3', name: 'רקע רוחבי 3', path: '/poster-builder/assets/backgrounds/bg-tech-lan3.png.png', orientation: 'landscape' },
-  { id: 'bg-tech-lan4', name: 'רקע רוחבי 4', path: '/poster-builder/assets/backgrounds/bg-tech-lan4.png.png', orientation: 'landscape' },
-  { id: 'bg-tech-lan5', name: 'רקע רוחבי 5', path: '/poster-builder/assets/backgrounds/bg-tech-lan5.png.png', orientation: 'landscape' },
-  { id: 'bg-tech-lan6', name: 'רקע רוחבי 6', path: '/poster-builder/assets/backgrounds/bg-tech-lan6.png.png', orientation: 'landscape' }
+  { id: 'bg-tech-lan1', name: 'רקע רוחבי 1', path: '/poster-builder/assets/backgrounds/bg-tech-lan1.png', orientation: 'landscape' },
+  { id: 'bg-tech-lan2', name: 'רקע רוחבי 2', path: '/poster-builder/assets/backgrounds/bg-tech-lan2.png', orientation: 'landscape' },
+  { id: 'bg-tech-lan3', name: 'רקע רוחבי 3', path: '/poster-builder/assets/backgrounds/bg-tech-lan3.png', orientation: 'landscape' },
+  { id: 'bg-tech-lan4', name: 'רקע רוחבי 4', path: '/poster-builder/assets/backgrounds/bg-tech-lan4.png', orientation: 'landscape' },
+  { id: 'bg-tech-lan5', name: 'רקע רוחבי 5', path: '/poster-builder/assets/backgrounds/bg-tech-lan5.png', orientation: 'landscape' },
+  { id: 'bg-tech-lan6', name: 'רקע רוחבי 6', path: '/poster-builder/assets/backgrounds/bg-tech-lan6.png', orientation: 'landscape' }
 ];
 
 export function isBackgroundCompatibleWithSize(path, sizeKey) {
@@ -41,68 +41,236 @@ export const ELEMENTS = Array.from({ length: 56 }, (_, index) => ({
   path: `/poster-builder/assets/elements/icon${index + 1}.png`
 }));
 
-export const FIELD_DEFINITIONS = [
-  { id: 'projectName', question: 'מה שם המיזם?', shortLabel: 'שם המיזם', maxChars: 60, align: 'right', fontSize: 66, minFontSize: 42, lineHeight: 1.05 },
-  { id: 'problem', question: 'מה הבעיה שבגללה החלטתן לפתח את המוצר?', shortLabel: 'הבעיה', maxChars: 260, align: 'right' },
-  { id: 'audience', question: 'מי קהל היעד שלכן?', shortLabel: 'קהל היעד', maxChars: 200, align: 'right' },
-  { id: 'importance', question: 'למה זה חשוב עכשיו?', shortLabel: 'למה זה חשוב', maxChars: 200, align: 'right' },
-  { id: 'solution', question: 'מה הפתרון שלכן?', shortLabel: 'הפתרון שלנו', maxChars: 240, align: 'right' },
-  { id: 'howItWorks', question: 'איך הפתרון עובד?', shortLabel: 'איך זה עובד', maxChars: 240, align: 'right' },
-  { id: 'unique', question: 'מה מייחד אתכן לעומת פתרונות אחרים?', shortLabel: 'מה מייחד אותנו', maxChars: 180, align: 'right' },
-  { id: 'benefit', question: 'מה התועלת המרכזית למשתמש?', shortLabel: 'מה התועלת', maxChars: 180, align: 'right' },
-  { id: 'team', question: 'מי בצוות שלכן?', shortLabel: 'צוות', maxChars: 120, align: 'right', fontSize: 30, minFontSize: 24 }
+export const PRODUCT_TYPES = [
+  { id: 'physical', label: 'מוצר פיזי' },
+  { id: 'website',  label: 'אתר' },
+  { id: 'app',      label: 'אפליקציה' }
 ];
 
+export const DYNAMIC_QUESTIONS = {
+  solution: {
+    none:     { question: 'מה הפתרון שפיתחתן?',       shortLabel: 'הפתרון שפיתחנו' },
+    physical: { question: 'איזה מוצר פיזי פיתחתן?',   shortLabel: 'המוצר שפיתחנו' },
+    website:  { question: 'איזה אתר פיתחתן?',          shortLabel: 'האתר שפיתחנו' },
+    app:      { question: 'איזו אפליקציה פיתחתן?',     shortLabel: 'האפליקציה שפיתחנו' }
+  },
+  howItWorks: {
+    none:     { question: 'איך הפתרון עובד?',                  shortLabel: 'איך זה עובד' },
+    physical: { question: 'איך משתמשים במוצר?',               shortLabel: 'איך משתמשים' },
+    website:  { question: 'מה המשתמש עושה באתר?',             shortLabel: 'מה עושים באתר' },
+    app:      { question: 'איך המשתמש משתמש באפליקציה?',      shortLabel: 'איך משתמשים' }
+  }
+};
+
+export const VISUAL_ZONE_TITLE = {
+  none:     'אזור חזותי',
+  physical: 'תמונות המוצר',
+  website:  'מסכי האתר',
+  app:      'מסכי האפליקציה'
+};
+
+export const FIELD_DEFINITIONS = [
+  {
+    id: 'projectName', question: 'שם המיזם', shortLabel: '',
+    maxChars: 20, align: 'center', fontSize: 130, minFontSize: 60,
+    lineHeight: 1.1, noLabel: true, center: true, fontWeight: 700, verticalCenter: true
+  },
+  {
+    id: 'description', question: 'תיאור קצר של המיזם', shortLabel: '',
+    maxChars: 75, align: 'center', fontSize: 65, minFontSize: 38,
+    lineHeight: 1.15, noLabel: true, center: true, fontWeight: 400, verticalCenter: true
+  },
+  { id: 'problem',          question: 'מה הבעיה שזיהיתן?',               shortLabel: 'הבעיה שזיהינו',  maxChars: 130, align: 'right', fontSize: 42, minFontSize: 30, lineHeight: 1.3 },
+  { id: 'audience',         question: 'למי הבעיה הזו מפריעה?',           shortLabel: 'למי זה מפריע',   maxChars: 75,  align: 'right', fontSize: 42, minFontSize: 30, lineHeight: 1.3 },
+  { id: 'researchQuestion', question: 'מה שאלת החקר הטכנולוגית?',        shortLabel: 'שאלת החקר',      maxChars: 90,  align: 'right', fontSize: 42, minFontSize: 30, lineHeight: 1.3 },
+  { id: 'research',         question: 'איזה חקר עשיתן?',                 shortLabel: 'החקר שעשינו',    type: 'list', maxCharsPerRow: 42, align: 'right', fontSize: 42, minFontSize: 30, lineHeight: 1.25 },
+  { id: 'findings',         question: 'מה גיליתן מהחקר?',                shortLabel: 'מה גילינו',       maxChars: 110, align: 'right', fontSize: 42, minFontSize: 30, lineHeight: 1.3 },
+  { id: 'requirements',     question: 'מה היה חשוב שהפתרון יכלול?',      shortLabel: 'דרישות הפתרון',   type: 'list', maxCharsPerRow: 42, align: 'right', fontSize: 42, minFontSize: 30, lineHeight: 1.25 },
+  { id: 'solution',         question: 'מה הפתרון שפיתחתן?',              shortLabel: 'הפתרון שפיתחנו', maxChars: 130, align: 'right', fontSize: 42, minFontSize: 30, lineHeight: 1.3, dynamic: 'solution' },
+  { id: 'howItWorks',       question: 'איך הפתרון עובד?',                shortLabel: 'איך זה עובד',     type: 'list', maxCharsPerRow: 42, align: 'right', fontSize: 42, minFontSize: 30, lineHeight: 1.25, dynamic: 'howItWorks' },
+  { id: 'value',            question: 'מה הערך הסופי של הפתרון?',        shortLabel: 'הערך הסופי',      maxChars: 90,  align: 'right', fontSize: 42, minFontSize: 30, lineHeight: 1.3 },
+  {
+    id: 'participants', question: 'פרטי המשתתפות', shortLabel: '',
+    type: 'participants', maxChars: 200,
+    align: 'center', fontSize: 46, minFontSize: 30,
+    lineHeight: 1.35, noLabel: true, center: true, fontWeight: 400, verticalCenter: true
+  }
+];
+
+export function getListRowIds(fieldId) {
+  return [`${fieldId}_1`, `${fieldId}_2`, `${fieldId}_3`];
+}
+
+export function buildListText(fieldId, values) {
+  return [1, 2, 3].map((i) => {
+    const v = (values[`${fieldId}_${i}`] || '').trim();
+    return `${i}. ${v}`;
+  }).join('\n\n');
+}
+
+export const PARTICIPANTS_SUB_KEYS = ['students', 'className', 'schoolName'];
+
+export function buildParticipantsText(values) {
+  const students  = (values.students   || '').trim();
+  const className = (values.className  || '').trim();
+  const school    = (values.schoolName || '').trim();
+  const line1 = `שמות התלמידות: ${students}`;
+  const classStr = className ? `כיתה ${className}` : '';
+  const parts2   = [classStr, school].filter(Boolean);
+  const line2    = parts2.join(' | ');
+  return [line1, line2].filter(Boolean).join('\n');
+}
+
+export function getAllContentKeys() {
+  const keys = [];
+  FIELD_DEFINITIONS.forEach((f) => {
+    if (f.type === 'list') {
+      keys.push(`${f.id}_1`, `${f.id}_2`, `${f.id}_3`);
+    } else if (f.type === 'participants') {
+      keys.push(...PARTICIPANTS_SUB_KEYS);
+    } else {
+      keys.push(f.id);
+    }
+  });
+  return keys;
+}
+
+export function getFieldDef(fieldId, productType = 'none') {
+  const f = FIELD_DEFINITIONS.find((d) => d.id === fieldId);
+  if (!f) return null;
+  if (f.dynamic && DYNAMIC_QUESTIONS[f.dynamic]) {
+    const dq = DYNAMIC_QUESTIONS[f.dynamic][productType] || DYNAMIC_QUESTIONS[f.dynamic].none;
+    return { ...f, question: dq.question, shortLabel: dq.shortLabel };
+  }
+  return f;
+}
+
 const PORTRAIT_RECTS = {
-  projectName: { x: 2360, y: 120, width: 1040, height: 320 },
-  problem: { x: 2360, y: 470, width: 1040, height: 540 },
-  audience: { x: 2360, y: 1040, width: 500, height: 520 },
-  importance: { x: 1840, y: 1040, width: 500, height: 520 },
-  solution: { x: 2360, y: 1590, width: 1040, height: 500 },
-  howItWorks: { x: 2360, y: 2120, width: 1040, height: 500 },
-  unique: { x: 2360, y: 2650, width: 500, height: 500 },
-  benefit: { x: 1840, y: 2650, width: 500, height: 500 },
-  team: { x: 2360, y: 3180, width: 1040, height: 210 }
+  projectName:      { x: 1440, y: 60,   width: 1880, height: 200  },
+  description:      { x: 1440, y: 280,  width: 1880, height: 160  },
+  problem:          { x: 2380, y: 680,  width: 1070, height: 310  },
+  audience:         { x: 2380, y: 1100, width: 1070, height: 250  },
+  researchQuestion: { x: 2380, y: 1460, width: 1070, height: 270  },
+  research:         { x: 2380, y: 1840, width: 1070, height: 450  },
+  findings:         { x: 2380, y: 2400, width: 1070, height: 290  },
+  requirements:     { x: 1170, y: 680,  width: 1070, height: 450  },
+  solution:         { x: 1170, y: 1670, width: 1070, height: 270  },
+  howItWorks:       { x: 1170, y: 2010, width: 1070, height: 450  },
+  value:            { x: 1170, y: 2530, width: 1070, height: 230  },
+  participants:     { x: 1240, y: 2840, width: 2280, height: 250  }
 };
 
 const LANDSCAPE_RECTS = {
-  projectName: { x: 3390, y: 90, width: 1470, height: 250 },
-  problem: { x: 3390, y: 370, width: 1060, height: 430 },
-  audience: { x: 2280, y: 370, width: 1060, height: 430 },
-  importance: { x: 1170, y: 370, width: 1060, height: 430 },
-  solution: { x: 3390, y: 840, width: 1470, height: 430 },
-  howItWorks: { x: 3390, y: 1310, width: 1470, height: 430 },
-  unique: { x: 1860, y: 1310, width: 1470, height: 430 },
-  benefit: { x: 3390, y: 1780, width: 1060, height: 430 },
-  team: { x: 2280, y: 1780, width: 2170, height: 430 }
+  projectName:      { x: 2055, y: 50,   width: 2710, height: 160  },
+  description:      { x: 2055, y: 230,  width: 2710, height: 120  },
+  problem:          { x: 3410, y: 450,  width: 1576, height: 240  },
+  audience:         { x: 3410, y: 770,  width: 1576, height: 180  },
+  researchQuestion: { x: 3410, y: 1030, width: 1576, height: 200  },
+  research:         { x: 3410, y: 1310, width: 1576, height: 380  },
+  findings:         { x: 3410, y: 1770, width: 1576, height: 220  },
+  requirements:     { x: 1674, y: 450,  width: 1576, height: 380  },
+  solution:         { x: 1674, y: 1200, width: 1576, height: 180  },
+  howItWorks:       { x: 1674, y: 1440, width: 1576, height: 380  },
+  value:            { x: 1674, y: 1880, width: 1576, height: 120  },
+  participants:     { x: 1754, y: 2060, width: 3312, height: 140  }
 };
 
-function withLayout(layoutRects) {
+function withLayout(layoutRects, productType = 'none') {
   return FIELD_DEFINITIONS.map((field) => {
     const rect = layoutRects[field.id];
+    const dynField = getFieldDef(field.id, productType);
     return {
-      id: field.id,
-      question: field.question,
-      shortLabel: field.shortLabel,
-      maxChars: field.maxChars,
-      x: rect.x,
-      y: rect.y,
-      width: rect.width,
-      height: rect.height,
-      align: field.align,
-      fontSize: field.fontSize || 34,
-      minFontSize: field.minFontSize || 24,
-      lineHeight: field.lineHeight || 1.2,
-      titleSpacing: field.titleSpacing || 68
+      id:             field.id,
+      type:           field.type || 'text',
+      question:       dynField.question,
+      shortLabel:     dynField.shortLabel,
+      maxChars:       field.maxChars,
+      maxCharsPerRow: field.maxCharsPerRow,
+      dynamic:        field.dynamic || null,
+      x:              rect.x,
+      y:              rect.y,
+      width:          rect.width,
+      height:         rect.height,
+      align:          field.align,
+      fontSize:       field.fontSize    || 42,
+      minFontSize:    field.minFontSize || 30,
+      lineHeight:     field.lineHeight  || 1.3,
+      titleSpacing:   field.titleSpacing || 80,
+      noLabel:        field.noLabel        || false,
+      center:         field.center         || false,
+      fontWeight:     field.fontWeight     || 400,
+      verticalCenter: field.verticalCenter || false
     };
   });
 }
 
-export const POSTER_FIELDS_BY_SIZE = {
-  A4: withLayout(PORTRAIT_RECTS),
-  A4_LANDSCAPE: withLayout(LANDSCAPE_RECTS)
-};
-
-export function getPosterFields(sizeKey) {
-  return POSTER_FIELDS_BY_SIZE[normalizePosterSize(sizeKey)] || POSTER_FIELDS_BY_SIZE.A4;
+export function getPosterFields(sizeKey, productType = 'none') {
+  const safe = normalizePosterSize(sizeKey);
+  const rects = safe === 'A4_LANDSCAPE' ? LANDSCAPE_RECTS : PORTRAIT_RECTS;
+  return withLayout(rects, productType);
 }
+
+export function getVisualSlots(sizeKey, productType = 'none') {
+  const safe = sizeKey === 'A4_LANDSCAPE' ? 'A4_LANDSCAPE' : 'A4';
+  const gap  = 40;
+
+  if (safe === 'A4_LANDSCAPE') {
+    const left   = 98;
+    const totalW = 1576;
+    const top    = 890;
+    const h      = 250;
+    if (productType === 'physical') {
+      const w = Math.floor((totalW - gap) / 2);
+      return [
+        { key: 'visual_1', label: 'תמונה ראשית', left: left + w + gap, top, width: w, height: h },
+        { key: 'visual_2', label: 'תמונת שימוש', left,                  top, width: w, height: h }
+      ];
+    }
+    if (productType === 'website' || productType === 'app') {
+      const g = 30;
+      const w = Math.floor((totalW - g * 2) / 3);
+      return [
+        { key: 'visual_1', label: 'מסך 1', left: left + 2 * (w + g), top, width: w, height: h },
+        { key: 'visual_2', label: 'מסך 2', left: left + w + g,        top, width: w, height: h },
+        { key: 'visual_3', label: 'מסך 3', left,                       top, width: w, height: h }
+      ];
+    }
+    return [{ key: 'visual', label: 'אזור חזותי', left, top, width: totalW, height: h }];
+  }
+
+  const left   = 100;
+  const totalW = 1070;
+  const top    = 1200;
+  const h      = 400;
+
+  if (productType === 'physical') {
+    const w = Math.floor((totalW - gap) / 2);
+    return [
+      { key: 'visual_1', label: 'תמונה ראשית', left: left + w + gap, top, width: w, height: h },
+      { key: 'visual_2', label: 'תמונת שימוש', left,                  top, width: w, height: h }
+    ];
+  }
+  if (productType === 'website' || productType === 'app') {
+    const g = 30;
+    const w = Math.floor((totalW - g * 2) / 3);
+    return [
+      { key: 'visual_1', label: 'מסך 1', left: left + 2 * (w + g), top, width: w, height: h },
+      { key: 'visual_2', label: 'מסך 2', left: left + w + g,        top, width: w, height: h },
+      { key: 'visual_3', label: 'מסך 3', left,                       top, width: w, height: h }
+    ];
+  }
+  return [{ key: 'visual', label: 'אזור חזותי', left, top, width: totalW, height: h }];
+}
+
+export const AVAILABLE_FONTS = [
+  { label: 'IBM Plex (ברירת מחדל)', value: 'IBM Plex Sans Hebrew' },
+  { label: 'Gveret Levin',           value: 'Gveret Levin' },
+  { label: 'Alice',                  value: 'Alice' },
+  { label: 'Choco',                  value: 'Choco' },
+  { label: 'Arial',                  value: 'Arial' },
+  { label: 'Tahoma',                 value: 'Tahoma' },
+  { label: 'David',                  value: 'David' }
+];
+
+export const DEFAULT_FIELD_FONT  = 'IBM Plex Sans Hebrew';
+export const DEFAULT_FIELD_COLOR = '#1f2937';
