@@ -1,6 +1,7 @@
 import {
   SAFE_MARGIN,
   POSTER_SIZES,
+  POSTER_FIELDS,
   normalizePosterSize,
   FONT_OPTIONS,
   TEXT_PRESETS,
@@ -32,8 +33,15 @@ function textBase(preset, overrides = {}) {
     fontFamily: DEFAULT_TEXT_FONT,
     fontWeight: preset.weight ?? 400,
     fontSize: preset.size,
-    editable: true,
+    editable: false,
     ...overrides
+  };
+}
+
+function getPosterDimensions(canvas) {
+  return {
+    width: canvas._posterWidth || canvas.getWidth(),
+    height: canvas._posterHeight || canvas.getHeight()
   };
 }
 
@@ -153,8 +161,9 @@ function fitCanvasToViewport(canvas) {
   const cssWidth = Math.round(logicalW * scale);
   const cssHeight = Math.round(logicalH * scale);
 
+  canvas.setDimensions({ width: logicalW, height: logicalH });
   canvas.setZoom(scale);
-  canvas.setDimensions({ width: cssWidth, height: cssHeight });
+  canvas.setDimensions({ width: cssWidth, height: cssHeight }, { cssOnly: true });
 
   if (canvas.wrapperEl) {
     canvas.wrapperEl.style.width = `${cssWidth}px`;
@@ -169,12 +178,17 @@ export function resizeCanvas(canvas, sizeKey) {
   canvas._posterWidth = size.width;
   canvas._posterHeight = size.height;
   fitCanvasToViewport(canvas);
+  if (canvas.__posterBackgroundPath !== undefined) {
+    applyBackground(canvas, canvas.__posterBackgroundPath || null);
+  }
   canvas.renderAll();
 }
 
 export function applyBackground(canvas, path) {
+  canvas.__posterBackgroundPath = path || null;
   const resolvedPath = resolveAssetPath(path);
   console.log('background image resolved', resolvedPath);
+  const { width: posterWidth, height: posterHeight } = getPosterDimensions(canvas);
 
   if (!resolvedPath) {
     canvas.setBackgroundImage(null, () => {
@@ -191,8 +205,8 @@ export function applyBackground(canvas, path) {
       if (!img) return;
 
       const scale = Math.max(
-        canvas.width / img.width,
-        canvas.height / img.height
+        posterWidth / img.width,
+        posterHeight / img.height
       );
 
       const scaledWidth = img.width * scale;
@@ -208,8 +222,8 @@ export function applyBackground(canvas, path) {
         {
           originX: 'left',
           originY: 'top',
-          left: (canvas.width - scaledWidth) / 2,
-          top: (canvas.height - scaledHeight) / 2,
+          left: (posterWidth - scaledWidth) / 2,
+          top: (posterHeight - scaledHeight) / 2,
           scaleX: scale,
           scaleY: scale
         }
@@ -217,6 +231,86 @@ export function applyBackground(canvas, path) {
     },
     { crossOrigin: 'anonymous' }
   );
+}
+
+function getFieldById(id) {
+  return POSTER_FIELDS.find((field) => field.id === id);
+}
+
+export function initializePosterFields(canvas, values = {}) {
+  const existing = canvas
+    .getObjects()
+    .filter((obj) => obj.__posterFieldObject || obj.__posterFieldContainer || obj.__posterFieldTitle);
+  existing.forEach((obj) => canvas.remove(obj));
+
+  POSTER_FIELDS.forEach((field) => {
+    const { rect } = field;
+    const container = new fabric.Rect({
+      left: rect.left,
+      top: rect.top,
+      width: rect.width,
+      height: rect.height,
+      rx: 20,
+      ry: 20,
+      fill: 'rgba(255,255,255,0.82)',
+      stroke: '#D5DDEA',
+      strokeWidth: 2,
+      originX: 'right',
+      originY: 'top',
+      selectable: false,
+      evented: false
+    });
+    container.__posterFieldContainer = true;
+
+    const title = new fabric.Text(field.title, {
+      ...textBase({ size: 44, weight: 700 }),
+      left: rect.left - 30,
+      top: rect.top + 26,
+      selectable: false,
+      evented: false
+    });
+    title.__posterFieldTitle = true;
+
+    const valueText = new fabric.Textbox(values[field.id] || '', {
+      ...textBase({ size: 34, weight: 400 }),
+      left: rect.left - 30,
+      top: rect.top + 95,
+      width: rect.width - 60,
+      selectable: false,
+      evented: false,
+      editable: false,
+      splitByGrapheme: true,
+      textAlign: field.textAlign || 'right',
+      lineHeight: 1.2
+    });
+    valueText.clipPath = new fabric.Rect({
+      left: rect.left - rect.width,
+      top: rect.top + 95,
+      width: rect.width - 20,
+      height: Math.max(44, rect.height - 120),
+      originX: 'left',
+      originY: 'top',
+      absolutePositioned: true
+    });
+    valueText.__posterFieldObject = true;
+    valueText.__posterFieldId = field.id;
+
+    canvas.add(container, title, valueText);
+  });
+
+  renderCanvas(canvas);
+}
+
+export function updatePosterField(canvas, fieldId, nextValue) {
+  const field = getFieldById(fieldId);
+  if (!field) return '';
+  const sanitized = (nextValue || '').slice(0, field.maxChars);
+  const target = canvas.getObjects().find((obj) => obj.__posterFieldObject && obj.__posterFieldId === fieldId);
+  if (!target) return sanitized;
+  target.set({ text: sanitized });
+  target.setCoords();
+  renderCanvas(canvas);
+  return sanitized;
 }
 
 export function addTextPreset(canvas, presetId) {

@@ -75,6 +75,81 @@ export const CONTENT_BOXES = [
   { id: 'emphasis-box', label: 'תיבת דגש', title: 'דגש', text: 'מסר חשוב במיוחד' }
 ];
 
+export const POSTER_FIELDS = [
+  {
+    id: 'projectName',
+    question: 'מה שם המיזם?',
+    title: 'שם המיזם',
+    maxChars: 60,
+    rect: { left: 2260, top: 130, width: 1970, height: 280 },
+    textAlign: 'right'
+  },
+  {
+    id: 'problem',
+    question: 'מה הבעיה שבגללה החלטתן לפתח את המוצר?',
+    title: 'הבעיה',
+    maxChars: 260,
+    rect: { left: 2260, top: 470, width: 1970, height: 520 },
+    textAlign: 'right'
+  },
+  {
+    id: 'audience',
+    question: 'מי קהל היעד שלכן?',
+    title: 'קהל היעד',
+    maxChars: 200,
+    rect: { left: 2260, top: 1060, width: 960, height: 520 },
+    textAlign: 'right'
+  },
+  {
+    id: 'importance',
+    question: 'למה זה חשוב עכשיו?',
+    title: 'למה זה חשוב',
+    maxChars: 200,
+    rect: { left: 1250, top: 1060, width: 970, height: 520 },
+    textAlign: 'right'
+  },
+  {
+    id: 'solution',
+    question: 'מה הפתרון שלכן?',
+    title: 'הפתרון שלנו',
+    maxChars: 240,
+    rect: { left: 2260, top: 1650, width: 1970, height: 500 },
+    textAlign: 'right'
+  },
+  {
+    id: 'howItWorks',
+    question: 'איך הפתרון עובד?',
+    title: 'איך זה עובד',
+    maxChars: 240,
+    rect: { left: 2260, top: 2210, width: 1970, height: 500 },
+    textAlign: 'right'
+  },
+  {
+    id: 'unique',
+    question: 'מה מייחד אתכן לעומת פתרונות אחרים?',
+    title: 'מה מייחד אותנו',
+    maxChars: 180,
+    rect: { left: 2260, top: 2770, width: 960, height: 500 },
+    textAlign: 'right'
+  },
+  {
+    id: 'benefit',
+    question: 'מה התועלת המרכזית למשתמש?',
+    title: 'מה התועלת',
+    maxChars: 180,
+    rect: { left: 1250, top: 2770, width: 970, height: 500 },
+    textAlign: 'right'
+  },
+  {
+    id: 'team',
+    question: 'מי בצוות שלכן?',
+    title: 'צוות',
+    maxChars: 120,
+    rect: { left: 2260, top: 3330, width: 1970, height: 170 },
+    textAlign: 'right'
+  }
+];
+
 export const TEMPLATE_LAYOUT = [
   { type: 'title', text: 'כותרת החקר', top: 120, left: 2200, size: 96 },
   { type: 'subtitle', text: 'תת-כותרת קצרה וממוקדת', top: 280, left: 2200, size: 52 },
