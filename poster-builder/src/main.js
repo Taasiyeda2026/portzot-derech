@@ -36,7 +36,7 @@ const h = React.createElement;
 
 const SERIALIZE_PROPS = [
   'lockMovementX', 'lockMovementY', 'lockScalingX', 'lockScalingY', 'lockRotation',
-  '__posterFixedLogo', '__posterFixedCredit',
+  '__posterFixedCredit',
   '__posterFieldObject', '__posterFieldContainer', '__posterFieldTitle', '__posterFieldId',
   '__posterImageZone', '__posterZoneImage', '__posterSlotKey'
 ];
@@ -93,7 +93,6 @@ function App() {
     obj.__posterFieldObject    ||
     obj.__posterFieldContainer ||
     obj.__posterFieldTitle     ||
-    obj.__posterFixedLogo      ||
     obj.__posterFixedCredit    ||
     obj.__posterImageZone      ||
     obj.__posterZoneImage;
