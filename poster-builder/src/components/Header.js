@@ -2,7 +2,7 @@ import { POSTER_SIZES } from '../data/config.js';
 
 const h = React.createElement;
 
-export function Header({ posterSize, onSizeChange, onNew, onSave, onReset, onExportPng, onExportPdf }) {
+export function Header({ posterSize, onSizeChange, onNew, onSave, onReset, onExportPdf }) {
   return h('header', { className: 'header' },
     h('div', { className: 'header-title' }, 'בונות פוסטר חקר'),
     h('div', { className: 'header-actions' },
@@ -17,7 +17,6 @@ export function Header({ posterSize, onSizeChange, onNew, onSave, onReset, onExp
       h('button', { className: 'btn', onClick: onNew }, 'חדש'),
       h('button', { className: 'btn', onClick: onSave }, 'שמור'),
       h('button', { className: 'btn', onClick: onReset }, 'איפוס'),
-      h('button', { className: 'btn btn-primary', onClick: onExportPng }, 'ייצוא PNG'),
       h('button', { className: 'btn btn-primary', onClick: onExportPdf }, 'ייצוא PDF')
     )
   );
