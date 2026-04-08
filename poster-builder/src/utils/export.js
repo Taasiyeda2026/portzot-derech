@@ -24,7 +24,7 @@ export function exportPDF(canvas, sizeKey) {
   const zoom = canvas.getZoom() || 1;
   const dataUrl = canvas.toDataURL({ format: 'png', quality: 1, multiplier: 1 / zoom });
   const pdf = new jsPDF({
-    orientation: 'portrait',
+    orientation: POSTER_SIZES[sizeKey].width >= POSTER_SIZES[sizeKey].height ? 'landscape' : 'portrait',
     unit: 'px',
     format: [POSTER_SIZES[sizeKey].width, POSTER_SIZES[sizeKey].height]
   });

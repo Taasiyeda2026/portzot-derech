@@ -41,124 +41,68 @@ export const ELEMENTS = Array.from({ length: 56 }, (_, index) => ({
   path: `/poster-builder/assets/elements/icon${index + 1}.png`
 }));
 
-export const FONT_OPTIONS = [
-  { id: 'ibm-regular', label: 'IBM Plex Sans Hebrew', family: 'IBMPlexSansHebrew', weight: 400, file: '/poster-builder/assets/fonts/IBMPlexSansHebrew-Regular.ttf' },
-  { id: 'ibm-medium', label: 'IBM Plex Sans Hebrew Medium', family: 'IBMPlexSansHebrew', weight: 500, file: '/poster-builder/assets/fonts/IBMPlexSansHebrew-Medium.ttf' },
-  { id: 'ibm-bold', label: 'IBM Plex Sans Hebrew Bold', family: 'IBMPlexSansHebrew', weight: 700, file: '/poster-builder/assets/fonts/IBMPlexSansHebrew-Bold.ttf' },
-  { id: 'alice-regular', label: 'Alice', family: 'Alice', weight: 400, file: '/poster-builder/assets/fonts/Alice-Regular.ttf' },
-  { id: 'choco-regular', label: 'Choco', family: 'Choco', weight: 400, file: '/poster-builder/assets/fonts/Choco.otf' },
-  { id: 'gveret', label: 'GveretLevin (עיצובי)', family: 'GveretLevin', weight: 400, file: '/poster-builder/assets/fonts/GveretLevin-Regular.ttf' }
+export const FIELD_DEFINITIONS = [
+  { id: 'projectName', question: 'מה שם המיזם?', shortLabel: 'שם המיזם', maxChars: 60, align: 'right', fontSize: 66, minFontSize: 42, lineHeight: 1.05 },
+  { id: 'problem', question: 'מה הבעיה שבגללה החלטתן לפתח את המוצר?', shortLabel: 'הבעיה', maxChars: 260, align: 'right' },
+  { id: 'audience', question: 'מי קהל היעד שלכן?', shortLabel: 'קהל היעד', maxChars: 200, align: 'right' },
+  { id: 'importance', question: 'למה זה חשוב עכשיו?', shortLabel: 'למה זה חשוב', maxChars: 200, align: 'right' },
+  { id: 'solution', question: 'מה הפתרון שלכן?', shortLabel: 'הפתרון שלנו', maxChars: 240, align: 'right' },
+  { id: 'howItWorks', question: 'איך הפתרון עובד?', shortLabel: 'איך זה עובד', maxChars: 240, align: 'right' },
+  { id: 'unique', question: 'מה מייחד אתכן לעומת פתרונות אחרים?', shortLabel: 'מה מייחד אותנו', maxChars: 180, align: 'right' },
+  { id: 'benefit', question: 'מה התועלת המרכזית למשתמש?', shortLabel: 'מה התועלת', maxChars: 180, align: 'right' },
+  { id: 'team', question: 'מי בצוות שלכן?', shortLabel: 'צוות', maxChars: 120, align: 'right', fontSize: 30, minFontSize: 24 }
 ];
 
-export const PALETTES = [
-  { name: 'סגול שזיף', colors: ['#5E2750', '#8B4A7A', '#C48DB8', '#EDD8E8', '#FAF5FB'] },
-  { name: 'סגול רך', colors: ['#5B4B8A', '#7D6BB3', '#B7A8DD', '#EAE3F8', '#FAF8FE'] },
-  { name: 'טורקיז נקי', colors: ['#1D6F78', '#2FA3B1', '#8ED5DB', '#DDF4F6', '#F7FCFD'] },
-  { name: 'ורוד מעושן', colors: ['#8F5F73', '#C0869F', '#E2BED0', '#F6E8EF', '#FDF9FB'] },
-  { name: 'אפור אלגנטי', colors: ['#495057', '#6C757D', '#ADB5BD', '#E9ECEF', '#F8F9FA'] }
-];
+const PORTRAIT_RECTS = {
+  projectName: { x: 2360, y: 120, width: 1040, height: 320 },
+  problem: { x: 2360, y: 470, width: 1040, height: 540 },
+  audience: { x: 2360, y: 1040, width: 500, height: 520 },
+  importance: { x: 1840, y: 1040, width: 500, height: 520 },
+  solution: { x: 2360, y: 1590, width: 1040, height: 500 },
+  howItWorks: { x: 2360, y: 2120, width: 1040, height: 500 },
+  unique: { x: 2360, y: 2650, width: 500, height: 500 },
+  benefit: { x: 1840, y: 2650, width: 500, height: 500 },
+  team: { x: 2360, y: 3180, width: 1040, height: 210 }
+};
 
-export const TEXT_PRESETS = [
-  { id: 'title', label: 'כותרת', text: 'כותרת כאן', size: 84, weight: 700 },
-  { id: 'subtitle', label: 'תת-כותרת', text: 'תת-כותרת כאן', size: 52, weight: 500 },
-  { id: 'body', label: 'גוף טקסט', text: 'הקלידי כאן טקסט', size: 38, weight: 400 },
-  { id: 'short', label: 'טקסט קצר', text: 'טקסט קצר', size: 32, weight: 400 },
-  { id: 'quote', label: 'ציטוט / הדגשה', text: '"רעיון מרכזי"', size: 44, weight: 500 }
-];
+const LANDSCAPE_RECTS = {
+  projectName: { x: 3390, y: 90, width: 1470, height: 250 },
+  problem: { x: 3390, y: 370, width: 1060, height: 430 },
+  audience: { x: 2280, y: 370, width: 1060, height: 430 },
+  importance: { x: 1170, y: 370, width: 1060, height: 430 },
+  solution: { x: 3390, y: 840, width: 1470, height: 430 },
+  howItWorks: { x: 3390, y: 1310, width: 1470, height: 430 },
+  unique: { x: 1860, y: 1310, width: 1470, height: 430 },
+  benefit: { x: 3390, y: 1780, width: 1060, height: 430 },
+  team: { x: 2280, y: 1780, width: 2170, height: 430 }
+};
 
-export const CONTENT_BOXES = [
-  { id: 'header-box', label: 'תיבת כותרת', title: 'כותרת', text: 'כתבי כאן כותרת קצרה' },
-  { id: 'content-box', label: 'תיבת תוכן', title: 'תוכן', text: 'כתבי כאן תוכן מפורט יותר' },
-  { id: 'question-box', label: 'תיבת שאלה', title: 'שאלה', text: 'מה רצינו לבדוק?' },
-  { id: 'insight-box', label: 'תיבת תובנה', title: 'תובנה', text: 'מה למדנו מהחקר?' },
-  { id: 'fact-box', label: 'תיבת עובדה', title: 'עובדה', text: 'עובדה חשובה להצגה' },
-  { id: 'emphasis-box', label: 'תיבת דגש', title: 'דגש', text: 'מסר חשוב במיוחד' }
-];
+function withLayout(layoutRects) {
+  return FIELD_DEFINITIONS.map((field) => {
+    const rect = layoutRects[field.id];
+    return {
+      id: field.id,
+      question: field.question,
+      shortLabel: field.shortLabel,
+      maxChars: field.maxChars,
+      x: rect.x,
+      y: rect.y,
+      width: rect.width,
+      height: rect.height,
+      align: field.align,
+      fontSize: field.fontSize || 34,
+      minFontSize: field.minFontSize || 24,
+      lineHeight: field.lineHeight || 1.2,
+      titleSpacing: field.titleSpacing || 68
+    };
+  });
+}
 
-export const POSTER_FIELDS = [
-  {
-    id: 'projectName',
-    question: 'מה שם המיזם?',
-    title: 'שם המיזם',
-    maxChars: 60,
-    rect: { left: 2260, top: 130, width: 1970, height: 280 },
-    textAlign: 'right'
-  },
-  {
-    id: 'problem',
-    question: 'מה הבעיה שבגללה החלטתן לפתח את המוצר?',
-    title: 'הבעיה',
-    maxChars: 260,
-    rect: { left: 2260, top: 470, width: 1970, height: 520 },
-    textAlign: 'right'
-  },
-  {
-    id: 'audience',
-    question: 'מי קהל היעד שלכן?',
-    title: 'קהל היעד',
-    maxChars: 200,
-    rect: { left: 2260, top: 1060, width: 960, height: 520 },
-    textAlign: 'right'
-  },
-  {
-    id: 'importance',
-    question: 'למה זה חשוב עכשיו?',
-    title: 'למה זה חשוב',
-    maxChars: 200,
-    rect: { left: 1250, top: 1060, width: 970, height: 520 },
-    textAlign: 'right'
-  },
-  {
-    id: 'solution',
-    question: 'מה הפתרון שלכן?',
-    title: 'הפתרון שלנו',
-    maxChars: 240,
-    rect: { left: 2260, top: 1650, width: 1970, height: 500 },
-    textAlign: 'right'
-  },
-  {
-    id: 'howItWorks',
-    question: 'איך הפתרון עובד?',
-    title: 'איך זה עובד',
-    maxChars: 240,
-    rect: { left: 2260, top: 2210, width: 1970, height: 500 },
-    textAlign: 'right'
-  },
-  {
-    id: 'unique',
-    question: 'מה מייחד אתכן לעומת פתרונות אחרים?',
-    title: 'מה מייחד אותנו',
-    maxChars: 180,
-    rect: { left: 2260, top: 2770, width: 960, height: 500 },
-    textAlign: 'right'
-  },
-  {
-    id: 'benefit',
-    question: 'מה התועלת המרכזית למשתמש?',
-    title: 'מה התועלת',
-    maxChars: 180,
-    rect: { left: 1250, top: 2770, width: 970, height: 500 },
-    textAlign: 'right'
-  },
-  {
-    id: 'team',
-    question: 'מי בצוות שלכן?',
-    title: 'צוות',
-    maxChars: 120,
-    rect: { left: 2260, top: 3330, width: 1970, height: 170 },
-    textAlign: 'right'
-  }
-];
+export const POSTER_FIELDS_BY_SIZE = {
+  A4: withLayout(PORTRAIT_RECTS),
+  A4_LANDSCAPE: withLayout(LANDSCAPE_RECTS)
+};
 
-export const TEMPLATE_LAYOUT = [
-  { type: 'title', text: 'כותרת החקר', top: 120, left: 2200, size: 96 },
-  { type: 'subtitle', text: 'תת-כותרת קצרה וממוקדת', top: 280, left: 2200, size: 52 },
-  { type: 'box', title: 'הבעיה', text: 'מה הבעיה שבחרנו לחקור?', top: 500, left: 2200, width: 2050, height: 560 },
-  { type: 'box', title: 'קהל יעד', text: 'למי הפתרון מיועד?', top: 1120, left: 2200, width: 980, height: 540 },
-  { type: 'box', title: 'רעיון / פתרון', text: 'מה הרעיון שפיתחנו?', top: 1120, left: 1180, width: 1030, height: 540 },
-  { type: 'box', title: 'תמונה / המחשה', text: 'אפשר להוסיף כאן תמונה או אייקונים', top: 1720, left: 2200, width: 2050, height: 920 },
-  { type: 'box', title: 'מסקנה / תובנה', text: 'מה המסקנה העיקרית?', top: 2700, left: 2200, width: 2050, height: 520 },
-  { type: 'footer', text: 'שם התלמידה / הקבוצה', top: 3320, left: 2200, size: 42 }
-];
-
-export const SAFE_MARGIN = 120;
+export function getPosterFields(sizeKey) {
+  return POSTER_FIELDS_BY_SIZE[normalizePosterSize(sizeKey)] || POSTER_FIELDS_BY_SIZE.A4;
+}
