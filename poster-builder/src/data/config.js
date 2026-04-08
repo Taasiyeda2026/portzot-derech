@@ -51,7 +51,7 @@ export const FONT_OPTIONS = [
 ];
 
 export const PALETTES = [
-  { name: 'כחול טכנולוגי', colors: ['#1F3A5F', '#3F6EA8', '#8FB7E8', '#DCEBFA', '#F7FAFF'] },
+  { name: 'סגול שזיף', colors: ['#5E2750', '#8B4A7A', '#C48DB8', '#EDD8E8', '#FAF5FB'] },
   { name: 'סגול רך', colors: ['#5B4B8A', '#7D6BB3', '#B7A8DD', '#EAE3F8', '#FAF8FE'] },
   { name: 'טורקיז נקי', colors: ['#1D6F78', '#2FA3B1', '#8ED5DB', '#DDF4F6', '#F7FCFD'] },
   { name: 'ורוד מעושן', colors: ['#8F5F73', '#C0869F', '#E2BED0', '#F6E8EF', '#FDF9FB'] },

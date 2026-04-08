@@ -28,7 +28,7 @@ function textBase(preset, overrides = {}) {
     originY: 'top',
     textAlign: 'right',
     direction: 'rtl',
-    fill: '#1F3A5F',
+    fill: '#5E2750',
     fontFamily: DEFAULT_TEXT_FONT,
     fontWeight: preset.weight ?? 400,
     fontSize: preset.size,
