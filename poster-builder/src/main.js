@@ -4,6 +4,7 @@ import { ActionPanel } from './components/ActionPanel.js';
 import { ObjectToolbar } from './components/ObjectToolbar.js';
 import { normalizePosterSize, isBackgroundCompatibleWithSize, FIELD_DEFINITIONS } from './data/config.js';
 import {
+  registerFonts,
   createEditor,
   addElement,
   applyBackground,
@@ -93,47 +94,58 @@ function App() {
   useEffect(() => {
     if (!canvasRef.current || fabricRef.current) return;
 
-    const canvas = createEditor(canvasRef.current, posterSizeRef.current);
-    if (!canvas) return;
+    let disposed = false;
 
-    fabricRef.current = canvas;
+    registerFonts().finally(() => {
+      if (disposed || !canvasRef.current || fabricRef.current) return;
 
-    const autoSave = () => {
-      if (!isHydratingRef.current) saveNow();
-    };
+      const canvas = createEditor(canvasRef.current, posterSizeRef.current);
+      if (!canvas) return;
 
-    const onSelectionChanged = ({ selected }) => {
-      const active = selected?.[0] ?? null;
-      setSelectedObject(active);
-      setSelectedLocked(Boolean(active?.lockMovementX));
-    };
+      fabricRef.current = canvas;
 
-    const onSelectionCleared = () => {
-      setSelectedObject(null);
-      setSelectedLocked(false);
-    };
+      const autoSave = () => {
+        if (!isHydratingRef.current) saveNow();
+      };
 
-    canvas.on('selection:created', onSelectionChanged);
-    canvas.on('selection:updated', onSelectionChanged);
-    canvas.on('selection:cleared', onSelectionCleared);
+      const onSelectionChanged = ({ selected }) => {
+        const active = selected?.[0] ?? null;
+        setSelectedObject(active);
+        setSelectedLocked(Boolean(active?.lockMovementX));
+      };
 
-    ['object:added', 'object:modified', 'object:removed'].forEach((evt) => canvas.on(evt, autoSave));
+      const onSelectionCleared = () => {
+        setSelectedObject(null);
+        setSelectedLocked(false);
+      };
 
-    const saved = loadProject();
-    if (saved?.canvas) {
-      hydrate(saved, canvas);
-    } else {
-      resizeCanvas(canvas, posterSizeRef.current);
-      initializePosterFields(canvas, EMPTY_CONTENT, posterSizeRef.current);
-      applyBackground(canvas, null);
-      saveNow();
-    }
+      canvas.on('selection:created', onSelectionChanged);
+      canvas.on('selection:updated', onSelectionChanged);
+      canvas.on('selection:cleared', onSelectionCleared);
+
+      ['object:added', 'object:modified', 'object:removed'].forEach((evt) => canvas.on(evt, autoSave));
+
+      const saved = loadProject();
+      if (saved?.canvas) {
+        hydrate(saved, canvas);
+      } else {
+        resizeCanvas(canvas, posterSizeRef.current);
+        initializePosterFields(canvas, EMPTY_CONTENT, posterSizeRef.current);
+        applyBackground(canvas, null);
+        saveNow();
+      }
+    });
 
     return () => {
-      ['object:added', 'object:modified', 'object:removed'].forEach((evt) => canvas.off(evt, autoSave));
-      canvas.off('selection:created', onSelectionChanged);
-      canvas.off('selection:updated', onSelectionChanged);
-      canvas.off('selection:cleared', onSelectionCleared);
+      disposed = true;
+      const canvas = fabricRef.current;
+      if (!canvas) return;
+      canvas.off('selection:created');
+      canvas.off('selection:updated');
+      canvas.off('selection:cleared');
+      canvas.off('object:added');
+      canvas.off('object:modified');
+      canvas.off('object:removed');
       canvas.dispose();
       fabricRef.current = null;
     };

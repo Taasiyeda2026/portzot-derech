@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'IBMPlexSansHebrew';
-  src: url('/poster-builder/assets/fonts/IBMPlexSansHebrew-Regular.ttf') format('truetype');
+  src: url('../assets/fonts/IBMPlexSansHebrew-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -8,7 +8,7 @@
 
 @font-face {
   font-family: 'IBMPlexSansHebrew';
-  src: url('/poster-builder/assets/fonts/IBMPlexSansHebrew-Medium.ttf') format('truetype');
+  src: url('../assets/fonts/IBMPlexSansHebrew-Medium.ttf') format('truetype');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -16,7 +16,7 @@
 
 @font-face {
   font-family: 'IBMPlexSansHebrew';
-  src: url('/poster-builder/assets/fonts/IBMPlexSansHebrew-Bold.ttf') format('truetype');
+  src: url('../assets/fonts/IBMPlexSansHebrew-Bold.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -137,11 +137,15 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 0;
+  height: 100%;
+  overscroll-behavior: contain;
 }
 
 .action-panel.open {
   width: 300px;
+  min-width: 300px;
   padding: 14px;
+  box-shadow: 8px 0 24px rgba(94, 39, 80, 0.08);
 }
 
 .action-panel.empty { width: 0; }
@@ -164,6 +168,7 @@ body {
   min-height: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
+  overscroll-behavior-y: contain;
   padding-inline-end: 2px;
 }
 
@@ -175,6 +180,7 @@ body {
   flex-direction: column;
   min-height: 0;
   overflow: hidden;
+  overscroll-behavior: contain;
 }
 
 .poster-content-title {
@@ -189,8 +195,10 @@ body {
   flex-direction: column;
   gap: 12px;
   min-height: 0;
+  height: 100%;
   overflow-y: auto;
   overscroll-behavior: contain;
+  overscroll-behavior-y: contain;
   padding-inline-end: 3px;
 }
 
@@ -272,22 +280,23 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid #dbc8ea;
-  border-radius: 12px;
-  background: #eee4f7;
+  border: 1px solid #dfd6e8;
+  border-radius: 14px;
+  background: #f2edf8;
   min-height: 0;
   padding: 18px;
   overflow: auto;
+  overscroll-behavior: contain;
 }
 
 .canvas-wrapper .canvas-container {
-  border: 1px solid #ccb3e0;
-  box-shadow: 0 14px 30px rgba(94, 39, 80, 0.14);
+  border: 1px solid #cabbd9;
+  box-shadow: 0 16px 34px rgba(94, 39, 80, 0.16);
   background: #fff;
 }
 
 canvas {
-  box-shadow: 0 10px 24px rgba(94, 39, 80, 0.1);
+  box-shadow: none;
   border-radius: 0;
 }
 
