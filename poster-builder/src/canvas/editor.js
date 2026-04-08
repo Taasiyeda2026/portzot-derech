@@ -1,7 +1,7 @@
 import { POSTER_SIZES, normalizePosterSize, getPosterFields } from '../data/config.js';
 
 const DEFAULT_TEXT_FONT = 'IBMPlexSansHebrew';
-const FIXED_LOGO_PATH = '/icon/logo.png';
+const FIXED_LOGO_PATH = '/poster-builder/assets/logoposter.png';
 const FIXED_CREDIT_TEXT = '© 2026 פורצות דרך | תעשיידע';
 
 function resolveAssetPath(path) {
@@ -230,7 +230,27 @@ function ensureFixedTemplateDecorations(canvas) {
   }
 }
 
-export function registerFonts() {}
+export function registerFonts() {
+  if (typeof window === 'undefined' || !('fonts' in document)) return Promise.resolve();
+
+  const families = [
+    { family: 'IBMPlexSansHebrew', weight: '400', url: './assets/fonts/IBMPlexSansHebrew-Regular.ttf' },
+    { family: 'IBMPlexSansHebrew', weight: '500', url: './assets/fonts/IBMPlexSansHebrew-Medium.ttf' },
+    { family: 'IBMPlexSansHebrew', weight: '700', url: './assets/fonts/IBMPlexSansHebrew-Bold.ttf' }
+  ];
+
+  return Promise.all(
+    families.map(async ({ family, weight, url }) => {
+      const font = new FontFace(family, `url(${url})`, { weight, style: 'normal' });
+      try {
+        const loaded = await font.load();
+        document.fonts.add(loaded);
+      } catch (error) {
+        console.warn('Failed loading poster font', family, weight, error);
+      }
+    })
+  );
+}
 
 export function createEditor(element, sizeKey) {
   const safeSizeKey = normalizePosterSize(sizeKey);
