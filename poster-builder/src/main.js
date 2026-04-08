@@ -491,7 +491,7 @@ function App() {
             fields: contentFields,
             onToggle: () => setContentPanelOpen((open) => !open),
             onChange: onContentFieldChange
-          )
+          })
         )
   );
 }

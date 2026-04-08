@@ -28,7 +28,7 @@ function textBase(preset, overrides = {}) {
     originY: 'top',
     textAlign: 'right',
     direction: 'rtl',
-    fill: '#1F3A5F',
+    fill: '#5E2750',
     fontFamily: DEFAULT_TEXT_FONT,
     fontWeight: preset.weight ?? 400,
     fontSize: preset.size,
@@ -41,10 +41,12 @@ function keepInside(canvas, obj) {
   const bounds = obj.getBoundingRect(true);
   let left = obj.left;
   let top = obj.top;
-  const maxX = canvas.width - SAFE_MARGIN;
+  const logicalW = canvas._posterWidth || canvas.width / (canvas.getZoom() || 1);
+  const logicalH = canvas._posterHeight || canvas.height / (canvas.getZoom() || 1);
+  const maxX = logicalW - SAFE_MARGIN;
   const minX = SAFE_MARGIN;
   const minY = SAFE_MARGIN;
-  const maxY = canvas.height - SAFE_MARGIN;
+  const maxY = logicalH - SAFE_MARGIN;
 
   if (bounds.left < minX) left += minX - bounds.left;
   if (bounds.top < minY) top += minY - bounds.top;
@@ -74,6 +76,9 @@ export function createEditor(element, sizeKey) {
     selection: true,
     backgroundColor: '#ffffff'
   });
+
+  canvas._posterWidth = size.width;
+  canvas._posterHeight = size.height;
 
   const safeRect = new fabric.Rect({
     left: SAFE_MARGIN,
@@ -137,41 +142,32 @@ function fitCanvasToViewport(canvas) {
   const container = canvas.wrapperEl?.parentElement;
   if (!container) return;
 
+  const logicalW = canvas._posterWidth;
+  const logicalH = canvas._posterHeight;
+
   const availableWidth = Math.max(320, container.clientWidth - 32);
   const availableHeight = Math.max(320, window.innerHeight - 220);
 
-  const scale = Math.min(
-    1,
-    availableWidth / canvas.width,
-    availableHeight / canvas.height
-  );
+  const scale = Math.min(1, availableWidth / logicalW, availableHeight / logicalH);
 
-  const cssWidth = Math.round(canvas.width * scale);
-  const cssHeight = Math.round(canvas.height * scale);
+  const cssWidth = Math.round(logicalW * scale);
+  const cssHeight = Math.round(logicalH * scale);
+
+  canvas.setZoom(scale);
+  canvas.setDimensions({ width: cssWidth, height: cssHeight });
 
   if (canvas.wrapperEl) {
     canvas.wrapperEl.style.width = `${cssWidth}px`;
     canvas.wrapperEl.style.height = `${cssHeight}px`;
     canvas.wrapperEl.style.margin = '0 auto';
   }
-
-  if (canvas.lowerCanvasEl) {
-    canvas.lowerCanvasEl.style.width = `${cssWidth}px`;
-    canvas.lowerCanvasEl.style.height = `${cssHeight}px`;
-  }
-
-  if (canvas.upperCanvasEl) {
-    canvas.upperCanvasEl.style.width = `${cssWidth}px`;
-    canvas.upperCanvasEl.style.height = `${cssHeight}px`;
-  }
-
-  canvas.calcOffset();
 }
 
 export function resizeCanvas(canvas, sizeKey) {
   const safeSizeKey = normalizePosterSize(sizeKey);
   const size = POSTER_SIZES[safeSizeKey];
-  canvas.setDimensions({ width: size.width, height: size.height });
+  canvas._posterWidth = size.width;
+  canvas._posterHeight = size.height;
   fitCanvasToViewport(canvas);
   canvas.renderAll();
 }

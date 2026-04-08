@@ -4,7 +4,7 @@ const h = React.createElement;
 
 export function Header({ posterSize, onSizeChange, onNew, onSave, onReset, onExportPng, onExportPdf }) {
   return h('header', { className: 'header' },
-    h('div', { className: 'header-title' }, 'בונה פוסטר חקר'),
+    h('div', { className: 'header-title' }, 'בונות פוסטר חקר'),
     h('div', { className: 'header-actions' },
       h('select', {
         className: 'select',
