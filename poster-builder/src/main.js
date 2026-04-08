@@ -17,7 +17,7 @@ import {
   registerFonts
 } from './canvas/editor.js';
 import { saveProject, loadProject, clearProject } from './utils/storage.js';
-import { exportPNG, exportPDF } from './utils/export.js';
+import { exportPDF } from './utils/export.js';
 
 const { useCallback, useEffect, useRef, useState } = React;
 const h = React.createElement;
@@ -403,7 +403,6 @@ function App() {
       onNew,
       onSave: saveNow,
       onReset,
-      onExportPng: () => exportPNG(fabricRef.current, posterSizeRef.current),
       onExportPdf: () => exportPDF(fabricRef.current, posterSizeRef.current)
     }),
     desktopOnly
