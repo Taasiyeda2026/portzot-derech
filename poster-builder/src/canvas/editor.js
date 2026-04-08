@@ -1,6 +1,8 @@
 import { POSTER_SIZES, normalizePosterSize, getPosterFields } from '../data/config.js';
 
 const DEFAULT_TEXT_FONT = 'IBMPlexSansHebrew';
+const FIXED_LOGO_PATH = '/icon/logo.png';
+const FIXED_CREDIT_TEXT = '© 2026 פורצות דרך | תעשיידע';
 
 function resolveAssetPath(path) {
   if (!path) return null;
@@ -141,6 +143,93 @@ function buildFieldObjects(canvas, sizeKey, values = {}) {
   });
 }
 
+
+function upsertFixedCredit(canvas) {
+  const existing = canvas.getObjects().find((obj) => obj.__posterFixedCredit === true);
+  const { width, height } = getPosterDimensions(canvas);
+  const fontSize = Math.round(Math.max(26, Math.min(width, height) * 0.013));
+
+  if (existing) {
+    existing.set({
+      text: FIXED_CREDIT_TEXT,
+      left: width / 2,
+      top: height - Math.round(height * 0.022),
+      fontSize
+    });
+    existing.setCoords();
+    return;
+  }
+
+  const credit = new fabric.Text(FIXED_CREDIT_TEXT, {
+    originX: 'center',
+    originY: 'bottom',
+    left: width / 2,
+    top: height - Math.round(height * 0.022),
+    textAlign: 'center',
+    fill: '#4b5563',
+    fontFamily: DEFAULT_TEXT_FONT,
+    fontWeight: 400,
+    fontSize,
+    selectable: false,
+    evented: false,
+    excludeFromExport: false,
+    hoverCursor: 'default'
+  });
+
+  credit.__posterFixedCredit = true;
+  canvas.add(credit);
+}
+
+function upsertFixedLogo(canvas) {
+  const existing = canvas.getObjects().find((obj) => obj.__posterFixedLogo === true);
+  const { width, height } = getPosterDimensions(canvas);
+  const margin = Math.round(Math.min(width, height) * 0.03);
+  const desiredWidth = Math.round(width * 0.14);
+
+  const placeLogo = (logoObj) => {
+    logoObj.set({
+      originX: 'left',
+      originY: 'top',
+      left: margin,
+      top: margin,
+      selectable: false,
+      evented: false,
+      excludeFromExport: false,
+      hoverCursor: 'default'
+    });
+    logoObj.scaleToWidth(desiredWidth);
+    logoObj.setCoords();
+  };
+
+  if (existing) {
+    placeLogo(existing);
+    return;
+  }
+
+  fabric.Image.fromURL(
+    resolveAssetPath(FIXED_LOGO_PATH),
+    (img) => {
+      if (!img) return;
+      img.__posterFixedLogo = true;
+      placeLogo(img);
+      canvas.add(img);
+      canvas.bringToFront(img);
+      renderCanvas(canvas);
+    },
+    { crossOrigin: 'anonymous' }
+  );
+}
+
+function ensureFixedTemplateDecorations(canvas) {
+  upsertFixedCredit(canvas);
+  upsertFixedLogo(canvas);
+
+  const credit = canvas.getObjects().find((obj) => obj.__posterFixedCredit === true);
+  if (credit) {
+    canvas.bringToFront(credit);
+  }
+}
+
 export function registerFonts() {}
 
 export function createEditor(element, sizeKey) {
@@ -162,6 +251,7 @@ export function createEditor(element, sizeKey) {
   canvas._posterSizeKey = safeSizeKey;
 
   fitCanvasToViewport(canvas);
+  ensureFixedTemplateDecorations(canvas);
   renderCanvas(canvas);
   return canvas;
 }
@@ -176,6 +266,7 @@ export function resizeCanvas(canvas, sizeKey) {
   if (canvas.__posterBackgroundPath !== undefined) {
     applyBackground(canvas, canvas.__posterBackgroundPath || null);
   }
+  ensureFixedTemplateDecorations(canvas);
   renderCanvas(canvas);
 }
 
@@ -214,10 +305,11 @@ export function applyBackground(canvas, path) {
 export function initializePosterFields(canvas, values = {}, sizeKey = canvas._posterSizeKey || 'A4') {
   const existing = canvas
     .getObjects()
-    .filter((obj) => obj.__posterFieldObject || obj.__posterFieldContainer || obj.__posterFieldTitle);
+    .filter((obj) => obj.__posterFieldObject || obj.__posterFieldContainer || obj.__posterFieldTitle || obj.__posterFixedLogo || obj.__posterFixedCredit);
   existing.forEach((obj) => canvas.remove(obj));
 
   buildFieldObjects(canvas, sizeKey, values);
+  ensureFixedTemplateDecorations(canvas);
   renderCanvas(canvas);
 }
 
@@ -299,7 +391,7 @@ export function setLock(canvas, locked) {
 
 export function removeActiveObject(canvas) {
   const active = canvas.getActiveObject();
-  if (!active) return;
+  if (!active || active.__posterFixedLogo || active.__posterFixedCredit) return;
 
   canvas.remove(active);
   canvas.discardActiveObject();

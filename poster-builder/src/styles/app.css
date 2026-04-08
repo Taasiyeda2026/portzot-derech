@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'IBMPlexSansHebrew';
-  src: url('../../assets/fonts/IBMPlexSansHebrew-Regular.ttf') format('truetype');
+  src: url('/poster-builder/assets/fonts/IBMPlexSansHebrew-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -8,7 +8,7 @@
 
 @font-face {
   font-family: 'IBMPlexSansHebrew';
-  src: url('../../assets/fonts/IBMPlexSansHebrew-Medium.ttf') format('truetype');
+  src: url('/poster-builder/assets/fonts/IBMPlexSansHebrew-Medium.ttf') format('truetype');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -16,7 +16,7 @@
 
 @font-face {
   font-family: 'IBMPlexSansHebrew';
-  src: url('../../assets/fonts/IBMPlexSansHebrew-Bold.ttf') format('truetype');
+  src: url('/poster-builder/assets/fonts/IBMPlexSansHebrew-Bold.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -24,15 +24,34 @@
 
 * { box-sizing: border-box; }
 
+html,
+body,
+#root {
+  height: 100%;
+}
+
 body {
   margin: 0;
   font-family: 'IBMPlexSansHebrew', sans-serif;
   background: #f7f0fb;
   color: #223;
+  overflow: hidden;
+}
+
+.app,
+.header,
+.sidebar,
+.action-panel,
+.canvas-area,
+.object-toolbar,
+.btn,
+.header-control,
+.poster-field-input {
+  font-family: 'IBMPlexSansHebrew', sans-serif;
 }
 
 .app {
-  min-height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
 }
@@ -46,6 +65,8 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 10px;
+  position: relative;
+  z-index: 20;
 }
 
 .header-title { font-size: 26px; font-weight: 700; color: #5e2750; }
@@ -64,7 +85,6 @@ body {
   background: #fff;
   border-radius: 10px;
   padding: 0 10px;
-  font-family: inherit;
   font-size: 14px;
   cursor: pointer;
   text-align: center;
@@ -95,22 +115,28 @@ body {
 
 .layout {
   display: grid;
-  grid-template-columns: 0 1fr 360px;
-  min-height: calc(100vh - 72px);
+  grid-template-columns: 0 minmax(0, 1fr) 360px;
+  height: calc(100vh - 72px);
+  min-height: 0;
+  overflow: hidden;
 }
 
 .layout.panel-open {
-  grid-template-columns: 300px 1fr 360px;
+  grid-template-columns: 300px minmax(0, 1fr) 360px;
 }
 
 .action-panel {
   background: #fff;
   border-inline-end: 1px solid #e0d0ec;
-  overflow: auto;
-  transition: width 0.22s ease;
+  transition: width 0.22s ease, padding 0.22s ease;
   width: 0;
+  min-width: 0;
+  overflow: hidden;
   position: relative;
-  z-index: 2;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 .action-panel.open {
@@ -125,6 +151,7 @@ body {
   align-items: center;
   justify-content: space-between;
   margin-bottom: 12px;
+  flex: 0 0 auto;
 }
 
 .action-panel-header h3 {
@@ -132,23 +159,39 @@ body {
   color: #5e2750;
 }
 
+.panel-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-inline-end: 2px;
+}
+
 .sidebar {
   background: #fff;
   border-inline-start: 1px solid #e0d0ec;
   padding: 14px;
-  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .poster-content-title {
   margin: 0 0 12px;
   font-size: 20px;
   color: #5e2750;
+  flex: 0 0 auto;
 }
 
 .poster-content-panel {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-inline-end: 3px;
 }
 
 .poster-field {
@@ -173,7 +216,6 @@ body {
   padding: 10px;
   resize: vertical;
   min-height: 72px;
-  font-family: inherit;
   text-align: right;
   direction: rtl;
 }
@@ -202,6 +244,7 @@ body {
   flex-direction: column;
   gap: 10px;
   overflow: hidden;
+  min-height: 0;
 }
 
 .object-toolbar {
@@ -219,7 +262,6 @@ body {
   background: #fff;
   border-radius: 10px;
   padding: 8px 12px;
-  font-family: inherit;
   cursor: pointer;
 }
 
@@ -232,14 +274,14 @@ body {
   align-items: center;
   border: 1px solid #dbc8ea;
   border-radius: 12px;
-  background: #f3ecfa;
+  background: #eee4f7;
   min-height: 0;
   padding: 18px;
   overflow: auto;
 }
 
 .canvas-wrapper .canvas-container {
-  border: 1px solid #d5c4e6;
+  border: 1px solid #ccb3e0;
   box-shadow: 0 14px 30px rgba(94, 39, 80, 0.14);
   background: #fff;
 }
