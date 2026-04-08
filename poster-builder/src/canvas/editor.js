@@ -10,7 +10,7 @@ import {
 const DEFAULT_TEXT_FONT = DEFAULT_FIELD_FONT;
 const FIXED_CREDIT_TEXT = '© 2026 פורצות דרך | תעשיידע';
 const LIST_SUB_GAP      = 14;
-const LOGO_SRC = new URL('../../assets/logoposter.png', import.meta.url).href;
+const LOGO_SRC = '/poster-builder/assets/logoposter.png';
 
 function resolveAssetPath(path) {
   if (!path) return null;
@@ -311,104 +311,68 @@ function upsertFixedCredit(canvas) {
 }
 
 function upsertFixedLogo(canvas) {
-  const existingLogo    = canvas.getObjects().find((obj) => obj.__posterFixedLogo    === true);
-  const existingBacking = canvas.getObjects().find((obj) => obj.__posterLogoBacking  === true);
-  const { width, height } = getPosterDimensions(canvas);
-  const margin       = Math.round(Math.min(width, height) * 0.03);
-  const desiredWidth = Math.round(width * 0.14);
-  const backPad      = Math.round(desiredWidth * 0.12);
+  if (!canvas.__posterFixedLogoImage) {
+    const nativeImg = new Image();
+    nativeImg.onload = () => renderCanvas(canvas);
+    nativeImg.src = LOGO_SRC;
+    canvas.__posterFixedLogoImage = nativeImg;
+  }
 
-  const placeLogoBacking = (logoObj) => {
-    const logoH = logoObj.getScaledHeight();
+  if (canvas.__posterFixedLogoRenderBound) return;
+
+  const drawFixedLogo = () => {
+    const logoImg = canvas.__posterFixedLogoImage;
+    if (!logoImg || !logoImg.complete || !logoImg.naturalWidth || !logoImg.naturalHeight) return;
+
+    const { width, height } = getPosterDimensions(canvas);
+    const margin       = Math.round(Math.min(width, height) * 0.03);
+    const desiredWidth = Math.round(width * 0.14);
+    const backPad      = Math.round(desiredWidth * 0.12);
+    const logoHeight   = Math.round((desiredWidth / logoImg.naturalWidth) * logoImg.naturalHeight);
+
     const bx = margin;
     const by = margin;
     const bw = desiredWidth + backPad * 2;
-    const bh = logoH + backPad * 2;
-    const props = {
-      originX:     'left',
-      originY:     'top',
-      left:        bx,
-      top:         by,
-      width:       bw,
-      height:      bh,
-      rx: 20, ry: 20,
-      fill:        '#ffffff',
-      stroke:      null,
-      strokeWidth: 0,
-      shadow: new fabric.Shadow({ color: 'rgba(0,0,0,0.22)', blur: 24, offsetX: 0, offsetY: 4 }),
-      selectable:  false,
-      evented:     false,
-      hasControls: false,
-      hasBorders:  false,
-      excludeFromExport: false,
-      hoverCursor: 'default'
-    };
-    if (existingBacking) {
-      existingBacking.set(props);
-      existingBacking.setCoords();
+    const bh = logoHeight + backPad * 2;
+    const radius = 20;
+    const zoom = canvas.getZoom() || 1;
+    const retina = canvas.getRetinaScaling ? canvas.getRetinaScaling() : 1;
+    const [,, , , offsetX = 0, offsetY = 0] = canvas.viewportTransform || [];
+    const scale = zoom * retina;
+    const dx = bx * scale + offsetX * retina;
+    const dy = by * scale + offsetY * retina;
+    const dw = bw * scale;
+    const dh = bh * scale;
+    const lx = (bx + backPad) * scale + offsetX * retina;
+    const ly = (by + backPad) * scale + offsetY * retina;
+    const lw = desiredWidth * scale;
+    const lh = logoHeight * scale;
+
+    const ctx = canvas.getContext();
+    ctx.save();
+    ctx.fillStyle = '#ffffff';
+    if (typeof ctx.roundRect === 'function') {
+      ctx.beginPath();
+      ctx.roundRect(dx, dy, dw, dh, radius * scale);
+      ctx.fill();
     } else {
-      const backing = new fabric.Rect(props);
-      backing.__posterLogoBacking = true;
-      canvas.add(backing);
+      const r = radius * scale;
+      ctx.beginPath();
+      ctx.moveTo(dx + r, dy);
+      ctx.arcTo(dx + dw, dy, dx + dw, dy + dh, r);
+      ctx.arcTo(dx + dw, dy + dh, dx, dy + dh, r);
+      ctx.arcTo(dx, dy + dh, dx, dy, r);
+      ctx.arcTo(dx, dy, dx + dw, dy, r);
+      ctx.closePath();
+      ctx.fill();
     }
+    ctx.drawImage(logoImg, lx, ly, lw, lh);
+    ctx.restore();
   };
 
-  const placeLogo = (logoObj) => {
-    logoObj.scaleToWidth(desiredWidth);
-    placeLogoBacking(logoObj);
-    logoObj.set({
-      originX:     'left',
-      originY:     'top',
-      left:        margin + backPad,
-      top:         margin + backPad,
-      selectable:  false,
-      evented:     false,
-      lockMovementX: true,
-      lockMovementY: true,
-      lockScalingX:  true,
-      lockScalingY:  true,
-      lockRotation:  true,
-      hasControls:   false,
-      hasBorders:    false,
-      excludeFromExport: false,
-      hoverCursor: 'default'
-    });
-    logoObj.setCoords();
-  };
-
-  if (existingLogo) {
-    placeLogo(existingLogo);
-    if (existingBacking) {
-      canvas.bringToFront(existingBacking);
-      canvas.bringToFront(existingLogo);
-    }
-    return;
-  }
-
-  const nativeImg = new Image();
-  nativeImg.onload = () => {
-    const img = new fabric.Image(nativeImg);
-    img.__posterFixedLogo = true;
-    placeLogo(img);
-    const backing = canvas.getObjects().find((o) => o.__posterLogoBacking === true);
-    if (backing) canvas.bringToFront(backing);
-    canvas.add(img);
-    canvas.bringToFront(img);
-    renderCanvas(canvas);
-  };
-  nativeImg.onerror = () => {
-    fabric.Image.fromURL(LOGO_SRC, (img) => {
-      if (!img || !img.width) return;
-      img.__posterFixedLogo = true;
-      placeLogo(img);
-      const backing = canvas.getObjects().find((o) => o.__posterLogoBacking === true);
-      if (backing) canvas.bringToFront(backing);
-      canvas.add(img);
-      canvas.bringToFront(img);
-      renderCanvas(canvas);
-    });
-  };
-  nativeImg.src = LOGO_SRC;
+  canvas.on('after:render', drawFixedLogo);
+  canvas.__posterFixedLogoRenderBound = drawFixedLogo;
+  renderCanvas(canvas);
 }
 
 function ensureFixedTemplateDecorations(canvas) {
