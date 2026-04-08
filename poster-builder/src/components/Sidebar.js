@@ -1,4 +1,4 @@
-import { BACKGROUNDS, PALETTES, FONT_OPTIONS, TEXT_PRESETS, ELEMENTS, CONTENT_BOXES, getPosterOrientation } from '../data/config.js';
+import { BACKGROUNDS, PALETTES, FONT_OPTIONS, ELEMENTS, POSTER_FIELDS, getPosterOrientation } from '../data/config.js';
 
 const h = React.createElement;
 
@@ -6,11 +6,11 @@ const TABS = [
   { id: 'backgrounds', label: 'רקעים' },
   { id: 'colors', label: 'צבעים' },
   { id: 'fonts', label: 'פונטים' },
-  { id: 'texts', label: 'טקסטים' },
+  { id: 'texts', label: 'תוכן הפוסטר' },
   { id: 'elements', label: 'אלמנטים' }
 ];
 
-export function Sidebar({ activeTab, setActiveTab, posterSize, onBackground, onColor, onFont, onText, onElement, onBox }) {
+export function Sidebar({ activeTab, setActiveTab, posterSize, onBackground, onColor, onFont, onElement, contentValues, onContentChange }) {
   const orientation = getPosterOrientation(posterSize);
   const visibleBackgrounds = BACKGROUNDS.filter((bg) => bg.orientation === 'any' || bg.orientation === orientation);
 
@@ -51,10 +51,25 @@ export function Sidebar({ activeTab, setActiveTab, posterSize, onBackground, onC
           onClick: () => onFont(font)
         }, font.label))
       ),
-      activeTab === 'texts' && h('div', { className: 'list' },
-        TEXT_PRESETS.map((item) => h('button', { key: item.id, className: 'list-item', onClick: () => onText(item.id) }, item.label)),
-        h('div', { className: 'list-title' }, 'תיבות תוכן מוכנות'),
-        CONTENT_BOXES.map((item) => h('button', { key: item.id, className: 'list-item', onClick: () => onBox(item.id) }, item.label))
+      activeTab === 'texts' && h('div', { className: 'poster-content-panel' },
+        h('h3', { className: 'poster-content-title' }, 'שאלות הפוסטר'),
+        POSTER_FIELDS.map((field) => {
+          const value = contentValues[field.id] || '';
+          const count = value.length;
+          const ratio = count / field.maxChars;
+          const statusClass = ratio > 1 ? 'overflow' : ratio >= 0.9 ? 'near-limit' : 'ok';
+          return h('label', { key: field.id, className: 'poster-field' },
+            h('span', { className: 'poster-field-question' }, field.question),
+            h('textarea', {
+              className: 'poster-field-input',
+              rows: 3,
+              value,
+              maxLength: field.maxChars,
+              onChange: (event) => onContentChange(field.id, event.target.value)
+            }),
+            h('span', { className: `poster-field-counter ${statusClass}` }, `${count}/${field.maxChars}`)
+          );
+        })
       ),
       activeTab === 'elements' && h('div', { className: 'grid grid-3' },
         ELEMENTS.map((element) => h('button', {

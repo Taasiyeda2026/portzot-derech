@@ -1,25 +1,23 @@
 import { Header } from './components/Header.js';
 import { Sidebar } from './components/Sidebar.js';
 import { ObjectToolbar } from './components/ObjectToolbar.js';
-import { ContentSidebar } from './components/ContentSidebar.js';
-import { normalizePosterSize, isBackgroundCompatibleWithSize } from './data/config.js';
+import { normalizePosterSize, isBackgroundCompatibleWithSize, POSTER_FIELDS } from './data/config.js';
 import {
   createEditor,
-  addTextPreset,
-  addContentBox,
   addElement,
   applyBackground,
   duplicateActiveObject,
   removeActiveObject,
   resizeCanvas,
-  buildTemplate,
+  initializePosterFields,
+  updatePosterField,
   setLock,
   registerFonts
 } from './canvas/editor.js';
 import { saveProject, loadProject, clearProject } from './utils/storage.js';
 import { exportPNG, exportPDF } from './utils/export.js';
 
-const { useCallback, useEffect, useRef, useState } = React;
+const { useEffect, useRef, useState } = React;
 const h = React.createElement;
 
 const SERIALIZE_PROPS = [
@@ -29,57 +27,6 @@ const SERIALIZE_PROPS = [
   'lockScalingY',
   'lockRotation'
 ];
-
-function ensureEditorFieldId(target) {
-  if (!target.__editorFieldId) {
-    target.__editorFieldId = `field-${Math.random().toString(36).slice(2, 11)}`;
-  }
-  return target.__editorFieldId;
-}
-
-function collectPosterFields(canvas) {
-  if (!canvas) return [];
-
-  const fields = [];
-
-  canvas.getObjects().forEach((object) => {
-    if (object.excludeFromExport) return;
-
-    if (object.type === 'i-text') {
-      fields.push({
-        id: ensureEditorFieldId(object),
-        label: 'שדה טקסט חופשי',
-        value: object.text || '',
-        target: object,
-        top: object.top ?? 0
-      });
-    }
-
-    if (object.type === 'group' && typeof object.getObjects === 'function') {
-      const textObjects = object
-        .getObjects()
-        .filter((item) => item.type === 'i-text')
-        .sort((a, b) => (a.top ?? 0) - (b.top ?? 0));
-
-      if (!textObjects.length) return;
-
-      const sectionName = (textObjects[0]?.text || 'מקטע').trim() || 'מקטע';
-
-      textObjects.forEach((textObject, index) => {
-        fields.push({
-          id: ensureEditorFieldId(textObject),
-          label: index === 0 ? `${sectionName} — כותרת` : `${sectionName} — תוכן`,
-          value: textObject.text || '',
-          target: textObject,
-          group: object,
-          top: (object.top ?? 0) + (textObject.top ?? 0)
-        });
-      });
-    }
-  });
-
-  return fields.sort((a, b) => a.top - b.top);
-}
 
 function App() {
   const canvasRef = useRef(null);
@@ -92,12 +39,14 @@ function App() {
   const [selectedLocked, setSelectedLocked] = useState(false);
   const [currentBackground, setCurrentBackground] = useState(null);
   const [initialMode, setInitialMode] = useState('blank');
-  const [contentPanelOpen, setContentPanelOpen] = useState(true);
-  const [contentFields, setContentFields] = useState([]);
+  const [contentValues, setContentValues] = useState(
+    Object.fromEntries(POSTER_FIELDS.map((field) => [field.id, '']))
+  );
 
   const posterSizeRef = useRef('A4');
   const currentBackgroundRef = useRef(null);
   const initialModeRef = useRef('blank');
+  const contentValuesRef = useRef(contentValues);
 
   useEffect(() => {
     posterSizeRef.current = posterSize;
@@ -112,6 +61,10 @@ function App() {
   }, [initialMode]);
 
   useEffect(() => {
+    contentValuesRef.current = contentValues;
+  }, [contentValues]);
+
+  useEffect(() => {
     const onResize = () => {
       const canvas = fabricRef.current;
       if (!canvas) return;
@@ -120,10 +73,6 @@ function App() {
 
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
-  }, []);
-
-  const refreshContentFields = useCallback((canvas = fabricRef.current) => {
-    setContentFields(collectPosterFields(canvas));
   }, []);
 
   useEffect(() => {
@@ -140,6 +89,7 @@ function App() {
       posterSize: posterSizeRef.current,
       mode: initialModeRef.current,
       background: currentBackgroundRef.current,
+      contentValues: contentValuesRef.current,
       canvas: canvas.toJSON(SERIALIZE_PROPS)
     });
   };
@@ -165,9 +115,10 @@ function App() {
 
     canvas.loadFromJSON(saved.canvas, () => {
       applyBackground(canvas, nextBackground);
+      initializePosterFields(canvas, saved.contentValues || {});
       canvas.renderAll();
       console.info('[PosterBuilder] canvas rendered');
-      refreshContentFields(canvas);
+      setContentValues(Object.fromEntries(POSTER_FIELDS.map((field) => [field.id, saved.contentValues?.[field.id] || ''])));
       isHydratingRef.current = false;
     });
   };
@@ -190,11 +141,6 @@ function App() {
     const autoSave = () => {
       if (isHydratingRef.current) return;
       saveNow();
-    };
-
-    const onCanvasChanged = () => {
-      if (isHydratingRef.current) return;
-      refreshContentFields(canvas);
     };
 
     const onSelectionCreated = ({ selected }) => {
@@ -222,7 +168,6 @@ function App() {
 
     ['object:added', 'object:modified', 'object:removed', 'text:changed'].forEach((evt) => {
       canvas.on(evt, autoSave);
-      canvas.on(evt, onCanvasChanged);
     });
 
     const saved = loadProject();
@@ -230,15 +175,14 @@ function App() {
       hydrate(saved, canvas);
     } else {
       resizeCanvas(canvas, posterSizeRef.current);
+      initializePosterFields(canvas, contentValuesRef.current);
       canvas.renderAll();
       console.info('[PosterBuilder] canvas rendered');
-      refreshContentFields(canvas);
     }
 
     return () => {
       ['object:added', 'object:modified', 'object:removed', 'text:changed'].forEach((evt) => {
         canvas.off(evt, autoSave);
-        canvas.off(evt, onCanvasChanged);
       });
 
       canvas.off('selection:created', onSelectionCreated);
@@ -248,7 +192,7 @@ function App() {
       canvas.dispose();
       fabricRef.current = null;
     };
-  }, [refreshContentFields]);
+  }, []);
 
   const start = (mode, options = {}) => {
     const canvas = fabricRef.current;
@@ -266,19 +210,19 @@ function App() {
     }
 
     if (nextMode === 'template') {
-      buildTemplate(canvas);
+      initializePosterFields(canvas, contentValuesRef.current);
     } else {
       canvas.getObjects().slice().forEach((obj) => {
-        if (!obj.excludeFromExport) {
+        if (!obj.excludeFromExport && !obj.__posterFieldObject && !obj.__posterFieldContainer && !obj.__posterFieldTitle) {
           canvas.remove(obj);
         }
       });
+      initializePosterFields(canvas, contentValuesRef.current);
       canvas.renderAll();
       console.info('[PosterBuilder] canvas rendered');
     }
 
     saveNow();
-    refreshContentFields(canvas);
   };
 
   const handleSizeChange = (sizeKey) => {
@@ -300,7 +244,6 @@ function App() {
     setCurrentBackground(backgroundToApply);
     applyBackground(canvas, backgroundToApply);
     saveNow();
-    refreshContentFields(canvas);
   };
 
   const applyToSelection = (fn) => {
@@ -314,31 +257,23 @@ function App() {
     canvas.renderAll();
     console.info('[PosterBuilder] canvas rendered');
     saveNow();
-    refreshContentFields(canvas);
   };
 
-  const onContentFieldChange = (fieldId, value) => {
+  const onContentFieldChange = (fieldId, rawValue) => {
     const canvas = fabricRef.current;
-    const field = contentFields.find((item) => item.id === fieldId);
-    if (!canvas || !field?.target) return;
+    if (!canvas) return;
 
-    field.target.set('text', value);
-    field.target.setCoords();
-    if (field.group) {
-      field.group.setCoords();
-      if (typeof field.group.addWithUpdate === 'function') {
-        field.group.addWithUpdate();
-      }
-    }
-
-    canvas.renderAll();
+    const value = updatePosterField(canvas, fieldId, rawValue);
+    setContentValues((prev) => ({ ...prev, [fieldId]: value }));
     saveNow();
-    refreshContentFields(canvas);
   };
 
   const onNew = () => {
     if (!confirm('לפתוח עבודה חדשה?')) return;
     clearProject();
+    const clearedValues = Object.fromEntries(POSTER_FIELDS.map((field) => [field.id, '']));
+    setContentValues(clearedValues);
+    contentValuesRef.current = clearedValues;
     start('blank', { clearBackground: true });
   };
 
@@ -349,13 +284,14 @@ function App() {
     if (!canvas) return;
 
     if (initialModeRef.current === 'template') {
-      buildTemplate(canvas);
+      initializePosterFields(canvas, contentValuesRef.current);
     } else {
       canvas.getObjects().slice().forEach((obj) => {
-        if (!obj.excludeFromExport) {
+        if (!obj.excludeFromExport && !obj.__posterFieldObject && !obj.__posterFieldContainer && !obj.__posterFieldTitle) {
           canvas.remove(obj);
         }
       });
+      initializePosterFields(canvas, contentValuesRef.current);
       canvas.renderAll();
       console.info('[PosterBuilder] canvas rendered');
     }
@@ -410,7 +346,7 @@ function App() {
       ? h('div', { className: 'mobile-msg' }, 'מומלץ לעבוד ממחשב')
       : h(
           'main',
-          { className: `layout ${contentPanelOpen ? 'content-open' : ''}` },
+          { className: 'layout' },
           h(Sidebar, {
             activeTab,
             setActiveTab,
@@ -431,18 +367,12 @@ function App() {
               applyToSelection((obj) =>
                 obj.set({ fontFamily: font.family, fontWeight: font.weight })
               ),
-            onText: (presetId) => {
-              addTextPreset(fabricRef.current, presetId);
-              saveNow();
-            },
             onElement: (path) => {
               addElement(fabricRef.current, path);
               setTimeout(saveNow, 120);
             },
-            onBox: (boxId) => {
-              addContentBox(fabricRef.current, boxId);
-              saveNow();
-            }
+            contentValues,
+            onContentChange: onContentFieldChange
           }),
           h(
             'section',
@@ -485,13 +415,7 @@ function App() {
               { className: 'canvas-wrapper' },
               h('canvas', { ref: canvasRef })
             )
-          ),
-          h(ContentSidebar, {
-            isOpen: contentPanelOpen,
-            fields: contentFields,
-            onToggle: () => setContentPanelOpen((open) => !open),
-            onChange: onContentFieldChange
-          })
+          )
         )
   );
 }
