@@ -10,7 +10,7 @@ import {
 const DEFAULT_TEXT_FONT = DEFAULT_FIELD_FONT;
 const FIXED_CREDIT_TEXT = '© 2026 פורצות דרך | תעשיידע';
 const LIST_SUB_GAP      = 14;
-const LOGO_SRC = (import.meta.env.BASE_URL || '/poster-builder/') + 'assets/logoposter.png';
+const LOGO_SRC = new URL('../../assets/logoposter.png', import.meta.url).href;
 
 function resolveAssetPath(path) {
   if (!path) return null;
