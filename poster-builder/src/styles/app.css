@@ -1,19 +1,25 @@
 @font-face {
   font-family: 'IBMPlexSansHebrew';
-  src: url('/poster-builder/assets/fonts/IBMPlexSansHebrew-Regular.ttf') format('truetype');
+  src: url('../../assets/fonts/IBMPlexSansHebrew-Regular.ttf') format('truetype');
   font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
   font-family: 'IBMPlexSansHebrew';
-  src: url('/poster-builder/assets/fonts/IBMPlexSansHebrew-Medium.ttf') format('truetype');
+  src: url('../../assets/fonts/IBMPlexSansHebrew-Medium.ttf') format('truetype');
   font-weight: 500;
+  font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
   font-family: 'IBMPlexSansHebrew';
-  src: url('/poster-builder/assets/fonts/IBMPlexSansHebrew-Bold.ttf') format('truetype');
+  src: url('../../assets/fonts/IBMPlexSansHebrew-Bold.ttf') format('truetype');
   font-weight: 700;
+  font-style: normal;
+  font-display: swap;
 }
 
 * { box-sizing: border-box; }
@@ -93,12 +99,18 @@ body {
   min-height: calc(100vh - 72px);
 }
 
+.layout.panel-open {
+  grid-template-columns: 300px 1fr 360px;
+}
+
 .action-panel {
   background: #fff;
   border-inline-end: 1px solid #e0d0ec;
   overflow: auto;
   transition: width 0.22s ease;
   width: 0;
+  position: relative;
+  z-index: 2;
 }
 
 .action-panel.open {
@@ -218,15 +230,22 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px dashed #c8b0dc;
+  border: 1px solid #dbc8ea;
   border-radius: 12px;
-  background: #efe6f8;
+  background: #f3ecfa;
   min-height: 0;
-  padding: 12px;
+  padding: 18px;
+  overflow: auto;
+}
+
+.canvas-wrapper .canvas-container {
+  border: 1px solid #d5c4e6;
+  box-shadow: 0 14px 30px rgba(94, 39, 80, 0.14);
+  background: #fff;
 }
 
 canvas {
-  box-shadow: 0 14px 30px rgba(94, 39, 80, 0.18);
+  box-shadow: 0 10px 24px rgba(94, 39, 80, 0.1);
   border-radius: 0;
 }
 

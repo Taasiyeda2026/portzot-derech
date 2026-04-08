@@ -264,7 +264,7 @@ function App() {
     }),
     desktopOnly
       ? h('div', { className: 'mobile-msg' }, 'מומלץ לעבוד ממחשב')
-      : h('main', { className: 'layout' },
+      : h('main', { className: `layout ${activePanel ? 'panel-open' : ''}` },
           h(ActionPanel, {
             activePanel,
             posterSize,
