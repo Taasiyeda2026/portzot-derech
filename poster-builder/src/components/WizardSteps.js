@@ -40,7 +40,7 @@ export function WizardStep1({
   currentBackground, currentShape, titleFont, titleColor,
   onBackground, onShape, onTitleFont, onTitleColor, onNext
 }) {
-  const backgrounds = BACKGROUNDS;
+  const bgImages   = BACKGROUNDS.filter(bg => bg.path);
   const isCustomColor = !PRESET_COLORS.includes(titleColor);
 
   return h('div', { className: 'wz-screen' },
@@ -54,12 +54,16 @@ export function WizardStep1({
 
       h('div', { className: 'wz-section' },
         h('h3', { className: 'wz-section-title' }, 'רקע'),
-        h('div', { className: 'wz-bg-grid' },
+
+        h('div', { className: 'wz-bg-none-row' },
           h('button', {
-            className: `wz-bg-btn ${!currentBackground ? 'active' : ''}`,
+            className: `wz-bg-none-btn ${!currentBackground ? 'active' : ''}`,
             onClick: () => onBackground(null)
-          }, h('span', { className: 'wz-bg-none-label' }, 'ללא רקע')),
-          backgrounds.filter(bg => bg.path).map(bg =>
+          }, 'ללא רקע')
+        ),
+
+        h('div', { className: 'wz-bg-grid' },
+          bgImages.map(bg =>
             h('button', {
               key: bg.id,
               className: `wz-bg-btn ${currentBackground === bg.path ? 'active' : ''}`,
@@ -69,32 +73,32 @@ export function WizardStep1({
         )
       ),
 
-      h('div', { className: 'wz-row-2col' },
-        h('div', { className: 'wz-section' },
-          h('h3', { className: 'wz-section-title' }, 'מסגרת תיבות'),
-          h('div', { className: 'wz-shapes' },
-            SHAPES.map(s =>
-              h('button', {
-                key: s.value,
-                className: `wz-shape-btn ${currentShape === s.value ? 'active' : ''}`,
-                style: { borderRadius: `${s.value * 0.6}px` },
-                title: s.title,
-                onClick: () => onShape(s.value)
-              }, s.symbol)
-            )
+      h('div', { className: 'wz-section' },
+        h('h3', { className: 'wz-section-title' }, 'מסגרת תיבות'),
+        h('div', { className: 'wz-shapes' },
+          SHAPES.map(s =>
+            h('button', {
+              key: s.value,
+              className: `wz-shape-btn ${currentShape === s.value ? 'active' : ''}`,
+              style: { borderRadius: `${s.value * 0.6}px` },
+              title: s.title,
+              onClick: () => onShape(s.value)
+            }, s.symbol)
           )
-        ),
+        )
+      ),
 
-        h('div', { className: 'wz-section' },
-          h('h3', { className: 'wz-section-title' }, 'פונט כותרות'),
-          h('div', { className: 'wz-font-list' },
-            AVAILABLE_FONTS.map(f =>
-              h('button', {
-                key: f.value,
-                className: `wz-font-btn ${titleFont === f.value ? 'active' : ''}`,
-                style: { fontFamily: f.value },
-                onClick: () => onTitleFont(f.value)
-              }, f.label)
+      h('div', { className: 'wz-section' },
+        h('h3', { className: 'wz-section-title' }, 'פונט כותרות'),
+        h('div', { className: 'wz-font-imgs' },
+          AVAILABLE_FONTS.map(f =>
+            h('button', {
+              key: f.value,
+              className: `wz-font-img-btn ${titleFont === f.value ? 'active' : ''}`,
+              title: f.label,
+              onClick: () => onTitleFont(f.value)
+            },
+              h('img', { src: f.img, alt: f.label, className: 'wz-font-img' })
             )
           )
         )

@@ -257,13 +257,11 @@ export function getVisualSlots(sizeKey, productType = 'none') {
 }
 
 export const AVAILABLE_FONTS = [
-  { label: 'IBM Plex (ברירת מחדל)', value: 'IBM Plex Sans Hebrew' },
-  { label: 'Gveret Levin',           value: 'Gveret Levin' },
-  { label: 'Alice',                  value: 'Alice' },
-  { label: 'Choco',                  value: 'Choco' },
-  { label: 'Arial',                  value: 'Arial' },
-  { label: 'Tahoma',                 value: 'Tahoma' },
-  { label: 'David',                  value: 'David' }
+  { label: 'IBM Plex Sans Hebrew', value: 'IBM Plex Sans Hebrew', img: '/poster-builder/assets/fonts/namebutton/IBM.png'    },
+  { label: 'Gveret Levin',         value: 'Gveret Levin',         img: '/poster-builder/assets/fonts/namebutton/GVERET.png' },
+  { label: 'Alef',                 value: 'Alef',                 img: '/poster-builder/assets/fonts/namebutton/ALEF.png'   },
+  { label: 'Alice',                value: 'Alice',                img: '/poster-builder/assets/fonts/namebutton/ALICE.png'  },
+  { label: 'Choco',                value: 'Choco',                img: '/poster-builder/assets/fonts/namebutton/CHOCO.png'  },
 ];
 
 export const DEFAULT_FIELD_FONT  = 'IBM Plex Sans Hebrew';
