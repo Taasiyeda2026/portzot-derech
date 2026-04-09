@@ -1,11 +1,9 @@
-import { Header }        from './components/Header.js';
-import { Sidebar }       from './components/Sidebar.js';
-import { ActionPanel }   from './components/ActionPanel.js';
-import { ObjectToolbar } from './components/ObjectToolbar.js';
+import { WizardStep1, WizardStep2, WizardStep3, StepIndicator } from './components/WizardSteps.js';
 import {
   normalizePosterSize,
   isBackgroundCompatibleWithSize,
   FIELD_DEFINITIONS,
+  ELEMENTS,
   getAllContentKeys,
   buildListText,
   buildParticipantsText,
@@ -27,36 +25,36 @@ import {
   updatePosterField,
   updateFieldLabels,
   updateAllFieldShapes,
+  setTitleStyle,
   setLock,
   isPosterManagedObject
 } from './canvas/editor.js';
 import { saveProject, loadProject, clearProject } from './utils/storage.js';
 import { exportPDF } from './utils/export.js';
 
-const { useEffect, useRef, useState } = React;
+const { useEffect, useRef, useState, useCallback } = React;
 const h = React.createElement;
 
 const SERIALIZE_PROPS = [
-  'lockMovementX', 'lockMovementY', 'lockScalingX', 'lockScalingY', 'lockRotation',
+  'lockMovementX','lockMovementY','lockScalingX','lockScalingY','lockRotation',
   '__posterManaged',
-  '__posterFixedCreditBar', '__posterFixedCredit',
-  '__posterFieldObject', '__posterFieldContainer', '__posterFieldTitle', '__posterFieldId',
-  '__posterListSubBox', '__posterListSubIndex',
-  '__posterImageZone', '__posterZoneImage', '__posterSlotKey'
+  '__posterFixedCreditBar','__posterFixedCredit',
+  '__posterFieldObject','__posterFieldContainer','__posterFieldTitle','__posterFieldId',
+  '__posterListSubBox','__posterListSubIndex',
+  '__posterImageZone','__posterZoneImage','__posterSlotKey'
 ];
 
-const ALL_CONTENT_KEYS = getAllContentKeys();
-
-const EMPTY_CONTENT = Object.fromEntries(ALL_CONTENT_KEYS.map((k) => [k, '']));
-
-const DEFAULT_SETTINGS = Object.fromEntries(
-  FIELD_DEFINITIONS.map((f) => [f.id, { fontFamily: DEFAULT_FIELD_FONT, color: DEFAULT_FIELD_COLOR, borderRadius: 20 }])
+const ALL_CONTENT_KEYS   = getAllContentKeys();
+const EMPTY_CONTENT      = Object.fromEntries(ALL_CONTENT_KEYS.map(k => [k, '']));
+const DEFAULT_SETTINGS   = Object.fromEntries(
+  FIELD_DEFINITIONS.map(f => [f.id, { fontFamily: DEFAULT_FIELD_FONT, color: DEFAULT_FIELD_COLOR, borderRadius: 20 }])
 );
-
-const EMPTY_SLOT_IMAGES = { visual: null, visual_1: null, visual_2: null, visual_3: null };
+const EMPTY_SLOT_IMAGES  = { visual: null, visual_1: null, visual_2: null, visual_3: null };
+const DEFAULT_TITLE_FONT  = 'IBM Plex Sans Hebrew';
+const DEFAULT_TITLE_COLOR = '#5E2750';
 
 function getListParentId(key) {
-  const listIds = FIELD_DEFINITIONS.filter((f) => f.type === 'list').map((f) => f.id);
+  const listIds = FIELD_DEFINITIONS.filter(f => f.type === 'list').map(f => f.id);
   for (const id of listIds) {
     if (key === `${id}_1` || key === `${id}_2` || key === `${id}_3`) return id;
   }
@@ -69,15 +67,18 @@ function App() {
   const fabricRef      = useRef(null);
   const isHydratingRef = useRef(false);
 
-  const [posterSize,       setPosterSize]       = useState('A4');
-  const [productType,      setProductType]      = useState('physical');
-  const [activePanel,      setActivePanel]      = useState(null);
-  const [selectedObject,   setSelectedObject]   = useState(null);
-  const [selectedLocked,   setSelectedLocked]   = useState(false);
+  const [wizardStep,   setWizardStep]   = useState(1);
+  const [posterSize,   setPosterSize]   = useState('A4');
+  const [productType,  setProductType]  = useState('physical');
   const [currentBackground, setCurrentBackground] = useState(null);
   const [contentValues,    setContentValues]    = useState(EMPTY_CONTENT);
   const [fieldSettings,    setFieldSettings]    = useState(DEFAULT_SETTINGS);
   const [slotImages,       setSlotImages]       = useState(EMPTY_SLOT_IMAGES);
+  const [selectedObject,   setSelectedObject]   = useState(null);
+  const [selectedLocked,   setSelectedLocked]   = useState(false);
+  const [titleFont,    setTitleFont]    = useState(DEFAULT_TITLE_FONT);
+  const [titleColor,   setTitleColor]   = useState(DEFAULT_TITLE_COLOR);
+  const [currentShape, setCurrentShape] = useState(20);
 
   const posterSizeRef        = useRef('A4');
   const productTypeRef       = useRef('physical');
@@ -93,59 +94,49 @@ function App() {
   useEffect(() => { fieldSettingsRef.current     = fieldSettings;    }, [fieldSettings]);
   useEffect(() => { slotImagesRef.current        = slotImages;       }, [slotImages]);
 
-  const saveNow = () => {
+  const saveNow = useCallback(() => {
     const canvas = fabricRef.current;
     if (!canvas) return;
-
-    const allObjects  = canvas.getObjects();
-    const userObjects = allObjects.filter((obj) =>
-      !isPosterManagedObject(obj) &&
-      (obj.selectable || obj.evented)
-    );
-    const tempCanvas  = { objects: userObjects.map((o) => o.toObject(SERIALIZE_PROPS)) };
-
+    const userObjects = canvas.getObjects().filter(obj => !isPosterManagedObject(obj) && (obj.selectable || obj.evented));
     saveProject({
-      posterSize:       posterSizeRef.current,
-      productType:      productTypeRef.current,
-      background:       currentBackgroundRef.current,
-      contentValues:    contentValuesRef.current,
-      fieldSettings:    fieldSettingsRef.current,
-      slotImages:       slotImagesRef.current,
-      userObjects:      tempCanvas
+      posterSize:    posterSizeRef.current,
+      productType:   productTypeRef.current,
+      background:    currentBackgroundRef.current,
+      contentValues: contentValuesRef.current,
+      fieldSettings: fieldSettingsRef.current,
+      slotImages:    slotImagesRef.current,
+      userObjects:   { objects: userObjects.map(o => o.toObject(SERIALIZE_PROPS)) }
     });
-  };
+  }, []);
 
-  const hydrate = (saved, canvas = fabricRef.current) => {
+  const hydrate = useCallback((saved, canvas = fabricRef.current) => {
     if (!canvas || !saved) return;
-
-    const nextSize        = normalizePosterSize(saved.posterSize || 'A4');
-    const validTypes = ['physical', 'website', 'app'];
-    const nextProductType = validTypes.includes(saved.productType) ? saved.productType : 'physical';
-    const nextBackground  = saved.background || null;
-    const nextValues      = { ...EMPTY_CONTENT, ...(saved.contentValues || {}) };
-    const nextSettings    = { ...DEFAULT_SETTINGS, ...(saved.fieldSettings || {}) };
-    const nextSlotImages  = { ...EMPTY_SLOT_IMAGES, ...(saved.slotImages || {}) };
+    const validTypes   = ['physical','website','app'];
+    const nextSize     = normalizePosterSize(saved.posterSize || 'A4');
+    const nextType     = validTypes.includes(saved.productType) ? saved.productType : 'physical';
+    const nextBg       = saved.background || null;
+    const nextValues   = { ...EMPTY_CONTENT, ...(saved.contentValues || {}) };
+    const nextSettings = { ...DEFAULT_SETTINGS, ...(saved.fieldSettings || {}) };
+    const nextSlots    = { ...EMPTY_SLOT_IMAGES, ...(saved.slotImages || {}) };
 
     isHydratingRef.current = true;
-
     posterSizeRef.current        = nextSize;
-    productTypeRef.current       = nextProductType;
-    currentBackgroundRef.current = nextBackground;
+    productTypeRef.current       = nextType;
+    currentBackgroundRef.current = nextBg;
     fieldSettingsRef.current     = nextSettings;
-    slotImagesRef.current        = nextSlotImages;
+    slotImagesRef.current        = nextSlots;
 
     setPosterSize(nextSize);
-    setProductType(nextProductType);
-    setCurrentBackground(nextBackground);
+    setProductType(nextType);
+    setCurrentBackground(nextBg);
     setContentValues(nextValues);
     setFieldSettings(nextSettings);
-    setSlotImages(nextSlotImages);
-
+    setSlotImages(nextSlots);
     resizeCanvas(canvas, nextSize);
 
     const afterLoad = () => {
-      applyBackground(canvas, nextBackground);
-      initializePosterFields(canvas, nextValues, nextSize, nextSettings, nextSlotImages, nextProductType);
+      applyBackground(canvas, nextBg);
+      initializePosterFields(canvas, nextValues, nextSize, nextSettings, nextSlots, nextType);
       canvas.renderAll();
       isHydratingRef.current = false;
     };
@@ -156,11 +147,10 @@ function App() {
       canvas.clear();
       afterLoad();
     }
-  };
+  }, []);
 
   useEffect(() => {
     if (!canvasRef.current || fabricRef.current) return;
-
     let disposed = false;
 
     registerFonts().finally(() => {
@@ -168,28 +158,20 @@ function App() {
 
       const canvas = createEditor(canvasRef.current, posterSizeRef.current);
       if (!canvas) return;
-
       fabricRef.current = canvas;
 
-      const autoSave = () => {
-        if (!isHydratingRef.current) saveNow();
-      };
-
-      const onSelectionChanged = ({ selected }) => {
+      const autoSave = () => { if (!isHydratingRef.current) saveNow(); };
+      const onSelChanged = ({ selected }) => {
         const active = selected?.[0] ?? null;
         setSelectedObject(active);
         setSelectedLocked(Boolean(active?.lockMovementX));
       };
+      const onSelCleared = () => { setSelectedObject(null); setSelectedLocked(false); };
 
-      const onSelectionCleared = () => {
-        setSelectedObject(null);
-        setSelectedLocked(false);
-      };
-
-      canvas.on('selection:created', onSelectionChanged);
-      canvas.on('selection:updated', onSelectionChanged);
-      canvas.on('selection:cleared', onSelectionCleared);
-      ['object:added', 'object:modified', 'object:removed'].forEach((evt) => canvas.on(evt, autoSave));
+      canvas.on('selection:created', onSelChanged);
+      canvas.on('selection:updated', onSelChanged);
+      canvas.on('selection:cleared', onSelCleared);
+      ['object:added','object:modified','object:removed'].forEach(evt => canvas.on(evt, autoSave));
 
       const saved = loadProject();
       if (saved?.userObjects || saved?.contentValues) {
@@ -220,53 +202,110 @@ function App() {
   useEffect(() => {
     const onResize = () => {
       const canvas = fabricRef.current;
-      if (!canvas) return;
-      resizeCanvas(canvas, posterSizeRef.current);
+      if (canvas) resizeCanvas(canvas, posterSizeRef.current);
     };
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
-  const handleSizeChange = (sizeKey) => {
-    const nextSize = normalizePosterSize(sizeKey);
-    setPosterSize(nextSize);
-    posterSizeRef.current = nextSize;
-
+  const handleProductTypeChange = type => {
+    setProductType(type);
+    productTypeRef.current = type;
     const canvas = fabricRef.current;
-    if (!canvas) return;
+    if (canvas) {
+      initializePosterFields(canvas, contentValuesRef.current, posterSizeRef.current, fieldSettingsRef.current, slotImagesRef.current, type);
+      saveNow();
+    }
+  };
 
-    resizeCanvas(canvas, nextSize);
-    initializePosterFields(canvas, contentValuesRef.current, nextSize, fieldSettingsRef.current, slotImagesRef.current, productTypeRef.current);
-
-    const backgroundToApply = isBackgroundCompatibleWithSize(currentBackgroundRef.current, nextSize)
-      ? currentBackgroundRef.current
-      : null;
-
-    currentBackgroundRef.current = backgroundToApply;
-    setCurrentBackground(backgroundToApply);
-    applyBackground(canvas, backgroundToApply);
+  const handleBackground = path => {
+    const canvas = fabricRef.current;
+    currentBackgroundRef.current = path;
+    setCurrentBackground(path);
+    if (canvas) applyBackground(canvas, path);
     saveNow();
   };
 
-  const handleProductTypeChange = (newType) => {
-    setProductType(newType);
-    productTypeRef.current = newType;
-
+  const handleShape = borderRadius => {
+    setCurrentShape(borderRadius);
     const canvas = fabricRef.current;
-    if (!canvas) return;
-
-    initializePosterFields(
-      canvas,
-      contentValuesRef.current,
-      posterSizeRef.current,
-      fieldSettingsRef.current,
-      slotImagesRef.current,
-      newType
+    const nextSettings = Object.fromEntries(
+      FIELD_DEFINITIONS.map(f => [f.id, { ...(fieldSettingsRef.current[f.id] || {}), borderRadius }])
     );
+    fieldSettingsRef.current = nextSettings;
+    setFieldSettings(nextSettings);
+    if (canvas) updateAllFieldShapes(canvas, borderRadius);
     saveNow();
   };
 
-  const applyToSelection = (fn) => {
+  const handleTitleFont = font => {
+    setTitleFont(font);
+    const canvas = fabricRef.current;
+    if (canvas) setTitleStyle(canvas, { fontFamily: font });
+  };
+
+  const handleTitleColor = color => {
+    setTitleColor(color);
+    const canvas = fabricRef.current;
+    if (canvas) setTitleStyle(canvas, { color });
+  };
+
+  const onContentFieldChange = (keyOrRowId, rawValue) => {
+    const canvas     = fabricRef.current;
+    const nextValues = { ...contentValuesRef.current, [keyOrRowId]: rawValue };
+    contentValuesRef.current = nextValues;
+    setContentValues(nextValues);
+
+    if (!canvas) { saveNow(); return; }
+
+    const parentId = getListParentId(keyOrRowId);
+    if (parentId === 'participants') {
+      const combined = buildParticipantsText(nextValues);
+      updatePosterField(canvas, 'participants', combined, posterSizeRef.current, fieldSettingsRef.current['participants'] || {});
+    } else if (parentId) {
+      const combined = buildListText(parentId, nextValues);
+      updatePosterField(canvas, parentId, combined, posterSizeRef.current, fieldSettingsRef.current[parentId] || {});
+    } else {
+      updatePosterField(canvas, keyOrRowId, rawValue, posterSizeRef.current, fieldSettingsRef.current[keyOrRowId] || {});
+    }
+    saveNow();
+  };
+
+  const onSlotUpload = (slotKey, file) => {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      const dataUrl   = e.target.result;
+      const nextSlots = { ...slotImagesRef.current, [slotKey]: dataUrl };
+      slotImagesRef.current = nextSlots;
+      setSlotImages(nextSlots);
+      applyZoneImage(fabricRef.current, slotKey, dataUrl, posterSizeRef.current, productTypeRef.current);
+      setTimeout(saveNow, 120);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const onSlotClear = slotKey => {
+    const nextSlots = { ...slotImagesRef.current, [slotKey]: null };
+    slotImagesRef.current = nextSlots;
+    setSlotImages(nextSlots);
+    applyZoneImage(fabricRef.current, slotKey, null, posterSizeRef.current, productTypeRef.current);
+    saveNow();
+  };
+
+  const handleExportPdf = () => exportPDF(fabricRef.current, posterSizeRef.current, contentValuesRef.current);
+
+  const goToStep = step => {
+    setWizardStep(step);
+    if (step === 4) {
+      setTimeout(() => {
+        const canvas = fabricRef.current;
+        if (canvas) resizeCanvas(canvas, posterSizeRef.current);
+      }, 60);
+    }
+  };
+
+  const applyToSelection = fn => {
     const canvas = fabricRef.current;
     if (!canvas) return;
     const active = canvas.getActiveObject();
@@ -276,196 +315,105 @@ function App() {
     saveNow();
   };
 
-  const onContentFieldChange = (keyOrRowId, rawValue) => {
-    const canvas = fabricRef.current;
-
-    const nextValues = { ...contentValuesRef.current, [keyOrRowId]: rawValue };
-    contentValuesRef.current = nextValues;
-    setContentValues(nextValues);
-
-    if (!canvas) { saveNow(); return; }
-
-    const parentId = getListParentId(keyOrRowId);
-    if (parentId === 'participants') {
-      const combinedText = buildParticipantsText(nextValues);
-      const setting = fieldSettingsRef.current['participants'] || {};
-      updatePosterField(canvas, 'participants', combinedText, posterSizeRef.current, setting);
-    } else if (parentId) {
-      const combinedText = buildListText(parentId, nextValues);
-      const setting = fieldSettingsRef.current[parentId] || {};
-      updatePosterField(canvas, parentId, combinedText, posterSizeRef.current, setting);
-    } else {
-      const setting = fieldSettingsRef.current[keyOrRowId] || {};
-      updatePosterField(canvas, keyOrRowId, rawValue, posterSizeRef.current, setting);
-    }
-
-    saveNow();
-  };
-
-  const onFieldSettingChange = (fieldId, newSetting) => {
-    const canvas = fabricRef.current;
-    const nextSettings = { ...fieldSettingsRef.current, [fieldId]: newSetting };
-    fieldSettingsRef.current = nextSettings;
-    setFieldSettings(nextSettings);
-
-    if (canvas) {
-      const parentId = getListParentId(fieldId);
-      const actualId = parentId || fieldId;
-      const fieldDef  = FIELD_DEFINITIONS.find((f) => f.id === actualId);
-      let displayValue;
-      if (fieldDef?.type === 'participants') {
-        displayValue = buildParticipantsText(contentValuesRef.current);
-      } else if (fieldDef?.type === 'list') {
-        displayValue = buildListText(actualId, contentValuesRef.current);
-      } else {
-        displayValue = contentValuesRef.current[actualId] || '';
-      }
-      updatePosterField(canvas, actualId, displayValue, posterSizeRef.current, newSetting);
-    }
-    saveNow();
-  };
-
-  const onGlobalShapeChange = (borderRadius) => {
-    const canvas = fabricRef.current;
-    const nextSettings = Object.fromEntries(
-      FIELD_DEFINITIONS.map((f) => [f.id, { ...(fieldSettingsRef.current[f.id] || {}), borderRadius }])
-    );
-    fieldSettingsRef.current = nextSettings;
-    setFieldSettings(nextSettings);
-    if (canvas) updateAllFieldShapes(canvas, borderRadius);
-    saveNow();
-  };
-
-  const onSlotUpload = (slotKey, file) => {
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const dataUrl    = e.target.result;
-      const nextSlots  = { ...slotImagesRef.current, [slotKey]: dataUrl };
-      slotImagesRef.current = nextSlots;
-      setSlotImages(nextSlots);
-      applyZoneImage(fabricRef.current, slotKey, dataUrl, posterSizeRef.current, productTypeRef.current);
-      setTimeout(saveNow, 120);
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const onSlotClear = (slotKey) => {
-    const nextSlots = { ...slotImagesRef.current, [slotKey]: null };
-    slotImagesRef.current = nextSlots;
-    setSlotImages(nextSlots);
-    applyZoneImage(fabricRef.current, slotKey, null, posterSizeRef.current, productTypeRef.current);
-    saveNow();
-  };
-
-  const onNew = () => {
-    if (!confirm('לפתוח עבודה חדשה?')) return;
-    clearProject();
-    setCurrentBackground(null);
-    currentBackgroundRef.current = null;
-    setProductType('physical');
-    productTypeRef.current = 'physical';
-    setContentValues(EMPTY_CONTENT);
-    contentValuesRef.current = EMPTY_CONTENT;
-    setFieldSettings(DEFAULT_SETTINGS);
-    fieldSettingsRef.current = DEFAULT_SETTINGS;
-    setSlotImages(EMPTY_SLOT_IMAGES);
-    slotImagesRef.current = EMPTY_SLOT_IMAGES;
-
-    const canvas = fabricRef.current;
-    if (!canvas) return;
-
-    canvas.getObjects().slice().forEach((obj) => {
-      if (!isPosterManagedObject(obj)) canvas.remove(obj);
-    });
-
-    initializePosterFields(canvas, EMPTY_CONTENT, posterSizeRef.current, DEFAULT_SETTINGS, EMPTY_SLOT_IMAGES, 'none');
-    applyBackground(canvas, null);
-    saveNow();
-  };
-
-  const onReset = () => {
-    if (!confirm('לאפס את הפוסטר?')) return;
-    const canvas = fabricRef.current;
-    if (!canvas) return;
-    initializePosterFields(canvas, contentValuesRef.current, posterSizeRef.current, fieldSettingsRef.current, slotImagesRef.current, productTypeRef.current);
-    applyBackground(canvas, currentBackgroundRef.current);
-    saveNow();
-  };
-
-  const onBackground = (path) => {
-    const canvas = fabricRef.current;
-    if (!canvas) return;
-    currentBackgroundRef.current = path;
-    setCurrentBackground(path);
-    applyBackground(canvas, path);
-    saveNow();
-  };
-
-  useEffect(() => {
-    const onDelete = (event) => {
-      const canvas = fabricRef.current;
-      if (!canvas) return;
-      if ((event.key === 'Delete' || event.key === 'Backspace') && canvas.getActiveObject()) {
-        removeActiveObject(canvas);
-        saveNow();
-      }
-    };
-    window.addEventListener('keydown', onDelete);
-    return () => window.removeEventListener('keydown', onDelete);
-  }, []);
+  const isStep4 = wizardStep === 4;
 
   return h('div', { className: 'app' },
-    h(Header, {
-      posterSize,
-      onSizeChange: handleSizeChange,
-      onNew,
-      onReset,
-      onExportPdf: () => exportPDF(fabricRef.current, posterSizeRef.current),
-      activePanel,
-      onPanelToggle: (panelId) => setActivePanel((prev) => (prev === panelId ? null : panelId))
-    }),
-    h('main', { className: `layout ${activePanel ? 'panel-open' : ''}` },
-          h(ActionPanel, {
-            activePanel,
-            posterSize,
-            onClose: () => setActivePanel(null),
-            onBackground,
-            onElement: (path) => {
-              addElement(fabricRef.current, path);
-              setTimeout(saveNow, 120);
-            }
-          }),
-          h('section', { className: 'canvas-area' },
-            h(ObjectToolbar, {
-              selected:    selectedObject,
-              isLocked:    selectedLocked,
-              onDelete:    () => { removeActiveObject(fabricRef.current); saveNow(); },
-              onDuplicate: () => { duplicateActiveObject(fabricRef.current); saveNow(); },
-              onFront:     () => applyToSelection((obj) => obj.bringForward()),
-              onBack:      () => applyToSelection((obj) => obj.sendBackwards()),
-              onLock:      () => {
-                setLock(fabricRef.current, !selectedLocked);
-                setSelectedLocked(!selectedLocked);
-                saveNow();
-              }
-            }),
-            h('div', { className: 'canvas-wrapper' }, h('canvas', { ref: canvasRef }))
-          ),
-          h(Sidebar, {
-            productType,
-            onProductTypeChange: handleProductTypeChange,
-            contentValues,
-            fieldSettings,
-            slotImages,
-            onContentChange: onContentFieldChange,
-            onSettingChange: onFieldSettingChange,
-            onGlobalShapeChange,
-            onSlotUpload,
-            onSlotClear,
-            posterSize
-          })
+
+    h('div', {
+      className: 'step4-wrapper',
+      style: { display: isStep4 ? 'flex' : 'none' }
+    },
+      h('div', { className: 'step4-bar' },
+        h('div', { className: 'step4-bar-start' },
+          h('button', {
+            className: 'step4-back-btn',
+            onClick: () => goToStep(3)
+          }, '‹ חזרה לשאלון')
+        ),
+        h('div', { className: 'step4-bar-center' },
+          h(StepIndicator, { current: 4 })
+        ),
+        h('div', { className: 'step4-bar-end' },
+          h('button', {
+            className: 'step4-export-btn',
+            onClick: handleExportPdf
+          }, 'ייצוא PDF')
         )
+      ),
+
+      h('div', { className: 'step4-body' },
+        h('aside', { className: 'step4-elements' },
+          h('h3', { className: 'step4-elements-title' }, 'הוספת אלמנטים'),
+          h('div', { className: 'grid grid-3' },
+            ELEMENTS.map(el =>
+              h('button', {
+                key: el.id,
+                className: 'icon-btn',
+                onClick: () => { addElement(fabricRef.current, el.path); setTimeout(saveNow, 120); }
+              }, h('img', { src: el.path, alt: el.name, className: 'icon' }))
+            )
+          ),
+
+          selectedObject && h('div', { className: 'step4-obj-toolbar' },
+            h('p', { className: 'step4-obj-title' }, 'אלמנט נבחר'),
+            h('div', { className: 'step4-obj-actions' },
+              h('button', { className: 'btn btn-small', onClick: () => { removeActiveObject(fabricRef.current); saveNow(); } }, 'מחיקה'),
+              h('button', { className: 'btn btn-small', onClick: () => { duplicateActiveObject(fabricRef.current); saveNow(); } }, 'שכפול'),
+              h('button', { className: 'btn btn-small', onClick: () => applyToSelection(obj => obj.bringForward()) }, 'קדימה'),
+              h('button', { className: 'btn btn-small', onClick: () => applyToSelection(obj => obj.sendBackwards()) }, 'אחורה'),
+              h('button', {
+                className: `btn btn-small ${selectedLocked ? 'btn-locked' : ''}`,
+                onClick: () => {
+                  setLock(fabricRef.current, !selectedLocked);
+                  setSelectedLocked(!selectedLocked);
+                  saveNow();
+                }
+              }, selectedLocked ? 'שחרור נעילה' : 'נעילה')
+            )
+          )
+        ),
+
+        h('section', { className: 'canvas-area' },
+          h('div', { className: 'canvas-wrapper' },
+            h('canvas', { ref: canvasRef })
+          )
+        )
+      )
+    ),
+
+    wizardStep < 4 && h('div', { className: 'wz-overlay' },
+      wizardStep === 1 && h(WizardStep1, {
+        posterSize,
+        currentBackground,
+        currentShape,
+        titleFont,
+        titleColor,
+        onBackground:  handleBackground,
+        onShape:       handleShape,
+        onTitleFont:   handleTitleFont,
+        onTitleColor:  handleTitleColor,
+        onNext:        () => goToStep(2)
+      }),
+
+      wizardStep === 2 && h(WizardStep2, {
+        productType,
+        onProductTypeChange: handleProductTypeChange,
+        onNext: () => goToStep(3),
+        onBack: () => goToStep(1)
+      }),
+
+      wizardStep === 3 && h(WizardStep3, {
+        productType,
+        contentValues,
+        slotImages,
+        posterSize,
+        onContentChange: onContentFieldChange,
+        onSlotUpload,
+        onSlotClear,
+        onNext: () => goToStep(4),
+        onBack: () => goToStep(2)
+      })
+    )
   );
 }
 

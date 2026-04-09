@@ -7,11 +7,16 @@ import {
   DEFAULT_FIELD_FONT
 } from '../data/config.js';
 
-const DEFAULT_TEXT_FONT = DEFAULT_FIELD_FONT;
-const FIXED_CREDIT_TEXT = '© 2026 פורצות דרך | תעשיידע';
-const LIST_SUB_GAP      = 14;
-const LOGO_SRC = '/poster-builder/assets/logoposter.png';
-const TITLE_TOP_GAP = 14;
+const DEFAULT_TEXT_FONT  = DEFAULT_FIELD_FONT;
+const DEFAULT_TITLE_COLOR = '#5E2750';
+const FIXED_CREDIT_TEXT  = '© 2026 פורצות דרך | תעשיידע';
+const LIST_SUB_GAP       = 14;
+const LOGO_SRC           = '/poster-builder/assets/logoposter.png';
+const TITLE_TOP_GAP      = 14;
+
+function getTitleStyle(canvas) {
+  return canvas._titleStyle || { color: DEFAULT_TITLE_COLOR, fontFamily: DEFAULT_TEXT_FONT };
+}
 
 export function isPosterManagedObject(obj) {
   return Boolean(
@@ -236,6 +241,7 @@ function buildListSubBoxes(canvas, field, values, setting) {
 }
 
 function buildFieldObjects(canvas, sizeKey, values = {}, settings = {}, productType = 'none') {
+  const ts = getTitleStyle(canvas);
   getPosterFields(sizeKey, productType).forEach((field) => {
     clearPosterFieldObjects(canvas, field.id);
 
@@ -253,8 +259,8 @@ function buildFieldObjects(canvas, sizeKey, values = {}, settings = {}, productT
           originY:    'top',
           textAlign:  field.align,
           direction:  'rtl',
-          fill:       '#5E2750',
-          fontFamily: DEFAULT_TEXT_FONT,
+          fill:       ts.color,
+          fontFamily: ts.fontFamily,
           fontWeight: 700,
           fontSize:   52,
           left:       field.x - hPad,
@@ -300,14 +306,14 @@ function buildFieldObjects(canvas, sizeKey, values = {}, settings = {}, productT
         originY:   'top',
         textAlign: field.align,
         direction: 'rtl',
-        fill:        '#5E2750',
-        fontFamily:  DEFAULT_TEXT_FONT,
-        fontWeight:  700,
-        fontSize:    52,
-        left:        field.x - hPad,
-        top:         field.y,
-        selectable:  false,
-        evented:     false
+        fill:       ts.color,
+        fontFamily: ts.fontFamily,
+        fontWeight: 700,
+        fontSize:   52,
+        left:       field.x - hPad,
+        top:        field.y,
+        selectable: false,
+        evented:    false
       });
       title.set({ top: computeTitleTop(field, title) });
       title.__posterFieldTitle = true;
@@ -603,6 +609,7 @@ export function createEditor(element, sizeKey) {
   canvas._posterHeight   = size.height;
   canvas._posterSizeKey  = safeSizeKey;
   canvas._productType    = 'none';
+  canvas._titleStyle     = { color: DEFAULT_TITLE_COLOR, fontFamily: DEFAULT_TEXT_FONT };
 
   fitCanvasToViewport(canvas);
   ensureFixedTemplateDecorations(canvas);
@@ -807,5 +814,21 @@ export function updateAllFieldShapes(canvas, borderRadius) {
       obj.set({ rx: borderRadius, ry: borderRadius });
     }
   });
+  renderCanvas(canvas);
+}
+
+export function setTitleStyle(canvas, style) {
+  canvas._titleStyle = { ...(canvas._titleStyle || {}), ...style };
+  const sizeKey     = canvas._posterSizeKey  || 'A4';
+  const productType = canvas._productType    || 'none';
+  canvas.getObjects()
+    .filter(o => o.__posterFieldTitle)
+    .forEach(o => {
+      if (style.color     !== undefined) o.set({ fill:       style.color });
+      if (style.fontFamily !== undefined) o.set({ fontFamily: style.fontFamily });
+      const fieldId = o.__posterFieldId;
+      const field   = getFieldById(sizeKey, fieldId, productType);
+      if (field) o.set({ top: computeTitleTop(field, o) });
+    });
   renderCanvas(canvas);
 }
