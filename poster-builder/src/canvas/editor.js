@@ -198,6 +198,7 @@ function buildListSubBoxes(canvas, field, values, setting) {
     markPosterManaged(subText, field.id);
 
     canvas.add(subContainer, subText);
+    canvas.bringToFront(subText);
   });
 }
 
@@ -231,6 +232,7 @@ function buildFieldObjects(canvas, sizeKey, values = {}, settings = {}, productT
         listTitle.__posterFieldTitle = true;
         markPosterManaged(listTitle, field.id);
         canvas.add(listTitle);
+        canvas.bringToFront(listTitle);
       }
       buildListSubBoxes(canvas, field, values, settings[field.id] || {});
       return;
@@ -322,6 +324,7 @@ function buildFieldObjects(canvas, sizeKey, values = {}, settings = {}, productT
     objectsToAdd.push(valueText);
 
     canvas.add(...objectsToAdd);
+    canvas.bringToFront(valueText);
   });
 }
 
@@ -329,26 +332,10 @@ function upsertFixedCredit(canvas) {
   const existingBar    = canvas.getObjects().find((obj) => obj.__posterFixedCreditBar  === true);
   const existingCredit = canvas.getObjects().find((obj) => obj.__posterFixedCredit     === true);
   const { width, height } = getPosterDimensions(canvas);
-  const barH    = Math.round(height * 0.055);
-  const barTop  = height - barH;
   const fontSize = Math.round(Math.max(26, Math.min(width, height) * 0.013));
-  const textTop  = height - Math.round(height * 0.018);
+  const textTop  = height - Math.round(height * 0.014);
 
-  if (existingBar) {
-    existingBar.set({ left: 0, top: barTop, width, height: barH });
-    existingBar.setCoords();
-  } else {
-    const bar = new fabric.Rect({
-      left:    0, top: barTop,
-      width,   height: barH,
-      fill:    'rgba(0,0,0,0.38)',
-      selectable: false, evented: false,
-      excludeFromExport: false, hoverCursor: 'default'
-    });
-    bar.__posterFixedCreditBar = true;
-    markPosterManaged(bar);
-    canvas.add(bar);
-  }
+  if (existingBar) canvas.remove(existingBar);
 
   if (existingCredit) {
     existingCredit.set({ text: FIXED_CREDIT_TEXT, left: width / 2, top: textTop, fontSize });
@@ -358,7 +345,7 @@ function upsertFixedCredit(canvas) {
       originX: 'center', originY: 'bottom',
       left:    width / 2, top: textTop,
       textAlign: 'center',
-      fill:      '#ffffff',
+      fill:      '#5E2750',
       fontFamily: DEFAULT_TEXT_FONT,
       fontWeight: 400,
       fontSize,
@@ -682,6 +669,7 @@ export function updatePosterField(canvas, fieldId, rawValue, sizeKey = canvas._p
   }
 
   target.setCoords();
+  canvas.bringToFront(target);
   renderCanvas(canvas);
   return rawValue || '';
 }
