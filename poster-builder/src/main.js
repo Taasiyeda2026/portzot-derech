@@ -39,6 +39,7 @@ const SERIALIZE_PROPS = [
   'lockMovementX', 'lockMovementY', 'lockScalingX', 'lockScalingY', 'lockRotation',
   '__posterFixedCreditBar', '__posterFixedCredit',
   '__posterFieldObject', '__posterFieldContainer', '__posterFieldTitle', '__posterFieldId',
+  '__posterListSubBox',
   '__posterImageZone', '__posterZoneImage', '__posterSlotKey'
 ];
 
@@ -94,6 +95,7 @@ function App() {
     obj.__posterFieldObject    ||
     obj.__posterFieldContainer ||
     obj.__posterFieldTitle     ||
+    obj.__posterListSubBox     ||
     obj.__posterFixedCreditBar ||
     obj.__posterFixedCredit    ||
     obj.__posterImageZone      ||

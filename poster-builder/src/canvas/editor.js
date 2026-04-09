@@ -96,11 +96,14 @@ function buildListSubBoxes(canvas, field, values, setting) {
   const color         = (setting && setting.color)      || '#1f2937';
   const borderRadius  = (setting && setting.borderRadius !== undefined) ? setting.borderRadius : 14;
   const hPad          = 18;
-  const titleSpacing  = field.titleSpacing || 80;
+  const titleSpacing  = field.noLabel ? 20 : Math.min(field.titleSpacing || 80, 66);
   const bottomPad     = 12;
   const available     = field.height - titleSpacing - bottomPad;
   const subBoxH       = Math.floor((available - LIST_SUB_GAP * 2) / 3);
   const subTopPad     = 14;
+  canvas.getObjects()
+    .filter((o) => o.__posterFieldId === field.id && (o.__posterListSubBox || o.__posterListSubIndex !== undefined))
+    .forEach((o) => canvas.remove(o));
 
   [1, 2, 3].forEach((num, idx) => {
     const rawItem  = (values[`${field.id}_${num}`] || '').trim();
@@ -601,10 +604,6 @@ export function updatePosterField(canvas, fieldId, rawValue, sizeKey = canvas._p
   if (!field) return rawValue || '';
 
   if (field.type === 'list') {
-    canvas.getObjects()
-      .filter((o) => o.__posterFieldId === fieldId && (o.__posterListSubBox || o.__posterFieldObject))
-      .forEach((o) => canvas.remove(o));
-
     const parts = (rawValue || '').split('\n\n');
     const fakeValues = {};
     [1, 2, 3].forEach((num, idx) => {
