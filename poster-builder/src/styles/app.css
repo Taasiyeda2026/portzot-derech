@@ -529,6 +529,45 @@ canvas {
   border-bottom: 1px solid #e8d9f5;
 }
 
+.global-shape-selector {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: #faf5ff;
+  border-bottom: 1px solid #e8d9f5;
+}
+
+.global-shape-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #5e2750;
+  white-space: nowrap;
+}
+
+.shape-picker {
+  display: flex;
+  gap: 6px;
+}
+
+.shape-btn {
+  width: 32px;
+  height: 32px;
+  border: 2px solid #d5c4e6;
+  background: #fff;
+  cursor: pointer;
+  padding: 0;
+  font-size: 16px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.shape-btn:hover { border-color: #8b4a7a; }
+.shape-btn.active { border-color: #5e2750; background: #f0e6f8; }
+
 .product-type-label {
   font-size: 13px;
   font-weight: 700;

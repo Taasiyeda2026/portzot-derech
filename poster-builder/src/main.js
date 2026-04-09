@@ -26,6 +26,7 @@ import {
   initializePosterFields,
   updatePosterField,
   updateFieldLabels,
+  updateAllFieldShapes,
   setLock
 } from './canvas/editor.js';
 import { saveProject, loadProject, clearProject } from './utils/storage.js';
@@ -46,7 +47,7 @@ const ALL_CONTENT_KEYS = getAllContentKeys();
 const EMPTY_CONTENT = Object.fromEntries(ALL_CONTENT_KEYS.map((k) => [k, '']));
 
 const DEFAULT_SETTINGS = Object.fromEntries(
-  FIELD_DEFINITIONS.map((f) => [f.id, { fontFamily: DEFAULT_FIELD_FONT, color: DEFAULT_FIELD_COLOR }])
+  FIELD_DEFINITIONS.map((f) => [f.id, { fontFamily: DEFAULT_FIELD_FONT, color: DEFAULT_FIELD_COLOR, borderRadius: 20 }])
 );
 
 const EMPTY_SLOT_IMAGES = { visual: null, visual_1: null, visual_2: null, visual_3: null };
@@ -326,6 +327,17 @@ function App() {
     saveNow();
   };
 
+  const onGlobalShapeChange = (borderRadius) => {
+    const canvas = fabricRef.current;
+    const nextSettings = Object.fromEntries(
+      FIELD_DEFINITIONS.map((f) => [f.id, { ...(fieldSettingsRef.current[f.id] || {}), borderRadius }])
+    );
+    fieldSettingsRef.current = nextSettings;
+    setFieldSettings(nextSettings);
+    if (canvas) updateAllFieldShapes(canvas, borderRadius);
+    saveNow();
+  };
+
   const onSlotUpload = (slotKey, file) => {
     if (!file) return;
     const reader = new FileReader();
@@ -450,6 +462,7 @@ function App() {
             slotImages,
             onContentChange: onContentFieldChange,
             onSettingChange: onFieldSettingChange,
+            onGlobalShapeChange,
             onSlotUpload,
             onSlotClear,
             posterSize

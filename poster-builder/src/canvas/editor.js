@@ -94,6 +94,7 @@ function fitFieldTextToBox(textObj, field, topPadOverride) {
 function buildListSubBoxes(canvas, field, values, setting) {
   const fontFamily    = (setting && setting.fontFamily) || DEFAULT_TEXT_FONT;
   const color         = (setting && setting.color)      || '#1f2937';
+  const borderRadius  = (setting && setting.borderRadius !== undefined) ? setting.borderRadius : 14;
   const hPad          = 18;
   const titleSpacing  = field.titleSpacing || 80;
   const bottomPad     = 12;
@@ -111,7 +112,7 @@ function buildListSubBoxes(canvas, field, values, setting) {
       top:         subY,
       width:       field.width,
       height:      subBoxH,
-      rx: 14, ry: 14,
+      rx: borderRadius, ry: borderRadius,
       fill:        '#ffffff',
       stroke:      '#D5DDEA',
       strokeWidth: 1.5,
@@ -157,9 +158,10 @@ function buildListSubBoxes(canvas, field, values, setting) {
 
 function buildFieldObjects(canvas, sizeKey, values = {}, settings = {}, productType = 'none') {
   getPosterFields(sizeKey, productType).forEach((field) => {
-    const s          = settings[field.id] || {};
-    const fontFamily = s.fontFamily || DEFAULT_TEXT_FONT;
-    const color      = s.color      || '#1f2937';
+    const s            = settings[field.id] || {};
+    const fontFamily   = s.fontFamily || DEFAULT_TEXT_FONT;
+    const color        = s.color      || '#1f2937';
+    const borderRadius = s.borderRadius !== undefined ? s.borderRadius : 20;
     const originX    = field.center ? 'center' : 'right';
     const hPad       = field.center ? 0 : 18;
 
@@ -192,7 +194,7 @@ function buildFieldObjects(canvas, sizeKey, values = {}, settings = {}, productT
       top:         field.y,
       width:       field.width,
       height:      field.height,
-      rx: 20, ry: 20,
+      rx: borderRadius, ry: borderRadius,
       fill:        '#ffffff',
       stroke:      isParticipants ? '#C4B0D8' : '#D5DDEA',
       strokeWidth: isParticipants ? 1 : 2,
@@ -204,6 +206,7 @@ function buildFieldObjects(canvas, sizeKey, values = {}, settings = {}, productT
       evented:     false
     });
     container.__posterFieldContainer = true;
+    container.__posterFieldId        = field.id;
 
     const objectsToAdd = [container];
 
@@ -611,6 +614,13 @@ export function updatePosterField(canvas, fieldId, rawValue, sizeKey = canvas._p
   if (setting.color)      updates.fill       = setting.color;
 
   target.set(updates);
+
+  if (setting.borderRadius !== undefined) {
+    const containerObj = canvas.getObjects().find(
+      (o) => o.__posterFieldContainer && o.__posterFieldId === fieldId
+    );
+    if (containerObj) containerObj.set({ rx: setting.borderRadius, ry: setting.borderRadius });
+  }
   fitFieldTextToBox(target, field);
 
   if (field.verticalCenter) {
@@ -710,5 +720,14 @@ export function setLock(canvas, lock) {
     hasBorders:    !lock
   });
   active.setCoords();
+  renderCanvas(canvas);
+}
+
+export function updateAllFieldShapes(canvas, borderRadius) {
+  canvas.getObjects().forEach((obj) => {
+    if (obj.__posterFieldContainer || obj.__posterListSubBox) {
+      obj.set({ rx: borderRadius, ry: borderRadius });
+    }
+  });
   renderCanvas(canvas);
 }
