@@ -9,7 +9,10 @@ const HEADER_ACTIONS = [
 
 export function Header({ posterSize, onSizeChange, onNew, onReset, onExportPdf, activePanel, onPanelToggle }) {
   return h('header', { className: 'header' },
-    h('div', { className: 'header-title' }, 'בונות פוסטר חקר'),
+    h('div', { className: 'header-logo' },
+      h('div', { className: 'header-logo-mark' }, '✦'),
+      h('div', { className: 'header-title' }, 'בונות פוסטר חקר')
+    ),
     h('div', { className: 'header-actions' },
       h('select', {
         className: 'header-control',
