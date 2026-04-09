@@ -14,14 +14,18 @@ export function ActionPanel({ activePanel, posterSize, onClose, onBackground, on
       h('button', { className: 'header-control header-btn', onClick: onClose }, 'סגירה')
     ),
     h('div', { className: 'panel-scroll' },
-      activePanel === 'backgrounds' && h('div', { className: 'grid grid-2' },
-        visibleBackgrounds.map((bg) => h('button', {
-          key: bg.id,
-          className: 'thumb-btn',
-          onClick: () => onBackground(bg.path)
-        }, bg.path
-          ? h('img', { src: bg.path, alt: bg.name, className: 'thumb' })
-          : h('span', { className: 'none-bg' }, 'ללא רקע')))
+      activePanel === 'backgrounds' && h('div', { className: 'panel' },
+        h('button', {
+          className: 'thumb-btn none-bg-btn',
+          onClick: () => onBackground(null)
+        }, h('span', { className: 'none-bg' }, 'ללא רקע')),
+        h('div', { className: 'grid grid-2' },
+          visibleBackgrounds.filter((bg) => bg.path).map((bg) => h('button', {
+            key: bg.id,
+            className: 'thumb-btn',
+            onClick: () => onBackground(bg.path)
+          }, h('img', { src: bg.path, alt: bg.name, className: 'thumb' })))
+        )
       ),
       activePanel === 'elements' && h('div', { className: 'grid grid-3' },
         ELEMENTS.map((element) => h('button', {
