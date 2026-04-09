@@ -847,25 +847,25 @@ canvas {
   margin-bottom: 24px;
 }
 
-/* ── Background: "ללא רקע" row ── */
-.wz-bg-none-row {
-  margin-bottom: 8px;
+/* ── Background: white "no background" thumb ── */
+.wz-bg-white-thumb {
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid #e8e0f0;
 }
 
-.wz-bg-none-btn {
-  padding: 8px 22px;
-  border: 2.5px solid #d5c4e6;
-  border-radius: 10px;
-  background: #fff;
-  color: #5e2750;
-  font-size: 14px;
-  font-weight: 600;
-  font-family: inherit;
-  cursor: pointer;
-  transition: all 0.15s;
+.wz-bg-white-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #9b80b8;
+  text-align: center;
+  line-height: 1.3;
 }
-.wz-bg-none-btn:hover { border-color: #9b5fa8; background: #f8f0ff; }
-.wz-bg-none-btn.active { border-color: #5e2750; background: #f0e6f8; box-shadow: 0 0 0 2px #5e2750; }
 
 /* ── Background grid ── */
 .wz-bg-grid {
