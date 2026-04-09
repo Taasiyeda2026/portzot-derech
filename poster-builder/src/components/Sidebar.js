@@ -194,12 +194,11 @@ export function Sidebar({
       )
     ),
 
-    h('div', { className: 'zone-image-section' },
-      h('span', { className: 'zone-image-section-title' }, VISUAL_ZONE_TITLE[productType] || 'אזור חזותי'),
-      h(SlotUploadSection, { slots, slotImages, onSlotUpload, onSlotClear })
-    ),
-
     h('div', { className: 'poster-content-panel' },
+      h('div', { className: 'zone-image-section' },
+        h('span', { className: 'zone-image-section-title' }, VISUAL_ZONE_TITLE[productType] || 'אזור חזותי'),
+        h(SlotUploadSection, { slots, slotImages, onSlotUpload, onSlotClear })
+      ),
       FIELD_DEFINITIONS.map((field) => {
         const resolvedField = getFieldQuestion(field);
         const setting = fieldSettings[field.id] || {};
