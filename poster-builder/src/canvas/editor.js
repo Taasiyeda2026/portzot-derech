@@ -69,8 +69,9 @@ function renderCanvas(canvas) {
 
 function computeTitleTop(field, titleObj) {
   if (!titleObj) return field.y;
-  titleObj.initDimensions();
-  return field.y - titleObj.height - TITLE_TOP_GAP;
+  const fontSize = titleObj.fontSize || 52;
+  const estimatedHeight = Math.ceil(fontSize * 1.3);
+  return field.y - estimatedHeight - TITLE_TOP_GAP;
 }
 
 function bringSectionTitlesToFront(canvas) {
