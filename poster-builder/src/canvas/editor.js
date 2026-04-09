@@ -277,40 +277,47 @@ function buildFieldObjects(canvas, sizeKey, values = {}, settings = {}, productT
 }
 
 function upsertFixedCredit(canvas) {
-  const existing  = canvas.getObjects().find((obj) => obj.__posterFixedCredit === true);
+  const existingBar    = canvas.getObjects().find((obj) => obj.__posterFixedCreditBar  === true);
+  const existingCredit = canvas.getObjects().find((obj) => obj.__posterFixedCredit     === true);
   const { width, height } = getPosterDimensions(canvas);
-  const fontSize  = Math.round(Math.max(26, Math.min(width, height) * 0.013));
+  const barH    = Math.round(height * 0.055);
+  const barTop  = height - barH;
+  const fontSize = Math.round(Math.max(26, Math.min(width, height) * 0.013));
+  const textTop  = height - Math.round(height * 0.018);
 
-  if (existing) {
-    existing.set({
-      text: FIXED_CREDIT_TEXT,
-      left: width / 2,
-      top:  height - Math.round(height * 0.022),
-      fontSize
+  if (existingBar) {
+    existingBar.set({ left: 0, top: barTop, width, height: barH });
+    existingBar.setCoords();
+  } else {
+    const bar = new fabric.Rect({
+      left:    0, top: barTop,
+      width,   height: barH,
+      fill:    'rgba(0,0,0,0.38)',
+      selectable: false, evented: false,
+      excludeFromExport: false, hoverCursor: 'default'
     });
-    existing.setCoords();
-    return;
+    bar.__posterFixedCreditBar = true;
+    canvas.add(bar);
   }
 
-  const credit = new fabric.Text(FIXED_CREDIT_TEXT, {
-    originX:   'center',
-    originY:   'bottom',
-    left:      width / 2,
-    top:       height - Math.round(height * 0.022),
-    textAlign: 'center',
-    fill:      '#ffffff',
-    fontFamily: DEFAULT_TEXT_FONT,
-    fontWeight: 400,
-    fontSize,
-    shadow: new fabric.Shadow({ color: 'rgba(0,0,0,0.55)', blur: 6, offsetX: 0, offsetY: 1 }),
-    selectable: false,
-    evented:    false,
-    excludeFromExport: false,
-    hoverCursor: 'default'
-  });
-
-  credit.__posterFixedCredit = true;
-  canvas.add(credit);
+  if (existingCredit) {
+    existingCredit.set({ text: FIXED_CREDIT_TEXT, left: width / 2, top: textTop, fontSize });
+    existingCredit.setCoords();
+  } else {
+    const credit = new fabric.Text(FIXED_CREDIT_TEXT, {
+      originX: 'center', originY: 'bottom',
+      left:    width / 2, top: textTop,
+      textAlign: 'center',
+      fill:      '#ffffff',
+      fontFamily: DEFAULT_TEXT_FONT,
+      fontWeight: 400,
+      fontSize,
+      selectable: false, evented: false,
+      excludeFromExport: false, hoverCursor: 'default'
+    });
+    credit.__posterFixedCredit = true;
+    canvas.add(credit);
+  }
 }
 
 function upsertFixedLogo(canvas) {
@@ -382,6 +389,8 @@ function ensureFixedTemplateDecorations(canvas) {
   upsertFixedCredit(canvas);
   upsertFixedLogo(canvas);
 
+  const creditBar = canvas.getObjects().find((obj) => obj.__posterFixedCreditBar === true);
+  if (creditBar) canvas.bringToFront(creditBar);
   const credit = canvas.getObjects().find((obj) => obj.__posterFixedCredit === true);
   if (credit) canvas.bringToFront(credit);
 }
@@ -573,6 +582,7 @@ export function initializePosterFields(canvas, values = {}, sizeKey = canvas._po
     obj.__posterListSubBox     ||
     obj.__posterFixedLogo      ||
     obj.__posterLogoBacking    ||
+    obj.__posterFixedCreditBar ||
     obj.__posterFixedCredit    ||
     obj.__posterImageZone      ||
     obj.__posterZoneImage
