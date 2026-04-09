@@ -383,7 +383,6 @@ function App() {
 
     wizardStep < 4 && h('div', { className: 'wz-overlay' },
       wizardStep === 1 && h(WizardStep1, {
-        posterSize,
         currentBackground,
         currentShape,
         titleFont,

@@ -4,7 +4,6 @@ import {
   PRODUCT_TYPES,
   DYNAMIC_QUESTIONS,
   VISUAL_ZONE_TITLE,
-  getPosterOrientation,
   getListRowIds,
   getVisualSlots,
   FIELD_DEFINITIONS
@@ -38,11 +37,10 @@ export function StepIndicator({ current }) {
 }
 
 export function WizardStep1({
-  posterSize, currentBackground, currentShape, titleFont, titleColor,
+  currentBackground, currentShape, titleFont, titleColor,
   onBackground, onShape, onTitleFont, onTitleColor, onNext
 }) {
-  const orientation = getPosterOrientation(posterSize || 'A4');
-  const backgrounds = BACKGROUNDS.filter(bg => bg.orientation === 'any' || bg.orientation === orientation);
+  const backgrounds = BACKGROUNDS;
   const isCustomColor = !PRESET_COLORS.includes(titleColor);
 
   return h('div', { className: 'wz-screen' },

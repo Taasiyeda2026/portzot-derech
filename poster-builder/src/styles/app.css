@@ -850,15 +850,21 @@ canvas {
   cursor: pointer;
   background: #fff;
   transition: border-color 0.15s, transform 0.12s, box-shadow 0.15s;
-  min-height: 58px;
   display: flex;
   align-items: center;
   justify-content: center;
+  aspect-ratio: 1 / 1.414;
 }
 .wz-bg-btn:hover { border-color: #b87ac8; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(94,39,80,0.18); }
 .wz-bg-btn.active { border-color: #5e2750; box-shadow: 0 0 0 2px #5e2750; }
 
-.wz-bg-thumb { width: 100%; height: 54px; object-fit: cover; border-radius: 7px; display: block; }
+.wz-bg-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 7px;
+  display: block;
+}
 .wz-bg-none-label { font-size: 12px; color: #8a7a9a; }
 
 /* ── Shape buttons ── */
