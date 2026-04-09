@@ -517,6 +517,7 @@ canvas {
 .thumb,
 .icon { width: 100%; height: 64px; object-fit: contain; }
 .none-bg { font-size: 14px; color: #495057; }
+.none-bg-btn { width: 100%; min-height: 44px; display: flex; align-items: center; justify-content: center; }
 
 .mobile-msg { display: grid; place-items: center; min-height: 70vh; font-size: 24px; }
 
