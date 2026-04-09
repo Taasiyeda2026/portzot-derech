@@ -738,9 +738,11 @@ canvas {
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding: 20px 24px 12px;
+  padding: 18px 24px 16px;
   gap: 0;
   flex-shrink: 0;
+  background: rgba(255,255,255,0.7);
+  border-bottom: 1px solid rgba(213,196,230,0.5);
 }
 
 .wz-dot-wrap {
@@ -751,35 +753,44 @@ canvas {
 }
 
 .wz-dot {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  font-size: 14px;
-  transition: all 0.2s;
+  font-size: 15px;
+  transition: all 0.25s;
   flex-shrink: 0;
+  position: relative;
 }
-.wz-dot.active  { background: #5e2750; color: #fff; box-shadow: 0 4px 14px rgba(94,39,80,0.45); }
+.wz-dot.active {
+  background: #5e2750;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(94,39,80,0.45);
+  transform: scale(1.1);
+}
 .wz-dot.done    { background: #2f855a; color: #fff; }
 .wz-dot.pending { background: #e5d7f1; color: #9b7ab8; }
 
-.wz-dot-label { font-size: 11px; font-weight: 600; white-space: nowrap; }
+.wz-dot-label { font-size: 11px; font-weight: 700; white-space: nowrap; letter-spacing: 0.01em; }
 .wz-dot-label.active  { color: #5e2750; }
 .wz-dot-label.done    { color: #2f855a; }
 .wz-dot-label.pending { color: #b0a0c0; }
 
 .wz-line {
-  width: 60px;
-  height: 2px;
+  flex: 1;
+  min-width: 40px;
+  max-width: 90px;
+  height: 3px;
+  border-radius: 2px;
   background: #e5d7f1;
-  margin-top: 17px;
-  transition: background 0.2s;
+  margin-top: 18px;
+  transition: background 0.35s;
   flex-shrink: 0;
 }
-.wz-line.done { background: #2f855a; }
+.wz-line.done { background: linear-gradient(90deg, #2f855a, #48bb78); }
 
 /* ── Screen base ── */
 .wz-screen {
@@ -978,6 +989,14 @@ canvas {
 }
 .wz-card:hover { border-color: #b87ac8; transform: translateY(-4px); box-shadow: 0 8px 24px rgba(94,39,80,0.16); }
 .wz-card.active { border-color: #5e2750; background: #fdf4ff; box-shadow: 0 0 0 2px #5e2750, 0 8px 24px rgba(94,39,80,0.2); }
+.wz-card.selecting {
+  animation: card-select-pulse 0.35s ease-out;
+}
+@keyframes card-select-pulse {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.06); box-shadow: 0 0 0 4px #5e2750, 0 12px 32px rgba(94,39,80,0.35); }
+  100% { transform: scale(1); }
+}
 .wz-card-emoji { font-size: 38px; }
 .wz-card-label { font-size: 16px; font-weight: 700; color: #5e2750; }
 .wz-card-desc  { font-size: 12px; color: #7a6a8a; line-height: 1.4; }
@@ -1169,8 +1188,13 @@ canvas {
 .btn-locked { background: #f0e6f8; border-color: #b87ac8; }
 
 /* Fix step4-bar indicator scale */
-.step4-bar .wz-indicator { padding: 0; }
-.step4-bar .wz-dot { width: 28px; height: 28px; font-size: 12px; }
+.step4-bar .wz-indicator {
+  padding: 0;
+  border-bottom: none;
+  background: transparent;
+}
+.step4-bar .wz-dot { width: 30px; height: 30px; font-size: 12px; }
+.step4-bar .wz-dot.active { transform: scale(1.05); }
 .step4-bar .wz-dot-label { font-size: 10px; }
-.step4-bar .wz-line { width: 40px; margin-top: 13px; }
+.step4-bar .wz-line { min-width: 28px; max-width: 48px; height: 3px; margin-top: 14px; }
 

@@ -139,11 +139,20 @@ export function WizardStep1({
 }
 
 export function WizardStep2({ productType, onProductTypeChange, onNext, onBack }) {
+  const { useState: useLocalState } = React;
+  const [selecting, setSelecting] = useLocalState(null);
+
   const cards = [
     { id: 'physical', emoji: '📦', label: 'מוצר פיזי',      desc: 'מוצר שניתן לגעת בו, לייצר ולמכור' },
     { id: 'website',  emoji: '🌐', label: 'אתר אינטרנט',    desc: 'פלטפורמה דיגיטלית נגישה בדפדפן'   },
     { id: 'app',      emoji: '📱', label: 'אפליקציה',        desc: 'אפליקציה לטלפון חכם'               }
   ];
+
+  const handleCardClick = (id) => {
+    setSelecting(id);
+    onProductTypeChange(id);
+    setTimeout(onNext, 380);
+  };
 
   return h('div', { className: 'wz-screen wz-screen-centered' },
     h(StepIndicator, { current: 2 }),
@@ -151,14 +160,14 @@ export function WizardStep2({ productType, onProductTypeChange, onNext, onBack }
     h('div', { className: 'wz-content wz-content-vcenter' },
       h('div', { className: 'wz-hero' },
         h('h1', { className: 'wz-title' }, 'מה פיתחתן?'),
-        h('p', { className: 'wz-subtitle' }, 'בחרו את סוג התוצר שיצרתן')
+        h('p', { className: 'wz-subtitle' }, 'לחצו על סוג המוצר שיצרתן — תעברו מיד לשלב הבא')
       ),
       h('div', { className: 'wz-cards' },
         cards.map(card =>
           h('button', {
             key: card.id,
-            className: `wz-card ${productType === card.id ? 'active' : ''}`,
-            onClick: () => onProductTypeChange(card.id)
+            className: `wz-card ${productType === card.id || selecting === card.id ? 'active' : ''} ${selecting === card.id ? 'selecting' : ''}`,
+            onClick: () => handleCardClick(card.id)
           },
             h('span', { className: 'wz-card-emoji' }, card.emoji),
             h('span', { className: 'wz-card-label' }, card.label),
@@ -169,11 +178,7 @@ export function WizardStep2({ productType, onProductTypeChange, onNext, onBack }
     ),
 
     h('div', { className: 'wz-nav' },
-      h('button', { className: 'wz-btn wz-btn-ghost', onClick: onBack }, '‹ חזרה'),
-      h('button', {
-        className: `wz-btn wz-btn-primary${!productType ? ' wz-btn-disabled' : ''}`,
-        onClick: productType ? onNext : undefined
-      }, 'הבא ›')
+      h('button', { className: 'wz-btn wz-btn-ghost', onClick: onBack }, '‹ חזרה')
     )
   );
 }
@@ -308,9 +313,9 @@ export function WizardStep3({
   };
 
   return h('div', { className: 'wz-screen wz-screen-form' },
+    h(StepIndicator, { current: 3 }),
     h('div', { className: 'wz-form-layout' },
       h('div', { className: 'wz-form-sidebar' },
-        h(StepIndicator, { current: 3 }),
         h('div', { className: 'wz-form-side-text' },
           h('h2', { className: 'wz-title wz-title-sm' }, 'תוכן הפוסטר'),
           h('p', { className: 'wz-subtitle wz-subtitle-sm' }, 'ענו על השאלות כדי למלא את הפוסטר')
