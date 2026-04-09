@@ -155,6 +155,12 @@ function ParticipantsField({ field, values, setting, onContentChange, onSettingC
   );
 }
 
+const SHAPES = [
+  { value: 0,  label: '▭', title: 'פינות ישרות' },
+  { value: 10, label: '▢', title: 'מעוגל קצת'   },
+  { value: 20, label: '◻', title: 'מעוגל'        }
+];
+
 export function Sidebar({
   productType,
   onProductTypeChange,
@@ -163,6 +169,7 @@ export function Sidebar({
   slotImages,
   onContentChange,
   onSettingChange,
+  onGlobalShapeChange,
   onSlotUpload,
   onSlotClear,
   posterSize
@@ -191,6 +198,23 @@ export function Sidebar({
             onClick: () => onProductTypeChange(pt.id)
           }, pt.label)
         )
+      )
+    ),
+
+    h('div', { className: 'global-shape-selector' },
+      h('span', { className: 'global-shape-label' }, 'צורת תיבות:'),
+      h('div', { className: 'shape-picker' },
+        SHAPES.map((s) => {
+          const currentRadius = Object.values(fieldSettings)[0]?.borderRadius ?? 20;
+          return h('button', {
+            key:       s.value,
+            type:      'button',
+            title:     s.title,
+            className: `shape-btn ${currentRadius === s.value ? 'active' : ''}`,
+            style:     { borderRadius: `${s.value * 0.6}px` },
+            onClick:   () => onGlobalShapeChange(s.value)
+          }, s.label);
+        })
       )
     ),
 

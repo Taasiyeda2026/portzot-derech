@@ -94,6 +94,7 @@ function fitFieldTextToBox(textObj, field, topPadOverride) {
 function buildListSubBoxes(canvas, field, values, setting) {
   const fontFamily    = (setting && setting.fontFamily) || DEFAULT_TEXT_FONT;
   const color         = (setting && setting.color)      || '#1f2937';
+  const borderRadius  = (setting && setting.borderRadius !== undefined) ? setting.borderRadius : 14;
   const hPad          = 18;
   const titleSpacing  = field.titleSpacing || 80;
   const bottomPad     = 12;
@@ -111,7 +112,7 @@ function buildListSubBoxes(canvas, field, values, setting) {
       top:         subY,
       width:       field.width,
       height:      subBoxH,
-      rx: 14, ry: 14,
+      rx: borderRadius, ry: borderRadius,
       fill:        '#ffffff',
       stroke:      '#D5DDEA',
       strokeWidth: 1.5,
@@ -157,9 +158,10 @@ function buildListSubBoxes(canvas, field, values, setting) {
 
 function buildFieldObjects(canvas, sizeKey, values = {}, settings = {}, productType = 'none') {
   getPosterFields(sizeKey, productType).forEach((field) => {
-    const s          = settings[field.id] || {};
-    const fontFamily = s.fontFamily || DEFAULT_TEXT_FONT;
-    const color      = s.color      || '#1f2937';
+    const s            = settings[field.id] || {};
+    const fontFamily   = s.fontFamily || DEFAULT_TEXT_FONT;
+    const color        = s.color      || '#1f2937';
+    const borderRadius = s.borderRadius !== undefined ? s.borderRadius : 20;
     const originX    = field.center ? 'center' : 'right';
     const hPad       = field.center ? 0 : 18;
 
@@ -192,7 +194,7 @@ function buildFieldObjects(canvas, sizeKey, values = {}, settings = {}, productT
       top:         field.y,
       width:       field.width,
       height:      field.height,
-      rx: 20, ry: 20,
+      rx: borderRadius, ry: borderRadius,
       fill:        '#ffffff',
       stroke:      isParticipants ? '#C4B0D8' : '#D5DDEA',
       strokeWidth: isParticipants ? 1 : 2,
@@ -204,6 +206,7 @@ function buildFieldObjects(canvas, sizeKey, values = {}, settings = {}, productT
       evented:     false
     });
     container.__posterFieldContainer = true;
+    container.__posterFieldId        = field.id;
 
     const objectsToAdd = [container];
 
@@ -274,40 +277,47 @@ function buildFieldObjects(canvas, sizeKey, values = {}, settings = {}, productT
 }
 
 function upsertFixedCredit(canvas) {
-  const existing  = canvas.getObjects().find((obj) => obj.__posterFixedCredit === true);
+  const existingBar    = canvas.getObjects().find((obj) => obj.__posterFixedCreditBar  === true);
+  const existingCredit = canvas.getObjects().find((obj) => obj.__posterFixedCredit     === true);
   const { width, height } = getPosterDimensions(canvas);
-  const fontSize  = Math.round(Math.max(26, Math.min(width, height) * 0.013));
+  const barH    = Math.round(height * 0.055);
+  const barTop  = height - barH;
+  const fontSize = Math.round(Math.max(26, Math.min(width, height) * 0.013));
+  const textTop  = height - Math.round(height * 0.018);
 
-  if (existing) {
-    existing.set({
-      text: FIXED_CREDIT_TEXT,
-      left: width / 2,
-      top:  height - Math.round(height * 0.022),
-      fontSize
+  if (existingBar) {
+    existingBar.set({ left: 0, top: barTop, width, height: barH });
+    existingBar.setCoords();
+  } else {
+    const bar = new fabric.Rect({
+      left:    0, top: barTop,
+      width,   height: barH,
+      fill:    'rgba(0,0,0,0.38)',
+      selectable: false, evented: false,
+      excludeFromExport: false, hoverCursor: 'default'
     });
-    existing.setCoords();
-    return;
+    bar.__posterFixedCreditBar = true;
+    canvas.add(bar);
   }
 
-  const credit = new fabric.Text(FIXED_CREDIT_TEXT, {
-    originX:   'center',
-    originY:   'bottom',
-    left:      width / 2,
-    top:       height - Math.round(height * 0.022),
-    textAlign: 'center',
-    fill:      '#ffffff',
-    fontFamily: DEFAULT_TEXT_FONT,
-    fontWeight: 400,
-    fontSize,
-    shadow: new fabric.Shadow({ color: 'rgba(0,0,0,0.55)', blur: 6, offsetX: 0, offsetY: 1 }),
-    selectable: false,
-    evented:    false,
-    excludeFromExport: false,
-    hoverCursor: 'default'
-  });
-
-  credit.__posterFixedCredit = true;
-  canvas.add(credit);
+  if (existingCredit) {
+    existingCredit.set({ text: FIXED_CREDIT_TEXT, left: width / 2, top: textTop, fontSize });
+    existingCredit.setCoords();
+  } else {
+    const credit = new fabric.Text(FIXED_CREDIT_TEXT, {
+      originX: 'center', originY: 'bottom',
+      left:    width / 2, top: textTop,
+      textAlign: 'center',
+      fill:      '#ffffff',
+      fontFamily: DEFAULT_TEXT_FONT,
+      fontWeight: 400,
+      fontSize,
+      selectable: false, evented: false,
+      excludeFromExport: false, hoverCursor: 'default'
+    });
+    credit.__posterFixedCredit = true;
+    canvas.add(credit);
+  }
 }
 
 function upsertFixedLogo(canvas) {
@@ -379,6 +389,8 @@ function ensureFixedTemplateDecorations(canvas) {
   upsertFixedCredit(canvas);
   upsertFixedLogo(canvas);
 
+  const creditBar = canvas.getObjects().find((obj) => obj.__posterFixedCreditBar === true);
+  if (creditBar) canvas.bringToFront(creditBar);
   const credit = canvas.getObjects().find((obj) => obj.__posterFixedCredit === true);
   if (credit) canvas.bringToFront(credit);
 }
@@ -570,6 +582,7 @@ export function initializePosterFields(canvas, values = {}, sizeKey = canvas._po
     obj.__posterListSubBox     ||
     obj.__posterFixedLogo      ||
     obj.__posterLogoBacking    ||
+    obj.__posterFixedCreditBar ||
     obj.__posterFixedCredit    ||
     obj.__posterImageZone      ||
     obj.__posterZoneImage
@@ -611,6 +624,13 @@ export function updatePosterField(canvas, fieldId, rawValue, sizeKey = canvas._p
   if (setting.color)      updates.fill       = setting.color;
 
   target.set(updates);
+
+  if (setting.borderRadius !== undefined) {
+    const containerObj = canvas.getObjects().find(
+      (o) => o.__posterFieldContainer && o.__posterFieldId === fieldId
+    );
+    if (containerObj) containerObj.set({ rx: setting.borderRadius, ry: setting.borderRadius });
+  }
   fitFieldTextToBox(target, field);
 
   if (field.verticalCenter) {
@@ -710,5 +730,14 @@ export function setLock(canvas, lock) {
     hasBorders:    !lock
   });
   active.setCoords();
+  renderCanvas(canvas);
+}
+
+export function updateAllFieldShapes(canvas, borderRadius) {
+  canvas.getObjects().forEach((obj) => {
+    if (obj.__posterFieldContainer || obj.__posterListSubBox) {
+      obj.set({ rx: borderRadius, ry: borderRadius });
+    }
+  });
   renderCanvas(canvas);
 }
