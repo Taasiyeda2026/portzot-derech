@@ -262,6 +262,7 @@ export const AVAILABLE_FONTS = [
   { label: 'Alef',                 value: 'Alef',                 img: '/poster-builder/assets/fonts/namebutton/ALEF.png'   },
   { label: 'Alice',                value: 'Alice',                img: '/poster-builder/assets/fonts/namebutton/ALICE.png'  },
   { label: 'Choco',                value: 'Choco',                img: '/poster-builder/assets/fonts/namebutton/CHOCO.png'  },
+  { label: 'Yehuda',               value: 'Yehuda',               img: '/poster-builder/assets/fonts/namebutton/YEHUDA.png' },
 ];
 
 export const DEFAULT_FIELD_FONT  = 'IBM Plex Sans Hebrew';

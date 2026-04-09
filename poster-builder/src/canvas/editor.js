@@ -585,7 +585,7 @@ export function applyZoneImage(canvas, slotKey, dataUrl, sizeKey, productType) {
 export async function registerFonts() {
   if (typeof document === 'undefined') return;
   await document.fonts.ready;
-  const families = ['IBM Plex Sans Hebrew', 'Gveret Levin', 'Alice', 'Choco', 'Alef'];
+  const families = ['IBM Plex Sans Hebrew', 'Gveret Levin', 'Alice', 'Choco', 'Alef', 'Yehuda'];
   await Promise.all(
     families.map((f) => document.fonts.load(`700 16px "${f}"`).catch(() => {}))
   );
