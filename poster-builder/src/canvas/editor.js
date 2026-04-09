@@ -11,6 +11,7 @@ const DEFAULT_TEXT_FONT = DEFAULT_FIELD_FONT;
 const FIXED_CREDIT_TEXT = '© 2026 פורצות דרך | תעשיידע';
 const LIST_SUB_GAP      = 14;
 const LOGO_SRC = '/poster-builder/assets/logoposter.png';
+const TITLE_TOP_GAP = 14;
 
 export function isPosterManagedObject(obj) {
   return Boolean(
@@ -64,6 +65,37 @@ function resolveAssetPath(path) {
 
 function renderCanvas(canvas) {
   canvas.requestRenderAll();
+}
+
+function computeTitleTop(field, titleObj) {
+  if (!titleObj) return field.y;
+  titleObj.initDimensions();
+  return field.y - titleObj.height - TITLE_TOP_GAP;
+}
+
+function bringSectionTitlesToFront(canvas) {
+  canvas.getObjects()
+    .filter((obj) => obj.__posterFieldTitle === true)
+    .forEach((titleObj) => canvas.bringToFront(titleObj));
+}
+
+function getContentBottomY(canvas) {
+  const trackedObjects = canvas.getObjects().filter((obj) => (
+    obj.__posterFieldContainer === true ||
+    obj.__posterListSubBox === true ||
+    obj.__posterFieldObject === true ||
+    obj.__posterFieldTitle === true ||
+    obj.__posterImageZone === true ||
+    obj.__posterZoneImage === true
+  ));
+
+  if (!trackedObjects.length) return 0;
+
+  return trackedObjects.reduce((maxBottom, obj) => {
+    const bounds = obj.getBoundingRect(true, true);
+    const bottom = bounds.top + bounds.height;
+    return Math.max(maxBottom, bottom);
+  }, 0);
 }
 
 function getPosterDimensions(canvas) {
@@ -225,10 +257,11 @@ function buildFieldObjects(canvas, sizeKey, values = {}, settings = {}, productT
           fontWeight: 700,
           fontSize:   52,
           left:       field.x - hPad,
-          top:        field.y + 14,
+          top:        field.y,
           selectable: false,
           evented:    false
         });
+        listTitle.set({ top: computeTitleTop(field, listTitle) });
         listTitle.__posterFieldTitle = true;
         markPosterManaged(listTitle, field.id);
         canvas.add(listTitle);
@@ -271,10 +304,11 @@ function buildFieldObjects(canvas, sizeKey, values = {}, settings = {}, productT
         fontWeight:  700,
         fontSize:    52,
         left:        field.x - hPad,
-        top:         field.y + 14,
+        top:         field.y,
         selectable:  false,
         evented:     false
       });
+      title.set({ top: computeTitleTop(field, title) });
       title.__posterFieldTitle = true;
       markPosterManaged(title, field.id);
       objectsToAdd.push(title);
@@ -326,14 +360,19 @@ function buildFieldObjects(canvas, sizeKey, values = {}, settings = {}, productT
     canvas.add(...objectsToAdd);
     canvas.bringToFront(valueText);
   });
+  bringSectionTitlesToFront(canvas);
 }
 
 function upsertFixedCredit(canvas) {
   const existingBar    = canvas.getObjects().find((obj) => obj.__posterFixedCreditBar  === true);
   const existingCredit = canvas.getObjects().find((obj) => obj.__posterFixedCredit     === true);
   const { width, height } = getPosterDimensions(canvas);
-  const fontSize = Math.round(Math.max(26, Math.min(width, height) * 0.013));
-  const textTop  = height - Math.round(height * 0.014);
+  const defaultFontSize = Math.round(Math.max(26, Math.min(width, height) * 0.013));
+  const minGapFromContent = Math.round(Math.max(22, height * 0.008));
+  const contentBottom = getContentBottomY(canvas);
+  const maxFontThatFits = Math.floor((height - 2) - contentBottom - minGapFromContent);
+  const fontSize = Math.max(12, Math.min(defaultFontSize, maxFontThatFits));
+  const textTop  = height - 2;
 
   if (existingBar) canvas.remove(existingBar);
 
@@ -426,6 +465,7 @@ function upsertFixedLogo(canvas) {
 function ensureFixedTemplateDecorations(canvas) {
   upsertFixedCredit(canvas);
   upsertFixedLogo(canvas);
+  bringSectionTitlesToFront(canvas);
 
   const creditBar = canvas.getObjects().find((obj) => obj.__posterFixedCreditBar === true);
   if (creditBar) canvas.bringToFront(creditBar);
@@ -637,6 +677,7 @@ export function updatePosterField(canvas, fieldId, rawValue, sizeKey = canvas._p
     });
 
     buildListSubBoxes(canvas, field, fakeValues, setting);
+    bringSectionTitlesToFront(canvas);
     renderCanvas(canvas);
     return rawValue || '';
   }
