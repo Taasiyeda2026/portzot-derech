@@ -140,8 +140,8 @@ export function getFieldDef(fieldId, productType = 'none') {
 }
 
 const PORTRAIT_RECTS = {
-  projectName:      { x: 1240, y:  270, width: 2200, height: 220  },
-  description:      { x: 1240, y:  525, width: 2200, height: 130  },
+  projectName:      { x: 1240, y:  120, width: 2200, height: 180  },
+  description:      { x: 1240, y:  320, width: 2200, height: 110  },
   problem:          { x: 2360, y:  720, width: 1080, height: 440  },
   audience:         { x: 2360, y: 1230, width: 1080, height: 330  },
   researchQuestion: { x: 2360, y: 1630, width: 1080, height: 330  },
@@ -155,8 +155,8 @@ const PORTRAIT_RECTS = {
 };
 
 const LANDSCAPE_RECTS = {
-  projectName:      { x: 2055, y: 50,   width: 2710, height: 160  },
-  description:      { x: 2055, y: 230,  width: 2710, height: 120  },
+  projectName:      { x: 2055, y: 24,   width: 2710, height: 140  },
+  description:      { x: 2055, y: 174,  width: 2710, height: 98   },
   problem:          { x: 3410, y: 450,  width: 1576, height: 240  },
   audience:         { x: 3410, y: 770,  width: 1576, height: 180  },
   researchQuestion: { x: 3410, y: 1030, width: 1576, height: 200  },

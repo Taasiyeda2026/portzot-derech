@@ -27,7 +27,8 @@ import {
   updatePosterField,
   updateFieldLabels,
   updateAllFieldShapes,
-  setLock
+  setLock,
+  isPosterManagedObject
 } from './canvas/editor.js';
 import { saveProject, loadProject, clearProject } from './utils/storage.js';
 import { exportPDF } from './utils/export.js';
@@ -37,9 +38,10 @@ const h = React.createElement;
 
 const SERIALIZE_PROPS = [
   'lockMovementX', 'lockMovementY', 'lockScalingX', 'lockScalingY', 'lockRotation',
+  '__posterManaged',
   '__posterFixedCreditBar', '__posterFixedCredit',
   '__posterFieldObject', '__posterFieldContainer', '__posterFieldTitle', '__posterFieldId',
-  '__posterListSubBox',
+  '__posterListSubBox', '__posterListSubIndex',
   '__posterImageZone', '__posterZoneImage', '__posterSlotKey'
 ];
 
@@ -91,22 +93,15 @@ function App() {
   useEffect(() => { fieldSettingsRef.current     = fieldSettings;    }, [fieldSettings]);
   useEffect(() => { slotImagesRef.current        = slotImages;       }, [slotImages]);
 
-  const isPosterManagedObject = (obj) =>
-    obj.__posterFieldObject    ||
-    obj.__posterFieldContainer ||
-    obj.__posterFieldTitle     ||
-    obj.__posterListSubBox     ||
-    obj.__posterFixedCreditBar ||
-    obj.__posterFixedCredit    ||
-    obj.__posterImageZone      ||
-    obj.__posterZoneImage;
-
   const saveNow = () => {
     const canvas = fabricRef.current;
     if (!canvas) return;
 
     const allObjects  = canvas.getObjects();
-    const userObjects = allObjects.filter((obj) => !isPosterManagedObject(obj));
+    const userObjects = allObjects.filter((obj) =>
+      !isPosterManagedObject(obj) &&
+      (obj.selectable || obj.evented)
+    );
     const tempCanvas  = { objects: userObjects.map((o) => o.toObject(SERIALIZE_PROPS)) };
 
     saveProject({

@@ -12,6 +12,50 @@ const FIXED_CREDIT_TEXT = '© 2026 פורצות דרך | תעשיידע';
 const LIST_SUB_GAP      = 14;
 const LOGO_SRC = '/poster-builder/assets/logoposter.png';
 
+export function isPosterManagedObject(obj) {
+  return Boolean(
+    obj?.__posterManaged       ||
+    obj?.__posterFieldObject   ||
+    obj?.__posterFieldContainer ||
+    obj?.__posterFieldTitle    ||
+    obj?.__posterListSubBox    ||
+    obj?.__posterListSubIndex !== undefined ||
+    obj?.__posterFixedCreditBar ||
+    obj?.__posterFixedCredit   ||
+    obj?.__posterImageZone     ||
+    obj?.__posterZoneImage
+  );
+}
+
+function markPosterManaged(obj, fieldId = null) {
+  if (!obj) return obj;
+  obj.__posterManaged = true;
+  if (fieldId) obj.__posterFieldId = fieldId;
+  return obj;
+}
+
+function removeObjects(canvas, predicate) {
+  canvas.getObjects().filter(predicate).forEach((o) => canvas.remove(o));
+}
+
+function clearPosterFieldObjects(canvas, fieldId) {
+  removeObjects(canvas, (o) => (
+    (o.__posterFieldId === fieldId && (isPosterManagedObject(o) || (!o.selectable && !o.evented))) ||
+    (o.__posterFieldTitle && o.__posterFieldId === fieldId)
+  ));
+}
+
+function clearListSubBoxes(canvas, fieldId) {
+  removeObjects(canvas, (o) => (
+    o.__posterFieldId === fieldId &&
+    (o.__posterListSubBox || o.__posterListSubIndex !== undefined)
+  ));
+}
+
+function purgeSystemLikeNonInteractiveObjects(canvas) {
+  removeObjects(canvas, (o) => isPosterManagedObject(o) || (!o.selectable && !o.evented));
+}
+
 function resolveAssetPath(path) {
   if (!path) return null;
   if (/^https?:\/\//.test(path)) return path;
@@ -96,14 +140,12 @@ function buildListSubBoxes(canvas, field, values, setting) {
   const color         = (setting && setting.color)      || '#1f2937';
   const borderRadius  = (setting && setting.borderRadius !== undefined) ? setting.borderRadius : 14;
   const hPad          = 18;
-  const titleSpacing  = field.noLabel ? 20 : Math.min(field.titleSpacing || 80, 66);
+  const titleSpacing  = field.noLabel ? 16 : Math.min(field.titleSpacing || 80, 58);
   const bottomPad     = 12;
   const available     = field.height - titleSpacing - bottomPad;
   const subBoxH       = Math.floor((available - LIST_SUB_GAP * 2) / 3);
-  const subTopPad     = 14;
-  canvas.getObjects()
-    .filter((o) => o.__posterFieldId === field.id && (o.__posterListSubBox || o.__posterListSubIndex !== undefined))
-    .forEach((o) => canvas.remove(o));
+  const subTopPad     = 12;
+  clearListSubBoxes(canvas, field.id);
 
   [1, 2, 3].forEach((num, idx) => {
     const rawItem  = (values[`${field.id}_${num}`] || '').trim();
@@ -126,7 +168,7 @@ function buildListSubBoxes(canvas, field, values, setting) {
       evented:     false
     });
     subContainer.__posterListSubBox = true;
-    subContainer.__posterFieldId    = field.id;
+    markPosterManaged(subContainer, field.id);
 
     const subField = { ...field, y: subY, height: subBoxH, noLabel: true };
 
@@ -152,15 +194,18 @@ function buildListSubBoxes(canvas, field, values, setting) {
     fitFieldTextToBox(subText, subField, subTopPad);
 
     subText.__posterFieldObject  = true;
-    subText.__posterFieldId      = field.id;
     subText.__posterListSubIndex = idx;
+    markPosterManaged(subText, field.id);
 
     canvas.add(subContainer, subText);
+    canvas.bringToFront(subText);
   });
 }
 
 function buildFieldObjects(canvas, sizeKey, values = {}, settings = {}, productType = 'none') {
   getPosterFields(sizeKey, productType).forEach((field) => {
+    clearPosterFieldObjects(canvas, field.id);
+
     const s            = settings[field.id] || {};
     const fontFamily   = s.fontFamily || DEFAULT_TEXT_FONT;
     const color        = s.color      || '#1f2937';
@@ -185,7 +230,9 @@ function buildFieldObjects(canvas, sizeKey, values = {}, settings = {}, productT
           evented:    false
         });
         listTitle.__posterFieldTitle = true;
+        markPosterManaged(listTitle, field.id);
         canvas.add(listTitle);
+        canvas.bringToFront(listTitle);
       }
       buildListSubBoxes(canvas, field, values, settings[field.id] || {});
       return;
@@ -209,7 +256,7 @@ function buildFieldObjects(canvas, sizeKey, values = {}, settings = {}, productT
       evented:     false
     });
     container.__posterFieldContainer = true;
-    container.__posterFieldId        = field.id;
+    markPosterManaged(container, field.id);
 
     const objectsToAdd = [container];
 
@@ -229,6 +276,7 @@ function buildFieldObjects(canvas, sizeKey, values = {}, settings = {}, productT
         evented:     false
       });
       title.__posterFieldTitle = true;
+      markPosterManaged(title, field.id);
       objectsToAdd.push(title);
     }
 
@@ -272,10 +320,11 @@ function buildFieldObjects(canvas, sizeKey, values = {}, settings = {}, productT
     }
 
     valueText.__posterFieldObject = true;
-    valueText.__posterFieldId     = field.id;
+    markPosterManaged(valueText, field.id);
     objectsToAdd.push(valueText);
 
     canvas.add(...objectsToAdd);
+    canvas.bringToFront(valueText);
   });
 }
 
@@ -283,25 +332,10 @@ function upsertFixedCredit(canvas) {
   const existingBar    = canvas.getObjects().find((obj) => obj.__posterFixedCreditBar  === true);
   const existingCredit = canvas.getObjects().find((obj) => obj.__posterFixedCredit     === true);
   const { width, height } = getPosterDimensions(canvas);
-  const barH    = Math.round(height * 0.055);
-  const barTop  = height - barH;
   const fontSize = Math.round(Math.max(26, Math.min(width, height) * 0.013));
-  const textTop  = height - Math.round(height * 0.018);
+  const textTop  = height - Math.round(height * 0.014);
 
-  if (existingBar) {
-    existingBar.set({ left: 0, top: barTop, width, height: barH });
-    existingBar.setCoords();
-  } else {
-    const bar = new fabric.Rect({
-      left:    0, top: barTop,
-      width,   height: barH,
-      fill:    'rgba(0,0,0,0.38)',
-      selectable: false, evented: false,
-      excludeFromExport: false, hoverCursor: 'default'
-    });
-    bar.__posterFixedCreditBar = true;
-    canvas.add(bar);
-  }
+  if (existingBar) canvas.remove(existingBar);
 
   if (existingCredit) {
     existingCredit.set({ text: FIXED_CREDIT_TEXT, left: width / 2, top: textTop, fontSize });
@@ -311,7 +345,7 @@ function upsertFixedCredit(canvas) {
       originX: 'center', originY: 'bottom',
       left:    width / 2, top: textTop,
       textAlign: 'center',
-      fill:      '#ffffff',
+      fill:      '#5E2750',
       fontFamily: DEFAULT_TEXT_FONT,
       fontWeight: 400,
       fontSize,
@@ -319,6 +353,7 @@ function upsertFixedCredit(canvas) {
       excludeFromExport: false, hoverCursor: 'default'
     });
     credit.__posterFixedCredit = true;
+    markPosterManaged(credit);
     canvas.add(credit);
   }
 }
@@ -414,6 +449,7 @@ function buildSlotPlaceholder(canvas, slot) {
   });
   rect.__posterImageZone = true;
   rect.__posterSlotKey   = slot.key;
+  markPosterManaged(rect);
 
   const fontSize = Math.min(56, slot.width * 0.055);
   const label = new fabric.Text(`${slot.label} +`, {
@@ -432,6 +468,7 @@ function buildSlotPlaceholder(canvas, slot) {
   });
   label.__posterImageZone = true;
   label.__posterSlotKey   = slot.key;
+  markPosterManaged(label);
 
   canvas.add(rect, label);
 }
@@ -455,6 +492,7 @@ function applySlotImage(canvas, slot, dataUrl) {
     });
     img.__posterZoneImage = true;
     img.__posterSlotKey   = slot.key;
+    markPosterManaged(img);
     img.setCoords();
     canvas.add(img);
     canvas.setActiveObject(img);
@@ -578,19 +616,7 @@ export function applyBackground(canvas, path) {
 export function initializePosterFields(canvas, values = {}, sizeKey = canvas._posterSizeKey || 'A4', settings = {}, slotImages = null, productType = canvas._productType || 'none') {
   canvas._productType = productType;
 
-  const existing = canvas.getObjects().filter((obj) =>
-    obj.__posterFieldObject    ||
-    obj.__posterFieldContainer ||
-    obj.__posterFieldTitle     ||
-    obj.__posterListSubBox     ||
-    obj.__posterFixedLogo      ||
-    obj.__posterLogoBacking    ||
-    obj.__posterFixedCreditBar ||
-    obj.__posterFixedCredit    ||
-    obj.__posterImageZone      ||
-    obj.__posterZoneImage
-  );
-  existing.forEach((obj) => canvas.remove(obj));
+  purgeSystemLikeNonInteractiveObjects(canvas);
 
   buildFieldObjects(canvas, sizeKey, values, settings, productType);
   applyVisualSlots(canvas, sizeKey, productType, slotImages || {});
@@ -643,6 +669,7 @@ export function updatePosterField(canvas, fieldId, rawValue, sizeKey = canvas._p
   }
 
   target.setCoords();
+  canvas.bringToFront(target);
   renderCanvas(canvas);
   return rawValue || '';
 }
