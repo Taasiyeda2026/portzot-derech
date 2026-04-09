@@ -42,10 +42,24 @@
   src: url('/poster-builder/assets/fonts/GveretLevin-Regular.ttf') format('truetype');
 }
 @font-face {
-  font-family: 'Yehuda';
+  font-family: 'Alef';
   font-weight: 400;
   font-style: normal;
-  src: url('/poster-builder/assets/fonts/Yehuda.ttf') format('truetype');
+  src: url('/poster-builder/assets/fonts/Alef-regular.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Alef';
+  font-weight: 700;
+  font-style: normal;
+  src: url('/poster-builder/assets/fonts/Alef-bold.woff') format('woff'),
+       url('/poster-builder/assets/fonts/Alef-bold.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Yehuda';
+  font-weight: 700;
+  font-style: normal;
+  src: url('/poster-builder/assets/fonts/yehudaclm-bold-webfont.woff') format('woff'),
+       url('/poster-builder/assets/fonts/yehudaclm-bold-webfont.ttf') format('truetype');
 }
 
 * { box-sizing: border-box; }
