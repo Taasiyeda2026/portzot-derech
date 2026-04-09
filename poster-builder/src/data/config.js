@@ -140,18 +140,18 @@ export function getFieldDef(fieldId, productType = 'none') {
 }
 
 const PORTRAIT_RECTS = {
-  projectName:      { x: 1440, y: 60,   width: 1880, height: 200  },
-  description:      { x: 1440, y: 280,  width: 1880, height: 160  },
-  problem:          { x: 2380, y: 680,  width: 1070, height: 310  },
-  audience:         { x: 2380, y: 1100, width: 1070, height: 250  },
-  researchQuestion: { x: 2380, y: 1460, width: 1070, height: 270  },
-  research:         { x: 2380, y: 1840, width: 1070, height: 450  },
-  findings:         { x: 2380, y: 2400, width: 1070, height: 290  },
-  requirements:     { x: 1170, y: 680,  width: 1070, height: 450  },
-  solution:         { x: 1170, y: 1670, width: 1070, height: 270  },
-  howItWorks:       { x: 1170, y: 2010, width: 1070, height: 450  },
-  value:            { x: 1170, y: 2530, width: 1070, height: 230  },
-  participants:     { x: 1240, y: 2840, width: 2280, height: 250  }
+  projectName:      { x: 1240, y:   70, width: 2200, height: 220  },
+  description:      { x: 1240, y:  325, width: 2200, height: 130  },
+  problem:          { x: 2360, y:  520, width: 1080, height: 440  },
+  audience:         { x: 2360, y: 1030, width: 1080, height: 330  },
+  researchQuestion: { x: 2360, y: 1430, width: 1080, height: 330  },
+  research:         { x: 2360, y: 1830, width: 1080, height: 620  },
+  findings:         { x: 2360, y: 2520, width: 1080, height: 480  },
+  requirements:     { x: 1160, y:  520, width: 1040, height: 500  },
+  solution:         { x: 1160, y: 1580, width: 1040, height: 350  },
+  howItWorks:       { x: 1160, y: 2000, width: 1040, height: 620  },
+  value:            { x: 1160, y: 2690, width: 1040, height: 310  },
+  participants:     { x: 1240, y: 3040, width: 2200, height: 200  }
 };
 
 const LANDSCAPE_RECTS = {
@@ -232,10 +232,10 @@ export function getVisualSlots(sizeKey, productType = 'none') {
     return [{ key: 'visual', label: 'אזור חזותי', left, top, width: totalW, height: h }];
   }
 
-  const left   = 100;
-  const totalW = 1070;
-  const top    = 1200;
-  const h      = 400;
+  const left   = 120;
+  const totalW = 1040;
+  const top    = 1090;
+  const h      = 420;
 
   if (productType === 'physical') {
     const w = Math.floor((totalW - gap) / 2);
