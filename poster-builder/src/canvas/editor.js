@@ -340,8 +340,8 @@ function upsertFixedLogo(canvas) {
     const backPad      = Math.round(desiredWidth * 0.12);
     const logoHeight   = Math.round((desiredWidth / logoImg.naturalWidth) * logoImg.naturalHeight);
 
-    const bx = margin;
-    const by = margin;
+    const bx = Math.round(margin * 0.35);
+    const by = Math.round(margin * 0.3);
     const bw = desiredWidth + backPad * 2;
     const bh = logoHeight + backPad * 2;
     const radius = 20;
