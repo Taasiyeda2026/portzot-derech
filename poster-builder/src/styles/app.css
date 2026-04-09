@@ -463,7 +463,7 @@ body {
   flex: 1;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   border: 1px solid #dfd6e8;
   border-radius: 14px;
   background: #f2edf8;
@@ -474,6 +474,7 @@ body {
 }
 
 .canvas-wrapper .canvas-container {
+  margin: auto;
   border: 1px solid #cabbd9;
   box-shadow: 0 16px 34px rgba(94, 39, 80, 0.16);
   background: #fff;
