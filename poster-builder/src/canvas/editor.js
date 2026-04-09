@@ -48,7 +48,7 @@ function fitCanvasToViewport(canvas) {
   if (canvas.wrapperEl) {
     canvas.wrapperEl.style.width  = `${cssWidth}px`;
     canvas.wrapperEl.style.height = `${cssHeight}px`;
-    canvas.wrapperEl.style.margin = '0 auto';
+    canvas.wrapperEl.style.margin = 'auto';
   }
 }
 
