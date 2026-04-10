@@ -1158,19 +1158,18 @@ canvas {
 }
 
 .bgm-select-btn {
-  padding: 12px 36px;
+  padding: 10px 24px;
   background: #5e2750;
   color: #fff;
   border: none;
-  border-radius: 14px;
-  font-size: 16px;
+  border-radius: 12px;
+  font-size: 14px;
   font-weight: 700;
   cursor: pointer;
   font-family: inherit;
   box-shadow: 0 4px 16px rgba(94,39,80,0.45);
   transition: all 0.15s;
-  width: 100%;
-  max-width: 280px;
+  width: auto;
 }
 .bgm-select-btn:hover { background: #7a3268; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(94,39,80,0.55); }
 .bgm-select-btn.selected { background: #1a5c3a; box-shadow: 0 4px 16px rgba(26,92,58,0.45); cursor: default; transform: none; }
