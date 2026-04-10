@@ -1,4 +1,4 @@
-import { WizardStep1, WizardStep2, WizardStep3, StepIndicator } from './components/WizardSteps.js';
+import { WizardStep1, WizardStep2, WizardStep3, WizardStep5, StepIndicator } from './components/WizardSteps.js';
 import {
   normalizePosterSize,
   isBackgroundCompatibleWithSize,
@@ -338,7 +338,11 @@ function App() {
           h('button', {
             className: 'step4-export-btn',
             onClick: handleExportPdf
-          }, 'ייצוא PDF')
+          }, 'ייצוא PDF'),
+          h('button', {
+            className: 'step4-finish-btn',
+            onClick: () => goToStep(5)
+          }, 'סיום ›')
         )
       ),
 
@@ -382,7 +386,7 @@ function App() {
       )
     ),
 
-    wizardStep < 4 && h('div', { className: 'wz-overlay' },
+    (wizardStep < 4 || wizardStep === 5) && h('div', { className: 'wz-overlay' },
       wizardStep === 1 && h(WizardStep1, {
         currentBackground,
         currentShape,
@@ -412,6 +416,11 @@ function App() {
         onSlotClear,
         onNext: () => goToStep(4),
         onBack: () => goToStep(2)
+      }),
+
+      wizardStep === 5 && h(WizardStep5, {
+        onExportPdf: handleExportPdf,
+        onBack: () => goToStep(4)
       })
     )
   );

@@ -1207,7 +1207,7 @@ canvas {
 }
 .step4-bar-start { display: flex; align-items: center; }
 .step4-bar-center { display: flex; justify-content: center; }
-.step4-bar-end { display: flex; align-items: center; justify-content: flex-start; }
+.step4-bar-end { display: flex; align-items: center; justify-content: flex-start; gap: 10px; }
 
 .step4-back-btn {
   padding: 8px 18px;
@@ -1237,6 +1237,94 @@ canvas {
   transition: all 0.15s;
 }
 .step4-export-btn:hover { background: #7a3268; transform: translateY(-2px); box-shadow: 0 5px 16px rgba(94,39,80,0.45); }
+
+.step4-finish-btn {
+  padding: 9px 22px;
+  background: #1a5c3a;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  box-shadow: 0 3px 10px rgba(26,92,58,0.35);
+  transition: all 0.15s;
+}
+.step4-finish-btn:hover { background: #217a4e; transform: translateY(-2px); box-shadow: 0 5px 16px rgba(26,92,58,0.45); }
+
+/* ── Step 5 – Completion screen ───────────────────────────── */
+.wz5-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 0;
+}
+
+.wz5-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 44px;
+  margin-top: 40px;
+}
+
+.wz5-actions {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.wz5-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 38px;
+  border-radius: 16px;
+  font-size: 20px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  transition: all 0.18s;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.13);
+  letter-spacing: 0.01em;
+}
+
+.wz5-btn-icon {
+  font-size: 22px;
+}
+
+.wz5-btn-pdf {
+  background: #5e2750;
+  color: #fff;
+  box-shadow: 0 4px 18px rgba(94,39,80,0.35);
+}
+.wz5-btn-pdf:hover { background: #7a3268; transform: translateY(-3px); box-shadow: 0 8px 24px rgba(94,39,80,0.45); }
+
+.wz5-btn-present {
+  background: #1a5c3a;
+  color: #fff;
+  box-shadow: 0 4px 18px rgba(26,92,58,0.35);
+}
+.wz5-btn-present:hover { background: #217a4e; transform: translateY(-3px); box-shadow: 0 8px 24px rgba(26,92,58,0.45); }
+
+.wz5-back {
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 14px;
+  font-family: inherit;
+  cursor: pointer;
+  padding: 6px 12px;
+  transition: color 0.15s;
+}
+.wz5-back:hover { color: #5e2750; }
 
 .step4-body {
   flex: 1;

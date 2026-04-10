@@ -17,7 +17,7 @@ const SHAPES = [
   { value: 20, symbol: '◻', title: 'מעוגל'        }
 ];
 
-const STEP_LABELS = ['עיצוב', 'סוג מוצר', 'תוכן', 'יצירה'];
+const STEP_LABELS = ['עיצוב', 'סוג מוצר', 'תוכן', 'יצירה', 'סיום'];
 const PRESET_COLORS = ['#5E2750','#1a3a6b','#1a5c3a','#7a1a1a','#b5520a','#1a4a5c','#2d2d2d'];
 
 export function StepIndicator({ current }) {
@@ -370,6 +370,44 @@ export function WizardStep3({
           });
         })
       )
+    )
+  );
+}
+
+export function WizardStep5({ onExportPdf, onBack }) {
+  return h('div', { className: 'wz-screen wz5-screen' },
+    h(StepIndicator, { current: 5 }),
+
+    h('div', { className: 'wz-content wz5-content' },
+      h('div', { className: 'wz-hero' },
+        h('h1', { className: 'wz-title' }, 'הפוסטר שלכן מוכן!'),
+        h('p',  { className: 'wz-subtitle' }, 'שמרו את הפוסטר ועברו לשלב ההצגה')
+      ),
+
+      h('div', { className: 'wz5-actions' },
+        h('button', {
+          className: 'wz5-btn wz5-btn-pdf',
+          onClick: onExportPdf
+        },
+          h('span', { className: 'wz5-btn-icon' }, '⬇'),
+          h('span', null, 'שמירה כ-PDF')
+        ),
+
+        h('a', {
+          className: 'wz5-btn wz5-btn-present',
+          href: 'https://portzot-derech.org/final/final.html',
+          target: '_blank',
+          rel: 'noopener noreferrer'
+        },
+          h('span', { className: 'wz5-btn-icon' }, '▶'),
+          h('span', null, 'מציגות ומשכנעות')
+        )
+      ),
+
+      h('button', {
+        className: 'wz5-back',
+        onClick: onBack
+      }, '‹ חזרה לעריכה')
     )
   );
 }
