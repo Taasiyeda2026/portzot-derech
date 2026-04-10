@@ -127,7 +127,7 @@ export function WizardStep1({
 
       h('div', { className: 'wz-section' },
         h('h3', { className: 'wz-section-title' }, 'רקע'),
-        h('div', { className: 'wz-bg-picker-row' },
+        h('div', { className: 'wz-bg-picker-col' },
           selectedBg && h('div', { className: 'wz-bg-current-wrap' },
             h('img', { src: selectedBg.path, alt: selectedBg.name, className: 'wz-bg-current-thumb' }),
             h('span', { className: 'wz-bg-current-check' }, '✓')
@@ -171,27 +171,40 @@ export function WizardStep1({
 
       h('div', { className: 'wz-section' },
         h('h3', { className: 'wz-section-title' }, 'צבע כותרות'),
-        h('div', { className: 'wz-colors' },
-          PRESET_COLORS.map(color =>
-            h('button', {
-              key: color,
-              className: `wz-color-swatch ${titleColor === color ? 'active' : ''}`,
-              style: { background: color },
-              title: color,
-              onClick: () => onTitleColor(color)
-            })
+        h('div', { className: 'wz-colors-grid' },
+          h('div', { className: 'wz-colors-row' },
+            PRESET_COLORS.slice(0, 5).map(color =>
+              h('button', {
+                key: color,
+                className: `wz-color-swatch ${titleColor === color ? 'active' : ''}`,
+                style: { background: color },
+                title: color,
+                onClick: () => onTitleColor(color)
+              })
+            )
           ),
-          h('label', { className: 'wz-color-custom-wrap', title: 'צבע מותאם אישית' },
-            h('div', {
-              className: `wz-color-swatch wz-color-swatch-custom ${isCustomColor ? 'active' : ''}`,
-              style: { background: isCustomColor ? titleColor : 'conic-gradient(red,yellow,lime,aqua,blue,magenta,red)' }
-            }),
-            h('input', {
-              type: 'color',
-              className: 'wz-color-input-hidden',
-              value: titleColor,
-              onChange: e => onTitleColor(e.target.value)
-            })
+          h('div', { className: 'wz-colors-row' },
+            PRESET_COLORS.slice(5).map(color =>
+              h('button', {
+                key: color,
+                className: `wz-color-swatch ${titleColor === color ? 'active' : ''}`,
+                style: { background: color },
+                title: color,
+                onClick: () => onTitleColor(color)
+              })
+            ),
+            h('label', { className: 'wz-color-custom-wrap', title: 'צבע מותאם אישית' },
+              h('div', {
+                className: `wz-color-swatch wz-color-swatch-custom ${isCustomColor ? 'active' : ''}`,
+                style: { background: isCustomColor ? titleColor : 'conic-gradient(red,yellow,lime,aqua,blue,magenta,red)' }
+              }),
+              h('input', {
+                type: 'color',
+                className: 'wz-color-input-hidden',
+                value: titleColor,
+                onChange: e => onTitleColor(e.target.value)
+              })
+            )
           )
         )
       )

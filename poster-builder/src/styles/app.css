@@ -961,10 +961,13 @@ canvas {
 }
 
 /* ── Background picker trigger ── */
-.wz-bg-picker-row {
-  display: flex;
-  align-items: center;
-  gap: 16px;
+.wz-bg-picker-row { display: inline-flex; align-items: center; gap: 12px; }
+
+.wz-bg-picker-col {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
 }
 
 .wz-bg-current-wrap {
@@ -973,10 +976,10 @@ canvas {
 }
 
 .wz-bg-current-thumb {
-  width: 60px;
+  width: 52px;
   aspect-ratio: 1 / 1.414;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 7px;
   border: 2.5px solid #5e2750;
   display: block;
   box-shadow: 0 2px 8px rgba(94,39,80,0.25);
@@ -990,9 +993,9 @@ canvas {
   background: #5e2750;
   color: #fff;
   border-radius: 50%;
-  width: 18px;
-  height: 18px;
-  font-size: 11px;
+  width: 16px;
+  height: 16px;
+  font-size: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1000,19 +1003,20 @@ canvas {
 }
 
 .wz-bg-open-btn {
-  padding: 10px 22px;
+  padding: 5px 14px;
   background: #5e2750;
   color: #fff;
   border: none;
-  border-radius: 12px;
-  font-size: 15px;
+  border-radius: 8px;
+  font-size: 12px;
   font-weight: 700;
   cursor: pointer;
   font-family: inherit;
-  box-shadow: 0 3px 10px rgba(94,39,80,0.30);
+  box-shadow: 0 2px 6px rgba(94,39,80,0.28);
   transition: all 0.15s;
+  white-space: nowrap;
 }
-.wz-bg-open-btn:hover { background: #7a3268; transform: translateY(-2px); box-shadow: 0 5px 14px rgba(94,39,80,0.4); }
+.wz-bg-open-btn:hover { background: #7a3268; transform: translateY(-1px); box-shadow: 0 4px 10px rgba(94,39,80,0.4); }
 
 /* ── Background catalog modal ── */
 .bgm-overlay {
@@ -1195,8 +1199,8 @@ canvas {
 
 /* ── Font image buttons ── */
 .wz-font-imgs {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 8px;
 }
 
@@ -1205,26 +1209,28 @@ canvas {
   border-radius: 8px;
   background: #fff;
   cursor: pointer;
-  padding: 2px 6px;
+  padding: 8px 6px;
   transition: border-color 0.15s, box-shadow 0.15s, transform 0.12s;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
+  width: 100%;
 }
 .wz-font-img-btn:hover { border-color: #9b5fa8; background: #f8f0ff; transform: translateY(-2px); }
 .wz-font-img-btn.active { border-color: #5e2750; background: #f0e6f8; box-shadow: 0 0 0 2px #5e2750; }
 
 .wz-font-img {
-  height: 24px;
+  height: 32px;
   width: auto;
-  max-width: 110px;
+  max-width: 100%;
   display: block;
   object-fit: contain;
 }
 
 /* ── Color swatches ── */
 .wz-colors { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.wz-colors-grid { display: flex; flex-direction: column; gap: 8px; }
+.wz-colors-row  { display: flex; flex-wrap: nowrap; gap: 10px; align-items: center; }
 .wz-color-swatch {
   width: 38px;
   height: 38px;
