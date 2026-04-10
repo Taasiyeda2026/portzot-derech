@@ -230,33 +230,61 @@ function ListField({ field, values, onContentChange }) {
 }
 
 function ParticipantsField({ field, values, onContentChange }) {
-  const rows = [
-    { key: 'students',   label: 'שמות התלמידות:', max: 80, placeholder: 'נועה קירל, מאיה בוסקילה' },
-    { key: 'className',  label: 'כיתה:',           max: 20, placeholder: "ט'5"                      },
-    { key: 'schoolName', label: 'שם בית הספר:',    max: 40, placeholder: 'רבין מודיעין'              }
+  const nameFields = [
+    { key: 'student1', placeholder: 'שם 1' },
+    { key: 'student2', placeholder: 'שם 2' },
+    { key: 'student3', placeholder: 'שם 3' },
   ];
+  const MAX_NAME   = 25;
+  const MAX_CLASS  = 5;
+  const MAX_SCHOOL = 25;
+
+  const inputCls = (val, max) => val.length >= max ? 'overflow' : val.length >= max * 0.85 ? 'near-limit' : 'ok';
+
   return h('div', { className: 'poster-field participants-field' },
     h('span', { className: 'poster-field-question' }, field.question),
-    h('div', { className: 'participants-inputs' },
-      rows.map(row => {
-        const val   = values[row.key] || '';
-        const count = val.length;
-        const cls   = count >= row.max ? 'overflow' : count >= row.max * 0.9 ? 'near-limit' : 'ok';
-        return h('div', { key: row.key, className: 'participants-row' },
-          h('label', { className: 'participants-label' }, row.label),
-          h('div', { className: 'participants-input-wrap' },
-            h('input', {
-              type: 'text',
-              className: `list-row-input ${cls}`,
-              maxLength: row.max,
-              placeholder: row.placeholder,
-              value: val,
-              onChange: e => onContentChange(row.key, e.target.value.slice(0, row.max))
-            }),
-            h(CharCounter, { count, max: row.max })
-          )
-        );
-      })
+
+    h('div', { className: 'participants-names-section' },
+      h('label', { className: 'participants-label' }, 'שמות התלמידות:'),
+      h('div', { className: 'participants-name-inputs' },
+        nameFields.map(nf => {
+          const val = values[nf.key] || '';
+          return h('input', {
+            key: nf.key,
+            type: 'text',
+            className: `participants-name-input ${inputCls(val, MAX_NAME)}`,
+            maxLength: MAX_NAME,
+            placeholder: nf.placeholder,
+            value: val,
+            onChange: e => onContentChange(nf.key, e.target.value.slice(0, MAX_NAME))
+          });
+        })
+      )
+    ),
+
+    h('div', { className: 'participants-meta-row' },
+      h('div', { className: 'participants-class-wrap' },
+        h('label', { className: 'participants-label' }, 'כיתה:'),
+        h('input', {
+          type: 'text',
+          className: `participants-class-input ${inputCls(values.className || '', MAX_CLASS)}`,
+          maxLength: MAX_CLASS,
+          placeholder: "ט'5",
+          value: values.className || '',
+          onChange: e => onContentChange('className', e.target.value.slice(0, MAX_CLASS))
+        })
+      ),
+      h('div', { className: 'participants-school-wrap' },
+        h('label', { className: 'participants-label' }, 'שם בית הספר:'),
+        h('input', {
+          type: 'text',
+          className: `participants-school-input ${inputCls(values.schoolName || '', MAX_SCHOOL)}`,
+          maxLength: MAX_SCHOOL,
+          placeholder: 'רבין מודיעין',
+          value: values.schoolName || '',
+          onChange: e => onContentChange('schoolName', e.target.value.slice(0, MAX_SCHOOL))
+        })
+      )
     )
   );
 }

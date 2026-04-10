@@ -101,16 +101,17 @@ export function buildListText(fieldId, values) {
   }).join('\n\n');
 }
 
-export const PARTICIPANTS_SUB_KEYS = ['students', 'className', 'schoolName'];
+export const PARTICIPANTS_SUB_KEYS = ['student1', 'student2', 'student3', 'className', 'schoolName'];
 
 export function buildParticipantsText(values) {
-  const students  = (values.students   || '').trim();
+  const names = ['student1', 'student2', 'student3']
+    .map(k => (values[k] || '').trim())
+    .filter(Boolean);
   const className = (values.className  || '').trim();
   const school    = (values.schoolName || '').trim();
-  const line1 = `שמות התלמידות: ${students}`;
-  const classStr = className ? `כיתה ${className}` : '';
-  const parts2   = [classStr, school].filter(Boolean);
-  const line2    = parts2.join(' | ');
+  const line1  = names.length ? `שמות התלמידות: ${names.join(', ')}` : '';
+  const parts2 = [className, school].filter(Boolean);
+  const line2  = parts2.join(' | ');
   return [line1, line2].filter(Boolean).join('\n');
 }
 
