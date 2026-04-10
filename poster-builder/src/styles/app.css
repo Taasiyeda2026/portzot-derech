@@ -962,9 +962,9 @@ canvas {
 
 /* ── Background picker trigger ── */
 .wz-bg-picker-row {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
 }
 
 .wz-bg-current-wrap {

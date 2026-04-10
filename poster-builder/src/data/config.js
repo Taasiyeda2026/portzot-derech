@@ -19,6 +19,15 @@ export const BACKGROUNDS = [
   { id: 'bg-tech4', name: 'רקע 4', path: '/poster-builder/assets/backgrounds/bg-tech4.png', orientation: 'portrait' },
   { id: 'bg-tech5', name: 'רקע 5', path: '/poster-builder/assets/backgrounds/bg-tech5.png', orientation: 'portrait' },
   { id: 'bg-tech6', name: 'רקע 6', path: '/poster-builder/assets/backgrounds/bg-tech6.png', orientation: 'portrait' },
+  { id: 'bg-tech7', name: 'רקע 7', path: '/poster-builder/assets/backgrounds/bg-tech7.png', orientation: 'portrait' },
+  { id: 'bg-tech8', name: 'רקע 8', path: '/poster-builder/assets/backgrounds/bg-tech8.png', orientation: 'portrait' },
+  { id: 'bg-tech9', name: 'רקע 9', path: '/poster-builder/assets/backgrounds/bg-tech9.png', orientation: 'portrait' },
+  { id: 'bg-tech-lan1', name: 'רקע נוף 1', path: '/poster-builder/assets/backgrounds/bg-tech-lan1.png', orientation: 'landscape' },
+  { id: 'bg-tech-lan2', name: 'רקע נוף 2', path: '/poster-builder/assets/backgrounds/bg-tech-lan2.png', orientation: 'landscape' },
+  { id: 'bg-tech-lan3', name: 'רקע נוף 3', path: '/poster-builder/assets/backgrounds/bg-tech-lan3.png', orientation: 'landscape' },
+  { id: 'bg-tech-lan4', name: 'רקע נוף 4', path: '/poster-builder/assets/backgrounds/bg-tech-lan4.png', orientation: 'landscape' },
+  { id: 'bg-tech-lan5', name: 'רקע נוף 5', path: '/poster-builder/assets/backgrounds/bg-tech-lan5.png', orientation: 'landscape' },
+  { id: 'bg-tech-lan6', name: 'רקע נוף 6', path: '/poster-builder/assets/backgrounds/bg-tech-lan6.png', orientation: 'landscape' },
 ];
 
 export function isBackgroundCompatibleWithSize(path, sizeKey) {
