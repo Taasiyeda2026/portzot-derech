@@ -13,15 +13,17 @@ export function getPosterOrientation(sizeKey) {
 }
 
 export const BACKGROUNDS = [
-  { id: 'bg-tech1', name: 'רקע 1', path: '/poster-builder/assets/backgrounds/bg-tech1.png', orientation: 'any' },
-  { id: 'bg-tech2', name: 'רקע 2', path: '/poster-builder/assets/backgrounds/bg-tech2.png', orientation: 'any' },
-  { id: 'bg-tech3', name: 'רקע 3', path: '/poster-builder/assets/backgrounds/bg-tech3.png', orientation: 'any' },
-  { id: 'bg-tech4', name: 'רקע 4', path: '/poster-builder/assets/backgrounds/bg-tech4.png', orientation: 'any' },
-  { id: 'bg-tech5', name: 'רקע 5', path: '/poster-builder/assets/backgrounds/bg-tech5.png', orientation: 'any' },
-  { id: 'bg-tech6', name: 'רקע 6', path: '/poster-builder/assets/backgrounds/bg-tech6.png', orientation: 'any' },
-  { id: 'bg-tech7', name: 'רקע 7', path: '/poster-builder/assets/backgrounds/bg-tech7.png', orientation: 'any' },
-  { id: 'bg-tech8', name: 'רקע 8', path: '/poster-builder/assets/backgrounds/bg-tech8.png', orientation: 'any' },
-  { id: 'bg-tech9', name: 'רקע 9', path: '/poster-builder/assets/backgrounds/bg-tech9.png', orientation: 'any' },
+  { id: 'bg-tech1',  name: 'רקע 1',  path: '/poster-builder/assets/backgrounds/bg-tech1.png',  orientation: 'any' },
+  { id: 'bg-tech2',  name: 'רקע 2',  path: '/poster-builder/assets/backgrounds/bg-tech2.png',  orientation: 'any' },
+  { id: 'bg-tech3',  name: 'רקע 3',  path: '/poster-builder/assets/backgrounds/bg-tech3.png',  orientation: 'any' },
+  { id: 'bg-tech4',  name: 'רקע 4',  path: '/poster-builder/assets/backgrounds/bg-tech4.png',  orientation: 'any' },
+  { id: 'bg-tech5',  name: 'רקע 5',  path: '/poster-builder/assets/backgrounds/bg-tech5.png',  orientation: 'any' },
+  { id: 'bg-tech6',  name: 'רקע 6',  path: '/poster-builder/assets/backgrounds/bg-tech6.png',  orientation: 'any' },
+  { id: 'bg-tech7',  name: 'רקע 7',  path: '/poster-builder/assets/backgrounds/bg-tech7.png',  orientation: 'any' },
+  { id: 'bg-tech8',  name: 'רקע 8',  path: '/poster-builder/assets/backgrounds/bg-tech8.png',  orientation: 'any' },
+  { id: 'bg-tech9',  name: 'רקע 9',  path: '/poster-builder/assets/backgrounds/bg-tech9.png',  orientation: 'any' },
+  { id: 'bg-tech10', name: 'רקע 10', path: '/poster-builder/assets/backgrounds/bg-tech10.png', orientation: 'any' },
+  { id: 'bg-tech11', name: 'רקע 11', path: '/poster-builder/assets/backgrounds/bg-tech11.png', orientation: 'any' },
 ];
 
 export function isBackgroundCompatibleWithSize(path, sizeKey) {
