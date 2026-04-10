@@ -1164,8 +1164,15 @@ canvas {
 .wz-form-side-text { flex: 1; }
 .wz-form-side-nav {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  flex-direction: row;
+  gap: 8px;
+}
+
+.wz-form-side-nav .wz-btn {
+  flex: 1;
+  width: auto !important;
+  padding: 9px 10px;
+  font-size: 14px;
 }
 
 .wz-form-fields {
