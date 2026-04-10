@@ -36,15 +36,88 @@ export function StepIndicator({ current }) {
   );
 }
 
+function BgCatalogModal({ bgImages, previewIdx, currentBackground, onPrev, onNext, onSelect, onClose, onDot }) {
+  const bg = bgImages[previewIdx];
+  const total = bgImages.length;
+  const isSelected = bg && bg.path === currentBackground;
+
+  return h('div', {
+    className: 'bgm-overlay',
+    onClick: e => { if (e.target === e.currentTarget) onClose(); }
+  },
+    h('div', { className: 'bgm-card' },
+
+      h('div', { className: 'bgm-top' },
+        h('span', { className: 'bgm-counter' }, `${previewIdx + 1} / ${total}`),
+        h('button', { className: 'bgm-close', onClick: onClose, 'aria-label': 'סגור' }, '✕')
+      ),
+
+      h('div', { className: 'bgm-stage' },
+        h('button', { className: 'bgm-arrow bgm-arrow-right', onClick: onPrev, 'aria-label': 'הקודם' }, '‹'),
+
+        h('div', { className: 'bgm-img-wrap' },
+          bg && h('img', {
+            key: bg.id,
+            src: bg.path,
+            alt: bg.name,
+            className: 'bgm-img'
+          })
+        ),
+
+        h('button', { className: 'bgm-arrow bgm-arrow-left', onClick: onNext, 'aria-label': 'הבא' }, '›')
+      ),
+
+      h('div', { className: 'bgm-dots' },
+        bgImages.map((b, i) =>
+          h('button', {
+            key: b.id,
+            className: `bgm-dot ${i === previewIdx ? 'active' : ''}`,
+            onClick: () => onDot(i)
+          })
+        )
+      ),
+
+      h('div', { className: 'bgm-footer' },
+        h('button', {
+          className: `bgm-select-btn ${isSelected ? 'selected' : ''}`,
+          onClick: onSelect
+        }, isSelected ? '✓ רקע זה נבחר' : 'בחרי רקע זה')
+      )
+    )
+  );
+}
+
 export function WizardStep1({
   currentBackground, currentShape, titleFont, titleColor,
   onBackground, onShape, onTitleFont, onTitleColor, onNext
 }) {
-  const bgImages   = BACKGROUNDS.filter(bg => bg.path);
+  const { useState: useLocalState } = React;
+  const bgImages      = BACKGROUNDS.filter(bg => bg.path);
   const isCustomColor = !PRESET_COLORS.includes(titleColor);
+  const [showBgModal, setShowBgModal] = useLocalState(false);
+  const [previewIdx,  setPreviewIdx]  = useLocalState(0);
+
+  const openModal = () => {
+    const idx = bgImages.findIndex(bg => bg.path === currentBackground);
+    setPreviewIdx(idx >= 0 ? idx : 0);
+    setShowBgModal(true);
+  };
+
+  const selectedBg = bgImages.find(bg => bg.path === currentBackground);
 
   return h('div', { className: 'wz-screen' },
     h(StepIndicator, { current: 1 }),
+
+    showBgModal && h(BgCatalogModal, {
+      bgImages,
+      previewIdx,
+      currentBackground,
+      onPrev:   () => setPreviewIdx(i => (i - 1 + bgImages.length) % bgImages.length),
+      onNext:   () => setPreviewIdx(i => (i + 1) % bgImages.length),
+      onDot:    i  => setPreviewIdx(i),
+      onSelect: () => { onBackground(bgImages[previewIdx].path); setShowBgModal(false); },
+      onClose:  () => setShowBgModal(false)
+    }),
 
     h('div', { className: 'wz-content' },
       h('div', { className: 'wz-hero' },
@@ -54,14 +127,13 @@ export function WizardStep1({
 
       h('div', { className: 'wz-section' },
         h('h3', { className: 'wz-section-title' }, 'רקע'),
-
-        h('div', { className: 'wz-bg-grid' },
-          bgImages.map(bg =>
-            h('button', {
-              key: bg.id,
-              className: `wz-bg-btn ${currentBackground === bg.path ? 'active' : ''}`,
-              onClick: () => onBackground(bg.path)
-            }, h('img', { src: bg.path, alt: bg.name, className: 'wz-bg-thumb' }))
+        h('div', { className: 'wz-bg-picker-row' },
+          selectedBg && h('div', { className: 'wz-bg-current-wrap' },
+            h('img', { src: selectedBg.path, alt: selectedBg.name, className: 'wz-bg-current-thumb' }),
+            h('span', { className: 'wz-bg-current-check' }, '✓')
+          ),
+          h('button', { className: 'wz-bg-open-btn', onClick: openModal },
+            selectedBg ? 'החלפת רקע ›' : 'בחרי רקע ›'
           )
         )
       ),

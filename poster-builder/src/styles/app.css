@@ -960,35 +960,220 @@ canvas {
   line-height: 1.3;
 }
 
-/* ── Background grid ── */
-.wz-bg-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-  gap: 8px;
+/* ── Background picker trigger ── */
+.wz-bg-picker-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
-.wz-bg-btn {
-  border: 2.5px solid #e5d7f1;
-  border-radius: 10px;
-  padding: 3px;
-  cursor: pointer;
-  background: #fff;
-  transition: border-color 0.15s, transform 0.12s, box-shadow 0.15s;
+.wz-bg-current-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.wz-bg-current-thumb {
+  width: 60px;
+  aspect-ratio: 1 / 1.414;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2.5px solid #5e2750;
+  display: block;
+  box-shadow: 0 2px 8px rgba(94,39,80,0.25);
+}
+
+.wz-bg-current-check {
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #5e2750;
+  color: #fff;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 11px;
   display: flex;
   align-items: center;
   justify-content: center;
-  aspect-ratio: 1 / 1.414;
+  font-weight: 700;
 }
-.wz-bg-btn:hover { border-color: #b87ac8; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(94,39,80,0.18); }
-.wz-bg-btn.active { border-color: #5e2750; box-shadow: 0 0 0 2px #5e2750; }
 
-.wz-bg-thumb {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 7px;
-  display: block;
+.wz-bg-open-btn {
+  padding: 10px 22px;
+  background: #5e2750;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  box-shadow: 0 3px 10px rgba(94,39,80,0.30);
+  transition: all 0.15s;
 }
+.wz-bg-open-btn:hover { background: #7a3268; transform: translateY(-2px); box-shadow: 0 5px 14px rgba(94,39,80,0.4); }
+
+/* ── Background catalog modal ── */
+.bgm-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(10,5,20,0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+  animation: bgm-fade-in 0.18s ease;
+}
+
+@keyframes bgm-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.bgm-card {
+  background: #1a0e2a;
+  border-radius: 20px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.65);
+  padding: 24px 28px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  max-width: 420px;
+  width: 92vw;
+  animation: bgm-pop-in 0.2s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+@keyframes bgm-pop-in {
+  from { transform: scale(0.88); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}
+
+.bgm-top {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bgm-counter {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 0.06em;
+}
+
+.bgm-close {
+  background: rgba(255,255,255,0.10);
+  border: none;
+  color: rgba(255,255,255,0.7);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, color 0.15s;
+  line-height: 1;
+}
+.bgm-close:hover { background: rgba(255,255,255,0.22); color: #fff; }
+
+.bgm-stage {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.bgm-arrow {
+  background: rgba(255,255,255,0.10);
+  border: none;
+  color: #fff;
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  font-size: 22px;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, transform 0.12s;
+  line-height: 1;
+  padding-bottom: 2px;
+}
+.bgm-arrow:hover { background: rgba(255,255,255,0.22); transform: scale(1.1); }
+.bgm-arrow-right { padding-right: 2px; }
+.bgm-arrow-left  { padding-left: 2px; }
+
+.bgm-img-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+}
+
+.bgm-img {
+  width: 100%;
+  max-height: 52vh;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  display: block;
+  transition: opacity 0.15s;
+}
+
+.bgm-dots {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+}
+
+.bgm-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.25);
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.15s, transform 0.12s;
+}
+.bgm-dot.active { background: #c97fcf; transform: scale(1.35); }
+.bgm-dot:hover:not(.active) { background: rgba(255,255,255,0.5); }
+
+.bgm-footer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.bgm-select-btn {
+  padding: 12px 36px;
+  background: #5e2750;
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  box-shadow: 0 4px 16px rgba(94,39,80,0.45);
+  transition: all 0.15s;
+  width: 100%;
+  max-width: 280px;
+}
+.bgm-select-btn:hover { background: #7a3268; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(94,39,80,0.55); }
+.bgm-select-btn.selected { background: #1a5c3a; box-shadow: 0 4px 16px rgba(26,92,58,0.45); cursor: default; transform: none; }
+
+/* keep old grid classes in case still referenced */
+.wz-bg-grid { display: none; }
+.wz-bg-thumb { display: none; }
 .wz-bg-none-label { font-size: 12px; color: #8a7a9a; }
 
 /* ── Shape buttons ── */
