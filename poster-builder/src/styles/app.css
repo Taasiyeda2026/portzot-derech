@@ -1195,30 +1195,30 @@ canvas {
 
 /* ── Font image buttons ── */
 .wz-font-imgs {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .wz-font-img-btn {
   border: 2.5px solid #d5c4e6;
-  border-radius: 10px;
+  border-radius: 8px;
   background: #fff;
   cursor: pointer;
-  padding: 3px 5px;
+  padding: 2px 6px;
   transition: border-color 0.15s, box-shadow 0.15s, transform 0.12s;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
+  flex-shrink: 0;
 }
 .wz-font-img-btn:hover { border-color: #9b5fa8; background: #f8f0ff; transform: translateY(-2px); }
 .wz-font-img-btn.active { border-color: #5e2750; background: #f0e6f8; box-shadow: 0 0 0 2px #5e2750; }
 
 .wz-font-img {
-  height: 36px;
+  height: 24px;
   width: auto;
-  max-width: 100%;
+  max-width: 110px;
   display: block;
   object-fit: contain;
 }
