@@ -173,7 +173,7 @@ export function WizardStep1({
         h('h3', { className: 'wz-section-title' }, 'צבע כותרות'),
         h('div', { className: 'wz-colors-grid' },
           h('div', { className: 'wz-colors-row' },
-            PRESET_COLORS.slice(0, 5).map(color =>
+            PRESET_COLORS.slice(0, 4).map(color =>
               h('button', {
                 key: color,
                 className: `wz-color-swatch ${titleColor === color ? 'active' : ''}`,
@@ -184,7 +184,7 @@ export function WizardStep1({
             )
           ),
           h('div', { className: 'wz-colors-row' },
-            PRESET_COLORS.slice(5).map(color =>
+            PRESET_COLORS.slice(4).map(color =>
               h('button', {
                 key: color,
                 className: `wz-color-swatch ${titleColor === color ? 'active' : ''}`,
