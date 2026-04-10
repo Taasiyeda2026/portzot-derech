@@ -418,48 +418,32 @@ function upsertFixedLogo(canvas) {
     const logoImg = canvas.__posterFixedLogoImage;
     if (!logoImg || !logoImg.complete || !logoImg.naturalWidth || !logoImg.naturalHeight) return;
 
-    const { width, height } = getPosterDimensions(canvas);
-    const margin       = Math.round(Math.min(width, height) * 0.03);
+    const { width } = getPosterDimensions(canvas);
+    const margin       = Math.round(width * 0.03);
     const desiredWidth = Math.round(width * 0.14);
-    const backPad      = Math.round(desiredWidth * 0.12);
     const logoHeight   = Math.round((desiredWidth / logoImg.naturalWidth) * logoImg.naturalHeight);
 
-    const bx = Math.round(margin * 0.35);
-    const by = Math.round(margin * 0.3);
-    const bw = desiredWidth + backPad * 2;
-    const bh = logoHeight + backPad * 2;
-    const radius = 20;
-    const zoom = canvas.getZoom() || 1;
+    const lx0 = Math.round(margin * 0.35);
+    const ly0 = Math.round(margin * 0.3);
+    const zoom   = canvas.getZoom() || 1;
     const retina = canvas.getRetinaScaling ? canvas.getRetinaScaling() : 1;
     const [,, , , offsetX = 0, offsetY = 0] = canvas.viewportTransform || [];
     const scale = zoom * retina;
-    const dx = bx * scale + offsetX * retina;
-    const dy = by * scale + offsetY * retina;
-    const dw = bw * scale;
-    const dh = bh * scale;
-    const lx = (bx + backPad) * scale + offsetX * retina;
-    const ly = (by + backPad) * scale + offsetY * retina;
+    const lx = lx0 * scale + offsetX * retina;
+    const ly = ly0 * scale + offsetY * retina;
     const lw = desiredWidth * scale;
     const lh = logoHeight * scale;
 
+    const glowRadius = Math.round(desiredWidth * 0.18 * scale);
+
     const ctx = canvas.getContext();
     ctx.save();
-    ctx.fillStyle = '#ffffff';
-    if (typeof ctx.roundRect === 'function') {
-      ctx.beginPath();
-      ctx.roundRect(dx, dy, dw, dh, radius * scale);
-      ctx.fill();
-    } else {
-      const r = radius * scale;
-      ctx.beginPath();
-      ctx.moveTo(dx + r, dy);
-      ctx.arcTo(dx + dw, dy, dx + dw, dy + dh, r);
-      ctx.arcTo(dx + dw, dy + dh, dx, dy + dh, r);
-      ctx.arcTo(dx, dy + dh, dx, dy, r);
-      ctx.arcTo(dx, dy, dx + dw, dy, r);
-      ctx.closePath();
-      ctx.fill();
-    }
+    ctx.shadowColor  = 'rgba(255, 255, 255, 0.92)';
+    ctx.shadowBlur   = glowRadius;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
+    ctx.drawImage(logoImg, lx, ly, lw, lh);
+    ctx.drawImage(logoImg, lx, ly, lw, lh);
     ctx.drawImage(logoImg, lx, ly, lw, lh);
     ctx.restore();
   };
