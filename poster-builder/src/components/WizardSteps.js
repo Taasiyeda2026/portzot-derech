@@ -231,9 +231,9 @@ function ListField({ field, values, onContentChange }) {
 
 function ParticipantsField({ field, values, onContentChange }) {
   const nameFields = [
-    { key: 'student1', placeholder: 'שם 1' },
-    { key: 'student2', placeholder: 'שם 2' },
-    { key: 'student3', placeholder: 'שם 3' },
+    { key: 'student1', placeholder: '' },
+    { key: 'student2', placeholder: '' },
+    { key: 'student3', placeholder: '' },
   ];
   const MAX_NAME   = 25;
   const MAX_CLASS  = 5;
@@ -269,7 +269,7 @@ function ParticipantsField({ field, values, onContentChange }) {
           type: 'text',
           className: `participants-class-input ${inputCls(values.className || '', MAX_CLASS)}`,
           maxLength: MAX_CLASS,
-          placeholder: "ט'5",
+          placeholder: '',
           value: values.className || '',
           onChange: e => onContentChange('className', e.target.value.slice(0, MAX_CLASS))
         })
@@ -280,7 +280,7 @@ function ParticipantsField({ field, values, onContentChange }) {
           type: 'text',
           className: `participants-school-input ${inputCls(values.schoolName || '', MAX_SCHOOL)}`,
           maxLength: MAX_SCHOOL,
-          placeholder: 'רבין מודיעין',
+          placeholder: '',
           value: values.schoolName || '',
           onChange: e => onContentChange('schoolName', e.target.value.slice(0, MAX_SCHOOL))
         })
