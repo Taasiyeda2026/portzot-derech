@@ -13,7 +13,6 @@ export function getPosterOrientation(sizeKey) {
 }
 
 export const BACKGROUNDS = [
-  { id: 'none', name: 'ללא רקע', path: null, orientation: 'any' },
   { id: 'bg-tech1', name: 'רקע 1', path: '/poster-builder/assets/backgrounds/bg-tech1.png', orientation: 'portrait' },
   { id: 'bg-tech2', name: 'רקע 2', path: '/poster-builder/assets/backgrounds/bg-tech2.png', orientation: 'portrait' },
   { id: 'bg-tech3', name: 'רקע 3', path: '/poster-builder/assets/backgrounds/bg-tech3.png', orientation: 'portrait' },

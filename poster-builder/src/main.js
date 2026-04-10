@@ -9,7 +9,8 @@ import {
   buildParticipantsText,
   PARTICIPANTS_SUB_KEYS,
   DEFAULT_FIELD_FONT,
-  DEFAULT_FIELD_COLOR
+  DEFAULT_FIELD_COLOR,
+  BACKGROUNDS
 } from './data/config.js';
 import {
   registerFonts,
@@ -70,7 +71,7 @@ function App() {
   const [wizardStep,   setWizardStep]   = useState(1);
   const [posterSize,   setPosterSize]   = useState('A4');
   const [productType,  setProductType]  = useState('physical');
-  const [currentBackground, setCurrentBackground] = useState(null);
+  const [currentBackground, setCurrentBackground] = useState(BACKGROUNDS[0].path);
   const [contentValues,    setContentValues]    = useState(EMPTY_CONTENT);
   const [fieldSettings,    setFieldSettings]    = useState(DEFAULT_SETTINGS);
   const [slotImages,       setSlotImages]       = useState(EMPTY_SLOT_IMAGES);
@@ -82,7 +83,7 @@ function App() {
 
   const posterSizeRef        = useRef('A4');
   const productTypeRef       = useRef('physical');
-  const currentBackgroundRef = useRef(null);
+  const currentBackgroundRef = useRef(BACKGROUNDS[0].path);
   const contentValuesRef     = useRef(EMPTY_CONTENT);
   const fieldSettingsRef     = useRef(DEFAULT_SETTINGS);
   const slotImagesRef        = useRef(EMPTY_SLOT_IMAGES);
@@ -114,7 +115,7 @@ function App() {
     const validTypes   = ['physical','website','app'];
     const nextSize     = normalizePosterSize(saved.posterSize || 'A4');
     const nextType     = validTypes.includes(saved.productType) ? saved.productType : 'physical';
-    const nextBg       = saved.background || null;
+    const nextBg       = saved.background || BACKGROUNDS[0].path;
     const nextValues   = { ...EMPTY_CONTENT, ...(saved.contentValues || {}) };
     const nextSettings = { ...DEFAULT_SETTINGS, ...(saved.fieldSettings || {}) };
     const nextSlots    = { ...EMPTY_SLOT_IMAGES, ...(saved.slotImages || {}) };

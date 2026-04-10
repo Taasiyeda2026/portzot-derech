@@ -56,14 +56,6 @@ export function WizardStep1({
         h('h3', { className: 'wz-section-title' }, 'רקע'),
 
         h('div', { className: 'wz-bg-grid' },
-          h('button', {
-            className: `wz-bg-btn ${!currentBackground ? 'active' : ''}`,
-            onClick: () => onBackground(null)
-          },
-            h('div', { className: 'wz-bg-white-thumb' },
-              h('span', { className: 'wz-bg-white-label' }, 'ללא רקע')
-            )
-          ),
           bgImages.map(bg =>
             h('button', {
               key: bg.id,
