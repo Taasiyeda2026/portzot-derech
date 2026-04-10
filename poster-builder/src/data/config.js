@@ -42,16 +42,16 @@ export const PRODUCT_TYPES = [
 
 export const DYNAMIC_QUESTIONS = {
   solution: {
-    none:     { question: 'מה הפתרון שפיתחתן?',       shortLabel: 'הפתרון שפיתחנו' },
-    physical: { question: 'איזה מוצר פיזי פיתחתן?',   shortLabel: 'המוצר שפיתחנו' },
-    website:  { question: 'איזה אתר פיתחתן?',          shortLabel: 'האתר שפיתחנו' },
-    app:      { question: 'איזו אפליקציה פיתחתן?',     shortLabel: 'האפליקציה שפיתחנו' }
+    none:     { question: 'מה הפתרון שפיתחתן?',        shortLabel: 'הפתרון שפיתחנו',      hint: 'תארו בקצרה את הפתרון שפיתחתן ואיך הוא נותן מענה לבעיה.' },
+    physical: { question: 'מהו המוצר הפיזי שפיתחתן?', shortLabel: 'המוצר שפיתחנו',       hint: 'תארו בקצרה מהו המוצר שפיתחתן, מה הוא עושה, ואיך הוא נותן מענה לבעיה.' },
+    website:  { question: 'מהו האתר שפיתחתן?',         shortLabel: 'האתר שפיתחנו',        hint: 'תארו בקצרה מהו האתר שבניתן, מה יש בו, ואיך הוא נותן מענה לבעיה.' },
+    app:      { question: 'מהי האפליקציה שפיתחתן?',    shortLabel: 'האפליקציה שפיתחנו',   hint: 'תארו בקצרה מהי האפליקציה שפיתחתן, מה יש בה, ואיך היא נותנת מענה לבעיה.' }
   },
   howItWorks: {
-    none:     { question: 'איך הפתרון עובד?',                  shortLabel: 'איך זה עובד' },
-    physical: { question: 'איך משתמשים במוצר?',               shortLabel: 'איך משתמשים' },
-    website:  { question: 'מה המשתמש עושה באתר?',             shortLabel: 'מה עושים באתר' },
-    app:      { question: 'איך המשתמש משתמש באפליקציה?',      shortLabel: 'איך משתמשים' }
+    none:     { question: 'איך הפתרון עובד?',                shortLabel: 'איך זה עובד',     hint: 'כתבו 3 פעולות עיקריות שמסבירות איך הפתרון עובד.' },
+    physical: { question: 'איך משתמשים במוצר?',             shortLabel: 'איך משתמשים',     hint: 'כתבו 3 פעולות עיקריות שמתארות איך משתמשים במוצר בפועל.' },
+    website:  { question: 'מה המשתמש עושה באתר?',           shortLabel: 'מה עושים באתר',   hint: 'כתבו 3 פעולות עיקריות שהמשתמש יכול לבצע בתוך האתר.' },
+    app:      { question: 'איך המשתמש משתמש באפליקציה?',    shortLabel: 'איך משתמשים',     hint: 'כתבו 3 פעולות עיקריות שהמשתמש יכול לבצע בתוך האפליקציה.' }
   }
 };
 
@@ -65,23 +65,25 @@ export const VISUAL_ZONE_TITLE = {
 export const FIELD_DEFINITIONS = [
   {
     id: 'projectName', question: 'שם המיזם', shortLabel: '',
+    hint: 'כתבו את שם המיזם בשם קצר, ברור וזכיר.',
     maxChars: 20, align: 'center', fontSize: 130, minFontSize: 60,
     lineHeight: 1.1, noLabel: true, center: true, fontWeight: 700, verticalCenter: true
   },
   {
     id: 'description', question: 'תיאור קצר של המיזם', shortLabel: '',
+    hint: 'במשפט אחד הסבירו מהו המיזם ומה הרעיון המרכזי שלו.',
     maxChars: 75, align: 'center', fontSize: 65, minFontSize: 38,
     lineHeight: 1.15, noLabel: true, center: true, fontWeight: 400, verticalCenter: true
   },
-  { id: 'problem',          question: 'מה הבעיה שזיהיתן?',               shortLabel: 'הבעיה שזיהינו',  maxChars: 130, align: 'right', fontSize: 42, minFontSize: 30, lineHeight: 1.3 },
-  { id: 'audience',         question: 'למי הבעיה הזו מפריעה?',           shortLabel: 'למי זה מפריע',   maxChars: 75,  align: 'right', fontSize: 42, minFontSize: 30, lineHeight: 1.3 },
-  { id: 'researchQuestion', question: 'מה שאלת החקר הטכנולוגית?',        shortLabel: 'שאלת החקר',      maxChars: 90,  align: 'right', fontSize: 42, minFontSize: 30, lineHeight: 1.3 },
-  { id: 'research',         question: 'איזה חקר עשיתן?',                 shortLabel: 'החקר שעשינו',    type: 'list', maxCharsPerRow: 42, align: 'right', fontSize: 42, minFontSize: 30, lineHeight: 1.25 },
-  { id: 'findings',         question: 'מה גיליתן מהחקר?',                shortLabel: 'מה גילינו',       maxChars: 110, align: 'right', fontSize: 42, minFontSize: 30, lineHeight: 1.3 },
-  { id: 'requirements',     question: 'מה היה חשוב שהפתרון יכלול?',      shortLabel: 'דרישות הפתרון',   type: 'list', maxCharsPerRow: 42, align: 'right', fontSize: 42, minFontSize: 30, lineHeight: 1.25 },
-  { id: 'solution',         question: 'מה הפתרון שפיתחתן?',              shortLabel: 'הפתרון שפיתחנו', maxChars: 130, align: 'right', fontSize: 42, minFontSize: 30, lineHeight: 1.3, dynamic: 'solution' },
-  { id: 'howItWorks',       question: 'איך הפתרון עובד?',                shortLabel: 'איך זה עובד',     type: 'list', maxCharsPerRow: 42, align: 'right', fontSize: 42, minFontSize: 30, lineHeight: 1.25, dynamic: 'howItWorks' },
-  { id: 'value',            question: 'מה הערך הסופי של הפתרון?',        shortLabel: 'הערך הסופי',      maxChars: 90,  align: 'right', fontSize: 42, minFontSize: 30, lineHeight: 1.3 },
+  { id: 'problem',          question: 'מה הבעיה שזיהיתן?',                  shortLabel: 'הבעיה שזיהינו',   hint: 'תארו בקצרה את הקושי, הצורך או המצב שהוביל אתכן לחפש פתרון.',                                                maxChars: 130, align: 'right', fontSize: 42, minFontSize: 30, lineHeight: 1.3 },
+  { id: 'audience',         question: 'על מי הבעיה משפיעה?',                shortLabel: 'קהל היעד',        hint: 'כתבו מי קהל היעד שסובל מהבעיה או מתמודד איתה ביומיום.',                                                     maxChars: 75,  align: 'right', fontSize: 42, minFontSize: 30, lineHeight: 1.3 },
+  { id: 'researchQuestion', question: 'מה הייתה שאלת החקר הטכנולוגית?',     shortLabel: 'שאלת החקר',       hint: 'נסחו את שאלת החקר שהובילה את תהליך הבדיקה, ההשוואה או התכנון.',                                             maxChars: 90,  align: 'right', fontSize: 42, minFontSize: 30, lineHeight: 1.3 },
+  { id: 'research',         question: 'איזה חקר ביצעתן?',                    shortLabel: 'החקר שביצענו',    hint: 'כתבו 3 פעולות חקר שביצעתן כדי להבין את הבעיה ולבדוק כיווני פתרון.',                                         type: 'list', maxCharsPerRow: 42, align: 'right', fontSize: 42, minFontSize: 30, lineHeight: 1.25 },
+  { id: 'findings',         question: 'מה גיליתן בעקבות החקר?',              shortLabel: 'מה גילינו',       hint: 'סכמו מה למדתן, מה הבנתן, ומה היה חשוב לכן לקחת מהבדיקה אל הפתרון.',                                        maxChars: 110, align: 'right', fontSize: 42, minFontSize: 30, lineHeight: 1.3 },
+  { id: 'requirements',     question: 'מה היה חשוב שהפתרון יכלול?',          shortLabel: 'דרישות הפתרון',   hint: 'כתבו 3 דברים מרכזיים שהיה חשוב לשלב בפתרון כדי שייתן מענה טוב לבעיה.',                                     type: 'list', maxCharsPerRow: 42, align: 'right', fontSize: 42, minFontSize: 30, lineHeight: 1.25 },
+  { id: 'solution',         question: 'מה הפתרון שפיתחתן?',                  shortLabel: 'הפתרון שפיתחנו',  hint: '',                                                                                                            maxChars: 130, align: 'right', fontSize: 42, minFontSize: 30, lineHeight: 1.3, dynamic: 'solution' },
+  { id: 'howItWorks',       question: 'איך הפתרון עובד?',                     shortLabel: 'איך זה עובד',     hint: '',                                                                                                            type: 'list', maxCharsPerRow: 42, align: 'right', fontSize: 42, minFontSize: 30, lineHeight: 1.25, dynamic: 'howItWorks' },
+  { id: 'value',            question: 'מה הערך המרכזי של הפתרון?',           shortLabel: 'הערך המרכזי',     hint: 'כתבו מה התועלת המרכזית של הפתרון ולמה הוא משמעותי עבור המשתמשים.',                                         maxChars: 110, align: 'right', fontSize: 42, minFontSize: 30, lineHeight: 1.3 },
   {
     id: 'participants', question: 'פרטי המשתתפות', shortLabel: '',
     type: 'participants', maxChars: 200,

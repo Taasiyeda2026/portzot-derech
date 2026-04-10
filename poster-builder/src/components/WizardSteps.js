@@ -187,6 +187,7 @@ function RegularField({ field, value, onContentChange }) {
   const cls   = count >= max ? 'overflow' : count >= max * 0.9 ? 'near-limit' : 'ok';
   return h('div', { className: 'poster-field' },
     h('span', { className: 'poster-field-question' }, field.question),
+    field.hint && h('span', { className: 'poster-field-hint' }, field.hint),
     h('textarea', {
       className: `poster-field-input ${cls}`,
       rows: 3,
@@ -208,6 +209,7 @@ function ListField({ field, values, onContentChange }) {
   const maxRow = field.maxCharsPerRow || 45;
   return h('div', { className: 'poster-field' },
     h('span', { className: 'poster-field-question' }, field.question),
+    field.hint && h('span', { className: 'poster-field-hint' }, field.hint),
     h('div', { className: 'list-field-rows' },
       rowIds.map((rowId, idx) => {
         const rowVal = values[rowId] || '';
@@ -328,7 +330,7 @@ export function WizardStep3({
   const resolveQuestion = field => {
     if (field.dynamic && DYNAMIC_QUESTIONS[field.dynamic]) {
       const dq = DYNAMIC_QUESTIONS[field.dynamic][productType] || DYNAMIC_QUESTIONS[field.dynamic].none;
-      return { ...field, question: dq.question };
+      return { ...field, question: dq.question, hint: dq.hint };
     }
     return field;
   };

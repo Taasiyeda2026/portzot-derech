@@ -36,6 +36,7 @@ function RegularField({ field, value, setting, onContentChange, onSettingChange 
 
   return h('div', { className: 'poster-field' },
     h('span', { className: 'poster-field-question' }, field.question),
+    field.hint && h('span', { className: 'poster-field-hint' }, field.hint),
     h('textarea', {
       className: `poster-field-input ${cls}`,
       rows: 3,
@@ -60,6 +61,7 @@ function ListField({ field, values, setting, onContentChange, onSettingChange })
 
   return h('div', { className: 'poster-field' },
     h('span', { className: 'poster-field-question' }, field.question),
+    field.hint && h('span', { className: 'poster-field-hint' }, field.hint),
     h('div', { className: 'list-field-rows' },
       rowIds.map((rowId, idx) => {
         const rowVal = values[rowId] || '';
@@ -203,7 +205,7 @@ export function Sidebar({
   const getFieldQuestion = (field) => {
     if (field.dynamic && DYNAMIC_QUESTIONS[field.dynamic]) {
       const dq = DYNAMIC_QUESTIONS[field.dynamic][productType] || DYNAMIC_QUESTIONS[field.dynamic].none;
-      return { ...field, question: dq.question };
+      return { ...field, question: dq.question, hint: dq.hint };
     }
     return field;
   };
