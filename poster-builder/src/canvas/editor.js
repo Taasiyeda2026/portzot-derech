@@ -12,7 +12,7 @@ const DEFAULT_TITLE_COLOR = '#5E2750';
 const FIXED_CREDIT_TEXT  = '© 2026 פורצות דרך | תעשיידע';
 const LIST_SUB_GAP       = 14;
 const LOGO_SRC           = '/poster-builder/assets/logoposter.png';
-const TITLE_TOP_GAP      = 14;
+const TITLE_TOP_GAP      = 6;
 
 function getTitleStyle(canvas) {
   return canvas._titleStyle || { color: DEFAULT_TITLE_COLOR, fontFamily: DEFAULT_TEXT_FONT };
@@ -262,7 +262,7 @@ function buildFieldObjects(canvas, sizeKey, values = {}, settings = {}, productT
           fill:       ts.color,
           fontFamily: ts.fontFamily,
           fontWeight: 700,
-          fontSize:   52,
+          fontSize:   46,
           left:       field.x - hPad,
           top:        field.y,
           selectable: false,
@@ -309,7 +309,7 @@ function buildFieldObjects(canvas, sizeKey, values = {}, settings = {}, productT
         fill:       ts.color,
         fontFamily: ts.fontFamily,
         fontWeight: 700,
-        fontSize:   52,
+        fontSize:   46,
         left:       field.x - hPad,
         top:        field.y,
         selectable: false,
