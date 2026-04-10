@@ -1195,8 +1195,8 @@ canvas {
 
 /* ── Font image buttons ── */
 .wz-font-imgs {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 8px;
 }
 
@@ -1205,20 +1205,20 @@ canvas {
   border-radius: 8px;
   background: #fff;
   cursor: pointer;
-  padding: 2px 6px;
+  padding: 8px 6px;
   transition: border-color 0.15s, box-shadow 0.15s, transform 0.12s;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
+  width: 100%;
 }
 .wz-font-img-btn:hover { border-color: #9b5fa8; background: #f8f0ff; transform: translateY(-2px); }
 .wz-font-img-btn.active { border-color: #5e2750; background: #f0e6f8; box-shadow: 0 0 0 2px #5e2750; }
 
 .wz-font-img {
-  height: 24px;
+  height: 32px;
   width: auto;
-  max-width: 110px;
+  max-width: 100%;
   display: block;
   object-fit: contain;
 }
