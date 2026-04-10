@@ -374,24 +374,38 @@ function upsertFixedCredit(canvas) {
   const existingBar    = canvas.getObjects().find((obj) => obj.__posterFixedCreditBar  === true);
   const existingCredit = canvas.getObjects().find((obj) => obj.__posterFixedCredit     === true);
   const { width, height } = getPosterDimensions(canvas);
-  const defaultFontSize = Math.round(Math.max(26, Math.min(width, height) * 0.013));
-  const minGapFromContent = Math.round(Math.max(22, height * 0.008));
-  const contentBottom = getContentBottomY(canvas);
-  const maxFontThatFits = Math.floor((height - 2) - contentBottom - minGapFromContent);
-  const fontSize = Math.max(12, Math.min(defaultFontSize, maxFontThatFits));
-  const textTop  = height - 2;
+
+  const fontSize  = Math.round(Math.min(width, height) * 0.010);
+  const bottomPad = Math.round(height * 0.012);
+  const textTop   = height - bottomPad;
 
   if (existingBar) canvas.remove(existingBar);
 
+  const creditProps = {
+    text:        FIXED_CREDIT_TEXT,
+    left:        width / 2,
+    top:         textTop,
+    fontSize,
+    fill:        '#1f2937',
+    stroke:      '#ffffff',
+    strokeWidth: 5,
+    paintFirst:  'stroke',
+  };
+
   if (existingCredit) {
-    existingCredit.set({ text: FIXED_CREDIT_TEXT, left: width / 2, top: textTop, fontSize });
+    existingCredit.set(creditProps);
     existingCredit.setCoords();
   } else {
     const credit = new fabric.Text(FIXED_CREDIT_TEXT, {
-      originX: 'center', originY: 'bottom',
-      left:    width / 2, top: textTop,
-      textAlign: 'center',
-      fill:      '#5E2750',
+      originX:    'center',
+      originY:    'bottom',
+      left:       width / 2,
+      top:        textTop,
+      textAlign:  'center',
+      fill:       '#1f2937',
+      stroke:     '#ffffff',
+      strokeWidth: 5,
+      paintFirst: 'stroke',
       fontFamily: DEFAULT_TEXT_FONT,
       fontWeight: 400,
       fontSize,
