@@ -2,7 +2,7 @@
 <html lang="he">
 <head>
 <meta charset="UTF-8">
-<title>פורצות דרך – בניית פרסונה</title>
+<title>פוסעות בנתיב החדשנות – בניית פרסונה</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600;700&family=Assistant:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/print.css" media="print">
@@ -58,21 +58,28 @@ textarea {
     margin: 5px 0;
 }
 
-button {
+.pdf-btn {
     background: linear-gradient(90deg, #e91e63, #00a7b5);
     color: white;
     border: none;
-    padding: 18px;
-    font-size: 20px;
-    border-radius: 50px;
+    padding: 10px 16px;
+    font-size: 14px;
+    border-radius: 14px;
     cursor: pointer;
     font-weight: 700;
-    width: 100%;
-    margin-top: 30px;
+    width: auto;
+    margin-top: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    transition: 0.2s ease;
 }
 
-button:hover {
-    opacity: 0.9;
+.pdf-btn:hover {
+    opacity: 0.95;
+    transform: translateY(-1px);
 }
 </style>
 </head>
@@ -80,7 +87,7 @@ button:hover {
 <body>
 
 <div id="formArea">
-<h1>בניית פרסונה – פורצות דרך 🎀</h1>
+<h1>בניית פרסונה – פוסעות בנתיב החדשנות 🎀</h1>
 
 <div style="background: #fff0f5; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
 <label>שמות חברות הצוות:</label>
@@ -164,7 +171,7 @@ button:hover {
 מתקשות ב-<input type="text" id="pDifficulty" style="width:200px; margin:0;" placeholder="ניהול זמן"> כאשר <input type="text" id="pWhen" style="width:200px; margin:0;" placeholder="משלבות פעילויות רבות">.
 </div>
 
-<button onclick="generatePDF()">🎀 הורדת PDF</button>
+<button class="pdf-btn" onclick="generatePDF()">🎀 הורדת PDF</button>
 </div>
 
 <!-- Hidden canvas for PDF generation -->
@@ -243,10 +250,10 @@ async function generatePDF() {
         <div style="background:linear-gradient(135deg,#fbcfe8,#f5d0fe 45%,#bae6fd);border:1px solid #d8b4fe;border-radius:10px;padding:12px 14px;margin-bottom:12px;">
           <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px;">
             <div>
-              <div style="color:#1e3a8a;font-size:24px;font-weight:800;">פורצות דרך</div>
+              <div style="color:#1e3a8a;font-size:24px;font-weight:800;">פוסעות בנתיב החדשנות</div>
               <div style="color:#c026d3;font-size:14px;font-weight:700;">פרסונה — דף עבודה</div>
             </div>
-            <img src="../icon/favicon.png" style="width:42px;height:42px;border-radius:50%;border:2px solid white;background:white;" alt="פורצות דרך" />
+            <img src="../icon/favicon.png" style="width:42px;height:42px;border-radius:50%;border:2px solid white;background:white;" alt="פוסעות בנתיב החדשנות" />
           </div>
           <div style="background:rgba(255,255,255,.8);border:1px solid #f9a8d4;border-radius:8px;padding:8px 10px;color:#334155;font-size:12px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
             <div><strong>משתתפות:</strong> ${team}</div>
@@ -297,7 +304,7 @@ async function generatePDF() {
           <div style="width:210px;text-align:center;">${imgData ? `<img src="${imgData}" style="max-width:100%;height:auto;max-height:260px;">` : ''}</div>
         </div>
 
-        <div style="text-align:center;color:#64748b;font-size:11px;margin-top:12px;padding-top:8px;border-top:1px solid #e2e8f0;">© 2026 פורצות דרך</div>
+        <div style="text-align:center;color:#64748b;font-size:11px;margin-top:12px;padding-top:8px;border-top:1px solid #e2e8f0;">© 2026 פוסעות בנתיב החדשנות</div>
       </div>
     `;
 
