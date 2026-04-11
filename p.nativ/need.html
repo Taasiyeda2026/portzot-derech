@@ -1,0 +1,1955 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מנהל מאמץ מנהל — יומן ניהולי אישי</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700;900&family=Heebo:wght@300;400;500;600&family=Assistant:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f7f5f1;
+  --surface: #ffffff;
+  --surface2: #f0ede8;
+  --border: #e0dbd2;
+  --gold: #b8913a;
+  --gold-light: #c9a84c;
+  --gold-dim: rgba(184,145,58,0.10);
+  --text: #1a1814;
+  --text-dim: #5a5550;
+  --text-muted: #9a9690;
+  --accent: #3a6a8a;
+  --success: #2d7a5e;
+  --font-display: 'Frank Ruhl Libre', serif;
+  --font-body: 'Heebo', sans-serif;
+  --radius: 8px;
+  --transition: 0.25s ease;
+}
+
+/* ── DEPTH & TACTILE SYSTEM ── */
+/* Elevation shadows for light theme */
+.login-card,
+.progress-section,
+.session-card,
+.login-box {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.session-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06);
+}
+
+/* Tactile press for ALL buttons */
+button, .name-btn, .school-btn {
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button:active, .name-btn:active, .school-btn:active {
+  transform: translateY(1px) scale(0.98) !important;
+  box-shadow: 0 0px 2px rgba(0,0,0,0.10) !important;
+  filter: brightness(0.96);
+}
+
+/* Scale-btn tactile */
+.scale-btn {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.8);
+}
+.scale-btn:active {
+  transform: translateY(1px) scale(0.97) !important;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.12) !important;
+}
+.scale-btn.selected {
+  box-shadow: 0 1px 3px rgba(184,145,58,0.20), inset 0 1px 0 rgba(255,255,255,0.5);
+}
+
+/* Primary button 3D feel */
+.btn-primary, .btn-submit {
+  box-shadow: 0 2px 6px rgba(184,145,58,0.30), inset 0 1px 0 rgba(255,255,255,0.15);
+}
+.btn-primary:hover, .btn-submit:hover {
+  box-shadow: 0 4px 12px rgba(184,145,58,0.35), inset 0 1px 0 rgba(255,255,255,0.15);
+}
+
+/* Draft button subtle depth */
+.btn-save-draft {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.9);
+}
+
+/* Radio label tactile */
+.radio-label {
+  box-shadow: 0 1px 2px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
+}
+.radio-option input:checked + .radio-label {
+  box-shadow: 0 1px 3px rgba(184,145,58,0.20), inset 0 1px 0 rgba(255,255,255,0.5);
+}
+
+/* Name & school buttons */
+.name-btn {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.9);
+}
+.school-btn {
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.9);
+}
+.school-btn.open, .name-btn:hover, .school-btn:hover {
+  box-shadow: 0 3px 8px rgba(184,145,58,0.15), inset 0 1px 0 rgba(255,255,255,0.8);
+}
+
+/* Top bar & session bar subtle shadow */
+.top-bar, .session-top-bar {
+  box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+}
+
+/* Form inputs — inset depth */
+textarea.field-input, input.field-input {
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.06);
+}
+textarea.field-input:focus, input.field-input:focus {
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.04), 0 0 0 3px var(--gold-dim);
+}
+
+/* Back button tactile */
+.btn-logout, .btn-logout-admin {
+  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+}
+
+/* ── RIPPLE EFFECT ── */
+.ripple-host { position: relative; overflow: hidden; }
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(184,145,58,0.22);
+  transform: scale(0);
+  animation: rippleAnim 0.55s linear;
+  pointer-events: none;
+}
+@keyframes rippleAnim {
+  to { transform: scale(4); opacity: 0; }
+}
+
+/* ── ENTRANCE ANIMATIONS ── */
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateX(10px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.fade-in { animation: fadeSlideUp 0.4s cubic-bezier(0.22,1,0.36,1) both; }
+.fade-in-delay-1 { animation: fadeSlideUp 0.4s 0.07s cubic-bezier(0.22,1,0.36,1) both; }
+.fade-in-delay-2 { animation: fadeSlideUp 0.4s 0.14s cubic-bezier(0.22,1,0.36,1) both; }
+.fade-in-delay-3 { animation: fadeSlideUp 0.4s 0.21s cubic-bezier(0.22,1,0.36,1) both; }
+
+/* ── SESSION CARD HOVER DEPTH ── */
+.session-card {
+  transition: box-shadow 0.2s ease, transform 0.2s ease !important;
+  cursor: pointer;
+}
+.session-card:hover {
+  transform: translateY(-2px) !important;
+}
+.session-card:active {
+  transform: translateY(0px) scale(0.99) !important;
+}
+
+/* ── FIELD FOCUS LIFT ── */
+textarea.field-input, input.field-input {
+  transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.15s ease !important;
+}
+textarea.field-input:focus, input.field-input:focus {
+  transform: translateY(-1px);
+}
+
+/* ── SCALE BTN SELECTION ANIMATION ── */
+.scale-btn {
+  transition: all 0.15s cubic-bezier(0.34,1.56,0.64,1) !important;
+}
+.scale-btn.selected {
+  animation: scalePop 0.2s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes scalePop {
+  0%   { transform: scale(0.9); }
+  60%  { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+/* ── RADIO LABEL SELECTION ── */
+.radio-label {
+  transition: all 0.18s cubic-bezier(0.34,1.56,0.64,1) !important;
+}
+.radio-option input:checked + .radio-label {
+  transform: scale(1.04);
+}
+
+/* ── NAME BTN HOVER LINE ── */
+.name-btn {
+  position: relative;
+  overflow: hidden;
+}
+.name-btn::after {
+  content: '';
+  position: absolute;
+  bottom: 0; right: 0;
+  width: 0; height: 2px;
+  background: var(--gold);
+  transition: width 0.25s ease;
+}
+.name-btn:hover::after { width: 100%; }
+
+/* ── SCHOOL BTN OPEN INDICATOR ── */
+.school-btn {
+  transition: all 0.2s cubic-bezier(0.4,0,0.2,1) !important;
+}
+.school-btn.open {
+  border-color: var(--gold) !important;
+}
+
+/* ── SAVE STATUS PULSE ── */
+@keyframes savePulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.6; }
+}
+.save-status.saving { animation: savePulse 1s ease infinite; }
+
+/* ── TOAST ENTRANCE ── */
+.toast { transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.34,1.56,0.64,1) !important; }
+.toast.show { transform: translateX(-50%) translateY(0) scale(1) !important; }
+
+/* ── PROGRESS BAR ANIMATION ── */
+.progress-fill {
+  transition: width 0.8s cubic-bezier(0.22,1,0.36,1) !important;
+}
+
+/* ── CODE PANEL ENTRANCE ── */
+#codePanel {
+  animation: scaleIn 0.25s cubic-bezier(0.22,1,0.36,1);
+}
+
+/* ── SUBMIT BUTTON SHINE ── */
+.btn-submit {
+  background-size: 200% auto !important;
+  transition: background-position 0.4s ease, box-shadow 0.2s ease, transform 0.15s ease !important;
+}
+.btn-submit:hover {
+  background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold) 100%) !important;
+  background-size: 200% auto !important;
+  animation: shimmer 1.5s linear infinite !important;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.7;
+  min-height: 100vh;
+  direction: rtl;
+}
+
+/* ── GRAIN OVERLAY REMOVED FOR LIGHT THEME ── */
+
+/* ── SCREENS ── */
+.screen { display: none; min-height: 100vh; position: relative; z-index: 1; }
+.screen.active { display: flex; flex-direction: column; }
+
+/* ── LOGIN SCREEN ── */
+#loginScreen {
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(184,145,58,0.08) 0%, transparent 70%);
+}
+
+.login-box {
+  width: 100%;
+  max-width: 320px;
+  text-align: center;
+}
+
+.logo-mark {
+  display: block;
+  margin-bottom: 16px;
+}
+
+.login-title {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 500;
+  color: var(--text);
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+}
+
+.login-subtitle {
+  color: var(--text-dim);
+  font-size: 14px;
+  font-weight: 300;
+  margin-bottom: 40px;
+  letter-spacing: 0.05em;
+}
+
+.login-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 36px 32px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+}
+
+.field-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-dim);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  text-align: right;
+}
+
+.code-panel {
+  margin-top: 16px;
+  padding: 20px;
+  background: var(--gold-dim);
+  border: 1px solid rgba(184,145,58,0.25);
+  border-radius: 10px;
+  animation: fadeIn 0.2s ease;
+}
+.code-panel-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 12px;
+  text-align: right;
+}
+.code-panel-input {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.2s;
+  direction: ltr;
+  margin-bottom: 12px;
+}
+.code-panel-input:focus { border-color: var(--gold); }
+.code-panel-btn {
+  width: 100%;
+  background: var(--gold);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  padding: 11px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.code-panel-btn:hover { background: var(--gold-light); }
+.code-panel-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.code-input {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-align: center;
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+  direction: ltr;
+}
+
+.code-input:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px var(--gold-dim);
+}
+
+.code-input::placeholder {
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  font-size: 16px;
+}
+
+.btn-primary {
+  width: 100%;
+  margin-top: 14px;
+  background: var(--gold);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius);
+  padding: 11px 24px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition), transform var(--transition);
+  letter-spacing: 0.03em;
+}
+.btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+.btn-primary:active { transform: translateY(0); }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+.error-msg {
+  margin-top: 14px;
+  padding: 10px 14px;
+  background: rgba(200, 70, 70, 0.08);
+  border: 1px solid rgba(200, 70, 70, 0.25);
+  border-radius: var(--radius);
+  color: #c05050;
+  font-size: 13px;
+  display: none;
+}
+
+/* ── NAMES LIST ── */
+.names-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 420px;
+  overflow-y: auto;
+  margin-top: 4px;
+}
+
+.names-loading {
+  display: flex;
+  align-items: center;
+  padding: 16px 0;
+}
+
+/* School group button */
+.school-btn {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 18px;
+  text-align: right;
+  cursor: pointer;
+  transition: all var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.school-btn:hover, .school-btn.open {
+  border-color: var(--gold);
+  background: var(--gold-dim);
+}
+
+.school-btn-text {
+  font-family: 'Assistant', sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.school-btn-count {
+  font-size: 11px;
+  color: var(--text-muted);
+  background: var(--surface2);
+  border-radius: 20px;
+  padding: 2px 8px;
+  margin-right: auto;
+  margin-left: 4px;
+}
+
+.school-btn-arrow {
+  color: var(--text-muted);
+  flex-shrink: 0;
+  transition: transform var(--transition), color var(--transition);
+}
+
+.school-btn.open .school-btn-arrow {
+  transform: rotate(90deg);
+  color: var(--gold);
+}
+
+/* Participants inside school */
+.participants-list {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px 0 4px 12px;
+  border-right: 2px solid var(--gold-dim);
+  margin-right: 8px;
+}
+
+.participants-list.open {
+  display: flex;
+}
+
+.name-btn {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 11px 16px;
+  text-align: right;
+  cursor: pointer;
+  transition: all var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.name-btn:hover {
+  border-color: var(--gold);
+  background: var(--gold-dim);
+  transform: translateX(-2px);
+}
+
+.name-btn-text {
+  font-family: 'Assistant', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text);
+  letter-spacing: 0;
+}
+
+.name-btn-arrow {
+  color: var(--text-muted);
+  flex-shrink: 0;
+  transition: color var(--transition);
+}
+
+.name-btn:hover .name-btn-arrow {
+  color: var(--gold);
+}
+
+.login-footer {
+  margin-top: 24px;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+/* ── DASHBOARD SCREEN ── */
+#dashboardScreen {
+  padding: 0;
+}
+
+.top-bar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.top-bar-brand {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--gold);
+  letter-spacing: -0.01em;
+}
+
+.top-bar-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-name {
+  font-size: 14px;
+  color: var(--text-dim);
+}
+
+.btn-logout {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 10px;
+  color: var(--text-muted);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.btn-logout:hover { border-color: var(--text-muted); color: var(--text-dim); }
+
+.dashboard-content {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 48px 40px;
+}
+
+.welcome-section {
+  margin-bottom: 48px;
+}
+
+.welcome-greeting {
+  font-size: 13px;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.welcome-name {
+  font-family: var(--font-display);
+  font-size: 38px;
+  font-weight: 400;
+  color: var(--text);
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+
+.welcome-desc {
+  color: var(--text-dim);
+  font-size: 15px;
+  font-weight: 300;
+  max-width: 520px;
+  line-height: 1.7;
+}
+
+/* Progress Bar */
+.progress-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px 28px;
+  margin-bottom: 40px;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.progress-label {
+  font-size: 13px;
+  color: var(--text-dim);
+  font-weight: 500;
+}
+
+.progress-count {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--gold);
+}
+
+.progress-track {
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 100%);
+  border-radius: 2px;
+  transition: width 0.6s ease;
+  width: 0%;
+}
+
+/* Session Cards */
+.sessions-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.session-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px 28px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 24px;
+  cursor: pointer;
+  transition: border-color var(--transition), background var(--transition), transform var(--transition);
+  text-decoration: none;
+  color: inherit;
+}
+
+.session-card:hover {
+  border-color: var(--gold);
+  background: var(--surface2);
+  transform: translateX(-4px);
+}
+
+.session-number {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  transition: all var(--transition);
+}
+
+.session-card:hover .session-number {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.session-card.completed .session-number {
+  background: var(--gold-dim);
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.session-card.draft .session-number {
+  background: rgba(74,127,165,0.1);
+  border-color: rgba(74,127,165,0.4);
+  color: var(--accent);
+}
+
+.session-info {}
+
+.session-title-text {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 4px;
+  letter-spacing: -0.01em;
+}
+
+.session-meta {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.session-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-muted);
+}
+
+.status-empty .status-dot { background: var(--text-muted); }
+.status-draft .status-dot { background: var(--accent); }
+.status-done .status-dot { background: var(--gold); }
+
+.status-empty { color: var(--text-muted); }
+.status-draft { color: var(--accent); }
+.status-done { color: var(--gold); }
+
+/* ── SESSION SCREEN ── */
+#sessionScreen {
+  padding: 0;
+}
+
+.session-top-bar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 13px;
+  cursor: pointer;
+  padding: 4px 0;
+  transition: color var(--transition);
+}
+.back-btn:hover { color: var(--text); }
+.back-btn svg { width: 14px; height: 14px; }
+
+.save-status {
+  font-size: 12px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: color var(--transition);
+}
+.save-status.saving { color: var(--accent); }
+.save-status.saved { color: var(--success); }
+
+.session-content-wrap {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 48px 40px 80px;
+}
+
+.session-header {
+  margin-bottom: 48px;
+}
+
+.session-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--gold-dim);
+  border: 1px solid rgba(201,168,76,0.3);
+  border-radius: 20px;
+  padding: 3px 11px;
+  font-size: 11px;
+  color: var(--gold);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  margin-bottom: 14px;
+}
+
+.session-main-title {
+  font-family: var(--font-display);
+  font-size: 34px;
+  font-weight: 400;
+  color: var(--text);
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  margin-bottom: 10px;
+}
+
+.session-desc {
+  color: var(--text-dim);
+  font-size: 14px;
+  font-weight: 300;
+}
+
+/* Form Sections */
+.form-section {
+  margin-bottom: 40px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.section-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--gold-dim);
+  border: 1px solid rgba(201,168,76,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 13px;
+  color: var(--gold);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+
+.section-subtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-right: auto;
+}
+
+/* Fields */
+.field-group { margin-bottom: 22px; }
+
+.field-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+
+.field-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 5px;
+}
+
+textarea.field-input,
+input.field-input {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 13px 16px;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.7;
+  outline: none;
+  resize: vertical;
+  transition: border-color var(--transition), box-shadow var(--transition);
+  direction: rtl;
+  min-height: 80px;
+}
+
+input.field-input {
+  min-height: unset;
+  height: 46px;
+  resize: none;
+}
+
+textarea.field-input:focus,
+input.field-input:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px var(--gold-dim);
+}
+
+textarea.field-input::placeholder,
+input.field-input::placeholder {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* Scale 1-5 */
+.scale-group { margin-bottom: 22px; }
+
+.scale-options {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.scale-btn {
+  flex: 1;
+  height: 36px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  font-size: 14px;
+  font-family: var(--font-display);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.scale-btn span.scale-label {
+  font-size: 9px;
+  font-family: var(--font-body);
+  font-weight: 400;
+  letter-spacing: 0;
+  display: none;
+}
+
+.scale-btn:first-child span.scale-label,
+.scale-btn:last-child span.scale-label {
+  display: block;
+}
+
+.scale-btn:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: var(--gold-dim);
+}
+
+.scale-btn.selected {
+  background: var(--gold-dim);
+  border-color: var(--gold);
+  color: var(--gold);
+  font-weight: 700;
+}
+
+/* Radio / Toggle */
+.radio-group { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+
+.radio-option {
+  position: relative;
+}
+
+.radio-option input[type=radio] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.radio-label {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  font-size: 13px;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all var(--transition);
+  user-select: none;
+}
+
+.radio-option input:checked + .radio-label {
+  background: var(--gold-dim);
+  border-color: var(--gold);
+  color: var(--gold);
+  font-weight: 500;
+}
+
+/* Special question box */
+.special-question {
+  background: linear-gradient(135deg, rgba(201,168,76,0.08) 0%, transparent 100%);
+  border: 1px solid rgba(201,168,76,0.25);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 22px;
+}
+
+.special-question-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.special-question-text {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 400;
+  color: var(--text);
+  line-height: 1.5;
+  margin-bottom: 16px;
+  letter-spacing: -0.01em;
+}
+
+/* Submit section */
+.submit-section {
+  border-top: 1px solid var(--border);
+  padding-top: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.btn-save-draft {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 9px 20px;
+  color: var(--text-dim);
+  font-size: 13px;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: all var(--transition);
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+}
+.btn-save-draft:hover { border-color: var(--text-dim); color: var(--text); }
+
+.btn-submit {
+  background: var(--gold);
+  border: none;
+  border-radius: var(--radius);
+  padding: 9px 20px;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: all var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 38px;
+}
+.btn-submit:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 14px;
+  color: var(--text);
+  z-index: 999;
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.toast.success { border-color: var(--success); color: #5dba96; }
+.toast.error { border-color: rgba(200,70,70,0.4); color: #e07070; }
+
+/* Loading */
+.loader {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(201,168,76,0.3);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Divider */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+  margin: 40px 0;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .top-bar, .session-top-bar { padding: 14px 20px; }
+  .dashboard-content, .session-content-wrap { padding: 28px 20px 60px; }
+  .welcome-name { font-size: 28px; }
+  .session-card { grid-template-columns: auto 1fr; gap: 16px; }
+  .session-status { display: none; }
+  .session-main-title { font-size: 26px; }
+  .scale-options { gap: 6px; }
+  .submit-section { flex-direction: column-reverse; }
+  .btn-save-draft, .btn-submit { width: 100%; justify-content: center; height: 44px; }
+  .session-top-bar { padding: 10px 16px; }
+}
+
+/* Fade in */
+.fade-in {
+  animation: fadeIn 0.4s ease forwards;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Shimmer loading */
+.shimmer {
+  background: linear-gradient(90deg, var(--surface) 25%, var(--surface2) 50%, var(--surface) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+@keyframes shimmer { to { background-position: -200% 0; } }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════ LOGIN ═══════════════════════════════ -->
+<div id="loginScreen" class="screen active">
+  <div class="login-box fade-in">
+    <div class="logo-mark">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAYAAACOEfKtAAABCGlDQ1BJQ0MgUHJvZmlsZQAAeJxjYGA8wQAELAYMDLl5JUVB7k4KEZFRCuwPGBiBEAwSk4sLGHADoKpv1yBqL+viUYcLcKakFicD6Q9ArFIEtBxopAiQLZIOYWuA2EkQtg2IXV5SUAJkB4DYRSFBzkB2CpCtkY7ETkJiJxcUgdT3ANk2uTmlyQh3M/Ck5oUGA2kOIJZhKGYIYnBncAL5H6IkfxEDg8VXBgbmCQixpJkMDNtbGRgkbiHEVBYwMPC3MDBsO48QQ4RJQWJRIliIBYiZ0tIYGD4tZ2DgjWRgEL7AwMAVDQsIHG5TALvNnSEfCNMZchhSgSKeDHkMyQx6QJYRgwGDIYMZAKbWPz9HbOBQAAAZoUlEQVR4nO1caZhU1Zl+v3PuUlW9szQiu6BAE1GDBMNiQUTBdcZJquMkasZJJo+axTiTZBKd2FQSnSU6TtSoIePENWoXLsEFgyBdAUHAZrWbfafpfe/qWu4955sftxpb6G66W8DwhPd5qqtvV91zv/uebz/nNnAWZ3EWZ/HXC+rPSaFQSNbU1FA0GnU7jxUMBiUARKNRF6GQDNbUdDt+NBpVABihkAwBiEQiGgAfIxd3efJZ9BVFIhgMGigqEuk/EPo5+ScbfRGCAPDkyVdmpLLEPJCyRcORV8rLy1MAMPmLV+Y70vwZk05uX/nODyfOmP+PwrKnauUoViwA7UKKZgCAZseW8Uc2R6NNBbOu/JJhBjKSiVjpjtXLjgCggmAwYzCQOEbDu0UwGDSATlp9GmH06ywhnjLtzFwnE18Eyj8AgCRonBXI+K4Tb2sF8EMI+htp2zfAESCLADBYM0gIEABX4QUATRrGw2TZkymV/HsAL42fPj1Taf/qGiEzJs6Yc/2291eUFcycH5K2f5oTa31j+wfLolOmzM1J+RNi66pVzQC4K6JDoZA8xi2cEogTf+UoOBQKyS1b3o2B9SuQ0oUt53R8qAQytHJdYuwCAGka3060tVzEsdg0SrRd6sbb7gGR66bi69xE+1xfi1EJAMTkuqmUInCdN1IgC6ALQGKMZrgAwIwrDX/Gv8AwbgRAsYD57+Qfsqtg+pU/AMATZl51X0Hwmu8VXHbVgA55IpHIcdoYDAaNtLaeNPPvkwbWpIMCCSxlrb7JkPMA/AcAlgLZJITBhHYA+Oi9N6oBVHecO2HGlSOFkIbLVLd91ZLl3g3BqNacDUBCO0kAMAwrR4FMVm4dOaIOAFiQ6zoJFxoN8EiZw0QDWdDei2fOH+zavrBWCpCpPwJomDBz/pOmZedxPF700Zql24uKikQ4HNbHBj2EQiJYU0PR2bM1wmFGP7S1TwSmfQyY21e6CZkQoMsKZswdUT53xmGxfG2+IMGAqASAKVOmmKXXXafGrV1r7s7KckVVayA9jJk2L9XYONlGDuVq5YK0qgQArZ1sYQWUdlKpNhlrBwDSnEsgg0A7LvxCcLgyzLFOoj1ltVS9m8wZdp0kqZSbXL3j/WUHPWporLADcxOpZATA9nA4zAXBYKZW9i8hxE430fD87nXrWhCJqKh3Y/AmNGhE8/MZnvb2Cn0xYQBgBIPGECFqwbzO8PlsJuNyhMOama9gAgm4GwEgMzOTEQ7rYfG4QiSitIBKj8Bp80LKHuwjwkBW7oLyD6K7AUBDjjQtnyG0+u/DH3wQ9/6GPO26YKFuT9mB9wzbb7LSr2zZsiXGmueRlEIQr/9YSq5XynGJdceksXLsqWYg+y5mejiQyFHjp8+9tGD2tYsnzrr69oKZ8ws8HqNuJ/J6ZeZ9JRCIRt1oNOqSxoskJAAEPzfjS1cK0/5bnYzDttXrRUVB42vjxxMXh+TfTfZLLg5JAZ1FBACauDgkv/3bb5vTCtyYRc7nv3pF/P6iYNAoKoIwhLPfbW/51/L3lz7UkbaQkLbWGmRYswWJAU5by8LMhHvHlClTApA0T7spItbvdohIoDiBDCHEURKEoBtA5ArWL27Z8m6MSMwUpu96MqwnWBhlEy+/dseEy699pGDmVfM7SO8NiT1+IRQKyTvvLKDZACIl5SK0oMCdeuXaWQ7ZNzqJxPmQ1jVKqSQJaYMEYrHYnYfWL3uiq7EGXTT3n/IH5y2Mtba8cGDtn24+oWAEaB2SQAFPCq5bLW3/NN3e8uWy95e92vGdiTOu+m8ZyLzbjbdvd6t2X2xdcgmXFxS445ev/a2dkfWtZKz5+ztWLf3NqGDQ8qnAR6bPP5bb275StnrpK6OCQV+G6/smbP//aCcVAximL5DDzHATsSVuqvGm3evWtXYis0v06AMjkYiKRDr9IQz4z585eejQjLu0MmFoxbYpLIvc/RkUf/HLF8tduZdf/3fnDjC1ZqYsPyBgCgLryObE1F0NjNFZ1siFj4ZuPNSQEra0dGPMoUPV7bq2sbXCckR1teOKIwlfYn00GiOKtALA6Gnzbb/UEMK86aLg/JFkCO24ap4wA9dAu8iy9d3rHrjEpULP/MSsq+sBgiSRAUBnOOZV5LPPc1Px2oykXgYUiQPRcGLCrHnjLdMyUk7iGav5yD0KQ2cqyP8xM7KvBvOtAB4LBoNGT/lolwSypwB4IPzlL0wy2mfKzJwBgB6Q5bfGk8A5Te3azc0IICtgGtk+4jy/zjOE+C4Z5k9tk2AawhtFkDcSA/Mv02htd+Cz5Cy/35gF5U2q0oxkitGWSIG1TjmKoJnijf80Im6bYk9bEvrnixsn7K93kCAj1OpQSKcYpjDAycS+/fvqv4Xqde/RcuDSK+bN9UmjsT7hBogAaO1cGAwOd7T1oGkYpJLxhaWly5qnTGk04/ECQ7OYr10HrNWyLVu2xIAtf5o446pVBDqfiIb3pFw9EUhCEEOzf9IFX3tz3uzUIPvQcsCyAGECWgFKeUrNDDATIHMABrTWYDCQnrBOscwQTHlZQkAzw3W0N0UMKYCAnxDwmwKCLE8CWCOlLwdSnAMAr47xo65VoaZFqYoml9sTzIOzDZFtadtvDbljR8Wom5vasebe11seYIFBBiiuEAcg73LcwE/8GYFBKhkrvfBc9avLvz3FXLiw1Jk0be5EMoxxbirRamusBUAFBQWmJjFNK1fqdFDKz8/vMbXpygcSCcGstdx6w2+2NT1z55hA22pdcOQ14UtUk5J+YkhBnObAA1PHWNT1oNzxI/05H/chwJ1+YwYkkQYACEhI8kKeTGu10oCQgCG9U+IaL69uROn+JO+qculwvYOkFrAk0NiSeG7v2ne/CcABIGfMnzu1ud24Vvoy/i0Vby/ZtnLJHACYNG3uRO3zfcSsE+ymzk+XlgKA7o7ALk2YNIMZ7B+1kwa8tMn48+3TdYM1SYxreBOj6v8M4naw9Hu27t1z76IVHXN8zAEd/5sEPEWHw2ml78h3CYDDRI4WBIYgfDWYLb8aBCGpub5FU9zR2uf5y8sO1N78RlVj4r1HlzbXb6s3/9eSDKlT8EE9yxySJQtq6M73ZNCwfCIVb0vX5UwAdUtedwSygiYSpKsv0LXTn1s3btC887h1SA42+b6OitxpmFD9Rwxs3QpAgqUN4n4l8b1GB/nU+cD7hNBBsgZ0TAEgSAEamCMBkgIMAcs6f+iIzPMBzJs4Jg/PrWxSBxq0cJJO2fZ9LUuJlioAKLj8mrmGIQDi9wBQMDhbRqPosaHRdRQORQQiUELIXaho+eL5/7eGNxXNg5FQqMkYh4bR/4IRzeswruZNZMb3A8ICC+uUE9kTCIAUnXyKy0f1lB2HBbkagnn8MCl+efMgCYcZChMP1+VvrWoa937pnra3HngnMaM52a4rKhKLAPB3vpMv8vO9qqm763ZNYE0ZAUAsgDYYNkYVb0Tl1Rei8tJzYbUpaCmxN+8LOJJ9EcY0rMSYunfhS1aliTQ/UyI7QNRZT9OaygSdYnCSIQhEguTwc6284WMyrrt0Qt51k86LYfWu9qSP5SV33X/eocLCSPOJrtMlgSXp97q2lu2wGUgoXPDoe6hb+DVo4aUolmK4ZGPb4Lk4mHsZRjdEMbqhBHay2iOSLADc4SM/Y3zMpgADxAAzWDE4xoxYQgtBmDlBipmTsm0dz3l2/kXZR/YcvnjRR3tbi3fvb9i48M3SOLrQih5LuYTJ1WAXyLJpwPv7cF7xRrhZBFIAk9fXs5RGUmaibMi1iI67DzuG3oR2axBIxUA66VFIfa8YPzUoHa3BXurlOt5La4Ak2A4AmXmgQUOJho6SPHSMVIPHkjt4PMTY8eqCK6aee/XdN37/uq/PXWUNHTadmREKheSxl+lSAx/PL2cA2GG1VLY4CWRrS7DfxLgnV6Jq1ji0Ds+BTDJYUJpITyMTRhbKh1yD/QOCGNa8HiMbViI7vg9gBUgfmCTAp1ArO/IqrQHl+X6WFuD3eW3GQBbg9wO2DZgmII2Pk30A0MyGgIJhGYDAR2WVpavL6n702O8Wr3h0IagrX9hl+sFgIhDfMH3uuY/HZu4dlsy0taFZNKeo+poCrP31jaB2DYhjNYtBzNAk4ArAp1zkt5VhZMMqDIyVQ7qtAJlpE6eTR2Z6LGjlmabpA7JygOwBQGY24PODDAkmT8Z0AXD0pTWzFKRgGwbIxoE9VfXr1ux/uPCWBx8EkGQGUTeCdpe/eSIFB2eWN31r28RU/nCFJAshidoS2Hr/Ddh102RYzQyWXafNxAxOEykYyE1UYljzhzinpRSZicOATnmVDXWQ2ZFT9oFQIi9/UQosDCAzFxiYD+TkgXw+jzDWnkYyd8rgySuYGEoIALYlARMH91W1l5dVP/XAfy351cqVHx4SgvDSS1+RhYXdR+FuE+AOLVx30Y8+mOoOnwYVVxBCwlFIZVtY/fxtaB6VB5nwTLn7C2gwCIoImjytHNC+C0NaNiG/rRwZySpAJwGSnmZCfpxOdxvN02ssyvUmYUA+MHgokJ2drhu0RxzjqHl6ysYMQEtJDEMYED4ALvbvqa3dsbP2uaeeiD4RecPrS65YUWTMmRM+4SJV992Y4AKJKNw2ndwBQdOgyKuvbANWbTs+d/+f8METX03PMrqdCk7HKYMZ0AyXDFRmTURl1kT43CRyEwcwuK0cA2M7kR0/BKnaPJ9JwjN3kt4YncdXrnfNvHOAc0cBWVkAFKAV2O1ohQhPyzQrKYhJkoBpCsCSgEJNRT2OVB1ZtXNn7Qvhnxa/Xn7gQJVHdLEECjVRuFcrgt0SWJJ+b/K5u5DqNAlKg7N9GFSyG+N/txof3TUDZpMGy54jLcNz1gTA1J52OMJGVeYFqMq6AIYCMlJ1yE0cQG77XuQkDiIjWQ2f0wLieJpU8qorfx4wYiwwYIBHkkoB6BR4ib3vmxKQmRLQcNsTqDrc0FRd3bz5cEXzO9GSnUsefuy1zR3yrVhRZJSUQBMV9rqd3yOBtelIfFA1lymkIEHEHg0grcFZFsY+sRJNk4bi8JfOg9nSnT/sikxxNDUzdTonI4FWexCafYOwP28KDA3YbisCqSZkJCsRcBuQlaiCabTANywfpmXAVEkY0EfN1IWAwwIpRUhJH9fVptzGneVLWlvdNTt3VW9+7g+lG9evX191VA5mKilZIGfPDqvealyvCSyLFDAAbDUbt9e5cXcI/NJrSqQdviAQMyYveBNto29F84hcGCfwh12T+XEaIZkhtaftTISkkYW4kYW6jBEgABVOM46oWtixJKw2BZ/QMImP+tkUCyRZIqlJidw8se/DNUt/f/3P/uYT10uT5mkbaaDnWvdE6OluvUg8H3Z51b17JiYHDtNwtOiUfLMUoNYEmqaOwuqFfw/XkBDKu/mTA0/jBWvsTlXgsNsMQQaYBDQfX+d0eD4SULaU8kDx4lueufOf//B0ydNWRu3bTihUrInopCahPTku1kUs8A6SDYjvgjA6ekkfC5z2h7kf7MNFv3gHsAgntwz2ItSOVCUOqVYYwoQgggTDJIZFGjap9EvDIg3Jii2fJWP7DjZse/qlJSSEvm3ObcnCwog62eQBJ1qVK1kgAKBeJDZAAgLHC0CuBudmYNiiTZj06Eq42QTSPbbQ+iAcY1+qCkdUM0wyjmaJn3zRUU1kACyEMk0bsYNH/rh+/fr6Yq0lTmFno0cCI/mTGAD2U9saRUkAXdsmaQXOsjH2sRKMf7oUqVwBUv0nkeE1+SqcWhx0G9Pk9YIDZpA0RPxIFSo/3PRbAIhECvstR2/QI4FlkTIGgKi/YsMRjrmAkBp8/J10JPkBGwUPLMX5i8qRyusfiQwvsjW6Ldjn1MEg2TvyvHOVL8MvmnfuWbX4Px5aV8QsIj1UEScDPRIYRlgLEF5dtXx/o0jugDDScnaBjoLRkvjcz97A2Fe3wemHJgoAKXawx6mGTueNvQVJCbexGQ2by/4TAJdHIqd8D+EJ+0wqeJ8BQNeK9vchBQT3sEbADEov+kz+6WKc90r5URJ74747TPeQU4NWTkF63btegZmVnREQ9WU7Nr98T3iJp319S4r7gxMSWJJ+30fNUS1c4EQLSJpBBgGSMPmexbjg2Q1wc7yyirqw/s6QAJpUGyrdlj6ZLuBpn2pupZq1G34OgipZsOC0NCFPuDurJOot6S2xDrw/zxmdGkGZlobLopuAAsAjUXpZ2aTw2/DVx1D23VnQKUA6XVcsDK8Cq3Ab4IJh9KHRxZqVPztTVi1fufqV+375WhGzCBN9qgS5tzjhLIUR1gymV9esOFgn4htYmBA9rJMehU7vTAjYGPvrElz648WwUg7cAB3nFztMt0XHUK/aIKn3pgtmlraF9kMVXLVq7d1EdFp8Xwd6p+bBBRIAH0LbMpIEcC8T0nRWzTk+nPvqJsz4x+cxYEctnFzhaan+eBgCUK2a4ILRl9DBIOXz+2Tdhi1Pvv5fD697WWt5OnxfB3pFYCTdWFgrjrzVipgGhOi9hgCkGJwbQPaWI5j+D89i3B82gQME1+dpo2RGglOoVzHIvqQtWmsrMyDrN310ZP3jT99bxCwKe2MdJxG9IrAwEtEChAfotdID3HyAhSG4j4KS0uBMG0bcwYX/9gam3bUIuQcakcoVgCQ0O606wQ5Eb7WPGcKyNDe30pHla+7YumpVY3kkQjgF5VpP6G2kYhW8z6BSOAeo+S2SEoL7PtOkNCAlONOHIW9vw4yvP42Cx9fASqYQyxSCiTTr3tWBTOT6A36jYsWq30buCy8uWrHCOJ2m24Feh/pItJwZQCnVv9RKbeiTGXcGe76Pc/ww2pKY8J/LcPEtT6nDy6M7LZLCzskSEEIxs2LtbdI5bgitlT87y6hcta7s3Vtvv7uYWYbnzDnt5AF9ILAQEc1gKtpcvHYfN+9kYfbZjDuDlAYbgjk3C237DrY+ef2Nl1W89vbNLRvKykylpT8nW5oZAYKUmolcBlxmVlpp18zMoObyHW17/hD5ymGieNmCBZ/ZVog+PSeSjsbufqPtRTJFv8z4kyOyJhZoyOSNzYIan7njn194+PL5n9/77Euhuj+vWdS+90CNSCSF3+83AtlZhj8nRwYGDTBUTb3Y89qSW5c+8+L20Msvy3A4fFoDR2f06TGHBemk+i2x66XL1JB78uE3AMXddWlOBMHEkIQ6Tm2CZnr7e7+2rv3ND5Iv/CS8CMCiC3NG5k348TcuzRo9vMCfkzOJMjOz4KrxdVvKFi5+4MHXilasMMJz5pyWhLk79InAdFItqJS233LRpD/nG7lXwG1XIBy35aF3IIAUaim2GQD7tzQo1kyh4mJRHAoxETVuvfcX7wJ499gzi4qKxGdNHtCPZ+VKgrMFotAfUM2TXxBDr7D6+dRUunSjdiSx12qtAo4uZHGksFB5mwiYQpGIKBg8mABg0uzZHAJ0YSQiwp9BxO0K/bl7b3WugMzN5o+3T3aGjtacYtE3fwoNZgGDKmVr8m6nZMLLO6L7Oxbz+yHTZ4b+dCy4JLhAohypD43GJ2EK+jTBJCm12nsOEt7RaSthTxr61fKZEw0rBtMj7rqFO1FTAzKl6iphOyEIbaRUeerQZxZFPy362zPjkuACuXnz5qZSWfs4LEmSqU8+ydvjI6C0aorl7G0WfWoh/OWg303HDi18WG58bDdq60BWj48DHAvJ0CABO8l1eAdJBX3c0w9nAj5N15YRioj169fXr6PKh2CSOHbduFeDSPEXEU37i0/V9qZIoWYUiR+k1jy2DVUVELbQ4L51aXR/fOdfDj7tugGXBCFqy8vbltPhn7mmJsEnWvlII+3wGOnHu85QfOqFlznRsMuhYvm9zc8//aE6vBLSL4n5hGapAAGtkbR0PqYgkN71cMbFkZOychVBBALEi2jn3TWySQEGulyA74T0vlHYwvRh4HDfmWrHJ4XAwkhELQ/eZzy09a3SVVTxK1imFLo3aQ3DYuG7pG2kzzs683DS1k7nRMOKQ8Xyy/Vv/XwDHd4JwzY0nyigMPxK6NFt/Jk3BfqLk7n4zBFEQIcPx18Uu/6h0mzVAgZ3Z8reBlVmE8KXK7KGAsACFP11+sAOFEYi6r1gkfHgxtfX/In23gfbkEKT27VpEqBZ5xh+eYFv8HkAMClU/tdNIJA25WCRcdvG39+/TOxdAjtgEh9voumnVtnSBoa0mH4AGFxTcJZAALwgCs1g+oax9JYtVLEL0mfoLlMbBljAZxrjT4EcpwWnZANOGGEdCRWKyvXb6x9Rm76y32puEWR1U6VIjKDsfACYfSqEOcU4ZTuYCiMRdV+wyHjqo3e2vMzlN1Vb7RBsfiKoaDCBNQTzWACE6IIzrq11SreAhaNhd0WwyPjJppeXvGxuv701oKXQhjpKIhFBM3K0PQ4ASYj0cxRnDk75Hro50bDLwSLjrg+fX/iKueuH8QCMj0lkAiv4tTEwOHVqvgaj6CyBx4PSJN62duFDi+SOH8UyYQg2vEc9WGOAsLOnuyPzvW8XnQ6RThpO26PkHSTe+uHvHnxGlH+/zpeSkk0B1qlsCmCMm/l5AJgdPH0ynQycVmE7SPzO+v979PdqQ+EBuzUOaVpCSz2EAgXAmReJT/tsUzqw/Hjrosjj5sa526y6A5AZYgxyRgMA0s+mnMUJsCJYZADAlClThpZecu+aDRf/a+uUoUMDdNz/ODqLblH88X/BMB+Z+o2f3HHhtXnp47ME9hb93pl0Fp8AdZj0mYb/B+iMbsFyeCHAAAAAAElFTkSuQmCC" alt="לוגו" style="height:80px;width:auto;display:block;margin:0 auto 8px;">
+    </div>
+    <div class="login-title">מנהל מאמץ מנהל</div>
+    <div class="login-subtitle">יומן ניהולי אישי</div>
+
+    <div class="login-card">
+      <label class="field-label">כניסה למרחב האישי</label>
+      <div id="namesList" class="names-list">
+        <div class="names-loading">
+          <span class="loader"></span>
+          <span style="margin-right:10px;font-size:13px;color:var(--text-muted)">טוען משתתפים...</span>
+        </div>
+      </div>
+      <div id="codePanel" style="display:none">
+        <div class="code-panel">
+          <div class="code-panel-name" id="codePanelName"></div>
+          <input class="code-panel-input" type="password" id="codePanelInput"
+            placeholder="הכנס/י קוד אישי"
+            maxlength="20"
+            onkeydown="if(event.key==='Enter') doCodeLogin()">
+          <button class="code-panel-btn" id="codePanelBtn" onclick="doCodeLogin()">כניסה ←</button>
+        </div>
+      </div>
+      <div class="error-msg" id="loginError"></div>
+    </div>
+
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ DASHBOARD ═══════════════════════════════ -->
+<div id="dashboardScreen" class="screen">
+  <div class="top-bar">
+    <div class="top-bar-brand" style="display:flex;align-items:center;gap:10px;">
+      <img src="data:image/png;base64,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" alt="לוגו" style="height:36px;width:auto;">
+      <span>מנהל מאמץ מנהל</span>
+    </div>
+    <div class="top-bar-user">
+      <span class="user-name" id="topBarName"></span>
+      <button class="btn-logout" onclick="doLogout()">יציאה</button>
+    </div>
+  </div>
+
+  <div class="dashboard-content fade-in">
+    <div class="welcome-section">
+      <div class="welcome-greeting">שלום ברוך הבא</div>
+      <div class="welcome-name" id="welcomeName">טוען...</div>
+      <div class="welcome-desc">
+        זהו המרחב האישי שלך לתיעוד תובנות, עיצוב צעדי המשך וניהול ידע מתוך המסע הניהולי שאתה/את חווה.
+        חזור/י בכל עת להשלים, לעדכן ולהעמיק.
+      </div>
+    </div>
+
+    <div class="progress-section">
+      <div class="progress-header">
+        <span class="progress-label">התקדמות בתוכנית</span>
+        <span class="progress-count" id="progressCount">0/5</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+
+    <div class="sessions-grid" id="sessionsGrid">
+      <!-- Cards injected by JS -->
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ SESSION SCREEN ═══════════════════════════════ -->
+<div id="sessionScreen" class="screen">
+  <div class="session-top-bar">
+    <button class="back-btn" onclick="goToDashboard()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M5 12h14M12 5l7 7-7 7"/>
+      </svg>
+      <span>חזרה לתוכנית</span>
+    </button>
+    <div class="save-status" id="saveStatus">
+      <span id="saveStatusText">לא נשמר עדיין</span>
+    </div>
+  </div>
+
+  <div class="session-content-wrap" id="sessionContent">
+    <!-- Injected by JS -->
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════ CONFIG ═══════════════════════════
+// Replace with your deployed Google Apps Script URL
+const API_URL = 'https://script.google.com/macros/s/AKfycbwx-8sQ-KzsdSpjSakvtU6SxBIkfGzqF-0yTsqdWG1G4yJJ10VsAKT05tMV3naJoJbF-w/exec';
+
+// For demo/local use without backend:
+const DEMO_MODE = false;
+
+// ═══════════════════════════ STATE ═══════════════════════════
+let state = {
+  participant: null,
+  sessions: {},
+  currentSession: null,
+  adminToken: null
+};
+
+// ═══════════════════════════ SESSION DEFINITIONS ═══════════════════════════
+const SESSIONS = [
+  {
+    number: 1,
+    title: 'תרבות ארגונית וניהול מבוסס ערכים',
+    desc: 'בחינת ערכי הליבה הניהוליים ותפקידם בהתנהלות ארגונית יומיומית',
+    customQuestion: 'איזה ערך ארגוני אני רוצה לחזק כעת, וכיצד הוא צריך לבוא לידי ביטוי בניהול היומיומי?'
+  },
+  {
+    number: 2,
+    title: 'חדשנות טכנולוגית ככלי ניהולי',
+    desc: 'שילוב כלים דיגיטליים ותהליכי שינוי בניהול ארגוני אפקטיבי',
+    customQuestion: 'איזה תהליך ניהולי או ארגוני אצלי מתאים לשדרוג באמצעות כלי טכנולוגי או דיגיטלי?'
+  },
+  {
+    number: 3,
+    title: 'ניהול פרויקטים בשיטה שיתופית',
+    desc: 'בניית תרבות עבודה שיתופית ומנגנוני ניהול מאפשרים',
+    customQuestion: 'איזה מהלך או פרויקט אצלנו יכול להתקדם טוב יותר דרך שיתוף פעולה?'
+  },
+  {
+    number: 4,
+    title: 'ניהול משברים וקבלת החלטות תחת לחץ',
+    desc: 'פיתוח כלים לקבלת החלטות ויכולת תפקוד בסביבה עמוסת אי-ודאות',
+    customQuestion: 'באיזה מצב ניהולי אני נדרש כיום לשפר קבלת החלטות בתנאי אי-ודאות או לחץ?'
+  },
+  {
+    number: 5,
+    title: 'יצירת שותפויות, מיתוג וחשיבה עסקית בחינוך',
+    desc: 'בניית ברית אסטרטגית וייצוג ערכי הארגון מול סביבה חיצונית',
+    customQuestion: 'איזו שותפות או יוזמה יכולה לייצר ערך משמעותי לארגון שלי בשנה הקרובה?'
+  }
+];
+
+// ═══════════════════════════ API ═══════════════════════════
+async function apiCall(action, body = {}) {
+  const res = await fetch(API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify({ action, ...body }),
+    redirect: 'follow'
+  });
+  const text = await res.text();
+  try { return JSON.parse(text); }
+  catch(e) { throw new Error('תשובה לא תקינה'); }
+}
+
+// Demo mode: uses localStorage as backend
+function demoApiCall(action, body) {
+  const db = JSON.parse(localStorage.getItem('mmm_db') || '{}');
+  if (!db.participants) db.participants = getDemoParticipants();
+  if (!db.responses) db.responses = {};
+
+  switch (action) {
+    case 'getParticipantNames':
+      return {
+        success: true,
+        names: db.participants.map(p => ({
+          accessCode: p.accessCode,
+          fullName: p.fullName,
+          organization: p.organization
+        }))
+      };
+    case 'login':
+    case 'getParticipant': {
+      const p = db.participants.find(p => p.accessCode === body.accessCode.toUpperCase());
+      if (p) return { success: true, participant: p };
+      return { success: false, error: 'קוד גישה שגוי' };
+    }
+    case 'saveSession': {
+      const key = `${body.accessCode}_${body.sessionNumber}`;
+      const now = new Date().toISOString();
+      db.responses[key] = {
+        ...body.data,
+        participantId: body.accessCode,
+        sessionNumber: body.sessionNumber,
+        updatedAt: now,
+        createdAt: db.responses[key]?.createdAt || now
+      };
+      localStorage.setItem('mmm_db', JSON.stringify(db));
+      return { success: true, message: 'נשמר' };
+    }
+    case 'getSession': {
+      const key = `${body.accessCode}_${body.sessionNumber}`;
+      return { success: true, data: db.responses[key] || null };
+    }
+    case 'getAllSessions': {
+      const sessions = {};
+      for (let i = 1; i <= 5; i++) {
+        const key = `${body.accessCode}_${i}`;
+        if (db.responses[key]) sessions[i] = db.responses[key];
+      }
+      return { success: true, sessions };
+    }
+    default:
+      return { success: false, error: 'Unknown action (demo)' };
+  }
+}
+
+function getDemoParticipants() {
+  return [
+    { participantId: 'P001', accessCode: '6UFMXN', fullName: 'גילת סיימון', role: 'מנהלת אגף החינוך העל-יסודי', organization: 'עיריית נתניה', partnerName: 'אורית טסלר לוי', partnerRole: 'סמנכ"לית' },
+    { participantId: 'P002', accessCode: 'PDB4TA', fullName: 'אושרית ונדן', role: 'צוות ניהול', organization: 'אולפנית בר אילן', partnerName: 'ד"ר אורנית כהן', partnerRole: 'ראש רשות המחקר והחדשנות' },
+    { participantId: 'P003', accessCode: '6PHKFP', fullName: 'יהודית', role: 'צוות ניהול', organization: 'אולפנית בר אילן', partnerName: 'ד"ר אורנית כהן', partnerRole: 'ראש רשות המחקר והחדשנות' },
+    { participantId: 'P004', accessCode: 'AGVX9P', fullName: 'בת-חן שטדלר', role: 'צוות ניהול', organization: 'אולפנית בר אילן', partnerName: 'ד"ר אורנית כהן', partnerRole: 'ראש רשות המחקר והחדשנות' },
+    { participantId: 'P005', accessCode: 'R9EXQJ', fullName: 'סמדר דביר', role: 'צוות ניהול', organization: 'טשרניחובסקי', partnerName: 'עידן ופנר', partnerRole: 'סמנכ"ל טכנולוגיות' },
+    { participantId: 'P006', accessCode: 'QKRQYH', fullName: 'אושר תבורי', role: 'צוות ניהול', organization: 'טשרניחובסקי', partnerName: 'עידן ופנר', partnerRole: 'סמנכ"ל טכנולוגיות' },
+    { participantId: 'P007', accessCode: 'XJBMJE', fullName: 'ענבל שרף', role: 'מנהלת בית הספר', organization: 'אלתרמן', partnerName: 'נתן ברק', partnerRole: 'מנכ"ל' },
+    { participantId: 'P008', accessCode: 'DVB68L', fullName: 'שוש קיפר', role: 'צוות ניהול', organization: 'חיים גורי', partnerName: 'לריסה אמיר', partnerRole: 'מנכ"לית' },
+    { participantId: 'P009', accessCode: 'Q4J78V', fullName: 'עינב כהן', role: 'צוות ניהול', organization: 'חיים גורי', partnerName: 'לריסה אמיר', partnerRole: 'מנכ"לית' },
+    { participantId: 'P010', accessCode: 'L35LYZ', fullName: 'גלית פישר', role: 'צוות ניהול', organization: 'חיים גורי', partnerName: 'לריסה אמיר', partnerRole: 'מנכ"לית' },
+    { participantId: 'P011', accessCode: 'B4P5P6', fullName: 'סיגלית כהן', role: 'צוות ניהול', organization: 'שי עגנון', partnerName: 'רון שניר', partnerRole: 'מנכ"ל' },
+    { participantId: 'P012', accessCode: 'NQ8477', fullName: 'נירית כהן', role: 'מנהלת בית הספר', organization: 'שחפים', partnerName: 'רגין שבח', partnerRole: 'מנכ"לית' },
+    { participantId: 'P013', accessCode: '8CDKBF', fullName: 'ברכה דעבול', role: 'מנהלת בית הספר', organization: 'מורשת זבולון', partnerName: 'אנסטסיה זהר מדר', partnerRole: 'מנהלת רווחה וחוויית עובדים' },
+  ];
+}
+
+// ═══════════════════════════ LOGIN ═══════════════════════════
+async function loadNamesList() {
+  const result = await apiCall('getParticipantNames', {});
+  const container = document.getElementById('namesList');
+
+  if (!result.success || !result.names || result.names.length === 0) {
+    container.innerHTML = '<div style="padding:16px;color:var(--text-muted);font-size:13px">לא נמצאו משתתפים</div>';
+    return;
+  }
+
+  // Group by organization
+  const groups = {};
+  result.names.forEach(p => {
+    const org = p.organization || 'אחר';
+    if (!groups[org]) groups[org] = [];
+    groups[org].push(p);
+  });
+
+  const sortedOrgs = Object.keys(groups).sort((a, b) => {
+    if (a === 'עיריית נתניה') return -1;
+    if (b === 'עיריית נתניה') return 1;
+    return a.localeCompare(b, 'he');
+  });
+
+  container.innerHTML = sortedOrgs.map((org, idx) => {
+    const members = groups[org];
+    const groupId = 'group_' + idx;
+
+    const memberBtns = members.map(p => `
+      <button class="name-btn" onclick="showCodePanel('${p.accessCode}', '${p.fullName}', this)">
+        <span class="name-btn-text">${p.fullName}</span>
+        <svg class="name-btn-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </button>
+    `).join('');
+
+    return `
+      <button class="school-btn" onclick="toggleSchool('${groupId}', this)">
+        <span class="school-btn-text">${org}</span>
+        <span class="school-btn-count">${members.length}</span>
+        <svg class="school-btn-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </button>
+      <div class="participants-list" id="${groupId}">
+        ${memberBtns}
+      </div>
+    `;
+  }).join('');
+}
+
+function toggleSchool(groupId, btn) {
+  const list = document.getElementById(groupId);
+  const isOpen = list.classList.contains('open');
+  // Close all
+  document.querySelectorAll('.participants-list').forEach(l => l.classList.remove('open'));
+  document.querySelectorAll('.school-btn').forEach(b => b.classList.remove('open'));
+  // Open clicked (if was closed)
+  if (!isOpen) {
+    list.classList.add('open');
+    btn.classList.add('open');
+  }
+}
+
+let _pendingAccessCode = null;
+let _pendingBtn = null;
+
+function showCodePanel(accessCode, fullName, btn) {
+  // Deactivate all name buttons
+  document.querySelectorAll('.name-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  _pendingAccessCode = accessCode;
+  _pendingBtn = btn;
+
+  document.getElementById('codePanelName').textContent = 'כניסה עבור: ' + fullName;
+  document.getElementById('codePanelInput').value = '';
+  document.getElementById('codePanel').style.display = 'block';
+  hideError();
+
+  // Scroll to panel and focus
+  setTimeout(() => {
+    document.getElementById('codePanel').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    document.getElementById('codePanelInput').focus();
+  }, 100);
+}
+
+async function doCodeLogin() {
+  const enteredCode = document.getElementById('codePanelInput').value.trim();
+  if (!enteredCode) { showError('יש להזין קוד אישי'); return; }
+  if (!_pendingAccessCode) return;
+
+  const btn = document.getElementById('codePanelBtn');
+  btn.disabled = true;
+  btn.textContent = 'מתחבר...';
+
+  // The accessCode IS the personal code — verify they match
+  if (enteredCode.toLowerCase() !== _pendingAccessCode.toString().toLowerCase()) {
+    showError('קוד שגוי — נסה/י שנית');
+    btn.disabled = false;
+    btn.textContent = 'כניסה ←';
+    document.getElementById('codePanelInput').value = '';
+    document.getElementById('codePanelInput').focus();
+    return;
+  }
+
+  const result = await apiCall('login', { accessCode: _pendingAccessCode });
+
+  if (result.success) {
+    state.participant = result.participant;
+    hideError();
+    document.getElementById('codePanel').style.display = 'none';
+    await showDashboard();
+  } else {
+    showError('שגיאה בטעינת הנתונים — נסה/י שנית');
+    btn.disabled = false;
+    btn.textContent = 'כניסה ←';
+  }
+}
+
+function showError(msg) {
+  const el = document.getElementById('loginError');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+function hideError() {
+  document.getElementById('loginError').style.display = 'none';
+}
+
+// ═══════════════════════════ DASHBOARD ═══════════════════════════
+async function showDashboard() {
+  showScreen('dashboardScreen');
+
+  const p = state.participant;
+  document.getElementById('welcomeName').textContent = p.fullName;
+  document.getElementById('topBarName').textContent = p.fullName;
+
+  // Load all sessions status
+  const result = await apiCall('getAllSessions', { accessCode: p.accessCode });
+  if (result.success) state.sessions = result.sessions;
+
+  renderDashboard();
+}
+
+function renderDashboard() {
+  const completed = Object.values(state.sessions).filter(s => s.isSubmitted === 'TRUE' || s.isSubmitted === true).length;
+  const draft = Object.values(state.sessions).filter(s => s && !(s.isSubmitted === 'TRUE' || s.isSubmitted === true)).length;
+
+  document.getElementById('progressCount').textContent = `${completed}/5`;
+  document.getElementById('progressFill').style.width = `${(completed / 5) * 100}%`;
+
+  const grid = document.getElementById('sessionsGrid');
+  grid.innerHTML = SESSIONS.map(s => {
+    const data = state.sessions[s.number];
+    const isCompleted = data && (data.isSubmitted === 'TRUE' || data.isSubmitted === true);
+    const delayClass = ['', 'fade-in-delay-1', 'fade-in-delay-2', 'fade-in-delay-3', 'fade-in-delay-3'][idx] || '';
+    const isDraft = data && !isCompleted;
+
+    let cardClass = '';
+    let statusHTML = '';
+
+    if (isCompleted) {
+      cardClass = 'completed';
+      statusHTML = `<div class="session-status status-done"><div class="status-dot"></div> הושלם</div>`;
+    } else if (isDraft) {
+      cardClass = 'draft';
+      statusHTML = `<div class="session-status status-draft"><div class="status-dot"></div> טיוטה</div>`;
+    } else {
+      statusHTML = `<div class="session-status status-empty"><div class="status-dot"></div> לא מולא</div>`;
+    }
+
+    return `
+      <div class="session-card ${cardClass}" onclick="openSession(${s.number})">
+        <div class="session-number">${s.number}</div>
+        <div class="session-info">
+          <div class="session-title-text">${s.title}</div>
+          <div class="session-meta">מפגש ${s.number} · חמישה חלקים</div>
+        </div>
+        ${statusHTML}
+      </div>
+    `;
+  }).join('');
+}
+
+// ═══════════════════════════ SESSION ═══════════════════════════
+async function openSession(num) {
+  state.currentSession = num;
+  showScreen('sessionScreen');
+
+  const sessionDef = SESSIONS[num - 1];
+  const savedResult = await apiCall('getSession', {
+    accessCode: state.participant.accessCode,
+    sessionNumber: num
+  });
+
+  const saved = savedResult.success ? savedResult.data : null;
+
+  renderSessionForm(sessionDef, saved);
+}
+
+function renderSessionForm(s, saved) {
+  const d = saved || {};
+
+  const html = `
+    <div class="session-header">
+      <div class="session-badge">מפגש ${s.number}</div>
+      <h1 class="session-main-title">${s.title}</h1>
+      <p class="session-desc">${s.desc}</p>
+    </div>
+
+    <!-- PART A -->
+    <div class="form-section">
+      <div class="section-header">
+        <div class="section-icon">א</div>
+        <div>
+          <div class="section-title">מיקוד אישי</div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">מהי התובנה המרכזית שלקחתי מהמפגש?</label>
+        <textarea class="field-input" id="f_mainInsight" rows="3" placeholder="תאר/י בקצרה את התובנה שהכי השפיעה עליך...">${d.mainInsight || ''}</textarea>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">איזה רעיון או עיקרון פגש אותי במיוחד?</label>
+        <textarea class="field-input" id="f_centralIdea" rows="2" placeholder="רעיון, מושג, משפט או גישה שתפס את תשומת לבך...">${d.centralIdea || ''}</textarea>
+      </div>
+
+      <div class="scale-group">
+        <label class="field-label">עד כמה התוכן היה רלוונטי למציאות הניהולית שלי?</label>
+        <div class="scale-options" id="scaleRelevance">
+          ${[1,2,3,4,5].map(n => `
+            <button class="scale-btn ${(d.relevanceScore == n) ? 'selected' : ''}"
+              onclick="selectScale('scaleRelevance', ${n})" data-value="${n}">
+              ${n}
+              <span class="scale-label">${n===1?'נמוכה':n===5?'גבוהה':''}</span>
+            </button>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- PART B -->
+    <div class="form-section">
+      <div class="section-header">
+        <div class="section-icon">ב</div>
+        <div>
+          <div class="section-title">הדיאלוג עם השותף/ה</div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">האם התקיים שיח עם השותף/ה מאז המפגש?</label>
+        <div class="radio-group" id="dialogueStatusGroup">
+          ${['כן','חלקי','לא'].map(v => `
+            <label class="radio-option">
+              <input type="radio" name="dialogueStatus" value="${v}" ${d.dialogueStatus === v ? 'checked' : ''}>
+              <span class="radio-label">${v}</span>
+            </label>
+          `).join('')}
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">מה היה הנושא המרכזי שעליו שוחחנו?</label>
+        <input type="text" class="field-input" id="f_dialogueTopic" placeholder="נושא השיחה עם השותף/ה..." value="${d.dialogueTopic || ''}">
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">מה התחדד לי בעקבות הדיאלוג?</label>
+        <textarea class="field-input" id="f_dialogueReflection" rows="2" placeholder="תובנה שהתגבשה לאחר השיחה...">${d.dialogueReflection || ''}</textarea>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- PART C -->
+    <div class="form-section">
+      <div class="section-header">
+        <div class="section-icon">ג</div>
+        <div>
+          <div class="section-title">השלכה ארגונית</div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">איפה הנושא של המפגש פוגש את הארגון שלי?</label>
+        <textarea class="field-input" id="f_organizationalConnection" rows="2" placeholder="הקשר לאתגרים ולהזדמנויות בארגון שלך...">${d.organizationalConnection || ''}</textarea>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">איזה אתגר ניהולי עלה או התחדד?</label>
+        <textarea class="field-input" id="f_managementChallenge" rows="2" placeholder="אתגר שהמפגש הצית או חידד...">${d.managementChallenge || ''}</textarea>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- PART D -->
+    <div class="form-section">
+      <div class="section-header">
+        <div class="section-icon">ד</div>
+        <div>
+          <div class="section-title">פעולה</div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">מהו צעד אחד ברור שאני מתחייב/ת לבצע עד המפגש הבא?</label>
+        <textarea class="field-input" id="f_actionCommitment" rows="2" placeholder="צעד ספציפי, ניתן למדידה...">${d.actionCommitment || ''}</textarea>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">מה ייחשב בעיניי התקדמות?</label>
+        <input type="text" class="field-input" id="f_progressDefinition" placeholder="כיצד תדע/י שהתקדמת?" value="${d.progressDefinition || ''}">
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">איזה משאב / שותפות / תמיכה דרושים לי?</label>
+        <input type="text" class="field-input" id="f_supportNeeded" placeholder="מה תצטרך/י כדי להצליח?" value="${d.supportNeeded || ''}">
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- PART E + Special -->
+    <div class="form-section">
+      <div class="section-header">
+        <div class="section-icon">ה</div>
+        <div>
+          <div class="section-title">תמצית ורפלקציה</div>
+        </div>
+      </div>
+
+      <div class="special-question">
+        <div class="special-question-label">שאלת המפגש</div>
+        <div class="special-question-text">${s.customQuestion}</div>
+        <textarea class="field-input" id="f_customSessionQuestionAnswer" rows="3" placeholder="מחשבתך על השאלה הייעודית למפגש זה...">${d.customSessionQuestionAnswer || ''}</textarea>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">כתוב/כתבי במשפט אחד את התובנה המרכזית שלך מהמפגש</label>
+        <input type="text" class="field-input" id="f_summarySentence" placeholder="משפט תמצות אחד, חד וברור..." value="${d.summarySentence || ''}">
+      </div>
+
+
+    </div>
+
+    <!-- Date + Submit -->
+    <div class="field-group" style="margin-bottom:28px;">
+      <label class="field-label">תאריך מילוי</label>
+      <input type="date" class="field-input date-input" id="f_sessionDate"
+        value="${d.sessionDate || new Date().toISOString().split('T')[0]}"
+        style="height:44px;min-height:unset;">
+    </div>
+    <div class="submit-section">
+      <button class="btn-save-draft" onclick="saveSession(false)">שמירה כטיוטה</button>
+      <button class="btn-submit" onclick="saveSession(true)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        סיום ושמירה
+      </button>
+    </div>
+  `;
+
+  document.getElementById('sessionContent').innerHTML = html;
+  window.scrollTo(0, 0);
+
+  // autosave on change
+  document.querySelectorAll('.field-input, input[type=radio]').forEach(el => {
+    el.addEventListener('change', () => autoSave());
+    if (el.tagName === 'TEXTAREA' || el.type === 'text') {
+      el.addEventListener('input', debounce(() => autoSave(), 2000));
+    }
+  });
+}
+
+// ═══════════════════════════ SAVE ═══════════════════════════
+function collectFormData(isSubmitted = false) {
+  const getVal = id => document.getElementById(id)?.value || '';
+  const getRadio = name => document.querySelector(`input[name="${name}"]:checked`)?.value || '';
+  const getScale = id => {
+    const sel = document.querySelector(`#${id} .scale-btn.selected`);
+    return sel ? parseInt(sel.dataset.value) : null;
+  };
+
+  return {
+    mainInsight: getVal('f_mainInsight'),
+    centralIdea: getVal('f_centralIdea'),
+    relevanceScore: getScale('scaleRelevance'),
+    dialogueStatus: getRadio('dialogueStatus'),
+    dialogueTopic: getVal('f_dialogueTopic'),
+    dialogueReflection: getVal('f_dialogueReflection'),
+    organizationalConnection: getVal('f_organizationalConnection'),
+    managementChallenge: getVal('f_managementChallenge'),
+    actionCommitment: getVal('f_actionCommitment'),
+    progressDefinition: getVal('f_progressDefinition'),
+    supportNeeded: getVal('f_supportNeeded'),
+    summarySentence: getVal('f_summarySentence'),
+    sessionDate: getVal('f_sessionDate'),
+    customSessionQuestionAnswer: getVal('f_customSessionQuestionAnswer'),
+    isSubmitted
+  };
+}
+
+async function saveSession(isSubmitted = false) {
+  const data = collectFormData(isSubmitted);
+  setSaveStatus('saving', 'שומר...');
+
+  const result = await apiCall('saveSession', {
+    accessCode: state.participant.accessCode,
+    sessionNumber: state.currentSession,
+    data
+  });
+
+  if (result.success) {
+    state.sessions[state.currentSession] = { ...data, sessionNumber: state.currentSession };
+    setSaveStatus('saved', 'נשמר ✓');
+    if (isSubmitted) {
+      showToast('המפגש הושלם ונשמר בהצלחה', 'success');
+      setTimeout(() => goToDashboard(), 1500);
+    } else {
+      showToast('הטיוטה נשמרה', 'success');
+      setTimeout(() => setSaveStatus('', ''), 3000);
+    }
+  } else {
+    setSaveStatus('error', 'שגיאה בשמירה');
+    showToast('שגיאה בשמירה — נסה/י שנית', 'error');
+  }
+}
+
+let autoSaveTimer;
+function autoSave() {
+  clearTimeout(autoSaveTimer);
+  setSaveStatus('saving', 'שומר אוטומטית...');
+  autoSaveTimer = setTimeout(() => saveSession(false), 1500);
+}
+
+function setSaveStatus(cls, text) {
+  const el = document.getElementById('saveStatus');
+  el.className = 'save-status ' + cls;
+  document.getElementById('saveStatusText').textContent = text;
+}
+
+// ═══════════════════════════ UI HELPERS ═══════════════════════════
+function selectScale(groupId, value) {
+  document.querySelectorAll(`#${groupId} .scale-btn`).forEach(btn => {
+    btn.classList.toggle('selected', parseInt(btn.dataset.value) === value);
+  });
+  autoSave();
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function goToDashboard() {
+  showDashboard();
+}
+
+// ── RIPPLE EFFECT ──
+function addRipple(e) {
+  const btn = e.currentTarget;
+  if (!btn.classList.contains('ripple-host')) btn.classList.add('ripple-host');
+  const rect = btn.getBoundingClientRect();
+  const size = Math.max(rect.width, rect.height);
+  const x = e.clientX - rect.left - size / 2;
+  const y = e.clientY - rect.top - size / 2;
+  const ripple = document.createElement('span');
+  ripple.className = 'ripple';
+  ripple.style.cssText = `width:${size}px;height:${size}px;left:${x}px;top:${y}px`;
+  btn.appendChild(ripple);
+  ripple.addEventListener('animationend', () => ripple.remove());
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Add ripple to all buttons
+  document.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', addRipple);
+  });
+
+  // Observer for dynamically added buttons
+  new MutationObserver(mutations => {
+    mutations.forEach(m => m.addedNodes.forEach(node => {
+      if (node.nodeType === 1) {
+        if (node.tagName === 'BUTTON') node.addEventListener('click', addRipple);
+        node.querySelectorAll?.('button').forEach(btn => btn.addEventListener('click', addRipple));
+      }
+    }));
+  }).observe(document.body, { childList: true, subtree: true });
+});
+
+function doLogout() {
+  state.participant = null;
+  state.sessions = {};
+  loadNamesList();
+  showScreen('loginScreen');
+}
+
+function showToast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + type;
+  setTimeout(() => { t.className = 'toast'; }, 3000);
+}
+
+function debounce(fn, ms) {
+  let t;
+  return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
+}
+
+// Init — load names on page load
+loadNamesList();
+</script>
+</body>
+</html>
