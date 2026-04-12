@@ -1,405 +1,220 @@
-const FIELD_KEYS = {
-  front: ["שם הכרטיס", "משפט מסקרן", "משפחה", "תחום", "יעד או״ם"],
-  back: [
-    "כיוון למוצר",
-    "קהל יעד",
-    "פרסונה",
-    "הנושא",
-    "מצב מהחיים",
-    "הבעיה",
-    "למה זה לא עובד היום",
-    "ההשפעה",
-    "מה עדיין חסר",
-    "שאלת פתיחה",
-  ],
-  cardCode: "קוד כרטיס",
-};
-
-const GAMES = {
-  group1: {
-    title: "משחק קבוצה 1",
-    jsonPath: "kvutza_1.json",
-    storage: {
-      selected: "pd_game_group1_selected",
-      ui: "pd_game_group1_ui",
-    },
-  },
-  group2: {
-    title: "משחק קבוצה 2",
-    jsonPath: "kvutza_2.json",
-    storage: {
-      selected: "pd_game_group2_selected",
-      ui: "pd_game_group2_ui",
-    },
-  },
-};
+const MAX_SUBGROUP_SIZE = 18;
+const MIN_CARD_SIZE = 76;
+const CARD_SHRINK_STEP = 8;
+const DEFAULT_CARD_SIZE = 170;
 
 const state = {
-  currentGame: null,
-  mode: "browse", // browse | select
-  cards: [],
-  selectedCodes: new Set(),
-  ui: {
-    search: "",
-    family: "all",
-    domain: "all",
-    viewMode: "front",
-    chosenFilter: "all", // all | selected | unselected
-  },
-  pendingSelectionCode: null,
+  activeCardId: null,
 };
 
-const el = {
-  selectorScreen: document.getElementById("game-selector"),
-  gameScreen: document.getElementById("game-screen"),
-  gameTitle: document.getElementById("game-title"),
-  modeLabel: document.getElementById("mode-label"),
-  toggleMode: document.getElementById("toggle-mode"),
-  backToSelector: document.getElementById("back-to-selector"),
-  searchInput: document.getElementById("search-input"),
-  familyFilter: document.getElementById("family-filter"),
-  domainFilter: document.getElementById("domain-filter"),
-  viewMode: document.getElementById("view-mode"),
-  clearFilters: document.getElementById("clear-filters"),
-  resetSelections: document.getElementById("reset-selections"),
-  cardsGrid: document.getElementById("cards-grid"),
-  totalCount: document.getElementById("total-count"),
-  selectedCount: document.getElementById("selected-count"),
-  remainingCount: document.getElementById("remaining-count"),
-  visibleCount: document.getElementById("visible-count"),
-  confirmDialog: document.getElementById("confirm-dialog"),
-  cardModal: document.getElementById("card-modal"),
-  modalBody: document.getElementById("modal-body"),
-  closeModal: document.getElementById("close-modal"),
-  showAll: document.getElementById("show-all"),
-  showSelected: document.getElementById("show-selected"),
-  showUnselected: document.getElementById("show-unselected"),
+const elements = {
+  body: document.body,
+  form: document.getElementById("setup-form"),
+  participantsInput: document.getElementById("participants"),
+  feedback: document.getElementById("feedback"),
+  boardWrapper: document.getElementById("board-wrapper"),
+  cardTemplate: document.getElementById("card-template"),
 };
 
 init();
 
 function init() {
-  document.querySelectorAll(".selector-btn").forEach((btn) => {
-    btn.addEventListener("click", () => enterGame(btn.dataset.game));
-  });
-
-  el.backToSelector.addEventListener("click", () => {
-    el.gameScreen.classList.remove("active");
-    el.selectorScreen.classList.add("active");
-  });
-
-  el.toggleMode.addEventListener("click", toggleMode);
-  el.searchInput.addEventListener("input", onUiChange);
-  el.familyFilter.addEventListener("change", onUiChange);
-  el.domainFilter.addEventListener("change", onUiChange);
-  el.viewMode.addEventListener("change", onUiChange);
-
-  el.clearFilters.addEventListener("click", clearFilters);
-  el.resetSelections.addEventListener("click", resetSelections);
-
-  el.showAll.addEventListener("click", () => setChosenFilter("all"));
-  el.showSelected.addEventListener("click", () => setChosenFilter("selected"));
-  el.showUnselected.addEventListener("click", () => setChosenFilter("unselected"));
-
-  el.confirmDialog.addEventListener("close", onConfirmDialogClose);
-  el.closeModal.addEventListener("click", () => el.cardModal.close());
-}
-
-async function enterGame(gameKey) {
-  const game = GAMES[gameKey];
-  if (!game) return;
-
-  state.currentGame = gameKey;
-  state.mode = "browse";
-  state.pendingSelectionCode = null;
-  el.modeLabel.textContent = "מצב עיון";
-  el.toggleMode.textContent = "התחל בחירה";
-
-  loadSelections();
-  loadUiState();
-  await loadJsonByGame(gameKey);
-
-  populateFilters();
-  syncUiInputsFromState();
-  renderCards();
-
-  el.gameTitle.textContent = game.title;
-  el.selectorScreen.classList.remove("active");
-  el.gameScreen.classList.add("active");
-}
-
-async function loadJsonByGame(gameKey) {
-  const game = GAMES[gameKey];
-  const response = await fetch(game.jsonPath, { cache: "no-cache" });
-  if (!response.ok) {
-    throw new Error(`נכשל בטעינת קובץ ${game.jsonPath}`);
-  }
-  const data = await response.json();
-  state.cards = Array.isArray(data) ? data : [];
-}
-
-function toggleMode() {
-  state.mode = state.mode === "browse" ? "select" : "browse";
-  const inSelection = state.mode === "select";
-  el.modeLabel.textContent = inSelection ? "מצב בחירה" : "מצב עיון";
-  el.toggleMode.textContent = inSelection ? "חזרה למצב עיון" : "התחל בחירה";
-  renderCards();
-}
-
-function onUiChange() {
-  state.ui.search = el.searchInput.value.trim();
-  state.ui.family = el.familyFilter.value;
-  state.ui.domain = el.domainFilter.value;
-  state.ui.viewMode = el.viewMode.value;
-  saveUiState();
-  renderCards();
-}
-
-function clearFilters() {
-  state.ui.search = "";
-  state.ui.family = "all";
-  state.ui.domain = "all";
-  state.ui.chosenFilter = "all";
-  setChipState();
-  syncUiInputsFromState();
-  saveUiState();
-  renderCards();
-}
-
-function setChosenFilter(type) {
-  state.ui.chosenFilter = type;
-  setChipState();
-  saveUiState();
-  renderCards();
-}
-
-function setChipState() {
-  el.showAll.classList.toggle("active", state.ui.chosenFilter === "all");
-  el.showSelected.classList.toggle("active", state.ui.chosenFilter === "selected");
-  el.showUnselected.classList.toggle("active", state.ui.chosenFilter === "unselected");
-}
-
-function resetSelections() {
-  if (!state.currentGame) return;
-  const ok = window.confirm("לאפס את כל הבחירות במשחק הנוכחי?");
-  if (!ok) return;
-  state.selectedCodes = new Set();
-  saveSelections();
-  renderCards();
-}
-
-function renderCards() {
-  const filtered = getFilteredCards();
-  el.cardsGrid.innerHTML = "";
-
-  filtered.forEach((card) => {
-    const selected = isCardSelected(card);
-
-    const article = document.createElement("article");
-    article.className = `card ${selected ? "selected" : ""}`;
-
-    const header = document.createElement("div");
-    header.className = "card-header";
-    header.innerHTML = `
-      <h3>${safe(card["שם הכרטיס"])}</h3>
-      <p>${safe(card["משפט מסקרן"])}</p>
-      <p class="kicker">${safe(card["משפחה"])} | ${safe(card["תחום"])} | ${safe(card["יעד או״ם"])}</p>
-    `;
-    article.appendChild(header);
-
-    const view = state.ui.viewMode;
-    if (view === "front" || view === "full") {
-      article.appendChild(renderSection("קדמי", FIELD_KEYS.front, card));
+  elements.form.addEventListener("submit", onSubmit);
+  window.addEventListener("resize", () => {
+    const board = getBoard();
+    if (board && board.childElementCount > 0) {
+      applyLayoutGuard();
     }
-    if (view === "back" || view === "full") {
-      article.appendChild(renderSection("אחורי", FIELD_KEYS.back, card));
+  });
+
+  renderFromForm();
+}
+
+function onSubmit(event) {
+  event.preventDefault();
+  renderFromForm();
+}
+
+function renderFromForm() {
+  const groupMode = elements.form.groupMode.value;
+  elements.body.dataset.theme = groupMode;
+
+  const n = Number(elements.participantsInput.value);
+  if (!Number.isInteger(n) || n < 2) {
+    showFeedback("יש להזין מספר משתתפות תקין (2 ומעלה).", true);
+    clearBoard();
+    return;
+  }
+
+  const groups = computeGroups(n);
+  if (!groups) {
+    showFeedback("לא ניתן לחלק את המשתתפות תחת המגבלות", true);
+    clearBoard();
+    return;
+  }
+
+  const cards = buildCards(n);
+  ensureBoard();
+  renderBoard(groups, cards, groupMode);
+
+  showFeedback(
+    `נוצרו ${n} כרטיסים, מחולקים ל-${groups.length} תתי-קבוצות: ${groups.join(", ")}.`,
+    false
+  );
+
+  applyLayoutGuard();
+}
+
+// חלוקה לקבוצות של 2/3 בלבד, תוך שמירה על מגבלת 18.
+function computeGroups(n) {
+  if (!Number.isInteger(n) || n < 2) {
+    return null;
+  }
+
+  let groups = [];
+  const remainder = n % 3;
+
+  if (remainder === 0) {
+    groups = Array(n / 3).fill(3);
+  } else if (remainder === 1) {
+    if (n < 4) return null;
+    groups = Array((n - 4) / 3).fill(3);
+    groups.push(2, 2);
+  } else {
+    groups = Array((n - 2) / 3).fill(3);
+    groups.push(2);
+  }
+
+  const valid = groups.every((size) => size >= 2 && size <= 3 && size <= MAX_SUBGROUP_SIZE);
+  return valid ? groups : null;
+}
+
+function buildCards(n) {
+  return Array.from({ length: n }, (_, index) => ({
+    id: index + 1,
+    front: `משתתפת #${index + 1}`,
+    back: `מידע נוסף #${index + 1}`,
+  }));
+}
+
+function renderBoard(groups, cards) {
+  const board = getBoard();
+  board.innerHTML = "";
+  state.activeCardId = null;
+
+  const titles = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  let cardIndex = 0;
+
+  groups.forEach((groupSize, groupIdx) => {
+    const subgroup = document.createElement("section");
+    subgroup.className = "subgroup";
+
+    const heading = document.createElement("h2");
+    heading.textContent = `קבוצה ${titles[groupIdx] || groupIdx + 1}`;
+    subgroup.appendChild(heading);
+
+    const cardsGrid = document.createElement("div");
+    cardsGrid.className = "cards-grid";
+
+    for (let i = 0; i < groupSize; i += 1) {
+      const cardData = cards[cardIndex];
+      cardIndex += 1;
+
+      const cardNode = elements.cardTemplate.content.firstElementChild.cloneNode(true);
+      cardNode.dataset.cardId = String(cardData.id);
+      cardNode.querySelector(".card-front").textContent = cardData.front;
+      cardNode.querySelector(".card-back").textContent = cardData.back;
+
+      cardNode.addEventListener("click", (event) => {
+        event.stopPropagation();
+        handleCardClick(cardData.id);
+      });
+
+      cardNode.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          handleCardClick(cardData.id);
+        }
+      });
+
+      cardsGrid.appendChild(cardNode);
     }
 
-    const code = document.createElement("p");
-    code.className = "card-code";
-    code.textContent = safe(card[FIELD_KEYS.cardCode]);
-    article.appendChild(code);
-
-    const actions = document.createElement("div");
-    actions.className = "card-actions";
-
-    const readBtn = document.createElement("button");
-    readBtn.className = "secondary";
-    readBtn.textContent = "קריאה נוחה";
-    readBtn.addEventListener("click", () => openCardModal(card));
-    actions.appendChild(readBtn);
-
-    const pickBtn = document.createElement("button");
-    pickBtn.className = "primary";
-    pickBtn.textContent = selected ? "כבר נבחר" : "בחר קלף";
-    const disabled = state.mode !== "select" || selected;
-    pickBtn.disabled = disabled;
-    pickBtn.addEventListener("click", () => askCardSelection(card));
-    actions.appendChild(pickBtn);
-
-    article.appendChild(actions);
-    el.cardsGrid.appendChild(article);
+    subgroup.appendChild(cardsGrid);
+    board.appendChild(subgroup);
   });
-
-  updateStats(filtered.length);
 }
 
-function renderSection(title, keys, card) {
-  const section = document.createElement("section");
-  section.className = "card-section";
+function applyLayoutGuard() {
+  const board = getBoard();
+  const root = document.documentElement;
+  root.style.setProperty("--cardSize", `${DEFAULT_CARD_SIZE}px`);
 
-  const heading = document.createElement("strong");
-  heading.textContent = title;
-  section.appendChild(heading);
+  let cardSize = DEFAULT_CARD_SIZE;
+  for (let i = 0; i < 15; i += 1) {
+    const hasOverflow = root.scrollHeight > window.innerHeight || root.scrollWidth > window.innerWidth;
 
-  keys.forEach((key) => {
-    const value = card[key] ?? "";
-    const p = document.createElement("p");
-    p.className = "field";
-    p.innerHTML = `<strong>${key}:</strong> ${safe(value)}`;
-    section.appendChild(p);
-  });
-
-  return section;
-}
-
-function askCardSelection(card) {
-  const code = card[FIELD_KEYS.cardCode];
-  if (!code || isCardSelected(card) || state.mode !== "select") return;
-  state.pendingSelectionCode = String(code);
-  el.confirmDialog.showModal();
-}
-
-function onConfirmDialogClose() {
-  if (el.confirmDialog.returnValue === "confirm" && state.pendingSelectionCode) {
-    state.selectedCodes.add(state.pendingSelectionCode);
-    saveSelections();
-    renderCards();
-  }
-  state.pendingSelectionCode = null;
-}
-
-function openCardModal(card) {
-  const container = document.createElement("div");
-  const title = document.createElement("h3");
-  title.textContent = safe(card["שם הכרטיס"]);
-  container.appendChild(title);
-
-  [...FIELD_KEYS.front, ...FIELD_KEYS.back, FIELD_KEYS.cardCode].forEach((key) => {
-    const p = document.createElement("p");
-    p.className = "field";
-    p.innerHTML = `<strong>${key}:</strong> ${safe(card[key] ?? "")}`;
-    container.appendChild(p);
-  });
-
-  el.modalBody.innerHTML = "";
-  el.modalBody.appendChild(container);
-  el.cardModal.showModal();
-}
-
-function getFilteredCards() {
-  const search = state.ui.search.toLowerCase();
-
-  return state.cards.filter((card) => {
-    const familyOk = state.ui.family === "all" || card["משפחה"] === state.ui.family;
-    const domainOk = state.ui.domain === "all" || card["תחום"] === state.ui.domain;
-
-    const selected = isCardSelected(card);
-    const chosenOk =
-      state.ui.chosenFilter === "all" ||
-      (state.ui.chosenFilter === "selected" && selected) ||
-      (state.ui.chosenFilter === "unselected" && !selected);
-
-    let textOk = true;
-    if (search) {
-      const merged = Object.values(card).join(" ").toLowerCase();
-      textOk = merged.includes(search);
+    if (!hasOverflow) {
+      board.hidden = false;
+      return true;
     }
 
-    return familyOk && domainOk && chosenOk && textOk;
+    cardSize -= CARD_SHRINK_STEP;
+    if (cardSize < MIN_CARD_SIZE) {
+      break;
+    }
+
+    root.style.setProperty("--cardSize", `${cardSize}px`);
+  }
+
+  elements.boardWrapper.innerHTML = '<div class="layout-error">המסך קטן מדי להצגה ללא גלילה</div>';
+  showFeedback("המסך קטן מדי להצגה ללא גלילה", true);
+  return false;
+}
+
+function handleCardClick(cardId) {
+  setActiveCard(cardId === state.activeCardId ? null : cardId);
+}
+
+function setActiveCard(cardId) {
+  state.activeCardId = cardId;
+
+  const board = getBoard();
+  if (!board) return;
+
+  board.querySelectorAll(".card").forEach((cardEl) => {
+    const currentId = Number(cardEl.dataset.cardId);
+    const active = cardId !== null && currentId === cardId;
+    cardEl.classList.toggle("active", active);
+    cardEl.setAttribute("aria-pressed", String(active));
   });
 }
 
-function populateFilters() {
-  fillSelect(el.familyFilter, "משפחה", state.cards);
-  fillSelect(el.domainFilter, "תחום", state.cards);
-}
-
-function fillSelect(selectEl, key, list) {
-  const uniqueValues = [...new Set(list.map((card) => card[key]).filter(Boolean))];
-  selectEl.innerHTML = `<option value="all">הכול</option>${uniqueValues
-    .map((value) => `<option value="${escapeAttr(value)}">${safe(value)}</option>`)
-    .join("")}`;
-}
-
-function syncUiInputsFromState() {
-  el.searchInput.value = state.ui.search;
-  el.viewMode.value = state.ui.viewMode;
-  el.familyFilter.value = state.ui.family;
-  el.domainFilter.value = state.ui.domain;
-  setChipState();
-}
-
-function isCardSelected(card) {
-  const code = card[FIELD_KEYS.cardCode];
-  return code ? state.selectedCodes.has(String(code)) : false;
-}
-
-function updateStats(visibleCount) {
-  const total = state.cards.length;
-  const selected = state.cards.reduce((acc, card) => acc + (isCardSelected(card) ? 1 : 0), 0);
-  el.totalCount.textContent = String(total);
-  el.selectedCount.textContent = String(selected);
-  el.remainingCount.textContent = String(total - selected);
-  el.visibleCount.textContent = String(visibleCount);
-}
-
-function saveSelections() {
-  const key = GAMES[state.currentGame]?.storage.selected;
-  if (!key) return;
-  localStorage.setItem(key, JSON.stringify([...state.selectedCodes]));
-}
-
-function loadSelections() {
-  const key = GAMES[state.currentGame]?.storage.selected;
-  if (!key) return;
-  try {
-    const saved = JSON.parse(localStorage.getItem(key) || "[]");
-    state.selectedCodes = new Set(Array.isArray(saved) ? saved.map(String) : []);
-  } catch {
-    state.selectedCodes = new Set();
+function onBoardClick(event) {
+  if (event.target.closest(".card")) {
+    return;
   }
+  setActiveCard(null);
 }
 
-function saveUiState() {
-  const key = GAMES[state.currentGame]?.storage.ui;
-  if (!key) return;
-  localStorage.setItem(key, JSON.stringify(state.ui));
+function clearBoard() {
+  ensureBoard();
+  getBoard().innerHTML = "";
+  state.activeCardId = null;
 }
 
-function loadUiState() {
-  const key = GAMES[state.currentGame]?.storage.ui;
-  if (!key) return;
-  const defaults = {
-    search: "",
-    family: "all",
-    domain: "all",
-    viewMode: "front",
-    chosenFilter: "all",
-  };
-
-  try {
-    const saved = JSON.parse(localStorage.getItem(key) || "null");
-    state.ui = { ...defaults, ...(saved || {}) };
-  } catch {
-    state.ui = defaults;
-  }
+function ensureBoard() {
+  elements.boardWrapper.innerHTML = '<div id="board" class="board"></div>';
+  const board = getBoard();
+  board.addEventListener("click", onBoardClick);
+  return board;
 }
 
-function safe(value) {
-  return String(value ?? "").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+function getBoard() {
+  return document.getElementById("board");
 }
 
-function escapeAttr(value) {
-  return String(value).replaceAll('"', "&quot;");
+function showFeedback(message, isError) {
+  elements.feedback.textContent = message;
+  elements.feedback.classList.toggle("error", Boolean(isError));
 }
