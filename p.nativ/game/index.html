@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>מערכת קלפי פעילות כיתתית</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section id="game-selector" class="screen selector-screen active" aria-label="בחירת משחק">
+        <div class="selector-card">
+          <h1>בחירת משחק למדריכות</h1>
+          <p>בחרו עם איזה משחק להתחיל. כל משחק שומר בחירות ומצב בנפרד.</p>
+          <div class="selector-actions">
+            <button class="selector-btn" data-game="group1">התחלת משחק קבוצה 1</button>
+            <button class="selector-btn" data-game="group2">התחלת משחק קבוצה 2</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="game-screen" class="screen game-screen" aria-label="מסך משחק">
+        <header class="topbar">
+          <div>
+            <h2 id="game-title">משחק קבוצה 1</h2>
+            <p id="mode-label" class="mode-label">מצב עיון</p>
+          </div>
+          <div class="topbar-actions">
+            <button id="back-to-selector" class="secondary">חזרה לבחירת משחק</button>
+            <button id="toggle-mode" class="primary">התחל בחירה</button>
+          </div>
+        </header>
+
+        <section class="controls">
+          <div class="control-group full-width">
+            <label for="search-input">חיפוש</label>
+            <input id="search-input" type="text" placeholder="חיפוש בכל הטקסטים של הכרטיס" />
+          </div>
+
+          <div class="control-group">
+            <label for="family-filter">סינון לפי משפחה</label>
+            <select id="family-filter"></select>
+          </div>
+
+          <div class="control-group">
+            <label for="domain-filter">סינון לפי תחום</label>
+            <select id="domain-filter"></select>
+          </div>
+
+          <div class="control-group">
+            <label for="view-mode">תצוגה</label>
+            <select id="view-mode">
+              <option value="front">צד קדמי</option>
+              <option value="back">צד אחורי</option>
+              <option value="full">תצוגה מלאה</option>
+            </select>
+          </div>
+
+          <div class="control-group chips">
+            <button id="show-all" class="chip-btn active">כל הקלפים</button>
+            <button id="show-unselected" class="chip-btn">רק לא נבחרו</button>
+            <button id="show-selected" class="chip-btn">רק נבחרו</button>
+          </div>
+
+          <div class="control-group row-actions full-width">
+            <button id="clear-filters" class="secondary">נקה סינונים</button>
+            <button id="reset-selections" class="danger">איפוס בחירות</button>
+          </div>
+        </section>
+
+        <section class="stats" aria-live="polite">
+          <div class="stat-box">סה״כ במשחק: <strong id="total-count">0</strong></div>
+          <div class="stat-box">נבחרו: <strong id="selected-count">0</strong></div>
+          <div class="stat-box">נותרו לבחירה: <strong id="remaining-count">0</strong></div>
+          <div class="stat-box">מוצגים כרגע: <strong id="visible-count">0</strong></div>
+        </section>
+
+        <section id="cards-grid" class="cards-grid" aria-label="גריד קלפים"></section>
+      </section>
+    </main>
+
+    <dialog id="confirm-dialog">
+      <form method="dialog" class="dialog-content">
+        <p>האם לבחור את הקלף הזה?</p>
+        <menu>
+          <button value="cancel" class="secondary">ביטול</button>
+          <button value="confirm" class="primary">אישור</button>
+        </menu>
+      </form>
+    </dialog>
+
+    <dialog id="card-modal" class="card-modal">
+      <div class="modal-content">
+        <button id="close-modal" class="secondary close-modal">סגירה</button>
+        <div id="modal-body"></div>
+      </div>
+    </dialog>
+
+    <script src="app.js"></script>
+  </body>
+</html>
