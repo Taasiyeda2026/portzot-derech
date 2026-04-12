@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>דף פעילות 1 – הגדרת פרסונה</title>
+  <title>PERSONA – דף פעילות</title>
 
   <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@600;700&family=Assistant:wght@400;600&display=swap" rel="stylesheet">
+  https://fonts.googleapis.com/css2?family=Rubik:wght@600;700&family=Assistant:wght@400;600&display=swap
 
   <!-- PDF libs -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js
+  https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js
 
   <style>
     body {
@@ -131,14 +131,21 @@
 
 <body>
 <main class="container">
-  <h1>דף פעילות 1 – הגדרת פרסונה</h1>
+  <h1>PERSONA – דף פעילות</h1>
 
-  <!-- חלק א -->
+  <!-- שמות התלמידות -->
+  <div class="question-block" data-question="שמות התלמידות"
+       style="background:#fff0f5;padding:15px;border-radius:10px;">
+    <label>שמות התלמידות / חברות הקבוצה:</label>
+    <input type="text" id="studentNames"
+           placeholder="לדוגמה: נועה, מאיה, שירה">
+  </div>
+
   <h2>חלק א’ – מי הפרסונה?</h2>
 
   <div class="question-block" data-question="מי קהל היעד הכללי של הכרטיס?">
     <label>מי קהל היעד הכללי של הכרטיס?</label>
-    <input type="text" placeholder="כתבו כאן">
+    <input type="text">
   </div>
 
   <div class="question-block" data-question="מי במיוחד בתוך קהל היעד הכי מושפעת מהבעיה?">
@@ -146,42 +153,17 @@
     <div class="checkbox-list">
       <label><input type="checkbox" value="מי שחווה את המצב לעיתים קרובות"> מי שחווה את המצב לעיתים קרובות</label>
       <label><input type="checkbox" value="מי שפחות בטוחה בעצמה"> מי שפחות בטוחה בעצמה</label>
-      <label><input type="checkbox" value="מי שאין לה הרבה תמיכה"> מי שאין לה הרבה תמיכה</label>
       <label><input type="checkbox" value="מי שפועלת תחת לחץ זמן"> מי שפועלת תחת לחץ זמן</label>
       <div class="inline-other">
-        <span>אחר:</span>
-        <input type="text">
+        <span>אחר:</span><input type="text">
       </div>
     </div>
   </div>
 
-  <!-- חלק ב -->
-  <h2>חלק ב’ – באיזה מצב היא פוגשת את הבעיה?</h2>
-
-  <div class="question-block" data-question="מתי הבעיה מופיעה בדרך כלל?">
-    <label>מתי הבעיה מופיעה בדרך כלל?</label>
-    <div class="checkbox-list">
-      <label><input type="checkbox" value="בבוקר"> בבוקר</label>
-      <label><input type="checkbox" value="במהלך יום הלימודים"> במהלך יום הלימודים</label>
-      <label><input type="checkbox" value="בערב"> בערב</label>
-      <div class="inline-other">
-        <span>אחר:</span>
-        <input type="text">
-      </div>
-    </div>
-  </div>
-
-  <div class="question-block" data-question="מה הפרסונה מנסה לעשות באותו רגע?">
-    <label>מה הפרסונה מנסה לעשות באותו רגע?</label>
-    <textarea></textarea>
-  </div>
-
-  <!-- חלק ה – משפט סיכום -->
   <h2>חלק ה’ – שורת סיכום</h2>
 
   <div class="question-block" data-question="משפט סיכום הפרסונה">
     <p><strong>כתבו את הפרסונה במשפט אחד:</strong></p>
-
     <div class="summary-box">
       <input class="sentence-part" type="text" placeholder="מי הפרסונה" style="width:140px;">
       מנסה ל
@@ -191,36 +173,27 @@
       ולכן היא זקוקה ל
       <input class="sentence-part" type="text" placeholder="מה היא צריכה" style="width:180px;">.
     </div>
-
-    <div id="sentencePreview" class="preview">
-      כאן יופיע המשפט השלם…
-    </div>
+    <div id="sentencePreview" class="preview">כאן יופיע המשפט השלם…</div>
   </div>
 
-  <!-- כפתור יחיד -->
   <div class="actions">
     <button onclick="saveAsPDF()">📄 שמירת PDF</button>
   </div>
 </main>
 
 <script>
-  // חיבור משפט הסיכום
+  /* משפט סיכום חי */
   const parts = document.querySelectorAll('.sentence-part');
   const preview = document.getElementById('sentencePreview');
-
-  function updateSentence() {
-    const v = [...parts].map(p => p.value.trim() || '____');
+  parts.forEach(p => p.addEventListener('input', () => {
+    const v = [...parts].map(x => x.value.trim() || '____');
     preview.textContent =
       `${v[0]} מנסה ל${v[1]}, אבל מתקשה כי${v[2]}, ולכן היא זקוקה ל${v[3]}.`;
-  }
+  }));
 
-  parts.forEach(p => p.addEventListener('input', updateSentence));
-
-  // איסוף רק תשובות שנענו
   function collectAnsweredQuestions() {
     const blocks = document.querySelectorAll('.question-block');
     const res = [];
-
     blocks.forEach(b => {
       const q = b.dataset.question;
       let answers = [];
@@ -229,17 +202,27 @@
         .forEach(cb => answers.push(cb.value));
 
       b.querySelectorAll('input[type=text], textarea')
-        .forEach(f => {
-          if (f.value.trim()) answers.push(f.value.trim());
-        });
+        .forEach(f => f.value.trim() && answers.push(f.value.trim()));
 
       if (answers.length) res.push({ q, answers });
     });
-
     return res;
   }
 
-  // יצירת PDF
+  function buildFileName() {
+    const names = document.getElementById('studentNames').value;
+    if (!names.trim()) return 'PERSONA.pdf';
+
+    const initials = names
+      .split(',')
+      .map(n => n.trim()[0])
+      .filter(Boolean)
+      .join('')
+      .toUpperCase();
+
+    return `PERSONA_${initials}.pdf`;
+  }
+
   async function saveAsPDF() {
     const data = collectAnsweredQuestions();
     if (!data.length) {
@@ -249,19 +232,17 @@
 
     const pdfDiv = document.createElement('div');
     pdfDiv.style.direction = 'rtl';
-    pdfDiv.style.fontFamily = 'Assistant, Arial, sans-serif';
+    pdfDiv.style.fontFamily = 'Assistant, Arial';
     pdfDiv.style.padding = '30px';
     pdfDiv.style.width = '800px';
     pdfDiv.style.background = 'white';
 
-    pdfDiv.innerHTML = `<h1 style="color:#e91e63;">דף פעילות – הגדרת פרסונה</h1>`;
+    pdfDiv.innerHTML = `<h1 style="color:#e91e63;">PERSONA – דף פעילות</h1>`;
 
     data.forEach(item => {
       pdfDiv.innerHTML += `
-        <h3 style="color:#00a7b5;margin-top:25px;">${item.q}</h3>
-        <ul>
-          ${item.answers.map(a => `<li>${a}</li>`).join('')}
-        </ul>
+        <h3 style="color:#00a7b5;margin-top:20px;">${item.q}</h3>
+        <ul>${item.answers.map(a => `<li>${a}</li>`).join('')}</ul>
       `;
     });
 
@@ -270,12 +251,12 @@
     const canvas = await html2canvas(pdfDiv, { scale: 2 });
     const img = canvas.toDataURL('image/png');
     const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF('p', 'mm', 'a4');
 
+    const pdf = new jsPDF('p', 'mm', 'a4');
     const w = 210;
     const h = canvas.height * w / canvas.width;
     pdf.addImage(img, 'PNG', 0, 0, w, h);
-    pdf.save('worksheet-persona.pdf');
+    pdf.save(buildFileName());
 
     document.body.removeChild(pdfDiv);
   }
