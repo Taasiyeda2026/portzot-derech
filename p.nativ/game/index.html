@@ -587,7 +587,7 @@ const FAM_COLORS = {
   L:"#C9879C",N:"#F0C9A0",R:"#A8C8E0"
 };
 
-const API = "https://script.google.com/macros/s/AKfycbzM7Ap-anspGxz7Gub6SLdyCIMJtaVcOM7JD3IHRz-QGN8JvoM4T1n9xmkmDknA_aUf/exec";
+const API = "https://script.google.com/macros/s/AKfycbxzdxCEaYl5jFWhPWPHQfsnpkjFMNU1AWGiAUvIf7H3Z26s85QL9BT3TkWYwYThS7p6/exec";
 
 // Init fam pips
 function initPips(){
@@ -875,7 +875,8 @@ function buildCard(card,chosen){
       </div>
     </div>`;
 
-  if(!isChosen){
+  // קלף שנבחר על ידי השחקנית הנוכחית — לחיץ לביטול; קלף של אחרת — לא לחיץ
+  if(!isChosen || myChosenCode===card.code){
     el.addEventListener('click',()=>openCardModal(card));
   }
 
@@ -909,7 +910,11 @@ function openCardModal(card){
   let footHtml;
   if(isChosen && myChosenCode===card.code){
     // זה הקלף שנבחר על ידי השחקנית הזו
-    footHtml=`<div class="chosen-mark" style="font-size:13px;padding:8px 0;color:#a8e6cf">✓ זה הקלף שלך!</div>`;
+    const canCancel = gameState && gameState.status === 'ACTIVE';
+    footHtml=`<div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:8px 0">
+      <div class="chosen-mark" style="font-size:13px;color:#a8e6cf">✓ זה הקלף שלך!</div>
+      ${canCancel ? `<button class="choose-btn" style="font-size:11px;padding:8px 14px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3)" onclick="cancelChoice('${card.code}')">ביטול בחירה</button>` : ''}
+    </div>`;
   } else if(myChosenCode){
     // השחקנית כבר בחרה קלף אחר
     footHtml=`<div class="chosen-mark" style="font-size:11px;padding:8px 0;color:rgba(255,255,255,.5)">בחרת כבר את קלף ${myChosenCode}<br>לא ניתן לבחור שנית</div>`;
@@ -983,7 +988,11 @@ async function closeWin(cancel){
   document.getElementById('win-ov').classList.remove('show');
   if(!cancel||!_pendingCancel)return;
   const code=_pendingCancel;_pendingCancel=null;
-  // ביטול הבחירה — שחקנית תוכל לבחור שנית
+  await cancelChoice(code);
+}
+
+async function cancelChoice(code){
+  closeCardModal();
   myChosenCode=null;
   sessionStorage.removeItem('chosen_g'+currentGroup);
   gameState.chosen=(gameState.chosen||[]).filter(c=>c!==code);
@@ -991,7 +1000,10 @@ async function closeWin(cancel){
   try{
     const res=await apiCall({action:'unchoose',group:currentGroup,code,_method:'POST'});
     gameState=res;renderGame();
-  }catch(e){toast('שגיאה בביטול: '+e.message);}
+    toast('הבחירה בוטלה — תוכלי לבחור קלף אחר');
+  }catch(e){
+    toast('שגיאה בביטול: '+e.message);
+  }
 }
 
 function showPlayerResults(){
