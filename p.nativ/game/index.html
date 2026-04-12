@@ -116,7 +116,7 @@ body::before{content:'';position:fixed;width:300px;height:300px;border-radius:50
 .fc.flipped .fc-inner,.fc.taken .fc-inner{transform:rotateY(180deg)}
 .fc-face{position:absolute;inset:0;border-radius:14px;
   backface-visibility:hidden;-webkit-backface-visibility:hidden;
-  overflow:clip}
+  overflow:hidden}
 
 /* FRONT */
 .fc-front{
@@ -170,7 +170,7 @@ body::before{content:'';position:fixed;width:300px;height:300px;border-radius:50
   box-shadow:0 8px 28px rgba(61,37,53,.35);
   transform:rotateY(180deg);
   display:flex;flex-direction:column}
-.fc-back-stripe{height:6px;flex-shrink:0;border-radius:14px 14px 0 0;opacity:.85}
+.fc-back-stripe{height:10px;flex-shrink:0;border-radius:14px 14px 0 0;opacity:.85;cursor:pointer}
 .fc-back-scroll{flex:1;overflow-y:scroll;-webkit-overflow-scrolling:touch;padding:10px 12px 5px;
   scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.15) transparent}
 .fc-back-scroll::-webkit-scrollbar{width:2px}
@@ -830,14 +830,16 @@ function buildCard(card,chosen){
     </div>
   </div>`;
 
-  // Flip on tap (not on button)
-  el.querySelector('.fc-inner').addEventListener('click',e=>{
-    if(e.target.classList.contains('choose-btn'))return;
+  // Flip on tap — only on front; back: allow scroll freely, flip back only via header
+  el.querySelector('.fc-front').addEventListener('click',e=>{
     if(isChosen)return;
-    if(localFlipped.has(card.code)) localFlipped.delete(card.code);
-    else localFlipped.add(card.code);
-    // Just toggle class directly — no full re-render
-    el.classList.toggle('flipped',localFlipped.has(card.code));
+    localFlipped.add(card.code);
+    el.classList.add('flipped');
+  });
+  el.querySelector('.fc-back-stripe').addEventListener('click',e=>{
+    if(isChosen)return;
+    localFlipped.delete(card.code);
+    el.classList.remove('flipped');
   });
 
   const btn=el.querySelector('.choose-btn');
