@@ -17,7 +17,7 @@
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden}
 body{font-family:var(--fb);background:var(--cream);color:var(--ink);
-  display:flex;flex-direction:column;height:100dvh;overflow:hidden}
+  display:flex;flex-direction:column;align-items:center;height:100dvh;overflow:hidden}
 
 /* BG blobs */
 body::before{content:'';position:fixed;width:300px;height:300px;border-radius:50%;
@@ -25,7 +25,8 @@ body::before{content:'';position:fixed;width:300px;height:300px;border-radius:50
   top:-80px;right:-60px;filter:blur(60px);opacity:.35;pointer-events:none;z-index:0}
 
 /* SCREENS */
-.screen{display:none;flex-direction:column;height:100dvh;overflow:hidden;position:relative;z-index:1}
+.screen{display:none;flex-direction:column;height:100dvh;overflow:hidden;position:relative;z-index:1;
+  width:100%;max-width:480px}
 .screen.active{display:flex}
 
 /* TOP BAR */
@@ -193,7 +194,8 @@ body::before{content:'';position:fixed;width:300px;height:300px;border-radius:50
 .chosen-mark{text-align:center;font-size:9px;color:var(--sage);font-weight:800;padding:3px 0;letter-spacing:.04em}
 
 /* BOTTOM BAR */
-.bot-bar{position:fixed;bottom:0;left:0;right:0;z-index:10;
+.bot-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+  width:100%;max-width:480px;z-index:10;
   padding:7px 14px 12px;
   background:linear-gradient(to top,var(--cream) 60%,transparent);
   display:flex;justify-content:flex-start;gap:8px}
