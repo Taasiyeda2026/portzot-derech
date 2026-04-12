@@ -78,7 +78,7 @@
   }
 
   .container {
-    max-width: 1420px;
+    max-width: 1400px;
     margin: auto;
     padding: 28px 24px 40px;
   }
@@ -108,31 +108,23 @@
   }
 
   .goals-stage {
-    --slot-w: 196px;
-    --slot-h: 74px;
-    --gap: 20px;
-    --center-size: 268px;
-    width: min(1320px, 100%);
+    width: fit-content;
+    max-width: 100%;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    grid-template-rows: repeat(6, auto);
-    grid-template-areas:
-      ". . g1 . ."
-      ". g2 . g3 ."
-      "g4 g5 center g10 g11"
-      "g6 g7 center g12 g13"
-      "g8 g9 center g14 g15"
-      ". g16 . g17 .";
-    justify-items: center;
+    grid-template-columns: 196px 196px 268px 196px 196px;
+    grid-template-rows: repeat(6, 74px);
+    column-gap: 28px;
+    row-gap: 18px;
     align-items: center;
-    gap: var(--gap);
+    justify-items: center;
   }
 
   .hero-image {
-    grid-area: center;
-    width: var(--center-size);
-    height: var(--center-size);
+    grid-column: 3;
+    grid-row: 3 / span 3;
+    width: 268px;
+    height: 268px;
     border-radius: 50%;
     overflow: hidden;
     display: flex;
@@ -142,7 +134,6 @@
     box-shadow: 0 14px 34px rgba(107, 45, 132, 0.18);
     border: 4px solid rgba(255, 255, 255, 0.96);
     padding: 16px;
-    z-index: 1;
   }
 
   .hero-image img {
@@ -153,16 +144,9 @@
     display: block;
   }
 
-  .goal-slot {
-    width: var(--slot-w);
-    z-index: 2;
-    display: flex;
-    justify-content: center;
-  }
-
   .goal-btn {
-    width: var(--slot-w);
-    height: var(--slot-h);
+    width: 196px;
+    height: 74px;
     background: linear-gradient(180deg, #ffffff 0%, #f7f0fa 100%);
     border: 1px solid rgba(214, 190, 225, 0.95);
     border-radius: 16px;
@@ -170,8 +154,8 @@
     cursor: pointer;
     text-align: center;
     font-weight: 700;
-    font-size: 0.83rem;
-    line-height: 1.25;
+    font-size: 0.82rem;
+    line-height: 1.22;
     color: #6b2d84;
     text-shadow: 0 1px 0 rgba(255,255,255,0.85);
     box-shadow: 0 10px 22px rgba(107,45,132,0.09), inset 0 1px 0 rgba(255,255,255,0.9);
@@ -188,28 +172,32 @@
     border-color: rgba(176, 128, 198, 0.95);
   }
 
-  .g1 { grid-area: g1; }
-  .g2 { grid-area: g2; }
-  .g3 { grid-area: g3; }
-  .g4 { grid-area: g4; }
-  .g5 { grid-area: g5; }
-  .g6 { grid-area: g6; }
-  .g7 { grid-area: g7; }
-  .g8 { grid-area: g8; }
-  .g9 { grid-area: g9; }
-  .g10 { grid-area: g10; }
-  .g11 { grid-area: g11; }
-  .g12 { grid-area: g12; }
-  .g13 { grid-area: g13; }
-  .g14 { grid-area: g14; }
-  .g15 { grid-area: g15; }
-  .g16 { grid-area: g16; }
-  .g17 { grid-area: g17; }
+  /* מיקומי הקלפים */
+  .g1  { grid-column: 3; grid-row: 1; }
+  .g2  { grid-column: 2; grid-row: 2; }
+  .g3  { grid-column: 4; grid-row: 2; }
+
+  .g4  { grid-column: 1; grid-row: 3; }
+  .g5  { grid-column: 2; grid-row: 3; }
+  .g6  { grid-column: 1; grid-row: 4; }
+  .g7  { grid-column: 2; grid-row: 4; }
+  .g8  { grid-column: 1; grid-row: 5; }
+  .g9  { grid-column: 2; grid-row: 5; }
+
+  .g10 { grid-column: 4; grid-row: 3; }
+  .g11 { grid-column: 5; grid-row: 3; }
+  .g12 { grid-column: 4; grid-row: 4; }
+  .g13 { grid-column: 5; grid-row: 4; }
+  .g14 { grid-column: 4; grid-row: 5; }
+  .g15 { grid-column: 5; grid-row: 5; }
+
+  .g16 { grid-column: 2; grid-row: 6; }
+  .g17 { grid-column: 4; grid-row: 6; }
 
   .bottom-action {
     display: flex;
     justify-content: center;
-    margin-top: 18px;
+    margin-top: 22px;
   }
 
   .next-btn {
@@ -283,25 +271,22 @@
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       grid-template-rows: auto;
-      grid-template-areas: none;
       gap: 12px;
       justify-items: center;
     }
 
     .hero-image {
       grid-column: 1 / -1;
-      margin: 0 auto 6px;
+      grid-row: auto;
       width: 220px;
       height: 220px;
+      margin-bottom: 6px;
     }
 
-    .goal-slot {
-      width: 100%;
-      grid-area: auto !important;
-    }
-
-    .bottom-action {
-      margin-top: 22px;
+    .g1, .g2, .g3, .g4, .g5, .g6, .g7, .g8, .g9,
+    .g10, .g11, .g12, .g13, .g14, .g15, .g16, .g17 {
+      grid-column: auto;
+      grid-row: auto;
     }
   }
 
@@ -335,7 +320,7 @@
     .goal-btn,
     .next-btn {
       width: 100%;
-      max-width: 360px;
+      max-width: 196px;
     }
   }
 </style>
@@ -361,30 +346,30 @@
   </p>
 
   <section class="goals-stage">
+    <button class="goal-btn g1" onclick="openModal(1)">יעד 1: מיגור העוני</button>
+    <button class="goal-btn g2" onclick="openModal(2)">יעד 2: אפס רעב / אי ביטחון תזונתי</button>
+    <button class="goal-btn g3" onclick="openModal(3)">יעד 3: בריאות טובה ורווחה אנושית</button>
+
+    <button class="goal-btn g4" onclick="openModal(4)">יעד 4: חינוך איכותי</button>
+    <button class="goal-btn g5" onclick="openModal(5)">יעד 5: שוויון מגדרי</button>
+    <button class="goal-btn g6" onclick="openModal(6)">יעד 6: מים נקיים ותברואה</button>
+    <button class="goal-btn g7" onclick="openModal(7)">יעד 7: אנרגיה זמינה ונקייה</button>
+    <button class="goal-btn g8" onclick="openModal(8)">יעד 8: עבודה הוגנת וצמיחה כלכלית</button>
+    <button class="goal-btn g9" onclick="openModal(9)">יעד 9: תעשייה, תשתיות וחדשנות</button>
+
     <div class="hero-image">
       <img src="../icon/sdg.png" alt="יעדי הפיתוח של האו״ם">
     </div>
 
-    <div class="goal-slot g1"><button class="goal-btn" onclick="openModal(1)">יעד 1: מיגור העוני</button></div>
-    <div class="goal-slot g2"><button class="goal-btn" onclick="openModal(2)">יעד 2: אפס רעב / אי ביטחון תזונתי</button></div>
-    <div class="goal-slot g3"><button class="goal-btn" onclick="openModal(3)">יעד 3: בריאות טובה ורווחה אנושית</button></div>
+    <button class="goal-btn g10" onclick="openModal(10)">יעד 10: צמצום אי השוויון</button>
+    <button class="goal-btn g11" onclick="openModal(11)">יעד 11: ערים וקהילות מקיימות</button>
+    <button class="goal-btn g12" onclick="openModal(12)">יעד 12: צריכה וייצור אחראים</button>
+    <button class="goal-btn g13" onclick="openModal(13)">יעד 13: שינויי אקלים</button>
+    <button class="goal-btn g14" onclick="openModal(14)">יעד 14: שימור המשאבים הימיים – חיים מתחת למים</button>
+    <button class="goal-btn g15" onclick="openModal(15)">יעד 15: חיים על פני האדמה</button>
 
-    <div class="goal-slot g4"><button class="goal-btn" onclick="openModal(4)">יעד 4: חינוך איכותי</button></div>
-    <div class="goal-slot g5"><button class="goal-btn" onclick="openModal(5)">יעד 5: שוויון מגדרי</button></div>
-    <div class="goal-slot g6"><button class="goal-btn" onclick="openModal(6)">יעד 6: מים נקיים ותברואה</button></div>
-    <div class="goal-slot g7"><button class="goal-btn" onclick="openModal(7)">יעד 7: אנרגיה זמינה ונקייה</button></div>
-    <div class="goal-slot g8"><button class="goal-btn" onclick="openModal(8)">יעד 8: עבודה הוגנת וצמיחה כלכלית</button></div>
-    <div class="goal-slot g9"><button class="goal-btn" onclick="openModal(9)">יעד 9: תעשייה, תשתיות וחדשנות</button></div>
-
-    <div class="goal-slot g10"><button class="goal-btn" onclick="openModal(10)">יעד 10: צמצום אי השוויון</button></div>
-    <div class="goal-slot g11"><button class="goal-btn" onclick="openModal(11)">יעד 11: ערים וקהילות מקיימות</button></div>
-    <div class="goal-slot g12"><button class="goal-btn" onclick="openModal(12)">יעד 12: צריכה וייצור אחראים</button></div>
-    <div class="goal-slot g13"><button class="goal-btn" onclick="openModal(13)">יעד 13: שינויי אקלים</button></div>
-    <div class="goal-slot g14"><button class="goal-btn" onclick="openModal(14)">יעד 14: שימור המשאבים הימיים – חיים מתחת למים</button></div>
-    <div class="goal-slot g15"><button class="goal-btn" onclick="openModal(15)">יעד 15: חיים על פני האדמה</button></div>
-
-    <div class="goal-slot g16"><button class="goal-btn" onclick="openModal(16)">יעד 16: שלום, צדק וחוזק המוסדות</button></div>
-    <div class="goal-slot g17"><button class="goal-btn" onclick="openModal(17)">יעד 17: שותפות להשגת היעדים</button></div>
+    <button class="goal-btn g16" onclick="openModal(16)">יעד 16: שלום, צדק וחוזק המוסדות</button>
+    <button class="goal-btn g17" onclick="openModal(17)">יעד 17: שותפות להשגת היעדים</button>
   </section>
 
   <div class="bottom-action">
@@ -579,11 +564,13 @@
     document.getElementById("modalTitle").innerText = goalsContent[id].title;
     const contentDiv = document.getElementById("modalContent");
     contentDiv.innerHTML = "";
+
     goalsContent[id].text.forEach(sentence => {
       const p = document.createElement("p");
       p.innerText = sentence;
       contentDiv.appendChild(p);
     });
+
     overlay.style.display = "flex";
   }
 
@@ -591,7 +578,7 @@
     document.getElementById("modalOverlay").style.display = "none";
   }
 
-  document.getElementById("modalOverlay").addEventListener("click", function(e){
+  document.getElementById("modalOverlay").addEventListener("click", function(e) {
     if (e.target === this) closeModal();
   });
 </script>
