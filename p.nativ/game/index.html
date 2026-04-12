@@ -130,10 +130,6 @@ body::before{content:'';position:fixed;width:300px;height:300px;border-radius:50
 .fc:not(.taken) .fc-stripe{animation:shimmer 2.8s linear infinite}
 .fc.taken .fc-stripe{background:#D4C8D0!important;animation:none}
 
-/* decorative pattern layer */
-.fc-pattern{position:absolute;inset:0;border-radius:14px;opacity:.04;
-  background-image:radial-gradient(circle,var(--deep) 1px,transparent 1px);
-  background-size:8px 8px;pointer-events:none}
 
 .fc-front-body{flex:1;display:flex;flex-direction:column;padding:10px 11px 5px;gap:5px;
   min-height:0;position:relative;z-index:1;align-items:center;text-align:center;justify-content:center}
@@ -815,7 +811,6 @@ function buildCard(card,chosen){
   el.innerHTML=`
     <div class="fc-front">
       <div class="fc-stripe" style="background-image:linear-gradient(90deg,${col} 0%,rgba(255,255,255,.55) 50%,${col} 100%);background-color:${col}"></div>
-      <div class="fc-pattern"></div>
       <div class="fc-front-body">
         <span class="fc-fam-badge">${card.family}</span>
         <div class="fc-name">${card.name}</div>
