@@ -585,6 +585,7 @@ initPips();
 let mode='player', currentGroup=1, numGirls=6, hostGroup=1;
 let gameState=null, pollTimer=null, gameCards=[];
 let _choosing=false, _pendingCancel=null;
+let myChosenCode=null; // קוד הקלף שהשחקנית הנוכחית בחרה
 
 // URL init
 (function(){
@@ -716,6 +717,8 @@ async function endGame(){
 
 // PLAYER POLL
 function startPlayerPoll(){
+  // טעינת הקלף שנבחר בעבר (במקרה של רענון דף)
+  myChosenCode=sessionStorage.getItem('chosen_g'+currentGroup)||null;
   document.getElementById('wait-badge').textContent='קבוצה '+currentGroup;
   goTo('s-waiting');
   clearInterval(pollTimer);
@@ -857,9 +860,20 @@ function openCardModal(card){
 
   document.getElementById('cm-scroll').scrollTop=0;
 
-  document.getElementById('cm-foot').innerHTML=isChosen
-    ?`<div class="chosen-mark" style="font-size:12px;padding:6px 0">✓ הקלף כבר נבחר</div>`
-    :`<button class="choose-btn" style="font-size:12px;padding:11px 14px" onclick="chooseFromModal('${card.code}')">✦ בחרי קלף זה</button>`;
+  let footHtml;
+  if(isChosen && myChosenCode===card.code){
+    // זה הקלף שנבחר על ידי השחקנית הזו
+    footHtml=`<div class="chosen-mark" style="font-size:13px;padding:8px 0;color:#a8e6cf">✓ זה הקלף שלך!</div>`;
+  } else if(myChosenCode){
+    // השחקנית כבר בחרה קלף אחר
+    footHtml=`<div class="chosen-mark" style="font-size:11px;padding:8px 0;color:rgba(255,255,255,.5)">בחרת כבר את קלף ${myChosenCode}<br>לא ניתן לבחור שנית</div>`;
+  } else if(isChosen){
+    // קלף שנבחר על ידי מישהי אחרת
+    footHtml=`<div class="chosen-mark" style="font-size:11px;padding:8px 0;color:rgba(255,255,255,.4)">✗ קלף זה כבר נלקח</div>`;
+  } else {
+    footHtml=`<button class="choose-btn" style="font-size:12px;padding:11px 14px" onclick="chooseFromModal('${card.code}')">✦ בחרי קלף זה</button>`;
+  }
+  document.getElementById('cm-foot').innerHTML=footHtml;
 
   document.getElementById('cm-ov').classList.add('show');
 }
@@ -878,6 +892,11 @@ function chooseFromModal(code){
 // CHOOSE
 async function chooseCard(code){
   if(_choosing)return;
+  // מניעת בחירה כפולה — שחקנית כבר בחרה קלף בסשן הזה
+  if(myChosenCode){
+    toast('כבר בחרת את קלף '+myChosenCode+' — לא ניתן לבחור שנית');
+    return;
+  }
   if((gameState.chosen||[]).includes(code))return;
   _choosing=true;
   if(!gameState.chosen)gameState.chosen=[];
@@ -887,6 +906,9 @@ async function chooseCard(code){
     const res=await apiCall({action:'choose',group:currentGroup,code,_method:'POST'});
     gameState=res;renderGame();
     if(res.status==='DONE')clearInterval(pollTimer);
+    // שמירת הבחירה — תישמר גם אחרי רענון דף
+    myChosenCode=code;
+    sessionStorage.setItem('chosen_g'+currentGroup,code);
     const card=gameCards.find(c=>c.code===code);
     if(card)showWin(card);
   }catch(e){
@@ -915,6 +937,9 @@ async function closeWin(cancel){
   document.getElementById('win-ov').classList.remove('show');
   if(!cancel||!_pendingCancel)return;
   const code=_pendingCancel;_pendingCancel=null;
+  // ביטול הבחירה — שחקנית תוכל לבחור שנית
+  myChosenCode=null;
+  sessionStorage.removeItem('chosen_g'+currentGroup);
   gameState.chosen=(gameState.chosen||[]).filter(c=>c!==code);
   renderGame();
   try{
