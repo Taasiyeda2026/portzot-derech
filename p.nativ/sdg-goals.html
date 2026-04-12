@@ -5,88 +5,207 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>פורצות דרך ו־17 יעדי הפיתוח של האו״ם</title>
 <style>
+  * {
+    box-sizing: border-box;
+  }
+
   body {
     font-family: "Arial", "Heebo", sans-serif;
     margin: 0;
-    background: #faf7fb;
+    background: linear-gradient(180deg, #fcf9fd 0%, #f7f1fa 100%);
     color: #2b2b2b;
     line-height: 1.7;
   }
+
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(180, 152, 196, 0.22);
+    box-shadow: 0 8px 24px rgba(107, 45, 132, 0.08);
+  }
+
+  .header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .header-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: #6b2d84;
+    font-weight: 700;
+  }
+
+  .header-logo img {
+    width: 42px;
+    height: 42px;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 6px 14px rgba(107, 45, 132, 0.16);
+    border: 1px solid rgba(227, 214, 234, 0.8);
+    background: #fff;
+  }
+
+  .home-link {
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 1.25rem;
+    background: linear-gradient(180deg, #ffffff 0%, #f4ebf8 100%);
+    color: #6b2d84;
+    border: 1px solid rgba(227, 214, 234, 0.95);
+    border-radius: 14px;
+    box-shadow: 0 8px 18px rgba(107, 45, 132, 0.14);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .home-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(107, 45, 132, 0.18);
+  }
+
   .container {
     max-width: 1100px;
     margin: auto;
-    padding: 24px;
+    padding: 28px 24px 40px;
   }
-  h1 {
-    text-align: center;
-    color: #6b2d84;
-    margin-bottom: 12px;
-  }
+
   .intro {
     text-align: center;
-    max-width: 760px;
-    margin: 0 auto 32px;
-    font-size: 1.05rem;
+    max-width: 860px;
+    margin: 0 auto 28px;
+    font-size: 1.08rem;
+    color: #4f3b5f;
+    background: rgba(255, 255, 255, 0.72);
+    padding: 18px 22px;
+    border-radius: 20px;
+    border: 1px solid rgba(227, 214, 234, 0.95);
+    box-shadow: 0 12px 28px rgba(107, 45, 132, 0.08);
   }
+
   .hero-image {
     width: 220px;
     height: 220px;
     border-radius: 50%;
-    background: #ddd;
-    margin: 32px auto;
+    margin: 24px auto 32px;
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #666;
-    font-size: 0.95rem;
-  }
-  .goals {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 16px;
-    margin-top: 24px;
-  }
-  .goal-btn {
-    background: #ffffff;
-    border: 2px solid #e3d6ea;
-    border-radius: 14px;
-    padding: 18px;
-    cursor: pointer;
-    text-align: center;
-    font-weight: bold;
-    color: #6b2d84;
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  .goal-btn:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 6px 18px rgba(107,45,132,0.15);
+    background: #ddd;
+    box-shadow: 0 14px 34px rgba(107, 45, 132, 0.18);
+    border: 4px solid rgba(255, 255, 255, 0.92);
   }
 
-  /* Modal */
+  .hero-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .goals {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  .goal-btn {
+    min-height: 74px;
+    background: linear-gradient(180deg, #ffffff 0%, #f7f0fa 100%);
+    border: 1px solid rgba(214, 190, 225, 0.95);
+    border-radius: 16px;
+    padding: 12px 10px 8px;
+    cursor: pointer;
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+    line-height: 1.35;
+    color: #6b2d84;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.85);
+    box-shadow: 0 10px 22px rgba(107,45,132,0.09), inset 0 1px 0 rgba(255,255,255,0.9);
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    display: block;
+  }
+
+  .goal-btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 26px rgba(107,45,132,0.15), inset 0 1px 0 rgba(255,255,255,0.95);
+    border-color: rgba(176, 128, 198, 0.95);
+  }
+
+  .bottom-action {
+    display: flex;
+    justify-content: center;
+    margin-top: 34px;
+  }
+
+  .next-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 13px 24px;
+    text-decoration: none;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.98rem;
+    letter-spacing: 0.2px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #7b3696 0%, #c04aa6 100%);
+    box-shadow: 0 14px 28px rgba(127, 56, 151, 0.28);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .next-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 32px rgba(127, 56, 151, 0.34);
+  }
+
   .modal-overlay {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.6);
+    background: rgba(31, 16, 39, 0.56);
     justify-content: center;
     align-items: center;
     z-index: 999;
+    padding: 20px;
   }
+
   .modal {
     background: #fff;
-    max-width: 560px;
-    width: 90%;
-    border-radius: 16px;
+    max-width: 420px;
+    width: 100%;
+    border-radius: 20px;
     padding: 24px;
     position: relative;
+    box-shadow: 0 24px 50px rgba(30, 18, 40, 0.22);
   }
+
   .modal h2 {
     color: #6b2d84;
     margin-top: 0;
+    margin-bottom: 10px;
   }
+
   .modal p {
     margin: 8px 0;
   }
+
   .close-btn {
     position: absolute;
     top: 12px;
@@ -97,21 +216,62 @@
     cursor: pointer;
     color: #6b2d84;
   }
+
+  @media (max-width: 640px) {
+    .header-inner {
+      padding: 10px 16px;
+    }
+
+    .header-logo span {
+      display: none;
+    }
+
+    .container {
+      padding: 20px 16px 32px;
+    }
+
+    .intro {
+      font-size: 1rem;
+      padding: 16px 18px;
+    }
+
+    .hero-image {
+      width: 190px;
+      height: 190px;
+    }
+
+    .goals {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .goal-btn {
+      min-height: 70px;
+      font-size: 0.85rem;
+      padding: 10px 8px 7px;
+    }
+  }
 </style>
 </head>
 <body>
 
-<div class="container">
-  <h1>פורצות דרך יוצרות עתיד: 17 יעדי הפיתוח של האו״ם</h1>
+<header class="site-header">
+  <div class="header-inner">
+    <a class="header-logo" href="#" aria-label="לוגו העמוד">
+      <img src="icon/sdg.png" alt="לוגו">
+      <span>פורצות דרך</span>
+    </a>
 
+    <a class="home-link" href="enter.html" aria-label="חזרה לדף הבית" title="דף הבית">🏠</a>
+  </div>
+</header>
+
+<div class="container">
   <p class="intro">
-    עולם משתנה נבנה בידי מנהיגות שמחברות חזון עם עשייה.  
-    17 יעדי הפיתוח של האו״ם הם מצפן גלובלי – אבל גם כלי יומיומי עבור נשים מובילות,
-    יזמיות ומנהלות המבקשות להשפיע, לחדש וליצור שינוי חברתי עמוק ובר־קיימא.
+    עולם משתנה נבנה בידי מנהיגות שמחברת בין חזון לעשייה. 17 יעדי הפיתוח של האו״ם הם מסגרת לחשיבה ולעשייה ומשמשים נקודת פתיחה לזיהוי אתגרים, הבנת צרכים ופיתוח מיזמים שמבקשים ליצור שינוי.
   </p>
 
   <div class="hero-image">
-    כאן תופיע תמונה
+    <img src="icon/sdg.png" alt="יעדי הפיתוח של האו״ם">
   </div>
 
   <section class="goals">
@@ -133,6 +293,10 @@
     <button class="goal-btn" onclick="openModal(16)">יעד 16: שלום, צדק וחוזק המוסדות</button>
     <button class="goal-btn" onclick="openModal(17)">יעד 17: שותפות להשגת היעדים</button>
   </section>
+
+  <div class="bottom-action">
+    <a class="next-btn" href="domains.html">לבחירת תחום</a>
+  </div>
 </div>
 
 <div id="modalOverlay" class="modal-overlay" role="dialog" aria-modal="true">
