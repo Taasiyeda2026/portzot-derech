@@ -775,6 +775,7 @@ function beginWaiting(){
       if(s.status==='ACTIVE'||s.status==='DONE'){
         clearInterval(pollTimer);
         gameState=s;
+        window._shuffled=false; // תמיד בנה קלפים לפי התכנית החדשה מהשרת
         buildGameCards(currentGroup,s.plan);
         renderGame();
         if(s.status==='DONE') goTo('s-done');
