@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>דף פעילות 2 - שלב :3</title>
+  <title>שלב 3 – פותחות כיווני פתרון</title>
   <style>
-
     * { box-sizing: border-box; }
     body {
       margin: 0;
@@ -70,62 +69,65 @@
       transform: translateY(-2px);
       box-shadow: 0 12px 24px rgba(107,45,132,0.18);
     }
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    .header-actions { display: flex; align-items: center; gap: 10px; }
     .container {
-      max-width: 980px;
+      max-width: 940px;
       margin: 0 auto;
       padding: 28px 20px 40px;
     }
     .page-card {
-      background: rgba(255,255,255,0.88);
+      background: rgba(255,255,255,0.9);
       border: 1px solid rgba(227,214,234,0.95);
       border-radius: 24px;
       box-shadow: 0 16px 36px rgba(107,45,132,0.08);
       padding: 28px 22px;
     }
     h1 {
-      margin: 0 0 10px;
+      margin: 0 0 8px;
       text-align: center;
       color: #6b2d84;
       font-size: 1.95rem;
-      line-height: 1.3;
+      line-height: 1.25;
     }
-    .guide {
-      text-align: right;
-      margin: 0 0 24px;
-      color: #4d3e59;
-      font-size: 1.02rem;
-    }
+    .student-box,
+    .intro-box,
     .section {
-      margin-top: 24px;
+      margin-top: 22px;
       padding: 18px 16px;
       border-radius: 18px;
       background: #fff;
       border: 1px solid #eadff0;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.9);
     }
+    .student-box { margin-top: 0; background: #faf5fd; }
+    .intro-box { background: linear-gradient(180deg, #fffdfd 0%, #faf5ff 100%); }
+    .student-box h2,
+    .intro-box h2,
     .section h2 {
       margin: 0 0 14px;
       color: #6b2d84;
       font-size: 1.2rem;
     }
-    .question {
-      margin-bottom: 18px;
+    .intro-box p { margin: 0 0 8px; color: #4d3e59; }
+    .mini-steps {
+      margin: 10px 0 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 8px;
     }
-    .question:last-child {
-      margin-bottom: 0;
+    .mini-steps li {
+      background: #fff;
+      border: 1px solid #efe5f4;
+      border-radius: 12px;
+      padding: 10px 12px;
+      color: #4d3e59;
+      font-weight: 600;
     }
-    .q-title {
-      font-weight: 700;
-      margin-bottom: 8px;
-      color: #3f304b;
-    }
+    .question { margin-bottom: 18px; }
+    .question:last-child { margin-bottom: 0; }
+    .q-title { font-weight: 700; margin-bottom: 8px; color: #3f304b; }
     .note {
-      margin: 10px 0 14px;
+      margin: 0 0 14px;
       padding: 12px 14px;
       border-radius: 14px;
       background: #faf5fd;
@@ -142,18 +144,8 @@
       color: #2b2b2b;
       outline: none;
     }
-    textarea {
-      min-height: 86px;
-      resize: vertical;
-    }
-    .line-input {
-      min-height: 52px;
-    }
-    .options {
-      display: grid;
-      gap: 8px;
-      margin-top: 8px;
-    }
+    textarea { min-height: 74px; resize: vertical; }
+    .options { display: grid; gap: 8px; margin-top: 8px; }
     .options label {
       display: flex;
       align-items: center;
@@ -163,16 +155,52 @@
       background: #fcfaff;
       border: 1px solid #efe5f4;
     }
-    .tool-box {
-      margin-top: 16px;
-      padding: 14px;
-      border: 1px solid #eadff0;
-      border-radius: 16px;
-      background: #fcfbfe;
+    .inline-other {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 8px;
     }
-    .summary-box {
+    .inline-other input[type="text"] { flex: 1 1 220px; width: auto; }
+    .tool-grid, .direction-grid {
       display: grid;
-      gap: 14px;
+      gap: 16px;
+    }
+    .tool-box, .direction-box {
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px solid #eadcf3;
+      background: #fcfaff;
+    }
+    .builder-box {
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px solid #eadcf3;
+      background: #faf5fd;
+    }
+    .builder-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      line-height: 2;
+      color: #4d3e59;
+    }
+    .builder-input {
+      width: auto !important;
+      min-width: 130px;
+      flex: 1 1 170px;
+      display: inline-block;
+      background: #fff;
+    }
+    .builder-preview {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: #fff;
+      border: 1px dashed #d8c7e3;
+      color: #5b476b;
     }
     .footer-nav {
       display: flex;
@@ -195,33 +223,21 @@
       .site-header, .footer-nav { display: none !important; }
       body { background: #fff; }
       .container { max-width: 100%; padding: 0; }
-      .page-card {
-        box-shadow: none;
-        border: none;
-        border-radius: 0;
-        padding: 0;
-      }
-      .section {
-        break-inside: avoid;
-        box-shadow: none;
-      }
-      input, textarea {
-        border: 1px solid #bbb;
-      }
+      .page-card { box-shadow: none; border: none; border-radius: 0; padding: 0; }
+      .section, .student-box, .intro-box { break-inside: avoid; }
+      input, textarea { border: 1px solid #bbb; }
     }
-
   </style>
 </head>
 <body>
-
   <header class="site-header">
     <div class="header-inner">
-      <a class="header-logo" href="enter.html" aria-label="לוגו העמוד">
-        <img src="../icon/logo.png" alt="לוגו פורצות דרך">
+      <a class="header-logo" href="#" aria-label="לוגו העמוד">
+        <img src="../icon/logo.png" alt="לוגו">
         <span>פורצות דרך</span>
       </a>
       <div class="header-actions">
-        <button class="print-btn" type="button" onclick="window.print()">PDF / הדפסה</button>
+        <button class="print-btn" type="button" onclick="printAnsweredOnly()">PDF / הדפסה</button>
         <a class="home-link" href="enter.html" aria-label="חזרה לדף הבית" title="דף הבית">🏠</a>
       </div>
     </div>
@@ -229,194 +245,148 @@
 
   <main class="container">
     <div class="page-card">
-      <h1>דף פעילות 2 - שלב :3</h1>
-      <p class="guide"><strong>הנחיה לקבוצה:</strong><br>
-      חזרו לבעיה המדויקת, לצורך ולמטרה שכתבתן.<br>
-      עכשיו המטרה היא לפתוח כמה כיווני פתרון, בלי לבחור מיד את ”הפתרון המושלם“.<br>
-      בשלב הזה אנחנו לא מחפשות תשובה אחת נכונה.<br>
-      אנחנו מנסות לחשוב בכמה דרכים שונות.</p>
+      <section class="student-box">
+        <h2>פרטי הקבוצה</h2>
+        <div class="question">
+          <div class="q-title">שמות התלמידות בקבוצה</div>
+          <input type="text" id="studentNames" placeholder="כתבו את שמות התלמידות">
+        </div>
+      </section>
 
-      <section class="section">
-        <h2>חלק א׳ - חוזרות לנקודת המוצא</h2>
-        <div class="question"><div class="q-title">1. מה הבעיה המדויקת שלכן?</div><textarea class="line-input"></textarea></div>
-        <div class="question"><div class="q-title">2. מה הצורך שזיהיתן?</div><textarea class="line-input"></textarea></div>
-        <div class="question"><div class="q-title">3. מה המטרה שלכן?</div><textarea class="line-input"></textarea></div>
+      <h1>שלב 3 – פותחות כיווני פתרון</h1>
+
+      <section class="intro-box">
+        <h2>פתיחה</h2>
+        <p>עכשיו אנחנו לוקחות את הבעיה, הצורך והמטרה ומתחילות לפתוח כמה כיווני פתרון.</p>
+        <p>בשלב הזה אנחנו לא מחפשות תשובה אחת נכונה, אלא בודקות כמה אפשרויות שונות.</p>
+        <ul class="mini-steps">
+          <li>בוחרות כלים לחשיבה יצירתית</li>
+          <li>מפתחות שלושה כיווני פתרון</li>
+          <li>בוחרות כיוון ראשוני להמשך</li>
+        </ul>
       </section>
 
       <section class="section">
-        <h2>חלק ב׳ - בוחרות כלים לפיתוח רעיונות</h2>
-        <div class="note">
-          הנחיה:<br>
-          סמנו לפחות 2–3 כלים שדרכם תפתחו כיווני פתרון.
+        <h2>חוזרות לנקודת המוצא</h2>
+        <div class="question">
+          <div class="q-title">מה הבעיה המדויקת שלכן</div>
+          <textarea id="exactProblem" placeholder="כתבו את הבעיה המדויקת"></textarea>
         </div>
         <div class="question">
-          <div class="q-title">4. באילו כלים תרצו להשתמש?</div>
-          <div>סמנו לפחות 2 אפשרויות:</div>
-          <div class="options">
-            <label><input type="checkbox"> חיבור</label>
-            <label><input type="checkbox"> החסרה</label>
-            <label><input type="checkbox"> הכפלה</label>
-            <label><input type="checkbox"> הוצאה מהקשר</label>
-            <label><input type="checkbox"> שינוי גודל או צורה</label>
-          </div>
+          <div class="q-title">מה הצורך שזיהיתן</div>
+          <textarea id="identifiedNeed" placeholder="כתבו את הצורך שזיהיתן"></textarea>
         </div>
         <div class="question">
-          <div class="q-title">5. למה בחרתן דווקא בכלים האלה?</div>
-          <div>סמנו אפשרות אחת או יותר:</div>
-          <div class="options">
-            <label><input type="checkbox"> הם הכי מתאימים לבעיה</label>
-            <label><input type="checkbox"> הם יכולים לייצר רעיונות חדשים</label>
-            <label><input type="checkbox"> הם עוזרים לחשוב אחרת</label>
-            <label><input type="checkbox"> הם יכולים להוביל למוצר ברור יותר</label>
-            <label><input type="checkbox"> אחר: <input type="text"></label>
-          </div>
+          <div class="q-title">מה המטרה שלכן</div>
+          <textarea id="mainGoal" placeholder="כתבו את המטרה שלכן"></textarea>
         </div>
       </section>
 
       <section class="section">
-        <h2>חלק ג׳ - מפעילות את הכלים</h2>
+        <h2>בוחרות כלים לחשיבה יצירתית</h2>
+        <div class="note">סמנו 2–3 כלים שדרכם תפתחו כיווני פתרון.</div>
+        <div class="options" id="toolsOptions">
+          <label><input type="checkbox" value="חיבור"> חיבור</label>
+          <label><input type="checkbox" value="החסרה"> החסרה</label>
+          <label><input type="checkbox" value="הכפלה"> הכפלה</label>
+          <label><input type="checkbox" value="הוצאה מהקשר"> הוצאה מהקשר</label>
+          <label><input type="checkbox" value="שינוי גודל או צורה"> שינוי גודל או צורה</label>
+        </div>
+      </section>
 
-        <div class="tool-box">
-          <div class="question"><div class="q-title">כלי :1 ______________________</div><input type="text"></div>
-          <div class="question"><div class="q-title">6. איך אפשר להפעיל את הכלי הזה על הבעיה שלכן?</div><textarea class="line-input"></textarea></div>
-          <div class="question"><div class="q-title">7. איזה כיוון פתרון ראשוני עולה מזה?</div><textarea class="line-input"></textarea></div>
-          <div class="question">
-            <div class="q-title">8. סוג המוצר שאליו הכיוון הזה מוביל:</div>
-            <div class="options">
-              <label><input type="checkbox"> מוצר טכנולוגי פיזי</label>
-              <label><input type="checkbox"> אפליקציה</label>
-              <label><input type="checkbox"> אתר</label>
+      <section class="section">
+        <h2>מפתחות שלושה כיווני פתרון</h2>
+        <div class="direction-grid">
+          <div class="direction-box">
+            <div class="question">
+              <div class="q-title">כיוון 1 – באיזה כלי השתמשתן</div>
+              <input type="text" id="dir1Tool" placeholder="כתבו את שם הכלי">
+            </div>
+            <div class="question">
+              <div class="q-title">איך הכיוון הזה נראה</div>
+              <textarea id="dir1Idea" placeholder="כתבו את כיוון הפתרון"></textarea>
+            </div>
+            <div class="question">
+              <div class="q-title">לאיזה סוג מוצר הוא מוביל</div>
+              <div class="options" id="dir1Type">
+                <label><input type="checkbox" value="מוצר טכנולוגי פיזי"> מוצר טכנולוגי פיזי</label>
+                <label><input type="checkbox" value="אפליקציה"> אפליקציה</label>
+                <label><input type="checkbox" value="אתר"> אתר</label>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="tool-box">
-          <div class="question"><div class="q-title">כלי :2 ______________________</div><input type="text"></div>
-          <div class="question"><div class="q-title">9. איך אפשר להפעיל את הכלי הזה על הבעיה שלכן?</div><textarea class="line-input"></textarea></div>
-          <div class="question"><div class="q-title">10. איזה כיוון פתרון ראשוני עולה מזה?</div><textarea class="line-input"></textarea></div>
-          <div class="question">
-            <div class="q-title">11. סוג המוצר שאליו הכיוון הזה מוביל:</div>
-            <div class="options">
-              <label><input type="checkbox"> מוצר טכנולוגי פיזי</label>
-              <label><input type="checkbox"> אפליקציה</label>
-              <label><input type="checkbox"> אתר</label>
+          <div class="direction-box">
+            <div class="question">
+              <div class="q-title">כיוון 2 – באיזה כלי השתמשתן</div>
+              <input type="text" id="dir2Tool" placeholder="כתבו את שם הכלי">
+            </div>
+            <div class="question">
+              <div class="q-title">איך הכיוון הזה נראה</div>
+              <textarea id="dir2Idea" placeholder="כתבו את כיוון הפתרון"></textarea>
+            </div>
+            <div class="question">
+              <div class="q-title">לאיזה סוג מוצר הוא מוביל</div>
+              <div class="options" id="dir2Type">
+                <label><input type="checkbox" value="מוצר טכנולוגי פיזי"> מוצר טכנולוגי פיזי</label>
+                <label><input type="checkbox" value="אפליקציה"> אפליקציה</label>
+                <label><input type="checkbox" value="אתר"> אתר</label>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="tool-box">
-          <div class="question"><div class="q-title">כלי :3 ______________________</div><input type="text"></div>
-          <div class="question"><div class="q-title">12. איך אפשר להפעיל את הכלי הזה על הבעיה שלכן?</div><textarea class="line-input"></textarea></div>
-          <div class="question"><div class="q-title">13. איזה כיוון פתרון ראשוני עולה מזה?</div><textarea class="line-input"></textarea></div>
-          <div class="question">
-            <div class="q-title">14. סוג המוצר שאליו הכיוון הזה מוביל:</div>
-            <div class="options">
-              <label><input type="checkbox"> מוצר טכנולוגי פיזי</label>
-              <label><input type="checkbox"> אפליקציה</label>
-              <label><input type="checkbox"> אתר</label>
+          <div class="direction-box">
+            <div class="question">
+              <div class="q-title">כיוון 3 – באיזה כלי השתמשתן</div>
+              <input type="text" id="dir3Tool" placeholder="כתבו את שם הכלי">
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section">
-        <h2>חלק ד׳ - בודקות את כיווני הפתרון</h2>
-        <div class="question"><div class="q-title">15. איזה כיוון נראה לכן כרגע הכי חזק ?</div><textarea class="line-input"></textarea></div>
-
-        <div class="question">
-          <div class="q-title">16. למה דווקא הכיוון הזה?</div>
-          <div>סמנו עד 2 אפשרויות:</div>
-          <div class="options">
-            <label><input type="checkbox"> הוא הכי מתאים לצורך</label>
-            <label><input type="checkbox"> הוא הכי ברור להסבר</label>
-            <label><input type="checkbox"> הוא נראה אפשרי לביצוע</label>
-            <label><input type="checkbox"> הוא מחדש יותר</label>
-            <label><input type="checkbox"> הוא הכי שימושי לקהל היעד</label>
-            <label><input type="checkbox"> הוא מוביל בקלות למוצר</label>
-            <label><input type="checkbox"> אחר: <input type="text"></label>
-          </div>
-        </div>
-
-        <div class="question"><div class="q-title">17. מה היתרון המרכזי של הכיוון הזה?</div><textarea class="line-input"></textarea></div>
-        <div class="question"><div class="q-title">18. מה עדיין לא ברור בו?</div><textarea class="line-input"></textarea></div>
-      </section>
-
-      <section class="section">
-        <h2>חלק ה׳ - מוודאות שלא קפצנו מהר מדי</h2>
-
-        <div class="question">
-          <div class="q-title">19. האם הכיוון שבחרתן באמת פותר את הבעיה של קהל היעד ?</div>
-          <div class="options">
-            <label><input type="checkbox"> כן</label>
-            <label><input type="checkbox"> חלקית</label>
-            <label><input type="checkbox"> עדיין לא בטוח</label>
-          </div>
-        </div>
-
-        <div class="question">
-          <div class="q-title">20. האם הוא מחובר למטרה שכתבתן?</div>
-          <div class="options">
-            <label><input type="checkbox"> כן</label>
-            <label><input type="checkbox"> חלקית</label>
-            <label><input type="checkbox"> לא בטוחות</label>
-          </div>
-        </div>
-
-        <div class="question">
-          <div class="q-title">21. האם הוא מוביל למוצר ברור?</div>
-          <div class="options">
-            <label><input type="checkbox"> מוצר טכנולוגי פיזי</label>
-            <label><input type="checkbox"> אפליקציה</label>
-            <label><input type="checkbox"> אתר</label>
-            <label><input type="checkbox"> עדיין לא ברור</label>
-          </div>
-        </div>
-
-        <div class="question"><div class="q-title">22. אם עדיין לא ברור, מה צריך לדייק?</div><textarea class="line-input"></textarea></div>
-      </section>
-
-      <section class="section">
-        <h2>חלק ו׳ - שורת סיכום</h2>
-        <div class="summary-box">
-          <div><div class="q-title">כיוון הפתרון הראשוני שבחרנו:</div><textarea class="line-input"></textarea></div>
-          <div><div class="q-title">הוא מתאים לקהל היעד כי:</div><textarea class="line-input"></textarea></div>
-          <div class="question">
-            <div class="q-title">הוא מוביל ל:</div>
-            <div class="options">
-              <label><input type="checkbox"> מוצר טכנולוגי פיזי</label>
-              <label><input type="checkbox"> אפליקציה</label>
-              <label><input type="checkbox"> אתר</label>
+            <div class="question">
+              <div class="q-title">איך הכיוון הזה נראה</div>
+              <textarea id="dir3Idea" placeholder="כתבו את כיוון הפתרון"></textarea>
+            </div>
+            <div class="question">
+              <div class="q-title">לאיזה סוג מוצר הוא מוביל</div>
+              <div class="options" id="dir3Type">
+                <label><input type="checkbox" value="מוצר טכנולוגי פיזי"> מוצר טכנולוגי פיזי</label>
+                <label><input type="checkbox" value="אפליקציה"> אפליקציה</label>
+                <label><input type="checkbox" value="אתר"> אתר</label>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       <section class="section">
-        <h2>גרסה קצרה יותר, אם את רוצה דף פחות עמוס</h2>
-        <div class="question"><div class="q-title">1. הבעיה שלנו</div><textarea class="line-input"></textarea></div>
-        <div class="question"><div class="q-title">2. המטרה שלנו</div><textarea class="line-input"></textarea></div>
+        <h2>בוחרות כיוון ראשוני להמשך</h2>
         <div class="question">
-          <div class="q-title">3. הכלים שבחרנו</div>
-          <div class="options">
-            <label><input type="checkbox"> חיבור</label>
-            <label><input type="checkbox"> החסרה</label>
-            <label><input type="checkbox"> הכפלה</label>
-            <label><input type="checkbox"> הוצאה מהקשר</label>
-            <label><input type="checkbox"> שינוי גודל או צורה</label>
+          <div class="q-title">איזה כיוון נראה לכן כרגע הכי חזק</div>
+          <textarea id="bestDirection" placeholder="כתבו איזה כיוון נראה לכן הכי חזק"></textarea>
+        </div>
+        <div class="question">
+          <div class="q-title">מה היתרון המרכזי שלו</div>
+          <textarea id="mainBenefit" placeholder="כתבו מה היתרון המרכזי שלו"></textarea>
+        </div>
+        <div class="question">
+          <div class="q-title">מה עדיין צריך לדייק</div>
+          <textarea id="needsRefine" placeholder="כתבו מה עדיין צריך לדייק"></textarea>
+        </div>
+        <div class="question">
+          <div class="q-title">לאיזה סוג מוצר הכיוון שנבחר מוביל</div>
+          <div class="options" id="chosenType">
+            <label><input type="checkbox" value="מוצר טכנולוגי פיזי"> מוצר טכנולוגי פיזי</label>
+            <label><input type="checkbox" value="אפליקציה"> אפליקציה</label>
+            <label><input type="checkbox" value="אתר"> אתר</label>
           </div>
         </div>
-        <div class="question"><div class="q-title">4. שלושה כיווני פתרון</div>
-          <div class="note">כיוון :1 __________________________<br>כיוון :2 __________________________<br>כיוון :3 __________________________</div>
-          <textarea rows="5"></textarea>
-        </div>
-        <div class="question"><div class="q-title">5. הכיוון הראשוני שבחרנו</div><textarea class="line-input"></textarea></div>
-        <div class="question">
-          <div class="q-title">6. הוא מוביל ל:</div>
-          <div class="options">
-            <label><input type="checkbox"> מוצר טכנולוגי פיזי</label>
-            <label><input type="checkbox"> אפליקציה</label>
-            <label><input type="checkbox"> אתר</label>
+        <div class="builder-box">
+          <div class="q-title">כיוון הפתרון הראשוני שבחרנו</div>
+          <div class="builder-row">
+            <span>בחרנו בכיוון</span>
+            <input class="builder-input" type="text" id="summary1" placeholder="איזה כיוון">
+            <span>כי הוא עוזר</span>
+            <input class="builder-input" type="text" id="summary2" placeholder="מה הוא מאפשר">
           </div>
+          <div class="builder-preview" id="summaryPreview">כאן יופיע ניסוח הסיכום…</div>
         </div>
       </section>
 
@@ -425,5 +395,210 @@
       </div>
     </div>
   </main>
+
+  <script>
+    function escapeHtml(text) {
+      return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function getCheckedValues(containerId) {
+      return Array.from(document.querySelectorAll(`#${containerId} input[type="checkbox"]:checked`)).map(cb => cb.value);
+    }
+
+    function updateSummaryPreview() {
+      const s1 = document.getElementById('summary1').value.trim() || '____';
+      const s2 = document.getElementById('summary2').value.trim() || '____';
+      document.getElementById('summaryPreview').textContent = `בחרנו בכיוון ${s1} כי הוא עוזר ${s2}.`;
+    }
+
+    ['summary1', 'summary2'].forEach(id => {
+      document.getElementById(id).addEventListener('input', updateSummaryPreview);
+    });
+    updateSummaryPreview();
+
+    function addBlock(blocks, title, content) {
+      if (!content) return;
+      blocks.push(`
+        <div class="print-block">
+          <div class="print-q">${escapeHtml(title)}</div>
+          <div class="print-a">${content}</div>
+        </div>
+      `);
+    }
+
+    function renderList(values) {
+      if (!values || !values.length) return '';
+      return `<ul class="print-list">${values.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>`;
+    }
+
+    function printAnsweredOnly() {
+      const logoUrl = new URL('../icon/logo.png', window.location.href).href;
+      const studentNames = document.getElementById('studentNames').value.trim();
+      const exactProblem = document.getElementById('exactProblem').value.trim();
+      const identifiedNeed = document.getElementById('identifiedNeed').value.trim();
+      const mainGoal = document.getElementById('mainGoal').value.trim();
+      const tools = getCheckedValues('toolsOptions');
+      const dir1Tool = document.getElementById('dir1Tool').value.trim();
+      const dir1Idea = document.getElementById('dir1Idea').value.trim();
+      const dir1Type = getCheckedValues('dir1Type');
+      const dir2Tool = document.getElementById('dir2Tool').value.trim();
+      const dir2Idea = document.getElementById('dir2Idea').value.trim();
+      const dir2Type = getCheckedValues('dir2Type');
+      const dir3Tool = document.getElementById('dir3Tool').value.trim();
+      const dir3Idea = document.getElementById('dir3Idea').value.trim();
+      const dir3Type = getCheckedValues('dir3Type');
+      const bestDirection = document.getElementById('bestDirection').value.trim();
+      const mainBenefit = document.getElementById('mainBenefit').value.trim();
+      const needsRefine = document.getElementById('needsRefine').value.trim();
+      const chosenType = getCheckedValues('chosenType');
+      const summary1 = document.getElementById('summary1').value.trim();
+      const summary2 = document.getElementById('summary2').value.trim();
+      const summaryText = (summary1 || summary2) ? `בחרנו בכיוון ${escapeHtml(summary1 || '____')} כי הוא עוזר ${escapeHtml(summary2 || '____')}.` : '';
+
+      const blocks = [];
+      addBlock(blocks, 'שמות התלמידות בקבוצה', escapeHtml(studentNames));
+      addBlock(blocks, 'מה הבעיה המדויקת שלכן', escapeHtml(exactProblem));
+      addBlock(blocks, 'מה הצורך שזיהיתן', escapeHtml(identifiedNeed));
+      addBlock(blocks, 'מה המטרה שלכן', escapeHtml(mainGoal));
+      addBlock(blocks, 'הכלים שבחרתן', renderList(tools));
+
+      if (dir1Tool || dir1Idea || dir1Type.length) {
+        addBlock(blocks, 'כיוון 1', `
+          ${dir1Tool ? `<div><strong>הכלי:</strong> ${escapeHtml(dir1Tool)}</div>` : ''}
+          ${dir1Idea ? `<div style="margin-top:6px;"><strong>כיוון הפתרון:</strong> ${escapeHtml(dir1Idea)}</div>` : ''}
+          ${dir1Type.length ? `<div style="margin-top:6px;"><strong>סוג מוצר:</strong> ${escapeHtml(dir1Type.join(' | '))}</div>` : ''}
+        `);
+      }
+      if (dir2Tool || dir2Idea || dir2Type.length) {
+        addBlock(blocks, 'כיוון 2', `
+          ${dir2Tool ? `<div><strong>הכלי:</strong> ${escapeHtml(dir2Tool)}</div>` : ''}
+          ${dir2Idea ? `<div style="margin-top:6px;"><strong>כיוון הפתרון:</strong> ${escapeHtml(dir2Idea)}</div>` : ''}
+          ${dir2Type.length ? `<div style="margin-top:6px;"><strong>סוג מוצר:</strong> ${escapeHtml(dir2Type.join(' | '))}</div>` : ''}
+        `);
+      }
+      if (dir3Tool || dir3Idea || dir3Type.length) {
+        addBlock(blocks, 'כיוון 3', `
+          ${dir3Tool ? `<div><strong>הכלי:</strong> ${escapeHtml(dir3Tool)}</div>` : ''}
+          ${dir3Idea ? `<div style="margin-top:6px;"><strong>כיוון הפתרון:</strong> ${escapeHtml(dir3Idea)}</div>` : ''}
+          ${dir3Type.length ? `<div style="margin-top:6px;"><strong>סוג מוצר:</strong> ${escapeHtml(dir3Type.join(' | '))}</div>` : ''}
+        `);
+      }
+
+      addBlock(blocks, 'איזה כיוון נראה לכן כרגע הכי חזק', escapeHtml(bestDirection));
+      addBlock(blocks, 'מה היתרון המרכזי שלו', escapeHtml(mainBenefit));
+      addBlock(blocks, 'מה עדיין צריך לדייק', escapeHtml(needsRefine));
+      addBlock(blocks, 'לאיזה סוג מוצר הכיוון שנבחר מוביל', renderList(chosenType));
+      addBlock(blocks, 'כיוון הפתרון הראשוני שבחרנו', summaryText);
+
+      if (!blocks.length) {
+        alert('עדיין לא מולא תוכן להדפסה.');
+        return;
+      }
+
+      const printWindow = window.open('', '_blank');
+      printWindow.document.write(`
+        <!DOCTYPE html>
+        <html lang="he" dir="rtl">
+        <head>
+          <meta charset="UTF-8">
+          <title>שלב 3 – פותחות כיווני פתרון</title>
+          <style>
+            body {
+              margin: 0;
+              font-family: Arial, "Heebo", sans-serif;
+              background: #ffffff;
+              color: #2b2b2b;
+              direction: rtl;
+              padding: 24px;
+            }
+            .sheet { max-width: 820px; margin: 0 auto; }
+            .print-header {
+              background: linear-gradient(180deg, #fffdfd 0%, #faf5ff 100%);
+              border: 1px solid #eadcf3;
+              border-radius: 18px;
+              padding: 18px;
+              margin-bottom: 18px;
+            }
+            .print-header-top {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              gap: 16px;
+            }
+            .print-brand {
+              margin: 0;
+              color: #6b2d84;
+              font-weight: 700;
+              font-size: 14px;
+            }
+            .print-title {
+              margin: 4px 0 0;
+              color: #3f304b;
+              font-size: 24px;
+              font-weight: 700;
+            }
+            .print-logo { width: 54px; height: 54px; object-fit: contain; }
+            .print-sub {
+              margin-top: 12px;
+              padding-top: 12px;
+              border-top: 1px solid #efe5f4;
+              color: #5b476b;
+              font-size: 14px;
+            }
+            .print-block {
+              margin-bottom: 12px;
+              page-break-inside: avoid;
+            }
+            .print-q {
+              background: #faf5fd;
+              border: 1px solid #eadcf3;
+              border-radius: 14px 14px 0 0;
+              padding: 10px 12px;
+              color: #6b2d84;
+              font-weight: 700;
+            }
+            .print-a {
+              border: 1px solid #eadcf3;
+              border-top: none;
+              border-radius: 0 0 14px 14px;
+              padding: 12px;
+              background: #fff;
+              line-height: 1.8;
+            }
+            .print-list {
+              margin: 0;
+              padding-right: 18px;
+            }
+            .print-list li { margin-bottom: 4px; }
+            @page { size: A4; margin: 14mm; }
+          </style>
+        </head>
+        <body>
+          <div class="sheet">
+            <div class="print-header">
+              <div class="print-header-top">
+                <div>
+                  <p class="print-brand">פורצות דרך</p>
+                  <p class="print-title">שלב 3 – פותחות כיווני פתרון</p>
+                </div>
+                <img src="${logoUrl}" alt="לוגו" class="print-logo">
+              </div>
+            </div>
+            ${blocks.join('')}
+          </div>
+        </body>
+        </html>
+      `);
+      printWindow.document.close();
+      printWindow.onload = () => {
+        printWindow.focus();
+        printWindow.print();
+      };
+    }
+  </script>
 </body>
 </html>

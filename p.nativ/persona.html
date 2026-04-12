@@ -3,321 +3,739 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PERSONA – דף פעילות</title>
-
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@600;700&family=Assistant:wght@400;600&display=swap" rel="stylesheet">
-
-  <!-- PDF libs -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
+  <title>דף פעילות – פרסונה</title>
   <style>
+    * { box-sizing: border-box; }
     body {
       margin: 0;
-      padding: 20px;
-      background: #f3f4f6;
-      font-family: 'Assistant', sans-serif;
-      direction: rtl;
-      color: #1f2937;
+      font-family: Arial, "Heebo", sans-serif;
+      background: linear-gradient(180deg, #fcf9fd 0%, #f7f1fa 100%);
+      color: #2b2b2b;
+      line-height: 1.7;
     }
-
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      background: white;
-      padding: 40px 30px;
-      border-radius: 15px;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-    }
-
-    .page-header {
-      position: relative;
-      margin-bottom: 10px;
-      min-height: 52px;
-    }
-
-    .page-logo {
-      position: absolute;
+    .site-header {
+      position: sticky;
       top: 0;
-      right: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(180,152,196,0.22);
+      box-shadow: 0 8px 24px rgba(107,45,132,0.08);
+    }
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .header-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: #6b2d84;
+      font-weight: 700;
+    }
+    .header-logo img {
       width: 42px;
-      height: auto;
-      opacity: 0.95;
+      height: 42px;
+      object-fit: cover;
+      border-radius: 12px;
+      box-shadow: 0 6px 14px rgba(107,45,132,0.16);
+      border: 1px solid rgba(227,214,234,0.8);
+      background: #fff;
     }
-
-    h1 {
-      font-family: 'Rubik', sans-serif;
-      color: #e91e63;
-      text-align: center;
-      margin-top: 0;
-      margin-bottom: 0;
-    }
-
-    h2 {
-      font-family: 'Rubik', sans-serif;
-      color: #00a7b5;
-      border-bottom: 2px solid #e5e7eb;
-      padding-bottom: 6px;
-      margin-top: 40px;
-    }
-
-    label {
-      display: block;
-      font-weight: 600;
-      margin-top: 18px;
-      margin-bottom: 6px;
-    }
-
-    input[type="text"],
-    textarea {
-      width: 100%;
-      box-sizing: border-box;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #d1d5db;
-      font-family: inherit;
+    .home-link, .print-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 44px;
+      height: 44px;
+      padding: 0 14px;
+      text-decoration: none;
       font-size: 1rem;
+      background: linear-gradient(180deg, #ffffff 0%, #f4ebf8 100%);
+      color: #6b2d84;
+      border: 1px solid rgba(227,214,234,0.95);
+      border-radius: 14px;
+      box-shadow: 0 8px 18px rgba(107,45,132,0.14);
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
     }
-
+    .home-link:hover, .print-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(107,45,132,0.18);
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .container {
+      max-width: 940px;
+      margin: 0 auto;
+      padding: 28px 20px 40px;
+    }
+    .page-card {
+      background: rgba(255,255,255,0.9);
+      border: 1px solid rgba(227,214,234,0.95);
+      border-radius: 24px;
+      box-shadow: 0 16px 36px rgba(107,45,132,0.08);
+      padding: 28px 22px;
+    }
+    h1 {
+      margin: 0 0 10px;
+      text-align: center;
+      color: #6b2d84;
+      font-size: 1.95rem;
+      line-height: 1.3;
+    }
+    .guide {
+      margin: 0 0 24px;
+      color: #4d3e59;
+      font-size: 1.02rem;
+    }
+    .student-box,
+    .section {
+      margin-top: 22px;
+      padding: 18px 16px;
+      border-radius: 18px;
+      background: #fff;
+      border: 1px solid #eadff0;
+    }
+    .student-box {
+      margin-top: 0;
+      background: #faf5fd;
+    }
+    .section h2,
+    .student-box h2 {
+      margin: 0 0 14px;
+      color: #6b2d84;
+      font-size: 1.2rem;
+    }
+    .question { margin-bottom: 18px; }
+    .question:last-child { margin-bottom: 0; }
+    .q-title {
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #3f304b;
+    }
+    .hint {
+      margin-top: 6px;
+      color: #6f5d7e;
+      font-size: 0.94rem;
+    }
+    input[type="text"], textarea {
+      width: 100%;
+      border: 1px solid #d8c7e3;
+      border-radius: 14px;
+      padding: 12px 14px;
+      font: inherit;
+      background: #fff;
+      color: #2b2b2b;
+      outline: none;
+    }
     textarea {
-      min-height: 80px;
+      min-height: 72px;
       resize: vertical;
     }
-
-    .question-block {
-      margin-bottom: 25px;
-    }
-
-    .checkbox-list {
-      background: #f9fafb;
-      border: 1px solid #e5e7eb;
-      border-radius: 10px;
-      padding: 15px;
-    }
-
-    .checkbox-list label {
-      display: block;
-      font-weight: 400;
-      margin: 6px 0;
-      cursor: pointer;
-    }
-
-    .inline-other {
-      display: flex;
+    .options {
+      display: grid;
       gap: 8px;
       margin-top: 8px;
+    }
+    .options label {
+      display: flex;
       align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      background: #fcfaff;
+      border: 1px solid #efe5f4;
     }
-
+    .inline-other {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .inline-other input[type="text"] {
+      flex: 1 1 220px;
+      width: auto;
+      min-width: 180px;
+      padding: 9px 12px;
+    }
     .summary-box {
-      background: #f8fafc;
-      border: 1.5px solid #94a3b8;
-      border-radius: 10px;
-      padding: 15px;
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px solid #eadcf3;
+      background: #faf5fd;
+    }
+    .sentence-builder {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
       line-height: 2;
+      color: #4d3e59;
     }
-
-    .preview {
-      margin-top: 15px;
-      padding: 12px;
-      background: #fff0f5;
-      border-radius: 8px;
-      font-style: italic;
+    .sentence-input {
+      width: auto !important;
+      min-width: 150px;
+      flex: 1 1 180px;
+      display: inline-block;
+      background: #fff;
     }
-
-    .actions {
-      margin-top: 40px;
-      text-align: center;
+    .sentence-preview {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: #fff;
+      border: 1px dashed #d8c7e3;
+      color: #5b476b;
     }
-
-    button {
-      background: linear-gradient(90deg, #e91e63, #00a7b5);
-      color: white;
-      border: none;
-      padding: 14px 26px;
-      border-radius: 18px;
-      font-size: 1rem;
+    .footer-nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 28px;
+    }
+    .next-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 13px 24px;
+      text-decoration: none;
+      color: #fff;
       font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+      border-radius: 999px;
+      background: linear-gradient(135deg, #7b3696 0%, #c04aa6 100%);
+      box-shadow: 0 14px 28px rgba(127,56,151,0.28);
+    }
+    @media print {
+      .site-header, .footer-nav { display: none !important; }
+      body { background: #fff; }
+      .container { max-width: 100%; padding: 0; }
+      .page-card {
+        box-shadow: none;
+        border: none;
+        border-radius: 0;
+        padding: 0;
+      }
+      .section, .student-box { break-inside: avoid; }
+      input, textarea { border: 1px solid #bbb; }
     }
   </style>
 </head>
-
 <body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="header-logo" href="#" aria-label="לוגו העמוד">
+        <img src="../icon/logo.png" alt="לוגו">
+        <span>פורצות דרך</span>
+      </a>
+      <div class="header-actions">
+        <button class="print-btn" type="button" onclick="printAnsweredOnly()">PDF / הדפסה</button>
+        <a class="home-link" href="enter.html" aria-label="חזרה לדף הבית" title="דף הבית">🏠</a>
+      </div>
+    </div>
+  </header>
+
   <main class="container">
-    <div class="page-header">
-      <img src="../icon/logo.png" alt="לוגו" class="page-logo">
-      <h1>PERSONA – דף פעילות</h1>
-    </div>
+    <div class="page-card">
+      <h1>דף פעילות – פרסונה</h1>
+      <p class="guide"><strong>הנחיה לקבוצה:</strong><br>
+      קראו את כרטיס המידע שקיבלתן, ובנו פרסונה אחת ברורה שמתאימה לקהל היעד ולבעיה שעלו בכרטיס.<br>
+      המטרה היא להבין מי המשתמשת, באיזה מצב היא פוגשת את הבעיה, מה הכי מקשה עליה, ומה באמת חשוב לה.</p>
 
-    <!-- שמות התלמידות -->
-    <div class="question-block" data-question="שמות התלמידות" style="background:#fff0f5;padding:15px;border-radius:10px;">
-      <label>שמות התלמידות / חברות הקבוצה:</label>
-      <input type="text" id="studentNames" placeholder="לדוגמה: נועה, מאיה, שירה">
-    </div>
-
-    <h2>חלק א’ – מי הפרסונה?</h2>
-
-    <div class="question-block" data-question="מי קהל היעד הכללי של הכרטיס?">
-      <label>מי קהל היעד הכללי של הכרטיס?</label>
-      <input type="text">
-    </div>
-
-    <div class="question-block" data-question="מי במיוחד בתוך קהל היעד הכי מושפעת מהבעיה?">
-      <label>מי במיוחד בתוך קהל היעד הכי מושפעת מהבעיה?</label>
-      <div class="checkbox-list">
-        <label><input type="checkbox" value="מי שחווה את המצב לעיתים קרובות"> מי שחווה את המצב לעיתים קרובות</label>
-        <label><input type="checkbox" value="מי שפחות בטוחה בעצמה"> מי שפחות בטוחה בעצמה</label>
-        <label><input type="checkbox" value="מי שפועלת תחת לחץ זמן"> מי שפועלת תחת לחץ זמן</label>
-        <div class="inline-other">
-          <span>אחר:</span><input type="text">
+      <section class="student-box">
+        <h2>פרטי הקבוצה</h2>
+        <div class="question">
+          <div class="q-title">שמות התלמידות בקבוצה</div>
+          <input type="text" id="studentNames" placeholder="כתבו את שמות התלמידות">
         </div>
+      </section>
+
+      <section class="section">
+        <h2>חלק א׳ – מי הפרסונה?</h2>
+        <div class="question">
+          <div class="q-title">1. מי קהל היעד הכללי של הכרטיס?</div>
+          <input type="text" placeholder="כתבו בקצרה">
+        </div>
+
+        <div class="question">
+          <div class="q-title">2. מי במיוחד בתוך קהל היעד הכי מושפעת מהבעיה?</div>
+          <div class="options">
+            <label><input type="checkbox"> מי שחווה את המצב לעיתים קרובות</label>
+            <label><input type="checkbox"> מי שפחות בטוחה בעצמה</label>
+            <label><input type="checkbox"> מי שאין לה הרבה תמיכה</label>
+            <label><input type="checkbox"> מי שפועלת תחת לחץ זמן</label>
+            <label><input type="checkbox"> מי שמנסה להתמודד לבד</label>
+            <label class="inline-other"><input type="checkbox"> אחר: <input type="text" placeholder="כתבו אם צריך"></label>
+          </div>
+        </div>
+
+        <div class="question">
+          <div class="q-title">3. בת כמה בערך הפרסונה?</div>
+          <div class="options">
+            <label><input type="radio" name="age"> 12–13</label>
+            <label><input type="radio" name="age"> 14–15</label>
+            <label><input type="radio" name="age"> 16–18</label>
+            <label class="inline-other"><input type="radio" name="age"> אחר: <input type="text" placeholder="כתבו גיל או טווח"></label>
+          </div>
+        </div>
+
+        <div class="question">
+          <div class="q-title">4. באיזה שלב חיים היא נמצאת?</div>
+          <div class="options">
+            <label><input type="checkbox"> חטיבת ביניים</label>
+            <label><input type="checkbox"> תיכון</label>
+            <label><input type="checkbox"> בתחילת עבודה ראשונה</label>
+            <label><input type="checkbox"> מתחילה יותר עצמאות יומיומית</label>
+            <label class="inline-other"><input type="checkbox"> אחר: <input type="text" placeholder="כתבו אם צריך"></label>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>חלק ב׳ – באיזה מצב היא פוגשת את הבעיה?</h2>
+        <div class="question">
+          <div class="q-title">5. מתי הבעיה מופיעה אצלה בדרך כלל?</div>
+          <div class="options">
+            <label><input type="checkbox"> בבוקר</label>
+            <label><input type="checkbox"> במהלך יום הלימודים</label>
+            <label><input type="checkbox"> אחר הצהריים</label>
+            <label><input type="checkbox"> בערב</label>
+            <label><input type="checkbox"> ברשת</label>
+            <label><input type="checkbox"> בזמן יציאה / בילוי</label>
+            <label><input type="checkbox"> בזמן נסיעה / דרך</label>
+            <label class="inline-other"><input type="checkbox"> אחר: <input type="text" placeholder="כתבו אם צריך"></label>
+          </div>
+        </div>
+
+        <div class="question">
+          <div class="q-title">6. איפה זה קורה לה בדרך כלל?</div>
+          <div class="options">
+            <label><input type="checkbox"> בבית הספר</label>
+            <label><input type="checkbox"> בבית</label>
+            <label><input type="checkbox"> בדרך</label>
+            <label><input type="checkbox"> במרחב ציבורי</label>
+            <label><input type="checkbox"> ברשתות החברתיות</label>
+            <label><input type="checkbox"> בעבודה</label>
+            <label class="inline-other"><input type="checkbox"> אחר: <input type="text" placeholder="כתבו אם צריך"></label>
+          </div>
+        </div>
+
+        <div class="question">
+          <div class="q-title">7. מה הפרסונה מנסה לעשות באותו רגע?</div>
+          <textarea placeholder="כתבו במשפט קצר"></textarea>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>חלק ג׳ – מה הכי מקשה עליה?</h2>
+        <div class="question">
+          <div class="q-title">8. מה הכי מקשה עליה במצב הזה?</div>
+          <div class="options">
+            <label><input type="checkbox"> חוסר זמן</label>
+            <label><input type="checkbox"> חוסר מידע ברור</label>
+            <label><input type="checkbox"> עומס</label>
+            <label><input type="checkbox"> בלבול</label>
+            <label><input type="checkbox"> מבוכה</label>
+            <label><input type="checkbox"> חוסר פרטיות</label>
+            <label><input type="checkbox"> חוסר ביטחון</label>
+            <label><input type="checkbox"> תלות באחרות / באחרים</label>
+            <label class="inline-other"><input type="checkbox"> אחר: <input type="text" placeholder="כתבו אם צריך"></label>
+          </div>
+        </div>
+
+        <div class="question">
+          <div class="q-title">9. איך היא מתמודדת היום?</div>
+          <div class="options">
+            <label><input type="checkbox"> מאלתרת</label>
+            <label><input type="checkbox"> מבקשת עזרה</label>
+            <label><input type="checkbox"> דוחה את ההתמודדות</label>
+            <label><input type="checkbox"> מוותרת</label>
+            <label><input type="checkbox"> מחפשת לבד פתרון</label>
+            <label><input type="checkbox"> משתמשת בפתרון חלקי</label>
+            <label class="inline-other"><input type="checkbox"> אחר: <input type="text" placeholder="כתבו אם צריך"></label>
+          </div>
+        </div>
+
+        <div class="question">
+          <div class="q-title">10. מה עדיין חסר לה?</div>
+          <textarea placeholder="כתבו בקצרה"></textarea>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>חלק ד׳ – מה חשוב לה בפתרון?</h2>
+        <div class="question">
+          <div class="q-title">11. מה הכי חשוב לפרסונה בפתרון טוב? סמנו עד 2 אפשרויות.</div>
+          <div class="options" data-limit="2">
+            <label><input type="checkbox"> מהירות</label>
+            <label><input type="checkbox"> פרטיות</label>
+            <label><input type="checkbox"> פשטות</label>
+            <label><input type="checkbox"> נוחות</label>
+            <label><input type="checkbox"> ביטחון</label>
+            <label><input type="checkbox"> זמינות</label>
+            <label><input type="checkbox"> דיסקרטיות</label>
+            <label class="inline-other"><input type="checkbox"> אחר: <input type="text" placeholder="כתבו אם צריך"></label>
+          </div>
+          <div class="hint">אפשר לסמן עד שתי אפשרויות.</div>
+        </div>
+
+        <div class="question">
+          <div class="q-title">12. מה ההשפעה של הבעיה עליה?</div>
+          <div class="options">
+            <label><input type="checkbox"> לחץ</label>
+            <label><input type="checkbox"> בלבול</label>
+            <label><input type="checkbox"> בזבוז זמן</label>
+            <label><input type="checkbox"> חוסר ביטחון</label>
+            <label><input type="checkbox"> מבוכה</label>
+            <label><input type="checkbox"> פספוס</label>
+            <label><input type="checkbox"> תלות באחרות / באחרים</label>
+            <label><input type="checkbox"> תסכול</label>
+            <label class="inline-other"><input type="checkbox"> אחר: <input type="text" placeholder="כתבו אם צריך"></label>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>חלק ה׳ – שורת סיכום</h2>
+        <div class="summary-box">
+          <div class="question">
+            <div class="q-title">13. כתבו את הפרסונה במשפט אחד:</div>
+            <div class="sentence-builder">
+              <input type="text" class="sentence-input" id="personaWho" placeholder="מי הפרסונה">
+              <span>מנסה ל</span>
+              <input type="text" class="sentence-input" id="personaTry" placeholder="מה היא מנסה לעשות">
+              <span>, אבל מתקשה כי </span>
+              <input type="text" class="sentence-input" id="personaHard" placeholder="מה מקשה עליה">
+              <span>, ולכן היא זקוקה ל</span>
+              <input type="text" class="sentence-input" id="personaNeed" placeholder="מה היא צריכה">
+              <span>.</span>
+            </div>
+            <div class="sentence-preview" id="personaSentencePreview">כאן יופיע המשפט השלם…</div>
+          </div>
+        </div>
+      </section>
+
+      <div class="footer-nav">
+        <a class="next-btn" href="problem_rebuilt.html">המשך לשלב 1</a>
       </div>
-    </div>
-
-    <h2>חלק ה’ – שורת סיכום</h2>
-
-    <div class="question-block" data-question="משפט סיכום הפרסונה">
-      <p><strong>כתבו את הפרסונה במשפט אחד:</strong></p>
-      <div class="summary-box">
-        <input class="sentence-part" type="text" placeholder="מי הפרסונה" style="width:140px;">
-        מנסה ל
-        <input class="sentence-part" type="text" placeholder="מה היא מנסה לעשות" style="width:180px;">
-        , אבל מתקשה כי 
-        <input class="sentence-part" type="text" placeholder="מה מקשה עליה" style="width:180px;">
-        , ולכן היא זקוקה ל
-        <input class="sentence-part" type="text" placeholder="מה היא צריכה" style="width:180px;">.
-      </div>
-      <div id="sentencePreview" class="preview">כאן יופיע המשפט השלם…</div>
-    </div>
-
-    <div class="actions">
-      <button type="button" onclick="saveAsPDF()">📄 שמירת PDF</button>
     </div>
   </main>
 
   <script>
-    /* משפט סיכום חי */
-    const parts = document.querySelectorAll('.sentence-part');
-    const preview = document.getElementById('sentencePreview');
+    const pageTitle = 'דף פעילות – פרסונה';
+    const pageSubtitle = '';
+    const personaSentenceInputs = [
+      document.getElementById('personaWho'),
+      document.getElementById('personaTry'),
+      document.getElementById('personaHard'),
+      document.getElementById('personaNeed')
+    ];
+    const personaSentencePreview = document.getElementById('personaSentencePreview');
 
-    parts.forEach((p) =>
-      p.addEventListener('input', () => {
-        const v = [...parts].map((x) => x.value.trim() || '____');
-        preview.textContent = `${v[0]} מנסה ל${v[1]}, אבל מתקשה כי${v[2]}, ולכן היא זקוקה ל${v[3]}.`;
-      })
-    );
+    function updatePersonaSentencePreview() {
+      const values = personaSentenceInputs.map(input => input.value.trim() || '________');
+      personaSentencePreview.textContent = `${values[0]} מנסה ל${values[1]}, אבל מתקשה כי ${values[2]}, ולכן היא זקוקה ל${values[3]}.`;
+    }
 
-    function collectAnsweredQuestions() {
-      const blocks = document.querySelectorAll('.question-block');
-      const res = [];
+    personaSentenceInputs.forEach(input => input.addEventListener('input', updatePersonaSentencePreview));
+    updatePersonaSentencePreview();
 
-      blocks.forEach((b) => {
-        const q = b.dataset.question;
-        const answers = [];
-
-        b.querySelectorAll('input[type="checkbox"]:checked').forEach((cb) => answers.push(cb.value));
-
-        b.querySelectorAll('input[type="text"], textarea').forEach((f) => {
-          if (f.value.trim()) {
-            answers.push(f.value.trim());
+    document.querySelectorAll('[data-limit]').forEach(group => {
+      const limit = Number(group.dataset.limit);
+      const boxes = group.querySelectorAll('input[type="checkbox"]');
+      boxes.forEach(box => {
+        box.addEventListener('change', () => {
+          const checked = Array.from(boxes).filter(item => item.checked);
+          if (checked.length > limit) {
+            box.checked = false;
+            alert(`אפשר לסמן עד ${limit} אפשרויות בשאלה הזאת.`);
           }
         });
-
-        if (answers.length) {
-          res.push({ q, answers });
-        }
       });
+    });
 
-      return res;
+    function escapeHtml(text) {
+      return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
     }
 
-    function buildFileName() {
-      const names = document.getElementById('studentNames').value;
-      if (!names.trim()) return 'PERSONA.pdf';
-
-      const initials = names
-        .split(',')
-        .map((n) => n.trim()[0])
-        .filter(Boolean)
-        .join('')
-        .toUpperCase();
-
-      return `PERSONA_${initials}.pdf`;
-    }
-
-    async function waitForImage(img) {
-      return new Promise((resolve) => {
-        if (!img) {
-          resolve();
+    function getLabelPureText(label) {
+      if (!label) return '';
+      let text = '';
+      Array.from(label.childNodes).forEach(node => {
+        if (node.nodeType === Node.TEXT_NODE) {
+          text += ' ' + node.textContent;
           return;
         }
-
-        if (img.complete) {
-          resolve();
-        } else {
-          img.onload = () => resolve();
-          img.onerror = () => resolve();
+        if (node.nodeType === Node.ELEMENT_NODE) {
+          const tag = node.tagName;
+          if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+          text += ' ' + node.textContent;
         }
       });
+      return text.replace(/\s+/g, ' ').trim();
     }
 
-    async function saveAsPDF() {
-      const data = collectAnsweredQuestions();
-      if (!data.length) {
-        alert('לא מולאו תשובות להדפסה');
-        return;
+    function getCheckedInputAnswer(input) {
+      const label = input.closest('label');
+      let text = '';
+      if (input.dataset.answer) {
+        text = input.dataset.answer.trim();
+      } else if (input.value && input.value !== 'on') {
+        text = input.value.trim();
+      } else {
+        text = getLabelPureText(label);
       }
 
-      const pdfDiv = document.createElement('div');
-      pdfDiv.style.direction = 'rtl';
-      pdfDiv.style.fontFamily = 'Assistant, Arial';
-      pdfDiv.style.padding = '30px';
-      pdfDiv.style.width = '800px';
-      pdfDiv.style.background = 'white';
-      pdfDiv.style.position = 'absolute';
-      pdfDiv.style.right = '-9999px';
-      pdfDiv.style.top = '0';
+      const extra = label ? label.querySelector('input[type="text"], textarea') : null;
+      const extraValue = extra && extra !== input ? extra.value.trim() : '';
 
-      pdfDiv.innerHTML = `
-        <div style="position:relative; min-height:46px; margin-bottom:16px;">
-          <img src="../icon/logo.png" alt="לוגו" style="position:absolute; top:0; right:0; width:42px; height:auto; opacity:0.95;">
-          <h1 style="color:#e91e63; margin:0; text-align:center;">PERSONA – דף פעילות</h1>
+      if (extraValue) {
+        if (!text || text === 'אחר:' || text === 'אחר') {
+          text = `אחר: ${extraValue}`;
+        } else {
+          text = `${text} ${extraValue}`.trim();
+        }
+      }
+
+      return text.trim();
+    }
+
+    function getQuestionAnswers(question) {
+      if (question.querySelector('.sentence-builder')) {
+        const sentenceValues = personaSentenceInputs.map(input => input.value.trim()).filter(Boolean);
+        return sentenceValues.length ? [personaSentencePreview.textContent.trim()] : [];
+      }
+
+      const answers = [];
+
+      question.querySelectorAll('input[type="checkbox"]:checked, input[type="radio"]:checked').forEach(input => {
+        const value = getCheckedInputAnswer(input);
+        if (value) answers.push(value);
+      });
+
+      question.querySelectorAll('textarea').forEach(field => {
+        const value = field.value.trim();
+        if (value) answers.push(value);
+      });
+
+      question.querySelectorAll('input[type="text"]').forEach(field => {
+        if (field.closest('label')) return;
+        if (field.classList.contains('sentence-input')) return;
+        if (field.id === 'studentNames') return;
+        const value = field.value.trim();
+        if (value) answers.push(value);
+      });
+
+      return answers.filter(Boolean);
+    }
+
+    function buildPrintHtml() {
+      const studentNames = document.getElementById('studentNames').value.trim();
+      const sections = Array.from(document.querySelectorAll('.student-box, .section'));
+      const logoSrc = new URL('../icon/logo.png', window.location.href).href;
+      let content = '';
+
+      sections.forEach((section, index) => {
+        const sectionTitle = section.querySelector('h2')?.textContent.trim() || '';
+        let sectionContent = '';
+
+        section.querySelectorAll('.question').forEach(question => {
+          const title = question.querySelector('.q-title')?.textContent.trim();
+          const answers = getQuestionAnswers(question);
+          if (!title || !answers.length) return;
+
+          sectionContent += `
+            <div class="print-question">
+              <div class="print-q-title">${escapeHtml(title)}</div>
+              <ul class="print-answer-list">
+                ${answers.map(answer => `<li>${escapeHtml(answer)}</li>`).join('')}
+              </ul>
+            </div>`;
+        });
+
+        if (sectionContent) {
+          content += `
+            <section class="print-section">
+              <h2>${escapeHtml(sectionTitle)}</h2>
+              ${sectionContent}
+            </section>`;
+        }
+      });
+
+      if (!content) return '';
+
+      return `<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<base href="${escapeHtml(window.location.href)}">
+<title>${pageTitle}</title>
+<style>
+  body {
+    font-family: Arial, "Heebo", sans-serif;
+    direction: rtl;
+    color: #1f2937;
+    margin: 0;
+    background: #fff;
+    line-height: 1.7;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .print-page {
+    padding: 24px;
+  }
+  .print-header {
+    background: linear-gradient(180deg, #fffdfd 0%, #faf5ff 100%);
+    color: #3f304b;
+    border: 1px solid #eadcf3;
+    border-radius: 18px;
+    padding: 18px 20px;
+    margin-bottom: 18px;
+    box-shadow: 0 8px 20px rgba(123, 54, 150, 0.08);
+  }
+  .print-header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .print-brand {
+    margin: 0 0 4px;
+    font-size: 0.95rem;
+    color: #7b3696;
+  }
+  .print-title {
+    margin: 0;
+    font-size: 1.85rem;
+    line-height: 1.2;
+    color: #6b2d84;
+  }
+  .print-subtitle {
+    margin: 0;
+    font-size: 0.98rem;
+    color: #6f5d7e;
+  }
+  .print-logo {
+    width: 58px;
+    height: 58px;
+    object-fit: contain;
+    background: #ffffff;
+    border: 1px solid #eadcf3;
+    border-radius: 16px;
+    padding: 7px;
+  }
+  .print-meta {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .print-meta-box {
+    background: #faf5ff;
+    border: 1px solid #eadcf3;
+    border-radius: 14px;
+    padding: 10px 14px;
+    color: #4c1d95;
+    font-weight: 600;
+  }
+  .print-section {
+    border: 1px solid #eadcf3;
+    border-radius: 16px;
+    padding: 16px;
+    margin-top: 16px;
+    background: linear-gradient(180deg, #ffffff 0%, #fcf8fe 100%);
+    page-break-inside: avoid;
+  }
+  .print-section h2 {
+    margin: 0 0 12px;
+    color: #6b2d84;
+    font-size: 1.15rem;
+  }
+  .print-question {
+    margin-bottom: 12px;
+    background: #fff;
+    border: 1px solid #efe5f4;
+    border-right: 4px solid #c04aa6;
+    border-radius: 12px 0 0 12px;
+    padding: 10px 12px;
+  }
+  .print-question:last-child { margin-bottom: 0; }
+  .print-q-title {
+    font-weight: 700;
+    color: #3f304b;
+    margin-bottom: 6px;
+  }
+  .print-answer-list {
+    margin: 0;
+    padding-right: 18px;
+  }
+  .print-answer-list li { margin-bottom: 4px; }
+  .print-answer-list li:last-child { margin-bottom: 0; }
+  @page {
+    size: A4;
+    margin: 14mm;
+  }
+</style>
+</head>
+<body>
+  <div class="print-page">
+    <div class="print-header">
+      <div class="print-header-top">
+        <div>
+          <p class="print-brand">פורצות דרך</p>
+          <h1 class="print-title">${escapeHtml(pageTitle)}</h1>
+          ${pageSubtitle ? `<p class="print-subtitle">${escapeHtml(pageSubtitle)}</p>` : ''}
         </div>
-      `;
+        <img class="print-logo" src="${escapeHtml(logoSrc)}" alt="לוגו" onerror="this.style.display='none'">
+      </div>
+    </div>
+    ${studentNames ? `<div class="print-meta"><div class="print-meta-box"><strong>שמות התלמידות בקבוצה:</strong> ${escapeHtml(studentNames)}</div></div>` : ''}
+    ${content}
+  </div>
+</body>
+</html>`;
+    }
 
-      data.forEach((item) => {
-        pdfDiv.innerHTML += `
-          <h3 style="color:#00a7b5;margin-top:20px;">${item.q}</h3>
-          <ul>${item.answers.map((a) => `<li>${a}</li>`).join('')}</ul>
-        `;
-      });
+    async function waitForPrintAssets(printWindow) {
+      const images = Array.from(printWindow.document.images || []);
+      await Promise.all(images.map(img => new Promise(resolve => {
+        if (img.complete) return resolve();
+        img.onload = () => resolve();
+        img.onerror = () => resolve();
+      })));
+    }
 
-      document.body.appendChild(pdfDiv);
-
-      const logoImg = pdfDiv.querySelector('img');
-      await waitForImage(logoImg);
-
-      const canvas = await html2canvas(pdfDiv, {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: '#ffffff'
-      });
-
-      const img = canvas.toDataURL('image/png');
-      const { jsPDF } = window.jspdf;
-
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      const w = 210;
-      const h = (canvas.height * w) / canvas.width;
-      pdf.addImage(img, 'PNG', 0, 0, w, h);
-      pdf.save(buildFileName());
-
-      document.body.removeChild(pdfDiv);
+    async function printAnsweredOnly() {
+      const html = buildPrintHtml();
+      if (!html) {
+        alert('אין עדיין תשובות מודפסות להצגה.');
+        return;
+      }
+      const printWindow = window.open('', '_blank');
+      if (!printWindow) {
+        alert('לא ניתן לפתוח חלון הדפסה.');
+        return;
+      }
+      printWindow.document.open();
+      printWindow.document.write(html);
+      printWindow.document.close();
+      printWindow.focus();
+      printWindow.onload = async () => {
+        await waitForPrintAssets(printWindow);
+        printWindow.print();
+      };
     }
   </script>
 </body>

@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>דף פעילות 2 - שלב :1</title>
+  <title>שלב 1 – מפת פערים והזדמנויות</title>
   <style>
-
     * { box-sizing: border-box; }
     body {
       margin: 0;
@@ -70,62 +69,77 @@
       transform: translateY(-2px);
       box-shadow: 0 12px 24px rgba(107,45,132,0.18);
     }
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    .header-actions { display: flex; align-items: center; gap: 10px; }
     .container {
-      max-width: 980px;
+      max-width: 940px;
       margin: 0 auto;
       padding: 28px 20px 40px;
     }
     .page-card {
-      background: rgba(255,255,255,0.88);
+      background: rgba(255,255,255,0.9);
       border: 1px solid rgba(227,214,234,0.95);
       border-radius: 24px;
       box-shadow: 0 16px 36px rgba(107,45,132,0.08);
       padding: 28px 22px;
     }
     h1 {
-      margin: 0 0 10px;
+      margin: 0 0 8px;
       text-align: center;
       color: #6b2d84;
       font-size: 1.95rem;
-      line-height: 1.3;
+      line-height: 1.25;
     }
-    .guide {
-      text-align: right;
-      margin: 0 0 24px;
-      color: #4d3e59;
-      font-size: 1.02rem;
-    }
+    .intro-box,
+    .student-box,
     .section {
-      margin-top: 24px;
+      margin-top: 22px;
       padding: 18px 16px;
       border-radius: 18px;
       background: #fff;
       border: 1px solid #eadff0;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.9);
     }
-    .section h2 {
+    .student-box {
+      margin-top: 0;
+      background: #faf5fd;
+    }
+    .intro-box {
+      background: linear-gradient(180deg, #fffdfd 0%, #faf5ff 100%);
+    }
+    .student-box h2,
+    .section h2,
+    .intro-box h2 {
       margin: 0 0 14px;
       color: #6b2d84;
       font-size: 1.2rem;
     }
-    .question {
-      margin-bottom: 18px;
+    .intro-box p {
+      margin: 0 0 10px;
+      color: #4d3e59;
     }
-    .question:last-child {
-      margin-bottom: 0;
+    .focus-list {
+      margin: 10px 0 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 8px;
     }
+    .focus-list li {
+      background: #fff;
+      border: 1px solid #efe5f4;
+      border-radius: 12px;
+      padding: 10px 12px;
+      color: #4d3e59;
+      font-weight: 600;
+    }
+    .question { margin-bottom: 18px; }
+    .question:last-child { margin-bottom: 0; }
     .q-title {
       font-weight: 700;
       margin-bottom: 8px;
       color: #3f304b;
     }
     .note {
-      margin: 10px 0 14px;
+      margin: 0 0 14px;
       padding: 12px 14px;
       border-radius: 14px;
       background: #faf5fd;
@@ -143,36 +157,53 @@
       outline: none;
     }
     textarea {
-      min-height: 86px;
+      min-height: 74px;
       resize: vertical;
     }
-    .line-input {
-      min-height: 52px;
-    }
-    .options {
+    .sentence-grid {
       display: grid;
-      gap: 8px;
-      margin-top: 8px;
+      gap: 12px;
     }
-    .options label {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 8px 10px;
-      border-radius: 12px;
-      background: #fcfaff;
+    .sentence-row {
       border: 1px solid #efe5f4;
+      border-radius: 14px;
+      padding: 12px;
+      background: #fcfaff;
     }
-    .tool-box {
-      margin-top: 16px;
-      padding: 14px;
-      border: 1px solid #eadff0;
-      border-radius: 16px;
-      background: #fcfbfe;
+    .sentence-starter {
+      display: block;
+      margin-bottom: 8px;
+      color: #6b2d84;
+      font-weight: 700;
     }
     .summary-box {
-      display: grid;
-      gap: 14px;
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px solid #eadcf3;
+      background: #faf5fd;
+    }
+    .summary-builder {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      line-height: 2;
+      color: #4d3e59;
+    }
+    .summary-input {
+      width: auto !important;
+      min-width: 150px;
+      flex: 1 1 180px;
+      display: inline-block;
+      background: #fff;
+    }
+    .summary-preview {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: #fff;
+      border: 1px dashed #d8c7e3;
+      color: #5b476b;
     }
     .footer-nav {
       display: flex;
@@ -195,33 +226,21 @@
       .site-header, .footer-nav { display: none !important; }
       body { background: #fff; }
       .container { max-width: 100%; padding: 0; }
-      .page-card {
-        box-shadow: none;
-        border: none;
-        border-radius: 0;
-        padding: 0;
-      }
-      .section {
-        break-inside: avoid;
-        box-shadow: none;
-      }
-      input, textarea {
-        border: 1px solid #bbb;
-      }
+      .page-card { box-shadow: none; border: none; border-radius: 0; padding: 0; }
+      .section, .student-box, .intro-box { break-inside: avoid; }
+      input, textarea { border: 1px solid #bbb; }
     }
-
   </style>
 </head>
 <body>
-
   <header class="site-header">
     <div class="header-inner">
-      <a class="header-logo" href="enter.html" aria-label="לוגו העמוד">
-        <img src="../icon/logo.png" alt="לוגו פורצות דרך">
+      <a class="header-logo" href="#" aria-label="לוגו העמוד">
+        <img src="../icon/logo.png" alt="לוגו">
         <span>פורצות דרך</span>
       </a>
       <div class="header-actions">
-        <button class="print-btn" type="button" onclick="window.print()">PDF / הדפסה</button>
+        <button class="print-btn" type="button" onclick="printAnsweredOnly()">PDF / הדפסה</button>
         <a class="home-link" href="enter.html" aria-label="חזרה לדף הבית" title="דף הבית">🏠</a>
       </div>
     </div>
@@ -229,163 +248,323 @@
 
   <main class="container">
     <div class="page-card">
-      <h1>דף פעילות 2 - שלב :1</h1>
-      <p class="guide"><strong>מפת פערים והזדמנויות</strong><br>
-      <strong>הנחיה לקבוצה:</strong><br>
-      חזרו לכרטיס המידע ולפרסונה שבניתן.<br>
-      עכשיו המטרה היא לזהות איפה יש פער, מה לא עובד טוב ומה יכול להפוך להזדמנות לפיתוח מוצר.</p>
-
-      <section class="section">
-        <h2>חלק א׳ - מבינות את המצב</h2>
-
+      <section class="student-box">
+        <h2>פרטי הקבוצה</h2>
         <div class="question">
-          <div class="q-title">1. מה המצב שהפרסונה פוגשת?</div>
-          <textarea class="line-input"></textarea>
-        </div>
-
-        <div class="question">
-          <div class="q-title">2. מה היא מנסה להשיג באותו רגע?</div>
-          <div>סמנו אפשרות אחת או יותר:</div>
-          <div class="options">
-            <label><input type="checkbox"> לחסוך זמן</label>
-            <label><input type="checkbox"> להבין מה לעשות</label>
-            <label><input type="checkbox"> להרגיש בטוחה יותר</label>
-            <label><input type="checkbox"> לשמור על פרטיות</label>
-            <label><input type="checkbox"> להתארגן טוב יותר</label>
-            <label><input type="checkbox"> לקבל החלטה נכונה</label>
-            <label><input type="checkbox"> למצוא פתרון נוח</label>
-            <label><input type="checkbox"> אחר: <input type="text"></label>
-          </div>
-        </div>
-
-        <div class="question">
-          <div class="q-title">3. מה אמור היה לקרות במצב תקין?</div>
-          <textarea class="line-input"></textarea>
-        </div>
-
-        <div class="question">
-          <div class="q-title">4. מה קורה בפועל במקום זה?</div>
-          <textarea class="line-input"></textarea>
+          <div class="q-title">שמות התלמידות בקבוצה</div>
+          <input type="text" id="studentNames" placeholder="כתבו את שמות התלמידות">
         </div>
       </section>
 
-      <section class="section">
-        <h2>חלק ב׳ - מזהות את הפער</h2>
+      <h1>שלב 1 – מפת פערים והזדמנויות</h1>
 
-        <div class="question">
-          <div class="q-title">5. איפה נמצא הפער המרכזי?</div>
-          <div class="options">
-            <label><input type="checkbox"> בין מה שצריך לקרות למה שקורה בפועל</label>
-            <label><input type="checkbox"> בין הצורך של קהל היעד למה שקיים היום</label>
-            <label><input type="checkbox"> בין הרצון לפעול נכון ליכולת לעשות את זה</label>
-            <label><input type="checkbox"> בין מידע שקיים לבין היכולת להבין אותו</label>
-            <label><input type="checkbox"> אחר: <input type="text"></label>
-          </div>
-        </div>
-
-        <div class="question">
-          <div class="q-title">6. מה לא עובד טוב ?</div>
-          <div>סמנו אפשרות אחת או יותר:</div>
-          <div class="options">
-            <label><input type="checkbox"> התהליך איטי מדי</label>
-            <label><input type="checkbox"> יש יותר מדי שלבים</label>
-            <label><input type="checkbox"> אין מידע ברור</label>
-            <label><input type="checkbox"> אין פתרון נגיש</label>
-            <label><input type="checkbox"> הפתרון לא נוח</label>
-            <label><input type="checkbox"> הפתרון לא פרטי / לא דיסקרטי</label>
-            <label><input type="checkbox"> הפתרון לא זמין בזמן הנכון</label>
-            <label><input type="checkbox"> אחר: <input type="text"></label>
-          </div>
-        </div>
-
-        <div class="question">
-          <div class="q-title">7. מה הכי מקשה על הפרסונה?</div>
-          <textarea class="line-input"></textarea>
-        </div>
-
-        <div class="question">
-          <div class="q-title">8. מה לוקח יותר מדי זמן, מאמץ או מחשבה ?</div>
-          <textarea class="line-input"></textarea>
-        </div>
-
-        <div class="question">
-          <div class="q-title">9. מה חסר לה כדי להתמודד טוב יותר?</div>
-          <textarea class="line-input"></textarea>
-        </div>
+      <section class="intro-box">
+        <h2>פתיחה</h2>
+        <p>אנחנו עוצרות כדי להבין איפה יש קושי, איפה משהו לא עובד טוב, איפה יש פער, תסכול או חוסר ששווה להתעכב עליו.</p>
+        <p>המטרה בשלב הזה היא לא לחשוב על פתרונות, אלא להבין איפה באמת נמצא הקושי.</p>
+        <ul class="focus-list">
+          <li>מה קורה בפועל?</li>
+          <li>מה לא עובד טוב?</li>
+          <li>מה מתסכל או מקשה?</li>
+          <li>ומה חסר?</li>
+        </ul>
       </section>
 
       <section class="section">
-        <h2>חלק ג׳ - כותבות הזדמנויות</h2>
+        <h2>כותבות הזדמנויות</h2>
         <div class="note">
-          כתבו 8–10 הזדמנויות.<br>
-          לא פתרונות.<br>
-          לא רעיונות למוצר.<br>
-          רק מצבים שלא עובדים טוב, פערים, חוסרים או תסכולים.<br><br>
-          אפשר להתחיל כך:<br>
-          יש קושי כש...<br>
-          מה שלא עובד טוב הוא...<br>
-          אין דרך פשוטה ל...<br>
-          יש פער בין... לבין...<br>
-          לוקח יותר מדי זמן ל...<br>
-          זה מסורבל כש...<br>
-          חסר משהו ש...<br>
-          לא תמיד מצליחים ל...
+          היעזרו במשפטי הפתיחה שלפניכן והשלימו לפחות 8 שורות.<br>
+          לא כותבות פתרון ולא כותבות מה אפשר להמציא — רק מצב, קושי, פער, תסכול או משהו שחסר.
         </div>
-        <div class="q-title">הזדמנויות:</div>
-        <textarea rows="12"></textarea>
+
+        <div class="sentence-grid">
+          <div class="sentence-row">
+            <span class="sentence-starter">יש פער בין... לבין...</span>
+            <input type="text" data-starter="יש פער בין... לבין..." placeholder="השלימו את המשפט">
+          </div>
+          <div class="sentence-row">
+            <span class="sentence-starter">יש בלבול כש...</span>
+            <input type="text" data-starter="יש בלבול כש..." placeholder="השלימו את המשפט">
+          </div>
+          <div class="sentence-row">
+            <span class="sentence-starter">אין דרך פשוטה ל...</span>
+            <input type="text" data-starter="אין דרך פשוטה ל..." placeholder="השלימו את המשפט">
+          </div>
+          <div class="sentence-row">
+            <span class="sentence-starter">זה לא נוח כש...</span>
+            <input type="text" data-starter="זה לא נוח כש..." placeholder="השלימו את המשפט">
+          </div>
+          <div class="sentence-row">
+            <span class="sentence-starter">מה שמקשה במיוחד הוא...</span>
+            <input type="text" data-starter="מה שמקשה במיוחד הוא..." placeholder="השלימו את המשפט">
+          </div>
+          <div class="sentence-row">
+            <span class="sentence-starter">חסר משהו ש...</span>
+            <input type="text" data-starter="חסר משהו ש..." placeholder="השלימו את המשפט">
+          </div>
+          <div class="sentence-row">
+            <span class="sentence-starter">יש קושי כש...</span>
+            <input type="text" data-starter="יש קושי כש..." placeholder="השלימו את המשפט">
+          </div>
+          <div class="sentence-row">
+            <span class="sentence-starter">מה שלא עובד טוב הוא...</span>
+            <input type="text" data-starter="מה שלא עובד טוב הוא..." placeholder="השלימו את המשפט">
+          </div>
+          <div class="sentence-row">
+            <span class="sentence-starter">אין דרך טובה ל...</span>
+            <input type="text" data-starter="אין דרך טובה ל..." placeholder="השלימו את המשפט">
+          </div>
+          <div class="sentence-row">
+            <span class="sentence-starter">לוקח יותר מדי זמן ל...</span>
+            <input type="text" data-starter="לוקח יותר מדי זמן ל..." placeholder="השלימו את המשפט">
+          </div>
+          <div class="sentence-row">
+            <span class="sentence-starter">לא תמיד מצליחים ל...</span>
+            <input type="text" data-starter="לא תמיד מצליחים ל..." placeholder="השלימו את המשפט">
+          </div>
+          <div class="sentence-row">
+            <span class="sentence-starter">זה מסורבל כש...</span>
+            <input type="text" data-starter="זה מסורבל כש..." placeholder="השלימו את המשפט">
+          </div>
+        </div>
       </section>
 
       <section class="section">
-        <h2>חלק ד׳ - בוחרות הזדמנות אחת</h2>
-
+        <h2>בחירה להמשך</h2>
         <div class="question">
-          <div class="q-title">10. איזו הזדמנות נראית לכן הכי משמעותית?</div>
-          <textarea class="line-input"></textarea>
+          <div class="q-title">ההזדמנות שבחרנו להתמקד בה</div>
+          <textarea id="chosenOpportunity" placeholder="כתבו את ההזדמנות שבחרתן"></textarea>
         </div>
-
         <div class="question">
-          <div class="q-title">11. למה דווקא היא?</div>
-          <div>סמנו אפשרות אחת או יותר:</div>
-          <div class="options">
-            <label><input type="checkbox"> היא חוזרת הרבה</label>
-            <label><input type="checkbox"> היא פוגעת בהרבה אנשים</label>
-            <label><input type="checkbox"> היא יוצרת תסכול גדול</label>
-            <label><input type="checkbox"> יש בה פער ברור</label>
-            <label><input type="checkbox"> קל להבין ממנה צורך אמיתי</label>
-            <label><input type="checkbox"> יש ממנה כיוון טוב לפיתוח מוצר</label>
-            <label><input type="checkbox"> אחר: <input type="text"></label>
-          </div>
-        </div>
-
-        <div class="question">
-          <div class="q-title">12. על מי היא משפיעה הכי חזק?</div>
-          <textarea class="line-input"></textarea>
-        </div>
-
-        <div class="question">
-          <div class="q-title">13. מה יכול להשתנות אם נבין אותה טוב יותר?</div>
-          <textarea class="line-input"></textarea>
-        </div>
-      </section>
-
-      <section class="section">
-        <h2>חלק ה׳ - שורת סיכום</h2>
-        <div class="summary-box">
-          <div>
-            <div class="q-title">ההזדמנות שבחרנו היא:</div>
-            <textarea class="line-input"></textarea>
-          </div>
-          <div>
-            <div class="q-title">בחרנו בה כי:</div>
-            <textarea class="line-input"></textarea>
-          </div>
+          <div class="q-title">למה בחרנו בה</div>
+          <textarea id="chosenReason" placeholder="כתבו בקצרה למה בחרתן בה"></textarea>
         </div>
       </section>
 
       <div class="footer-nav">
-        <a class="next-btn" href="need.html">המשך לשלב 2</a>
+        <a class="next-btn" href="need_rebuilt.html">המשך לשלב 2</a>
       </div>
     </div>
   </main>
+
+  <script>
+    const pageTitle = 'שלב 1 – מפת פערים והזדמנויות';
+
+    function escapeHtml(text) {
+      return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function buildFilledSentenceRows() {
+      return Array.from(document.querySelectorAll('.sentence-row input[type="text"]'))
+        .map(input => {
+          const value = input.value.trim();
+          const starter = input.dataset.starter || '';
+          if (!value) return null;
+          return `${starter} ${value}`.replace(/\s+/g, ' ').trim();
+        })
+        .filter(Boolean);
+    }
+
+    function buildPrintHtml() {
+      const studentNames = document.getElementById('studentNames').value.trim();
+      const filledSentences = buildFilledSentenceRows();
+      const chosenOpportunity = document.getElementById('chosenOpportunity').value.trim();
+      const chosenReason = document.getElementById('chosenReason').value.trim();
+      const logoSrc = new URL('../icon/logo.png', window.location.href).href;
+
+      let content = '';
+
+      if (filledSentences.length) {
+        content += `
+          <section class="print-section">
+            <h2>הזדמנויות שכתבנו</h2>
+            ${filledSentences.map(sentence => `
+              <div class="print-question">
+                <div class="print-answer-line">${escapeHtml(sentence)}</div>
+              </div>`).join('')}
+          </section>`;
+      }
+
+      const selectionParts = [];
+      if (chosenOpportunity) {
+        selectionParts.push(`
+          <div class="print-question">
+            <div class="print-q-title">ההזדמנות שבחרנו להתמקד בה</div>
+            <div class="print-answer-line">${escapeHtml(chosenOpportunity)}</div>
+          </div>`);
+      }
+      if (chosenReason) {
+        selectionParts.push(`
+          <div class="print-question">
+            <div class="print-q-title">למה בחרנו בה</div>
+            <div class="print-answer-line">${escapeHtml(chosenReason)}</div>
+          </div>`);
+      }
+      if (selectionParts.length) {
+        content += `
+          <section class="print-section">
+            <h2>בחירה להמשך</h2>
+            ${selectionParts.join('')}
+          </section>`;
+      }
+
+      if (!content && !studentNames) return '';
+
+      return `<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<base href="${escapeHtml(window.location.href)}">
+<title>${pageTitle}</title>
+<style>
+  body {
+    font-family: Arial, "Heebo", sans-serif;
+    direction: rtl;
+    color: #1f2937;
+    margin: 0;
+    background: #fff;
+    line-height: 1.7;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .print-page { padding: 24px; }
+  .print-header {
+    background: linear-gradient(180deg, #fffdfd 0%, #faf5ff 100%);
+    color: #3f304b;
+    border: 1px solid #eadcf3;
+    border-radius: 18px;
+    padding: 18px 20px;
+    margin-bottom: 18px;
+    box-shadow: 0 8px 20px rgba(123, 54, 150, 0.08);
+  }
+  .print-header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .print-brand {
+    margin: 0 0 4px;
+    font-size: 0.95rem;
+    color: #7b3696;
+  }
+  .print-title {
+    margin: 0;
+    font-size: 1.85rem;
+    line-height: 1.2;
+    color: #6b2d84;
+  }
+  .print-logo {
+    width: 58px;
+    height: 58px;
+    object-fit: contain;
+    background: #ffffff;
+    border: 1px solid #eadcf3;
+    border-radius: 16px;
+    padding: 7px;
+  }
+  .print-meta {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .print-meta-box {
+    background: #faf5ff;
+    border: 1px solid #eadcf3;
+    border-radius: 14px;
+    padding: 10px 14px;
+    color: #4c1d95;
+    font-weight: 600;
+  }
+  .print-section {
+    border: 1px solid #eadcf3;
+    border-radius: 16px;
+    padding: 16px;
+    margin-top: 16px;
+    background: linear-gradient(180deg, #ffffff 0%, #fcf8fe 100%);
+    page-break-inside: avoid;
+  }
+  .print-section h2 {
+    margin: 0 0 12px;
+    color: #6b2d84;
+    font-size: 1.15rem;
+  }
+  .print-question {
+    margin-bottom: 12px;
+    background: #fff;
+    border: 1px solid #efe5f4;
+    border-right: 4px solid #c04aa6;
+    border-radius: 12px 0 0 12px;
+    padding: 10px 12px;
+  }
+  .print-question:last-child { margin-bottom: 0; }
+  .print-q-title {
+    font-weight: 700;
+    color: #3f304b;
+    margin-bottom: 6px;
+  }
+  .print-answer-line {
+    color: #2b2b2b;
+    white-space: pre-wrap;
+  }
+  @page {
+    size: A4;
+    margin: 14mm;
+  }
+</style>
+</head>
+<body>
+  <div class="print-page">
+    <div class="print-header">
+      <div class="print-header-top">
+        <div>
+          <p class="print-brand">פורצות דרך</p>
+          <h1 class="print-title">${escapeHtml(pageTitle)}</h1>
+        </div>
+        <img class="print-logo" src="${escapeHtml(logoSrc)}" alt="לוגו" onerror="this.style.display='none'">
+      </div>
+    </div>
+    ${studentNames ? `<div class="print-meta"><div class="print-meta-box"><strong>שמות התלמידות בקבוצה:</strong> ${escapeHtml(studentNames)}</div></div>` : ''}
+    ${content}
+  </div>
+</body>
+</html>`;
+    }
+
+    async function waitForPrintAssets(printWindow) {
+      const images = Array.from(printWindow.document.images || []);
+      await Promise.all(images.map(img => new Promise(resolve => {
+        if (img.complete) return resolve();
+        img.onload = () => resolve();
+        img.onerror = () => resolve();
+      })));
+    }
+
+    async function printAnsweredOnly() {
+      const html = buildPrintHtml();
+      if (!html) {
+        alert('אין עדיין שורות מלאות להצגה.');
+        return;
+      }
+      const printWindow = window.open('', '_blank');
+      if (!printWindow) {
+        alert('לא ניתן לפתוח חלון הדפסה.');
+        return;
+      }
+      printWindow.document.open();
+      printWindow.document.write(html);
+      printWindow.document.close();
+      printWindow.focus();
+      printWindow.onload = async () => {
+        await waitForPrintAssets(printWindow);
+        printWindow.print();
+      };
+    }
+  </script>
 </body>
 </html>
