@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>פורצות דרך ו־17 יעדי הפיתוח של האו״ם</title>
+<title>17 היעדים | פורצות דרך</title>
 <style>
   * {
     box-sizing: border-box;
@@ -78,9 +78,20 @@
   }
 
   .container {
-    max-width: 1100px;
+    max-width: 1500px;
     margin: auto;
     padding: 28px 24px 40px;
+  }
+
+  .page-title {
+    text-align: center;
+    margin: 4px 0 18px;
+    font-size: clamp(2rem, 4vw, 2.9rem);
+    font-weight: 800;
+    color: #6b2d84;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.82);
   }
 
   .intro {
@@ -96,32 +107,59 @@
     box-shadow: 0 12px 28px rgba(107, 45, 132, 0.08);
   }
 
+  .goals-orbit {
+    position: relative;
+    width: min(1450px, 100%);
+    min-height: 1280px;
+    margin: 10px auto 0;
+  }
+
   .hero-image {
-    width: 220px;
-    height: 220px;
+    width: 260px;
+    height: 260px;
     border-radius: 50%;
-    margin: 24px auto 32px;
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #ddd;
+    background: radial-gradient(circle at center, #ffffff 0%, #f8effb 72%, #f1e3f7 100%);
     box-shadow: 0 14px 34px rgba(107, 45, 132, 0.18);
-    border: 4px solid rgba(255, 255, 255, 0.92);
+    border: 4px solid rgba(255, 255, 255, 0.96);
+    padding: 18px;
+  }
+
+  .hero-image.central-image {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    z-index: 3;
   }
 
   .hero-image img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
+    object-position: center center;
     display: block;
   }
 
-  .goals {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 12px;
-    margin-top: 8px;
+  .goals-ring {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+  }
+
+  .goal-item {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform:
+      translate(-50%, -50%)
+      rotate(calc(var(--angle) * 1deg))
+      translateY(calc(-1 * var(--radius)))
+      rotate(calc(var(--angle) * -1deg));
   }
 
   .goal-btn {
@@ -151,7 +189,7 @@
   .bottom-action {
     display: flex;
     justify-content: center;
-    margin-top: 34px;
+    margin-top: 28px;
   }
 
   .next-btn {
@@ -217,6 +255,32 @@
     color: #6b2d84;
   }
 
+  @media (max-width: 1100px) {
+    .goals-orbit {
+      position: static;
+      min-height: auto;
+      width: 100%;
+    }
+
+    .hero-image.central-image {
+      position: static;
+      transform: none;
+      margin: 24px auto 28px;
+    }
+
+    .goals-ring {
+      position: static;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .goal-item {
+      position: static;
+      transform: none;
+    }
+  }
+
   @media (max-width: 640px) {
     .header-inner {
       padding: 10px 16px;
@@ -230,17 +294,23 @@
       padding: 20px 16px 32px;
     }
 
+    .page-title {
+      margin-bottom: 14px;
+      font-size: 1.9rem;
+    }
+
     .intro {
       font-size: 1rem;
       padding: 16px 18px;
     }
 
     .hero-image {
-      width: 190px;
-      height: 190px;
+      width: 210px;
+      height: 210px;
+      padding: 16px;
     }
 
-    .goals {
+    .goals-ring {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
@@ -266,36 +336,40 @@
 </header>
 
 <div class="container">
+  <h1 class="page-title">17 היעדים</h1>
+
   <p class="intro">
     עולם משתנה נבנה בידי מנהיגות שמחברת בין חזון לעשייה. 17 יעדי הפיתוח של האו״ם הם מסגרת לחשיבה ולעשייה ומשמשים נקודת פתיחה לזיהוי אתגרים, הבנת צרכים ופיתוח מיזמים שמבקשים ליצור שינוי.
   </p>
 
-  <div class="hero-image">
-    <img src="../icon/sdg.png" alt="יעדי הפיתוח של האו״ם">
-  </div>
+  <section class="goals-orbit">
+    <div class="hero-image central-image">
+      <img src="../icon/sdg.png" alt="יעדי הפיתוח של האו״ם">
+    </div>
 
-  <section class="goals">
-    <button class="goal-btn" onclick="openModal(1)">יעד 1: מיגור העוני</button>
-    <button class="goal-btn" onclick="openModal(2)">יעד 2: אפס רעב / אי ביטחון תזונתי</button>
-    <button class="goal-btn" onclick="openModal(3)">יעד 3: בריאות טובה ורווחה אנושית</button>
-    <button class="goal-btn" onclick="openModal(4)">יעד 4: חינוך איכותי</button>
-    <button class="goal-btn" onclick="openModal(5)">יעד 5: שוויון מגדרי</button>
-    <button class="goal-btn" onclick="openModal(6)">יעד 6: מים נקיים ותברואה</button>
-    <button class="goal-btn" onclick="openModal(7)">יעד 7: אנרגיה זמינה ונקייה</button>
-    <button class="goal-btn" onclick="openModal(8)">יעד 8: עבודה הוגנת וצמיחה כלכלית</button>
-    <button class="goal-btn" onclick="openModal(9)">יעד 9: תעשייה, תשתיות וחדשנות</button>
-    <button class="goal-btn" onclick="openModal(10)">יעד 10: צמצום אי השוויון</button>
-    <button class="goal-btn" onclick="openModal(11)">יעד 11: ערים וקהילות מקיימות</button>
-    <button class="goal-btn" onclick="openModal(12)">יעד 12: צריכה וייצור אחראים</button>
-    <button class="goal-btn" onclick="openModal(13)">יעד 13: שינויי אקלים</button>
-    <button class="goal-btn" onclick="openModal(14)">יעד 14: שימור המשאבים הימיים – חיים מתחת למים</button>
-    <button class="goal-btn" onclick="openModal(15)">יעד 15: חיים על פני האדמה</button>
-    <button class="goal-btn" onclick="openModal(16)">יעד 16: שלום, צדק וחוזק המוסדות</button>
-    <button class="goal-btn" onclick="openModal(17)">יעד 17: שותפות להשגת היעדים</button>
+    <div class="goals-ring">
+      <div class="goal-item"><button class="goal-btn" onclick="openModal(1)">יעד 1: מיגור העוני</button></div>
+      <div class="goal-item"><button class="goal-btn" onclick="openModal(2)">יעד 2: אפס רעב / אי ביטחון תזונתי</button></div>
+      <div class="goal-item"><button class="goal-btn" onclick="openModal(3)">יעד 3: בריאות טובה ורווחה אנושית</button></div>
+      <div class="goal-item"><button class="goal-btn" onclick="openModal(4)">יעד 4: חינוך איכותי</button></div>
+      <div class="goal-item"><button class="goal-btn" onclick="openModal(5)">יעד 5: שוויון מגדרי</button></div>
+      <div class="goal-item"><button class="goal-btn" onclick="openModal(6)">יעד 6: מים נקיים ותברואה</button></div>
+      <div class="goal-item"><button class="goal-btn" onclick="openModal(7)">יעד 7: אנרגיה זמינה ונקייה</button></div>
+      <div class="goal-item"><button class="goal-btn" onclick="openModal(8)">יעד 8: עבודה הוגנת וצמיחה כלכלית</button></div>
+      <div class="goal-item"><button class="goal-btn" onclick="openModal(9)">יעד 9: תעשייה, תשתיות וחדשנות</button></div>
+      <div class="goal-item"><button class="goal-btn" onclick="openModal(10)">יעד 10: צמצום אי השוויון</button></div>
+      <div class="goal-item"><button class="goal-btn" onclick="openModal(11)">יעד 11: ערים וקהילות מקיימות</button></div>
+      <div class="goal-item"><button class="goal-btn" onclick="openModal(12)">יעד 12: צריכה וייצור אחראים</button></div>
+      <div class="goal-item"><button class="goal-btn" onclick="openModal(13)">יעד 13: שינויי אקלים</button></div>
+      <div class="goal-item"><button class="goal-btn" onclick="openModal(14)">יעד 14: שימור המשאבים הימיים – חיים מתחת למים</button></div>
+      <div class="goal-item"><button class="goal-btn" onclick="openModal(15)">יעד 15: חיים על פני האדמה</button></div>
+      <div class="goal-item"><button class="goal-btn" onclick="openModal(16)">יעד 16: שלום, צדק וחוזק המוסדות</button></div>
+      <div class="goal-item"><button class="goal-btn" onclick="openModal(17)">יעד 17: שותפות להשגת היעדים</button></div>
+    </div>
   </section>
 
   <div class="bottom-action">
-    <a class="next-btn" href="domains.html">לבחירת תחום</a>
+    <a class="next-btn" href="/p.nativ/game/index.html">לבחירת תחום</a>
   </div>
 </div>
 
@@ -501,6 +575,34 @@
   document.getElementById("modalOverlay").addEventListener("click", function(e){
     if (e.target === this) closeModal();
   });
+
+  function layoutGoalsOrbit() {
+    const orbit = document.querySelector(".goals-orbit");
+    const items = document.querySelectorAll(".goal-item");
+
+    if (!orbit || !items.length) return;
+
+    if (window.innerWidth <= 1100) {
+      orbit.style.minHeight = "auto";
+      return;
+    }
+
+    const total = items.length;
+    const orbitWidth = orbit.offsetWidth;
+    const radius = Math.max(390, Math.min(520, orbitWidth * 0.36));
+    const stageSize = Math.max(1120, (radius * 2) + 260);
+
+    orbit.style.minHeight = stageSize + "px";
+
+    items.forEach((item, index) => {
+      const angle = -90 + (360 / total) * index;
+      item.style.setProperty("--angle", angle);
+      item.style.setProperty("--radius", radius + "px");
+    });
+  }
+
+  window.addEventListener("load", layoutGoalsOrbit);
+  window.addEventListener("resize", layoutGoalsOrbit);
 </script>
 
 </body>
