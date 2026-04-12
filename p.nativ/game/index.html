@@ -1,57 +1,80 @@
-<!doctype html>
+<!-- index.html -->
+<!DOCTYPE html>
 <html lang="he" dir="rtl">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>משחק קלפים - מדריכה</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body data-theme="group1">
-    <main class="app">
-      <header class="app-header">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>משחק קלפים לקבוצות</title>
+  <meta name="description" content="משחק קלפים סטטי לחלוקה לתת-קבוצות בגודל 2 או 3, ללא גלילה." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-theme="group1">
+  <div class="app-shell">
+    <header class="page-header">
+      <div class="header-copy">
+        <p class="eyebrow">Portzot Derech</p>
         <h1>משחק קלפים לקבוצות</h1>
-        <p>בחירת קבוצה, חלוקה אוטומטית לתתי-קבוצות (2/3 בלבד), והצגת כרטיסים ללא גלילה.</p>
-      </header>
+        <p class="subtitle">בחירת מצב קבוצה, חלוקה אוטומטית לתת-קבוצות 2–3, ותצוגת קלפים ללא גלילה.</p>
+      </div>
 
-      <section class="controls" aria-label="בקרות משחק">
-        <form id="setup-form" novalidate>
-          <fieldset>
-            <legend>מצב קבוצה</legend>
-            <label>
-              <input type="radio" name="groupMode" value="group1" checked />
-              קבוצה 1
-            </label>
-            <label>
-              <input type="radio" name="groupMode" value="group2" />
-              קבוצה 2
-            </label>
-          </fieldset>
+      <div class="theme-badge" id="themeBadge" aria-live="polite">
+        מצב פעיל: קבוצה 1
+      </div>
+    </header>
 
-          <label class="number-field" for="participants">מספר משתתפות</label>
-          <input id="participants" name="participants" type="number" min="2" step="1" value="9" inputmode="numeric" />
+    <section class="control-panel" aria-label="הגדרות משחק">
+      <form id="setupForm" class="setup-form" novalidate>
+        <fieldset class="mode-fieldset">
+          <legend>בחירת מצב</legend>
 
-          <div class="actions-row">
-            <button type="submit" class="primary-btn">בני לוח קלפים</button>
-          </div>
-        </form>
+          <label class="mode-option">
+            <input type="radio" name="groupMode" value="group1" checked />
+            <span>קבוצה 1</span>
+          </label>
 
-        <p id="feedback" class="feedback" role="status" aria-live="polite"></p>
-      </section>
+          <label class="mode-option">
+            <input type="radio" name="groupMode" value="group2" />
+            <span>קבוצה 2</span>
+          </label>
+        </fieldset>
 
-      <section id="board-wrapper" class="board-wrapper" aria-label="לוח קלפים">
-        <div id="board" class="board"></div>
-      </section>
-    </main>
+        <label class="input-field" for="participantCount">
+          <span>מספר משתתפות</span>
+          <input
+            id="participantCount"
+            name="participantCount"
+            type="number"
+            inputmode="numeric"
+            min="2"
+            step="1"
+            placeholder="לדוגמה 12"
+            required
+          />
+        </label>
 
-    <template id="card-template">
-      <article class="card" tabindex="0" role="button" aria-pressed="false">
-        <div class="card-inner">
-          <div class="card-face card-front"></div>
-          <div class="card-face card-back"></div>
+        <button type="submit" class="primary-button">צור לוח</button>
+      </form>
+
+      <div class="panel-feedback">
+        <p id="validationMessage" class="feedback-message is-hidden" role="alert" aria-live="assertive"></p>
+        <p id="summaryMessage" class="feedback-message neutral" aria-live="polite">
+          הזיני מספר משתתפות ובחרי מצב קבוצה כדי לבנות את הלוח.
+        </p>
+      </div>
+    </section>
+
+    <main class="board-area" id="boardArea">
+      <div class="board-placeholder" id="boardPlaceholder">
+        <div class="placeholder-card">
+          <strong>הלוח עדיין לא נבנה</strong>
+          <span>בחרי מצב קבוצה, הזיני מספר משתתפות ולחצי על “צור לוח”.</span>
         </div>
-      </article>
-    </template>
+      </div>
 
-    <script src="app.js" defer></script>
-  </body>
+      <div id="boardGrid" class="board-grid is-hidden" aria-live="polite" aria-label="לוח הקלפים"></div>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
 </html>
