@@ -6,7 +6,11 @@
   <title>דף פעילות 1 – הגדרת פרסונה</title>
 
   <!-- Fonts -->
-  https://fonts.googleapis.com/css2?family=Rubik:wght@600;700&family=Assistant:wght@400;600&display=swap
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@600;700&family=Assistant:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- PDF libs -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
   <style>
     body {
@@ -14,13 +18,14 @@
       padding: 20px;
       background: #f3f4f6;
       font-family: 'Assistant', sans-serif;
+      direction: rtl;
       color: #1f2937;
     }
 
     .container {
       max-width: 900px;
       margin: 0 auto;
-      background: #ffffff;
+      background: white;
       padding: 40px 30px;
       border-radius: 15px;
       box-shadow: 0 6px 20px rgba(0,0,0,0.08);
@@ -41,19 +46,6 @@
       margin-top: 40px;
     }
 
-    h3 {
-      margin-top: 25px;
-      color: #374151;
-    }
-
-    p.hint {
-      background: #fff0f5;
-      padding: 12px 15px;
-      border-radius: 10px;
-      margin: 20px 0;
-      font-size: 0.95rem;
-    }
-
     label {
       display: block;
       font-weight: 600;
@@ -65,11 +57,11 @@
     textarea {
       width: 100%;
       box-sizing: border-box;
-      padding: 10px 12px;
+      padding: 10px;
       border-radius: 6px;
       border: 1px solid #d1d5db;
-      font-size: 1rem;
       font-family: inherit;
+      font-size: 1rem;
     }
 
     textarea {
@@ -77,10 +69,8 @@
       resize: vertical;
     }
 
-    fieldset {
-      border: none;
-      margin: 0;
-      padding: 0;
+    .question-block {
+      margin-bottom: 25px;
     }
 
     .checkbox-list {
@@ -88,7 +78,6 @@
       border: 1px solid #e5e7eb;
       border-radius: 10px;
       padding: 15px;
-      margin-top: 8px;
     }
 
     .checkbox-list label {
@@ -101,258 +90,195 @@
     .inline-other {
       display: flex;
       gap: 8px;
-      align-items: center;
       margin-top: 8px;
+      align-items: center;
     }
 
-    .inline-other span {
-      white-space: nowrap;
-      font-size: 0.9rem;
+    .summary-box {
+      background: #f8fafc;
+      border: 1.5px solid #94a3b8;
+      border-radius: 10px;
+      padding: 15px;
+      line-height: 2;
     }
 
-    .error {
-      color: #b91c1c;
-      font-size: 0.85rem;
-      margin-top: 4px;
-      display: none;
+    .preview {
+      margin-top: 15px;
+      padding: 12px;
+      background: #fff0f5;
+      border-radius: 8px;
+      font-style: italic;
     }
 
     .actions {
       margin-top: 40px;
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      flex-wrap: wrap;
+      text-align: center;
     }
 
     button {
       background: linear-gradient(90deg, #e91e63, #00a7b5);
+      color: white;
       border: none;
-      color: #ffffff;
-      padding: 12px 22px;
-      border-radius: 16px;
-      font-size: 0.95rem;
+      padding: 14px 26px;
+      border-radius: 18px;
+      font-size: 1rem;
       font-weight: 700;
       cursor: pointer;
       box-shadow: 0 4px 14px rgba(0,0,0,0.12);
-      transition: transform 0.15s ease, opacity 0.15s ease;
-    }
-
-    button:hover {
-      opacity: 0.95;
-      transform: translateY(-1px);
-    }
-
-    @media (max-width: 600px) {
-      .container {
-        padding: 25px 18px;
-      }
     }
   </style>
 </head>
 
 <body>
-  <main class="container">
-    <h1>דף פעילות 1 – הגדרת פרסונה</h1>
+<main class="container">
+  <h1>דף פעילות 1 – הגדרת פרסונה</h1>
 
-    <p class="hint">
-      <strong>הנחיה:</strong><br>
-      קראו את כרטיס המידע שקיבלתן. בנו פרסונה שמתאימה לקהל היעד ולבעיה שעלו בכרטיס.
-    </p>
+  <!-- חלק א -->
+  <h2>חלק א’ – מי הפרסונה?</h2>
 
-    <!-- חלק א -->
-    <section>
-      <h2>חלק א’ – מי הפרסונה?</h2>
+  <div class="question-block" data-question="מי קהל היעד הכללי של הכרטיס?">
+    <label>מי קהל היעד הכללי של הכרטיס?</label>
+    <input type="text" placeholder="כתבו כאן">
+  </div>
 
-      <label for="audience">1. מי קהל היעד הכללי של הכרטיס?</label>
-      <input type="text" id="audience" placeholder="לדוגמה: נערות בגילאי תיכון" required>
-      <div class="error" id="audienceError">שדה זה נדרש</div>
-
-      <label>2. מי במיוחד בתוך קהל היעד הכי מושפעת מהבעיה?</label>
-      <div class="checkbox-list">
-        <label><input type="checkbox"> מי שחווה את המצב לעיתים קרובות</label>
-        <label><input type="checkbox"> מי שפחות בטוחה בעצמה</label>
-        <label><input type="checkbox"> מי שאין לה הרבה תמיכה</label>
-        <label><input type="checkbox"> מי שפועלת תחת לחץ זמן</label>
-        <label><input type="checkbox"> מי שמנסה להתמודד לבד</label>
-        <div class="inline-other">
-          <span>אחר:</span>
-          <input type="text" placeholder="TODO">
-        </div>
+  <div class="question-block" data-question="מי במיוחד בתוך קהל היעד הכי מושפעת מהבעיה?">
+    <label>מי במיוחד בתוך קהל היעד הכי מושפעת מהבעיה?</label>
+    <div class="checkbox-list">
+      <label><input type="checkbox" value="מי שחווה את המצב לעיתים קרובות"> מי שחווה את המצב לעיתים קרובות</label>
+      <label><input type="checkbox" value="מי שפחות בטוחה בעצמה"> מי שפחות בטוחה בעצמה</label>
+      <label><input type="checkbox" value="מי שאין לה הרבה תמיכה"> מי שאין לה הרבה תמיכה</label>
+      <label><input type="checkbox" value="מי שפועלת תחת לחץ זמן"> מי שפועלת תחת לחץ זמן</label>
+      <div class="inline-other">
+        <span>אחר:</span>
+        <input type="text">
       </div>
-
-      <label>3. בת כמה בערך הפרסונה?</label>
-      <div class="checkbox-list">
-        <label><input type="checkbox"> 12–13</label>
-        <label><input type="checkbox"> 14–15</label>
-        <label><input type="checkbox"> 16–18</label>
-        <div class="inline-other">
-          <span>אחר:</span>
-          <input type="text">
-        </div>
-      </div>
-
-      <label>4. באיזה שלב חיים היא נמצאת?</label>
-      <div class="checkbox-list">
-        <label><input type="checkbox"> חטיבת ביניים</label>
-        <label><input type="checkbox"> תיכון</label>
-        <label><input type="checkbox"> בתחילת עבודה ראשונה</label>
-        <label><input type="checkbox"> מתחילה יותר עצמאות יומיומית</label>
-        <div class="inline-other">
-          <span>אחר:</span>
-          <input type="text">
-        </div>
-      </div>
-    </section>
-
-    <!-- חלק ב -->
-    <section>
-      <h2>חלק ב’ – באיזה מצב היא פוגשת את הבעיה?</h2>
-
-      <label>5. מתי הבעיה מופיעה בדרך כלל?</label>
-      <div class="checkbox-list">
-        <label><input type="checkbox"> בבוקר</label>
-        <label><input type="checkbox"> במהלך יום הלימודים</label>
-        <label><input type="checkbox"> אחר הצהריים</label>
-        <label><input type="checkbox"> בערב</label>
-        <label><input type="checkbox"> ברשת</label>
-        <label><input type="checkbox"> בזמן יציאה / בילוי</label>
-        <label><input type="checkbox"> בזמן נסיעה / דרך</label>
-        <div class="inline-other">
-          <span>אחר:</span>
-          <input type="text">
-        </div>
-      </div>
-
-      <label>6. איפה זה קורה לה בדרך כלל?</label>
-      <div class="checkbox-list">
-        <label><input type="checkbox"> בבית הספר</label>
-        <label><input type="checkbox"> בבית</label>
-        <label><input type="checkbox"> בדרך</label>
-        <label><input type="checkbox"> במרחב ציבורי</label>
-        <label><input type="checkbox"> ברשתות החברתיות</label>
-        <label><input type="checkbox"> בעבודה</label>
-        <div class="inline-other">
-          <span>אחר:</span>
-          <input type="text">
-        </div>
-      </div>
-
-      <label for="trying">7. מה הפרסונה מנסה לעשות באותו רגע?</label>
-      <textarea id="trying" placeholder="תיאור קצר"></textarea>
-    </section>
-
-    <!-- חלק ג -->
-    <section>
-      <h2>חלק ג’ – מה הכי מקשה עליה?</h2>
-
-      <label>8. מה הכי מקשה עליה במצב הזה?</label>
-      <div class="checkbox-list">
-        <label><input type="checkbox"> חוסר זמן</label>
-        <label><input type="checkbox"> חוסר מידע ברור</label>
-        <label><input type="checkbox"> עומס</label>
-        <label><input type="checkbox"> בלבול</label>
-        <label><input type="checkbox"> מבוכה</label>
-        <label><input type="checkbox"> חוסר פרטיות</label>
-        <label><input type="checkbox"> חוסר ביטחון</label>
-        <label><input type="checkbox"> תלות באחרות / אחרים</label>
-        <div class="inline-other">
-          <span>אחר:</span>
-          <input type="text">
-        </div>
-      </div>
-
-      <label for="frustration">9. מה הכי מתסכל אותה?</label>
-      <textarea id="frustration"></textarea>
-
-      <label>10. איך היא מתמודדת היום?</label>
-      <div class="checkbox-list">
-        <label><input type="checkbox"> מאלתרת</label>
-        <label><input type="checkbox"> מבקשת עזרה</label>
-        <label><input type="checkbox"> דוחה את ההתמודדות</label>
-        <label><input type="checkbox"> מוותרת</label>
-        <label><input type="checkbox"> מחפשת לבד פתרון</label>
-        <label><input type="checkbox"> משתמשת בפתרון חלקי</label>
-        <div class="inline-other">
-          <span>אחר:</span>
-          <input type="text">
-        </div>
-      </div>
-
-      <label for="missing">11. מה עדיין חסר לה?</label>
-      <textarea id="missing"></textarea>
-    </section>
-
-    <!-- חלק ד -->
-    <section>
-      <h2>חלק ד’ – מה חשוב לה?</h2>
-
-      <label>12. מה הכי חשוב לפרסונה בפתרון טוב? (עד 2)</label>
-      <div class="checkbox-list">
-        <label><input type="checkbox"> מהירות</label>
-        <label><input type="checkbox"> פרטיות</label>
-        <label><input type="checkbox"> פשטות</label>
-        <label><input type="checkbox"> נוחות</label>
-        <label><input type="checkbox"> ביטחון</label>
-        <label><input type="checkbox"> מחיר נגיש</label>
-        <label><input type="checkbox"> זמינות</label>
-        <label><input type="checkbox"> דיסקרטיות</label>
-        <div class="inline-other">
-          <span>אחר:</span>
-          <input type="text">
-        </div>
-      </div>
-
-      <label>13. מה ההשפעה של הבעיה עליה?</label>
-      <div class="checkbox-list">
-        <label><input type="checkbox"> לחץ</label>
-        <label><input type="checkbox"> בלבול</label>
-        <label><input type="checkbox"> בזבוז זמן</label>
-        <label><input type="checkbox"> חוסר ביטחון</label>
-        <label><input type="checkbox"> מבוכה</label>
-        <label><input type="checkbox"> פספוס</label>
-        <label><input type="checkbox"> תלות באחרות / אחרים</label>
-        <label><input type="checkbox"> תסכול</label>
-        <div class="inline-other">
-          <span>אחר:</span>
-          <input type="text">
-        </div>
-      </div>
-    </section>
-
-    <!-- חלק ה -->
-    <section>
-      <h2>חלק ה’ – שורת סיכום</h2>
-
-      <label for="summary">14. כתבו את הפרסונה במשפט אחד:</label>
-      <textarea id="summary" placeholder="___ מנסה ל___ אבל מתקשה כי ___ ולכן היא זקוקה ל___"></textarea>
-    </section>
-
-    <div class="actions">
-      <button type="button" onclick="handleSave()">💾 שמירה (Stub)</button>
-      <button type="button" onclick="handleSubmit()">✅ שליחה (Stub)</button>
     </div>
-  </main>
+  </div>
 
-  <script>
-    function handleSave() {
-      alert('שמירה – TODO (חיבור לשרת / LocalStorage)');
+  <!-- חלק ב -->
+  <h2>חלק ב’ – באיזה מצב היא פוגשת את הבעיה?</h2>
+
+  <div class="question-block" data-question="מתי הבעיה מופיעה בדרך כלל?">
+    <label>מתי הבעיה מופיעה בדרך כלל?</label>
+    <div class="checkbox-list">
+      <label><input type="checkbox" value="בבוקר"> בבוקר</label>
+      <label><input type="checkbox" value="במהלך יום הלימודים"> במהלך יום הלימודים</label>
+      <label><input type="checkbox" value="בערב"> בערב</label>
+      <div class="inline-other">
+        <span>אחר:</span>
+        <input type="text">
+      </div>
+    </div>
+  </div>
+
+  <div class="question-block" data-question="מה הפרסונה מנסה לעשות באותו רגע?">
+    <label>מה הפרסונה מנסה לעשות באותו רגע?</label>
+    <textarea></textarea>
+  </div>
+
+  <!-- חלק ה – משפט סיכום -->
+  <h2>חלק ה’ – שורת סיכום</h2>
+
+  <div class="question-block" data-question="משפט סיכום הפרסונה">
+    <p><strong>כתבו את הפרסונה במשפט אחד:</strong></p>
+
+    <div class="summary-box">
+      <input class="sentence-part" type="text" placeholder="מי הפרסונה" style="width:140px;">
+      מנסה ל
+      <input class="sentence-part" type="text" placeholder="מה היא מנסה לעשות" style="width:180px;">,
+      אבל מתקשה כי
+      <input class="sentence-part" type="text" placeholder="מה מקשה עליה" style="width:180px;">,
+      ולכן היא זקוקה ל
+      <input class="sentence-part" type="text" placeholder="מה היא צריכה" style="width:180px;">.
+    </div>
+
+    <div id="sentencePreview" class="preview">
+      כאן יופיע המשפט השלם…
+    </div>
+  </div>
+
+  <!-- כפתור יחיד -->
+  <div class="actions">
+    <button onclick="saveAsPDF()">📄 שמירת PDF</button>
+  </div>
+</main>
+
+<script>
+  // חיבור משפט הסיכום
+  const parts = document.querySelectorAll('.sentence-part');
+  const preview = document.getElementById('sentencePreview');
+
+  function updateSentence() {
+    const v = [...parts].map(p => p.value.trim() || '____');
+    preview.textContent =
+      `${v[0]} מנסה ל${v[1]}, אבל מתקשה כי${v[2]}, ולכן היא זקוקה ל${v[3]}.`;
+  }
+
+  parts.forEach(p => p.addEventListener('input', updateSentence));
+
+  // איסוף רק תשובות שנענו
+  function collectAnsweredQuestions() {
+    const blocks = document.querySelectorAll('.question-block');
+    const res = [];
+
+    blocks.forEach(b => {
+      const q = b.dataset.question;
+      let answers = [];
+
+      b.querySelectorAll('input[type=checkbox]:checked')
+        .forEach(cb => answers.push(cb.value));
+
+      b.querySelectorAll('input[type=text], textarea')
+        .forEach(f => {
+          if (f.value.trim()) answers.push(f.value.trim());
+        });
+
+      if (answers.length) res.push({ q, answers });
+    });
+
+    return res;
+  }
+
+  // יצירת PDF
+  async function saveAsPDF() {
+    const data = collectAnsweredQuestions();
+    if (!data.length) {
+      alert('לא מולאו תשובות להדפסה');
+      return;
     }
 
-    function handleSubmit() {
-      const audience = document.getElementById('audience');
-      const error = document.getElementById('audienceError');
+    const pdfDiv = document.createElement('div');
+    pdfDiv.style.direction = 'rtl';
+    pdfDiv.style.fontFamily = 'Assistant, Arial, sans-serif';
+    pdfDiv.style.padding = '30px';
+    pdfDiv.style.width = '800px';
+    pdfDiv.style.background = 'white';
 
-      if (!audience.value.trim()) {
-        error.style.display = 'block';
-        audience.focus();
-        return;
-      } else {
-        error.style.display = 'none';
-      }
+    pdfDiv.innerHTML = `<h1 style="color:#e91e63;">דף פעילות – הגדרת פרסונה</h1>`;
 
-      alert('שליחה – TODO (ולידציה מלאה + Backend)');
-    }
-  </script>
+    data.forEach(item => {
+      pdfDiv.innerHTML += `
+        <h3 style="color:#00a7b5;margin-top:25px;">${item.q}</h3>
+        <ul>
+          ${item.answers.map(a => `<li>${a}</li>`).join('')}
+        </ul>
+      `;
+    });
+
+    document.body.appendChild(pdfDiv);
+
+    const canvas = await html2canvas(pdfDiv, { scale: 2 });
+    const img = canvas.toDataURL('image/png');
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF('p', 'mm', 'a4');
+
+    const w = 210;
+    const h = canvas.height * w / canvas.width;
+    pdf.addImage(img, 'PNG', 0, 0, w, h);
+    pdf.save('worksheet-persona.pdf');
+
+    document.body.removeChild(pdfDiv);
+  }
+</script>
 </body>
 </html>
