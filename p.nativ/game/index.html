@@ -4,17 +4,588 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>מערכת קלפי פעילות כיתתית</title>
-    <link rel="stylesheet" href="styles.css" />
+    <style>
+      :root {
+        --bg: #f6f7fb;
+        --panel: #ffffff;
+        --panel-soft: #f9f7ff;
+        --text: #23263a;
+        --muted: #687089;
+        --line: #dbe0ee;
+        --primary: #6d4aff;
+        --primary-strong: #5534ea;
+        --secondary: #eef1f8;
+        --danger: #e65576;
+        --success: #19a26b;
+        --shadow: 0 12px 28px rgba(29, 38, 73, 0.09);
+        --radius: 18px;
+        --card-radius: 20px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        font-family: "Rubik", "Assistant", Arial, sans-serif;
+        background: radial-gradient(circle at top, #fdfcff 0%, #f6f7fb 58%, #eef2fb 100%);
+        color: var(--text);
+      }
+
+      body {
+        min-height: 100vh;
+      }
+
+      button,
+      input,
+      select {
+        font: inherit;
+      }
+
+      .app-shell {
+        width: min(1500px, 100%);
+        margin: 0 auto;
+        min-height: 100vh;
+        padding: 14px;
+      }
+
+      .screen {
+        display: none;
+      }
+
+      .screen.active {
+        display: block;
+      }
+
+      .selector-screen,
+      .setup-screen {
+        min-height: calc(100vh - 28px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .selector-screen.active,
+      .setup-screen.active {
+        display: flex;
+      }
+
+      .selector-card,
+      .setup-card {
+        width: min(720px, 100%);
+        background: rgba(255, 255, 255, 0.92);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.7);
+        border-radius: 28px;
+        box-shadow: var(--shadow);
+        padding: 28px;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      .selector-card h1,
+      .setup-card h2 {
+        font-size: clamp(1.5rem, 3vw, 2.1rem);
+        margin-bottom: 10px;
+      }
+
+      .selector-card p,
+      .setup-card p,
+      .setup-note,
+      .distribution-box,
+      .mode-label {
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .selector-actions,
+      .setup-actions,
+      .topbar-actions,
+      .chips,
+      .row-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .selector-actions {
+        margin-top: 18px;
+      }
+
+      .compact-btn,
+      .selector-btn,
+      .primary,
+      .secondary,
+      .danger,
+      .chip-btn,
+      .mini-btn {
+        border: none;
+        border-radius: 999px;
+        padding: 9px 14px;
+        min-height: 36px;
+        font-size: 0.92rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease, color 0.16s ease;
+      }
+
+      .selector-btn,
+      .primary {
+        background: var(--primary);
+        color: #fff;
+        box-shadow: 0 8px 18px rgba(109, 74, 255, 0.22);
+      }
+
+      .selector-btn:hover,
+      .primary:hover,
+      .chip-btn:hover,
+      .secondary:hover,
+      .danger:hover,
+      .mini-btn:hover {
+        transform: translateY(-1px);
+      }
+
+      .selector-btn:active,
+      .primary:active,
+      .chip-btn:active,
+      .secondary:active,
+      .danger:active,
+      .mini-btn:active {
+        transform: translateY(0);
+      }
+
+      .secondary,
+      .mini-btn {
+        background: var(--secondary);
+        color: var(--text);
+      }
+
+      .danger {
+        background: rgba(230, 85, 118, 0.14);
+        color: #bc234c;
+      }
+
+      .chip-btn {
+        background: #f1f4fb;
+        color: var(--text);
+      }
+
+      .chip-btn.active {
+        background: #e7e0ff;
+        color: var(--primary-strong);
+      }
+
+      .setup-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 14px;
+        margin-top: 20px;
+      }
+
+      .field {
+        display: grid;
+        gap: 8px;
+      }
+
+      .field label {
+        font-weight: 600;
+      }
+
+      .field input,
+      .field select,
+      .control-group input,
+      .control-group select {
+        width: 100%;
+        border: 1px solid var(--line);
+        background: #fff;
+        border-radius: 14px;
+        min-height: 42px;
+        padding: 0 12px;
+        color: var(--text);
+      }
+
+      .distribution-box {
+        margin-top: 16px;
+        background: var(--panel-soft);
+        border: 1px solid #e7dfff;
+        border-radius: 18px;
+        padding: 14px 16px;
+      }
+
+      .setup-actions {
+        margin-top: 16px;
+      }
+
+      .game-screen {
+        min-height: calc(100vh - 28px);
+        display: none;
+      }
+
+      .game-screen.active {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .topbar,
+      .controls,
+      .stats {
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        box-shadow: var(--shadow);
+        border-radius: 22px;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 14px 16px;
+      }
+
+      .topbar h2 {
+        font-size: clamp(1.2rem, 2vw, 1.55rem);
+      }
+
+      .controls {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+        gap: 10px;
+        padding: 12px;
+      }
+
+      .control-group {
+        display: grid;
+        gap: 7px;
+      }
+
+      .control-group label {
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: var(--muted);
+      }
+
+      .control-group.full-width {
+        grid-column: 1 / -1;
+      }
+
+      .control-group.chips,
+      .control-group.row-actions {
+        align-content: end;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 10px;
+        padding: 10px;
+      }
+
+      .stat-box {
+        background: #f8f9ff;
+        border: 1px solid #edf0fb;
+        border-radius: 16px;
+        padding: 10px 12px;
+        text-align: center;
+        font-size: 0.92rem;
+        line-height: 1.45;
+      }
+
+      .board-wrap {
+        position: relative;
+        flex: 1;
+        min-height: 0;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(245, 247, 255, 0.96));
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        box-shadow: var(--shadow);
+        border-radius: 28px;
+        overflow: hidden;
+      }
+
+      .board-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 12px 16px 0;
+      }
+
+      .board-header p {
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      .cards-grid {
+        position: relative;
+        width: 100%;
+        height: calc(100vh - 318px);
+        min-height: 420px;
+        padding: 18px;
+        overflow: hidden;
+      }
+
+      .card {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        border-radius: var(--card-radius);
+        padding: 12px;
+        background: linear-gradient(180deg, #ffffff 0%, #faf8ff 100%);
+        border: 1px solid #e9e3ff;
+        box-shadow: 0 10px 24px rgba(51, 58, 100, 0.12);
+        overflow: hidden;
+        user-select: none;
+        transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+      }
+
+      .card:hover {
+        box-shadow: 0 16px 28px rgba(51, 58, 100, 0.16);
+      }
+
+      .card.selected {
+        border-color: rgba(25, 162, 107, 0.45);
+        box-shadow: 0 20px 34px rgba(25, 162, 107, 0.2);
+      }
+
+      .card.taken {
+        cursor: not-allowed;
+      }
+
+      .card-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 8px;
+      }
+
+      .card-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 8px;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        min-height: 24px;
+        padding: 0 9px;
+        border-radius: 999px;
+        background: #f2edff;
+        color: var(--primary-strong);
+        font-size: 0.76rem;
+        font-weight: 700;
+      }
+
+      .badge.success {
+        background: rgba(25, 162, 107, 0.12);
+        color: var(--success);
+      }
+
+      .card-code {
+        font-size: 0.72rem;
+        color: var(--muted);
+        white-space: nowrap;
+      }
+
+      .card-title {
+        font-size: 1rem;
+        font-weight: 700;
+        line-height: 1.3;
+        margin-bottom: 6px;
+      }
+
+      .card-hook,
+      .card-text,
+      .card-footer {
+        color: var(--muted);
+        line-height: 1.45;
+      }
+
+      .card-hook {
+        font-size: 0.86rem;
+        margin-bottom: 10px;
+      }
+
+      .card-content {
+        display: grid;
+        gap: 6px;
+        font-size: 0.84rem;
+      }
+
+      .card-line strong {
+        color: var(--text);
+      }
+
+      .card-actions {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      .card-actions .mini-btn,
+      .card-actions .primary,
+      .card-actions .secondary {
+        flex: 1;
+        min-width: 0;
+        min-height: 34px;
+        padding: 7px 10px;
+        font-size: 0.84rem;
+      }
+
+      dialog {
+        border: none;
+        border-radius: 24px;
+        padding: 0;
+        width: min(760px, calc(100vw - 24px));
+        box-shadow: 0 22px 48px rgba(20, 25, 46, 0.22);
+      }
+
+      dialog::backdrop {
+        background: rgba(18, 24, 43, 0.42);
+        backdrop-filter: blur(4px);
+      }
+
+      .dialog-content,
+      .modal-content {
+        background: #fff;
+        padding: 20px;
+      }
+
+      .dialog-content menu {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        padding: 0;
+        margin: 14px 0 0;
+      }
+
+      .close-modal {
+        margin-bottom: 12px;
+      }
+
+      .modal-card {
+        display: grid;
+        gap: 14px;
+      }
+
+      .modal-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .modal-box {
+        background: #f8f9ff;
+        border: 1px solid #edf0fb;
+        border-radius: 14px;
+        padding: 12px;
+      }
+
+      .muted {
+        color: var(--muted);
+      }
+
+      @media (max-width: 1100px) {
+        .controls {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .stats {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .cards-grid {
+          height: calc(100vh - 420px);
+        }
+      }
+
+      @media (max-width: 760px) {
+        .app-shell {
+          padding: 10px;
+        }
+
+        .topbar,
+        .controls,
+        .stats,
+        .selector-card,
+        .setup-card {
+          border-radius: 18px;
+        }
+
+        .topbar,
+        .board-header {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .controls {
+          grid-template-columns: 1fr;
+        }
+
+        .stats {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .cards-grid {
+          height: calc(100vh - 520px);
+          min-height: 360px;
+        }
+
+        .modal-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
   </head>
   <body>
     <main class="app-shell">
       <section id="game-selector" class="screen selector-screen active" aria-label="בחירת משחק">
         <div class="selector-card">
           <h1>בחירת משחק למדריכות</h1>
-          <p>בחרו עם איזה משחק להתחיל. כל משחק שומר בחירות ומצב בנפרד.</p>
+          <p>קודם בוחרות קבוצה. אחר כך מגדירות כמה משתתפות יש. רק אחרי זה מפזרים את הכרטיסים על המסך.</p>
           <div class="selector-actions">
-            <button class="selector-btn" data-game="group1">התחלת משחק קבוצה 1</button>
-            <button class="selector-btn" data-game="group2">התחלת משחק קבוצה 2</button>
+            <button class="selector-btn" data-game="group1">קבוצה 1</button>
+            <button class="selector-btn" data-game="group2">קבוצה 2</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="setup-screen" class="screen setup-screen" aria-label="הגדרת משחק">
+        <div class="setup-card">
+          <h2 id="setup-title">הגדרת משחק</h2>
+          <p>בחרי כמה משתתפות יש בקבוצה, ואז המערכת תציג חלוקה ברורה ותעבור למסך הכרטיסים.</p>
+
+          <div class="setup-grid">
+            <div class="field">
+              <label for="participants-count">כמות משתתפות</label>
+              <input id="participants-count" type="number" min="1" step="1" value="6" />
+            </div>
+            <div class="field">
+              <label for="selection-mode-setup">אופן שימוש</label>
+              <select id="selection-mode-setup">
+                <option value="browse">עיון חופשי לפני בחירה</option>
+                <option value="select">מעבר ישר לבחירה</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="distribution-summary" class="distribution-box"></div>
+
+          <div class="setup-actions">
+            <button id="setup-back" class="secondary">חזרה</button>
+            <button id="start-game" class="primary">המשך לפיזור הכרטיסים</button>
           </div>
         </div>
       </section>
@@ -26,7 +597,8 @@
             <p id="mode-label" class="mode-label">מצב עיון</p>
           </div>
           <div class="topbar-actions">
-            <button id="back-to-selector" class="secondary">חזרה לבחירת משחק</button>
+            <button id="back-to-selector" class="secondary">בחירת קבוצה</button>
+            <button id="back-to-setup" class="secondary">כמות משתתפות</button>
             <button id="toggle-mode" class="primary">התחל בחירה</button>
           </div>
         </header>
@@ -58,8 +630,8 @@
 
           <div class="control-group chips">
             <button id="show-all" class="chip-btn active">כל הקלפים</button>
-            <button id="show-unselected" class="chip-btn">רק לא נבחרו</button>
-            <button id="show-selected" class="chip-btn">רק נבחרו</button>
+            <button id="show-unselected" class="chip-btn">פנויים</button>
+            <button id="show-selected" class="chip-btn">נבחרו</button>
           </div>
 
           <div class="control-group row-actions full-width">
@@ -69,13 +641,21 @@
         </section>
 
         <section class="stats" aria-live="polite">
-          <div class="stat-box">סה״כ במשחק: <strong id="total-count">0</strong></div>
-          <div class="stat-box">נבחרו: <strong id="selected-count">0</strong></div>
-          <div class="stat-box">נותרו לבחירה: <strong id="remaining-count">0</strong></div>
-          <div class="stat-box">מוצגים כרגע: <strong id="visible-count">0</strong></div>
+          <div class="stat-box">סה״כ במשחק<br /><strong id="total-count">0</strong></div>
+          <div class="stat-box">משתתפות<br /><strong id="participants-stat">0</strong></div>
+          <div class="stat-box">נבחרו<br /><strong id="selected-count">0</strong></div>
+          <div class="stat-box">נותרו לבחירה<br /><strong id="remaining-count">0</strong></div>
+          <div class="stat-box">מוצגים כרגע<br /><strong id="visible-count">0</strong></div>
+          <div class="stat-box">חלוקה שווה<br /><strong id="distribution-stat">-</strong></div>
         </section>
 
-        <section id="cards-grid" class="cards-grid" aria-label="גריד קלפים"></section>
+        <section class="board-wrap">
+          <div class="board-header">
+            <h3>לוח כרטיסים</h3>
+            <p>כל הכרטיסים נשמרים בתוך שטח המסך. בחירה מסמנת ומגדילה את הקלף.</p>
+          </div>
+          <section id="cards-grid" class="cards-grid" aria-label="פיזור כרטיסים"></section>
+        </section>
       </section>
     </main>
 
@@ -96,6 +676,404 @@
       </div>
     </dialog>
 
-    <script src="app.js"></script>
-  </body>
-</html>
+    <script>
+      /*
+        אם כבר יש לך נתונים אמיתיים, אפשר להזריק אותם כך:
+        window.GAME_DATA = {
+          group1: [...],
+          group2: [...]
+        };
+
+        כל כרטיס תומך בשדות הבאים:
+        code, title, hook, family, domain, sdg,
+        productDirection, audience, persona, topic,
+        situation, problem, whyNotWorking, impact, missing, question
+      */
+
+      const USER_CARDS = [
+        { code: "A1", title: "הליכה לילית", hook: "הדרך הביתה לא אמורה להפוך לרגע של דריכות ופחד.", family: "בטיחות", domain: "פיזי", sdg: "", productDirection: "", audience: "", persona: "", topic: "", situation: "", problem: "", whyNotWorking: "", impact: "", missing: "", question: "" },
+        { code: "A2", title: "מרחבי בילוי", hook: "בילוי אמור להרגיש משוחרר, לא כמו מקום שצריך להישמר בו בלי הפסקה.", family: "בטיחות", domain: "פיזי", sdg: "", productDirection: "", audience: "", persona: "", topic: "", situation: "", problem: "", whyNotWorking: "", impact: "", missing: "", question: "" },
+        { code: "A3", title: "תחבורה ציבורית", hook: "נסיעה הביתה לא אמורה לדרוש אומץ מיוחד רק כי כבר חשוך.", family: "בטיחות", domain: "פיזי", sdg: "", productDirection: "", audience: "", persona: "", topic: "", situation: "", problem: "", whyNotWorking: "", impact: "", missing: "", question: "" },
+        { code: "B1", title: "דימוי גוף", hook: "כשכל תמונה נראית מושלמת, קל לשכוח כמה עריכה מסתתרת מאחוריה.", family: "רווחה", domain: "דיגיטלי", sdg: "", productDirection: "", audience: "", persona: "", topic: "", situation: "", problem: "", whyNotWorking: "", impact: "", missing: "", question: "" },
+        { code: "B2", title: "חרדת זמינות", hook: "לא כל הודעה חייבת לקבל תשובה מיידית, אבל לפעמים זה בדיוק מה שמרגיש.", family: "רווחה", domain: "דיגיטלי", sdg: "", productDirection: "", audience: "", persona: "", topic: "", situation: "", problem: "", whyNotWorking: "", impact: "", missing: "", question: "" },
+        { code: "B3", title: "איכות השינה", hook: "לפעמים העייפות מתחילה הרבה לפני הבוקר, בגלילה שלא נגמרת בלילה.", family: "רווחה", domain: "דיגיטלי", sdg: "", productDirection: "", audience: "", persona: "", topic: "", situation: "", problem: "", whyNotWorking: "", impact: "", missing: "", question: "" },
+        { code: "E1", title: "נגישות פיזית", hook: "יציאה לבילוי מתחילה הרבה לפני שמגיעים, בשאלה אם בכלל אפשר להיכנס ולהתנייד.", family: "נגישות", domain: "פיזי", sdg: "", productDirection: "", audience: "", persona: "", topic: "", situation: "", problem: "", whyNotWorking: "", impact: "", missing: "", question: "" },
+        { code: "E2", title: "נגישות חושית", hook: "גם אירוע שמרגיש כיפי לרוב האנשים יכול להיות מציף מאוד לאחרים.", family: "נגישות", domain: "פיזי", sdg: "", productDirection: "", audience: "", persona: "", topic: "", situation: "", problem: "", whyNotWorking: "", impact: "", missing: "", question: "" },
+        { code: "E3", title: "שילוב שפתי", hook: "כשלא מבינים את השפה סביבך, גם בילוי פשוט יכול להפוך למחסום.", family: "נגישות", domain: "פיזי", sdg: "", productDirection: "", audience: "", persona: "", topic: "", situation: "", problem: "", whyNotWorking: "", impact: "", missing: "", question: "" },
+        { code: "H1", title: "האוריינות החדשה", hook: "העולם כבר משתמש ב-AI בכל מקום, אבל לא לכולן יש הזדמנות ללמוד אותו באמת.", family: "למידה", domain: "דיגיטלי", sdg: "", productDirection: "", audience: "", persona: "", topic: "", situation: "", problem: "", whyNotWorking: "", impact: "", missing: "", question: "" },
+        { code: "H2", title: "נגישות חומרית", hook: "למידה דיגיטלית נשמעת זמינה לכולם, עד שאין בבית את הציוד הבסיסי.", family: "למידה", domain: "דיגיטלי", sdg: "", productDirection: "", audience: "", persona: "", topic: "", situation: "", problem: "", whyNotWorking: "", impact: "", missing: "", question: "" },
+        { code: "H3", title: "שפת הטכנולוגיה", hook: "לפעמים המחסום בדרך לטכנולוגיה הוא לא היכולת, אלא השפה.", family: "למידה", domain: "דיגיטלי", sdg: "", productDirection: "", audience: "", persona: "", topic: "", situation: "", problem: "", whyNotWorking: "", impact: "", missing: "", question: "" },
+        { code: "J1", title: "ארוחות על הדרך", hook: "כשאין זמן לעצור, גם האוכל הופך לפתרון מהיר ולא תמיד בריא.", family: "בריאות", domain: "פיזי", sdg: "", productDirection: "", audience: "", persona: "", topic: "", situation: "", problem: "", whyNotWorking: "", impact: "", missing: "", question: "" },
+        { code: "J2", title: "אלרגיות במרחב", hook: "לפעמים ביס אחד קטן מספיק כדי להפוך ארוחה שלמה למסוכנת.", family: "בריאות", domain: "פיזי", sdg: "", productDirection: "", audience: "", persona: "", topic: "", situation: "", problem: "", whyNotWorking: "", impact: "", missing: "", question: "" },
+        { code: "J3", title: "ויטמינים ומעקב", hook: "לא כל חוסר מרגיש מיד בגוף, אבל הוא עדיין משפיע.", family: "בריאות", domain: "פיזי", sdg: "", productDirection: "", audience: "", persona: "", topic: "", situation: "", problem: "", whyNotWorking: "", impact: "", missing: "", question: "" },
+        { code: "M1", title: "עריכת רילס", hook: "לכולן יש רעיון טוב לסטורי, אבל לא תמיד יש דרך קלה להפוך אותו לתוכן שנראה מקצועי.", family: "יצירה", domain: "דיגיטלי", sdg: "", productDirection: "", audience: "", persona: "", topic: "", situation: "", problem: "", whyNotWorking: "", impact: "", missing: "", question: "" },
+        { code: "M2", title: "טיוטות שלא נסגרות", hook: "לפעמים הבעיה היא לא שאין מה לפרסם, אלא שהכול נשאר חצי מוכן.", family: "יצירה", domain: "דיגיטלי", sdg: "", productDirection: "", audience: "", persona: "", topic: "", situation: "", problem: "", whyNotWorking: "", impact: "", missing: "", question: "" },
+        { code: "M3", title: "פרטיות ליוצרות", hook: "לא כל מי שיוצרת תוכן רוצה לחשוף יותר ממה שהתכוונה.", family: "יצירה", domain: "דיגיטלי", sdg: "", productDirection: "", audience: "", persona: "", topic: "", situation: "", problem: "", whyNotWorking: "", impact: "", missing: "", question: "" },
+        { code: "O1", title: "המידה שלא יושבת", hook: "קנייה אונליין אמורה לחסוך זמן, לא להפוך להימור על המידה.", family: "צרכנות", domain: "דיגיטלי", sdg: "", productDirection: "", audience: "", persona: "", topic: "", situation: "", problem: "", whyNotWorking: "", impact: "", missing: "", question: "" },
+        { code: "O2", title: "תמונה מול מציאות", hook: "מה שנראה מושלם במסך לא תמיד מגיע ככה בדלת.", family: "צרכנות", domain: "דיגיטלי", sdg: "", productDirection: "", audience: "", persona: "", topic: "", situation: "", problem: "", whyNotWorking: "", impact: "", missing: "", question: "" },
+        { code: "O3", title: "החזרות שלא נגמרות", hook: "לפעמים החלק הכי מעייף בקנייה הוא דווקא מה שקורה אחרי שמחזירים.", family: "צרכנות", domain: "דיגיטלי", sdg: "", productDirection: "", audience: "", persona: "", topic: "", situation: "", problem: "", whyNotWorking: "", impact: "", missing: "", question: "" },
+        { code: "P1", title: "תיק שלא שוקל עולם", hook: "יום לימודים ארוך לא אמור להתחיל בכאב גב כבר בבוקר.", family: "שגרה", domain: "פיזי", sdg: "", productDirection: "", audience: "", persona: "", topic: "", situation: "", problem: "", whyNotWorking: "", impact: "", missing: "", question: "" },
+        { code: "P2", title: "דברים שנשארים מאחור", hook: "מספיק מעבר אחד בין כיתות כדי שמשהו חשוב יישאר בדיוק במקום הלא נכון.", family: "שגרה", domain: "פיזי", sdg: "", productDirection: "", audience: "", persona: "", topic: "", situation: "", problem: "", whyNotWorking: "", impact: "", missing: "", question: "" },
+        { code: "P3", title: "סוללה שנגמרת באמצע", hook: "כשהיום עוד ארוך והסוללה כבר באחוזים בודדים, כל דבר קטן נהיה מלחיץ.", family: "שגרה", domain: "פיזי", sdg: "", productDirection: "", audience: "", persona: "", topic: "", situation: "", problem: "", whyNotWorking: "", impact: "", missing: "", question: "" },
+        { code: "Q1", title: "קובעות בלי בלגן", hook: "לפעמים הכי קשה ביציאה הוא לא להגיע, אלא בכלל להחליט מה קובעות.", family: "חברה", domain: "דיגיטלי", sdg: "", productDirection: "", audience: "", persona: "", topic: "", situation: "", problem: "", whyNotWorking: "", impact: "", missing: "", question: "" },
+        { code: "Q2", title: "מתנה קבוצתית", hook: "הכוונה טובה, אבל איסוף כסף בקבוצה כמעט תמיד מסתבך בדרך.", family: "חברה", domain: "דיגיטלי", sdg: "", productDirection: "", audience: "", persona: "", topic: "", situation: "", problem: "", whyNotWorking: "", impact: "", missing: "", question: "" },
+        { code: "Q3", title: "לא לפספס אף אחת", hook: "גם בקבוצה הכי טובה, לפעמים מישהי נשארת בחוץ בלי שאף אחת ממש התכוונה.", family: "חברה", domain: "דיגיטלי", sdg: "", productDirection: "", audience: "", persona: "", topic: "", situation: "", problem: "", whyNotWorking: "", impact: "", missing: "", question: "" }
+      ];
+
+      const fallbackData = {
+        group1: USER_CARDS.map(card => ({ ...card })),
+        group2: USER_CARDS.map(card => ({ ...card }))
+      };
+
+      const GAME_DATA = window.GAME_DATA || fallbackData;
+
+      const ui = {
+        selectorScreen: document.getElementById("game-selector"),
+        setupScreen: document.getElementById("setup-screen"),
+        gameScreen: document.getElementById("game-screen"),
+        selectorButtons: document.querySelectorAll(".selector-btn"),
+        setupTitle: document.getElementById("setup-title"),
+        participantsInput: document.getElementById("participants-count"),
+        selectionModeSetup: document.getElementById("selection-mode-setup"),
+        distributionSummary: document.getElementById("distribution-summary"),
+        setupBack: document.getElementById("setup-back"),
+        startGame: document.getElementById("start-game"),
+        gameTitle: document.getElementById("game-title"),
+        modeLabel: document.getElementById("mode-label"),
+        toggleMode: document.getElementById("toggle-mode"),
+        backToSelector: document.getElementById("back-to-selector"),
+        backToSetup: document.getElementById("back-to-setup"),
+        searchInput: document.getElementById("search-input"),
+        familyFilter: document.getElementById("family-filter"),
+        domainFilter: document.getElementById("domain-filter"),
+        viewMode: document.getElementById("view-mode"),
+        showAll: document.getElementById("show-all"),
+        showUnselected: document.getElementById("show-unselected"),
+        showSelected: document.getElementById("show-selected"),
+        clearFilters: document.getElementById("clear-filters"),
+        resetSelections: document.getElementById("reset-selections"),
+        totalCount: document.getElementById("total-count"),
+        participantsStat: document.getElementById("participants-stat"),
+        selectedCount: document.getElementById("selected-count"),
+        remainingCount: document.getElementById("remaining-count"),
+        visibleCount: document.getElementById("visible-count"),
+        distributionStat: document.getElementById("distribution-stat"),
+        cardsGrid: document.getElementById("cards-grid"),
+        confirmDialog: document.getElementById("confirm-dialog"),
+        cardModal: document.getElementById("card-modal"),
+        modalBody: document.getElementById("modal-body"),
+        closeModal: document.getElementById("close-modal")
+      };
+
+      const STORAGE_KEY = "card-game-state-v2";
+
+      const appState = {
+        currentGame: null,
+        mode: "browse",
+        participants: 6,
+        displayCountValue: 6,
+        roundCardCodes: [],
+        view: "front",
+        showMode: "all",
+        search: "",
+        family: "all",
+        domain: "all",
+        pendingCardId: null,
+        selections: loadSelections()
+      };
+
+      function loadSelections() {
+        try {
+          const raw = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+          return {
+            group1: new Set(raw.group1 || []),
+            group2: new Set(raw.group2 || [])
+          };
+        } catch {
+          return { group1: new Set(), group2: new Set() };
+        }
+      }
+
+      function saveSelections() {
+        localStorage.setItem(
+          STORAGE_KEY,
+          JSON.stringify({
+            group1: [...appState.selections.group1],
+            group2: [...appState.selections.group2]
+          })
+        );
+      }
+
+      function getAllCards() {
+        return GAME_DATA[appState.currentGame] || [];
+      }
+
+      function getCurrentCards() {
+        const allCards = getAllCards();
+        if (!appState.roundCardCodes.length) return allCards.slice(0, appState.displayCountValue || allCards.length);
+        const allowed = new Set(appState.roundCardCodes);
+        return allCards.filter(card => allowed.has(card.code));
+      }
+
+      function getSelectedSet() {
+        return appState.selections[appState.currentGame];
+      }
+
+      function showScreen(name) {
+        ui.selectorScreen.classList.remove("active");
+        ui.setupScreen.classList.remove("active");
+        ui.gameScreen.classList.remove("active");
+
+        if (name === "selector") ui.selectorScreen.classList.add("active");
+        if (name === "setup") ui.setupScreen.classList.add("active");
+        if (name === "game") ui.gameScreen.classList.add("active");
+      }
+
+      function getGameLabel(gameKey) {
+        return gameKey === "group2" ? "משחק קבוצה 2" : "משחק קבוצה 1";
+      }
+
+      function openSetup(gameKey) {
+        appState.currentGame = gameKey;
+        ui.setupTitle.textContent = `הגדרת ${getGameLabel(gameKey)}`;
+        ui.participantsInput.value = appState.participants;
+        ui.selectionModeSetup.value = appState.mode;
+        updateDistributionSummary();
+        showScreen("setup");
+      }
+
+      function updateDistributionSummary() {
+        const total = getAllCards().length;
+        const participants = Math.max(1, Math.min(total, Number(ui.participantsInput.value) || 1));
+        ui.participantsInput.value = participants;
+        const text = `במאגר יש ${total} קלפים. בתצוגה יוצגו בדיוק ${participants} קלפים — קלף אחד לכל משתתפת.`;
+        ui.distributionSummary.textContent = text;
+      }
+
+      function populateFilters() {
+        const cards = getCurrentCards();
+        const families = [...new Set(cards.map(card => card.family).filter(Boolean))];
+        const domains = [...new Set(cards.map(card => card.domain).filter(Boolean))];
+
+        fillSelect(ui.familyFilter, ["כל המשפחות", ...families], appState.family);
+        fillSelect(ui.domainFilter, ["כל התחומים", ...domains], appState.domain);
+      }
+
+      function fillSelect(select, values, selectedValue) {
+        const isFamily = select === ui.familyFilter;
+        const allValue = "all";
+        select.innerHTML = "";
+
+        values.forEach((label, index) => {
+          const option = document.createElement("option");
+          if (index === 0) {
+            option.value = allValue;
+            option.textContent = label;
+          } else {
+            option.value = label;
+            option.textContent = label;
+          }
+          if ((selectedValue || "all") === option.value) option.selected = true;
+          select.appendChild(option);
+        });
+      }
+
+      function startGame() {
+        const allCards = getAllCards();
+        const maxCards = allCards.length;
+        appState.participants = Math.max(1, Math.min(maxCards, Number(ui.participantsInput.value) || 1));
+        appState.displayCountValue = appState.participants;
+        appState.roundCardCodes = allCards.slice(0, appState.displayCountValue).map(card => card.code);
+        appState.mode = ui.selectionModeSetup.value;
+        appState.search = "";
+        appState.family = "all";
+        appState.domain = "all";
+        appState.showMode = "all";
+        ui.searchInput.value = "";
+        ui.viewMode.value = appState.view;
+
+        ui.gameTitle.textContent = `${getGameLabel(appState.currentGame)} · ${appState.displayCountValue} קלפים בתצוגה`;
+        updateModeUI();
+        populateFilters();
+        updateChipButtons();
+        showScreen("game");
+        render();
+      }
+
+      function updateModeUI() {
+        const selecting = appState.mode === "select";
+        ui.modeLabel.textContent = selecting ? "מצב בחירה" : "מצב עיון";
+        ui.toggleMode.textContent = selecting ? "חזרה לעיון" : "התחל בחירה";
+      }
+
+      function updateChipButtons() {
+        [ui.showAll, ui.showUnselected, ui.showSelected].forEach(btn => btn.classList.remove("active"));
+        if (appState.showMode === "all") ui.showAll.classList.add("active");
+        if (appState.showMode === "unselected") ui.showUnselected.classList.add("active");
+        if (appState.showMode === "selected") ui.showSelected.classList.add("active");
+      }
+
+      function getFilteredCards() {
+        const cards = getCurrentCards();
+        const selected = getSelectedSet();
+        const search = appState.search.trim().toLowerCase();
+
+        return cards.filter(card => {
+          const fullText = Object.values(card).join(" ").toLowerCase();
+          const familyMatch = appState.family === "all" || card.family === appState.family;
+          const domainMatch = appState.domain === "all" || card.domain === appState.domain;
+          const searchMatch = !search || fullText.includes(search);
+          const showMatch =
+            appState.showMode === "all" ||
+            (appState.showMode === "selected" && selected.has(card.code)) ||
+            (appState.showMode === "unselected" && !selected.has(card.code));
+
+          return familyMatch && domainMatch && searchMatch && showMatch;
+        });
+      }
+
+      function render() {
+        const allCards = getAllCards();
+        const cards = getCurrentCards();
+        const filtered = getFilteredCards();
+        const selected = getSelectedSet();
+        const selectedInRound = cards.filter(card => selected.has(card.code)).length;
+
+        ui.totalCount.textContent = String(allCards.length);
+        ui.participantsStat.textContent = String(appState.participants);
+        if (ui.displayCount) ui.displayCount.textContent = String(cards.length);
+        ui.selectedCount.textContent = String(selectedInRound);
+        ui.remainingCount.textContent = String(Math.max(cards.length - selectedInRound, 0));
+        ui.visibleCount.textContent = String(filtered.length);
+        if (ui.distributionStat) {
+          ui.distributionStat.textContent = `${cards.length} / ${allCards.length}`;
+        }
+
+        renderCards(filtered, selected);
+      }
+
+      function getDistributionShortText(total, participants) {
+        const base = Math.floor(total / participants);
+        const extra = total % participants;
+        if (participants <= 1) return `${total} ליחידה`;
+        if (base === 0) return `${extra}/${participants} יקבלו 1`;
+        if (extra === 0) return `${base} לכל משתתפת`;
+        return `${extra}×${base + 1}, ${participants - extra}×${base}`;
+      }
+
+      function renderCards(cards, selectedSet) {
+        ui.cardsGrid.innerHTML = "";
+
+        if (!cards.length) {
+          const empty = document.createElement("div");
+          empty.style.cssText = "position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font-weight:600;";
+          empty.textContent = "לא נמצאו כרטיסים בתצוגה הנוכחית.";
+          ui.cardsGrid.appendChild(empty);
+          return;
+        }
+
+        const layout = calculateLayout(cards.length, ui.cardsGrid.clientWidth - 36, ui.cardsGrid.clientHeight - 36);
+
+        cards.forEach((card, index) => {
+          const position = getCardPosition(index, layout);
+          const isSelected = selectedSet.has(card.code);
+          const cardEl = createCardElement(card, isSelected, position, layout);
+          ui.cardsGrid.appendChild(cardEl);
+        });
+      }
+
+      function calculateLayout(count, width, height) {
+        const gap = 14;
+        const aspect = 1.42;
+        let best = null;
+
+        for (let cols = 1; cols <= count; cols += 1) {
+          const rows = Math.ceil(count / cols);
+          const cellWidth = (width - gap * (cols - 1)) / cols;
+          const cellHeight = (height - gap * (rows - 1)) / rows;
+          const cardWidth = Math.min(cellWidth, cellHeight / aspect);
+          const cardHeight = cardWidth * aspect;
+
+          if (cardWidth <= 88 || cardHeight <= 120) continue;
+
+          const score = cardWidth;
+          if (!best || score > best.score) {
+            best = { cols, rows, gap, aspect, cardWidth, cardHeight, score };
+          }
+        }
+
+        if (!best) {
+          const cols = Math.ceil(Math.sqrt(count));
+          const rows = Math.ceil(count / cols);
+          const cardWidth = Math.max(88, (width - gap * (cols - 1)) / cols);
+          return { cols, rows, gap, aspect, cardWidth, cardHeight: cardWidth * aspect };
+        }
+
+        return best;
+      }
+
+      function getCardPosition(index, layout) {
+        const gridWidth = ui.cardsGrid.clientWidth - 36;
+        const gridHeight = ui.cardsGrid.clientHeight - 36;
+        const cellWidth = (gridWidth - layout.gap * (layout.cols - 1)) / layout.cols;
+        const cellHeight = (gridHeight - layout.gap * (layout.rows - 1)) / layout.rows;
+        const row = Math.floor(index / layout.cols);
+        const col = index % layout.cols;
+
+        const baseLeft = col * (cellWidth + layout.gap);
+        const baseTop = row * (cellHeight + layout.gap);
+        const offsetX = (cellWidth - layout.cardWidth) / 2;
+        const offsetY = (cellHeight - layout.cardHeight) / 2;
+
+        const jitterX = seededJitter(index * 5 + 1, Math.min(6, offsetX));
+        const jitterY = seededJitter(index * 5 + 2, Math.min(6, offsetY));
+        const rotate = seededJitter(index * 5 + 3, 2.8);
+
+        return {
+          left: 18 + baseLeft + offsetX + jitterX,
+          top: 18 + baseTop + offsetY + jitterY,
+          width: layout.cardWidth,
+          height: layout.cardHeight,
+          rotate
+        };
+      }
+
+      function seededJitter(seed, max) {
+        const x = Math.sin(seed * 999) * 10000;
+        const fraction = x - Math.floor(x);
+        return (fraction * 2 - 1) * max;
+      }
+
+      function createCardElement(card, isSelected, position) {
+        const el = document.createElement("article");
+        el.className = `card${isSelected ? " selected taken" : ""}`;
+        el.style.width = `${position.width}px`;
+        el.style.height = `${position.height}px`;
+        el.style.left = `${position.left}px`;
+        el.style.top = `${position.top}px`;
+        el.style.transform = `rotate(${position.rotate}deg) scale(${isSelected ? 1.08 : 1})`;
+        el.style.zIndex = isSelected ? "5" : "1";
+
+        const content = getCardMarkup(card, isSelected);
+        el.innerHTML = content;
+
+        const previewBtn = el.querySelector("[data-action='preview']");
+        const selectBtn = el.querySelector("[data-action='select']");
+
+        previewBtn?.addEventListener("click", event => {
+          event.stopPropagation();
+          openCardModal(card, isSelected);
+        });
+
+        selectBtn?.addEventListener("click", event => {
+          event.stopPropagation();
+          handleCardSelection(card, isSelected);
+        });
+
+        el.addEventListener("click", () => {
+          if (appState.mode === "select") {
+            handleCardSelection(card, isSelected);
+          } else {
+            openCardModal(card, isSelected);
+          }
+        });
