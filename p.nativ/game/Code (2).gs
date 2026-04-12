@@ -17,11 +17,12 @@ function doGet(e) {
   try {
     // POST מקודד כ-GET
     if (p._method === "POST") {
-      const group = parseInt(p.group) || 1;
-      const code  = p.code || "";
-      const girls = parseInt(p.girls) || 6;
+      const group  = parseInt(p.group) || 1;
+      const code   = p.code || "";
+      const player = p.player || "";
+      const girls  = parseInt(p.girls) || 6;
 
-      if (action === "choose")        result = chooseCard(group, code);
+      if (action === "choose")        result = chooseCard(group, code, player);
       else if (action === "unchoose") result = unchooseCard(group, code);
       else if (action === "reset")    result = resetGame(group, girls);
       else result = { error: "Unknown action" };
@@ -65,9 +66,22 @@ function getState(group) {
 
   const status = data[0] || "WAITING";
   const plan   = data[1] ? JSON.parse(data[1]) : [];
-  const chosen = data[2] ? JSON.parse(data[2]) : [];
 
-  return { status, plan, chosen, group };
+  // תאימות אחורה: נתונים ישנים שמורים כמערך, חדשים כאובייקט
+  let chosenBy = {};
+  if (data[2]) {
+    const raw = JSON.parse(data[2]);
+    if (Array.isArray(raw)) {
+      raw.forEach(code => { chosenBy[code] = ""; });
+    } else {
+      chosenBy = raw;
+    }
+  }
+
+  // chosen — מערך קודים לתאימות אחורה
+  const chosen = Object.keys(chosenBy);
+
+  return { status, plan, chosen, chosenBy, group };
 }
 
 function resetGame(group, numGirls) {
@@ -80,13 +94,13 @@ function resetGame(group, numGirls) {
   sheet.getRange(1, col, 50, 1).clearContent();
   sheet.getRange(1, col).setValue("ACTIVE");
   sheet.getRange(2, col).setValue(JSON.stringify(plan));
-  sheet.getRange(3, col).setValue(JSON.stringify([]));
+  sheet.getRange(3, col).setValue(JSON.stringify({}));
 
-  return { status: "ACTIVE", plan, chosen: [], group };
+  return { status: "ACTIVE", plan, chosen: [], chosenBy: {}, group };
 }
 
 // בחירת קלף עם נעילה
-function chooseCard(group, code) {
+function chooseCard(group, code, player) {
   const lock = LockService.getScriptLock();
   try { lock.waitLock(5000); } catch(e) { throw new Error("השרת עמוס, נסי שוב"); }
 
@@ -101,15 +115,16 @@ function chooseCard(group, code) {
     if (!planCodes.includes(code)) throw new Error("קלף לא קיים במשחק זה");
     if (state.chosen.includes(code)) throw new Error("ALREADY_TAKEN");
 
-    const newChosen = [...state.chosen, code];
-    sheet.getRange(3, col).setValue(JSON.stringify(newChosen));
+    const newChosenBy = Object.assign({}, state.chosenBy, { [code]: player || "" });
+    const newChosen   = Object.keys(newChosenBy);
+    sheet.getRange(3, col).setValue(JSON.stringify(newChosenBy));
 
     if (newChosen.length >= planCodes.length) {
       sheet.getRange(1, col).setValue("DONE");
-      return { status: "DONE", plan: state.plan, chosen: newChosen, group };
+      return { status: "DONE", plan: state.plan, chosen: newChosen, chosenBy: newChosenBy, group };
     }
 
-    return { status: "ACTIVE", plan: state.plan, chosen: newChosen, group };
+    return { status: "ACTIVE", plan: state.plan, chosen: newChosen, chosenBy: newChosenBy, group };
   } finally {
     lock.releaseLock();
   }
@@ -128,10 +143,12 @@ function unchooseCard(group, code) {
     if (state.status === "DONE") throw new Error("המשחק כבר הסתיים");
     if (!state.chosen.includes(code)) throw new Error("קלף לא נבחר");
 
-    const newChosen = state.chosen.filter(c => c !== code);
-    sheet.getRange(3, col).setValue(JSON.stringify(newChosen));
+    const newChosenBy = Object.assign({}, state.chosenBy);
+    delete newChosenBy[code];
+    const newChosen = Object.keys(newChosenBy);
+    sheet.getRange(3, col).setValue(JSON.stringify(newChosenBy));
 
-    return { status: "ACTIVE", plan: state.plan, chosen: newChosen, group };
+    return { status: "ACTIVE", plan: state.plan, chosen: newChosen, chosenBy: newChosenBy, group };
   } finally {
     lock.releaseLock();
   }
