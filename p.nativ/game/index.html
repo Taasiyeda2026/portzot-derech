@@ -108,32 +108,26 @@ body::before{content:'';position:fixed;width:300px;height:300px;border-radius:50
 .cards-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 10px 70px;width:100%}
 .cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
 
-/* ═══ FLIP CARD ═══ */
-.fc{aspect-ratio:5/7;perspective:900px;cursor:pointer;position:relative}
-.fc-inner{position:relative;width:100%;height:100%;
-  transition:transform .65s cubic-bezier(.25,.8,.25,1);
-  transform-style:preserve-3d}
-.fc.flipped .fc-inner,.fc.taken .fc-inner{transform:rotateY(180deg)}
-.fc-face{position:absolute;inset:0;border-radius:14px;
-  backface-visibility:hidden;-webkit-backface-visibility:hidden;
-  overflow:hidden}
+/* ═══ CARD (front only in grid) ═══ */
+.fc{aspect-ratio:5/7;cursor:pointer;position:relative;border-radius:14px;display:flex;flex-direction:column}
 
 /* FRONT */
 .fc-front{
-  display:flex;flex-direction:column;
+  display:flex;flex-direction:column;flex:1;border-radius:14px;
   background:linear-gradient(160deg,#ffffff 0%,#fdf5fb 100%);
   border:1px solid rgba(201,135,156,.22);
   box-shadow:0 4px 18px rgba(61,37,53,.13),0 1px 3px rgba(61,37,53,.07);
   transition:box-shadow .2s,transform .15s}
-.fc:not(.taken):not(.flipped):hover .fc-front{
+.fc:not(.taken):hover .fc-front{
   box-shadow:0 8px 28px rgba(61,37,53,.22),0 2px 6px rgba(61,37,53,.1);
   transform:translateY(-2px)}
-.fc:not(.taken):not(.flipped) .fc-front:active{transform:scale(.96)}
+.fc:not(.taken) .fc-front:active{transform:scale(.96)}
 .fc.taken .fc-front{background:#F0EBF0;border-color:rgba(139,91,107,.1);box-shadow:none;opacity:.7}
+.fc.taken{cursor:default}
 
 /* colour stripe top */
 .fc-stripe{height:6px;flex-shrink:0;border-radius:14px 14px 0 0;background-size:200% 100%}
-.fc:not(.taken):not(.flipped) .fc-stripe{animation:shimmer 2.8s linear infinite}
+.fc:not(.taken) .fc-stripe{animation:shimmer 2.8s linear infinite}
 .fc.taken .fc-stripe{background:#D4C8D0!important;animation:none}
 
 /* decorative pattern layer */
@@ -163,18 +157,33 @@ body::before{content:'';position:fixed;width:300px;height:300px;border-radius:50
 .fc-code{font-size:9px;font-weight:800;color:rgba(201,135,156,.6);white-space:nowrap;flex-shrink:0;letter-spacing:.05em}
 .fc.taken .fc-code{color:#C4B8BF;font-size:8px}
 
-/* BACK */
-.fc-back{
+/* ═══ CARD MODAL ═══ */
+.cm-ov{position:fixed;inset:0;z-index:300;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(30,8,24,.6);backdrop-filter:blur(5px);
+  opacity:0;pointer-events:none;transition:opacity .22s}
+.cm-ov.show{opacity:1;pointer-events:all}
+.cm-card{width:min(340px,88vw);max-height:82dvh;
   background:linear-gradient(145deg,#3D2535 0%,#5c3348 100%);
-  border:1px solid rgba(255,255,255,.06);
-  box-shadow:0 8px 28px rgba(61,37,53,.35);
-  transform:rotateY(180deg);
-  display:flex;flex-direction:column}
-.fc-back-stripe{height:10px;flex-shrink:0;border-radius:14px 14px 0 0;opacity:.85;cursor:pointer}
-.fc-back-scroll{flex:1;overflow-y:scroll;-webkit-overflow-scrolling:touch;padding:10px 12px 5px;
+  border:1px solid rgba(255,255,255,.08);border-radius:18px;
+  box-shadow:0 24px 70px rgba(20,5,20,.65);
+  display:flex;flex-direction:column;overflow:hidden;position:relative;
+  transform:scale(.9) translateY(16px);
+  transition:transform .28s cubic-bezier(.34,1.36,.64,1)}
+.cm-ov.show .cm-card{transform:scale(1) translateY(0)}
+.cm-stripe{height:12px;flex-shrink:0;border-radius:18px 18px 0 0;opacity:.9}
+.cm-close{position:absolute;top:14px;left:14px;
+  width:28px;height:28px;border-radius:99px;
+  background:rgba(255,255,255,.12);border:none;cursor:pointer;
+  color:#fff;font-size:15px;display:flex;align-items:center;justify-content:center;
+  transition:background .15s}
+.cm-close:hover{background:rgba(255,255,255,.22)}
+.cm-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding:12px 16px 6px;min-height:0;
   scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.15) transparent}
-.fc-back-scroll::-webkit-scrollbar{width:2px}
-.fc-back-scroll::-webkit-scrollbar-thumb{background:rgba(255,255,255,.2);border-radius:99px}
+.cm-scroll::-webkit-scrollbar{width:3px}
+.cm-scroll::-webkit-scrollbar-thumb{background:rgba(255,255,255,.2);border-radius:99px}
+.cm-foot{padding:8px 14px 16px;flex-shrink:0}
 .bk-code{font-size:8px;font-weight:800;color:rgba(255,255,255,.35);margin-bottom:3px;letter-spacing:.06em}
 .bk-name{font-family:var(--fd);font-size:14px;font-weight:700;color:#fff;
   line-height:1.3;margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,.12)}
@@ -391,6 +400,16 @@ body::before{content:'';position:fixed;width:300px;height:300px;border-radius:50
   </div>
 </div>
 
+<!-- CARD MODAL -->
+<div class="cm-ov" id="cm-ov" onclick="handleModalOvClick(event)">
+  <div class="cm-card" id="cm-card">
+    <div class="cm-stripe" id="cm-stripe"></div>
+    <button class="cm-close" onclick="closeCardModal()">✕</button>
+    <div class="cm-scroll" id="cm-scroll"></div>
+    <div class="cm-foot" id="cm-foot"></div>
+  </div>
+</div>
+
 <!-- DONE -->
 <div id="s-done" class="screen">
   <div class="top-bar"><span class="logo">17 היעדים</span></div>
@@ -564,7 +583,7 @@ initPips();
 
 // STATE
 let mode='player', currentGroup=1, numGirls=6, hostGroup=1;
-let gameState=null, localFlipped=new Set(), pollTimer=null, gameCards=[];
+let gameState=null, pollTimer=null, gameCards=[];
 let _choosing=false, _pendingCancel=null;
 
 // URL init
@@ -773,8 +792,7 @@ function renderGame(){
   gameCards.forEach((card,i)=>{
     const wasChosen=grid.children[i].classList.contains('taken');
     const isChosen=chosen.includes(card.code);
-    const wasFlipped=localFlipped.has(card.code);
-    if(wasChosen!==isChosen || (wasFlipped && !grid.children[i].classList.contains('flipped'))){
+    if(wasChosen!==isChosen){
       const el=buildCard(card,chosen);
       grid.replaceChild(el,grid.children[i]);
     }
@@ -785,19 +803,12 @@ function renderGame(){
 function buildCard(card,chosen){
   const col=FAM_COLORS[card.fam]||'#ccc';
   const isChosen=chosen.includes(card.code);
-  const isFlipped=localFlipped.has(card.code);
 
   const el=document.createElement('div');
-  el.className='fc'+(isFlipped||isChosen?' flipped':'')+(isChosen?' taken':'');
+  el.className='fc'+(isChosen?' taken':'');
 
-  const backRows=[
-    ['כיוון מוצר',card.product],['קהל יעד',card.audience],['פרסונה',card.persona],
-    ['הנושא',card.topic],['מצב מהחיים',card.scenario],['הבעיה',card.problem],
-    ['למה לא עובד',card.why],['ההשפעה',card.impact],['מה חסר',card.missing],
-  ].map(([l,v])=>`<div class="bk-row"><span class="bk-lbl">${l}</span><span class="bk-val">${v}</span></div>`).join('');
-
-  el.innerHTML=`<div class="fc-inner">
-    <div class="fc-face fc-front">
+  el.innerHTML=`
+    <div class="fc-front">
       <div class="fc-stripe" style="background-image:linear-gradient(90deg,${col} 0%,rgba(255,255,255,.55) 50%,${col} 100%);background-color:${col}"></div>
       <div class="fc-pattern"></div>
       <div class="fc-front-body">
@@ -813,39 +824,55 @@ function buildCard(card,chosen){
         </div>
         <span class="fc-code">${isChosen?'✓':card.code}</span>
       </div>
-    </div>
-    <div class="fc-face fc-back">
-      <div class="fc-back-stripe" style="background:${col}"></div>
-      <div class="fc-back-scroll">
-        <div class="bk-code">${card.code}</div>
-        <div class="bk-name">${card.name}</div>
-        ${backRows}
-        <div class="bk-q"><div class="bk-qlbl">שאלת פתיחה</div><div class="bk-qtxt">${card.question}</div></div>
-      </div>
-      <div class="fc-back-foot">
-        ${isChosen
-          ?`<div class="chosen-mark">✓ נבחר</div>`
-          :`<button class="choose-btn" data-code="${card.code}">✦ בחרי קלף זה</button>`}
-      </div>
-    </div>
-  </div>`;
+    </div>`;
 
-  // Flip on tap — only on front; back: allow scroll freely, flip back only via header
-  el.querySelector('.fc-front').addEventListener('click',e=>{
-    if(isChosen)return;
-    localFlipped.add(card.code);
-    el.classList.add('flipped');
-  });
-  el.querySelector('.fc-back-stripe').addEventListener('click',e=>{
-    if(isChosen)return;
-    localFlipped.delete(card.code);
-    el.classList.remove('flipped');
-  });
-
-  const btn=el.querySelector('.choose-btn');
-  if(btn) btn.addEventListener('click',e=>{e.stopPropagation();chooseCard(card.code);});
+  if(!isChosen){
+    el.addEventListener('click',()=>openCardModal(card));
+  }
 
   return el;
+}
+
+// ── CARD MODAL ──
+let _cmCurrentCode=null;
+function openCardModal(card){
+  const chosen=(gameState&&gameState.chosen)||[];
+  const isChosen=chosen.includes(card.code);
+  const col=FAM_COLORS[card.fam]||'#ccc';
+
+  _cmCurrentCode=card.code;
+  document.getElementById('cm-stripe').style.background=col;
+
+  const backRows=[
+    ['כיוון מוצר',card.product],['קהל יעד',card.audience],['פרסונה',card.persona],
+    ['הנושא',card.topic],['מצב מהחיים',card.scenario],['הבעיה',card.problem],
+    ['למה לא עובד',card.why],['ההשפעה',card.impact],['מה חסר',card.missing],
+  ].map(([l,v])=>`<div class="bk-row"><span class="bk-lbl">${l}</span><span class="bk-val">${v||'—'}</span></div>`).join('');
+
+  document.getElementById('cm-scroll').innerHTML=`
+    <div class="bk-code">${card.code}</div>
+    <div class="bk-name">${card.name}</div>
+    ${backRows}
+    <div class="bk-q"><div class="bk-qlbl">שאלת פתיחה</div><div class="bk-qtxt">${card.question||''}</div></div>`;
+
+  document.getElementById('cm-scroll').scrollTop=0;
+
+  document.getElementById('cm-foot').innerHTML=isChosen
+    ?`<div class="chosen-mark" style="font-size:12px;padding:6px 0">✓ הקלף כבר נבחר</div>`
+    :`<button class="choose-btn" style="font-size:12px;padding:11px 14px" onclick="chooseFromModal('${card.code}')">✦ בחרי קלף זה</button>`;
+
+  document.getElementById('cm-ov').classList.add('show');
+}
+function closeCardModal(){
+  document.getElementById('cm-ov').classList.remove('show');
+  _cmCurrentCode=null;
+}
+function handleModalOvClick(e){
+  if(e.target===document.getElementById('cm-ov')) closeCardModal();
+}
+function chooseFromModal(code){
+  closeCardModal();
+  chooseCard(code);
 }
 
 // CHOOSE
@@ -855,7 +882,6 @@ async function chooseCard(code){
   _choosing=true;
   if(!gameState.chosen)gameState.chosen=[];
   gameState.chosen.push(code);
-  localFlipped.add(code);
   renderGame();
   try{
     const res=await apiCall({action:'choose',group:currentGroup,code,_method:'POST'});
@@ -866,7 +892,7 @@ async function chooseCard(code){
   }catch(e){
     if(e.message==='ALREADY_TAKEN'){
       gameState.chosen=gameState.chosen.filter(c=>c!==code);
-      localFlipped.delete(code);renderGame();
+      renderGame();
       toast('אחת אחרת תפסה את הקלף — בחרי אחר');
     } else {
       gameState.chosen=gameState.chosen.filter(c=>c!==code);
@@ -890,7 +916,7 @@ async function closeWin(cancel){
   if(!cancel||!_pendingCancel)return;
   const code=_pendingCancel;_pendingCancel=null;
   gameState.chosen=(gameState.chosen||[]).filter(c=>c!==code);
-  localFlipped.delete(code);renderGame();
+  renderGame();
   try{
     const res=await apiCall({action:'unchoose',group:currentGroup,code,_method:'POST'});
     gameState=res;renderGame();
