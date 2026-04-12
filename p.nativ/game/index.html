@@ -260,6 +260,23 @@ body::before{content:'';position:fixed;width:300px;height:300px;border-radius:50
 .res-ok{color:var(--sage);font-weight:700;font-size:9px}
 .res-no{color:var(--muted);font-size:9px}
 
+/* NAME ENTRY */
+.name-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:12px;padding:24px 20px}
+.name-icon{font-size:44px}
+.name-title{font-family:var(--fd);font-size:22px;font-weight:700;color:var(--deep);margin:0;text-align:center}
+.name-sub{font-size:12px;color:var(--muted);margin:0;text-align:center}
+.name-input{width:min(260px,85%);padding:13px 16px;border-radius:12px;
+  border:1.5px solid var(--border);font-size:16px;text-align:center;
+  font-family:var(--fb);outline:none;direction:rtl;
+  transition:border-color .2s,box-shadow .2s}
+.name-input:focus{border-color:var(--rose);box-shadow:0 0 0 3px rgba(201,135,156,.15)}
+.name-btn{min-width:160px;margin-top:6px}
+
+/* RESULTS — player name */
+.res-player{font-size:9px;color:var(--plum);font-weight:600;
+  background:rgba(201,135,156,.12);padding:1px 6px;border-radius:99px;white-space:nowrap}
+
 /* WAITING */
 .wait-wrap{flex:1;display:flex;flex-direction:column;align-items:center;
   justify-content:center;padding:30px 20px;text-align:center}
@@ -371,6 +388,18 @@ body::before{content:'';position:fixed;width:300px;height:300px;border-radius:50
       <button class="win-keep" onclick="endGame()">כן — סיימו את המשחק</button>
       <button class="win-cancel" onclick="document.getElementById('end-ov').classList.remove('show')">ביטול</button>
     </div>
+  </div>
+</div>
+
+<!-- NAME ENTRY -->
+<div id="s-name-entry" class="screen">
+  <div class="top-bar"><span class="logo">17 היעדים</span><span class="badge" id="name-badge"></span></div>
+  <div class="name-wrap">
+    <div class="name-icon">✨</div>
+    <h2 class="name-title">מה שמך?</h2>
+    <p class="name-sub">השם שלך יוצג למדריכה בסיכום הסופי</p>
+    <input type="text" id="name-input" class="name-input" placeholder="הקלידי את שמך..." maxlength="30" autocomplete="off" autocorrect="off" spellcheck="false" onkeydown="if(event.key==='Enter')submitName()">
+    <button class="btn primary name-btn" onclick="submitName()">המשך ✦</button>
   </div>
 </div>
 
@@ -584,6 +613,7 @@ let mode='player', currentGroup=1, numGirls=6, hostGroup=1;
 let gameState=null, pollTimer=null, gameCards=[];
 let _choosing=false, _pendingCancel=null;
 let myChosenCode=null; // קוד הקלף שהשחקנית הנוכחית בחרה
+let playerName=null;   // שם השחקנית הנוכחית
 
 // URL init
 (function(){
@@ -715,8 +745,27 @@ async function endGame(){
 
 // PLAYER POLL
 function startPlayerPoll(){
-  // טעינת הקלף שנבחר בעבר (במקרה של רענון דף)
   myChosenCode=sessionStorage.getItem('chosen_g'+currentGroup)||null;
+  playerName=sessionStorage.getItem('pname_g'+currentGroup)||null;
+  // אם אין שם — הצג מסך הזנה קודם
+  if(!playerName){
+    document.getElementById('name-badge').textContent='קבוצה '+currentGroup;
+    const inp=document.getElementById('name-input');
+    inp.value='';
+    goTo('s-name-entry');
+    setTimeout(()=>inp.focus(),300);
+    return;
+  }
+  beginWaiting();
+}
+function submitName(){
+  const val=document.getElementById('name-input').value.trim();
+  if(!val){document.getElementById('name-input').focus();return;}
+  playerName=val;
+  sessionStorage.setItem('pname_g'+currentGroup,val);
+  beginWaiting();
+}
+function beginWaiting(){
   document.getElementById('wait-badge').textContent='קבוצה '+currentGroup;
   goTo('s-waiting');
   clearInterval(pollTimer);
@@ -900,7 +949,7 @@ async function chooseCard(code){
   gameState.chosen.push(code);
   renderGame();
   try{
-    const res=await apiCall({action:'choose',group:currentGroup,code,_method:'POST'});
+    const res=await apiCall({action:'choose',group:currentGroup,code,player:playerName||'',_method:'POST'});
     gameState=res;renderGame();
     if(res.status==='DONE')clearInterval(pollTimer);
     // שמירת הבחירה — תישמר גם אחרי רענון דף
@@ -963,9 +1012,11 @@ function renderResults(g,state){
       <span class="res-lbl">סט ${fam}</span><span class="res-size">${label}</span></div>`;
     cards.forEach(c=>{
       const ok=chosen.includes(c.code);
+      const pName=state.chosenBy&&state.chosenBy[c.code]?state.chosenBy[c.code]:null;
       html+=`<div class="res-row"><span class="res-code">${c.code}</span>
         <span class="res-name">${c.name}</span>
-        <span class="${ok?'res-ok':'res-no'}">${ok?'✓ נבחר':'לא נבחר'}</span></div>`;
+        ${pName?`<span class="res-player">${pName}</span>`:''}
+        <span class="${ok?'res-ok':'res-no'}">${ok?'✓':'—'}</span></div>`;
     });
     div.innerHTML=html;body.appendChild(div);
   });
