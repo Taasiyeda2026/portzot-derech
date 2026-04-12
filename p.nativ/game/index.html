@@ -350,6 +350,20 @@ body::before{content:'';position:fixed;width:300px;height:300px;border-radius:50
   <div class="bot-bar">
     <button class="btn" onclick="goTo('s-host-setup')">הגדרות</button>
     <button class="btn primary" onclick="showHostResults()">סיכום ✦</button>
+    <button class="btn danger" onclick="confirmEndGame()">סיום משחק</button>
+  </div>
+</div>
+
+<!-- END GAME CONFIRM -->
+<div class="win-ov" id="end-ov">
+  <div class="win-card">
+    <div style="font-size:28px;margin-bottom:10px">🏁</div>
+    <div class="win-name">לסיים את המשחק?</div>
+    <div class="win-sub" id="end-sub" style="margin-top:4px;margin-bottom:14px"></div>
+    <div class="win-acts">
+      <button class="win-keep" onclick="endGame()">כן — סיימו את המשחק</button>
+      <button class="win-cancel" onclick="document.getElementById('end-ov').classList.remove('show')">ביטול</button>
+    </div>
   </div>
 </div>
 
@@ -663,6 +677,22 @@ function showHostResults(){
   document.getElementById('res-badge').textContent='מדריכה';
   document.getElementById('res-back-btn').onclick=()=>{startHostPoll();goTo('s-host-live');};
   goTo('s-results');
+}
+function confirmEndGame(){
+  const chosen=(gameState&&gameState.chosen)||[];
+  const plan=(gameState&&gameState.plan)||[];
+  const total=plan.reduce((s,p)=>s+p.size,0);
+  document.getElementById('end-sub').textContent=
+    'נבחרו '+chosen.length+' קלפים מתוך '+total+'. הקלפים שנבחרו יישמרו.';
+  document.getElementById('end-ov').classList.add('show');
+}
+async function endGame(){
+  document.getElementById('end-ov').classList.remove('show');
+  try{
+    await apiCall({action:'end',group:hostGroup,_method:'POST'});
+  }catch(e){}
+  clearInterval(pollTimer);
+  showHostResults();
 }
 
 // PLAYER POLL
