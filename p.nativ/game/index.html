@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
@@ -94,7 +93,7 @@ body::before{content:'';position:fixed;width:300px;height:300px;border-radius:50
   font-size:11px;font-weight:500;margin:2px;background:var(--blush);color:var(--plum)}
 .chip.pair{background:var(--lav-lt)}
 .dist-err{font-size:11px;color:#C0392B;margin-top:4px}
-.setup-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.setup-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;width:fit-content}
 
 /* GAME HEADER */
 .game-hdr{padding:8px 14px 6px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;border-bottom:1px solid var(--border)}
@@ -104,11 +103,11 @@ body::before{content:'';position:fixed;width:300px;height:300px;border-radius:50
 .prog strong{color:var(--plum)}
 
 /* CARDS GRID — fills remaining space, no page scroll */
-.cards-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 10px 10px}
-.cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.cards-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 10px 10px;max-width:420px;margin:0 auto;width:100%}
+.cards-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px}
 
 /* ═══ FLIP CARD ═══ */
-.fc{aspect-ratio:2/3;perspective:700px;cursor:pointer}
+.fc{aspect-ratio:3/5;perspective:700px;cursor:pointer}
 .fc-inner{position:relative;width:100%;height:100%;
   transition:transform .55s cubic-bezier(.4,0,.2,1);
   transform-style:preserve-3d}
@@ -123,25 +122,25 @@ body::before{content:'';position:fixed;width:300px;height:300px;border-radius:50
   transition:box-shadow .15s,transform .15s}
 .fc:not(.taken):not(.flipped) .fc-front:active{transform:scale(.96)}
 .fc.taken .fc-front{background:#F5F1EE;border-color:transparent;box-shadow:none}
-.fc-bar{height:4px;flex-shrink:0;border-radius:11px 11px 0 0}
+.fc-bar{height:5px;flex-shrink:0;border-radius:11px 11px 0 0}
 .fc.taken .fc-bar{background:#DDD!important}
-.fc-front-body{flex:1;display:flex;flex-direction:column;padding:6px 6px 4px;gap:2px;min-height:0}
-.fc-fam{font-size:7px;color:var(--muted);line-height:1.3;
+.fc-front-body{flex:1;display:flex;flex-direction:column;padding:9px 9px 5px;gap:4px;min-height:0}
+.fc-fam{font-size:9px;color:var(--muted);line-height:1.3;
   overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
 .fc.taken .fc-fam{color:#C4B8BF}
-.fc-name{font-family:var(--fd);font-size:10px;font-weight:700;color:var(--deep);
+.fc-name{font-family:var(--fd);font-size:13px;font-weight:700;color:var(--deep);
   line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 .fc.taken .fc-name{color:#C4B8BF}
-.fc-teaser{font-size:7.5px;color:var(--muted);line-height:1.4;flex:1;overflow:hidden;
+.fc-teaser{font-size:10px;color:var(--muted);line-height:1.4;flex:1;overflow:hidden;
   display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical}
 .fc.taken .fc-teaser{color:#C4B8BF}
-.fc-bottom{padding:3px 6px 5px;display:flex;align-items:center;justify-content:space-between;
+.fc-bottom{padding:5px 8px 7px;display:flex;align-items:center;justify-content:space-between;
   border-top:1px solid rgba(139,91,107,.07);flex-shrink:0}
 .fc-tags{display:flex;gap:2px;flex-wrap:wrap;min-width:0;overflow:hidden}
-.fc-tag{font-size:6.5px;padding:1px 4px;border-radius:99px;
+.fc-tag{font-size:8px;padding:2px 5px;border-radius:99px;
   background:var(--cream);color:var(--muted);border:1px solid var(--border);white-space:nowrap}
 .fc.taken .fc-tag{opacity:0}
-.fc-code{font-size:7px;font-weight:700;color:var(--muted);white-space:nowrap;flex-shrink:0}
+.fc-code{font-size:9px;font-weight:700;color:var(--muted);white-space:nowrap;flex-shrink:0}
 .fc.taken .fc-code{color:#C4B8BF;font-style:italic;font-size:6.5px}
 
 /* BACK */
@@ -149,7 +148,7 @@ body::before{content:'';position:fixed;width:300px;height:300px;border-radius:50
   box-shadow:0 6px 20px var(--shadow);
   transform:rotateY(180deg);
   display:flex;flex-direction:column}
-.fc-back-scroll{flex:1;overflow-y:auto;padding:6px 7px 2px;
+.fc-back-scroll{flex:1;overflow-y:auto;padding:9px 10px 4px;
   scrollbar-width:thin;scrollbar-color:var(--border) transparent}
 .fc-back-scroll::-webkit-scrollbar{width:2px}
 .fc-back-scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:99px}
@@ -267,9 +266,11 @@ body::before{content:'';position:fixed;width:300px;height:300px;border-radius:50
     <div class="group-list">
       <div class="group-item" onclick="enterGroup(1)">
         <span class="group-item-name">קבוצה 1</span>
+        <span style="font-size:11px;color:var(--muted)">18 קלפים ←</span>
       </div>
       <div class="group-item" onclick="enterGroup(2)">
         <span class="group-item-name">קבוצה 2</span>
+        <span style="font-size:11px;color:var(--muted)">18 קלפים ←</span>
       </div>
     </div>
     <div class="host-entry" onclick="goHostSetup()">⚙ כניסת מדריכה</div>
@@ -355,7 +356,7 @@ body::before{content:'';position:fixed;width:300px;height:300px;border-radius:50
     <div class="done-emoji">🎉</div>
     <h2>כל הקלפים נבחרו!</h2>
     <p>המשחק הסתיים.</p>
-    <button class="btn primary" style="margin-top:18px;justify-content:center" onclick="showPlayerResults()">ראי את הקבוצות</button>
+    <button class="btn primary" style="margin-top:18px" onclick="showPlayerResults()">ראי את הקבוצות</button>
   </div>
 </div>
 
