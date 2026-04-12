@@ -2,96 +2,134 @@
 <html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>PERSONA – דף פעילות</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>פוסעות בנתיב החדשנות – הגדרת פרסונה</title>
 
-  <!-- Fonts -->
-  https://fonts.googleapis.com/css2?family=Rubik:wght@600;700&family=Assistant:wght@400;600&display=swap
-
-  <!-- PDF libs -->
-  https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js
-  https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600;700;800&family=Assistant:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      margin: 0;
-      padding: 20px;
-      background: #f3f4f6;
       font-family: 'Assistant', sans-serif;
       direction: rtl;
+      margin: 0;
+      background: #f3f4f6;
+      padding: 20px;
       color: #1f2937;
     }
 
-    .container {
+    #formArea {
       max-width: 900px;
       margin: 0 auto;
       background: white;
-      padding: 40px 30px;
-      border-radius: 15px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+      padding: 40px 32px;
+      border-radius: 18px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
     }
 
     h1 {
-      font-family: 'Rubik', sans-serif;
       color: #e91e63;
+      font-family: 'Rubik', sans-serif;
       text-align: center;
-      margin-top: 0;
+      margin: 0 0 8px;
+      font-size: 2rem;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #475569;
+      margin-bottom: 26px;
+      line-height: 1.7;
     }
 
     h2 {
-      font-family: 'Rubik', sans-serif;
       color: #00a7b5;
+      font-family: 'Rubik', sans-serif;
       border-bottom: 2px solid #e5e7eb;
       padding-bottom: 6px;
-      margin-top: 40px;
+      margin-top: 36px;
+      margin-bottom: 18px;
+      font-size: 1.25rem;
     }
 
-    label {
+    .intro-box {
+      background: linear-gradient(135deg, #fff0f5, #fdf2f8);
+      border: 1px solid #fbcfe8;
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 24px;
+    }
+
+    .question-block {
+      margin-bottom: 24px;
+    }
+
+    label.question-title {
       display: block;
-      font-weight: 600;
-      margin-top: 18px;
-      margin-bottom: 6px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #111827;
+    }
+
+    .question-number {
+      color: #e91e63;
+      font-family: 'Rubik', sans-serif;
+      margin-left: 6px;
     }
 
     input[type="text"],
     textarea {
       width: 100%;
-      box-sizing: border-box;
-      padding: 10px;
-      border-radius: 6px;
+      padding: 10px 12px;
       border: 1px solid #d1d5db;
-      font-family: inherit;
+      border-radius: 8px;
       font-size: 1rem;
+      font-family: inherit;
+      background: white;
     }
 
     textarea {
-      min-height: 80px;
+      min-height: 84px;
       resize: vertical;
     }
 
-    .question-block {
-      margin-bottom: 25px;
-    }
-
-    .checkbox-list {
+    .checkbox-list,
+    .radio-list {
       background: #f9fafb;
       border: 1px solid #e5e7eb;
       border-radius: 10px;
-      padding: 15px;
+      padding: 14px 16px;
     }
 
-    .checkbox-list label {
+    .checkbox-list label,
+    .radio-list label {
       display: block;
       font-weight: 400;
-      margin: 6px 0;
+      margin: 7px 0;
       cursor: pointer;
+      line-height: 1.5;
     }
 
     .inline-other {
       display: flex;
       gap: 8px;
-      margin-top: 8px;
       align-items: center;
+      margin-top: 10px;
+    }
+
+    .inline-other span {
+      white-space: nowrap;
+      font-weight: 600;
+    }
+
+    .inline-other input {
+      flex: 1;
+      margin: 0;
     }
 
     .summary-box {
@@ -99,167 +137,487 @@
       border: 1.5px solid #94a3b8;
       border-radius: 10px;
       padding: 15px;
-      line-height: 2;
+      line-height: 2.2;
+    }
+
+    .summary-box .sentence-part {
+      width: 180px;
+      display: inline-block;
+      vertical-align: middle;
+      margin: 0 4px;
     }
 
     .preview {
-      margin-top: 15px;
+      margin-top: 14px;
       padding: 12px;
       background: #fff0f5;
       border-radius: 8px;
       font-style: italic;
+      color: #374151;
     }
 
     .actions {
-      margin-top: 40px;
       text-align: center;
+      margin-top: 40px;
     }
 
-    button {
+    .pdf-btn {
       background: linear-gradient(90deg, #e91e63, #00a7b5);
       color: white;
       border: none;
-      padding: 14px 26px;
-      border-radius: 18px;
+      padding: 14px 24px;
       font-size: 1rem;
-      font-weight: 700;
+      border-radius: 18px;
       cursor: pointer;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+      font-weight: 700;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+      transition: 0.2s ease;
+      font-family: inherit;
+    }
+
+    .pdf-btn:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+    }
+
+    .note {
+      font-size: 0.95rem;
+      color: #64748b;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 700px) {
+      #formArea {
+        padding: 24px 18px;
+      }
+
+      .summary-box {
+        line-height: 1.9;
+      }
+
+      .summary-box .sentence-part {
+        width: 100%;
+        display: block;
+        margin: 8px 0;
+      }
+
+      .inline-other {
+        flex-direction: column;
+        align-items: stretch;
+      }
     }
   </style>
 </head>
 
 <body>
-<main class="container">
-  <h1>PERSONA – דף פעילות</h1>
+  <main id="formArea">
+    <h1>בניית פרסונה – פוסעות בנתיב החדשנות 🎀</h1>
+    <div class="subtitle">
+      דף פעילות להגדרת פרסונה על בסיס כרטיס המידע של הקבוצה
+    </div>
 
-  <!-- שמות התלמידות -->
-  <div class="question-block" data-question="שמות התלמידות"
-       style="background:#fff0f5;padding:15px;border-radius:10px;">
-    <label>שמות התלמידות / חברות הקבוצה:</label>
-    <input type="text" id="studentNames"
-           placeholder="לדוגמה: נועה, מאיה, שירה">
-  </div>
-
-  <h2>חלק א’ – מי הפרסונה?</h2>
-
-  <div class="question-block" data-question="מי קהל היעד הכללי של הכרטיס?">
-    <label>מי קהל היעד הכללי של הכרטיס?</label>
-    <input type="text">
-  </div>
-
-  <div class="question-block" data-question="מי במיוחד בתוך קהל היעד הכי מושפעת מהבעיה?">
-    <label>מי במיוחד בתוך קהל היעד הכי מושפעת מהבעיה?</label>
-    <div class="checkbox-list">
-      <label><input type="checkbox" value="מי שחווה את המצב לעיתים קרובות"> מי שחווה את המצב לעיתים קרובות</label>
-      <label><input type="checkbox" value="מי שפחות בטוחה בעצמה"> מי שפחות בטוחה בעצמה</label>
-      <label><input type="checkbox" value="מי שפועלת תחת לחץ זמן"> מי שפועלת תחת לחץ זמן</label>
-      <div class="inline-other">
-        <span>אחר:</span><input type="text">
+    <div class="intro-box">
+      <label class="question-title" for="teamNames">שמות חברות הצוות:</label>
+      <input type="text" id="teamNames" placeholder="רשמו את שמות חברות הצוות">
+      <div class="note">
+        הנחיה לקבוצה: קראו את כרטיס המידע שקיבלתן. בנו פרסונה שמתאימה לקהל היעד ולבעיה שעלו בכרטיס.
       </div>
     </div>
-  </div>
 
-  <h2>חלק ה’ – שורת סיכום</h2>
+    <h2>חלק א׳ – מי הפרסונה?</h2>
 
-  <div class="question-block" data-question="משפט סיכום הפרסונה">
-    <p><strong>כתבו את הפרסונה במשפט אחד:</strong></p>
-    <div class="summary-box">
-      <input class="sentence-part" type="text" placeholder="מי הפרסונה" style="width:140px;">
-      מנסה ל
-      <input class="sentence-part" type="text" placeholder="מה היא מנסה לעשות" style="width:180px;">,
-      אבל מתקשה כי
-      <input class="sentence-part" type="text" placeholder="מה מקשה עליה" style="width:180px;">,
-      ולכן היא זקוקה ל
-      <input class="sentence-part" type="text" placeholder="מה היא צריכה" style="width:180px;">.
+    <div class="question-block" data-question="מי קהל היעד הכללי של הכרטיס?">
+      <label class="question-title">
+        <span class="question-number">1.</span> מי קהל היעד הכללי של הכרטיס?
+      </label>
+      <input type="text" placeholder="כתבו">
     </div>
-    <div id="sentencePreview" class="preview">כאן יופיע המשפט השלם…</div>
-  </div>
 
-  <div class="actions">
-    <button onclick="saveAsPDF()">📄 שמירת PDF</button>
-  </div>
-</main>
+    <div class="question-block" data-question="מי במיוחד בתוך קהל היעד הכי מושפעת מהבעיה?">
+      <label class="question-title">
+        <span class="question-number">2.</span> מי במיוחד בתוך קהל היעד הכי מושפעת מהבעיה?
+      </label>
+      <div class="checkbox-list">
+        <label><input type="checkbox" value="מי שחווה את המצב לעיתים קרובות"> מי שחווה את המצב לעיתים קרובות</label>
+        <label><input type="checkbox" value="מי שפחות בטוחה בעצמה"> מי שפחות בטוחה בעצמה</label>
+        <label><input type="checkbox" value="מי שאין לה הרבה תמיכה"> מי שאין לה הרבה תמיכה</label>
+        <label><input type="checkbox" value="מי שפועלת תחת לחץ זמן"> מי שפועלת תחת לחץ זמן</label>
+        <label><input type="checkbox" value="מי שמנסה להתמודד לבד"> מי שמנסה להתמודד לבד</label>
+        <div class="inline-other">
+          <span>אחר:</span>
+          <input type="text" data-other="true">
+        </div>
+      </div>
+    </div>
 
-<script>
-  /* משפט סיכום חי */
-  const parts = document.querySelectorAll('.sentence-part');
-  const preview = document.getElementById('sentencePreview');
-  parts.forEach(p => p.addEventListener('input', () => {
-    const v = [...parts].map(x => x.value.trim() || '____');
-    preview.textContent =
-      `${v[0]} מנסה ל${v[1]}, אבל מתקשה כי${v[2]}, ולכן היא זקוקה ל${v[3]}.`;
-  }));
+    <div class="question-block" data-question="בת כמה בערך הפרסונה?">
+      <label class="question-title">
+        <span class="question-number">3.</span> בת כמה בערך הפרסונה?
+      </label>
+      <div class="radio-list">
+        <label><input type="radio" name="personaAge" value="12–13"> 12–13</label>
+        <label><input type="radio" name="personaAge" value="14–15"> 14–15</label>
+        <label><input type="radio" name="personaAge" value="16–18"> 16–18</label>
+        <div class="inline-other">
+          <span>אחר:</span>
+          <input type="text" data-other="true">
+        </div>
+      </div>
+    </div>
 
-  function collectAnsweredQuestions() {
-    const blocks = document.querySelectorAll('.question-block');
-    const res = [];
-    blocks.forEach(b => {
-      const q = b.dataset.question;
-      let answers = [];
+    <div class="question-block" data-question="באיזה שלב חיים היא נמצאת?">
+      <label class="question-title">
+        <span class="question-number">4.</span> באיזה שלב חיים היא נמצאת?
+      </label>
+      <div class="checkbox-list">
+        <label><input type="checkbox" value="חטיבת ביניים"> חטיבת ביניים</label>
+        <label><input type="checkbox" value="תיכון"> תיכון</label>
+        <label><input type="checkbox" value="בתחילת עבודה ראשונה"> בתחילת עבודה ראשונה</label>
+        <label><input type="checkbox" value="מתחילה יותר עצמאות יומיומית"> מתחילה יותר עצמאות יומיומית</label>
+        <div class="inline-other">
+          <span>אחר:</span>
+          <input type="text" data-other="true">
+        </div>
+      </div>
+    </div>
 
-      b.querySelectorAll('input[type=checkbox]:checked')
-        .forEach(cb => answers.push(cb.value));
+    <h2>חלק ב׳ – באיזה מצב היא פוגשת את הבעיה?</h2>
 
-      b.querySelectorAll('input[type=text], textarea')
-        .forEach(f => f.value.trim() && answers.push(f.value.trim()));
+    <div class="question-block" data-question="מתי הבעיה מופיעה אצלה בדרך כלל?">
+      <label class="question-title">
+        <span class="question-number">5.</span> מתי הבעיה מופיעה אצלה בדרך כלל?
+      </label>
+      <div class="checkbox-list">
+        <label><input type="checkbox" value="בבוקר"> בבוקר</label>
+        <label><input type="checkbox" value="במהלך יום הלימודים"> במהלך יום הלימודים</label>
+        <label><input type="checkbox" value="אחר הצהריים"> אחר הצהריים</label>
+        <label><input type="checkbox" value="בערב"> בערב</label>
+        <label><input type="checkbox" value="ברשת"> ברשת</label>
+        <label><input type="checkbox" value="בזמן יציאה / בילוי"> בזמן יציאה / בילוי</label>
+        <label><input type="checkbox" value="בזמן נסיעה / דרך"> בזמן נסיעה / דרך</label>
+        <div class="inline-other">
+          <span>אחר:</span>
+          <input type="text" data-other="true">
+        </div>
+      </div>
+    </div>
 
-      if (answers.length) res.push({ q, answers });
-    });
-    return res;
-  }
+    <div class="question-block" data-question="איפה זה קורה לה בדרך כלל?">
+      <label class="question-title">
+        <span class="question-number">6.</span> איפה זה קורה לה בדרך כלל?
+      </label>
+      <div class="checkbox-list">
+        <label><input type="checkbox" value="בבית הספר"> בבית הספר</label>
+        <label><input type="checkbox" value="בבית"> בבית</label>
+        <label><input type="checkbox" value="בדרך"> בדרך</label>
+        <label><input type="checkbox" value="במרחב ציבורי"> במרחב ציבורי</label>
+        <label><input type="checkbox" value="ברשתות החברתיות"> ברשתות החברתיות</label>
+        <label><input type="checkbox" value="בעבודה"> בעבודה</label>
+        <div class="inline-other">
+          <span>אחר:</span>
+          <input type="text" data-other="true">
+        </div>
+      </div>
+    </div>
 
-  function buildFileName() {
-    const names = document.getElementById('studentNames').value;
-    if (!names.trim()) return 'PERSONA.pdf';
+    <div class="question-block" data-question="מה הפרסונה מנסה לעשות באותו רגע?">
+      <label class="question-title">
+        <span class="question-number">7.</span> מה הפרסונה מנסה לעשות באותו רגע?
+      </label>
+      <textarea placeholder="כתבו במשפט קצר"></textarea>
+    </div>
 
-    const initials = names
-      .split(',')
-      .map(n => n.trim()[0])
-      .filter(Boolean)
-      .join('')
-      .toUpperCase();
+    <h2>חלק ג׳ – מה הכי מקשה עליה?</h2>
 
-    return `PERSONA_${initials}.pdf`;
-  }
+    <div class="question-block" data-question="מה הכי מקשה עליה במצב הזה?">
+      <label class="question-title">
+        <span class="question-number">8.</span> מה הכי מקשה עליה במצב הזה?
+      </label>
+      <div class="checkbox-list">
+        <label><input type="checkbox" value="חוסר זמן"> חוסר זמן</label>
+        <label><input type="checkbox" value="חוסר מידע ברור"> חוסר מידע ברור</label>
+        <label><input type="checkbox" value="עומס"> עומס</label>
+        <label><input type="checkbox" value="בלבול"> בלבול</label>
+        <label><input type="checkbox" value="מבוכה"> מבוכה</label>
+        <label><input type="checkbox" value="חוסר פרטיות"> חוסר פרטיות</label>
+        <label><input type="checkbox" value="חוסר ביטחון"> חוסר ביטחון</label>
+        <label><input type="checkbox" value="תלות באחרות / באחרים"> תלות באחרות / באחרים</label>
+        <div class="inline-other">
+          <span>אחר:</span>
+          <input type="text" data-other="true">
+        </div>
+      </div>
+    </div>
 
-  async function saveAsPDF() {
-    const data = collectAnsweredQuestions();
-    if (!data.length) {
-      alert('לא מולאו תשובות להדפסה');
-      return;
+    <div class="question-block" data-question="מה הכי מתסכל אותה?">
+      <label class="question-title">
+        <span class="question-number">9.</span> מה הכי מתסכל אותה?
+      </label>
+      <textarea placeholder="כתבו"></textarea>
+    </div>
+
+    <div class="question-block" data-question="איך היא מתמודדת היום?">
+      <label class="question-title">
+        <span class="question-number">10.</span> איך היא מתמודדת היום?
+      </label>
+      <div class="checkbox-list">
+        <label><input type="checkbox" value="מאלתרת"> מאלתרת</label>
+        <label><input type="checkbox" value="מבקשת עזרה"> מבקשת עזרה</label>
+        <label><input type="checkbox" value="דוחה את ההתמודדות"> דוחה את ההתמודדות</label>
+        <label><input type="checkbox" value="מוותרת"> מוותרת</label>
+        <label><input type="checkbox" value="מחפשת לבד פתרון"> מחפשת לבד פתרון</label>
+        <label><input type="checkbox" value="משתמשת בפתרון חלקי"> משתמשת בפתרון חלקי</label>
+        <div class="inline-other">
+          <span>אחר:</span>
+          <input type="text" data-other="true">
+        </div>
+      </div>
+    </div>
+
+    <div class="question-block" data-question="מה עדיין חסר לה?">
+      <label class="question-title">
+        <span class="question-number">11.</span> מה עדיין חסר לה?
+      </label>
+      <textarea placeholder="כתבו"></textarea>
+    </div>
+
+    <h2>חלק ד׳ – מה חשוב לה?</h2>
+
+    <div class="question-block" data-question="מה הכי חשוב לפרסונה בפתרון טוב?">
+      <label class="question-title">
+        <span class="question-number">12.</span> מה הכי חשוב לפרסונה בפתרון טוב?
+      </label>
+      <div class="checkbox-list limit-two-group">
+        <label><input type="checkbox" class="limit-two" value="מהירות"> מהירות</label>
+        <label><input type="checkbox" class="limit-two" value="פרטיות"> פרטיות</label>
+        <label><input type="checkbox" class="limit-two" value="פשטות"> פשטות</label>
+        <label><input type="checkbox" class="limit-two" value="נוחות"> נוחות</label>
+        <label><input type="checkbox" class="limit-two" value="ביטחון"> ביטחון</label>
+        <label><input type="checkbox" class="limit-two" value="מחיר נגיש"> מחיר נגיש</label>
+        <label><input type="checkbox" class="limit-two" value="זמינות"> זמינות</label>
+        <label><input type="checkbox" class="limit-two" value="דיסקרטיות"> דיסקרטיות</label>
+        <div class="inline-other">
+          <span>אחר:</span>
+          <input type="text" data-other="true">
+        </div>
+      </div>
+      <div class="note">אפשר לסמן עד שתי אפשרויות.</div>
+    </div>
+
+    <div class="question-block" data-question="מה ההשפעה של הבעיה עליה?">
+      <label class="question-title">
+        <span class="question-number">13.</span> מה ההשפעה של הבעיה עליה?
+      </label>
+      <div class="checkbox-list">
+        <label><input type="checkbox" value="לחץ"> לחץ</label>
+        <label><input type="checkbox" value="בלבול"> בלבול</label>
+        <label><input type="checkbox" value="בזבוז זמן"> בזבוז זמן</label>
+        <label><input type="checkbox" value="חוסר ביטחון"> חוסר ביטחון</label>
+        <label><input type="checkbox" value="מבוכה"> מבוכה</label>
+        <label><input type="checkbox" value="פספוס"> פספוס</label>
+        <label><input type="checkbox" value="תלות באחרות / באחרים"> תלות באחרות / באחרים</label>
+        <label><input type="checkbox" value="תסכול"> תסכול</label>
+        <div class="inline-other">
+          <span>אחר:</span>
+          <input type="text" data-other="true">
+        </div>
+      </div>
+    </div>
+
+    <h2>חלק ה׳ – שורת סיכום</h2>
+
+    <div class="question-block" data-question="כתבו את הפרסונה במשפט אחד:">
+      <label class="question-title">
+        <span class="question-number">14.</span> כתבו את הפרסונה במשפט אחד:
+      </label>
+      <div class="summary-box">
+        <input class="sentence-part" type="text" placeholder="מי הפרסונה">
+        מנסה ל
+        <input class="sentence-part" type="text" placeholder="מה היא מנסה לעשות">
+        , אבל מתקשה כי
+        <input class="sentence-part" type="text" placeholder="מה מקשה עליה">
+        , ולכן היא זקוקה ל
+        <input class="sentence-part" type="text" placeholder="מה היא צריכה">.
+      </div>
+      <div id="sentencePreview" class="preview">כאן יופיע המשפט השלם…</div>
+    </div>
+
+    <div class="actions">
+      <button class="pdf-btn" type="button" onclick="saveAsPDF()">📄 שמירת PDF</button>
+    </div>
+  </main>
+
+  <script>
+    const parts = document.querySelectorAll('.sentence-part');
+    const preview = document.getElementById('sentencePreview');
+
+    function updateSentencePreview() {
+      const v = [...parts].map(x => x.value.trim() || '____');
+      preview.textContent = `${v[0]} מנסה ל${v[1]}, אבל מתקשה כי${v[2]}, ולכן היא זקוקה ל${v[3]}.`;
     }
 
-    const pdfDiv = document.createElement('div');
-    pdfDiv.style.direction = 'rtl';
-    pdfDiv.style.fontFamily = 'Assistant, Arial';
-    pdfDiv.style.padding = '30px';
-    pdfDiv.style.width = '800px';
-    pdfDiv.style.background = 'white';
+    parts.forEach(p => p.addEventListener('input', updateSentencePreview));
+    updateSentencePreview();
 
-    pdfDiv.innerHTML = `<h1 style="color:#e91e63;">PERSONA – דף פעילות</h1>`;
-
-    data.forEach(item => {
-      pdfDiv.innerHTML += `
-        <h3 style="color:#00a7b5;margin-top:20px;">${item.q}</h3>
-        <ul>${item.answers.map(a => `<li>${a}</li>`).join('')}</ul>
-      `;
+    document.querySelectorAll('.limit-two-group').forEach(group => {
+      group.querySelectorAll('.limit-two').forEach(box => {
+        box.addEventListener('change', () => {
+          const checked = group.querySelectorAll('.limit-two:checked');
+          if (checked.length > 2) {
+            box.checked = false;
+            alert('אפשר לסמן עד 2 אפשרויות.');
+          }
+        });
+      });
     });
 
-    document.body.appendChild(pdfDiv);
+    function getQuestionAnswers(block) {
+      const answers = [];
 
-    const canvas = await html2canvas(pdfDiv, { scale: 2 });
-    const img = canvas.toDataURL('image/png');
-    const { jsPDF } = window.jspdf;
+      block.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
+        answers.push(cb.value);
+      });
 
-    const pdf = new jsPDF('p', 'mm', 'a4');
-    const w = 210;
-    const h = canvas.height * w / canvas.width;
-    pdf.addImage(img, 'PNG', 0, 0, w, h);
-    pdf.save(buildFileName());
+      block.querySelectorAll('input[type="radio"]:checked').forEach(radio => {
+        answers.push(radio.value);
+      });
 
-    document.body.removeChild(pdfDiv);
-  }
-</script>
+      if (block.querySelector('.sentence-part')) {
+        const sentence = preview.textContent.trim();
+        return sentence && sentence !== 'כאן יופיע המשפט השלם…' ? [sentence] : ['לא צוין'];
+      }
+
+      block.querySelectorAll('textarea').forEach(el => {
+        const value = el.value.trim();
+        if (value) answers.push(value);
+      });
+
+      block.querySelectorAll('input[type="text"]').forEach(el => {
+        if (
+          el.id !== 'teamNames' &&
+          !el.classList.contains('sentence-part') &&
+          el.value.trim()
+        ) {
+          answers.push(el.value.trim());
+        }
+      });
+
+      return answers.length ? answers : ['לא צוין'];
+    }
+
+    function collectAllQuestions() {
+      const blocks = document.querySelectorAll('.question-block');
+      return [...blocks].map(block => ({
+        q: block.dataset.question,
+        answers: getQuestionAnswers(block)
+      }));
+    }
+
+    function buildFileName() {
+      const names = document.getElementById('teamNames').value.trim();
+      if (!names) return 'PERSONA.pdf';
+
+      const safe = names
+        .replace(/[\\/:*?"<>|]/g, '')
+        .replace(/\s+/g, '_')
+        .substring(0, 40);
+
+      return `PERSONA_${safe}.pdf`;
+    }
+
+    function getTodayString() {
+      const d = new Date();
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      return `${day}/${month}/${year}`;
+    }
+
+    async function saveAsPDF() {
+      const teamNames = document.getElementById('teamNames').value.trim() || 'לא צוין';
+      const data = collectAllQuestions();
+
+      const pdfDiv = document.createElement('div');
+      pdfDiv.style.direction = 'rtl';
+      pdfDiv.style.fontFamily = "'Assistant', Arial, sans-serif";
+      pdfDiv.style.padding = '32px';
+      pdfDiv.style.width = '800px';
+      pdfDiv.style.background = 'white';
+      pdfDiv.style.color = '#1f2937';
+      pdfDiv.style.position = 'absolute';
+      pdfDiv.style.right = '-9999px';
+      pdfDiv.style.top = '0';
+
+      let sectionsHtml = '';
+
+      data.forEach((item, index) => {
+        sectionsHtml += `
+          <div style="margin-bottom:16px;padding:12px 14px;border:1px solid #e5e7eb;border-radius:10px;background:#fafafa;">
+            <div style="color:#00a7b5;font-weight:700;font-size:16px;margin-bottom:8px;">${index + 1}. ${item.q}</div>
+            <ul style="margin:0;padding-right:18px;line-height:1.8;">
+              ${item.answers.map(a => `<li>${a}</li>`).join('')}
+            </ul>
+          </div>
+        `;
+      });
+
+      pdfDiv.innerHTML = `
+        <div style="background:linear-gradient(135deg,#fff0f5,#fdf2f8);border:1px solid #fbcfe8;border-radius:14px;padding:18px 20px;margin-bottom:18px;">
+          <div style="font-family:'Rubik', Arial, sans-serif;color:#e91e63;font-size:28px;font-weight:800;text-align:center;margin-bottom:6px;">
+            פוסעות בנתיב החדשנות
+          </div>
+          <div style="font-family:'Rubik', Arial, sans-serif;color:#00a7b5;font-size:20px;font-weight:700;text-align:center;margin-bottom:12px;">
+            דף פעילות – הגדרת פרסונה
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;background:white;border:1px solid #fce7f3;border-radius:10px;padding:10px 12px;font-size:14px;">
+            <div><strong>שמות חברות הצוות:</strong> ${teamNames}</div>
+            <div><strong>תאריך:</strong> ${getTodayString()}</div>
+          </div>
+        </div>
+
+        ${sectionsHtml}
+      `;
+
+      document.body.appendChild(pdfDiv);
+
+      try {
+        const canvas = await html2canvas(pdfDiv, {
+          scale: 2,
+          useCORS: true,
+          backgroundColor: '#ffffff',
+          windowWidth: 800
+        });
+
+        const imgData = canvas.toDataURL('image/png');
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF('p', 'mm', 'a4');
+
+        const pageWidth = 210;
+        const pageHeight = 297;
+        const imgWidth = pageWidth;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+        let heightLeft = imgHeight;
+        let position = 0;
+
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+
+        while (heightLeft > 0) {
+          position = heightLeft - imgHeight;
+          pdf.addPage();
+          pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+          heightLeft -= pageHeight;
+        }
+
+        pdf.save(buildFileName());
+      } catch (err) {
+        console.error(err);
+        alert('אירעה שגיאה ביצירת ה-PDF');
+      } finally {
+        document.body.removeChild(pdfDiv);
+      }
+    }
+  </script>
 </body>
 </html>
