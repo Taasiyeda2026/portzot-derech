@@ -105,7 +105,7 @@ body::before{content:'';position:fixed;width:300px;height:300px;border-radius:50
 
 /* CARDS GRID — fills remaining space, no page scroll */
 .cards-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 10px 70px;width:100%}
-.cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.cards-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
 
 /* ═══ FLIP CARD ═══ */
 .fc{aspect-ratio:5/7;perspective:900px;cursor:pointer;position:relative}
@@ -114,7 +114,8 @@ body::before{content:'';position:fixed;width:300px;height:300px;border-radius:50
   transform-style:preserve-3d}
 .fc.flipped .fc-inner,.fc.taken .fc-inner{transform:rotateY(180deg)}
 .fc-face{position:absolute;inset:0;border-radius:14px;
-  backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden}
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  overflow:clip}
 
 /* FRONT */
 .fc-front{
@@ -169,7 +170,7 @@ body::before{content:'';position:fixed;width:300px;height:300px;border-radius:50
   transform:rotateY(180deg);
   display:flex;flex-direction:column}
 .fc-back-stripe{height:6px;flex-shrink:0;border-radius:14px 14px 0 0;opacity:.85}
-.fc-back-scroll{flex:1;overflow-y:auto;padding:8px 10px 4px;
+.fc-back-scroll{flex:1;overflow-y:scroll;-webkit-overflow-scrolling:touch;padding:8px 10px 4px;
   scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.15) transparent}
 .fc-back-scroll::-webkit-scrollbar{width:2px}
 .fc-back-scroll::-webkit-scrollbar-thumb{background:rgba(255,255,255,.2);border-radius:99px}
