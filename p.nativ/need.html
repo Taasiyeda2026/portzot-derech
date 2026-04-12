@@ -1,4 +1,369 @@
 <!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>דף פעילות 2 - שלב :2</title>
+  <style>
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, "Heebo", sans-serif;
+      background: linear-gradient(180deg, #fcf9fd 0%, #f7f1fa 100%);
+      color: #2b2b2b;
+      line-height: 1.7;
+    }
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(180,152,196,0.22);
+      box-shadow: 0 8px 24px rgba(107,45,132,0.08);
+    }
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .header-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: #6b2d84;
+      font-weight: 700;
+    }
+    .header-logo img {
+      width: 42px;
+      height: 42px;
+      object-fit: cover;
+      border-radius: 12px;
+      box-shadow: 0 6px 14px rgba(107,45,132,0.16);
+      border: 1px solid rgba(227,214,234,0.8);
+      background: #fff;
+    }
+    .home-link, .print-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 44px;
+      height: 44px;
+      padding: 0 14px;
+      text-decoration: none;
+      font-size: 1rem;
+      background: linear-gradient(180deg, #ffffff 0%, #f4ebf8 100%);
+      color: #6b2d84;
+      border: 1px solid rgba(227,214,234,0.95);
+      border-radius: 14px;
+      box-shadow: 0 8px 18px rgba(107,45,132,0.14);
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+    }
+    .home-link:hover, .print-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(107,45,132,0.18);
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .container {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 28px 20px 40px;
+    }
+    .page-card {
+      background: rgba(255,255,255,0.88);
+      border: 1px solid rgba(227,214,234,0.95);
+      border-radius: 24px;
+      box-shadow: 0 16px 36px rgba(107,45,132,0.08);
+      padding: 28px 22px;
+    }
+    h1 {
+      margin: 0 0 10px;
+      text-align: center;
+      color: #6b2d84;
+      font-size: 1.95rem;
+      line-height: 1.3;
+    }
+    .guide {
+      text-align: right;
+      margin: 0 0 24px;
+      color: #4d3e59;
+      font-size: 1.02rem;
+    }
+    .section {
+      margin-top: 24px;
+      padding: 18px 16px;
+      border-radius: 18px;
+      background: #fff;
+      border: 1px solid #eadff0;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.9);
+    }
+    .section h2 {
+      margin: 0 0 14px;
+      color: #6b2d84;
+      font-size: 1.2rem;
+    }
+    .question {
+      margin-bottom: 18px;
+    }
+    .question:last-child {
+      margin-bottom: 0;
+    }
+    .q-title {
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #3f304b;
+    }
+    .note {
+      margin: 10px 0 14px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: #faf5fd;
+      border: 1px solid #eadcf3;
+      color: #5b476b;
+    }
+    input[type="text"], textarea {
+      width: 100%;
+      border: 1px solid #d8c7e3;
+      border-radius: 14px;
+      padding: 12px 14px;
+      font: inherit;
+      background: #fff;
+      color: #2b2b2b;
+      outline: none;
+    }
+    textarea {
+      min-height: 86px;
+      resize: vertical;
+    }
+    .line-input {
+      min-height: 52px;
+    }
+    .options {
+      display: grid;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .options label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      background: #fcfaff;
+      border: 1px solid #efe5f4;
+    }
+    .tool-box {
+      margin-top: 16px;
+      padding: 14px;
+      border: 1px solid #eadff0;
+      border-radius: 16px;
+      background: #fcfbfe;
+    }
+    .summary-box {
+      display: grid;
+      gap: 14px;
+    }
+    .footer-nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 28px;
+    }
+    .next-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 13px 24px;
+      text-decoration: none;
+      color: #fff;
+      font-weight: 700;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #7b3696 0%, #c04aa6 100%);
+      box-shadow: 0 14px 28px rgba(127,56,151,0.28);
+    }
+    @media print {
+      .site-header, .footer-nav { display: none !important; }
+      body { background: #fff; }
+      .container { max-width: 100%; padding: 0; }
+      .page-card {
+        box-shadow: none;
+        border: none;
+        border-radius: 0;
+        padding: 0;
+      }
+      .section {
+        break-inside: avoid;
+        box-shadow: none;
+      }
+      input, textarea {
+        border: 1px solid #bbb;
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="header-logo" href="#" aria-label="לוגו העמוד">
+        <img src="../icon/logo.png" alt="לוגו">
+        <span>פורצות דרך</span>
+      </a>
+      <div class="header-actions">
+        <button class="print-btn" type="button" onclick="window.print()">PDF / הדפסה</button>
+        <a class="home-link" href="enter.html" aria-label="חזרה לדף הבית" title="דף הבית">🏠</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="page-card">
+      <h1>דף פעילות 2 - שלב :2</h1>
+      <p class="guide"><strong>הנחיה לקבוצה:</strong><br>
+      בחרו מתוך מפת הפערים וההזדמנויות פער אחד מרכזי שתרצו להבין לעומק.<br>
+      עכשיו תעברו שלושה צעדים:<br>
+      5 למה<br>
+      ניסוח בעיה מדויקת<br>
+      ניסוח צורך ומטרה</p>
+
+      <section class="section">
+        <h2>חלק א׳ - בוחרות את ההזדמנות המרכזית</h2>
+
+        <div class="question">
+          <div class="q-title">1. מה ההזדמנות / הפער שבחרתן?</div>
+          <textarea class="line-input"></textarea>
+        </div>
+
+        <div class="question">
+          <div class="q-title">2. למה בחרתן דווקא בה?</div>
+          <div>סמנו עד 2 אפשרויות:</div>
+          <div class="options">
+            <label><input type="checkbox"> היא חוזרת הרבה</label>
+            <label><input type="checkbox"> היא משפיעה על הרבה אנשים</label>
+            <label><input type="checkbox"> היא יוצרת תסכול גדול</label>
+            <label><input type="checkbox"> יש בה פער ברור</label>
+            <label><input type="checkbox"> היא קשורה ישירות לפרסונה</label>
+            <label><input type="checkbox"> היא יכולה להוביל לכיוון מוצר מעניין</label>
+            <label><input type="checkbox"> אחר: <input type="text"></label>
+          </div>
+        </div>
+
+        <div class="question">
+          <div class="q-title">3. על מי היא משפיעה הכי חזק ?</div>
+          <textarea class="line-input"></textarea>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>חלק ב׳ - 5 למה</h2>
+        <div class="note">
+          הנחיה:<br>
+          שאלו בכל פעם: למה זה קורה ?<br>
+          ועל כל תשובה — שאלו שוב למה.<br>
+          המטרה היא לא להאשים, אלא להבין מה באמת עומד מאחורי הבעיה.
+        </div>
+
+        <div class="question"><div class="q-title">למה 1?</div><textarea class="line-input"></textarea></div>
+        <div class="question"><div class="q-title">למה 2?</div><textarea class="line-input"></textarea></div>
+        <div class="question"><div class="q-title">למה 3?</div><textarea class="line-input"></textarea></div>
+        <div class="question"><div class="q-title">למה 4?</div><textarea class="line-input"></textarea></div>
+        <div class="question"><div class="q-title">למה 5?</div><textarea class="line-input"></textarea></div>
+
+        <div class="question">
+          <div class="q-title">מה גיליתן אחרי 5 למה?</div>
+          <div class="options">
+            <label><input type="checkbox"> שהבעיה עמוקה יותר ממה שחשבנו</label>
+            <label><input type="checkbox"> שהבעיה קשורה לחוסר מידע</label>
+            <label><input type="checkbox"> שהבעיה קשורה לעומס או בלבול</label>
+            <label><input type="checkbox"> שהבעיה קשורה לנגישות / זמינות</label>
+            <label><input type="checkbox"> שהבעיה קשורה לפרטיות / ביטחון</label>
+            <label><input type="checkbox"> שהבעיה קשורה למבנה או לארגון לא טוב</label>
+            <label><input type="checkbox"> אחר: <input type="text"></label>
+          </div>
+        </div>
+
+        <div class="question">
+          <div class="q-title">כתבו במשפט קצר מה גיליתן:</div>
+          <textarea class="line-input"></textarea>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>חלק ג׳ - הבעיה המדויקת</h2>
+        <div class="note">
+          הנחיה:<br>
+          עכשיו נסחו את הבעיה בצורה מדויקת.<br>
+          לא כללית מדי, ולא כפתרון.
+        </div>
+
+        <div class="question"><div class="q-title">1. מי קהל היעד שנפגע מהבעיה?</div><textarea class="line-input"></textarea></div>
+        <div class="question"><div class="q-title">2. באיזה מצב הבעיה מופיעה?</div><textarea class="line-input"></textarea></div>
+        <div class="question"><div class="q-title">3. מה בדיוק לא עובד?</div><textarea class="line-input"></textarea></div>
+
+        <div class="question">
+          <div class="q-title">4. מה ההשפעה של הבעיה?</div>
+          <div>סמנו אפשרות אחת או יותר:</div>
+          <div class="options">
+            <label><input type="checkbox"> לחץ</label>
+            <label><input type="checkbox"> בלבול</label>
+            <label><input type="checkbox"> בזבוז זמן</label>
+            <label><input type="checkbox"> מבוכה</label>
+            <label><input type="checkbox"> חוסר ביטחון</label>
+            <label><input type="checkbox"> פספוס</label>
+            <label><input type="checkbox"> תלות באחרות / באחרים</label>
+            <label><input type="checkbox"> קושי להתארגן</label>
+            <label><input type="checkbox"> אחר: <input type="text"></label>
+          </div>
+        </div>
+
+        <div class="question">
+          <div class="q-title">5. כתבו את הבעיה המדויקת במשפט אחד:</div>
+          <div class="note">________________ מתקשות ל________________ כאשר________________, ולכן________________.</div>
+          <textarea class="line-input"></textarea>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>חלק ד׳ - הצורך</h2>
+        <div class="note">
+          הנחיה:<br>
+          הצורך הוא לא פתרון.<br>
+          הוא אומר מה חסר ומה צריך להשתנות.
+        </div>
+
+        <div class="question"><div class="q-title">1. מה חסר לקהל היעד במצב הזה?</div><textarea class="line-input"></textarea></div>
+
+        <div class="question">
+          <div class="q-title">2. מה היה יכול לעזור לו להתמודד טוב יותר?</div>
+          <div>סמנו אפשרות אחת או יותר:</div>
+          <div class="options">
+            <label><input type="checkbox"> מידע ברור יותר</label>
+            <label><input type="checkbox"> פעולה מהירה יותר</label>
+            <label><input type="checkbox"> פרטיות</label>
+            <label><input type="checkbox"> נוחות</label>
+            <label><input type="checkbox"> סדר וארגון</label>
+            <label><input type="checkbox"> תחושת ביטחון</label>
+            <label><input type="checkbox"> זמינות מיידית</label>
+            <label><input type="checkbox"> שליטה טובה יותר</label>
+            <label><input type="checkbox"> אחר: <input type="text"></label>
+          </div>
+        </div>
+
+        <div class="question">
+          <div class="q-title">3. כתבו את הצורך במשפט אחד:</div>
+          <div class="note">יש צורך ב______________________________________<br>או<br>חסר משהו ש______________________________________</div>
+          <textarea class="line-input"></textarea>
         </div>
       </section>
 
