@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>מחולל כרטיסים מתוך אקסל</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+  <style>
+    :root {
+      --bg: #f7f5f8;
+      --surface: #fffdfd;
+      --surface-soft: #fff8fb;
+      --ink: #22314d;
+      --muted: #667085;
+      --line: #eadbe6;
+      --accent: #c63f7f;
+      --accent-soft: #f8d8e9;
+      --accent-2: #2f4a78;
+      --accent-2-soft: #dce7fb;
+      --shadow: 0 14px 36px rgba(34, 49, 77, 0.10);
+      --radius: 22px;
+      --card-w-screen: 300px;
+      --card-h-screen: 420px;
+      --card-w-print: 63mm;
+      --card-h-print: 88mm;
+      --gap-screen: 18px;
+      --gap-print: 4mm;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      background: linear-gradient(180deg, #faf7fa 0%, #f4f4f9 100%);
+      color: var(--ink);
+      font-family: 'Rubik', sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+    }
+
+    .app {
+      max-width: 1480px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .topbar {
+      background: rgba(255,255,255,0.86);
+      border: 1px solid rgba(234,219,230,0.95);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      border-radius: 28px;
+      padding: 22px;
+      margin-bottom: 24px;
+    }
+
+    .title-row {
+      display: flex;
+      gap: 16px;
+      align-items: start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 32px;
+      line-height: 1.1;
+      font-weight: 800;
+      color: var(--accent-2);
+    }
+
+    .subtitle {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
+      max-width: 820px;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 12px;
+      align-items: end;
+    }
+
+    .control {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      min-width: 0;
+    }
+
+    .control label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent-2);
+    }
+
+    .control input,
+    .control select,
+    .control button {
+      width: 100%;
+      min-height: 46px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: white;
+      color: var(--ink);
+      font-family: inherit;
+      font-size: 15px;
+      padding: 10px 14px;
+    }
+
+    .control input[type="file"] {
+      padding: 8px 10px;
+      background: var(--surface);
+    }
+
+    .control button {
+      cursor: pointer;
+      font-weight: 700;
+      transition: 0.18s ease;
+    }
+
+    .control button.primary {
+      background: linear-gradient(135deg, var(--accent), #d95c95);
+      color: #fff;
+      border-color: transparent;
+    }
+
+    .control button.secondary {
+      background: linear-gradient(135deg, #ffffff, #fff7fb);
+    }
+
+    .control button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 20px rgba(34,49,77,0.08);
+    }
+
+    .span-3 { grid-column: span 3; }
+    .span-2 { grid-column: span 2; }
+    .span-1 { grid-column: span 1; }
+
+    .status-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .pill {
+      padding: 8px 12px;
+      background: white;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .pill strong {
+      color: var(--accent-2);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 26px;
+    }
+
+    .panel {
+      background: rgba(255,255,255,0.88);
+      border: 1px solid rgba(234,219,230,0.95);
+      box-shadow: var(--shadow);
+      border-radius: 28px;
+      padding: 20px;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .panel-header h2 {
+      margin: 0;
+      font-size: 22px;
+      color: var(--accent-2);
+    }
+
+    .panel-note {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(var(--card-w-screen), 1fr));
+      gap: var(--gap-screen);
+      align-items: start;
+    }
+
+    .card {
+      width: 100%;
+      min-height: var(--card-h-screen);
+      background: linear-gradient(180deg, #ffffff 0%, #fffafe 100%);
+      border: 1px solid #ecdce8;
+      border-radius: var(--radius);
+      box-shadow: 0 14px 28px rgba(34,49,77,0.08);
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      isolation: isolate;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at top left, rgba(248, 216, 233, 0.65), transparent 35%),
+        radial-gradient(circle at bottom right, rgba(220, 231, 251, 0.60), transparent 32%);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .card-top-strip {
+      height: 10px;
+      background: linear-gradient(90deg, var(--accent) 0%, #e478aa 54%, #f5c7db 100%);
+    }
+
+    .card-inner {
+      padding: 18px 18px 16px;
+      display: flex;
+      flex-direction: column;
+      min-height: calc(var(--card-h-screen) - 10px);
+      height: 100%;
+    }
+
+    .front .card-title {
+      font-size: 26px;
+      line-height: 1.1;
+      font-weight: 800;
+      color: var(--accent-2);
+      margin-bottom: 12px;
+      letter-spacing: -0.3px;
+    }
+
+    .hook-box {
+      background: rgba(255,255,255,0.82);
+      border: 1px solid #efd9e5;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.6);
+      border-radius: 18px;
+      padding: 14px;
+      font-size: 16px;
+      line-height: 1.55;
+      color: #6f2f58;
+      margin-bottom: 14px;
+      min-height: 90px;
+      font-weight: 500;
+    }
+
+    .meta-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .meta-item, .back-item {
+      background: rgba(255,255,255,0.82);
+      border: 1px solid #eddde8;
+      border-radius: 16px;
+      padding: 11px 12px;
+    }
+
+    .meta-label, .back-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 5px;
+      font-weight: 700;
+    }
+
+    .meta-value, .back-value {
+      font-size: 15px;
+      line-height: 1.45;
+      color: var(--ink);
+      font-weight: 600;
+      word-break: break-word;
+    }
+
+    .front-footer {
+      margin-top: auto;
+      padding-top: 12px;
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .code-tag {
+      font-size: 10px;
+      line-height: 1.2;
+      color: #7d7390;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+    }
+
+    .family-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, var(--chip-bg, #f8d8e9), #ffffff);
+      color: var(--chip-ink, #7f2858);
+      border: 1px solid rgba(198,63,127,0.18);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      width: fit-content;
+    }
+
+    .back .card-title-small {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--accent);
+      margin-bottom: 12px;
+      letter-spacing: 0.04em;
+    }
+
+    .back-grid {
+      display: grid;
+      gap: 8px;
+    }
+
+    .back-item {
+      padding: 9px 11px;
+    }
+
+    .back-value {
+      font-size: 13.5px;
+      font-weight: 500;
+      line-height: 1.42;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 42px 20px;
+      color: var(--muted);
+      border: 2px dashed var(--line);
+      border-radius: 24px;
+      background: #fff;
+    }
+
+    .hidden-screen {
+      display: none !important;
+    }
+
+    .duplex-hint {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    @media (max-width: 1100px) {
+      .span-3, .span-2, .span-1 {
+        grid-column: span 6;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .app { padding: 14px; }
+      .topbar, .panel { padding: 16px; border-radius: 22px; }
+      .controls { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+      .span-3, .span-2, .span-1 { grid-column: span 6; }
+      h1 { font-size: 26px; }
+      .cards-grid { grid-template-columns: 1fr; }
+    }
+
+    @page {
+      size: A4 portrait;
+      margin: 8mm;
+    }
+
+    @media print {
+      html, body {
+        background: white !important;
+      }
+
+      .topbar {
+        display: none !important;
+      }
+
+      .app {
+        max-width: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .layout {
+        display: block;
+      }
+
+      .panel {
+        box-shadow: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+        background: transparent;
+      }
+
+      .panel-header {
+        display: none !important;
+      }
+
+      .cards-grid {
+        grid-template-columns: repeat(3, var(--card-w-print));
+        gap: var(--gap-print);
+        justify-content: center;
+        align-items: start;
+      }
+
+      .card {
+        width: var(--card-w-print);
+        min-height: var(--card-h-print);
+        height: var(--card-h-print);
+        box-shadow: none;
+        border-radius: 5mm;
+        overflow: hidden;
+        break-inside: avoid;
+        page-break-inside: avoid;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .card-inner {
+        min-height: calc(var(--card-h-print) - 10px);
+        padding: 4.3mm 4mm 3.6mm;
+      }
+
+      .front .card-title {
+        font-size: 18px;
+        margin-bottom: 7px;
+      }
+
+      .hook-box {
+        font-size: 11px;
+        min-height: 24mm;
+        border-radius: 4mm;
+        padding: 3.2mm;
+        margin-bottom: 3mm;
+      }
+
+      .meta-list { gap: 2.6mm; }
+
+      .meta-item, .back-item {
+        padding: 2.6mm 2.8mm;
+        border-radius: 4mm;
+      }
+
+      .meta-label, .back-label {
+        font-size: 7px;
+        margin-bottom: 1mm;
+      }
+
+      .meta-value {
+        font-size: 10px;
+      }
+
+      .back .card-title-small {
+        font-size: 9px;
+        margin-bottom: 2mm;
+      }
+
+      .back-grid {
+        gap: 1.7mm;
+      }
+
+      .back-value {
+        font-size: 8.3px;
+      }
+
+      .code-tag {
+        font-size: 6.8px;
+      }
+
+      .panel.print-page-break {
+        page-break-before: always;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <section class="topbar">
+      <div class="title-row">
+        <div>
+          <h1>מחולל כרטיסים מתוך אקסל</h1>
+          <div class="subtitle">
+            המערכת קוראת את קובץ האקסל, מזהה את עמודות הכרטיסים שלך, ובונה כרטיסים דו־צדדיים מוכנים לתצוגה ולהדפסה.
+            הסדר בכרטיס מותאם בדיוק לשדות שביקשת.
+          </div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div class="control span-3">
+          <label for="excelFile">קובץ אקסל</label>
+          <input id="excelFile" type="file" accept=".xlsx,.xls,.xlsm" />
+        </div>
+
+        <div class="control span-2">
+          <label for="familyFilter">סינון לפי משפחה</label>
+          <select id="familyFilter">
+            <option value="">כל המשפחות</option>
+          </select>
+        </div>
+
+        <div class="control span-2">
+          <label for="searchBox">חיפוש חופשי</label>
+          <input id="searchBox" type="text" placeholder="שם כרטיס, פרסונה, תחום..." />
+        </div>
+
+        <div class="control span-2">
+          <label for="viewMode">מצב תצוגה</label>
+          <select id="viewMode">
+            <option value="both">שני הצדדים</option>
+            <option value="front">קדמי בלבד</option>
+            <option value="back">אחורי בלבד</option>
+          </select>
+        </div>
+
+        <div class="control span-1">
+          <label>&nbsp;</label>
+          <button id="printBtn" class="primary">הדפסה / PDF</button>
+        </div>
+
+        <div class="control span-2">
+          <label>&nbsp;</label>
+          <button id="resetBtn" class="secondary">ניקוי וסידור מחדש</button>
+        </div>
+      </div>
+
+      <div class="status-bar">
+        <div class="pill"><strong id="fileName">לא נטען קובץ</strong></div>
+        <div class="pill">כרטיסים: <strong id="cardsCount">0</strong></div>
+        <div class="pill">משפחות: <strong id="familiesCount">0</strong></div>
+        <div class="pill">עמודות שזוהו: <strong id="headersStatus">—</strong></div>
+      </div>
+    </section>
+
+    <div class="layout">
+      <section class="panel" id="frontPanel">
+        <div class="panel-header">
+          <div>
+            <h2>צד קדמי</h2>
+            <p class="panel-note">סדר קבוע: שם הכרטיס, משפט מסקרן, משפחה, תחום, יעד או״ם, קוד כרטיס קטן בתחתית.</p>
+          </div>
+        </div>
+        <div id="frontGrid" class="cards-grid"></div>
+      </section>
+
+      <section class="panel print-page-break" id="backPanel">
+        <div class="panel-header">
+          <div>
+            <h2>צד אחורי</h2>
+            <p class="panel-note">סדר קבוע: כיוון מוצר, קהל יעד, פרסונה, הנושא, מצב מהחיים, הבעיה, למה לא עובד היום, ההשפעה, מה עדיין חסר, שאלת פתיחה.</p>
+          </div>
+          <div class="duplex-hint">להדפסה דו־צדדית: מומלץ קודם להדפיס ניסיון על דף אחד כדי לבדוק את כיוון ההיפוך במדפסת.</div>
+        </div>
+        <div id="backGrid" class="cards-grid"></div>
+      </section>
+    </div>
+  </div>
+
+  
+  <script>
+    const state = {
+      allCards: [],
+      filteredCards: [],
+      detectedHeaders: [],
+      fileName: '',
+      sheetSummaries: []
+    };
+
+    const HEADER_ALIASES = {
+      cardCode: ['קוד כרטיס', 'קוד', 'code'],
+      cardName: ['שם הכרטיס', 'שם', 'title'],
+      hook: ['משפט מסקרן', 'משפט פתיחה מסקרן', 'משפט פתיחה', 'משפט', 'פתיח'],
+      family: ['משפחה', 'family'],
+      domain: ['תחום', 'תחום תוכן', 'topic domain'],
+      sdg: ['יעד או"ם', 'יעד או״ם', 'יעד האום', 'יעד', 'sdg'],
+      productDirection: ['כיוון למוצר', 'כיוון מוצר', 'סוג מוצר'],
+      targetAudience: ['קהל יעד', 'קהל', 'target audience'],
+      persona: ['פרסונה', 'persona'],
+      topic: ['הנושא', 'נושא', 'מוקד הבעיה', 'topic'],
+      lifeSituation: ['מצב מהחיים', 'סיטואציה', 'המצב מהחיים', 'life situation'],
+      problem: ['הבעיה', 'בעיה', 'problem'],
+      whyNotWorking: ['למה לא עובד היום', 'למה זה לא עובד היום', 'מה לא עובד היום', 'why not'],
+      impact: ['ההשפעה', 'שפעה', 'השפעה', 'impact'],
+      missing: ['מה עדיין חסר', 'מה חסר', 'still missing'],
+      openingQuestion: ['שאלת פתיחה', 'שאלה פותחת', 'שאלת חשיבה', 'opening question']
+    };
+
+    const fieldOrder = [
+      'cardCode', 'cardName', 'hook', 'family', 'domain', 'sdg',
+      'productDirection', 'targetAudience', 'persona', 'topic',
+      'lifeSituation', 'problem', 'whyNotWorking', 'impact', 'missing', 'openingQuestion'
+    ];
+
+    const familyFilter = document.getElementById('familyFilter');
+    const searchBox = document.getElementById('searchBox');
+    const viewMode = document.getElementById('viewMode');
+    const frontPanel = document.getElementById('frontPanel');
+    const backPanel = document.getElementById('backPanel');
+    const frontGrid = document.getElementById('frontGrid');
+    const backGrid = document.getElementById('backGrid');
+    const cardsCount = document.getElementById('cardsCount');
+    const familiesCount = document.getElementById('familiesCount');
+    const headersStatus = document.getElementById('headersStatus');
+    const fileNameLabel = document.getElementById('fileName');
+
+    function normalizeHeader(value) {
+      return String(value || '')
+        .replace(/״/g, '"')
+        .replace(/׳/g, "'")
+        .replace(/[\u200f\u200e]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .toLowerCase();
+    }
+
+    function normalizeValue(value) {
+      return String(value ?? '')
+        .replace(/[\u200f\u200e]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function findValueByAliases(row, aliases) {
+      const normalizedEntries = Object.entries(row).map(([key, val]) => [normalizeHeader(key), val]);
+      for (const alias of aliases) {
+        const target = normalizeHeader(alias);
+        const match = normalizedEntries.find(([key]) => key === target);
+        if (match) return normalizeValue(match[1]);
+      }
+      return '';
+    }
+
+    function normalizeProductDirection(raw) {
+      const value = normalizeValue(raw);
+      const low = value.toLowerCase();
+      if (!value) return '';
+      if (low.includes('אפל')) return 'אפליקציה';
+      if (low.includes('דיג')) return 'דיגיטלי';
+      if (low.includes('פיז')) return 'פיזי';
+      return value;
+    }
+
+    function escapeHtml(value) {
+      return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function hashColor(text) {
+      const palette = [
+        ['#f8d8e9', '#7f2858'],
+        ['#dce7fb', '#26446b'],
+        ['#f7e5cf', '#7a4a17'],
+        ['#e3f4ec', '#236246'],
+        ['#efe4fb', '#65408c']
+      ];
+      let hash = 0;
+      for (let i = 0; i < text.length; i++) hash = text.charCodeAt(i) + ((hash << 5) - hash);
+      return palette[Math.abs(hash) % palette.length];
+    }
+
+    function extractCard(row, index) {
+      const card = {};
+      for (const [field, aliases] of Object.entries(HEADER_ALIASES)) {
+        card[field] = findValueByAliases(row, aliases);
+      }
+      card.productDirection = normalizeProductDirection(card.productDirection);
+      card._search = normalizeHeader([
+        card.cardCode, card.cardName, card.hook, card.family, card.domain,
+        card.sdg, card.productDirection, card.targetAudience, card.persona,
+        card.topic, card.lifeSituation, card.problem, card.whyNotWorking,
+        card.impact, card.missing, card.openingQuestion
+      ].join(' | '));
+      card._id = `${card.cardCode || 'card'}-${index}`;
+      return card;
+    }
+
+    function meaningfulFieldCount(card) {
+      return fieldOrder.reduce((count, field) => count + (normalizeValue(card[field]) ? 1 : 0), 0);
+    }
+
+    function isMetaOrNoiseRow(card, rawRow) {
+      const rawJoined = normalizeHeader(Object.values(rawRow || {}).join(' | '));
+      const name = normalizeHeader(card.cardName);
+      const bannedPhrases = [
+        'סהכ', 'סך הכל', 'הערות', 'דוגמה', 'הנחיה', 'הוראות',
+        'משפחה כרטיסים', 'sheet', 'כותרת', 'header'
+      ];
+      if (bannedPhrases.some(term => rawJoined.includes(term) || name.includes(term))) return true;
+      return false;
+    }
+
+    function isValidCard(card, rawRow) {
+      const hasName = !!normalizeValue(card.cardName);
+      const hasFrontIdentity = [card.family, card.domain, card.sdg].some(v => normalizeValue(v));
+      const hasBackContent = [
+        card.productDirection, card.targetAudience, card.persona, card.topic,
+        card.lifeSituation, card.problem, card.whyNotWorking, card.impact,
+        card.missing, card.openingQuestion
+      ].filter(v => normalizeValue(v)).length >= 4;
+      const enoughData = meaningfulFieldCount(card) >= 6;
+
+      if (isMetaOrNoiseRow(card, rawRow)) return false;
+      if (!hasName) return false;
+      if (!hasFrontIdentity) return false;
+      if (!hasBackContent) return false;
+      if (!enoughData) return false;
+      return true;
+    }
+
+    function dedupeCards(cards) {
+      const seen = new Set();
+      return cards.filter(card => {
+        const key = normalizeHeader([
+          card.cardCode || '',
+          card.cardName || '',
+          card.family || '',
+          card.problem || '',
+          card.persona || ''
+        ].join('|'));
+        if (!key || seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+    }
+
+    function setStatus() {
+      fileNameLabel.textContent = state.fileName || 'לא נטען קובץ';
+      cardsCount.textContent = String(state.filteredCards.length);
+      const families = new Set(state.allCards.map(c => c.family).filter(Boolean));
+      familiesCount.textContent = String(families.size);
+      const headerText = state.detectedHeaders.length ? state.detectedHeaders.join(' | ') : '—';
+      const summaryText = state.sheetSummaries.length
+        ? ' | ' + state.sheetSummaries.map(s => `${s.sheet}: ${s.accepted}/${s.total}`).join(' · ')
+        : '';
+      headersStatus.textContent = (headerText + summaryText).slice(0, 500);
+    }
+
+    function buildMetaItem(label, value, isChip = false, chipColors = null) {
+      const normalized = normalizeValue(value);
+      if (!normalized) return '';
+      const safe = escapeHtml(normalized);
+      if (isChip) {
+        const [bg, ink] = chipColors || ['#f8d8e9', '#7f2858'];
+        return `
+          <div class="meta-item">
+            <div class="meta-label">${label}</div>
+            <div class="meta-value">
+              <span class="family-chip" style="--chip-bg:${bg};--chip-ink:${ink};">${safe}</span>
+            </div>
+          </div>
+        `;
+      }
+      return `
+        <div class="meta-item">
+          <div class="meta-label">${label}</div>
+          <div class="meta-value">${safe}</div>
+        </div>
+      `;
+    }
+
+    function buildBackItem(label, value) {
+      const normalized = normalizeValue(value);
+      if (!normalized) return '';
+      return `
+        <div class="back-item">
+          <div class="back-label">${label}</div>
+          <div class="back-value">${escapeHtml(normalized)}</div>
+        </div>
+      `;
+    }
+
+    function renderFrontCard(card) {
+      const chipColors = hashColor(card.family || card.cardName || 'x');
+      const hook = normalizeValue(card.hook);
+      const code = normalizeValue(card.cardCode);
+      return `
+        <article class="card front" data-id="${escapeHtml(card._id)}">
+          <div class="card-top-strip"></div>
+          <div class="card-inner">
+            <div class="card-title">${escapeHtml(card.cardName || 'ללא שם כרטיס')}</div>
+            ${hook ? `<div class="hook-box">${escapeHtml(hook)}</div>` : ''}
+            <div class="meta-list">
+              ${buildMetaItem('משפחה', card.family, true, chipColors)}
+              ${buildMetaItem('תחום', card.domain)}
+              ${buildMetaItem('יעד או״ם', card.sdg)}
+            </div>
+            <div class="front-footer">
+              <div></div>
+              ${code ? `<div class="code-tag">${escapeHtml(code)}</div>` : ''}
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    function renderBackCard(card) {
+      return `
+        <article class="card back" data-id="${escapeHtml(card._id)}">
+          <div class="card-top-strip"></div>
+          <div class="card-inner">
+            <div class="card-title-small">פרטי כרטיס</div>
+            <div class="back-grid">
+              ${buildBackItem('כיוון מוצר', card.productDirection)}
+              ${buildBackItem('קהל יעד', card.targetAudience)}
+              ${buildBackItem('פרסונה', card.persona)}
+              ${buildBackItem('הנושא', card.topic)}
+              ${buildBackItem('מצב מהחיים', card.lifeSituation)}
+              ${buildBackItem('הבעיה', card.problem)}
+              ${buildBackItem('למה לא עובד היום', card.whyNotWorking)}
+              ${buildBackItem('ההשפעה', card.impact)}
+              ${buildBackItem('מה עדיין חסר', card.missing)}
+              ${buildBackItem('שאלת פתיחה', card.openingQuestion)}
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    function renderCards() {
+      const cards = state.filteredCards;
+      if (!cards.length) {
+        const emptyHtml = `
+          <div class="empty-state">
+            לא נמצאו כרטיסים תקינים להצגה.<br>
+            ודאי שהאקסל כולל שורת כותרות ושכל שורת כרטיס כוללת לפחות: שם כרטיס, משפחה/תחום/יעד, ועוד תוכן ממשי.
+          </div>
+        `;
+        frontGrid.innerHTML = emptyHtml;
+        backGrid.innerHTML = emptyHtml;
+        setStatus();
+        return;
+      }
+      frontGrid.innerHTML = cards.map(renderFrontCard).join('');
+      backGrid.innerHTML = cards.map(renderBackCard).join('');
+      setStatus();
+    }
+
+    function updateFamilyFilter() {
+      const families = [...new Set(state.allCards.map(card => card.family).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'he'));
+      const current = familyFilter.value;
+      familyFilter.innerHTML = `<option value="">כל המשפחות</option>` + families.map(f => `<option value="${escapeHtml(f)}">${escapeHtml(f)}</option>`).join('');
+      familyFilter.value = families.includes(current) ? current : '';
+    }
+
+    function applyFilters() {
+      const family = normalizeValue(familyFilter.value);
+      const search = normalizeHeader(searchBox.value);
+
+      state.filteredCards = state.allCards.filter(card => {
+        const byFamily = !family || card.family === family;
+        const bySearch = !search || card._search.includes(search);
+        return byFamily && bySearch;
+      });
+
+      const mode = viewMode.value;
+      frontPanel.classList.toggle('hidden-screen', mode === 'back');
+      backPanel.classList.toggle('hidden-screen', mode === 'front');
+
+      renderCards();
+    }
+
+    function readWorkbook(file) {
+      const reader = new FileReader();
+      reader.onload = event => {
+        const data = new Uint8Array(event.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        let cards = [];
+        const detectedHeaders = new Set();
+        const sheetSummaries = [];
+
+        workbook.SheetNames.forEach(sheetName => {
+          const sheet = workbook.Sheets[sheetName];
+          const rows = XLSX.utils.sheet_to_json(sheet, { defval: '', blankrows: false });
+          let accepted = 0;
+
+          rows.forEach((row, idx) => {
+            Object.keys(row).forEach(key => key && detectedHeaders.add(normalizeValue(key)));
+            const card = extractCard(row, `${sheetName}-${idx + 1}`);
+            if (isValidCard(card, row)) {
+              cards.push(card);
+              accepted += 1;
+            }
+          });
+
+          sheetSummaries.push({ sheet: sheetName, total: rows.length, accepted });
+        });
+
+        cards = dedupeCards(cards);
+
+        state.allCards = cards;
+        state.filteredCards = [...cards];
+        state.detectedHeaders = [...detectedHeaders];
+        state.fileName = file.name;
+        state.sheetSummaries = sheetSummaries;
+
+        updateFamilyFilter();
+        applyFilters();
+      };
+      reader.readAsArrayBuffer(file);
+    }
+
+    document.getElementById('excelFile').addEventListener('change', event => {
+      const file = event.target.files?.[0];
+      if (!file) return;
+      readWorkbook(file);
+    });
+
+    familyFilter.addEventListener('change', applyFilters);
+    searchBox.addEventListener('input', applyFilters);
+    viewMode.addEventListener('change', applyFilters);
+    document.getElementById('printBtn').addEventListener('click', () => window.print());
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      familyFilter.value = '';
+      searchBox.value = '';
+      viewMode.value = 'both';
+      applyFilters();
+    });
+
+    renderCards();
+  </script>
+
+</body>
+</html>
