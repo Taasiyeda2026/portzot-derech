@@ -248,8 +248,9 @@ body::before{content:'';position:fixed;width:300px;height:300px;border-radius:50
 .hchip.taken{background:var(--sage);color:white;border-color:var(--sage)}
 
 /* RESULTS */
+#results-body{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px}
 .res-group{background:white;border-radius:11px;border:1.5px solid var(--border);
-  padding:9px 12px;margin-bottom:7px;box-shadow:0 1px 5px var(--shadow)}
+  padding:9px 12px;box-shadow:0 1px 5px var(--shadow)}
 .res-hdr{display:flex;align-items:center;gap:7px;margin-bottom:7px}
 .res-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
 .res-lbl{font-size:12px;font-weight:700;color:var(--deep)}
