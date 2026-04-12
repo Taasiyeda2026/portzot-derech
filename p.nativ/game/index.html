@@ -1,80 +1,727 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>משחק קלפים לקבוצות</title>
-  <meta name="description" content="משחק קלפים סטטי לחלוקה לתת-קבוצות בגודל 2 או 3, ללא גלילה." />
-  <link rel="stylesheet" href="styles.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>קלפי רעיונות — תעשיידע</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700&family=Frank+Ruhl+Libre:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream:#FAF7F2; --blush:#F2D9D9; --rose:#E8B4B8;
+  --mauve:#C9879C; --plum:#8B5B6B; --deep:#3D2535;
+  --sage:#A8C5B5; --sage-lt:#D6EAE1;
+  --lavender:#C5BEE0; --lav-lt:#EAE8F5;
+  --peach:#F0C9A0; --sky:#A8C8E0;
+  --ink:#2A1A22; --muted:#8A7080;
+  --border:rgba(139,91,107,0.15);
+  --shadow:rgba(61,37,53,0.08);
+  --r-md:18px; --r-lg:28px; --r-xl:40px;
+  --font-d:'Frank Ruhl Libre',serif;
+  --font-b:'Heebo',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-b);background:var(--cream);color:var(--ink);min-height:100dvh;overflow-x:hidden}
+body::before,body::after{content:'';position:fixed;border-radius:50%;filter:blur(80px);opacity:.3;pointer-events:none;z-index:0}
+body::before{width:500px;height:500px;background:radial-gradient(circle,var(--blush),transparent 70%);top:-120px;right:-100px}
+body::after{width:400px;height:400px;background:radial-gradient(circle,var(--lav-lt),transparent 70%);bottom:-100px;left:-80px}
+.screen{display:none;position:relative;z-index:1;min-height:100dvh}
+.screen.active{display:flex;flex-direction:column}
+.top-bar{padding:18px 22px 0;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.logo{font-family:var(--font-d);font-size:15px;color:var(--plum);letter-spacing:.03em}
+.badge{font-size:11px;padding:4px 12px;border-radius:99px;font-weight:500;background:var(--blush);color:var(--plum)}
+.badge.host{background:var(--deep);color:var(--cream)}
+.hero{padding:36px 26px 20px;text-align:center;flex-shrink:0}
+.hero h1{font-family:var(--font-d);font-size:clamp(26px,7vw,42px);font-weight:700;color:var(--deep);line-height:1.15;margin-bottom:8px}
+.hero p{font-size:14px;color:var(--muted);line-height:1.6;max-width:300px;margin:0 auto}
+.deck-art{display:flex;justify-content:center;margin:0 0 28px;height:80px;position:relative}
+.deck-art span{position:absolute;width:52px;height:74px;border-radius:10px;border:1.5px solid rgba(139,91,107,.2);background:white;box-shadow:0 4px 14px var(--shadow)}
+.deck-art span:nth-child(1){transform:rotate(-12deg) translate(-28px,4px);background:var(--blush)}
+.deck-art span:nth-child(2){transform:rotate(-5deg) translate(-9px,0);background:var(--lav-lt)}
+.deck-art span:nth-child(3){transform:rotate(3deg) translate(9px,2px);background:var(--sage-lt)}
+.deck-art span:nth-child(4){transform:rotate(11deg) translate(28px,5px);background:var(--peach)}
+.btn{font-family:var(--font-b);font-size:14px;font-weight:500;padding:12px 24px;border-radius:var(--r-xl);border:none;cursor:pointer;transition:transform .15s,box-shadow .15s,opacity .15s;display:inline-flex;align-items:center;gap:8px}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--deep);color:var(--cream);box-shadow:0 4px 18px rgba(61,37,53,.25)}
+.btn-primary:hover{box-shadow:0 6px 26px rgba(61,37,53,.35)}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.btn-soft{background:white;color:var(--plum);border:1.5px solid var(--border)}
+.btn-soft:hover{background:var(--blush)}
+.group-cards{display:flex;flex-direction:column;gap:10px;padding:0 20px 28px}
+.group-card{background:white;border-radius:var(--r-lg);border:1.5px solid var(--border);padding:18px 20px;cursor:pointer;transition:transform .15s,box-shadow .15s,border-color .15s;box-shadow:0 2px 10px var(--shadow)}
+.group-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px var(--shadow)}
+.group-card.sel{border-color:var(--mauve);background:#FDF5F7}
+.group-card-title{font-family:var(--font-d);font-size:19px;font-weight:700;color:var(--deep);margin-bottom:6px}
+.group-fams{display:flex;gap:5px;flex-wrap:wrap}
+.fam-pip{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--deep)}
+.setup-body{padding:14px 20px;flex:1;display:flex;flex-direction:column;gap:18px}
+.field-label{font-size:12px;font-weight:500;color:var(--muted);margin-bottom:7px}
+.stepper{display:flex;align-items:center;background:white;border-radius:var(--r-xl);border:1.5px solid var(--border);width:fit-content;overflow:hidden;box-shadow:0 2px 8px var(--shadow)}
+.stepper button{width:42px;height:42px;border:none;background:none;font-size:20px;cursor:pointer;color:var(--plum);font-family:var(--font-b);transition:background .1s}
+.stepper button:hover{background:var(--blush)}
+.stepper span{min-width:48px;text-align:center;font-size:19px;font-weight:700;color:var(--deep);font-family:var(--font-d)}
+.dist-preview{background:white;border-radius:var(--r-md);border:1.5px solid var(--border);padding:14px 18px;box-shadow:0 2px 8px var(--shadow)}
+.dist-preview .dist-title{font-size:12px;font-weight:500;color:var(--muted);margin-bottom:9px}
+.dist-chips{display:flex;gap:7px;flex-wrap:wrap}
+.dist-chip{padding:5px 12px;border-radius:99px;font-size:12px;font-weight:500;background:var(--blush);color:var(--plum)}
+.dist-chip.pair{background:var(--lav-lt);color:var(--plum)}
+.dist-error{font-size:12px;color:#C0392B}
+.game-header{padding:14px 18px 10px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.game-title{font-family:var(--font-d);font-size:19px;color:var(--deep)}
+.progress-pill{background:white;border:1.5px solid var(--border);border-radius:99px;padding:4px 13px;font-size:11px;font-weight:500;color:var(--muted);box-shadow:0 2px 6px var(--shadow)}
+.progress-pill strong{color:var(--plum)}
+
+/* ── CARD GRID ── */
+.cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 12px 80px;flex:1}
+
+/* ── FLIP CARD ── */
+.fc{aspect-ratio:2/3;perspective:900px}
+.fc-inner{position:relative;width:100%;height:100%;transition:transform .5s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d}
+.fc.flipped .fc-inner{transform:rotateY(180deg)}
+.fc-face{position:absolute;inset:0;border-radius:14px;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden}
+
+/* FRONT */
+.fc-front{
+  background:white;border:1.5px solid var(--border);
+  box-shadow:0 3px 12px var(--shadow);
+  display:flex;flex-direction:column;cursor:pointer;
+  transition:transform .15s,box-shadow .15s;
+  padding:0;
+}
+.fc-front:hover:not(.taken-face){transform:translateY(-3px);box-shadow:0 7px 20px var(--shadow)}
+.fc.taken .fc-front{background:var(--cream);border-color:transparent;box-shadow:none;cursor:default}
+/* front top accent bar */
+.fc-front-bar{height:5px;flex-shrink:0;border-radius:14px 14px 0 0}
+.fc.taken .fc-front-bar{background:#DDD!important}
+/* front body */
+.fc-front-body{flex:1;display:flex;flex-direction:column;padding:8px 7px 6px;gap:4px;overflow:hidden}
+.fc-front-family{font-size:8px;font-weight:500;color:var(--muted);line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical}
+.fc.taken .fc-front-family{color:#C4B8BF}
+.fc-front-name{font-family:var(--font-d);font-size:11px;font-weight:700;color:var(--deep);line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.fc.taken .fc-front-name{color:#C4B8BF}
+.fc-front-teaser{font-size:8px;color:var(--muted);line-height:1.4;flex:1;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical}
+.fc.taken .fc-front-teaser{color:#C4B8BF}
+/* front bottom */
+.fc-front-bottom{padding:5px 7px 7px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(139,91,107,.08)}
+.fc-front-tags{display:flex;gap:3px;flex-wrap:wrap}
+.fc-front-tag{font-size:7px;padding:2px 5px;border-radius:99px;background:var(--cream);color:var(--muted);border:1px solid var(--border)}
+.fc.taken .fc-front-tag{background:transparent;border-color:transparent;color:#C4B8BF}
+.fc-front-code{font-size:8px;font-weight:700;color:var(--muted)}
+.fc.taken .fc-front-code{color:#C4B8BF}
+.fc-taken-mark{font-size:9px;color:#C4B8BF;font-style:italic}
+
+/* BACK */
+.fc-back{
+  background:white;border:1.5px solid var(--border);
+  box-shadow:0 8px 28px var(--shadow);
+  transform:rotateY(180deg);
+  display:flex;flex-direction:column;
+}
+.fc-back-bar{height:5px;flex-shrink:0;border-radius:14px 14px 0 0}
+.fc-back-scroll{flex:1;overflow-y:auto;padding:8px 9px 4px;display:flex;flex-direction:column;gap:0}
+.fc-back-scroll::-webkit-scrollbar{width:3px}
+.fc-back-scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:99px}
+.back-code{font-size:8px;font-weight:700;color:var(--muted);margin-bottom:3px}
+.back-name{font-family:var(--font-d);font-size:12px;font-weight:700;color:var(--deep);line-height:1.3;margin-bottom:6px;border-bottom:1px solid var(--border);padding-bottom:5px}
+.back-row{display:flex;gap:4px;margin-bottom:4px;align-items:flex-start}
+.back-row-label{font-size:7px;font-weight:700;color:var(--mauve);white-space:nowrap;flex-shrink:0;margin-top:1px;min-width:52px}
+.back-row-val{font-size:8px;color:var(--ink);line-height:1.4;flex:1}
+.back-question{background:var(--cream);border-radius:8px;padding:6px 8px;margin-top:4px;border-right:3px solid var(--rose)}
+.back-question-label{font-size:7px;font-weight:700;color:var(--mauve);margin-bottom:2px}
+.back-question-text{font-size:9px;color:var(--deep);line-height:1.4;font-weight:500}
+.fc-back-footer{padding:5px 8px 7px;flex-shrink:0}
+.choose-btn{background:var(--deep);color:white;border:none;border-radius:99px;padding:7px 0;font-size:10px;font-family:var(--font-b);font-weight:500;cursor:pointer;width:100%;transition:background .15s}
+.choose-btn:hover{background:var(--plum)}
+.chosen-mark{text-align:center;font-size:10px;color:var(--sage);font-weight:700;padding:4px 0}
+
+/* BOTTOM BAR */
+.bottom-bar{position:fixed;bottom:0;left:0;right:0;padding:10px 18px 18px;background:linear-gradient(to top,var(--cream) 55%,transparent);display:flex;justify-content:center;gap:8px;z-index:10}
+
+/* HOST */
+.host-groups{padding:0 18px 90px;flex:1;display:flex;flex-direction:column;gap:14px}
+.host-group-card{background:white;border-radius:var(--r-lg);border:1.5px solid var(--border);padding:16px 18px;box-shadow:0 2px 10px var(--shadow)}
+.host-fam-row{display:flex;align-items:center;gap:7px;padding:7px 0;border-top:1px solid var(--border)}
+.host-fam-label{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--deep);flex-shrink:0}
+.host-cards{display:flex;gap:5px;flex:1;flex-wrap:wrap}
+.host-card-chip{padding:3px 9px;border-radius:99px;font-size:10px;font-weight:500;background:var(--cream);border:1px solid var(--border);color:var(--muted);transition:all .3s}
+.host-card-chip.taken{background:var(--sage);color:white;border-color:var(--sage)}
+
+/* RESULTS */
+.results-body{padding:0 18px 90px;flex:1;display:flex;flex-direction:column;gap:10px}
+.result-group{background:white;border-radius:var(--r-lg);border:1.5px solid var(--border);padding:14px 18px;box-shadow:0 2px 10px var(--shadow)}
+.result-group-header{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+.result-fam-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0}
+.result-group-label{font-size:13px;font-weight:700;color:var(--deep)}
+.result-group-size{font-size:10px;padding:3px 9px;border-radius:99px;background:var(--blush);color:var(--plum);font-weight:500}
+.result-card-item{display:flex;align-items:center;gap:7px;padding:6px 0;border-top:1px solid var(--border);font-size:11px}
+.result-card-code{font-weight:700;color:var(--plum);min-width:26px}
+.result-card-name{color:var(--deep);flex:1}
+.result-card-status.ok{color:var(--sage);font-weight:700;font-size:10px}
+.result-card-status.no{color:var(--muted);font-size:10px}
+
+/* WAITING */
+.waiting-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 26px;text-align:center}
+.pulse-ring{width:76px;height:76px;border-radius:50%;border:3px solid var(--rose);margin:0 auto 22px;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.1);opacity:.6}}
+.waiting-wrap h2{font-family:var(--font-d);font-size:23px;color:var(--deep);margin-bottom:9px}
+.waiting-wrap p{font-size:13px;color:var(--muted);line-height:1.6}
+.done-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 26px;text-align:center}
+.done-emoji{font-size:52px;margin-bottom:18px}
+.done-wrap h2{font-family:var(--font-d);font-size:25px;color:var(--deep);margin-bottom:7px}
+.done-wrap p{font-size:13px;color:var(--muted)}
+.toast{position:fixed;bottom:78px;left:50%;transform:translateX(-50%) translateY(18px);background:var(--deep);color:white;padding:9px 20px;border-radius:99px;font-size:12px;font-weight:500;opacity:0;pointer-events:none;transition:all .3s;z-index:100;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ── WIN POPUP ── */
+.win-overlay{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;background:rgba(61,37,53,.45);backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .3s}
+.win-overlay.show{opacity:1;pointer-events:all}
+.win-card{background:white;border-radius:24px;padding:28px 24px 22px;width:min(340px,88vw);text-align:center;box-shadow:0 20px 60px rgba(61,37,53,.25);transform:scale(.92) translateY(16px);transition:transform .35s cubic-bezier(.34,1.56,.64,1)}
+.win-overlay.show .win-card{transform:scale(1) translateY(0)}
+.win-bar{height:6px;border-radius:99px;margin:0 auto 18px;width:60px}
+.win-emoji{font-size:42px;margin-bottom:12px}
+.win-title{font-family:var(--font-d);font-size:20px;font-weight:700;color:var(--deep);margin-bottom:4px}
+.win-sub{font-size:12px;color:var(--muted);margin-bottom:14px}
+.win-question{background:var(--cream);border-radius:12px;padding:12px 14px;border-right:3px solid var(--rose);text-align:right;margin-bottom:18px}
+.win-question-label{font-size:10px;font-weight:700;color:var(--mauve);margin-bottom:4px}
+.win-question-text{font-size:13px;color:var(--deep);line-height:1.5;font-weight:500}
+.win-actions{display:flex;flex-direction:column;gap:8px}
+.win-cancel-btn{background:transparent;border:1.5px solid var(--border);border-radius:99px;padding:9px;font-size:12px;color:var(--muted);cursor:pointer;font-family:var(--font-b);transition:background .15s,color .15s}
+.win-cancel-btn:hover{background:var(--blush);color:var(--plum)}
+.win-keep-btn{background:var(--deep);color:white;border:none;border-radius:99px;padding:11px;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--font-b);transition:background .15s}
+.win-keep-btn:hover{background:var(--plum)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.fc{animation:fadeUp .35s ease both}
+</style>
 </head>
-<body data-theme="group1">
-  <div class="app-shell">
-    <header class="page-header">
-      <div class="header-copy">
-        <p class="eyebrow">Portzot Derech</p>
-        <h1>משחק קלפים לקבוצות</h1>
-        <p class="subtitle">בחירת מצב קבוצה, חלוקה אוטומטית לתת-קבוצות 2–3, ותצוגת קלפים ללא גלילה.</p>
-      </div>
+<body>
 
-      <div class="theme-badge" id="themeBadge" aria-live="polite">
-        מצב פעיל: קבוצה 1
-      </div>
-    </header>
+<!-- LANDING -->
+<div id="s-landing" class="screen active">
+  <div class="top-bar"><span class="logo">תעשיידע</span></div>
+  <div class="hero">
+    <h1>קלפי רעיונות</h1>
+    <p>פעילות חשיבה יצירתית בקבוצות</p>
+  </div>
+  <div class="deck-art"><span></span><span></span><span></span><span></span></div>
+  <div class="group-cards">
+    <div class="group-card" onclick="enterGroup(1)">
+      <div class="group-card-title">קבוצה 1</div>
+      <div class="group-fams" id="fams1"></div>
+    </div>
+    <div class="group-card" onclick="enterGroup(2)">
+      <div class="group-card-title">קבוצה 2</div>
+      <div class="group-fams" id="fams2"></div>
+    </div>
+    <button class="btn btn-soft" onclick="goHostSetup()" style="justify-content:center">⚙ כניסת מדריכה</button>
+  </div>
+</div>
 
-    <section class="control-panel" aria-label="הגדרות משחק">
-      <form id="setupForm" class="setup-form" novalidate>
-        <fieldset class="mode-fieldset">
-          <legend>בחירת מצב</legend>
-
-          <label class="mode-option">
-            <input type="radio" name="groupMode" value="group1" checked />
-            <span>קבוצה 1</span>
-          </label>
-
-          <label class="mode-option">
-            <input type="radio" name="groupMode" value="group2" />
-            <span>קבוצה 2</span>
-          </label>
-        </fieldset>
-
-        <label class="input-field" for="participantCount">
-          <span>מספר משתתפות</span>
-          <input
-            id="participantCount"
-            name="participantCount"
-            type="number"
-            inputmode="numeric"
-            min="2"
-            step="1"
-            placeholder="לדוגמה 12"
-            required
-          />
-        </label>
-
-        <button type="submit" class="primary-button">צור לוח</button>
-      </form>
-
-      <div class="panel-feedback">
-        <p id="validationMessage" class="feedback-message is-hidden" role="alert" aria-live="assertive"></p>
-        <p id="summaryMessage" class="feedback-message neutral" aria-live="polite">
-          הזיני מספר משתתפות ובחרי מצב קבוצה כדי לבנות את הלוח.
-        </p>
-      </div>
-    </section>
-
-    <main class="board-area" id="boardArea">
-      <div class="board-placeholder" id="boardPlaceholder">
-        <div class="placeholder-card">
-          <strong>הלוח עדיין לא נבנה</strong>
-          <span>בחרי מצב קבוצה, הזיני מספר משתתפות ולחצי על “צור לוח”.</span>
+<!-- HOST SETUP -->
+<div id="s-host-setup" class="screen">
+  <div class="top-bar"><span class="logo">תעשיידע</span><span class="badge host">מדריכה</span></div>
+  <div class="hero" style="padding-top:24px;padding-bottom:10px">
+    <h1 style="font-size:clamp(20px,5vw,30px)">הגדרת משחק</h1>
+  </div>
+  <div class="setup-body">
+    <div>
+      <div class="field-label">קבוצה</div>
+      <div class="group-cards" style="padding:0;gap:8px">
+        <div class="group-card" onclick="hostSelectGroup(1)" id="hgc1" style="padding:13px 16px">
+          <div class="group-card-title" style="font-size:15px;margin-bottom:0">קבוצה 1</div>
+        </div>
+        <div class="group-card" onclick="hostSelectGroup(2)" id="hgc2" style="padding:13px 16px">
+          <div class="group-card-title" style="font-size:15px;margin-bottom:0">קבוצה 2</div>
         </div>
       </div>
-
-      <div id="boardGrid" class="board-grid is-hidden" aria-live="polite" aria-label="לוח הקלפים"></div>
-    </main>
+    </div>
+    <div>
+      <div class="field-label">מספר בנות</div>
+      <div class="stepper">
+        <button onclick="changeGirls(-1)">−</button>
+        <span id="girls-val">6</span>
+        <button onclick="changeGirls(1)">+</button>
+      </div>
+    </div>
+    <div class="dist-preview">
+      <div class="dist-title">חלוקה לקבוצות</div>
+      <div class="dist-chips" id="dist-chips"></div>
+      <div class="dist-error" id="dist-error" style="display:none"></div>
+    </div>
+    <div style="display:flex;gap:9px">
+      <button class="btn btn-soft" onclick="goTo('s-landing')">חזרה</button>
+      <button class="btn btn-primary" id="launch-btn" onclick="launchGame()" style="flex:1;justify-content:center">הפעלת משחק ✦</button>
+    </div>
   </div>
+</div>
 
-  <script src="app.js"></script>
+<!-- HOST LIVE -->
+<div id="s-host-live" class="screen">
+  <div class="top-bar"><span class="logo">תעשיידע</span><span class="badge host">מדריכה — חי</span></div>
+  <div style="padding:14px 18px 6px;flex-shrink:0">
+    <h2 style="font-family:var(--font-d);font-size:21px;color:var(--deep)">מצב המשחק</h2>
+    <p style="font-size:12px;color:var(--muted)">מתרענן כל 3 שניות</p>
+  </div>
+  <div class="host-groups" id="host-groups-wrap"></div>
+  <div class="bottom-bar">
+    <button class="btn btn-soft" onclick="goTo('s-host-setup')">הגדרות</button>
+    <button class="btn btn-primary" onclick="showHostResults()">סיכום ✦</button>
+  </div>
+</div>
+
+<!-- WAITING -->
+<div id="s-waiting" class="screen">
+  <div class="top-bar"><span class="logo">תעשיידע</span><span class="badge" id="waiting-group-badge"></span></div>
+  <div class="waiting-wrap">
+    <div class="pulse-ring"></div>
+    <h2>מחכות להתחלה...</h2>
+    <p>המדריכה עוד לא הפעילה את המשחק.<br>הדף יתרענן אוטומטית.</p>
+  </div>
+</div>
+
+<!-- PLAYER GAME -->
+<div id="s-game" class="screen">
+  <div class="game-header">
+    <span class="game-title" id="game-group-title"></span>
+    <div class="progress-pill"><strong id="prog-taken">0</strong> / <span id="prog-total">0</span></div>
+  </div>
+  <div class="cards-grid" id="cards-grid"></div>
+  <div class="bottom-bar">
+    <button class="btn btn-soft" onclick="showPlayerResults()">סיכום</button>
+  </div>
+</div>
+
+<!-- DONE -->
+<div id="s-done" class="screen">
+  <div class="top-bar"><span class="logo">תעשיידע</span></div>
+  <div class="done-wrap">
+    <div class="done-emoji">🎉</div>
+    <h2>כל הקלפים נבחרו!</h2>
+    <p>המשחק הסתיים.<br>המדריכה תציג את הקבוצות.</p>
+    <button class="btn btn-soft" style="margin-top:22px" onclick="showPlayerResults()">ראי את הקבוצות</button>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div id="s-results" class="screen">
+  <div class="top-bar"><span class="logo">תעשיידע</span><span class="badge" id="res-badge"></span></div>
+  <div style="padding:14px 18px 7px;flex-shrink:0">
+    <h2 style="font-family:var(--font-d);font-size:23px;color:var(--deep)">חלוקה לקבוצות</h2>
+    <p style="font-size:12px;color:var(--muted);margin-top:3px">הסטים שנוצרו</p>
+  </div>
+  <div class="results-body" id="results-body"></div>
+  <div class="bottom-bar">
+    <button class="btn btn-soft" id="res-back-btn">חזרה לקלפים</button>
+    <button class="btn btn-primary" onclick="goTo('s-landing')" style="justify-content:center">סיום ✦</button>
+  </div>
+</div>
+
+
+<!-- WIN POPUP -->
+<div class="win-overlay" id="win-overlay">
+  <div class="win-card">
+    <div class="win-bar" id="win-bar"></div>
+    <div class="win-emoji">✨</div>
+    <div class="win-title" id="win-card-name"></div>
+    <div class="win-sub" id="win-card-code"></div>
+    <div class="win-question">
+      <div class="win-question-label">שאלת פתיחה</div>
+      <div class="win-question-text" id="win-question"></div>
+    </div>
+    <div class="win-actions">
+      <button class="win-keep-btn" onclick="closeWin(false)">שמרי על הקלף הזה ✓</button>
+      <button class="win-cancel-btn" onclick="closeWin(true)">ביטול — אני רוצה לבחור שוב</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const CARDS = {
+  1:{
+  A:[
+    {code:`A1`,fam:`A`,name:`הליכה לילית`,family:`משפחה 1 – מוגנות`,teaser:`הדרך הביתה לא אמורה להפוך לרגע של דריכות ופחד.`,domain:`בטיחות נשים`,sdg:`5 – שוויון מגדרי`,product:`פיזי`,audience:`נערות שחוזרות לבדן בשעות החשיכה`,persona:`החוזרת מחוג בשעת ערב`,topic:`ביטחון אישי בדרכים מבודדות`,scenario:`הליכה ברחוב שקט ללא תאורה מספקת כשיש תחושה שמישהו עוקב מאחור.`,problem:`היעדר אמצעי הרתעה או קריאה לעזרה שאינם דורשים שליפת טלפון.`,why:`כיום הפתרונות הקיימים מבוססים על שיחות טלפון מדומות, החזקת מפתחות ביד, שיתוף מיקום בוואטסאפ, אך תלות במכשיר סלולרי שעלול להיגנב; זמן תגובה ארוך של שירותי חירום.`,impact:`הגבלת חופש התנועה, מתח נפשי ותלות מוחלטת בליווי של מבוגרים.`,missing:`מענה מיידי, דיסקרטי ומרתיע שאינו תלוי בשליפת טלפון זמין.`,question:`איך אפשר לעזור לנערה שחוזרת לבד להרגיש בטוחה יותר בלי להיות תלויה בשליפת טלפון?`},
+    {code:`A2`,fam:`A`,name:`מרחבי בילוי`,family:`משפחה 1 – מוגנות`,teaser:`בילוי אמור להרגיש משוחרר, לא כמו מקום שצריך להישמר בו בלי הפסקה.`,domain:`בטיחות נשים`,sdg:`5 – שוויון מגדרי`,product:`פיזי`,audience:`צעירות שמבלות במרחבים הומי אדם`,persona:`המבלה שרוצה להרגיש בטוחה`,topic:`מניעת פגיעה במסיבות ואירועים`,scenario:`שהייה במסיבה רועשת כשהמשקה נותר ללא השגחה או כשיש צורך בעזרה דחופה ושקטה.`,problem:`קושי בזיהוי סכנות (כמו סם אונס) או קושי לאותת על מצוקה בסביבה רועשת.`,why:`כיום הפתרונות הקיימים מבוססים על חברות שומרות על הכוסות, הימנעות משתייה של זרים, אך סמי אונס הם חסרי טעם וריח; מאבטחים לא תמיד רואים הכל בחושך.`,impact:`חשיפה לפגיעות קשות, טראומות וחשש תמידי לצאת לבילויים חברתיים.`,missing:`דרך שקטה ומהירה לזהות סיכון במשקה או לאותת על מצוקה בלי למשוך תשומת לב.`,question:`איך אפשר לזהות סיכון או לאותת על מצוקה במסיבה בצורה שקטה, מהירה ודיסקרטית?`},
+    {code:`A3`,fam:`A`,name:`תחבורה ציבורית`,family:`משפחה 1 – מוגנות`,teaser:`נסיעה הביתה לא אמורה לדרוש אומץ מיוחד רק כי כבר חשוך.`,domain:`בטיחות נשים`,sdg:`5 – שוויון מגדרי`,product:`פיזי`,audience:`תלמידות ונערות שנוסעות לבדן בשעות הערב`,persona:`הנוסעת לבד בשעות הערב`,topic:`מוגנות בתחנות ובאמצעי תחבורה`,scenario:`המתנה לאוטובוס בתחנה חשוכה או ישיבה בקרון רכבת ריק בשעות מאוחרות.`,problem:`תחושת חוסר הגנה במרחבי המתנה מבודדים ללא נוכחות של גורם סמכות.`,why:`כיום הפתרונות הקיימים מבוססים על ישיבה ליד הנהג, שימוש במוניות יקרות במקום באוטובוס, אך מצלמות אבטחה לא נותנות מענה בזמן אמת; תחנות ממוקמות באזורים לא מוארים.`,impact:`פגיעה בניידות, צורך בהסעות פרטיות יקרות ותחושת פגיעות במרחב העירוני.`,missing:`מענה פעיל שמגביר תחושת מוגנות במרחבי המתנה מבודדים ומקצר את הזמן עד לקבלת עזרה.`,question:`איך אפשר להפוך תחנה או מרחב המתנה למוגנים יותר עבור מי שנוסעת לבד בשעות הערב?`}
+  ],
+  B:[
+    {code:`B1`,fam:`B`,name:`דימוי גוף`,family:`משפחה 2 – רווחה נפשית`,teaser:`כשכל תמונה נראית מושלמת, קל לשכוח כמה עריכה מסתתרת מאחוריה.`,domain:`בריאות הנפש`,sdg:`3 – בריאות ורווחה`,product:`אפליקציה`,audience:`נערות שמושפעות מסטנדרטים של מראה ברשת`,persona:`הגוללת בין פילטרים`,topic:`פילטרים ועיוות מציאות ויזואלית`,scenario:`צפייה בתוכן ערוך וריטוש פנים בטיקטוק או באינסטגרם ללא סימון שמדובר בעריכה.`,problem:`קושי להבחין בין מציאות לעריכה, המוביל לתפיסת גוף מעוותת.`,why:`כיום הפתרונות הקיימים מבוססים על קמפיינים להעלאת מודעות (כמו Body Positivity), הורדת אפליקציות עריכה, אך חוסר שקיפות בטכנולוגיית הריטוש; היעדר כלים לנירמול המראה הטבעי.`,impact:`ירידה בביטחון העצמי, עיסוק אובססיבי במראה ועלייה בחרדה חברתית.`,missing:`שקיפות ברורה יותר שמבדילה בין מראה טבעי לבין תוכן שעבר עריכה וריטוש.`,question:`איך אפשר לעזור לנערות להבחין בין מראה טבעי לבין תוכן שעבר עריכה ברשת?`},
+    {code:`B2`,fam:`B`,name:`חרדת זמינות`,family:`משפחה 2 – רווחה נפשית`,teaser:`לא כל הודעה חייבת לקבל תשובה מיידית, אבל לפעמים זה בדיוק מה שמרגיש.`,domain:`בריאות הנפש`,sdg:`3 – בריאות ורווחה`,product:`אפליקציה`,audience:`תלמידות שמנהלות כמה קבוצות חברתיות במקביל`,persona:`מנהלת הקבוצה הלחוצה`,topic:`לחץ חברתי למענה מיידי (Seen)`,scenario:`קבלת עשרות הודעות בקבוצת הכיתה או החברות כשיש צורך בזמן שקט או למידה.`,problem:`חוסר יכולת להציב גבולות דיגיטליים מבלי לשלם מחיר חברתי של נידוי או כעס.`,why:`כיום הפתרונות הקיימים מבוססים על כיבוי הוי הכחול, שימוש במצב נא לא להפריע (שנתפס כהתעלמות), אך הווי הכחול שמסגיר צפייה בהודעה; חוסר בנורמות של מצב שקט מוסכם.`,impact:`עומס קוגניטיבי, מריבות מיותרות בין חברות ותחושת רדיפה דיגיטלית.`,missing:`דרך מוסכמת לייצר שקט דיגיטלי בלי לפגוע בקשרים חברתיים.`,question:`איך אפשר לאפשר זמן שקט דיגיטלי בלי לפגוע בחברות ובתחושת השייכות?`},
+    {code:`B3`,fam:`B`,name:`איכות השינה`,family:`משפחה 2 – רווחה נפשית`,teaser:`לפעמים העייפות מתחילה הרבה לפני הבוקר, בגלילה שלא נגמרת בלילה.`,domain:`בריאות הנפש`,sdg:`3 – בריאות ורווחה`,product:`אפליקציה`,audience:`נערות שסובלות מעייפות מתמשכת בגלל שימוש לילי במסכים`,persona:`הגוללת אל תוך הלילה`,topic:`התמכרות למסכים ודחיית שינה`,scenario:`גלילה אינסופית בטלפון במיטה (Doomscrolling) גם כשממש עייפים.`,problem:`מנגנונים של האפליקציות שמעוצבים להשאיר אותנו מחוברים בכוח גם כשהגוף זקוק למנוחה.`,why:`כיום הפתרונות הקיימים מבוססים על הגדרת שעות מסך בהגדרות הטלפון (שקל מאוד לעקוף בלחיצת כפתור), אך שליטה עצמית לא מספיקה מול אלגוריתם; חוסר בטקסי שינה ללא מסכים.`,impact:`פגיעה בריכוז בלימודים, מצב רוח ירוד ובעיות בריאותיות ארוכות טווח.`,missing:`הפרדה ברורה יותר בין זמן מסך בלילה לבין זמן מנוחה ושינה.`,question:`איך אפשר לעזור לנערות להפסיק גלילה לילית בזמן ולעבור לשינה באופן בריא יותר?`}
+  ],
+  E:[
+    {code:`E1`,fam:`E`,name:`נגישות פיזית`,family:`משפחה 5 – נגישות`,teaser:`יציאה לבילוי מתחילה הרבה לפני שמגיעים, בשאלה אם בכלל אפשר להיכנס ולהתנייד.`,domain:`הנגשת פנאי`,sdg:`10 – צמצום אי-שוויון`,product:`דיגיטלי`,audience:`בני נוער שמשתמשים בכיסא גלגלים, קביים או אמצעי ניידות`,persona:`המבלה עם כיסא גלגלים`,topic:`מידע נגישות למקומות בילוי`,scenario:`הגעה לקולנוע או מסעדה וגילוי שהכניסה כוללת מדרגות או שהשירותים אינם נגישים.`,problem:`חוסר במידע אמין ועדכני על מצב הנגשות בשטח בזמן אמת.`,why:`כיום הפתרונות הקיימים מבוססים על שימוש בגוגל מפות (מידע לא תמיד עדכני), שיחות טלפון מקדימות לעסק, אך בעלי עסקים לא מבינים מהי נגישות מלאה; אתרים רשמיים לא מעודכנים.`,impact:`הדרה חברתית, פגיעה בזכויות אדם בסיסיות ותחושת חוסר שייכות לעיר.`,missing:`מקור מידע אמין ועדכני על נגישות בפועל לפני שיוצאים לבילוי.`,question:`איך אפשר לדעת מראש אם מקום בילוי באמת נגיש מבחינה פיזית ולא רק על הנייר?`},
+    {code:`E2`,fam:`E`,name:`נגישות חושית`,family:`משפחה 5 – נגישות`,teaser:`גם אירוע שמרגיש כיפי לרוב האנשים יכול להיות מציף מאוד לאחרים.`,domain:`הנגשת פנאי`,sdg:`10 – צמצום אי-שוויון`,product:`דיגיטלי`,audience:`בני נוער עם רגישות חושית, קשיי קשב או לקויות ראייה ושמיעה`,persona:`התלמידה הרגישה לעומס חושי`,topic:`התאמת אירועים לרגישויות חושיות`,scenario:`שהייה במסיבה או הופעה כשהרעש הופך לבלתי נסבל או כשהמידע מועבר רק בצורה קולית.`,problem:`היעדר כלים טכנולוגיים המנגישים את המידע החושי (כמו תמלול או סינון רעש).`,why:`כיום הפתרונות הקיימים מבוססים על שימוש באוזניות חוסמות רעש, הימנעות מהגעה למקומות הומים, אך אמצעי הנגשה הם לעיתים יקרים ומסורבלים; חוסר מודעות של מארגני אירועים.`,impact:`צמצום אפשרויות התרבות והפנאי ותחושת ניכור במרחב הציבורי.`,missing:`מידע נגיש מראש וכלים פשוטים להתאמת הסביבה לעומס חושי.`,question:`איך אפשר להנגיש מידע על עומס חושי כך שיהיה אפשר לבחור אירוע מתאים מראש?`},
+    {code:`E3`,fam:`E`,name:`שילוב שפתי`,family:`משפחה 5 – נגישות`,teaser:`כשלא מבינים את השפה סביבך, גם בילוי פשוט יכול להפוך למחסום.`,domain:`הנגשת פנאי`,sdg:`10 – צמצום אי-שוויון`,product:`דיגיטלי`,audience:`עולות ועולים חדשים שמתקשים להשתלב חברתית`,persona:`העולה החדשה שמנסה להשתלב`,topic:`גישור על פער שפתי בין בני נוער`,scenario:`ישיבה בקבוצת חברות שמדברות מהר ובסלנג וחוסר יכולת להשתלב בבדיחות או בשיחה.`,problem:`פער בתרגום מיידי של ניואנסים חברתיים וסלנג שאינו נלמד באולפן.`,why:`כיום הפתרונות הקיימים מבוססים על שימוש בגוגל טרנסלייט (רובוטי ומביך) או שתיקה בתוך הקבוצה, אך תרגום של גוגל טרנסלייט הוא רובוטי מדי; בושה לבקש מהחברות לדבר לאט.`,impact:`בדידות, ירידה בביטחון העצמי והיווצרות גטאות של שפה בתוך בתי הספר.`,missing:`דרך דיסקרטית ונגישה לגשר על פערי שפה וסלנג בזמן אמת.`,question:`איך אפשר לעזור לעולות ולעולים חדשים להבין שפה חברתית וסלנג בלי מבוכה?`}
+  ],
+  H:[
+    {code:`H1`,fam:`H`,name:`האוריינות החדשה`,family:`משפחה 8 – חינוך דיגיטלי`,teaser:`העולם כבר משתמש ב-AI בכל מקום, אבל לא לכולן יש הזדמנות ללמוד אותו באמת.`,domain:`טכנולוגיה וחינוך`,sdg:`4 – חינוך איכותי`,product:`דיגיטלי`,audience:`תלמידות תיכון בפריפריה שמנסות לפתח מיומנויות AI`,persona:`התלמידה שמנסה להדביק את הקצב`,topic:`צמצום פערים במיומנויות AI`,scenario:`ניסיון ללמוד כלים טכנולוגיים חדשים באופן עצמאי בלי מסגרת מסודרת.`,problem:`הצפה של מידע וחוסר הכוונה לכלים הרלוונטיים באמת.`,why:`כיום הפתרונות הקיימים מבוססים על חיפוש אקראי ביוטיוב, מדריכים מפוזרים או ניסוי וטעייה, אך מערכת החינוך לא מעדכנת תכנים בקצב הטכנולוגי ואין מסלול ברור שמסביר מאיפה להתחיל.`,impact:`פער דיגיטלי שגדל, תחושת פיגור מול אחרות ופגיעה בסיכויי הקבלה לעבודה ולהמשך לימודים.`,missing:`מסלול למידה ברור, מעודכן ומותאם לרמת הידע של הלומדת.`,question:`איך אפשר לבנות לתלמידות מסלול ברור ועדכני לפיתוח מיומנויות AI לפי הרמה שלהן?`},
+    {code:`H2`,fam:`H`,name:`נגישות חומרית`,family:`משפחה 8 – חינוך דיגיטלי`,teaser:`למידה דיגיטלית נשמעת זמינה לכולם, עד שאין בבית את הציוד הבסיסי.`,domain:`טכנולוגיה וחינוך`,sdg:`4 – חינוך איכותי`,product:`דיגיטלי`,audience:`תלמידות בבתי ספר עם נגישות נמוכה לציוד מחשוב`,persona:`התלמידה בלי מחשב זמין`,topic:`מחסור בחומרת קצה ללמידה`,scenario:`שיעור מחשבים שבו התשתית בבית הספר ישנה או חסרה ואין אפשרות לתרגל אחר כך בבית.`,problem:`תלמידות אינן יכולות להתנסות באופן קבוע בכלים שנלמדו בגלל מחסור בציוד זמין.`,why:`כיום הפתרונות הקיימים מבוססים על שיתוף ציוד, חדרי מחשבים עמוסים או ויתור על תרגול עצמאי, אך עלויות הציוד גבוהות ואין מנגנון פשוט להשאלה או לניצול משאבים קיימים.`,impact:`תסכול לימודי, חוסר שוויון בתוצרי הלמידה ופערים שמעמיקים לאורך זמן.`,missing:`שיטה נגישה לניצול, שיתוף והפניה של ציוד קיים למי שזקוקה לו בפועל.`,question:`איך אפשר לחלק או לשתף ציוד מחשוב בצורה חכמה יותר למי שבאמת צריכה אותו?`},
+    {code:`H3`,fam:`H`,name:`שפת הטכנולוגיה`,family:`משפחה 8 – חינוך דיגיטלי`,teaser:`לפעמים המחסום בדרך לטכנולוגיה הוא לא היכולת, אלא השפה.`,domain:`טכנולוגיה וחינוך`,sdg:`4 – חינוך איכותי`,product:`דיגיטלי`,audience:`עולות חדשות ותלמידות מאוכלוסיות קצה שנכנסות לעולם הטק`,persona:`העולה החדשה לעולם הטק`,topic:`חסמי שפה בלימודי קוד וטק`,scenario:`רצון להשתלב במגמות טכנולוגיות או בלימודי קוד עם חומרי לימוד מתקדמים.`,problem:`רוב חומרי הלימוד האיכותיים זמינים באנגלית בלבד והתרגום למונחים טכניים לא תמיד מובן.`,why:`כיום הפתרונות הקיימים מבוססים על תרגום מכונה, מילונים מפוזרים או בקשת עזרה מחברות, אך התרגום למונחים מקצועיים אינו עקבי והלמידה נעצרת כל הזמן.`,impact:`נשירה ממקצועות ריאליים, ירידה בביטחון העצמי וקושי להשתלב במסלולים טכנולוגיים.`,missing:`תיווך ברור ועקבי של מושגים טכנולוגיים בשפה נגישה לקהל היעד.`,question:`איך אפשר לתווך מושגים טכנולוגיים באנגלית בשפה ברורה ונגישה ללומדות חדשות?`}
+  ],
+  J:[
+    {code:`J1`,fam:`J`,name:`ארוחות על הדרך`,family:`משפחה 10 – תזונה נבונה`,teaser:`כשאין זמן לעצור, גם האוכל הופך לפתרון מהיר ולא תמיד בריא.`,domain:`בריאות ותזונה`,sdg:`3 – בריאות ורווחה`,product:`פיזי`,audience:`סטודנטיות ועובדות צעירות עם סדר יום צפוף`,persona:`הצעירה שבין לימודים לעבודה`,topic:`צריכת מזון מעובד מחוסר זמן`,scenario:`יום לימודים או עבודה עמוס ללא הפסקות מסודרות ובלי זמן לארגן אוכל מראש.`,problem:`בחירה חוזרת באוכל מהיר ולא מזין בגלל זמינות ונוחות מיידית.`,why:`כיום הפתרונות הקיימים מבוססים על קניית אוכל מוכן, נשנושים מזדמנים או הכנה מאולתרת בלחץ, אך הכנת אוכל בריא דורשת זמן, תכנון ולעיתים גם ציוד שלא נוח לקחת לדרך.`,impact:`עייפות, חוסר ריכוז, הוצאות כספיות גבוהות והרגלי אכילה שפוגעים בבריאות לאורך זמן.`,missing:`דרך פשוטה לשמור, לארגן או לצרוך אוכל טרי גם ביום צפוף ומחוץ לבית.`,question:`איך אפשר לעזור לצעירות לשמור על אכילה טובה גם בימים צפופים ומחוץ לבית?`},
+    {code:`J2`,fam:`J`,name:`אלרגיות במרחב`,family:`משפחה 10 – תזונה נבונה`,teaser:`לפעמים ביס אחד קטן מספיק כדי להפוך ארוחה שלמה למסוכנת.`,domain:`בריאות ותזונה`,sdg:`3 – בריאות ורווחה`,product:`פיזי`,audience:`נערות עם אלרגיות מזון שמשתתפות באירועים ובמפגשים`,persona:`הנערה האלרגית באירוע`,topic:`זיהוי רכיבים מסוכנים במזון`,scenario:`אכילה במסיבת כיתה, באירוע או מחוץ לבית כשהרכב המזון לא תמיד ברור.`,problem:`חשש מחשיפה לאלרגנים בגלל מידע חלקי, תוויות לא ברורות או הסתמכות על זיכרון של מי שהכינה את האוכל.`,why:`כיום הפתרונות הקיימים מבוססים על שאלות חוזרות ויתור על אוכל או נשיאה קבועה של מזון חלופי, אך אין תמיד מידע אמין ומהיר על המרכיבים בפועל.`,impact:`סכנת חיים ממשית, חרדה חברתית והימנעות מהשתתפות מלאה באירועים.`,missing:`דרך אמינה ומהירה להבין אם המזון מתאים לצרכים הבריאותיים של המשתמשת או המשתמש.`,question:`איך אפשר לבדוק במהירות אם מזון מסוים בטוח למי שיש לה אלרגיה?`},
+    {code:`J3`,fam:`J`,name:`ויטמינים ומעקב`,family:`משפחה 10 – תזונה נבונה`,teaser:`לא כל חוסר מרגיש מיד בגוף, אבל הוא עדיין משפיע.`,domain:`בריאות ותזונה`,sdg:`3 – בריאות ורווחה`,product:`פיזי`,audience:`נערות ונשים צעירות שנמצאות במעקב אחר חוסרים תזונתיים`,persona:`הצעירה שמנסה להתמיד`,topic:`חוסרים תזונתיים לא מורגשים`,scenario:`בדיקת דם שגרתית שמראה חוסר בברזל או B12, בלי תחושה מיידית של שיפור או החמרה ביום-יום.`,problem:`קשה להתמיד בנטילת תוספים או בשינוי תזונתי כשאין פידבק ברור לאורך הזמן.`,why:`כיום הפתרונות הקיימים מבוססים על תזכורות בטלפון, נטילת תוספים לסירוגין או ניסיון לשנות תזונה לבד, אך קשה לראות אם ההתמדה באמת משפיעה בחיי היומיום.`,impact:`הידרדרות איטית במצב הגופני והנפשי, עייפות כרונית וקושי לשמור על שגרה בריאה.`,missing:`מעקב רציף ופשוט יותר שמחזק התמדה ומאפשר להבין מגמות בלי לחכות רק לבדיקה הבאה.`,question:`איך אפשר לחזק התמדה במעקב תזונתי ובנטילת תוספים לאורך זמן?`}
+  ],
+  M:[
+    {code:`M1`,fam:`M`,name:`עריכת רילס`,family:`משפחה 13 – תוכן אישי`,teaser:`לכולן יש רעיון טוב לסטורי, אבל לא תמיד יש דרך קלה להפוך אותו לתוכן שנראה מקצועי.`,domain:`תוכן ויצירה`,sdg:`9 – תעשייה, חדשנות ותשתיות`,product:`אפליקציה`,audience:`נערות שיוצרות תוכן קצר לרשתות החברתיות`,persona:`היוצרת שמצלמת מהנייד`,topic:`יצירת תוכן איכותי בלי ידע מקצועי`,scenario:`צילום כמה קטעים לטיקטוק או לרילס ורצון להעלות אותם מהר לפני שהטרנד חולף.`,problem:`קשה לערוך תוכן קצר, יפה ועקבי בלי להסתבך בכלים מורכבים או לבזבז הרבה זמן.`,why:`כיום הפתרונות הקיימים מבוססים על אפליקציות עריכה עמוסות, תבניות גנריות או ניסוי וטעייה שחוזר בכל סרטון מחדש.`,impact:`תסכול, ויתור על יצירה עקבית ותחושה שהתוצאה תמיד נראית פחות טובה משל אחרות.`,missing:`כלי פשוט, מהיר ומכוון שמוביל שלב-שלב ליצירת תוכן שנראה טוב גם בלי ידע מוקדם.`,question:`איך אפשר לעזור לנערה ליצור סרטון קצר שנראה טוב בלי להסתבך עם עריכה מורכבת?`},
+    {code:`M2`,fam:`M`,name:`טיוטות שלא נסגרות`,family:`משפחה 13 – תוכן אישי`,teaser:`לפעמים הבעיה היא לא שאין מה לפרסם, אלא שהכול נשאר חצי מוכן.`,domain:`תוכן ויצירה`,sdg:`9 – תעשייה, חדשנות ותשתיות`,product:`אפליקציה`,audience:`נערות שיש להן הרבה רעיונות, צילומים ופתיחים לתוכן`,persona:`היוצרת עם עשר טיוטות פתוחות`,topic:`ניהול רעיונות וטיוטות לתוכן`,scenario:`שמירת צילומים, קטעי קול, רעיונות לכיתוב וטיוטות בכמה אפליקציות שונות לאורך השבוע.`,problem:`אין דרך נוחה לרכז, לארגן ולהמשיך טיוטות תוכן בלי לאבד כיוון או לשכוח מה רצו לעשות.`,why:`כיום הפתרונות הקיימים מבוססים על פתקים, תיקיות בגלריה, טיוטות מפוזרות באפליקציות שונות או זיכרון אישי שלא מחזיק לאורך זמן.`,impact:`רעיונות טובים נעלמים, התהליך נהיה מעייף ותחושת היצירתיות מתחלפת בעומס.`,missing:`מקום אחד ברור שמחזיק רעיונות, קבצים ושלבי עבודה בצורה מסודרת ונעימה.`,question:`איך אפשר לשמור ולארגן רעיונות לתוכן כך שלא יישארו תקועים כטיוטות פתוחות?`},
+    {code:`M3`,fam:`M`,name:`פרטיות ליוצרות`,family:`משפחה 13 – תוכן אישי`,teaser:`לא כל מי שיוצרת תוכן רוצה לחשוף יותר ממה שהתכוונה.`,domain:`תוכן ויצירה`,sdg:`9 – תעשייה, חדשנות ותשתיות`,product:`אפליקציה`,audience:`נערות שמעלות סרטונים ותמונות מהבית, מהחדר או מבית הספר`,persona:`היוצרת שחושפת יותר מדי בלי לשים לב`,topic:`שמירה על פרטיות בזמן העלאת תוכן`,scenario:`העלאת סרטון או תמונה שצולמו בסביבה אישית, בלי לשים לב למה שנחשף ברקע.`,problem:`קשה לזהות מראש אילו פרטים בתמונה או בסרטון חושפים מקום מגורים, בית ספר, שגרה אישית או מידע פרטי.`,why:`כיום הפתרונות הקיימים מבוססים על חיתוך ידני, טשטוש בסיסי או בדיקה מהירה בעין שלא תמיד מספיקה לפני פרסום.`,impact:`חשיפת יתר, תחושת חוסר ביטחון ופחד לפרסם גם כשהתוכן עצמו לגמרי לגיטימי.`,missing:`בדיקה חכמה ופשוטה לפני פרסום שמסייעת לזהות חשיפת יתר בלי להכביד על היצירה.`,question:`איך אפשר לעזור ליוצרת תוכן לבדוק אם היא חושפת יותר מדי לפני שהיא מפרסמת?`}
+  ],
+  O:[
+    {code:`O1`,fam:`O`,name:`המידה שלא יושבת`,family:`משפחה 15 – קנייה חכמה`,teaser:`קנייה אונליין אמורה לחסוך זמן, לא להפוך להימור על המידה.`,domain:`קנייה אונליין`,sdg:`12 – צריכה וייצור אחראיים`,product:`אפליקציה`,audience:`נערות שקונות בגדים והנעלה באתרים ובאפליקציות`,persona:`הקונה עם עגלות פתוחות`,topic:`התאמת מידות בקנייה דיגיטלית`,scenario:`רכישת בגדים באינטרנט בלי מדידה פיזית ועם פערים גדולים בין מותגים ואתרים.`,problem:`קשה לדעת מראש אם הפריט באמת יתאים לגוף, לסגנון או לגזרה הרצויה.`,why:`כיום הפתרונות הקיימים מבוססים על טבלאות מידות לא אחידות, תגובות כלליות של קונות אחרות או הזמנה של כמה מידות יחד.`,impact:`החזרות מרובות, בזבוז כסף, תסכול וקניות מיותרות שנשארות בארון או חוזרות למחסן.`,missing:`התאמה אישית ברורה ופשוטה יותר שמקטינה את רמת ההימור בקנייה.`,question:`איך אפשר לעזור לנערה לדעת אם פריט באמת יתאים לה לפני שהיא מזמינה?`},
+    {code:`O2`,fam:`O`,name:`תמונה מול מציאות`,family:`משפחה 15 – קנייה חכמה`,teaser:`מה שנראה מושלם במסך לא תמיד מגיע ככה בדלת.`,domain:`קנייה אונליין`,sdg:`12 – צריכה וייצור אחראיים`,product:`אפליקציה`,audience:`נערות שקונות פריטי אופנה, אביזרים ומוצרי לייף-סטייל ברשת`,persona:`הקונה שמתאכזבת מהחבילה`,topic:`פער בין הצגת מוצר לבין המוצר בפועל`,scenario:`בחירת מוצר לפי תמונה ערוכה, תאורה מחמיאה ותיאור שיווקי קצר.`,problem:`קשה להבין מה באמת איכות המוצר, איך הוא נראה בשימוש רגיל והאם הוא שווה את המחיר.`,why:`כיום הפתרונות הקיימים מבוססים על תמונות יח"צ, ביקורות חלקיות או חיפוש ידני ברשת אחרי תמונות אמיתיות.`,impact:`אכזבה, בזבוז כסף ותחושה שלא באמת אפשר לסמוך על מה שרואים לפני הקנייה.`,missing:`מידע אמין, פשוט וזמין יותר על איך המוצר נראה ומתפקד בחיים האמיתיים.`,question:`איך אפשר לעזור לקונות להבין איך מוצר באמת נראה ומתפקד לפני שהן מזמינות אותו?`},
+    {code:`O3`,fam:`O`,name:`החזרות שלא נגמרות`,family:`משפחה 15 – קנייה חכמה`,teaser:`לפעמים החלק הכי מעייף בקנייה הוא דווקא מה שקורה אחרי שמחזירים.`,domain:`קנייה אונליין`,sdg:`12 – צריכה וייצור אחראיים`,product:`אפליקציה`,audience:`נערות שמזמינות מכמה אתרים ועושות החזרות לעיתים קרובות`,persona:`הקונה שמסתבכת אחרי הקופה`,topic:`ניהול תהליך ההחזרה והזיכוי`,scenario:`החזרת כמה פריטים מאתרים שונים, כל אחד בתאריך אחר ובתנאים קצת אחרים.`,problem:`קשה לעקוב אחרי חלונות החזרה, סטטוס משלוח וזיכוי שמגיע או לא מגיע בזמן.`,why:`כיום הפתרונות הקיימים מבוססים על מיילים מפוזרים, צילומי מסך, זיכרון אישי ומעקב ידני בכל אתר בנפרד.`,impact:`איבוד כסף, פספוס מועדים ותחושה שקניות קטנות יוצרות בלגן גדול.`,missing:`מרכז אחד ברור שעוזר לנהל החזרות וזיכויים בלי להתפזר בין אתרים.`,question:`איך אפשר לעשות סדר בכל תהליך ההחזרה והזיכוי כשקונות מכמה מקומות?`}
+  ],
+  P:[
+    {code:`P1`,fam:`P`,name:`תיק שלא שוקל עולם`,family:`משפחה 16 – יום לימודים ארוך`,teaser:`יום לימודים ארוך לא אמור להתחיל בכאב גב כבר בבוקר.`,domain:`יום לימודים`,sdg:`4 – חינוך איכותי`,product:`פיזי`,audience:`תלמידות שמסיימות יום לימודים ארוך וממשיכות לעוד פעילויות`,persona:`הנוסעת עם חצי בית על הגב`,topic:`נשיאה חכמה של ציוד יומי`,scenario:`יציאה מהבית עם ספרים, אוכל, מטען, בקבוק, ציוד לשיעורים ולפעמים גם לחוג או לאימון.`,problem:`יותר מדי ציוד נישא יחד בלי חלוקה טובה, מה שיוצר עומס, בלגן וקושי למצוא דברים בזמן.`,why:`כיום הפתרונות הקיימים מבוססים על תיקים כלליים עם הרבה תאים לא מדויקים או נשיאה של כמה תיקים במקביל.`,impact:`כאבי גב, שכחה של ציוד, עייפות עוד לפני סוף היום ותחושת עומס קבועה.`,missing:`דרך נוחה וחכמה יותר לחלק, לארגן ולשאת ציוד של יום ארוך.`,question:`איך אפשר להקל על נערה שסוחבת איתה ציוד של יום שלם מהבוקר עד הערב?`},
+    {code:`P2`,fam:`P`,name:`דברים שנשארים מאחור`,family:`משפחה 16 – יום לימודים ארוך`,teaser:`מספיק מעבר אחד בין כיתות כדי שמשהו חשוב יישאר בדיוק במקום הלא נכון.`,domain:`יום לימודים`,sdg:`4 – חינוך איכותי`,product:`פיזי`,audience:`תלמידות שעוברות בין כיתות, מגמות ופעילויות במהלך היום`,persona:`זו שתמיד מחפשת משהו ברגע האחרון`,topic:`ארגון ציוד קטן במעברים בין שיעורים`,scenario:`מעבר מהיר בין שיעורים עם מחברות, אוזניות, כרטיסים, מפתחות, טלפון וציוד קטן נוסף.`,problem:`ציוד קטן נעלם או נזרק לתיק בלי סדר, וקשה להגיע אליו דווקא כשצריך אותו מהר.`,why:`כיום הפתרונות הקיימים מבוססים על כיסים פנימיים כלליים, קלמרים לא מתאימים או זיכרון אישי של מה הונח איפה.`,impact:`איחורים, לחץ, איבוד ציוד ותחושה של חוסר שליטה בדברים הכי בסיסיים של היום.`,missing:`פתרון מהיר, זמין ופשוט שמחזיק ציוד קטן במקום קבוע גם ביום דינמי.`,question:`איך אפשר לעזור לתלמידה לשמור ציוד קטן זמין ומסודר גם כשהיא עוברת כל היום בין כיתות?`},
+    {code:`P3`,fam:`P`,name:`סוללה שנגמרת באמצע`,family:`משפחה 16 – יום לימודים ארוך`,teaser:`כשהיום עוד ארוך והסוללה כבר באחוזים בודדים, כל דבר קטן נהיה מלחיץ.`,domain:`יום לימודים`,sdg:`4 – חינוך איכותי`,product:`פיזי`,audience:`תלמידות שנשארות אחרי הלימודים לחוגים, עבודה או מפגשים`,persona:`זו שתמיד מחפשת שקע פנוי`,topic:`טעינה נגישה ובטוחה במהלך היום`,scenario:`שימוש בטלפון לניווט, הודעות, תשלומים ולמידה לאורך יום ארוך מחוץ לבית.`,problem:`אין דרך נוחה, מסודרת ובטוחה להטעין מכשיר באמצע היום בלי להיתקע ליד קיר או להסתבך עם כבלים.`,why:`כיום הפתרונות הקיימים מבוססים על מטענים ניידים כבדים, חיפוש שקע אקראי או ויתור על שימוש בטלפון עד הערב.`,impact:`ניתוק, חוסר ודאות, קושי לתאם הגעה וחוסר שקט במהלך היום.`,missing:`פתרון טעינה נוח, קומפקטי ומסודר שמתאים לשגרת יום של תלמידה.`,question:`איך אפשר לאפשר טעינה נוחה ובטוחה לטלפון גם באמצע יום לימודים ארוך?`}
+  ],
+  Q:[
+    {code:`Q1`,fam:`Q`,name:`קובעות בלי בלגן`,family:`משפחה 17 – חברות ותיאום`,teaser:`לפעמים הכי קשה ביציאה הוא לא להגיע, אלא בכלל להחליט מה קובעות.`,domain:`חיי חברה`,sdg:`11 – ערים וקהילות בנות קיימא`,product:`דיגיטלי`,audience:`קבוצות חברות שמנסות לתאם יציאות, מפגשים וימי הולדת`,persona:`זו שתמיד מנסה לסגור לכולן`,topic:`תיאום מפגשים קבוצתיים`,scenario:`ניסיון לקבוע איפה, מתי ומה עושים דרך צ'אט קבוצה עמוס בהודעות.`,problem:`קשה להגיע להחלטה משותפת כשכל אחת עונה בזמן אחר, מציעה משהו אחר או מפספסת את ההודעות.`,why:`כיום הפתרונות הקיימים מבוססים על הודעות ארוכות, סקרים חלקיים או ניהול ידני של מי פנויה ומי לא.`,impact:`ביטולים, אי הבנות, עייפות מתיאומים ותחושה שמפגש פשוט דורש יותר מדי מאמץ.`,missing:`דרך פשוטה ומסודרת להפוך צ'אט עמוס להחלטה ברורה אחת.`,question:`איך אפשר לעזור לקבוצה של חברות לסגור מפגש בלי לטבוע בעשרות הודעות?`},
+    {code:`Q2`,fam:`Q`,name:`מתנה קבוצתית`,family:`משפחה 17 – חברות ותיאום`,teaser:`הכוונה טובה, אבל איסוף כסף בקבוצה כמעט תמיד מסתבך בדרך.`,domain:`חיי חברה`,sdg:`11 – ערים וקהילות בנות קיימא`,product:`דיגיטלי`,audience:`נערות שמארגנות מתנות קבוצתיות לימי הולדת, פרידות ואירועים`,persona:`המארגנת שמתחילה יפה ומסתבכת מהר`,topic:`חלוקת תשלומים קטנים בין חברות`,scenario:`איסוף כסף בקבוצה עבור מתנה משותפת או הזמנה קבוצתית קטנה.`,problem:`לא ברור מי כבר שילמה, כמה חסר ואיך מזכירים בלי ליצור מבוכה חברתית.`,why:`כיום הפתרונות הקיימים מבוססים על הודעות בקבוצה, רשימות ידניות או בקשות תשלום לא עקביות.`,impact:`אי נעימות, חוסר שקיפות, הוצאות לא הוגנות על המארגנת ותסכול סביב משהו שאמור להיות כיפי.`,missing:`כלי פשוט ונעים שעושה סדר בתשלומים קטנים בלי להכביד על היחסים בקבוצה.`,question:`איך אפשר לאסוף כסף בקבוצה בצורה ברורה ונעימה בלי ליצור לחץ או מבוכה?`},
+    {code:`Q3`,fam:`Q`,name:`לא לפספס אף אחת`,family:`משפחה 17 – חברות ותיאום`,teaser:`גם בקבוצה הכי טובה, לפעמים מישהי נשארת בחוץ בלי שאף אחת ממש התכוונה.`,domain:`חיי חברה`,sdg:`10 – צמצום אי-שוויון`,product:`דיגיטלי`,audience:`קבוצות חברות שמתכננות מפגשים עם צרכים, אילוצים והעדפות שונות`,persona:`החברה שרוצה שכולן ירגישו חלק`,topic:`הכללה חברתית בתכנון מפגשים`,scenario:`בחירת מקום, שעה או פעילות שמתאימים לחלק מהקבוצה אבל לא באמת לכולה.`,problem:`בקבוצות גדולות ההחלטות מתקבלות לפי מי שהכי פעילות או הכי מהירות להגיב, ולא תמיד לפי מה שמתאים לכולן.`,why:`כיום הפתרונות הקיימים מבוססים על זרימת הצ'אט, ניחושים או התאמה למי שהכי מובילה את השיחה.`,impact:`תחושת החמצה, פגיעה בשייכות והתרחקות חברתית גם בלי כוונה רעה.`,missing:`דרך לראות את הצרכים והאילוצים של כולן לפני שסוגרים תכנית.`,question:`איך אפשר לתכנן מפגש קבוצתי בצורה שמגדילה את הסיכוי שכולן ירגישו חלק?`}
+  ]
+},
+  2:{
+  C:[
+    {code:`C1`,fam:`C`,name:`אורך חיי בגד`,family:`משפחה 3 – צריכה`,teaser:`לפעמים הארון מלא, אבל התחושה היא שעדיין אין באמת מה ללבוש.`,domain:`אופנה`,sdg:`12 – צריכה וייצור אחראיים`,product:`דיגיטלי`,audience:`נערות עם ארון בגדים עמוס ותחושת חוסר מענה`,persona:`העומדת מול ארון מלא`,topic:`ניצול מקסימלי של ארון הבגדים`,scenario:`עמידה מול ארון מלא בתחושת אין לי מה ללבוש כי הבגדים נראים ישנים או לא רלוונטיים.`,problem:`חוסר יצירתיות בשימוש חוזר בבגדים קיימים והשפעה של טרנדים מתחלפים מדי שבוע.`,why:`כיום הפתרונות הקיימים מבוססים על מסירת בגדים למיחזור או לצדקה, ניסיונות למכור באפליקציות יד שנייה, אך קושי להתאים פריטים ישנים לסטייל חדש; איכות ירודה של בגדי אופנה מהירה.`,impact:`בזבוז משאבים, הצטברות אשפה בלתי מתכלה ותחושת ריקנות צרכנית.`,missing:`דרך נגישה לגלות שימושים חדשים בבגדים קיימים במקום לקנות עוד.`,question:`איך אפשר לעזור לנערות לגלות אפשרויות חדשות בבגדים שכבר יש להן בארון?`},
+    {code:`C2`,fam:`C`,name:`שיתוף וקהילה`,family:`משפחה 3 – צריכה`,teaser:`לא כל אירוע מצדיק קנייה חדשה, אבל לפעמים ככה זה מרגיש.`,domain:`אופנה`,sdg:`12 – צריכה וייצור אחראיים`,product:`דיגיטלי`,audience:`תלמידות ונערות שזקוקות לבגד חגיגי לאירועים`,persona:`המוזמנת לעוד אירוע`,topic:`השאלת בגדים לאירועים מיוחדים`,scenario:`צורך בבגד יוקרתי לנשף או חתונה שברור שיילבש רק לכמה שעות.`,problem:`היעדר מערכת בטוחה ומסודרת להשאלת בגדים בתוך קהילה קרובה (כמו בית הספר).`,why:`כיום הפתרונות הקיימים מבוססים על השאלה מחברות קרובות (בצורה לא מוסדרת), קנייה חוזרת של שמלות זולות, אך פחד שהבגד ייהרס או יתלכלך אצל אחרת; קושי לנהל לוגיסטיקה של החלפות.`,impact:`פגיעה כלכלית בכיס של בני הנוער והוריהם וייצור עודף של בגדי ערב.`,missing:`מנגנון קהילתי אמין ופשוט שמאפשר השאלת בגדים לטווח קצר בלי בלגן או חוסר ודאות.`,question:`איך אפשר לאפשר השאלת בגדים בטוחה, פשוטה ומסודרת בתוך קהילה קרובה?`},
+    {code:`C3`,fam:`C`,name:`שקיפות הייצור`,family:`משפחה 3 – צריכה`,teaser:`מאחורי חולצה זולה במיוחד יכול להסתתר מחיר סביבתי יקר מאוד.`,domain:`אופנה`,sdg:`12 – צריכה וייצור אחראיים`,product:`דיגיטלי`,audience:`נערות שקונות בכמויות גדולות באתרים אונליין`,persona:`הקונה המצפונית`,topic:`מודעות לנזק הסביבתי של הקנייה`,scenario:`קנייה אימפולסיבית של עשרות פריטים זולים באתרי ענק (כמו SHEIN) בגלל מחיר נמוך.`,problem:`חוסר במידע נגיש ומשמעותי על הנזק הסביבתי בזמן ובמקום שבו מתבצעת הקנייה.`,why:`כיום הפתרונות הקיימים מבוססים על קריאת כתבות על זיהום הסביבה או ניסיון לקרוא תוויות יצרן מורכבות, אך תוויות הבגדים לא מספקות מידע אקולוגי; הפיתוי הכלכלי חזק מהערך הסביבתי.`,impact:`הרס מערכות אקולוגיות וניצול כוח עבודה זול במדינות עולם שלישי.`,missing:`מידע ברור, פשוט וזמין על המחיר הסביבתי של פריט בזמן קבלת החלטת הקנייה.`,question:`איך אפשר להציג את המחיר הסביבתי של בגד בדיוק ברגע שבו מחליטות לקנות?`}
+  ],
+  D:[
+    {code:`D1`,fam:`D`,name:`ניהול הוצאות`,family:`משפחה 4 – התנהלות פיננסית`,teaser:`כסף קטן שנעלם כל יום יכול להפוך מהר לבור גדול בלי שמרגישים.`,domain:`ניהול כסף`,sdg:`8 – עבודה ראויה וצמיחה כלכלית`,product:`אפליקציה`,audience:`נערות שמוציאות כסף על בילויים, משלוחים וקניות קטנות`,persona:`המוציאה בלי לשים לב`,topic:`מעקב אחר הוצאות שוטפות`,scenario:`קבלת דמי כיס או משכורת וגילוי שהחשבון ריק אחרי שבוע מבלי לדעת על מה הכסף יצא.`,problem:`היעדר כלי פשוט ואינטואיטיבי לניהול תקציב המותאם לשפת בני הנוער.`,why:`כיום הפתרונות הקיימים מבוססים על ניסיון לזכור בראש או שימוש באפליקציית הבנק שאינה מובנת לבני נוער, אך אפליקציות בנק הן מורכבות ומשעממות; היעדר הפרדה בין צורך לרצון.`,impact:`חוסר עצמאות, תלות כלכלית בהורים ותסכול מול עבודה שאינה משאירה פרי.`,missing:`תמונה ברורה ופשוטה של לאן הכסף הולך ביום-יום.`,question:`איך אפשר לעזור לנערות להבין בקלות לאן הכסף שלהן יוצא במהלך השבוע?`},
+    {code:`D2`,fam:`D`,name:`חיסכון למטרה`,family:`משפחה 4 – התנהלות פיננסית`,teaser:`חלום גדול מתחיל הרבה פעמים דווקא בהחלטות קטנות של כסף.`,domain:`ניהול כסף`,sdg:`8 – עבודה ראויה וצמיחה כלכלית`,product:`אפליקציה`,audience:`נערות שחוסכות למטרה אישית או ללימודים`,persona:`החוסכת למטרה אישית`,topic:`תכנון פיננסי לטווח ארוך`,scenario:`רצון לקנות מחשב חדש או לממן קורס יקר, אך חוסר יכולת להתמיד בחיסכון של סכומים קטנים.`,problem:`חוסר במוטיבציה ויזואלית או תגמול פסיכולוגי על תהליך החיסכון הארוך.`,why:`כיום הפתרונות הקיימים מבוססים על שמירת כסף במזומן בקופסת חיסכון פיזית או ניסיונות איפוק עצמי, אך קשה לראות את המטרה הרחוקה ביום-יום; פיתויים שיווקיים אגרסיביים בנייד.`,impact:`חוסר יכולת להגשים חלומות גדולים ותחושת כישלון בניהול עצמי.`,missing:`חיזוק יומיומי שמסייע להתמיד בחיסכון גם מול פיתויים קטנים.`,question:`איך אפשר לחזק התמדה בחיסכון למטרה ארוכת טווח גם מול פיתויים קטנים?`},
+    {code:`D3`,fam:`D`,name:`זכויות עובדים`,family:`משפחה 4 – התנהלות פיננסית`,teaser:`עבודה ראשונה אמורה ללמד עצמאות, לא לחשוף לניצול.`,domain:`ניהול כסף`,sdg:`8 – עבודה ראויה וצמיחה כלכלית`,product:`אפליקציה`,audience:`בני נוער במשרות ראשונות, כמו מלצרות או בייביסיטר`,persona:`העובדת שלא בטוחה מה מגיע לה`,topic:`הגנה מפני ניצול בשוק העבודה`,scenario:`עבודה במשמרת כפולה ללא הפסקה או קבלת שכר נמוך משכר המינימום בחוק.`,problem:`פערי מידע עצומים בין המעסיק המנוסה לבין העובד הצעיר שלא מכיר את זכויותיו.`,why:`כיום הפתרונות הקיימים מבוססים על התייעצות עם ההורים או חיפוש מידע משפטי מסורבל באינטרנט, אך חוזי עבודה הם מסמכים משפטיים קשים; פחד לאבד את מקום העבודה אם יתלוננו.`,impact:`פגיעה כלכלית, תחושת קיפוח וחווית כניסה שלילית לעולם העבודה.`,missing:`מידע ברור ונגיש על זכויות עבודה והתרעות פשוטות על חריגות.`,question:`איך אפשר לעזור לעובדות ולעובדים צעירים לזהות במהירות אם תנאי ההעסקה שלהם הוגנים?`}
+  ],
+  F:[
+    {code:`F1`,fam:`F`,name:`הגיינה ורווחה`,family:`משפחה 6 – משאבים`,teaser:`מקום בסיסי כמו שירותים בבית הספר לא אמור להפוך למרחב שמעדיפים להימנע ממנו.`,domain:`תחזוקה בבי"ס`,sdg:`6 – מים נקיים ותברואה`,product:`פיזי`,audience:`תלמידות שנמנעות משימוש בשירותי בית הספר`,persona:`התלמידה שנמנעת מהשירותים`,topic:`שיפור חוויית השירותים הציבוריים`,scenario:`כניסה לשירותים וגילוי שהם ללא נייר, ללא סבון או שהמנעול בדלת שבור.`,problem:`היעדר מערכת דיווח ובקרה בזמן אמת על מצב התחזוקה בשירותים.`,why:`כיום הפתרונות הקיימים מבוססים על תלונות בעל פה למורים/מזכירות (שלא תמיד מטופלות), הבאת נייר מהבית, אך דיווח ידני למזכירות הוא איטי ומביך; צוות הניקיון לא יודע מתי נגמר הציוד.`,impact:`פגיעה בריאותית, יחס שלילי לבית הספר ותחושת הזנחה אישית.`,missing:`דיווח מהיר ולא מביך על מצב השירותים, עם ודאות שמישהו ראה ומטפל.`,question:`איך אפשר לדווח על מצב השירותים בבית הספר בצורה מהירה, מכבדת ויעילה?`},
+    {code:`F2`,fam:`F`,name:`ניהול מקורות מים`,family:`משפחה 6 – משאבים`,teaser:`מים אמורים להיות זמינים לשתייה, לא להתבזבז בלי שאף אחת שמה לב.`,domain:`תחזוקה בבי"ס`,sdg:`6 – מים נקיים ותברואה`,product:`פיזי`,audience:`תלמידות ותלמידים שמשתמשים בברזיות במרחב הבית ספרי`,persona:`התלמידה ששמה לב לבזבוז`,topic:`מניעת בזבוז מים בברזיות`,scenario:`ברזייה בחצר שנשארת פתוחה או שבורה ומזרימה מים לחינם לאורך כל סוף השבוע.`,problem:`קושי בזיהוי נזילות סמויות או חוסר במנגנון סגירה אוטומטי חכם.`,why:`כיום הפתרונות הקיימים מבוססים על סגירה ידנית של ברזים בידי עוברים ושבים, הזמנת שרת (באיחור רב), אך ברזים רגילים נוטים להישבר בקלות; אין מעקב אחרי כמות המים הנצרכת.`,impact:`נזק סביבתי מצטבר ובזבוז כספי ציבור שיכלו לעבור לחינוך.`,missing:`זיהוי מהיר של בזבוז מים ומתן מענה לפני שהתקלה נמשכת שעות.`,question:`איך אפשר לזהות בזבוז מים בברזיות בזמן ולמנוע המשך נזילה?`},
+    {code:`F3`,fam:`F`,name:`יעילות אנרגטית`,family:`משפחה 6 – משאבים`,teaser:`לפעמים מספיק מזגן שנשאר דולק כדי לבזבז הרבה יותר ממה שנדמה.`,domain:`תחזוקה בבי"ס`,sdg:`6 – מים נקיים ותברואה`,product:`פיזי`,audience:`תלמידות ותלמידים שנשארים אחרונים בכיתה בסוף היום`,persona:`התלמידה שיוצאת אחרונה`,topic:`חיסכון בחשמל (מזגן ותאורה)`,scenario:`יציאה מהכיתה לשיעור ספורט או הביתה כשהמזגן נשאר על 16 מעלות והאורות דולקים.`,problem:`היעדר מנגנון המזהה נוכחות בחדר ומכבה מערכות באופן עצמאי.`,why:`כיום הפתרונות הקיימים מבוססים על המורה מכבה בסוף יום, או שהחשמל דולק עד שמגיע השרת בערב, אך שלטים נא לכבות אינם אפקטיביים; המתגים לעיתים נמצאים בארון נעול.`,impact:`תרומה להתחממות הגלובלית ובזבוז משאבים לאומיים.`,missing:`מנגנון פשוט ואמין שמונע הפעלה מיותרת של מזגן ותאורה כשאין שימוש.`,question:`איך אפשר לצמצם הפעלת מזגן ותאורה בכיתה ריקה בלי להיות תלויים במישהי שתזכור?`}
+  ],
+  G:[
+    {code:`G1`,fam:`G`,name:`צרכנות ביתית`,family:`משפחה 7 – פסולת ומזון`,teaser:`האוכל שנזרק בבית מתחיל הרבה לפני הפח, בתכנון שלא הסתדר.`,domain:`סביבה וקיימות`,sdg:`12 – צריכה וייצור אחראיים`,product:`אפליקציה`,audience:`משפחות עירוניות שמנסות לצמצם זריקת מזון`,persona:`המשפחה שמנסה לזרוק פחות`,topic:`צמצום זריקת מזון`,scenario:`קנייה שבועית גדולה בסופרמרקט שממלאת את המקרר לכמה ימים קדימה.`,problem:`מוצרים טריים נשכחים במקרר ונזרקים לפני שנעשה בהם שימוש.`,why:`כיום הפתרונות הקיימים מבוססים על פתקים על המקרר, בדיקה ידנית של תוקף או ניסיון לזכור מה נקנה, אך תאריכי תפוגה לא תמיד ברורים וניהול מלאי ידני מרגיש מעיק ולא קבוע.`,impact:`בזבוז כספי משמעותי, תחושת תסכול וזיהום סביבתי שנוצר מזריקת מזון ראוי לאכילה.`,missing:`דרך פשוטה לעקוב אחרי מה שקיים בבית ולהבין מה צריך לצרוך קודם.`,question:`איך אפשר לעזור למשפחה לדעת מה כדאי לצרוך קודם כדי לזרוק פחות מזון?`},
+    {code:`G2`,fam:`G`,name:`עודפים במוסדות`,family:`משפחה 7 – פסולת ומזון`,teaser:`עודפי מזון במוסדות הם לא תמיד חוסר אחריות, לפעמים פשוט חסר מנגנון נכון.`,domain:`סביבה וקיימות`,sdg:`12 – צריכה וייצור אחראיים`,product:`אפליקציה`,audience:`מנהלות ומנהלי חדרי אוכל, קפיטריות ומטבחים מוסדיים`,persona:`מנהלת הקפיטריה עם העודפים`,topic:`ניהול עודפי מזון מבושל`,scenario:`סיום יום עבודה עם כמויות אוכל גדולות שנשארו לאחר ההגשה.`,problem:`חוסר יכולת להעביר מזון ראוי לאכילה למתאים בזמן קצר.`,why:`כיום הפתרונות הקיימים מבוססים על טלפונים, קשרים אישיים או השלכת המזון לפח, אך הבירוקרטיה, הלוגיסטיקה המורכבת והחשש מחשיפה משפטית מעכבים קבלת החלטה מהירה.`,impact:`טונות של אוכל מזין הולכים לאשפה בכל יום, לצד הפסד כספי ופגיעה סביבתית.`,missing:`דרך מהירה, בטוחה ומתואמת לחבר בין עודפי מזון לבין מי שיכול להשתמש בהם בזמן אמת.`,question:`איך אפשר לחבר מהר ובבטחה בין עודפי מזון מבושל לבין מי שיכול להשתמש בהם בזמן?`},
+    {code:`G3`,fam:`G`,name:`פסולת אירועים`,family:`משפחה 7 – פסולת ומזון`,teaser:`באירועים גדולים נשאר לפעמים יותר אוכל ממה שבאמת נאכל.`,domain:`סביבה וקיימות`,sdg:`12 – צריכה וייצור אחראיים`,product:`אפליקציה`,audience:`מארגנות ומארגני אירועים שרוצים לצמצם פסולת מזון`,persona:`מפיקת האירוע שרוצה לדייק`,topic:`בזבוז מזון באירועים המוניים`,scenario:`תכנון תפריט לפי כמות אורחים משוערת באירוע גדול.`,problem:`מוזמן יותר אוכל ממה שנאכל בפועל והעודפים הופכים לפסולת.`,why:`כיום הפתרונות הקיימים מבוססים על הזמנה לפי ניסיון קודם, הערכות גסות או הגדלת כמויות ליתר ביטחון, אך קשה לחזות הרגלי אכילה בזמן אמת ולדייק לפי מאפייני הקהל.`,impact:`עלויות גבוהות מאוד, הטמנת פסולת בכמויות גדולות ופגיעה סביבתית מיותרת.`,missing:`יכולת מדויקת יותר להעריך צריכה צפויה ולהקטין עודפים עוד בשלב התכנון.`,question:`איך אפשר לעזור למארגני אירועים להעריך טוב יותר כמויות מזון ולצמצם עודפים?`}
+  ],
+  I:[
+    {code:`I1`,fam:`I`,name:`עבודה ראשונה`,family:`משפחה 9 – זכויות נוער`,teaser:`עבודה ראשונה יכולה להיות צעד מעצים, אבל גם מקום שקל ללכת בו לאיבוד.`,domain:`תעסוקה וקריירה`,sdg:`8 – עבודה ראויה וצמיחה כלכלית`,product:`דיגיטלי`,audience:`בני נוער עובדים בתחילת הדרך`,persona:`העובדת הראשונה מול התלוש`,topic:`מניעת ניצול בני נוער בעבודה`,scenario:`קבלת תלוש שכר ראשון בסוף הקיץ או אחרי כמה משמרות ראשונות.`,problem:`חוסר הבנה של התלוש ושל זכויות המינימום שמגיעות לעובדות ולעובדים צעירים.`,why:`כיום הפתרונות הקיימים מבוססים על שאלות להורים, חיפוש אקראי ברשת או התעלמות כי לא מבינים מה לבדוק, אך המידע המשפטי מסובך וכתוב בשפה של מבוגרים.`,impact:`בני נוער לא מקבלים את הכסף שמגיע להם, מוותרים על זכויות וחווים כניסה שלילית לעולם העבודה.`,missing:`דרך פשוטה להבין אם תנאי ההעסקה והשכר תואמים את מה שמגיע לפי גיל וסוג עבודה.`,question:`איך אפשר לעזור לבני נוער להבין תלוש שכר וזכויות בסיסיות בלי ידע מוקדם?`},
+    {code:`I2`,fam:`I`,name:`בטיחות בעבודה`,family:`משפחה 9 – זכויות נוער`,teaser:`בטיחות בעבודה לא מתחילה רק בשלט אזהרה, אלא בהבנה אמיתית של הסיכון.`,domain:`תעסוקה וקריירה`,sdg:`8 – עבודה ראויה וצמיחה כלכלית`,product:`דיגיטלי`,audience:`בני נוער במקומות עבודה ראשונים`,persona:`העובדת בלי הכשרה מספקת`,topic:`הדרכת בטיחות מותאמת לגיל`,scenario:`תחילת עבודה במסעדה, קייטנה או מקום עבודה חדש עם משימות פיזיות או סביבה לא מוכרת.`,problem:`בני נוער נשלחים למשימות בלי להבין מספיק מה מותר, מה מסוכן ואיך עובדים נכון.`,why:`כיום הפתרונות הקיימים מבוססים על הסבר קצר ממנהל המשמרת או למידה תוך כדי עבודה, אך ההדרכות הקיימות כלליות, לא מותאמות לגיל ולא נשארות זמינות לבדיקה בזמן אמת.`,impact:`ריבוי פציעות, טעויות מיותרות ותחושת חוסר ביטחון כבר בתחילת העבודה.`,missing:`מידע קצר, ברור ונגיש שמסביר לנערות ולנערים איך לעבוד בבטחה במצבים יומיומיים.`,question:`איך אפשר ללמד בני נוער כללי בטיחות לעבודה בצורה קצרה, ברורה ורלוונטית?`},
+    {code:`I3`,fam:`I`,name:`חיפוש עבודה בטוח`,family:`משפחה 9 – זכויות נוער`,teaser:`מודעת דרושים ברשת יכולה להיראות תמימה, גם כשהיא ממש לא.`,domain:`תעסוקה וקריירה`,sdg:`8 – עבודה ראויה וצמיחה כלכלית`,product:`דיגיטלי`,audience:`נערות שמחפשות עבודה דרך הרשתות החברתיות`,persona:`המחפשת עבודה ברשת`,topic:`חיפוש עבודה ברשתות חברתיות`,scenario:`חיפוש עבודת קיץ או עבודה חלקית דרך קבוצות וסטוריז ברשתות החברתיות.`,problem:`קשה להבחין בין הצעת עבודה אמינה לבין מודעה חשודה, מנצלת או פוגענית.`,why:`כיום הפתרונות הקיימים מבוססים על שאלות לחברות, בדיקה ידנית של פרופילים או פנייה ישירה למעסיקים לא מוכרים, אך אין פיקוח על לוחות פתוחים והמידע שמופיע בהם חלקי או מטעה.`,impact:`פגיעה בפרטיות, חשיפה למצבים לא בטוחים ובזבוז זמן על פניות לא אמינות.`,missing:`דרך פשוטה לבדוק אם הצעת עבודה נראית אמינה ובטוחה לפני שנכנסות לתהליך.`,question:`איך אפשר לזהות אם הצעת עבודה ברשת נראית אמינה ובטוחה לפני שפונים אליה?`}
+  ],
+  K:[
+    {code:`K1`,fam:`K`,name:`בדידות דיגיטלית`,family:`משפחה 11 – קשר בין-דורי`,teaser:`כששירותים חשובים עוברים לדיגיטל, יש מי שנשארים מאחור בלי שהתכוונו.`,domain:`קהילה וחברה`,sdg:`10 – צמצום אי-שוויון`,product:`פיזי`,audience:`אזרחים ותיקים שנדרשים לבצע פעולות דיגיטליות לבד`,persona:`האזרחית הוותיקה שמנסה להסתדר לבד`,topic:`נגישות לשירותים חיוניים דיגיטליים`,scenario:`צורך לקבוע תור לרופא, להזמין מצרכים או לבצע פעולה בסיסית דרך הנייד.`,problem:`טכנולוגיה שמעוצבת לצעירים אינה ברורה או נגישה מספיק למבוגרים רבים.`,why:`כיום הפתרונות הקיימים מבוססים על בקשת עזרה מילדים או שכנים, ניסוי וטעייה או ויתור על שימוש בשירותים דיגיטליים, אך הממשקים מורכבים מדי ויש חשש קבוע לטעות בלחיצה.`,impact:`בידוד חברתי, תלות מוחלטת בעזרה חיצונית וקושי לנהל חיים עצמאיים.`,missing:`דרך פשוטה ובטוחה לבצע פעולות דיגיטליות חיוניות בלי תלות קבועה באחרים.`,question:`איך אפשר לאפשר לאזרחים ותיקים לבצע פעולות דיגיטליות חיוניות בפשטות ובביטחון?`},
+    {code:`K2`,fam:`K`,name:`העברת ידע`,family:`משפחה 11 – קשר בין-דורי`,teaser:`כשידע לא עובר הלאה, הוא נעלם לאט גם אם אף אחד לא התכוון לכך.`,domain:`קהילה וחברה`,sdg:`10 – צמצום אי-שוויון`,product:`פיזי`,audience:`בני נוער ומבוגרים בקהילה המקומית`,persona:`הנערה שרוצה להכיר את השכונה`,topic:`אובדן סיפורים ומיומנויות מסורתיות`,scenario:`מפגש מקרי בין שכן צעיר לשכנה ותיקה בלי מסגרת שמעודדת שיחה משמעותית.`,problem:`חסר מרחב פשוט שמזמן היכרות, שיתוף ידע ומפגש בין-דורי קבוע.`,why:`כיום הפתרונות הקיימים מבוססים על יוזמות חד-פעמיות, אירועים קהילתיים נקודתיים או קבוצות וואטסאפ, אך הקשרים הקהילתיים נחלשו ואין תשתית עקבית לשימור ידע וסיפורים.`,impact:`תחושת חוסר משמעות למבוגרים, חוסר שורשים לצעירים ואובדן ידע אנושי מקומי.`,missing:`מסגרת נגישה שמחברת בין דורות ומאפשרת לשמר ידע קהילתי לאורך זמן.`,question:`איך אפשר ליצור מפגש קבוע שבו ידע, סיפורים וניסיון עוברים בין דורות?`},
+    {code:`K3`,fam:`K`,name:`ביטחון בבית`,family:`משפחה 11 – קשר בין-דורי`,teaser:`ביטחון בבית חשוב, אבל כך גם הזכות להרגיש שלא עוקבים אחרייך כל הזמן.`,domain:`קהילה וחברה`,sdg:`10 – צמצום אי-שוויון`,product:`פיזי`,audience:`קשישים וקשישות שגרים לבד`,persona:`הקשישה שגרה לבדה`,topic:`ניטור מצוקה ללא פגיעה בפרטיות`,scenario:`נפילה בבית בשעות הלילה כשאין אף אחד בסביבה לשים לב בזמן.`,problem:`לחצני המצוקה הקיימים דורשים פעולה יזומה ולעיתים אינם זמינים ברגע האמת.`,why:`כיום הפתרונות הקיימים מבוססים על לחצני מצוקה, שיחות בדיקה עם משפחה או שכנים, אך המבוגר לעיתים שוכח לענוד את המכשיר או לא מספיק להגיע אליו בזמן.`,impact:`זמן תגובה איטי שמחמיר פציעות פשוטות, פחד להישאר לבד וירידה בתחושת הביטחון בבית.`,missing:`מענה לא פולשני שמזהה מצב חריג בבית ומאפשר תגובה מהירה בלי להכביד על המשתמשת או המשתמש.`,question:`איך אפשר לזהות מצב חריג בבית במהירות, בלי לפגוע בפרטיות של מי שגרה לבד?`}
+  ],
+  L:[
+    {code:`L1`,fam:`L`,name:`הליכתיות בטוחה`,family:`משפחה 12 – ניידות בטוחה`,teaser:`לא כל מסלול קצר הוא גם המסלול שמרגיש בטוח ללכת בו.`,domain:`תחבורה ותשתיות`,sdg:`11 – ערים וקהילות בנות קיימא`,product:`דיגיטלי`,audience:`נשים ונערות במרחב הציבורי בשעות הערב`,persona:`הנערה שחוזרת לבד`,topic:`בחירת מסלול הליכה לפי רמת ביטחון`,scenario:`חזרה מחוג, עבודה או בילוי בשעות החשיכה.`,problem:`אפליקציות ניווט סטנדרטיות מציעות את המסלול המהיר ביותר, לא את המסלול שמרגיש בטוח יותר.`,why:`כיום הפתרונות הקיימים מבוססים על שיתוף מיקום, שיחות טלפון או בחירת מסלול אינטואיטיבית, אך אין מידע מהימן ומעודכן על תאורה, נוכחות אנשים או תחושת ביטחון במסלול.`,impact:`הימנעות מיציאה מהבית, הליכה בלחץ מתמיד ופגיעה בעצמאות במרחב הציבורי.`,missing:`מידע אמין ושוטף על רמת ביטחון במסלולי הליכה בשעות ובאזורים שונים.`,question:`איך אפשר לבחור מסלול הליכה שמרגיש בטוח יותר ולא רק קצר יותר?`},
+    {code:`L2`,fam:`L`,name:`תחבורה שיתופית`,family:`משפחה 12 – ניידות בטוחה`,teaser:`בלי רכב פרטי, הדרך לעיר יכולה להפוך למסע מסובך הרבה יותר.`,domain:`תחבורה ותשתיות`,sdg:`11 – ערים וקהילות בנות קיימא`,product:`דיגיטלי`,audience:`תושבות ותושבי יישובים מרוחקים ללא רכב פרטי זמין`,persona:`התלמידה מהיישוב המרוחק`,topic:`קושי להגיע למרכזי ערים ללא רכב פרטי`,scenario:`המתנה ארוכה לאוטובוס שמגיע פעם בשעה או צורך בתיאום מורכב כדי להגיע ללימודים ולעבודה.`,problem:`התחבורה הציבורית אינה מסונכרנת לצרכים בפועל והחלופות הפרטיות יקרות ולא תמיד זמינות.`,why:`כיום הפתרונות הקיימים מבוססים על טרמפים, הקפצות משפחתיות או נסיעה ברכב פרטי לכל צורך קטן, אך אין דרך נוחה וגמישה לארגן נסיעות משותפות באופן בטוח וקבוע.`,impact:`חוסר נגישות להשכלה, עבודה ושירותים מחוץ ליישוב לצד עומס בכבישים וזיהום אוויר.`,missing:`דרך גמישה ובטוחה יותר לתאם נסיעות משותפות לפי צורך אמיתי ולא רק לפי קווי תחבורה קבועים.`,question:`איך אפשר לתאם נסיעות משותפות בצורה גמישה ובטוחה למי שגרה רחוק ממרכזים?`},
+    {code:`L3`,fam:`L`,name:`מיקרו-מוביליטי`,family:`משפחה 12 – ניידות בטוחה`,teaser:`קורקינטים ואופניים חשמליים חוסכים זמן, אבל לפעמים גם מייצרים סיכון חדש.`,domain:`תחבורה ותשתיות`,sdg:`11 – ערים וקהילות בנות קיימא`,product:`דיגיטלי`,audience:`רוכבות ורוכבים על אופניים וקורקינטים במרחב העירוני`,persona:`הרוכבת העירונית`,topic:`הסדרת השימוש בכלים חשמליים`,scenario:`נסיעה על המדרכה או בכביש בגלל חוסר בשבילים מסומנים וברורים לרכיבה.`,problem:`קיים קונפליקט מסוכן בין הולכי רגל, נהגים ורוכבים כי התשתיות לא מותאמות להיקף השימוש בכלים חשמליים.`,why:`כיום הפתרונות הקיימים מבוססים על קבוצות פייסבוק, דיווחים נקודתיים או הימנעות ממסלולים מסוימים, אך אין מיפוי נגיש ורציף של מפגעים ותקלות בתשתית הרכיבה.`,impact:`עלייה בתאונות, תחושת חוסר ביטחון ברכיבה ופגיעה באמון באמצעי תחבורה חלופיים.`,missing:`מידע עדכני על מפגעים, שבילים ותנאי רכיבה כדי לקבל החלטות בטוחות יותר במרחב העירוני.`,question:`איך אפשר לעזור לרוכבות ולרוכבים לקבל החלטות בטוחות יותר בזמן נסיעה בעיר?`}
+  ],
+  N:[
+    {code:`N1`,fam:`N`,name:`תיק איפור בדרך`,family:`משפחה 14 – ביוטי וטיפוח`,teaser:`כשכל הבוקר קורה בתנועה, גם הביוטי צריך להסתדר עם זה.`,domain:`ביוטי וטיפוח`,sdg:`12 – צריכה וייצור אחראיים`,product:`פיזי`,audience:`נערות שמתארגנות מחוץ לבית בין בית ספר, חוגים ומפגשים`,persona:`המתארגנת בין תחנות ביום`,topic:`שמירה על מוצרי ביוטי ונגישות מהירה בתיק`,scenario:`תיק עמוס עם איפור, טיפוח ומוצרי היגיינה שנזרקים יחד עם שאר הציוד של היום.`,problem:`מוצרים נשפכים, נשברים או נעלמים בתוך התיק ואין דרך נוחה להגיע למה שצריך בזמן קצר.`,why:`כיום הפתרונות הקיימים מבוססים על תיקי איפור כלליים, שקיות אקראיות או סידור ידני שלא מחזיק לאורך יום עמוס.`,impact:`בלגן, בזבוז מוצרים, לכלוך בתיק ותסכול בכל פעם שצריך להתארגן מהר.`,missing:`פתרון קומפקטי, עמיד ונוח שמחזיק מוצרי ביוטי בצורה מסודרת גם בתנועה.`,question:`איך אפשר לשמור מוצרי ביוטי מסודרים, מוגנים ונגישים בתוך תיק יומי עמוס?`},
+    {code:`N2`,fam:`N`,name:`היגיינה בין חברות`,family:`משפחה 14 – ביוטי וטיפוח`,teaser:`מברשות, ספוגיות וליפגלוסים עוברים לפעמים מיד ליד, אבל לא תמיד בצורה נקייה.`,domain:`ביוטי וטיפוח`,sdg:`3 – בריאות ורווחה`,product:`פיזי`,audience:`נערות שמשתפות מוצרי ביוטי ואביזרי טיפוח עם חברות`,persona:`המשתפת בלי לחשוב פעמיים`,topic:`שמירה על היגיינה של אביזרי ביוטי`,scenario:`התארגנות משותפת לפני יציאה, מסיבה או יום לימודים שבו כמה חברות משתמשות באותם מוצרים ואביזרים.`,problem:`אין דרך נוחה, מהירה וזמינה לשמור על ניקיון בסיסי של אביזרים בזמן אמת.`,why:`כיום הפתרונות הקיימים מבוססים על ניגוב מאולתר, שימוש חוזר בלי ניקוי או הימנעות חלקית משיתוף.`,impact:`פצעונים, גירויים בעור, תחושת אי נוחות וחוסר מודעות לסיכון היגייני קטן שחוזר כל הזמן.`,missing:`מענה קטן, נייד ופשוט שמאפשר שמירה על היגיינה גם מחוץ לבית.`,question:`איך אפשר לאפשר שיתוף מוצרי ביוטי בלי לוותר על היגיינה בסיסית?`},
+    {code:`N3`,fam:`N`,name:`אקססוריז שנעלמים`,family:`משפחה 14 – ביוטי וטיפוח`,teaser:`אביזרים קטנים מוסיפים סטייל, אבל גם נעלמים ומסתבכים מהר מאוד.`,domain:`ביוטי וטיפוח`,sdg:`12 – צריכה וייצור אחראיים`,product:`פיזי`,audience:`נערות שמחליפות תכשיטים ואביזרים בין בית הספר, הבית ואירועים`,persona:`זו שתמיד חסר לה עגיל אחד`,topic:`אחסון ונשיאה של אביזרים קטנים`,scenario:`עגילים, טבעות, שרשראות וסיכות עוברים בין תיקים, מגירות והכנות מהירות לפני יציאה.`,problem:`אביזרים קטנים מסתבכים, נעלמים או נפגעים כי אין להם מקום ייעודי קטן ונוח לנשיאה.`,why:`כיום הפתרונות הקיימים מבוססים על קופסאות גדולות, שקיות קטנות או פיזור בכמה מקומות שלא באמת עובדים ביום-יום.`,impact:`בזבוז זמן, קנייה חוזרת של פריטים שכבר היו ותחושת בלגן קבועה סביב ההתארגנות.`,missing:`פתרון קטן, מסודר ונייד ששומר על אביזרים קטנים בלי לסבך את ההתארגנות.`,question:`איך אפשר לשמור אביזרים קטנים מסודרים וזמינים גם כשמתארגנות מהר ובדרך?`}
+  ],
+  R:[
+    {code:`R1`,fam:`R`,name:`שולחן שלא נרגע`,family:`משפחה 18 – חדר אישי ונוחות`,teaser:`כשהשולחן עמוס, גם הראש מרגיש בדיוק ככה.`,domain:`חדר אישי ונוחות`,sdg:`11 – ערים וקהילות בנות קיימא`,product:`פיזי`,audience:`נערות שלומדות, מתארגנות ויוצרות בחדר קטן`,persona:`הלומדת בתוך בלגן קבוע`,topic:`סדר וארגון בשולחן אישי קטן`,scenario:`אותו שולחן משמש להכנת שיעורים, איפור, יצירה, טעינה ואחסון של ציוד יומי.`,problem:`אין חלוקה טובה בין שימושים שונים, וכל דבר נשאר על השולחן כי אין לו מקום ברור.`,why:`כיום הפתרונות הקיימים מבוססים על קופסאות כלליות, מדפים גדולים או סידור ידני שחוזר ומתפרק כל יום מחדש.`,impact:`חוסר ריכוז, עומס חזותי, איבוד זמן ותחושה שהחדר תמיד לא מספיק מסודר.`,missing:`פתרון מודולרי, קומפקטי ונעים שמסדר כמה שימושים שונים באותו מרחב קטן.`,question:`איך אפשר להפוך שולחן קטן למקום שגם לומדים בו, גם מתארגנים בו וגם מרגישים בו נעים?`},
+    {code:`R2`,fam:`R`,name:`מטענים בכל מקום`,family:`משפחה 18 – חדר אישי ונוחות`,teaser:`בין טלפון, אוזניות ושעון חכם, תמיד יש כבל אחד יותר מדי.`,domain:`חדר אישי ונוחות`,sdg:`9 – תעשייה, חדשנות ותשתיות`,product:`פיזי`,audience:`נערות שמשתמשות בכמה מכשירים ואביזרים טכנולוגיים ביום-יום`,persona:`זו שתמיד מחפשת כבל פנוי`,topic:`ניהול מטענים ואביזרי טעינה`,scenario:`טעינה יומיומית של כמה מכשירים בחדר, בתיק או לפני יציאה מהבית.`,problem:`כבלים, מתאמים ומטענים מתערבבים, נשכחים או נשחקים כי אין להם סידור קבוע ונוח.`,why:`כיום הפתרונות הקיימים מבוססים על מגירה אקראית, שקית כבלים או כמה מטענים מפוזרים בבית.`,impact:`בלגן, זמן שמתבזבז, בלאי של ציוד ותסכול קטן שחוזר כמעט כל יום.`,missing:`דרך מסודרת, קומפקטית ונוחה לנהל כמה פריטי טעינה בלי בלגן.`,question:`איך אפשר לעשות סדר בכל המטענים והכבלים כך שיהיו זמינים ולא יתפזרו כל הזמן?`},
+    {code:`R3`,fam:`R`,name:`אור שמתאים להכול`,family:`משפחה 18 – חדר אישי ונוחות`,teaser:`אותו חדר משמש ללמוד, להתארגן, להצטלם ולהירגע — אבל האור נשאר אותו אור.`,domain:`חדר אישי ונוחות`,sdg:`7 – אנרגיה נקייה ובת-השגה`,product:`פיזי`,audience:`נערות שמשתמשות בחדר אחד לכמה צרכים שונים לאורך היום`,persona:`היוצרת שמתארגנת בחדר קטן`,topic:`תאורה מותאמת לשימושים משתנים`,scenario:`שימוש באותו חלל קטן ללמידה, צילום, איפור, קריאה ומנוחה בשעות שונות של היום.`,problem:`התאורה הקיימת לא מתאימה לכל המצבים, ולעיתים היא חזקה מדי, חלשה מדי או לא נעימה לעיניים.`,why:`כיום הפתרונות הקיימים מבוססים על תאורת חדר כללית או מנורה אחת שלא באמת מתאימה לכל שימוש.`,impact:`מאמץ בעיניים, חוסר נוחות, צילום לא טוב וקושי להפוך את החדר למרחב שמתאים לקצב היום.`,missing:`פתרון תאורה גמיש, נעים וחסכוני שמותאם לכמה שימושים באותו חלל.`,question:`איך אפשר ליצור תאורה אחת שמתאימה גם ללמידה, גם להתארגנות וגם למנוחה באותו חדר?`}
+  ]
+}
+};
+
+// Family colours
+const FAM_COLORS = {
+  A:"#E8B4B8",B:"#C9879C",E:"#C5BEE0",H:"#A8C5B5",J:"#F0C9A0",M:"#A8C8E0",
+  O:"#C9879C",P:"#A8C5B5",Q:"#C5BEE0",
+  C:"#E8B4B8",D:"#C9879C",F:"#A8C5B5",G:"#C5BEE0",I:"#F0C9A0",K:"#A8C8E0",
+  L:"#C9879C",N:"#F0C9A0",R:"#A8C8E0"
+};
+
+// Populate landing family pips
+function initFamPips() {
+  [1,2].forEach(g => {
+    const el = document.getElementById("fams"+g);
+    const fams = [...new Set(Object.values(CARDS[g]).flat().map(c=>c.fam))].sort();
+    fams.forEach(f => {
+      const pip = document.createElement("div");
+      pip.className = "fam-pip";
+      pip.style.background = FAM_COLORS[f]||"#ccc";
+      pip.textContent = f;
+      el.appendChild(pip);
+    });
+  });
+}
+initFamPips();
+
+// ═══════════════════════════════
+const API = "https://script.google.com/macros/s/AKfycby8ASTrD20ffrdtqwMw7YElQPln0Ff1jgFxSt2dxs4yC0U-9i4cjYrJrFxPMdQRNB-e/exec";
+let mode="player", currentGroup=1, numGirls=6, hostGroup=1;
+let gameState=null, localFlipped=new Set(), pollTimer=null, gameCards=[];
+
+(function init(){
+  const p = new URLSearchParams(location.search);
+  if(p.get("mode")==="host"){ mode="host"; goTo("s-host-setup"); calcDist(); }
+  else if(p.get("group")){ mode="player"; currentGroup=parseInt(p.get("group"))||1; startPlayerPoll(); }
+})();
+
+function goTo(id){ document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active")); document.getElementById(id).classList.add("active"); }
+function enterGroup(g){ currentGroup=g; mode="player"; startPlayerPoll(); }
+function goHostSetup(){ mode="host"; goTo("s-host-setup"); calcDist(); }
+
+// HOST SETUP
+function hostSelectGroup(g){
+  hostGroup=g;
+  ["hgc1","hgc2"].forEach((id,i)=>document.getElementById(id).classList.toggle("sel",i+1===g));
+  calcDist();
+}
+function changeGirls(d){ numGirls=Math.max(2,Math.min(18,numGirls+d)); document.getElementById("girls-val").textContent=numGirls; calcDist(); }
+
+function buildPlan(n){
+  for(let a=6;a>=0;a--) for(let b=0;b<=6-a;b++) if(3*a+2*b===n) return{trips:a,pairs:b};
+  return null;
+}
+function calcDist(){
+  const chips=document.getElementById("dist-chips"), err=document.getElementById("dist-error"), btn=document.getElementById("launch-btn");
+  const plan=buildPlan(numGirls);
+  if(!plan){ chips.innerHTML=""; err.style.display="block"; err.textContent="המספר "+numGirls+" לא מתחלק — נסי מספר אחר"; btn.disabled=true; return; }
+  err.style.display="none"; chips.innerHTML="";
+  for(let i=0;i<plan.trips;i++){ const c=document.createElement("span"); c.className="dist-chip"; c.textContent="קבוצת 3"; chips.appendChild(c); }
+  for(let i=0;i<plan.pairs;i++){ const c=document.createElement("span"); c.className="dist-chip pair"; c.textContent="זוג"; chips.appendChild(c); }
+  btn.disabled=false;
+}
+
+async function launchGame(){
+  const btn=document.getElementById("launch-btn"); btn.disabled=true; btn.textContent="מפעילה...";
+  try{
+    const res=await apiPost({action:"reset",group:hostGroup,girls:numGirls});
+    gameState=res; buildGameCards(hostGroup,res.plan); startHostPoll(); goTo("s-host-live"); renderHostLive();
+  }catch(e){ toast("שגיאה: "+e.message); }
+  btn.disabled=false; btn.textContent="הפעלת משחק ✦";
+}
+
+// HOST LIVE
+function startHostPoll(){ clearInterval(pollTimer); pollTimer=setInterval(async()=>{ try{ gameState=await apiGet({action:"state",group:hostGroup}); renderHostLive(); }catch(e){} },3000); }
+function renderHostLive(){
+  if(!gameState) return;
+  const wrap=document.getElementById("host-groups-wrap"); wrap.innerHTML="";
+  const plan=gameState.plan||[], chosen=gameState.chosen||[], famData=CARDS[hostGroup];
+  plan.forEach(({fam,size})=>{
+    const cards=famData[fam].slice(0,size), col=FAM_COLORS[fam]||"#ccc", taken=cards.filter(c=>chosen.includes(c.code)).length, label=size===3?"קבוצת 3":"זוג";
+    const card=document.createElement("div"); card.className="host-group-card";
+    let inner=`<div class="host-fam-row" style="border-top:none;padding-top:0"><div class="host-fam-label" style="background:${col}">${fam}</div><div style="font-size:12px;font-weight:600;color:var(--deep)">${label}</div><div style="margin-right:auto;font-size:11px;color:var(--muted)">${taken}/${size} נבחרו</div></div><div class="host-cards" style="margin-top:7px">`;
+    cards.forEach(c=>{ const t=chosen.includes(c.code); inner+=`<span class="host-card-chip${t?" taken":""}">${c.code}${t?" ✓":""}</span>`; });
+    inner+="</div>"; card.innerHTML=inner; wrap.appendChild(card);
+  });
+  const total=(gameState.plan||[]).reduce((s,p)=>s+p.size,0), taken2=(gameState.chosen||[]).length;
+  const stat=document.createElement("p"); stat.style.cssText="font-size:12px;color:var(--muted);padding:0 18px 7px;text-align:center";
+  stat.textContent="סה\"כ "+taken2+" מתוך "+total+" קלפים נבחרו"; wrap.appendChild(stat);
+}
+function showHostResults(){ clearInterval(pollTimer); renderResults(hostGroup,gameState); document.getElementById("res-badge").textContent="מדריכה"; document.getElementById("res-back-btn").onclick=()=>{ startHostPoll(); goTo("s-host-live"); }; goTo("s-results"); }
+
+// PLAYER POLL
+function startPlayerPoll(){
+  document.getElementById("waiting-group-badge").textContent="קבוצה "+currentGroup; goTo("s-waiting");
+  clearInterval(pollTimer);
+  pollTimer=setInterval(async()=>{
+    try{
+      const state=await apiGet({action:"state",group:currentGroup});
+      if(state.status==="ACTIVE"||state.status==="DONE"){
+        clearInterval(pollTimer); gameState=state; buildGameCards(currentGroup,state.plan); renderGame();
+        if(state.status==="DONE") goTo("s-done");
+        else{ goTo("s-game"); startGamePoll(); }
+      }
+    }catch(e){}
+  },2500);
+}
+function startGamePoll(){
+  clearInterval(pollTimer);
+  pollTimer=setInterval(async()=>{
+    try{ const state=await apiGet({action:"state",group:currentGroup}); gameState=state; renderGame(); if(state.status==="DONE"){ clearInterval(pollTimer); goTo("s-done"); } }catch(e){}
+  },2500);
+}
+
+// BUILD + SHUFFLE CARDS ONCE
+function buildGameCards(g,plan){
+  const famData=CARDS[g]; gameCards=[];
+  plan.forEach(({fam,size})=>{ famData[fam].slice(0,size).forEach(c=>gameCards.push({...c,fam})); });
+  if(!window._shuffled){
+    for(let i=gameCards.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [gameCards[i],gameCards[j]]=[gameCards[j],gameCards[i]]; }
+    window._shuffled=true; window._gameCardsOrder=[...gameCards];
+  } else { gameCards=window._gameCardsOrder; }
+}
+
+// RENDER GAME
+function renderGame(){
+  const grid=document.getElementById("cards-grid");
+  const chosen=(gameState&&gameState.chosen)||[], total=gameCards.length, taken=chosen.length;
+  document.getElementById("game-group-title").textContent="קבוצה "+currentGroup;
+  document.getElementById("prog-taken").textContent=taken;
+  document.getElementById("prog-total").textContent=total;
+  grid.innerHTML="";
+
+  gameCards.forEach((card,i)=>{
+    const col=FAM_COLORS[card.fam]||"#ccc";
+    const isChosen=chosen.includes(card.code);
+    const isFlipped=localFlipped.has(card.code);
+    const el=document.createElement("div");
+    el.className="fc"+(isFlipped||isChosen?" flipped":"")+(isChosen?" taken":"");
+    el.style.animationDelay=(i*.04)+"s";
+
+    // FRONT
+    const frontTags = [card.domain, card.sdg].filter(Boolean);
+    const frontTagsHtml = frontTags.map(t=>`<span class="fc-front-tag">${t}</span>`).join("");
+
+    // BACK rows
+    const backRows = [
+      ["כיוון מוצר", card.product],
+      ["קהל יעד", card.audience],
+      ["פרסונה", card.persona],
+      ["הנושא", card.topic],
+      ["מצב מהחיים", card.scenario],
+      ["הבעיה", card.problem],
+      ["למה לא עובד", card.why],
+      ["ההשפעה", card.impact],
+      ["מה חסר", card.missing],
+    ].map(([l,v])=>`<div class="back-row"><span class="back-row-label">${l}</span><span class="back-row-val">${v}</span></div>`).join("");
+
+    el.innerHTML=`<div class="fc-inner">
+      <div class="fc-face fc-front">
+        <div class="fc-front-bar" style="background:${col}"></div>
+        <div class="fc-front-body">
+          <div class="fc-front-family">${card.family}</div>
+          <div class="fc-front-name">${card.name}</div>
+          <div class="fc-front-teaser">${card.teaser}</div>
+        </div>
+        <div class="fc-front-bottom">
+          <div class="fc-front-tags">${frontTagsHtml}</div>
+          <div class="${isChosen?"fc-taken-mark":"fc-front-code"}">${isChosen?"נבחר":card.code}</div>
+        </div>
+      </div>
+      <div class="fc-face fc-back">
+        <div class="fc-back-bar" style="background:${col}"></div>
+        <div class="fc-back-scroll">
+          <div class="back-code">${card.code}</div>
+          <div class="back-name">${card.name}</div>
+          ${backRows}
+          <div class="back-question">
+            <div class="back-question-label">שאלת פתיחה</div>
+            <div class="back-question-text">${card.question}</div>
+          </div>
+        </div>
+        <div class="fc-back-footer">
+          ${isChosen
+            ? `<div class="chosen-mark">✓ נבחר</div>`
+            : `<button class="choose-btn" data-code="${card.code}">בחרי קלף זה</button>`}
+        </div>
+      </div>
+    </div>`;
+
+    el.querySelector(".fc-inner").addEventListener("click",e=>{
+      if(e.target.classList.contains("choose-btn")) return;
+      if(isChosen) return;
+      toggleFlip(card.code);
+    });
+    const btn=el.querySelector(".choose-btn");
+    if(btn) btn.addEventListener("click",e=>{ e.stopPropagation(); chooseCard(card.code); });
+    grid.appendChild(el);
+  });
+}
+
+function toggleFlip(code){ if(localFlipped.has(code)) localFlipped.delete(code); else localFlipped.add(code); renderGame(); }
+
+// מניעת לחיצה כפולה בצד הלקוח
+let _choosing = false;
+
+async function chooseCard(code){
+  if(_choosing) return; // כבר בתהליך בחירה
+  if(!gameState.chosen) gameState.chosen=[];
+  if(gameState.chosen.includes(code)) return;
+  _choosing = true;
+
+  // Optimistic UI
+  gameState.chosen.push(code); localFlipped.add(code); renderGame();
+  try{
+    const res = await apiPost({action:"choose", group:currentGroup, code});
+    gameState = res; renderGame();
+    if(res.status==="DONE") clearInterval(pollTimer);
+    // הצגת פופ-אפ זכייה
+    const card = gameCards.find(c=>c.code===code);
+    if(card) showWin(card);
+  }catch(e){
+    // ALREADY_TAKEN = מישהי אחרת הקדימה
+    if(e.message==="ALREADY_TAKEN"){
+      gameState.chosen = gameState.chosen.filter(c=>c!==code);
+      localFlipped.delete(code); renderGame();
+      toast("אחת אחרת תפסה את הקלף הזה — בחרי קלף אחר");
+    } else {
+      gameState.chosen = gameState.chosen.filter(c=>c!==code);
+      renderGame(); toast("שגיאה — "+e.message);
+    }
+  }
+  _choosing = false;
+}
+
+// פופ-אפ זכייה
+let _pendingCancelCode = null;
+
+function showWin(card){
+  const col = FAM_COLORS[card.fam]||"#ccc";
+  document.getElementById("win-bar").style.background = col;
+  document.getElementById("win-card-name").textContent = card.name;
+  document.getElementById("win-card-code").textContent = card.code + " · " + card.family;
+  document.getElementById("win-question").textContent = card.question;
+  _pendingCancelCode = card.code;
+  document.getElementById("win-overlay").classList.add("show");
+}
+
+async function closeWin(cancel){
+  document.getElementById("win-overlay").classList.remove("show");
+  if(!cancel || !_pendingCancelCode) return;
+
+  // ביטול — שולחים unchoose לשרת
+  const code = _pendingCancelCode;
+  _pendingCancelCode = null;
+  // Optimistic UI
+  gameState.chosen = (gameState.chosen||[]).filter(c=>c!==code);
+  localFlipped.delete(code); renderGame();
+  try{
+    const res = await apiPost({action:"unchoose", group:currentGroup, code});
+    gameState = res; renderGame();
+  }catch(e){
+    toast("שגיאה בביטול: "+e.message);
+  }
+}
+
+function showPlayerResults(){
+  renderResults(currentGroup,gameState);
+  document.getElementById("res-badge").textContent="קבוצה "+currentGroup;
+  document.getElementById("res-back-btn").onclick=()=>goTo("s-game");
+  goTo("s-results");
+}
+
+function renderResults(g,state){
+  const body=document.getElementById("results-body");
+  const plan=(state&&state.plan)||[], chosen=(state&&state.chosen)||[];
+  body.innerHTML="";
+  plan.forEach(({fam,size})=>{
+    const cards=CARDS[g][fam].slice(0,size), col=FAM_COLORS[fam]||"#ccc", label=size===3?"קבוצת 3":"זוג";
+    const el=document.createElement("div"); el.className="result-group";
+    let inner=`<div class="result-group-header"><div class="result-fam-dot" style="background:${col}"></div><div class="result-group-label">סט ${fam}</div><span class="result-group-size">${label}</span></div>`;
+    cards.forEach(c=>{ const ok=chosen.includes(c.code); inner+=`<div class="result-card-item"><span class="result-card-code">${c.code}</span><span class="result-card-name">${c.name}</span><span class="result-card-status ${ok?"ok":"no"}">${ok?"✓ נבחר":"לא נבחר"}</span></div>`; });
+    el.innerHTML=inner; body.appendChild(el);
+  });
+}
+
+async function apiGet(params){ const qs=new URLSearchParams(params).toString(); const res=await fetch(API+"?"+qs); const data=await res.json(); if(data.error) throw new Error(data.error); return data; }
+async function apiPost(body){ const res=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)}); const data=await res.json(); if(data.error) throw new Error(data.error); return data; }
+
+function toast(msg){ const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),3000); }
+</script>
 </body>
 </html>
