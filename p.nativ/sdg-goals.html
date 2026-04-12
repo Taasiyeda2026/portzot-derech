@@ -108,19 +108,31 @@
   }
 
   .goals-stage {
-    position: relative;
+    --slot-w: 196px;
+    --slot-h: 74px;
+    --gap: 20px;
+    --center-size: 268px;
     width: min(1320px, 100%);
-    height: 650px;
     margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-rows: repeat(6, auto);
+    grid-template-areas:
+      ". . g1 . ."
+      ". g2 . g3 ."
+      "g4 g5 center g10 g11"
+      "g6 g7 center g12 g13"
+      "g8 g9 center g14 g15"
+      ". g16 . g17 .";
+    justify-items: center;
+    align-items: center;
+    gap: var(--gap);
   }
 
   .hero-image {
-    position: absolute;
-    top: 168px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 268px;
-    height: 268px;
+    grid-area: center;
+    width: var(--center-size);
+    height: var(--center-size);
     border-radius: 50%;
     overflow: hidden;
     display: flex;
@@ -130,7 +142,7 @@
     box-shadow: 0 14px 34px rgba(107, 45, 132, 0.18);
     border: 4px solid rgba(255, 255, 255, 0.96);
     padding: 16px;
-    z-index: 2;
+    z-index: 1;
   }
 
   .hero-image img {
@@ -142,14 +154,15 @@
   }
 
   .goal-slot {
-    position: absolute;
-    width: 196px;
-    z-index: 3;
+    width: var(--slot-w);
+    z-index: 2;
+    display: flex;
+    justify-content: center;
   }
 
   .goal-btn {
-    width: 196px;
-    height: 74px;
+    width: var(--slot-w);
+    height: var(--slot-h);
     background: linear-gradient(180deg, #ffffff 0%, #f7f0fa 100%);
     border: 1px solid rgba(214, 190, 225, 0.95);
     border-radius: 16px;
@@ -175,30 +188,23 @@
     border-color: rgba(176, 128, 198, 0.95);
   }
 
-  /* עליון */
-  .pos-top-center { top: 0; left: 50%; transform: translateX(-50%); }
-  .pos-top-left   { top: 100px; left: 50%; transform: translateX(-208px); }
-  .pos-top-right  { top: 100px; left: 50%; transform: translateX(12px); }
-
-  /* שמאל - שתי עמודות, שלוש שורות */
-  .pos-left-far-1  { top: 200px; left: 0; }
-  .pos-left-near-1 { top: 200px; left: 222px; }
-  .pos-left-far-2  { top: 300px; left: 0; }
-  .pos-left-near-2 { top: 300px; left: 222px; }
-  .pos-left-far-3  { top: 400px; left: 0; }
-  .pos-left-near-3 { top: 400px; left: 222px; }
-
-  /* ימין - שתי עמודות, שלוש שורות */
-  .pos-right-near-1 { top: 200px; right: 222px; }
-  .pos-right-far-1  { top: 200px; right: 0; }
-  .pos-right-near-2 { top: 300px; right: 222px; }
-  .pos-right-far-2  { top: 300px; right: 0; }
-  .pos-right-near-3 { top: 400px; right: 222px; }
-  .pos-right-far-3  { top: 400px; right: 0; }
-
-  /* תחתון */
-  .pos-bottom-left  { top: 500px; left: 50%; transform: translateX(-208px); }
-  .pos-bottom-right { top: 500px; left: 50%; transform: translateX(12px); }
+  .g1 { grid-area: g1; }
+  .g2 { grid-area: g2; }
+  .g3 { grid-area: g3; }
+  .g4 { grid-area: g4; }
+  .g5 { grid-area: g5; }
+  .g6 { grid-area: g6; }
+  .g7 { grid-area: g7; }
+  .g8 { grid-area: g8; }
+  .g9 { grid-area: g9; }
+  .g10 { grid-area: g10; }
+  .g11 { grid-area: g11; }
+  .g12 { grid-area: g12; }
+  .g13 { grid-area: g13; }
+  .g14 { grid-area: g14; }
+  .g15 { grid-area: g15; }
+  .g16 { grid-area: g16; }
+  .g17 { grid-area: g17; }
 
   .bottom-action {
     display: flex;
@@ -273,18 +279,16 @@
 
   @media (max-width: 1180px) {
     .goals-stage {
-      position: static;
       width: 100%;
-      height: auto;
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-rows: auto;
+      grid-template-areas: none;
       gap: 12px;
       justify-items: center;
     }
 
     .hero-image {
-      position: static;
-      transform: none;
       grid-column: 1 / -1;
       margin: 0 auto 6px;
       width: 220px;
@@ -292,11 +296,8 @@
     }
 
     .goal-slot {
-      position: static;
       width: 100%;
-      display: flex;
-      justify-content: center;
-      transform: none !important;
+      grid-area: auto !important;
     }
 
     .bottom-action {
@@ -334,7 +335,7 @@
     .goal-btn,
     .next-btn {
       width: 100%;
-      max-width: 196px;
+      max-width: 360px;
     }
   }
 </style>
@@ -364,26 +365,26 @@
       <img src="../icon/sdg.png" alt="יעדי הפיתוח של האו״ם">
     </div>
 
-    <div class="goal-slot pos-top-center"><button class="goal-btn" onclick="openModal(1)">יעד 1: מיגור העוני</button></div>
-    <div class="goal-slot pos-top-left"><button class="goal-btn" onclick="openModal(2)">יעד 2: אפס רעב / אי ביטחון תזונתי</button></div>
-    <div class="goal-slot pos-top-right"><button class="goal-btn" onclick="openModal(3)">יעד 3: בריאות טובה ורווחה אנושית</button></div>
+    <div class="goal-slot g1"><button class="goal-btn" onclick="openModal(1)">יעד 1: מיגור העוני</button></div>
+    <div class="goal-slot g2"><button class="goal-btn" onclick="openModal(2)">יעד 2: אפס רעב / אי ביטחון תזונתי</button></div>
+    <div class="goal-slot g3"><button class="goal-btn" onclick="openModal(3)">יעד 3: בריאות טובה ורווחה אנושית</button></div>
 
-    <div class="goal-slot pos-left-far-1"><button class="goal-btn" onclick="openModal(4)">יעד 4: חינוך איכותי</button></div>
-    <div class="goal-slot pos-left-near-1"><button class="goal-btn" onclick="openModal(5)">יעד 5: שוויון מגדרי</button></div>
-    <div class="goal-slot pos-left-far-2"><button class="goal-btn" onclick="openModal(6)">יעד 6: מים נקיים ותברואה</button></div>
-    <div class="goal-slot pos-left-near-2"><button class="goal-btn" onclick="openModal(7)">יעד 7: אנרגיה זמינה ונקייה</button></div>
-    <div class="goal-slot pos-left-far-3"><button class="goal-btn" onclick="openModal(8)">יעד 8: עבודה הוגנת וצמיחה כלכלית</button></div>
-    <div class="goal-slot pos-left-near-3"><button class="goal-btn" onclick="openModal(9)">יעד 9: תעשייה, תשתיות וחדשנות</button></div>
+    <div class="goal-slot g4"><button class="goal-btn" onclick="openModal(4)">יעד 4: חינוך איכותי</button></div>
+    <div class="goal-slot g5"><button class="goal-btn" onclick="openModal(5)">יעד 5: שוויון מגדרי</button></div>
+    <div class="goal-slot g6"><button class="goal-btn" onclick="openModal(6)">יעד 6: מים נקיים ותברואה</button></div>
+    <div class="goal-slot g7"><button class="goal-btn" onclick="openModal(7)">יעד 7: אנרגיה זמינה ונקייה</button></div>
+    <div class="goal-slot g8"><button class="goal-btn" onclick="openModal(8)">יעד 8: עבודה הוגנת וצמיחה כלכלית</button></div>
+    <div class="goal-slot g9"><button class="goal-btn" onclick="openModal(9)">יעד 9: תעשייה, תשתיות וחדשנות</button></div>
 
-    <div class="goal-slot pos-right-near-1"><button class="goal-btn" onclick="openModal(10)">יעד 10: צמצום אי השוויון</button></div>
-    <div class="goal-slot pos-right-far-1"><button class="goal-btn" onclick="openModal(11)">יעד 11: ערים וקהילות מקיימות</button></div>
-    <div class="goal-slot pos-right-near-2"><button class="goal-btn" onclick="openModal(12)">יעד 12: צריכה וייצור אחראים</button></div>
-    <div class="goal-slot pos-right-far-2"><button class="goal-btn" onclick="openModal(13)">יעד 13: שינויי אקלים</button></div>
-    <div class="goal-slot pos-right-near-3"><button class="goal-btn" onclick="openModal(14)">יעד 14: שימור המשאבים הימיים – חיים מתחת למים</button></div>
-    <div class="goal-slot pos-right-far-3"><button class="goal-btn" onclick="openModal(15)">יעד 15: חיים על פני האדמה</button></div>
+    <div class="goal-slot g10"><button class="goal-btn" onclick="openModal(10)">יעד 10: צמצום אי השוויון</button></div>
+    <div class="goal-slot g11"><button class="goal-btn" onclick="openModal(11)">יעד 11: ערים וקהילות מקיימות</button></div>
+    <div class="goal-slot g12"><button class="goal-btn" onclick="openModal(12)">יעד 12: צריכה וייצור אחראים</button></div>
+    <div class="goal-slot g13"><button class="goal-btn" onclick="openModal(13)">יעד 13: שינויי אקלים</button></div>
+    <div class="goal-slot g14"><button class="goal-btn" onclick="openModal(14)">יעד 14: שימור המשאבים הימיים – חיים מתחת למים</button></div>
+    <div class="goal-slot g15"><button class="goal-btn" onclick="openModal(15)">יעד 15: חיים על פני האדמה</button></div>
 
-    <div class="goal-slot pos-bottom-left"><button class="goal-btn" onclick="openModal(16)">יעד 16: שלום, צדק וחוזק המוסדות</button></div>
-    <div class="goal-slot pos-bottom-right"><button class="goal-btn" onclick="openModal(17)">יעד 17: שותפות להשגת היעדים</button></div>
+    <div class="goal-slot g16"><button class="goal-btn" onclick="openModal(16)">יעד 16: שלום, צדק וחוזק המוסדות</button></div>
+    <div class="goal-slot g17"><button class="goal-btn" onclick="openModal(17)">יעד 17: שותפות להשגת היעדים</button></div>
   </section>
 
   <div class="bottom-action">
