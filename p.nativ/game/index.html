@@ -2,335 +2,389 @@
 <html lang="he" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>קלפי רעיונות — תעשיידע</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>17 היעדים — כרטיסיות מידע</title>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700&family=Frank+Ruhl+Libre:wght@400;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --cream:#FAF7F2; --blush:#F2D9D9; --rose:#E8B4B8;
-  --mauve:#C9879C; --plum:#8B5B6B; --deep:#3D2535;
-  --sage:#A8C5B5; --sage-lt:#D6EAE1;
-  --lavender:#C5BEE0; --lav-lt:#EAE8F5;
-  --peach:#F0C9A0; --sky:#A8C8E0;
-  --ink:#2A1A22; --muted:#8A7080;
-  --border:rgba(139,91,107,0.15);
-  --shadow:rgba(61,37,53,0.08);
-  --r-md:18px; --r-lg:28px; --r-xl:40px;
-  --font-d:'Frank Ruhl Libre',serif;
-  --font-b:'Heebo',sans-serif;
+:root{
+  --cream:#FAF7F2;--blush:#F2D9D9;--rose:#E8B4B8;
+  --mauve:#C9879C;--plum:#8B5B6B;--deep:#3D2535;
+  --sage:#A8C5B5;--sage-lt:#D6EAE1;--lav-lt:#EAE8F5;
+  --peach:#F0C9A0;--ink:#2A1A22;--muted:#8A7080;
+  --border:rgba(139,91,107,0.18);--shadow:rgba(61,37,53,0.09);
+  --fd:'Frank Ruhl Libre',serif;--fb:'Heebo',sans-serif;
 }
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--font-b);background:var(--cream);color:var(--ink);min-height:100dvh;overflow-x:hidden}
-body::before,body::after{content:'';position:fixed;border-radius:50%;filter:blur(80px);opacity:.3;pointer-events:none;z-index:0}
-body::before{width:500px;height:500px;background:radial-gradient(circle,var(--blush),transparent 70%);top:-120px;right:-100px}
-body::after{width:400px;height:400px;background:radial-gradient(circle,var(--lav-lt),transparent 70%);bottom:-100px;left:-80px}
-.screen{display:none;position:relative;z-index:1;min-height:100dvh}
-.screen.active{display:flex;flex-direction:column}
-.top-bar{padding:12px 16px 0;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.logo{font-family:var(--font-d);font-size:15px;color:var(--plum);letter-spacing:.03em}
-.badge{font-size:11px;padding:4px 12px;border-radius:99px;font-weight:500;background:var(--blush);color:var(--plum)}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden}
+body{font-family:var(--fb);background:var(--cream);color:var(--ink);
+  display:flex;flex-direction:column;height:100dvh;overflow:hidden}
+
+/* BG blobs */
+body::before{content:'';position:fixed;width:300px;height:300px;border-radius:50%;
+  background:radial-gradient(circle,var(--blush),transparent 70%);
+  top:-80px;right:-60px;filter:blur(60px);opacity:.35;pointer-events:none;z-index:0}
+
+/* SCREENS */
+.screen{display:none;flex-direction:column;height:100dvh;overflow:hidden;position:relative;z-index:1;max-width:480px;margin:0 auto}
+.screen.active{display:flex}
+
+/* TOP BAR */
+.top-bar{padding:10px 14px 0;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.logo{font-family:var(--fd);font-size:13px;color:var(--plum);letter-spacing:.03em}
+.badge{font-size:10px;padding:3px 10px;border-radius:99px;font-weight:500;background:var(--blush);color:var(--plum)}
 .badge.host{background:var(--deep);color:var(--cream)}
-.hero{padding:22px 22px 14px;text-align:center;flex-shrink:0}
-.hero h1{font-family:var(--font-d);font-size:clamp(22px,6vw,34px);font-weight:700;color:var(--deep);line-height:1.15;margin-bottom:6px}
-.hero p{font-size:13px;color:var(--muted);line-height:1.5;max-width:300px;margin:0 auto}
-.deck-art{display:flex;justify-content:center;margin:0 0 16px;height:60px;position:relative}
-.deck-art span{position:absolute;width:40px;height:56px;border-radius:8px;border:1.5px solid rgba(139,91,107,.2);background:white;box-shadow:0 3px 10px var(--shadow)}
-.deck-art span:nth-child(1){transform:rotate(-12deg) translate(-28px,4px);background:var(--blush)}
-.deck-art span:nth-child(2){transform:rotate(-5deg) translate(-9px,0);background:var(--lav-lt)}
-.deck-art span:nth-child(3){transform:rotate(3deg) translate(9px,2px);background:var(--sage-lt)}
-.deck-art span:nth-child(4){transform:rotate(11deg) translate(28px,5px);background:var(--peach)}
-.btn{font-family:var(--font-b);font-size:13px;font-weight:500;padding:9px 18px;border-radius:var(--r-xl);border:none;cursor:pointer;transition:transform .15s,box-shadow .15s,opacity .15s;display:inline-flex;align-items:center;gap:6px}
-.btn:active{transform:scale(.97)}
-.btn-primary{background:var(--deep);color:var(--cream);box-shadow:0 4px 18px rgba(61,37,53,.25)}
-.btn-primary:hover{box-shadow:0 6px 26px rgba(61,37,53,.35)}
-.btn-primary:disabled{opacity:.4;cursor:not-allowed;transform:none}
-.btn-soft{background:white;color:var(--plum);border:1.5px solid var(--border)}
-.btn-soft:hover{background:var(--blush)}
-.group-cards{display:flex;flex-direction:column;gap:8px;padding:0 16px 20px}
-.group-card{background:white;border-radius:var(--r-md);border:1.5px solid var(--border);padding:12px 16px;cursor:pointer;transition:transform .15s,box-shadow .15s,border-color .15s;box-shadow:0 2px 8px var(--shadow)}
-.group-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px var(--shadow)}
-.group-card.sel{border-color:var(--mauve);background:#FDF5F7}
-.group-card-title{font-family:var(--font-d);font-size:16px;font-weight:700;color:var(--deep);margin-bottom:4px}
-.group-fams{display:flex;gap:5px;flex-wrap:wrap}
-.fam-pip{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--deep)}
-.setup-body{padding:10px 16px;flex:1;display:flex;flex-direction:column;gap:12px}
-.field-label{font-size:12px;font-weight:500;color:var(--muted);margin-bottom:7px}
-.stepper{display:flex;align-items:center;background:white;border-radius:var(--r-xl);border:1.5px solid var(--border);width:fit-content;overflow:hidden;box-shadow:0 1px 5px var(--shadow)}
-.stepper button{width:36px;height:36px;border:none;background:none;font-size:18px;cursor:pointer;color:var(--plum);font-family:var(--font-b);transition:background .1s}
-.stepper button:hover{background:var(--blush)}
-.stepper span{min-width:40px;text-align:center;font-size:16px;font-weight:700;color:var(--deep);font-family:var(--font-d)}
-.dist-preview{background:white;border-radius:var(--r-md);border:1.5px solid var(--border);padding:10px 14px;box-shadow:0 1px 5px var(--shadow)}
-.dist-preview .dist-title{font-size:12px;font-weight:500;color:var(--muted);margin-bottom:9px}
-.dist-chips{display:flex;gap:7px;flex-wrap:wrap}
-.dist-chip{padding:5px 12px;border-radius:99px;font-size:12px;font-weight:500;background:var(--blush);color:var(--plum)}
-.dist-chip.pair{background:var(--lav-lt);color:var(--plum)}
-.dist-error{font-size:12px;color:#C0392B}
-.game-header{padding:10px 14px 8px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.game-title{font-family:var(--font-d);font-size:19px;color:var(--deep)}
-.progress-pill{background:white;border:1.5px solid var(--border);border-radius:99px;padding:4px 13px;font-size:11px;font-weight:500;color:var(--muted);box-shadow:0 2px 6px var(--shadow)}
-.progress-pill strong{color:var(--plum)}
 
-/* ── CARD GRID ── */
-.cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 12px 80px;flex:1}
+/* SCROLL BODY */
+.scroll-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:10px 14px 70px}
 
-/* ── FLIP CARD ── */
-.fc{aspect-ratio:2/3;perspective:900px}
-.fc-inner{position:relative;width:100%;height:100%;transition:transform .5s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d}
-.fc.flipped .fc-inner{transform:rotateY(180deg)}
-.fc-face{position:absolute;inset:0;border-radius:14px;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden}
+/* COMPACT BUTTON */
+.btn{font-family:var(--fb);font-size:12px;font-weight:500;padding:7px 14px;
+  border-radius:99px;border:1.5px solid var(--border);cursor:pointer;
+  background:white;color:var(--plum);transition:all .15s;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.btn:active{transform:scale(.96)}
+.btn.primary{background:var(--deep);color:var(--cream);border-color:var(--deep);
+  box-shadow:0 3px 12px rgba(61,37,53,.22)}
+.btn.primary:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.btn.danger{background:#FFF0F0;color:#C0392B;border-color:#F5C1C1}
+
+/* SECTION TITLE */
+.sec-title{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:7px;margin-top:14px}
+.sec-title:first-child{margin-top:4px}
+
+/* HERO — landing */
+.hero{text-align:center;padding:14px 0 10px;flex-shrink:0}
+.hero h1{font-family:var(--fd);font-size:24px;font-weight:700;color:var(--deep);margin-bottom:3px}
+.hero p{font-size:12px;color:var(--muted)}
+
+/* DECK ART */
+.deck-art{display:flex;justify-content:center;height:44px;position:relative;margin-bottom:10px;flex-shrink:0}
+.deck-art span{position:absolute;width:32px;height:44px;border-radius:6px;
+  border:1.5px solid rgba(139,91,107,.2);box-shadow:0 3px 8px var(--shadow)}
+.deck-art span:nth-child(1){transform:rotate(-12deg) translate(-22px,3px);background:var(--blush)}
+.deck-art span:nth-child(2){transform:rotate(-5deg) translate(-7px,0);background:var(--lav-lt)}
+.deck-art span:nth-child(3){transform:rotate(3deg) translate(7px,2px);background:var(--sage-lt)}
+.deck-art span:nth-child(4){transform:rotate(11deg) translate(22px,4px);background:var(--peach)}
+
+/* GROUP CARDS — landing */
+.group-list{display:flex;flex-direction:column;gap:7px;max-width:320px;margin:0 auto;width:100%}
+.group-item{background:white;border-radius:12px;border:1.5px solid var(--border);padding:10px 14px;cursor:pointer;transition:all .15s;box-shadow:0 1px 6px var(--shadow);display:flex;align-items:center;justify-content:space-between;width:100%}
+.group-item:active{transform:scale(.98)}
+.group-item.sel{border-color:var(--mauve);background:#FDF5F7}
+.group-item-name{font-family:var(--fd);font-size:15px;font-weight:700;color:var(--deep)}
+.group-item-fams{display:flex;gap:4px;flex-wrap:wrap}
+.fam-pip{width:19px;height:19px;border-radius:5px;display:flex;align-items:center;
+  justify-content:center;font-size:8px;font-weight:700;color:rgba(0,0,0,.55)}
+.host-entry{background:transparent;border:1.5px dashed var(--border);border-radius:12px;
+  padding:9px 14px;cursor:pointer;text-align:center;color:var(--muted);
+  font-size:12px;font-family:var(--fb);transition:all .15s;margin-top:4px}
+.host-entry:hover{background:var(--blush);color:var(--plum)}
+
+/* SETUP */
+.stepper{display:inline-flex;align-items:center;background:white;border-radius:99px;
+  border:1.5px solid var(--border);overflow:hidden;box-shadow:0 1px 5px var(--shadow)}
+.stepper button{width:32px;height:32px;border:none;background:none;font-size:17px;
+  cursor:pointer;color:var(--plum);font-family:var(--fb)}
+.stepper button:active{background:var(--blush)}
+.stepper span{min-width:36px;text-align:center;font-size:15px;font-weight:700;
+  color:var(--deep);font-family:var(--fd)}
+.dist-box{background:white;border-radius:10px;border:1.5px solid var(--border);
+  padding:9px 12px;font-size:12px;line-height:1.7;margin-top:6px}
+.chip{display:inline-flex;align-items:center;padding:3px 10px;border-radius:99px;
+  font-size:11px;font-weight:500;margin:2px;background:var(--blush);color:var(--plum)}
+.chip.pair{background:var(--lav-lt)}
+.dist-err{font-size:11px;color:#C0392B;margin-top:4px}
+.setup-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+
+/* GAME HEADER */
+.game-hdr{padding:8px 14px 6px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;border-bottom:1px solid var(--border)}
+.game-hdr-title{font-family:var(--fd);font-size:15px;color:var(--deep)}
+.prog{font-size:11px;color:var(--muted);background:white;border:1px solid var(--border);
+  border-radius:99px;padding:3px 10px}
+.prog strong{color:var(--plum)}
+
+/* CARDS GRID — fills remaining space, no page scroll */
+.cards-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 10px 10px}
+.cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+
+/* ═══ FLIP CARD ═══ */
+.fc{aspect-ratio:2/3;perspective:700px;cursor:pointer}
+.fc-inner{position:relative;width:100%;height:100%;
+  transition:transform .55s cubic-bezier(.4,0,.2,1);
+  transform-style:preserve-3d}
+.fc.flipped .fc-inner,.fc.taken .fc-inner{transform:rotateY(180deg)}
+.fc-face{position:absolute;inset:0;border-radius:11px;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden}
 
 /* FRONT */
-.fc-front{
-  background:white;border:1.5px solid var(--border);
-  box-shadow:0 3px 12px var(--shadow);
-  display:flex;flex-direction:column;cursor:pointer;
-  transition:transform .15s,box-shadow .15s;
-  padding:0;
-}
-.fc-front:hover:not(.taken-face){transform:translateY(-3px);box-shadow:0 7px 20px var(--shadow)}
-.fc.taken .fc-front{background:var(--cream);border-color:transparent;box-shadow:none;cursor:default}
-/* front top accent bar */
-.fc-front-bar{height:5px;flex-shrink:0;border-radius:14px 14px 0 0}
-.fc.taken .fc-front-bar{background:#DDD!important}
-/* front body */
-.fc-front-body{flex:1;display:flex;flex-direction:column;padding:8px 7px 6px;gap:4px;overflow:hidden}
-.fc-front-family{font-size:8px;font-weight:500;color:var(--muted);line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical}
-.fc.taken .fc-front-family{color:#C4B8BF}
-.fc-front-name{font-family:var(--font-d);font-size:11px;font-weight:700;color:var(--deep);line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
-.fc.taken .fc-front-name{color:#C4B8BF}
-.fc-front-teaser{font-size:8px;color:var(--muted);line-height:1.4;flex:1;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical}
-.fc.taken .fc-front-teaser{color:#C4B8BF}
-/* front bottom */
-.fc-front-bottom{padding:5px 7px 7px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(139,91,107,.08)}
-.fc-front-tags{display:flex;gap:3px;flex-wrap:wrap}
-.fc-front-tag{font-size:7px;padding:2px 5px;border-radius:99px;background:var(--cream);color:var(--muted);border:1px solid var(--border)}
-.fc.taken .fc-front-tag{background:transparent;border-color:transparent;color:#C4B8BF}
-.fc-front-code{font-size:8px;font-weight:700;color:var(--muted)}
-.fc.taken .fc-front-code{color:#C4B8BF}
-.fc-taken-mark{font-size:9px;color:#C4B8BF;font-style:italic}
+.fc-front{background:white;border:1.5px solid var(--border);
+  box-shadow:0 2px 8px var(--shadow);
+  display:flex;flex-direction:column;
+  transition:box-shadow .15s,transform .15s}
+.fc:not(.taken):not(.flipped) .fc-front:active{transform:scale(.96)}
+.fc.taken .fc-front{background:#F5F1EE;border-color:transparent;box-shadow:none}
+.fc-bar{height:4px;flex-shrink:0;border-radius:11px 11px 0 0}
+.fc.taken .fc-bar{background:#DDD!important}
+.fc-front-body{flex:1;display:flex;flex-direction:column;padding:6px 6px 4px;gap:2px;min-height:0}
+.fc-fam{font-size:7px;color:var(--muted);line-height:1.3;
+  overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.fc.taken .fc-fam{color:#C4B8BF}
+.fc-name{font-family:var(--fd);font-size:10px;font-weight:700;color:var(--deep);
+  line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.fc.taken .fc-name{color:#C4B8BF}
+.fc-teaser{font-size:7.5px;color:var(--muted);line-height:1.4;flex:1;overflow:hidden;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical}
+.fc.taken .fc-teaser{color:#C4B8BF}
+.fc-bottom{padding:3px 6px 5px;display:flex;align-items:center;justify-content:space-between;
+  border-top:1px solid rgba(139,91,107,.07);flex-shrink:0}
+.fc-tags{display:flex;gap:2px;flex-wrap:wrap;min-width:0;overflow:hidden}
+.fc-tag{font-size:6.5px;padding:1px 4px;border-radius:99px;
+  background:var(--cream);color:var(--muted);border:1px solid var(--border);white-space:nowrap}
+.fc.taken .fc-tag{opacity:0}
+.fc-code{font-size:7px;font-weight:700;color:var(--muted);white-space:nowrap;flex-shrink:0}
+.fc.taken .fc-code{color:#C4B8BF;font-style:italic;font-size:6.5px}
 
 /* BACK */
-.fc-back{
-  background:white;border:1.5px solid var(--border);
-  box-shadow:0 8px 28px var(--shadow);
+.fc-back{background:white;border:1.5px solid var(--border);
+  box-shadow:0 6px 20px var(--shadow);
   transform:rotateY(180deg);
-  display:flex;flex-direction:column;
-}
-.fc-back-bar{height:5px;flex-shrink:0;border-radius:14px 14px 0 0}
-.fc-back-scroll{flex:1;overflow-y:auto;padding:8px 9px 4px;display:flex;flex-direction:column;gap:0}
-.fc-back-scroll::-webkit-scrollbar{width:3px}
+  display:flex;flex-direction:column}
+.fc-back-scroll{flex:1;overflow-y:auto;padding:6px 7px 2px;
+  scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+.fc-back-scroll::-webkit-scrollbar{width:2px}
 .fc-back-scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:99px}
-.back-code{font-size:8px;font-weight:700;color:var(--muted);margin-bottom:3px}
-.back-name{font-family:var(--font-d);font-size:12px;font-weight:700;color:var(--deep);line-height:1.3;margin-bottom:6px;border-bottom:1px solid var(--border);padding-bottom:5px}
-.back-row{display:flex;gap:4px;margin-bottom:4px;align-items:flex-start}
-.back-row-label{font-size:7px;font-weight:700;color:var(--mauve);white-space:nowrap;flex-shrink:0;margin-top:1px;min-width:52px}
-.back-row-val{font-size:8px;color:var(--ink);line-height:1.4;flex:1}
-.back-question{background:var(--cream);border-radius:8px;padding:6px 8px;margin-top:4px;border-right:3px solid var(--rose)}
-.back-question-label{font-size:7px;font-weight:700;color:var(--mauve);margin-bottom:2px}
-.back-question-text{font-size:9px;color:var(--deep);line-height:1.4;font-weight:500}
-.fc-back-footer{padding:5px 8px 7px;flex-shrink:0}
-.choose-btn{background:var(--deep);color:white;border:none;border-radius:99px;padding:7px 0;font-size:10px;font-family:var(--font-b);font-weight:500;cursor:pointer;width:100%;transition:background .15s}
-.choose-btn:hover{background:var(--plum)}
-.chosen-mark{text-align:center;font-size:10px;color:var(--sage);font-weight:700;padding:4px 0}
+.bk-code{font-size:7px;font-weight:700;color:var(--muted);margin-bottom:2px}
+.bk-name{font-family:var(--fd);font-size:11px;font-weight:700;color:var(--deep);
+  line-height:1.3;margin-bottom:4px;padding-bottom:4px;border-bottom:1px solid var(--border)}
+.bk-row{display:flex;gap:3px;margin-bottom:3px;align-items:flex-start}
+.bk-lbl{font-size:6.5px;font-weight:700;color:var(--mauve);white-space:nowrap;
+  flex-shrink:0;margin-top:.5px;min-width:46px}
+.bk-val{font-size:7px;color:var(--ink);line-height:1.4;flex:1}
+.bk-q{background:var(--cream);border-radius:7px;padding:5px 7px;
+  margin-top:4px;border-right:2px solid var(--rose)}
+.bk-qlbl{font-size:6.5px;font-weight:700;color:var(--mauve);margin-bottom:2px}
+.bk-qtxt{font-size:8px;color:var(--deep);line-height:1.4;font-weight:500}
+.fc-back-foot{padding:4px 6px 6px;flex-shrink:0}
+.choose-btn{width:100%;background:var(--deep);color:white;border:none;border-radius:99px;
+  padding:6px;font-size:9px;font-family:var(--fb);font-weight:500;cursor:pointer;
+  transition:background .15s}
+.choose-btn:active{background:var(--plum)}
+.chosen-mark{text-align:center;font-size:9px;color:var(--sage);font-weight:700;padding:3px 0}
 
 /* BOTTOM BAR */
-.bottom-bar{position:fixed;bottom:0;left:0;right:0;padding:8px 14px 14px;background:linear-gradient(to top,var(--cream) 60%,transparent);display:flex;justify-content:center;gap:7px;z-index:10}
+.bot-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:10;
+  padding:7px 12px 12px;
+  background:linear-gradient(to top,var(--cream) 60%,transparent);
+  display:flex;justify-content:center;gap:7px}
+
+/* WIN POPUP */
+.win-ov{position:fixed;inset:0;z-index:200;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(61,37,53,.45);backdrop-filter:blur(6px);
+  opacity:0;pointer-events:none;transition:opacity .25s}
+.win-ov.show{opacity:1;pointer-events:all}
+.win-card{background:white;border-radius:18px;padding:18px 16px 14px;
+  width:min(300px,86vw);text-align:center;
+  box-shadow:0 16px 50px rgba(61,37,53,.25);
+  transform:scale(.9) translateY(14px);
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+.win-ov.show .win-card{transform:scale(1) translateY(0)}
+.win-bar{height:5px;border-radius:99px;width:50px;margin:0 auto 12px}
+.win-emoji{font-size:32px;margin-bottom:8px}
+.win-name{font-family:var(--fd);font-size:17px;font-weight:700;color:var(--deep);margin-bottom:2px}
+.win-sub{font-size:10px;color:var(--muted);margin-bottom:10px}
+.win-q{background:var(--cream);border-radius:10px;padding:9px 11px;
+  border-right:2px solid var(--rose);text-align:right;margin-bottom:12px}
+.win-qlbl{font-size:9px;font-weight:700;color:var(--mauve);margin-bottom:3px}
+.win-qtxt{font-size:11px;color:var(--deep);line-height:1.45;font-weight:500}
+.win-acts{display:flex;flex-direction:column;gap:6px}
+.win-keep{background:var(--deep);color:white;border:none;border-radius:99px;
+  padding:9px;font-size:11px;font-weight:500;cursor:pointer;font-family:var(--fb)}
+.win-keep:active{background:var(--plum)}
+.win-cancel{background:transparent;border:1.5px solid var(--border);border-radius:99px;
+  padding:7px;font-size:10px;color:var(--muted);cursor:pointer;font-family:var(--fb)}
+.win-cancel:active{background:var(--blush)}
 
 /* HOST */
-.host-groups{padding:0 18px 90px;flex:1;display:flex;flex-direction:column;gap:14px}
-.host-group-card{background:white;border-radius:var(--r-md);border:1.5px solid var(--border);padding:11px 14px;box-shadow:0 1px 6px var(--shadow)}
-.host-fam-row{display:flex;align-items:center;gap:7px;padding:7px 0;border-top:1px solid var(--border)}
-.host-fam-label{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--deep);flex-shrink:0}
-.host-cards{display:flex;gap:5px;flex:1;flex-wrap:wrap}
-.host-card-chip{padding:3px 9px;border-radius:99px;font-size:10px;font-weight:500;background:var(--cream);border:1px solid var(--border);color:var(--muted);transition:all .3s}
-.host-card-chip.taken{background:var(--sage);color:white;border-color:var(--sage)}
+.host-fam-row{display:flex;align-items:center;gap:6px;padding:6px 0;border-top:1px solid var(--border)}
+.host-fam-pip{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;
+  justify-content:center;font-size:9px;font-weight:700;color:rgba(0,0,0,.55);flex-shrink:0}
+.hchip{padding:2px 8px;border-radius:99px;font-size:10px;font-weight:500;
+  background:var(--cream);border:1px solid var(--border);color:var(--muted);margin:2px}
+.hchip.taken{background:var(--sage);color:white;border-color:var(--sage)}
 
 /* RESULTS */
-.results-body{padding:0 18px 90px;flex:1;display:flex;flex-direction:column;gap:10px}
-.result-group{background:white;border-radius:var(--r-md);border:1.5px solid var(--border);padding:10px 14px;box-shadow:0 1px 6px var(--shadow)}
-.result-group-header{display:flex;align-items:center;gap:9px;margin-bottom:9px}
-.result-fam-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0}
-.result-group-label{font-size:13px;font-weight:700;color:var(--deep)}
-.result-group-size{font-size:10px;padding:3px 9px;border-radius:99px;background:var(--blush);color:var(--plum);font-weight:500}
-.result-card-item{display:flex;align-items:center;gap:7px;padding:6px 0;border-top:1px solid var(--border);font-size:11px}
-.result-card-code{font-weight:700;color:var(--plum);min-width:26px}
-.result-card-name{color:var(--deep);flex:1}
-.result-card-status.ok{color:var(--sage);font-weight:700;font-size:10px}
-.result-card-status.no{color:var(--muted);font-size:10px}
+.res-group{background:white;border-radius:11px;border:1.5px solid var(--border);
+  padding:9px 12px;margin-bottom:7px;box-shadow:0 1px 5px var(--shadow)}
+.res-hdr{display:flex;align-items:center;gap:7px;margin-bottom:7px}
+.res-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.res-lbl{font-size:12px;font-weight:700;color:var(--deep)}
+.res-size{font-size:9px;padding:2px 8px;border-radius:99px;
+  background:var(--blush);color:var(--plum);font-weight:500}
+.res-row{display:flex;align-items:center;gap:6px;padding:5px 0;
+  border-top:1px solid var(--border);font-size:10px}
+.res-code{font-weight:700;color:var(--plum);min-width:24px}
+.res-name{color:var(--deep);flex:1}
+.res-ok{color:var(--sage);font-weight:700;font-size:9px}
+.res-no{color:var(--muted);font-size:9px}
 
 /* WAITING */
-.waiting-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 26px;text-align:center}
-.pulse-ring{width:76px;height:76px;border-radius:50%;border:3px solid var(--rose);margin:0 auto 22px;animation:pulse 2s ease-in-out infinite}
+.wait-wrap{flex:1;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;padding:30px 20px;text-align:center}
+.pulse{width:60px;height:60px;border-radius:50%;border:2.5px solid var(--rose);
+  margin:0 auto 18px;animation:pulse 2s ease-in-out infinite}
 @keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.1);opacity:.6}}
-.waiting-wrap h2{font-family:var(--font-d);font-size:23px;color:var(--deep);margin-bottom:9px}
-.waiting-wrap p{font-size:13px;color:var(--muted);line-height:1.6}
-.done-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 26px;text-align:center}
-.done-emoji{font-size:52px;margin-bottom:18px}
-.done-wrap h2{font-family:var(--font-d);font-size:25px;color:var(--deep);margin-bottom:7px}
-.done-wrap p{font-size:13px;color:var(--muted)}
-.toast{position:fixed;bottom:78px;left:50%;transform:translateX(-50%) translateY(18px);background:var(--deep);color:white;padding:9px 20px;border-radius:99px;font-size:12px;font-weight:500;opacity:0;pointer-events:none;transition:all .3s;z-index:100;white-space:nowrap}
+.wait-wrap h2{font-family:var(--fd);font-size:20px;color:var(--deep);margin-bottom:7px}
+.wait-wrap p{font-size:12px;color:var(--muted);line-height:1.6}
+
+/* DONE */
+.done-wrap{flex:1;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;padding:30px 20px;text-align:center}
+.done-emoji{font-size:44px;margin-bottom:14px}
+.done-wrap h2{font-family:var(--fd);font-size:22px;color:var(--deep);margin-bottom:6px}
+.done-wrap p{font-size:12px;color:var(--muted)}
+
+/* TOAST */
+.toast{position:fixed;bottom:68px;left:50%;transform:translateX(-50%) translateY(16px);
+  background:var(--deep);color:white;padding:7px 18px;border-radius:99px;
+  font-size:11px;font-weight:500;opacity:0;pointer-events:none;
+  transition:all .25s;z-index:300;white-space:nowrap;max-width:90vw;text-align:center}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-/* ── WIN POPUP ── */
-.win-overlay{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;background:rgba(61,37,53,.45);backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .3s}
-.win-overlay.show{opacity:1;pointer-events:all}
-.win-card{background:white;border-radius:20px;padding:20px 18px 16px;width:min(320px,88vw);text-align:center;box-shadow:0 16px 50px rgba(61,37,53,.25);transform:scale(.92) translateY(16px);transition:transform .35s cubic-bezier(.34,1.56,.64,1)}
-.win-overlay.show .win-card{transform:scale(1) translateY(0)}
-.win-bar{height:6px;border-radius:99px;margin:0 auto 18px;width:60px}
-.win-emoji{font-size:42px;margin-bottom:12px}
-.win-title{font-family:var(--font-d);font-size:20px;font-weight:700;color:var(--deep);margin-bottom:4px}
-.win-sub{font-size:12px;color:var(--muted);margin-bottom:14px}
-.win-question{background:var(--cream);border-radius:12px;padding:12px 14px;border-right:3px solid var(--rose);text-align:right;margin-bottom:18px}
-.win-question-label{font-size:10px;font-weight:700;color:var(--mauve);margin-bottom:4px}
-.win-question-text{font-size:13px;color:var(--deep);line-height:1.5;font-weight:500}
-.win-actions{display:flex;flex-direction:column;gap:8px}
-.win-cancel-btn{background:transparent;border:1.5px solid var(--border);border-radius:99px;padding:7px;font-size:11px;color:var(--muted);cursor:pointer;font-family:var(--font-b);transition:background .15s,color .15s}
-.win-cancel-btn:hover{background:var(--blush);color:var(--plum)}
-.win-keep-btn{background:var(--deep);color:white;border:none;border-radius:99px;padding:9px;font-size:12px;font-weight:500;cursor:pointer;font-family:var(--font-b);transition:background .15s}
-.win-keep-btn:hover{background:var(--plum)}
-
-@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-.fc{animation:fadeUp .35s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.fc{animation:fadeUp .3s ease both}
 </style>
 </head>
 <body>
 
 <!-- LANDING -->
 <div id="s-landing" class="screen active">
-  <div class="top-bar"><span class="logo">תעשיידע</span></div>
-  <div class="hero">
-    <h1>קלפי רעיונות</h1>
-    <p>פעילות חשיבה יצירתית בקבוצות</p>
-  </div>
+  <div class="top-bar"><span class="logo">17 היעדים</span></div>
+  <div class="hero"><h1>17 היעדים</h1><p>כרטיסיות מידע — פעילות חשיבה יצירתית</p></div>
   <div class="deck-art"><span></span><span></span><span></span><span></span></div>
-  <div class="group-cards">
-    <div class="group-card" onclick="enterGroup(1)">
-      <div class="group-card-title">קבוצה 1</div>
-      <div class="group-fams" id="fams1"></div>
+  <div class="scroll-body" style="padding-bottom:20px">
+    <div class="sec-title">בחרי קבוצה</div>
+    <div class="group-list">
+      <div class="group-item" onclick="enterGroup(1)">
+        <span class="group-item-name">קבוצה 1</span>
+      </div>
+      <div class="group-item" onclick="enterGroup(2)">
+        <span class="group-item-name">קבוצה 2</span>
+      </div>
     </div>
-    <div class="group-card" onclick="enterGroup(2)">
-      <div class="group-card-title">קבוצה 2</div>
-      <div class="group-fams" id="fams2"></div>
-    </div>
-    <button class="btn btn-soft" onclick="goHostSetup()" style="justify-content:center">⚙ כניסת מדריכה</button>
+    <div class="host-entry" onclick="goHostSetup()">⚙ כניסת מדריכה</div>
   </div>
 </div>
 
 <!-- HOST SETUP -->
 <div id="s-host-setup" class="screen">
-  <div class="top-bar"><span class="logo">תעשיידע</span><span class="badge host">מדריכה</span></div>
-  <div class="hero" style="padding-top:24px;padding-bottom:10px">
-    <h1 style="font-size:clamp(20px,5vw,30px)">הגדרת משחק</h1>
-  </div>
-  <div class="setup-body">
-    <div>
-      <div class="field-label">קבוצה</div>
-      <div class="group-cards" style="padding:0;gap:8px">
-        <div class="group-card" onclick="hostSelectGroup(1)" id="hgc1" style="padding:13px 16px">
-          <div class="group-card-title" style="font-size:15px;margin-bottom:0">קבוצה 1</div>
-        </div>
-        <div class="group-card" onclick="hostSelectGroup(2)" id="hgc2" style="padding:13px 16px">
-          <div class="group-card-title" style="font-size:15px;margin-bottom:0">קבוצה 2</div>
-        </div>
+  <div class="top-bar"><span class="logo">17 היעדים</span><span class="badge host">מדריכה</span></div>
+  <div class="scroll-body">
+    <div class="sec-title">קבוצה</div>
+    <div class="group-list">
+      <div class="group-item" onclick="hostSelectGroup(1)" id="hgc1">
+        <span class="group-item-name" style="font-size:13px">קבוצה 1</span>
+        <div class="group-item-fams" id="hfams1"></div>
+      </div>
+      <div class="group-item" onclick="hostSelectGroup(2)" id="hgc2">
+        <span class="group-item-name" style="font-size:13px">קבוצה 2</span>
+        <div class="group-item-fams" id="hfams2"></div>
       </div>
     </div>
-    <div>
-      <div class="field-label">מספר בנות</div>
+    <div class="sec-title">מספר בנות</div>
+    <div class="setup-row">
       <div class="stepper">
         <button onclick="changeGirls(-1)">−</button>
         <span id="girls-val">6</span>
         <button onclick="changeGirls(1)">+</button>
       </div>
+      <div class="dist-box" id="dist-box" style="flex:1">—</div>
     </div>
-    <div class="dist-preview">
-      <div class="dist-title">חלוקה לקבוצות</div>
-      <div class="dist-chips" id="dist-chips"></div>
-      <div class="dist-error" id="dist-error" style="display:none"></div>
-    </div>
-    <div style="display:flex;gap:9px">
-      <button class="btn btn-soft" onclick="goTo('s-landing')">חזרה</button>
-      <button class="btn btn-primary" id="launch-btn" onclick="launchGame()" style="flex:1;justify-content:center">הפעלת משחק ✦</button>
+    <div class="dist-err" id="dist-err" style="display:none"></div>
+    <div style="display:flex;gap:8px;margin-top:14px">
+      <button class="btn" onclick="goTo('s-landing')">חזרה</button>
+      <button class="btn primary" id="launch-btn" onclick="launchGame()" style="flex:1;justify-content:center">הפעלת משחק ✦</button>
     </div>
   </div>
 </div>
 
 <!-- HOST LIVE -->
 <div id="s-host-live" class="screen">
-  <div class="top-bar"><span class="logo">תעשיידע</span><span class="badge host">מדריכה — חי</span></div>
-  <div style="padding:14px 18px 6px;flex-shrink:0">
-    <h2 style="font-family:var(--font-d);font-size:21px;color:var(--deep)">מצב המשחק</h2>
-    <p style="font-size:12px;color:var(--muted)">מתרענן כל 3 שניות</p>
+  <div class="top-bar">
+    <span class="logo">17 היעדים</span>
+    <span class="badge host">מדריכה — חי</span>
   </div>
-  <div class="host-groups" id="host-groups-wrap"></div>
-  <div class="bottom-bar">
-    <button class="btn btn-soft" onclick="goTo('s-host-setup')">הגדרות</button>
-    <button class="btn btn-primary" onclick="showHostResults()">סיכום ✦</button>
+  <div class="scroll-body">
+    <div class="sec-title" id="host-stat-line">מצב המשחק</div>
+    <div id="host-groups-wrap"></div>
+  </div>
+  <div class="bot-bar">
+    <button class="btn" onclick="goTo('s-host-setup')">הגדרות</button>
+    <button class="btn primary" onclick="showHostResults()">סיכום ✦</button>
   </div>
 </div>
 
 <!-- WAITING -->
 <div id="s-waiting" class="screen">
-  <div class="top-bar"><span class="logo">תעשיידע</span><span class="badge" id="waiting-group-badge"></span></div>
-  <div class="waiting-wrap">
-    <div class="pulse-ring"></div>
+  <div class="top-bar"><span class="logo">17 היעדים</span><span class="badge" id="wait-badge"></span></div>
+  <div class="wait-wrap">
+    <div class="pulse"></div>
     <h2>מחכות להתחלה...</h2>
-    <p>המדריכה עוד לא הפעילה את המשחק.<br>הדף יתרענן אוטומטית.</p>
+    <p>המדריכה עוד לא הפעילה.<br>הדף יתרענן אוטומטית.</p>
   </div>
 </div>
 
-<!-- PLAYER GAME -->
+<!-- GAME -->
 <div id="s-game" class="screen">
-  <div class="game-header">
-    <span class="game-title" id="game-group-title"></span>
-    <div class="progress-pill"><strong id="prog-taken">0</strong> / <span id="prog-total">0</span></div>
+  <div class="game-hdr">
+    <span class="game-hdr-title" id="game-title"></span>
+    <div class="prog"><strong id="prog-t">0</strong> / <span id="prog-tot">0</span></div>
   </div>
-  <div class="cards-grid" id="cards-grid"></div>
-  <div class="bottom-bar">
-    <button class="btn btn-soft" onclick="showPlayerResults()">סיכום</button>
+  <div class="cards-area">
+    <div class="cards-grid" id="cards-grid"></div>
+  </div>
+  <div class="bot-bar">
+    <button class="btn" onclick="showPlayerResults()">סיכום</button>
   </div>
 </div>
 
 <!-- DONE -->
 <div id="s-done" class="screen">
-  <div class="top-bar"><span class="logo">תעשיידע</span></div>
+  <div class="top-bar"><span class="logo">17 היעדים</span></div>
   <div class="done-wrap">
     <div class="done-emoji">🎉</div>
     <h2>כל הקלפים נבחרו!</h2>
-    <p>המשחק הסתיים.<br>המדריכה תציג את הקבוצות.</p>
-    <button class="btn btn-soft" style="margin-top:22px" onclick="showPlayerResults()">ראי את הקבוצות</button>
+    <p>המשחק הסתיים.</p>
+    <button class="btn primary" style="margin-top:18px;justify-content:center" onclick="showPlayerResults()">ראי את הקבוצות</button>
   </div>
 </div>
 
 <!-- RESULTS -->
 <div id="s-results" class="screen">
-  <div class="top-bar"><span class="logo">תעשיידע</span><span class="badge" id="res-badge"></span></div>
-  <div style="padding:14px 18px 7px;flex-shrink:0">
-    <h2 style="font-family:var(--font-d);font-size:23px;color:var(--deep)">חלוקה לקבוצות</h2>
-    <p style="font-size:12px;color:var(--muted);margin-top:3px">הסטים שנוצרו</p>
+  <div class="top-bar"><span class="logo">17 היעדים</span><span class="badge" id="res-badge"></span></div>
+  <div class="scroll-body">
+    <div class="sec-title">חלוקה לקבוצות</div>
+    <div id="results-body"></div>
   </div>
-  <div class="results-body" id="results-body"></div>
-  <div class="bottom-bar">
-    <button class="btn btn-soft" id="res-back-btn">חזרה לקלפים</button>
-    <button class="btn btn-primary" onclick="goTo('s-landing')" style="justify-content:center">סיום ✦</button>
+  <div class="bot-bar">
+    <button class="btn" id="res-back-btn">חזרה לקלפים</button>
+    <button class="btn primary" onclick="goTo('s-landing')" style="justify-content:center">סיום ✦</button>
   </div>
 </div>
 
-
 <!-- WIN POPUP -->
-<div class="win-overlay" id="win-overlay">
+<div class="win-ov" id="win-ov">
   <div class="win-card">
     <div class="win-bar" id="win-bar"></div>
     <div class="win-emoji">✨</div>
-    <div class="win-title" id="win-card-name"></div>
-    <div class="win-sub" id="win-card-code"></div>
-    <div class="win-question">
-      <div class="win-question-label">שאלת פתיחה</div>
-      <div class="win-question-text" id="win-question"></div>
+    <div class="win-name" id="win-name"></div>
+    <div class="win-sub" id="win-sub"></div>
+    <div class="win-q">
+      <div class="win-qlbl">שאלת פתיחה</div>
+      <div class="win-qtxt" id="win-q"></div>
     </div>
-    <div class="win-actions">
-      <button class="win-keep-btn" onclick="closeWin(false)">שמרי על הקלף הזה ✓</button>
-      <button class="win-cancel-btn" onclick="closeWin(true)">ביטול — אני רוצה לבחור שוב</button>
+    <div class="win-acts">
+      <button class="win-keep" onclick="closeWin(false)">שמרי על הקלף הזה ✓</button>
+      <button class="win-cancel" onclick="closeWin(true)">ביטול — רוצה לבחור שוב</button>
     </div>
   </div>
 </div>
@@ -435,7 +489,7 @@ const CARDS = {
 }
 };
 
-// Family colours
+
 const FAM_COLORS = {
   A:"#E8B4B8",B:"#C9879C",E:"#C5BEE0",H:"#A8C5B5",J:"#F0C9A0",M:"#A8C8E0",
   O:"#C9879C",P:"#A8C5B5",Q:"#C5BEE0",
@@ -443,310 +497,392 @@ const FAM_COLORS = {
   L:"#C9879C",N:"#F0C9A0",R:"#A8C8E0"
 };
 
-// Populate landing family pips
-function initFamPips() {
-  [1,2].forEach(g => {
-    const el = document.getElementById("fams"+g);
-    const fams = [...new Set(Object.values(CARDS[g]).flat().map(c=>c.fam))].sort();
-    fams.forEach(f => {
-      const pip = document.createElement("div");
-      pip.className = "fam-pip";
-      pip.style.background = FAM_COLORS[f]||"#ccc";
-      pip.textContent = f;
-      el.appendChild(pip);
+const API = "https://script.google.com/macros/s/AKfycbzM7Ap-anspGxz7Gub6SLdyCIMJtaVcOM7JD3IHRz-QGN8JvoM4T1n9xmkmDknA_aUf/exec";
+
+// Init fam pips
+function initPips(){
+  [1,2].forEach(g=>{
+    ['fams','hfams'].forEach(prefix=>{
+      const el=document.getElementById(prefix+g);
+      if(!el) return;
+      const fams=[...new Set(Object.values(CARDS[g]).flat().map(c=>c.fam))].sort();
+      fams.forEach(f=>{
+        const p=document.createElement('div');
+        p.className='fam-pip';
+        p.style.background=FAM_COLORS[f]||'#ccc';
+        p.textContent=f;
+        el.appendChild(p);
+      });
     });
   });
 }
-initFamPips();
+initPips();
 
-// ═══════════════════════════════
-const API = "https://script.google.com/macros/s/AKfycbzM7Ap-anspGxz7Gub6SLdyCIMJtaVcOM7JD3IHRz-QGN8JvoM4T1n9xmkmDknA_aUf/exec";
-let mode="player", currentGroup=1, numGirls=6, hostGroup=1;
+// STATE
+let mode='player', currentGroup=1, numGirls=6, hostGroup=1;
 let gameState=null, localFlipped=new Set(), pollTimer=null, gameCards=[];
+let _choosing=false, _pendingCancel=null;
 
-(function init(){
-  const p = new URLSearchParams(location.search);
-  if(p.get("mode")==="host"){ mode="host"; goTo("s-host-setup"); calcDist(); }
-  else if(p.get("group")){ mode="player"; currentGroup=parseInt(p.get("group"))||1; startPlayerPoll(); }
+// URL init
+(function(){
+  const p=new URLSearchParams(location.search);
+  if(p.get('mode')==='host'){mode='host';goTo('s-host-setup');calcDist();}
+  else if(p.get('group')){mode='player';currentGroup=parseInt(p.get('group'))||1;startPlayerPoll();}
 })();
 
-function goTo(id){ document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active")); document.getElementById(id).classList.add("active"); }
-function enterGroup(g){ currentGroup=g; mode="player"; startPlayerPoll(); }
-function goHostSetup(){ mode="host"; goTo("s-host-setup"); calcDist(); }
+function goTo(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+function enterGroup(g){currentGroup=g;mode='player';startPlayerPoll();}
+function goHostSetup(){mode='host';goTo('s-host-setup');calcDist();}
 
 // HOST SETUP
 function hostSelectGroup(g){
   hostGroup=g;
-  ["hgc1","hgc2"].forEach((id,i)=>document.getElementById(id).classList.toggle("sel",i+1===g));
+  ['hgc1','hgc2'].forEach((id,i)=>document.getElementById(id).classList.toggle('sel',i+1===g));
   calcDist();
 }
-function changeGirls(d){ numGirls=Math.max(2,Math.min(18,numGirls+d)); document.getElementById("girls-val").textContent=numGirls; calcDist(); }
-
+function changeGirls(d){
+  numGirls=Math.max(2,Math.min(27,numGirls+d));
+  document.getElementById('girls-val').textContent=numGirls;
+  calcDist();
+}
 function buildPlan(n){
-  for(let a=6;a>=0;a--) for(let b=0;b<=6-a;b++) if(3*a+2*b===n) return{trips:a,pairs:b};
+  for(let a=9;a>=0;a--) for(let b=0;b<=9-a;b++) if(3*a+2*b===n&&a+b<=9) return{trips:a,pairs:b};
   return null;
 }
 function calcDist(){
-  const chips=document.getElementById("dist-chips"), err=document.getElementById("dist-error"), btn=document.getElementById("launch-btn");
+  const box=document.getElementById('dist-box'),
+        err=document.getElementById('dist-err'),
+        btn=document.getElementById('launch-btn');
   const plan=buildPlan(numGirls);
-  if(!plan){ chips.innerHTML=""; err.style.display="block"; err.textContent="המספר "+numGirls+" לא מתחלק — נסי מספר אחר"; btn.disabled=true; return; }
-  err.style.display="none"; chips.innerHTML="";
-  for(let i=0;i<plan.trips;i++){ const c=document.createElement("span"); c.className="dist-chip"; c.textContent="קבוצת 3"; chips.appendChild(c); }
-  for(let i=0;i<plan.pairs;i++){ const c=document.createElement("span"); c.className="dist-chip pair"; c.textContent="זוג"; chips.appendChild(c); }
+  if(!plan){
+    box.innerHTML='';err.style.display='block';
+    err.textContent='המספר '+numGirls+' לא מתחלק לסטים';
+    btn.disabled=true;return;
+  }
+  err.style.display='none';
+  let html='';
+  for(let i=0;i<plan.trips;i++) html+='<span class="chip">קבוצת 3</span>';
+  for(let i=0;i<plan.pairs;i++) html+='<span class="chip pair">זוג</span>';
+  box.innerHTML=html;
   btn.disabled=false;
 }
 
 async function launchGame(){
-  const btn=document.getElementById("launch-btn"); btn.disabled=true; btn.textContent="מפעילה...";
+  const btn=document.getElementById('launch-btn');
+  btn.disabled=true;btn.textContent='מפעילה...';
   try{
-    const res=await apiPost({action:"reset",group:hostGroup,girls:numGirls});
-    gameState=res; buildGameCards(hostGroup,res.plan); startHostPoll(); goTo("s-host-live"); renderHostLive();
-  }catch(e){ toast("שגיאה: "+e.message); }
-  btn.disabled=false; btn.textContent="הפעלת משחק ✦";
+    const res=await apiCall({action:'reset',group:hostGroup,girls:numGirls,_method:'POST'});
+    gameState=res;
+    buildGameCards(hostGroup,res.plan);
+    window._shuffled=false; // reset shuffle for new game
+    buildGameCards(hostGroup,res.plan);
+    goTo('s-host-live');renderHostLive();startHostPoll();
+  }catch(e){toast('שגיאה: '+e.message);}
+  btn.disabled=false;btn.textContent='הפעלת משחק ✦';
 }
 
-// HOST LIVE
-function startHostPoll(){ clearInterval(pollTimer); pollTimer=setInterval(async()=>{ try{ gameState=await apiGet({action:"state",group:hostGroup}); renderHostLive(); }catch(e){} },3000); }
-function renderHostLive(){
-  if(!gameState) return;
-  const wrap=document.getElementById("host-groups-wrap"); wrap.innerHTML="";
-  const plan=gameState.plan||[], chosen=gameState.chosen||[], famData=CARDS[hostGroup];
-  plan.forEach(({fam,size})=>{
-    const cards=famData[fam].slice(0,size), col=FAM_COLORS[fam]||"#ccc", taken=cards.filter(c=>chosen.includes(c.code)).length, label=size===3?"קבוצת 3":"זוג";
-    const card=document.createElement("div"); card.className="host-group-card";
-    let inner=`<div class="host-fam-row" style="border-top:none;padding-top:0"><div class="host-fam-label" style="background:${col}">${fam}</div><div style="font-size:12px;font-weight:600;color:var(--deep)">${label}</div><div style="margin-right:auto;font-size:11px;color:var(--muted)">${taken}/${size} נבחרו</div></div><div class="host-cards" style="margin-top:7px">`;
-    cards.forEach(c=>{ const t=chosen.includes(c.code); inner+=`<span class="host-card-chip${t?" taken":""}">${c.code}${t?" ✓":""}</span>`; });
-    inner+="</div>"; card.innerHTML=inner; wrap.appendChild(card);
-  });
-  const total=(gameState.plan||[]).reduce((s,p)=>s+p.size,0), taken2=(gameState.chosen||[]).length;
-  const stat=document.createElement("p"); stat.style.cssText="font-size:12px;color:var(--muted);padding:0 18px 7px;text-align:center";
-  stat.textContent="סה\"כ "+taken2+" מתוך "+total+" קלפים נבחרו"; wrap.appendChild(stat);
-}
-function showHostResults(){ clearInterval(pollTimer); renderResults(hostGroup,gameState); document.getElementById("res-badge").textContent="מדריכה"; document.getElementById("res-back-btn").onclick=()=>{ startHostPoll(); goTo("s-host-live"); }; goTo("s-results"); }
-
-// PLAYER POLL
-function startPlayerPoll(){
-  document.getElementById("waiting-group-badge").textContent="קבוצה "+currentGroup; goTo("s-waiting");
+// HOST LIVE — silent update, no re-render if nothing changed
+let _lastChosenStr='';
+function startHostPoll(){
   clearInterval(pollTimer);
   pollTimer=setInterval(async()=>{
     try{
-      const state=await apiGet({action:"state",group:currentGroup});
-      if(state.status==="ACTIVE"||state.status==="DONE"){
-        clearInterval(pollTimer); gameState=state; buildGameCards(currentGroup,state.plan); renderGame();
-        if(state.status==="DONE") goTo("s-done");
-        else{ goTo("s-game"); startGamePoll(); }
+      const s=await apiCall({action:'state',group:hostGroup});
+      const chosenStr=JSON.stringify(s.chosen||[]);
+      if(chosenStr!==_lastChosenStr){
+        _lastChosenStr=chosenStr;
+        gameState=s;renderHostLive();
+      }
+    }catch(e){}
+  },3000);
+}
+function renderHostLive(){
+  if(!gameState)return;
+  const wrap=document.getElementById('host-groups-wrap');
+  wrap.innerHTML='';
+  const plan=gameState.plan||[],chosen=gameState.chosen||[];
+  const total=plan.reduce((s,p)=>s+p.size,0);
+  document.getElementById('host-stat-line').textContent=
+    'נבחרו '+chosen.length+' מתוך '+total+' קלפים';
+  plan.forEach(({fam,size})=>{
+    const cards=CARDS[hostGroup][fam].slice(0,size),
+          col=FAM_COLORS[fam]||'#ccc',
+          taken=cards.filter(c=>chosen.includes(c.code)).length,
+          label=size===3?'קבוצת 3':'זוג';
+    const div=document.createElement('div');
+    div.style.cssText='background:white;border-radius:10px;border:1.5px solid var(--border);padding:9px 12px;margin-bottom:7px;box-shadow:0 1px 5px var(--shadow)';
+    let inner=`<div class="host-fam-row" style="border-top:none;padding-top:0">
+      <div class="host-fam-pip" style="background:${col}">${fam}</div>
+      <span style="font-size:11px;font-weight:600;color:var(--deep)">${label}</span>
+      <span style="margin-right:auto;font-size:10px;color:var(--muted)">${taken}/${size}</span>
+    </div><div style="display:flex;flex-wrap:wrap;margin-top:5px">`;
+    cards.forEach(c=>{
+      const t=chosen.includes(c.code);
+      inner+=`<span class="hchip${t?' taken':''}">${c.code}${t?' ✓':''}</span>`;
+    });
+    inner+='</div>';
+    div.innerHTML=inner;wrap.appendChild(div);
+  });
+}
+function showHostResults(){
+  clearInterval(pollTimer);
+  renderResults(hostGroup,gameState);
+  document.getElementById('res-badge').textContent='מדריכה';
+  document.getElementById('res-back-btn').onclick=()=>{startHostPoll();goTo('s-host-live');};
+  goTo('s-results');
+}
+
+// PLAYER POLL
+function startPlayerPoll(){
+  document.getElementById('wait-badge').textContent='קבוצה '+currentGroup;
+  goTo('s-waiting');
+  clearInterval(pollTimer);
+  pollTimer=setInterval(async()=>{
+    try{
+      const s=await apiCall({action:'state',group:currentGroup});
+      if(s.status==='ACTIVE'||s.status==='DONE'){
+        clearInterval(pollTimer);
+        gameState=s;
+        buildGameCards(currentGroup,s.plan);
+        renderGame();
+        if(s.status==='DONE') goTo('s-done');
+        else{goTo('s-game');startGamePoll();}
       }
     }catch(e){}
   },2500);
 }
+
+// GAME POLL — silent, only re-render cards that changed
+let _lastGameChosenStr='';
 function startGamePoll(){
   clearInterval(pollTimer);
   pollTimer=setInterval(async()=>{
-    try{ const state=await apiGet({action:"state",group:currentGroup}); gameState=state; renderGame(); if(state.status==="DONE"){ clearInterval(pollTimer); goTo("s-done"); } }catch(e){}
+    try{
+      const s=await apiCall({action:'state',group:currentGroup});
+      const str=JSON.stringify(s.chosen||[]);
+      if(str!==_lastGameChosenStr){
+        _lastGameChosenStr=str;
+        gameState=s;
+        renderGame();
+        if(s.status==='DONE'){clearInterval(pollTimer);goTo('s-done');}
+      }
+    }catch(e){}
   },2500);
 }
 
-// BUILD + SHUFFLE CARDS ONCE
+// BUILD CARDS — shuffle once per game
 function buildGameCards(g,plan){
-  const famData=CARDS[g]; gameCards=[];
-  plan.forEach(({fam,size})=>{ famData[fam].slice(0,size).forEach(c=>gameCards.push({...c,fam})); });
+  const famData=CARDS[g];
   if(!window._shuffled){
-    for(let i=gameCards.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [gameCards[i],gameCards[j]]=[gameCards[j],gameCards[i]]; }
-    window._shuffled=true; window._gameCardsOrder=[...gameCards];
-  } else { gameCards=window._gameCardsOrder; }
+    let arr=[];
+    plan.forEach(({fam,size})=>famData[fam].slice(0,size).forEach(c=>arr.push({...c,fam})));
+    for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}
+    gameCards=arr;
+    window._shuffled=true;
+    window._gameCardsSnap=[...arr];
+  } else {
+    gameCards=window._gameCardsSnap||gameCards;
+  }
 }
 
-// RENDER GAME
+// RENDER GAME — only update DOM for changed cards, no full re-render
 function renderGame(){
-  const grid=document.getElementById("cards-grid");
-  const chosen=(gameState&&gameState.chosen)||[], total=gameCards.length, taken=chosen.length;
-  document.getElementById("game-group-title").textContent="קבוצה "+currentGroup;
-  document.getElementById("prog-taken").textContent=taken;
-  document.getElementById("prog-total").textContent=total;
-  grid.innerHTML="";
+  const chosen=(gameState&&gameState.chosen)||[];
+  document.getElementById('game-title').textContent='קבוצה '+currentGroup;
+  document.getElementById('prog-t').textContent=chosen.length;
+  document.getElementById('prog-tot').textContent=gameCards.length;
 
-  gameCards.forEach((card,i)=>{
-    const col=FAM_COLORS[card.fam]||"#ccc";
-    const isChosen=chosen.includes(card.code);
-    const isFlipped=localFlipped.has(card.code);
-    const el=document.createElement("div");
-    el.className="fc"+(isFlipped||isChosen?" flipped":"")+(isChosen?" taken":"");
-    el.style.animationDelay=(i*.04)+"s";
+  const grid=document.getElementById('cards-grid');
 
-    // FRONT
-    const frontTags = [card.domain, card.sdg].filter(Boolean);
-    const frontTagsHtml = frontTags.map(t=>`<span class="fc-front-tag">${t}</span>`).join("");
-
-    // BACK rows
-    const backRows = [
-      ["כיוון מוצר", card.product],
-      ["קהל יעד", card.audience],
-      ["פרסונה", card.persona],
-      ["הנושא", card.topic],
-      ["מצב מהחיים", card.scenario],
-      ["הבעיה", card.problem],
-      ["למה לא עובד", card.why],
-      ["ההשפעה", card.impact],
-      ["מה חסר", card.missing],
-    ].map(([l,v])=>`<div class="back-row"><span class="back-row-label">${l}</span><span class="back-row-val">${v}</span></div>`).join("");
-
-    el.innerHTML=`<div class="fc-inner">
-      <div class="fc-face fc-front">
-        <div class="fc-front-bar" style="background:${col}"></div>
-        <div class="fc-front-body">
-          <div class="fc-front-family">${card.family}</div>
-          <div class="fc-front-name">${card.name}</div>
-          <div class="fc-front-teaser">${card.teaser}</div>
-        </div>
-        <div class="fc-front-bottom">
-          <div class="fc-front-tags">${frontTagsHtml}</div>
-          <div class="${isChosen?"fc-taken-mark":"fc-front-code"}">${isChosen?"נבחר":card.code}</div>
-        </div>
-      </div>
-      <div class="fc-face fc-back">
-        <div class="fc-back-bar" style="background:${col}"></div>
-        <div class="fc-back-scroll">
-          <div class="back-code">${card.code}</div>
-          <div class="back-name">${card.name}</div>
-          ${backRows}
-          <div class="back-question">
-            <div class="back-question-label">שאלת פתיחה</div>
-            <div class="back-question-text">${card.question}</div>
-          </div>
-        </div>
-        <div class="fc-back-footer">
-          ${isChosen
-            ? `<div class="chosen-mark">✓ נבחר</div>`
-            : `<button class="choose-btn" data-code="${card.code}">בחרי קלף זה</button>`}
-        </div>
-      </div>
-    </div>`;
-
-    el.querySelector(".fc-inner").addEventListener("click",e=>{
-      if(e.target.classList.contains("choose-btn")) return;
-      if(isChosen) return;
-      toggleFlip(card.code);
+  // If grid is empty, build from scratch
+  if(grid.children.length!==gameCards.length){
+    grid.innerHTML='';
+    gameCards.forEach((card,i)=>{
+      const el=buildCard(card,chosen);
+      el.style.animationDelay=(i*.03)+'s';
+      grid.appendChild(el);
     });
-    const btn=el.querySelector(".choose-btn");
-    if(btn) btn.addEventListener("click",e=>{ e.stopPropagation(); chooseCard(card.code); });
-    grid.appendChild(el);
+    _lastGameChosenStr=JSON.stringify(chosen);
+    return;
+  }
+
+  // Otherwise only update changed cards
+  gameCards.forEach((card,i)=>{
+    const wasChosen=grid.children[i].classList.contains('taken');
+    const isChosen=chosen.includes(card.code);
+    const wasFlipped=localFlipped.has(card.code);
+    if(wasChosen!==isChosen || (wasFlipped && !grid.children[i].classList.contains('flipped'))){
+      const el=buildCard(card,chosen);
+      grid.replaceChild(el,grid.children[i]);
+    }
   });
+  _lastGameChosenStr=JSON.stringify(chosen);
 }
 
-function toggleFlip(code){ if(localFlipped.has(code)) localFlipped.delete(code); else localFlipped.add(code); renderGame(); }
+function buildCard(card,chosen){
+  const col=FAM_COLORS[card.fam]||'#ccc';
+  const isChosen=chosen.includes(card.code);
+  const isFlipped=localFlipped.has(card.code);
 
-// מניעת לחיצה כפולה בצד הלקוח
-let _choosing = false;
+  const el=document.createElement('div');
+  el.className='fc'+(isFlipped||isChosen?' flipped':'')+(isChosen?' taken':'');
 
+  const backRows=[
+    ['כיוון מוצר',card.product],['קהל יעד',card.audience],['פרסונה',card.persona],
+    ['הנושא',card.topic],['מצב מהחיים',card.scenario],['הבעיה',card.problem],
+    ['למה לא עובד',card.why],['ההשפעה',card.impact],['מה חסר',card.missing],
+  ].map(([l,v])=>`<div class="bk-row"><span class="bk-lbl">${l}</span><span class="bk-val">${v}</span></div>`).join('');
+
+  el.innerHTML=`<div class="fc-inner">
+    <div class="fc-face fc-front">
+      <div class="fc-bar" style="background:${col}"></div>
+      <div class="fc-front-body">
+        <div class="fc-fam">${card.family}</div>
+        <div class="fc-name">${card.name}</div>
+        <div class="fc-teaser">${card.teaser}</div>
+      </div>
+      <div class="fc-bottom">
+        <div class="fc-tags">
+          <span class="fc-tag">${card.domain}</span>
+          <span class="fc-tag">${card.sdg}</span>
+        </div>
+        <span class="fc-code">${isChosen?'נבחר':card.code}</span>
+      </div>
+    </div>
+    <div class="fc-face fc-back">
+      <div class="fc-bar" style="background:${col}"></div>
+      <div class="fc-back-scroll">
+        <div class="bk-code">${card.code}</div>
+        <div class="bk-name">${card.name}</div>
+        ${backRows}
+        <div class="bk-q"><div class="bk-qlbl">שאלת פתיחה</div><div class="bk-qtxt">${card.question}</div></div>
+      </div>
+      <div class="fc-back-foot">
+        ${isChosen
+          ?`<div class="chosen-mark">✓ נבחר</div>`
+          :`<button class="choose-btn" data-code="${card.code}">בחרי קלף זה</button>`}
+      </div>
+    </div>
+  </div>`;
+
+  // Flip on tap (not on button)
+  el.querySelector('.fc-inner').addEventListener('click',e=>{
+    if(e.target.classList.contains('choose-btn'))return;
+    if(isChosen)return;
+    if(localFlipped.has(card.code)) localFlipped.delete(card.code);
+    else localFlipped.add(card.code);
+    // Just toggle class directly — no full re-render
+    el.classList.toggle('flipped',localFlipped.has(card.code));
+  });
+
+  const btn=el.querySelector('.choose-btn');
+  if(btn) btn.addEventListener('click',e=>{e.stopPropagation();chooseCard(card.code);});
+
+  return el;
+}
+
+// CHOOSE
 async function chooseCard(code){
-  if(_choosing) return; // כבר בתהליך בחירה
-  if(!gameState.chosen) gameState.chosen=[];
-  if(gameState.chosen.includes(code)) return;
-  _choosing = true;
-
-  // Optimistic UI
-  gameState.chosen.push(code); localFlipped.add(code); renderGame();
+  if(_choosing)return;
+  if((gameState.chosen||[]).includes(code))return;
+  _choosing=true;
+  if(!gameState.chosen)gameState.chosen=[];
+  gameState.chosen.push(code);
+  localFlipped.add(code);
+  renderGame();
   try{
-    const res = await apiPost({action:"choose", group:currentGroup, code});
-    gameState = res; renderGame();
-    if(res.status==="DONE") clearInterval(pollTimer);
-    // הצגת פופ-אפ זכייה
-    const card = gameCards.find(c=>c.code===code);
-    if(card) showWin(card);
+    const res=await apiCall({action:'choose',group:currentGroup,code,_method:'POST'});
+    gameState=res;renderGame();
+    if(res.status==='DONE')clearInterval(pollTimer);
+    const card=gameCards.find(c=>c.code===code);
+    if(card)showWin(card);
   }catch(e){
-    // ALREADY_TAKEN = מישהי אחרת הקדימה
-    if(e.message==="ALREADY_TAKEN"){
-      gameState.chosen = gameState.chosen.filter(c=>c!==code);
-      localFlipped.delete(code); renderGame();
-      toast("אחת אחרת תפסה את הקלף הזה — בחרי קלף אחר");
+    if(e.message==='ALREADY_TAKEN'){
+      gameState.chosen=gameState.chosen.filter(c=>c!==code);
+      localFlipped.delete(code);renderGame();
+      toast('אחת אחרת תפסה את הקלף — בחרי אחר');
     } else {
-      gameState.chosen = gameState.chosen.filter(c=>c!==code);
-      renderGame(); toast("שגיאה — "+e.message);
+      gameState.chosen=gameState.chosen.filter(c=>c!==code);
+      renderGame();toast('שגיאה: '+e.message);
     }
   }
-  _choosing = false;
+  _choosing=false;
 }
-
-// פופ-אפ זכייה
-let _pendingCancelCode = null;
 
 function showWin(card){
-  const col = FAM_COLORS[card.fam]||"#ccc";
-  document.getElementById("win-bar").style.background = col;
-  document.getElementById("win-card-name").textContent = card.name;
-  document.getElementById("win-card-code").textContent = card.code + " · " + card.family;
-  document.getElementById("win-question").textContent = card.question;
-  _pendingCancelCode = card.code;
-  document.getElementById("win-overlay").classList.add("show");
+  const col=FAM_COLORS[card.fam]||'#ccc';
+  document.getElementById('win-bar').style.background=col;
+  document.getElementById('win-name').textContent=card.name;
+  document.getElementById('win-sub').textContent=card.code+' · '+card.family;
+  document.getElementById('win-q').textContent=card.question;
+  _pendingCancel=card.code;
+  document.getElementById('win-ov').classList.add('show');
 }
-
 async function closeWin(cancel){
-  document.getElementById("win-overlay").classList.remove("show");
-  if(!cancel || !_pendingCancelCode) return;
-
-  // ביטול — שולחים unchoose לשרת
-  const code = _pendingCancelCode;
-  _pendingCancelCode = null;
-  // Optimistic UI
-  gameState.chosen = (gameState.chosen||[]).filter(c=>c!==code);
-  localFlipped.delete(code); renderGame();
+  document.getElementById('win-ov').classList.remove('show');
+  if(!cancel||!_pendingCancel)return;
+  const code=_pendingCancel;_pendingCancel=null;
+  gameState.chosen=(gameState.chosen||[]).filter(c=>c!==code);
+  localFlipped.delete(code);renderGame();
   try{
-    const res = await apiPost({action:"unchoose", group:currentGroup, code});
-    gameState = res; renderGame();
-  }catch(e){
-    toast("שגיאה בביטול: "+e.message);
-  }
+    const res=await apiCall({action:'unchoose',group:currentGroup,code,_method:'POST'});
+    gameState=res;renderGame();
+  }catch(e){toast('שגיאה בביטול: '+e.message);}
 }
 
 function showPlayerResults(){
   renderResults(currentGroup,gameState);
-  document.getElementById("res-badge").textContent="קבוצה "+currentGroup;
-  document.getElementById("res-back-btn").onclick=()=>goTo("s-game");
-  goTo("s-results");
+  document.getElementById('res-badge').textContent='קבוצה '+currentGroup;
+  document.getElementById('res-back-btn').onclick=()=>goTo('s-game');
+  goTo('s-results');
 }
 
 function renderResults(g,state){
-  const body=document.getElementById("results-body");
-  const plan=(state&&state.plan)||[], chosen=(state&&state.chosen)||[];
-  body.innerHTML="";
+  const body=document.getElementById('results-body');
+  body.innerHTML='';
+  const plan=(state&&state.plan)||[],chosen=(state&&state.chosen)||[];
   plan.forEach(({fam,size})=>{
-    const cards=CARDS[g][fam].slice(0,size), col=FAM_COLORS[fam]||"#ccc", label=size===3?"קבוצת 3":"זוג";
-    const el=document.createElement("div"); el.className="result-group";
-    let inner=`<div class="result-group-header"><div class="result-fam-dot" style="background:${col}"></div><div class="result-group-label">סט ${fam}</div><span class="result-group-size">${label}</span></div>`;
-    cards.forEach(c=>{ const ok=chosen.includes(c.code); inner+=`<div class="result-card-item"><span class="result-card-code">${c.code}</span><span class="result-card-name">${c.name}</span><span class="result-card-status ${ok?"ok":"no"}">${ok?"✓ נבחר":"לא נבחר"}</span></div>`; });
-    el.innerHTML=inner; body.appendChild(el);
+    const cards=CARDS[g][fam].slice(0,size),col=FAM_COLORS[fam]||'#ccc',label=size===3?'קבוצת 3':'זוג';
+    const div=document.createElement('div');div.className='res-group';
+    let html=`<div class="res-hdr"><div class="res-dot" style="background:${col}"></div>
+      <span class="res-lbl">סט ${fam}</span><span class="res-size">${label}</span></div>`;
+    cards.forEach(c=>{
+      const ok=chosen.includes(c.code);
+      html+=`<div class="res-row"><span class="res-code">${c.code}</span>
+        <span class="res-name">${c.name}</span>
+        <span class="${ok?'res-ok':'res-no'}">${ok?'✓ נבחר':'לא נבחר'}</span></div>`;
+    });
+    div.innerHTML=html;body.appendChild(div);
   });
 }
 
-// JSONP — עוקף CORS עם Apps Script
-function jsonp(params) {
-  return new Promise((resolve, reject) => {
-    const cb = "_cb" + Date.now() + Math.floor(Math.random()*9999);
-    const qs = new URLSearchParams({...params, callback: cb}).toString();
-    const script = document.createElement("script");
-    const timer = setTimeout(() => {
-      delete window[cb]; script.remove();
-      reject(new Error("timeout"));
-    }, 10000);
-    window[cb] = (data) => {
-      clearTimeout(timer); delete window[cb]; script.remove();
-      if (data.error) reject(new Error(data.error));
-      else resolve(data);
+// JSONP API
+function apiCall(params){
+  return new Promise((resolve,reject)=>{
+    const cb='_cb'+Date.now()+Math.floor(Math.random()*9999);
+    const qs=new URLSearchParams({...params,callback:cb}).toString();
+    const script=document.createElement('script');
+    const timer=setTimeout(()=>{
+      delete window[cb];script.remove();reject(new Error('timeout'));
+    },10000);
+    window[cb]=(data)=>{
+      clearTimeout(timer);delete window[cb];script.remove();
+      if(data.error)reject(new Error(data.error));else resolve(data);
     };
-    script.src = API + "?" + qs;
-    script.onerror = () => { clearTimeout(timer); delete window[cb]; reject(new Error("network error")); };
+    script.src=API+'?'+qs;
+    script.onerror=()=>{clearTimeout(timer);delete window[cb];reject(new Error('network error'));};
     document.head.appendChild(script);
   });
 }
 
-async function apiGet(params) { return jsonp(params); }
-
-// POST — מקודד כ-GET עם פרמטר body דרך JSONP
-async function apiPost(body) {
-  return jsonp({ ...body, _method: "POST" });
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
 }
-
-function toast(msg){ const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),3000); }
 </script>
 </body>
 </html>
