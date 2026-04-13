@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>מחולל קלפים | 17 היעדים</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --app-bg: #f4f2f7;
+      --sidebar-w: 180px;
+      --topbar-h: 64px;
+      --radius: 14px;
+      --shadow: 0 4px 20px rgba(0,0,0,.08);
+      --accent: #7c3aed;
+      --accent2: #c63f7f;
+      --ink: #1e1b2e;
+      --muted: #6b6880;
+      --line: rgba(0,0,0,.08);
+
+      --card-bg: #ffffff;
+      --card-text: #2a1a24;
+      --card-muted: #7a6070;
+      --card-w: 220px;
+      --card-h: 308px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      font-family: 'Rubik', sans-serif;
+      background: var(--app-bg);
+      color: var(--ink);
+      direction: rtl;
+    }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      position: fixed;
+      top: 0; right: 0; left: 0;
+      height: var(--topbar-h);
+      background: rgba(255,255,255,.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      gap: 12px;
+      z-index: 100;
+      box-shadow: 0 1px 12px rgba(0,0,0,.06);
+    }
+    .topbar h1 {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--ink);
+      flex: 1;
+      letter-spacing: -.02em;
+    }
+    .topbar h1 span { color: var(--accent2); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 99px;
+      border: none;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity .15s, transform .1s;
+      white-space: nowrap;
+    }
+    .btn:active { transform: scale(.97); }
+    .btn-import {
+      background: var(--accent);
+      color: #fff;
+    }
+    .btn-import:hover { opacity: .9; }
+    .btn-pdf {
+      background: #059669;
+      color: #fff;
+    }
+    .btn-pdf:hover { opacity: .9; }
+    .btn-pdf:disabled { opacity: .4; cursor: default; }
+    .card-count {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    /* ── LAYOUT ── */
+    .layout {
+      display: flex;
+      padding-top: var(--topbar-h);
+      min-height: 100vh;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      flex-shrink: 0;
+      position: fixed;
+      top: var(--topbar-h);
+      right: 0;
+      bottom: 0;
+      overflow-y: auto;
+      background: rgba(255,255,255,.9);
+      backdrop-filter: blur(10px);
+      border-left: 1px solid var(--line);
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .ctrl-section { display: flex; flex-direction: column; gap: 8px; }
+    .ctrl-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .swatches {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .swatch {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: transform .12s, border-color .12s;
+      outline: none;
+    }
+    .swatch:hover { transform: scale(1.12); }
+    .swatch.active { border-color: var(--accent); transform: scale(1.08); }
+    .swatch.dark-border { border-color: rgba(0,0,0,.15); }
+
+    .toggle-row {
+      display: flex;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      overflow: hidden;
+    }
+    .toggle-btn {
+      flex: 1;
+      padding: 7px 0;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: background .15s, color .15s;
+    }
+    .toggle-btn.active {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .sidebar-divider {
+      height: 1px;
+      background: var(--line);
+    }
+
+    /* ── MAIN GRID ── */
+    .main {
+      flex: 1;
+      margin-right: var(--sidebar-w);
+      padding: 24px;
+    }
+
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: calc(100vh - var(--topbar-h) - 48px);
+      gap: 16px;
+      text-align: center;
+    }
+    .empty-icon { font-size: 56px; }
+    .empty-title { font-size: 20px; font-weight: 700; color: var(--ink); }
+    .empty-sub { font-size: 14px; color: var(--muted); }
+
+    .group-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .07em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      margin-top: 8px;
+    }
+    .group-label:first-child { margin-top: 0; }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(var(--card-w), 1fr));
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    /* ── CARD ── */
+    .pc {
+      width: 100%;
+      aspect-ratio: 63 / 88;
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow);
+      position: relative;
+      background: var(--card-bg);
+      transition: transform .18s, box-shadow .18s;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+    .pc:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,.13); }
+
+    .pc-stripe {
+      height: 10px;
+      flex-shrink: 0;
+    }
+
+    /* FRONT */
+    .pc-front {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .pc-front-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 10px 12px 6px;
+      gap: 5px;
+    }
+    .pc-fam {
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      padding: 2px 8px;
+      border-radius: 99px;
+      background: rgba(0,0,0,.07);
+      color: var(--card-muted);
+      white-space: nowrap;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .pc-name {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--card-text);
+      line-height: 1.25;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+    }
+    .pc-divider {
+      height: 1px;
+      background: linear-gradient(to left, transparent, rgba(0,0,0,.12), transparent);
+      width: 60%;
+      margin: 3px 0;
+    }
+    .pc-teaser {
+      font-size: 10.5px;
+      color: var(--card-muted);
+      line-height: 1.5;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+    }
+    .pc-bottom {
+      padding: 5px 10px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+    .pc-tags {
+      display: flex;
+      gap: 3px;
+      flex-wrap: wrap;
+      min-width: 0;
+      overflow: hidden;
+    }
+    .pc-tag {
+      font-size: 7.5px;
+      padding: 2px 5px;
+      border-radius: 99px;
+      background: rgba(0,0,0,.06);
+      color: var(--card-muted);
+      white-space: nowrap;
+      border: 1px solid rgba(0,0,0,.06);
+    }
+    .pc-code {
+      font-size: 9px;
+      font-weight: 800;
+      color: var(--card-muted);
+      opacity: .6;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* BACK */
+    .pc-back {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      padding: 8px 10px 8px;
+      gap: 3px;
+    }
+    .pc-back-header {
+      font-size: 7px;
+      font-weight: 700;
+      color: var(--card-muted);
+      opacity: .7;
+      margin-bottom: 3px;
+    }
+    .pc-back-name {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--card-text);
+      line-height: 1.2;
+      margin-bottom: 4px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid rgba(0,0,0,.08);
+    }
+    .pc-brow {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      flex-shrink: 0;
+    }
+    .pc-blbl {
+      font-size: 6.5px;
+      font-weight: 700;
+      color: var(--card-muted);
+      opacity: .7;
+      letter-spacing: .03em;
+    }
+    .pc-bval {
+      font-size: 7.5px;
+      color: var(--card-text);
+      line-height: 1.35;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+    .pc-bq {
+      margin-top: 4px;
+      padding-top: 4px;
+      border-top: 1px solid rgba(0,0,0,.08);
+      flex-shrink: 0;
+    }
+    .pc-bq .pc-blbl { color: var(--accent2); opacity: 1; }
+    .pc-bq .pc-bval { -webkit-line-clamp: 3; font-weight: 500; }
+
+    /* ── PRINT ── */
+    @media print {
+      :root { --card-w: 63mm; --card-h: 88mm; }
+
+      .topbar, .sidebar { display: none !important; }
+
+      .layout { padding-top: 0; display: block; }
+      .main { margin: 0; padding: 6mm; }
+
+      .group-label { display: none; }
+
+      .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 63mm);
+        grid-template-rows: repeat(3, 88mm);
+        gap: 3mm;
+        page-break-after: always;
+        margin: 0;
+        width: 100%;
+      }
+      .cards-grid:last-child { page-break-after: auto; }
+
+      .pc {
+        width: 63mm !important;
+        height: 88mm !important;
+        aspect-ratio: unset;
+        box-shadow: none;
+        border: 0.5pt solid rgba(0,0,0,.12);
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .pc:hover { transform: none; box-shadow: none; }
+
+      .empty-state { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <h1>מחולל קלפים <span>17 היעדים</span></h1>
+  <span class="card-count" id="card-count"></span>
+  <button class="btn btn-import" onclick="importCards()">↓ ייבוא קלפים</button>
+  <button class="btn btn-pdf" id="pdf-btn" onclick="window.print()" disabled>⎙ ייצוא ל-PDF</button>
+</div>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <div class="ctrl-section">
+      <div class="ctrl-label">רקע הקלף</div>
+      <div class="swatches" id="bg-swatches"></div>
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <div class="ctrl-section">
+      <div class="ctrl-label">צבע טקסט</div>
+      <div class="toggle-row">
+        <button class="toggle-btn active" id="txt-dark" onclick="setTextMode('dark')">כהה</button>
+        <button class="toggle-btn" id="txt-light" onclick="setTextMode('light')">בהיר</button>
+      </div>
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <div class="ctrl-section">
+      <div class="ctrl-label">צד הקלף</div>
+      <div class="toggle-row">
+        <button class="toggle-btn active" id="side-front" onclick="setView('front')">פנים</button>
+        <button class="toggle-btn" id="side-back" onclick="setView('back')">אחורה</button>
+      </div>
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <div class="ctrl-section">
+      <div class="ctrl-label">קבוצה</div>
+      <div class="toggle-row">
+        <button class="toggle-btn active" id="grp-all" onclick="setGroup(0)">הכל</button>
+        <button class="toggle-btn" id="grp-1" onclick="setGroup(1)">1</button>
+        <button class="toggle-btn" id="grp-2" onclick="setGroup(2)">2</button>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main" id="main">
+    <div class="empty-state" id="empty">
+      <div class="empty-icon">🃏</div>
+      <div class="empty-title">טרם יובאו קלפים</div>
+      <div class="empty-sub">לחצי על "ייבוא קלפים" כדי לטעון את כל הקלפים מהמאגר</div>
+    </div>
+  </main>
+
+</div>
+
+<script>
+const FAM_COLORS = {
+  A:"#F0C9A0",B:"#C5BEE0",E:"#A8C8E0",H:"#E8B4B8",J:"#A8C5B5",
+  M:"#F0C9A0",O:"#C9879C",P:"#A8C5B5",Q:"#C5BEE0",
+  C:"#E8B4B8",D:"#C9879C",F:"#A8C5B5",G:"#C5BEE0",I:"#F0C9A0",K:"#A8C8E0",
+  L:"#C9879C",N:"#F0C9A0",R:"#A8C8E0"
+};
+
+const BG_OPTIONS = [
+  { color: '#ffffff', label: 'לבן', dark: true },
+  { color: '#fdf8f0', label: 'שמנת', dark: true },
+  { color: '#f7f4fb', label: 'סגול בהיר', dark: true },
+  { color: '#fff0f6', label: 'ורוד בהיר', dark: true },
+  { color: '#e8f0fe', label: 'כחול בהיר', dark: true },
+  { color: '#f0fdf4', label: 'ירוק בהיר', dark: true },
+  { color: '#1a1f2e', label: 'כחול כהה', dark: false },
+  { color: '#1e1e1e', label: 'שחור', dark: false },
+];
+
+let allCards = [];      // [{...card, _group:1|2}]
+let curBg    = '#ffffff';
+let curText  = 'dark';  // 'dark' | 'light'
+let curView  = 'front'; // 'front' | 'back'
+let curGroup = 0;       // 0=all, 1, 2
+
+// ── BUILD BG SWATCHES ──
+(function buildSwatches(){
+  const cont = document.getElementById('bg-swatches');
+  BG_OPTIONS.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'swatch' + (i===0?' active':'') + (!opt.dark?' dark-border':'');
+    btn.style.background = opt.color;
+    btn.title = opt.label;
+    btn.onclick = () => setBg(opt.color, btn);
+    cont.appendChild(btn);
+  });
+})();
+
+// ── IMPORT ──
+async function importCards(){
+  const btn = document.querySelector('.btn-import');
+  btn.textContent = '...טוען';
+  btn.disabled = true;
+  try {
+    const [r1, r2] = await Promise.all([
+      fetch('./kvutza_1.json').then(r=>r.json()),
+      fetch('./kvutza_2.json').then(r=>r.json())
+    ]);
+    allCards = [
+      ...r1.map(c=>({...c,_group:1})),
+      ...r2.map(c=>({...c,_group:2}))
+    ];
+    document.getElementById('pdf-btn').disabled = false;
+    render();
+  } catch(e) {
+    alert('שגיאה בטעינת הקלפים: '+e.message);
+  }
+  btn.textContent = '↓ ייבוא קלפים';
+  btn.disabled = false;
+}
+
+// ── CONTROLS ──
+function setBg(color, el){
+  curBg = color;
+  document.querySelectorAll('.swatch').forEach(s=>s.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.pc').forEach(pc=>{
+    pc.style.background = curBg;
+  });
+}
+
+function setTextMode(mode){
+  curText = mode;
+  document.getElementById('txt-dark').classList.toggle('active', mode==='dark');
+  document.getElementById('txt-light').classList.toggle('active', mode==='light');
+  applyTextMode();
+}
+function applyTextMode(){
+  const textColor   = curText==='dark' ? '#2a1a24' : '#ffffff';
+  const mutedColor  = curText==='dark' ? '#7a6070' : 'rgba(255,255,255,.65)';
+  document.documentElement.style.setProperty('--card-text',  textColor);
+  document.documentElement.style.setProperty('--card-muted', mutedColor);
+}
+
+function setView(view){
+  curView = view;
+  document.getElementById('side-front').classList.toggle('active', view==='front');
+  document.getElementById('side-back').classList.toggle('active', view==='back');
+  render();
+}
+
+function setGroup(g){
+  curGroup = g;
+  ['all','1','2'].forEach(id=>{
+    const el = document.getElementById('grp-'+id);
+    if(el) el.classList.toggle('active', String(g)===(id==='all'?'0':id));
+  });
+  render();
+}
+
+// ── RENDER ──
+function render(){
+  const main = document.getElementById('main');
+  const empty = document.getElementById('empty');
+  if(!allCards.length){ empty.style.display=''; main.innerHTML=''; main.appendChild(empty); return; }
+  if(empty) empty.style.display='none';
+
+  const filtered = curGroup===0 ? allCards : allCards.filter(c=>c._group===curGroup);
+  document.getElementById('card-count').textContent = filtered.length + ' קלפים';
+
+  // Group into pages of 9 for print grid
+  const chunks = [];
+  for(let i=0;i<filtered.length;i+=9) chunks.push(filtered.slice(i,i+9));
+
+  main.innerHTML = '';
+  chunks.forEach((chunk, ci) => {
+    if(chunks.length > 1){
+      const lbl = document.createElement('div');
+      lbl.className = 'group-label';
+      lbl.textContent = `עמוד ${ci+1} מתוך ${chunks.length}`;
+      main.appendChild(lbl);
+    }
+    const grid = document.createElement('div');
+    grid.className = 'cards-grid';
+    chunk.forEach(card => grid.appendChild(buildCard(card)));
+    main.appendChild(grid);
+  });
+}
+
+function buildCard(card){
+  const code   = card['קוד כרטיס'] || '';
+  const fam    = code[0] || 'A';
+  const col    = FAM_COLORS[fam] || '#ccc';
+  const name   = card['שם הכרטיס'] || '';
+  const family = card['משפחה'] || '';
+  const teaser = card['משפט מסקרן'] || '';
+  const domain = card['תחום'] || '';
+  const sdg    = card['יעד או״ם'] || '';
+
+  const el = document.createElement('div');
+  el.className = 'pc';
+  el.style.background = curBg;
+
+  const stripe = `<div class="pc-stripe" style="background:linear-gradient(90deg,${col} 0%,rgba(255,255,255,.55) 50%,${col} 100%)"></div>`;
+
+  if(curView==='front'){
+    el.innerHTML = stripe + `
+      <div class="pc-front">
+        <div class="pc-front-body">
+          <span class="pc-fam">${esc(family)}</span>
+          <div class="pc-name">${esc(name)}</div>
+          <div class="pc-divider"></div>
+          <div class="pc-teaser">${esc(teaser)}</div>
+        </div>
+        <div class="pc-bottom">
+          <div class="pc-tags">
+            ${domain?`<span class="pc-tag">${esc(domain)}</span>`:''}
+            ${sdg?`<span class="pc-tag">${esc(sdg)}</span>`:''}
+          </div>
+          <span class="pc-code">${esc(code)}</span>
+        </div>
+      </div>`;
+  } else {
+    const rows = [
+      ['כיוון', card['כיוון למוצר']],
+      ['קהל יעד', card['קהל יעד']],
+      ['פרסונה', card['פרסונה']],
+      ['הנושא', card['הנושא']],
+      ['מצב', card['מצב מהחיים']],
+      ['הבעיה', card['הבעיה']],
+      ['למה לא עובד', card['למה זה לא עובד היום']],
+      ['השפעה', card['ההשפעה']],
+      ['מה חסר', card['מה עדיין חסר']],
+    ].filter(([,v])=>v).map(([l,v])=>`
+      <div class="pc-brow">
+        <div class="pc-blbl">${esc(l)}</div>
+        <div class="pc-bval">${esc(v)}</div>
+      </div>`).join('');
+
+    const q = card['שאלת פתיחה'] || '';
+    el.innerHTML = stripe + `
+      <div class="pc-back">
+        <div class="pc-back-header">${esc(code)} · ${esc(domain)}</div>
+        <div class="pc-back-name">${esc(name)}</div>
+        ${rows}
+        ${q?`<div class="pc-bq">
+          <div class="pc-blbl">שאלת פתיחה</div>
+          <div class="pc-bval">${esc(q)}</div>
+        </div>`:''}
+      </div>`;
+  }
+
+  return el;
+}
+
+function esc(s){
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>
