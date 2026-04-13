@@ -23,7 +23,7 @@
       --card-bg: #ffffff;
       --card-text: #2a1a24;
       --card-muted: #7a6070;
-      --card-w: 220px;
+      --card-w: 280px;
       --card-h: 308px;
     }
 
@@ -213,9 +213,9 @@
     /* ── CARD ── */
     .pc {
       width: 100%;
-      aspect-ratio: 63 / 88;
+      min-height: 280px;
       border-radius: var(--radius);
-      overflow: hidden;
+      overflow: visible;
       display: flex;
       flex-direction: column;
       box-shadow: var(--shadow);
@@ -237,7 +237,6 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      overflow: hidden;
     }
     .pc-front-body {
       flex: 1;
@@ -246,14 +245,14 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 10px 12px 6px;
-      gap: 5px;
+      padding: 16px 16px 10px;
+      gap: 8px;
     }
     .pc-fam {
-      font-size: 8px;
+      font-size: 10px;
       font-weight: 700;
       letter-spacing: .04em;
-      padding: 2px 8px;
+      padding: 3px 10px;
       border-radius: 99px;
       background: rgba(0,0,0,.07);
       color: var(--card-muted);
@@ -263,48 +262,38 @@
       text-overflow: ellipsis;
     }
     .pc-name {
-      font-size: 17px;
+      font-size: 22px;
       font-weight: 800;
       color: var(--card-text);
       line-height: 1.25;
-      overflow: hidden;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
     }
     .pc-divider {
       height: 1px;
       background: linear-gradient(to left, transparent, rgba(0,0,0,.12), transparent);
       width: 60%;
-      margin: 3px 0;
+      margin: 2px 0;
     }
     .pc-teaser {
-      font-size: 10.5px;
+      font-size: 13px;
       color: var(--card-muted);
-      line-height: 1.5;
-      overflow: hidden;
-      display: -webkit-box;
-      -webkit-line-clamp: 4;
-      -webkit-box-orient: vertical;
+      line-height: 1.55;
     }
     .pc-bottom {
-      padding: 5px 10px 8px;
+      padding: 8px 14px 12px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 4px;
-      flex-shrink: 0;
+      gap: 6px;
     }
     .pc-tags {
       display: flex;
-      gap: 3px;
+      gap: 4px;
       flex-wrap: wrap;
       min-width: 0;
-      overflow: hidden;
     }
     .pc-tag {
-      font-size: 7.5px;
-      padding: 2px 5px;
+      font-size: 10px;
+      padding: 3px 8px;
       border-radius: 99px;
       background: rgba(0,0,0,.06);
       color: var(--card-muted);
@@ -312,7 +301,7 @@
       border: 1px solid rgba(0,0,0,.06);
     }
     .pc-code {
-      font-size: 9px;
+      font-size: 11px;
       font-weight: 800;
       color: var(--card-muted);
       opacity: .6;
@@ -325,56 +314,49 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      overflow: hidden;
-      padding: 8px 10px 8px;
-      gap: 3px;
+      padding: 12px 14px 14px;
+      gap: 6px;
     }
     .pc-back-header {
-      font-size: 7px;
+      font-size: 10px;
       font-weight: 700;
       color: var(--card-muted);
       opacity: .7;
-      margin-bottom: 3px;
+      margin-bottom: 2px;
     }
     .pc-back-name {
-      font-size: 11px;
+      font-size: 15px;
       font-weight: 800;
       color: var(--card-text);
       line-height: 1.2;
-      margin-bottom: 4px;
-      padding-bottom: 4px;
+      margin-bottom: 6px;
+      padding-bottom: 6px;
       border-bottom: 1px solid rgba(0,0,0,.08);
     }
     .pc-brow {
       display: flex;
       flex-direction: column;
-      gap: 1px;
-      flex-shrink: 0;
+      gap: 2px;
     }
     .pc-blbl {
-      font-size: 6.5px;
+      font-size: 9px;
       font-weight: 700;
       color: var(--card-muted);
       opacity: .7;
       letter-spacing: .03em;
     }
     .pc-bval {
-      font-size: 7.5px;
+      font-size: 11px;
       color: var(--card-text);
-      line-height: 1.35;
-      overflow: hidden;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
+      line-height: 1.45;
     }
     .pc-bq {
-      margin-top: 4px;
-      padding-top: 4px;
+      margin-top: 6px;
+      padding-top: 8px;
       border-top: 1px solid rgba(0,0,0,.08);
-      flex-shrink: 0;
     }
-    .pc-bq .pc-blbl { color: var(--accent2); opacity: 1; }
-    .pc-bq .pc-bval { -webkit-line-clamp: 3; font-weight: 500; }
+    .pc-bq .pc-blbl { color: var(--accent2); opacity: 1; font-size: 10px; }
+    .pc-bq .pc-bval { font-weight: 600; font-size: 12px; }
 
     /* ── PRINT ── */
     @page { size: A4 portrait; margin: 8mm; }
