@@ -39,6 +39,12 @@
     }
 
     .zoom-shell {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    .zoom-inner {
       width: calc(100% / 0.75);
       transform: scale(0.75);
       transform-origin: top center;
@@ -296,7 +302,7 @@
     }
 
     @media (max-width: 820px) {
-      .zoom-shell {
+      .zoom-inner {
         width: 100%;
         transform: none;
       }
@@ -328,7 +334,7 @@
     }
 
     @media (max-width: 480px) {
-      .zoom-shell {
+      .zoom-inner {
         width: 100%;
         transform: none;
       }
@@ -354,7 +360,8 @@
 </head>
 <body>
   <div class="zoom-shell">
-    <main class="page">
+    <div class="zoom-inner">
+      <main class="page">
     <header class="hero">
       <h1>יעד 12:</h1>
       <h2>צריכה וייצור אחראיים</h2>
@@ -379,6 +386,7 @@
       </div>
     </div>
   </main>
+    </div>
   </div>
 
   <script>
