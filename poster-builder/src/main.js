@@ -388,6 +388,12 @@ function App() {
 
     (wizardStep < 4 || wizardStep === 5) && h('div', { className: 'wz-overlay' },
       wizardStep === 1 && h(WizardStep1, {
+        productType,
+        onProductTypeChange: handleProductTypeChange,
+        onNext: () => goToStep(2)
+      }),
+
+      wizardStep === 2 && h(WizardStep2, {
         currentBackground,
         currentShape,
         titleFont,
@@ -396,12 +402,6 @@ function App() {
         onShape:       handleShape,
         onTitleFont:   handleTitleFont,
         onTitleColor:  handleTitleColor,
-        onNext:        () => goToStep(2)
-      }),
-
-      wizardStep === 2 && h(WizardStep2, {
-        productType,
-        onProductTypeChange: handleProductTypeChange,
         onNext: () => goToStep(3),
         onBack: () => goToStep(1)
       }),
