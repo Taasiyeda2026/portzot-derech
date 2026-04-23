@@ -21,6 +21,18 @@
       gap: 1rem;
     }
 
+    #summary-modal {
+      overflow-y: auto;
+      align-items: flex-start;
+    }
+
+    #summary-modal .summary-modal-panel {
+      margin: 1rem auto;
+      max-height: calc(100vh - 2rem);
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
     .summary-step {
       position: relative;
       display: block;
@@ -62,6 +74,17 @@
     @media (max-width: 640px) {
       .summary-step {
         padding: 0.875rem;
+      }
+    }
+
+    @media (min-width: 641px) {
+      #summary-modal {
+        align-items: center;
+      }
+
+      #summary-modal .summary-modal-panel {
+        margin: 0 auto;
+        max-height: 90vh;
       }
     }
 
@@ -145,7 +168,7 @@
     </div>
    </div><!-- Summary Modal -->
    <div id="summary-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-    <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" dir="rtl">
+    <div class="summary-modal-panel bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" dir="rtl">
      <div class="bg-gradient-to-l from-purple-600 to-purple-800 rounded-t-3xl px-6 py-5 text-white">
       <div class="flex items-center justify-between">
        <div>
