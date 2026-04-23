@@ -888,9 +888,10 @@ canvas {
 /* ── Screen base ── */
 .wz-screen {
   flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  overflow: visible;
+  overflow: hidden;
 }
 
 .wz-screen-centered { justify-content: center; }
