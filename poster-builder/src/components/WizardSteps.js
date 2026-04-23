@@ -105,12 +105,11 @@ export function WizardStep1({
     setTimeout(onNext, 380);
   };
 
-  return h('div', { className: 'wz-screen' },
+  return h('div', { className: 'wz-screen wz-screen-centered' },
     h(StepIndicator, { current: 1 }),
 
     h('div', { className: 'wz-content wz-content-vcenter' },
       h('div', { className: 'wz-hero' },
-        h('h2', { className: 'wz-opening-headline' }, 'ממתגות ומבססות'),
         h('h1', { className: 'wz-title' }, 'נתחיל מסוג התוצר'),
         h('p', { className: 'wz-subtitle' }, 'בוחרים איזה תוצר יוצרים — הבחירה תשפיע על השאלות והמבנה בהמשך.')
       ),
