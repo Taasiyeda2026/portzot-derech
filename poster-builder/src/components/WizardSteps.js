@@ -406,41 +406,135 @@ function SlotUploadSection({ slots, slotImages, onSlotUpload, onSlotClear }) {
   );
 }
 
+function resolveDynamicField(field, productType) {
+  if (!field.dynamic || !DYNAMIC_QUESTIONS[field.dynamic]) return field;
+  const dynamicBank = DYNAMIC_QUESTIONS[field.dynamic];
+  const resolved = dynamicBank[productType] || dynamicBank.none;
+  return { ...field, question: resolved.question, hint: resolved.hint || field.hint };
+}
+
+function getProductTypeLabel(productType) {
+  const type = PRODUCT_TYPES.find(item => item.id === productType);
+  return type ? type.label : 'לא נבחר';
+}
+
+function getMissingStep3Fields(contentValues, productType) {
+  const textRequired = [
+    'projectName', 'description', 'problem', 'audience', 'researchQuestion',
+    'findings', 'solution', 'value', 'student1', 'className', 'schoolName'
+  ];
+  const listRequired = ['research', 'requirements', 'howItWorks'];
+
+  const missing = [];
+  const questionById = {};
+  FIELD_DEFINITIONS.forEach(field => {
+    const resolved = resolveDynamicField(field, productType);
+    questionById[field.id] = resolved.question;
+  });
+
+  textRequired.forEach(key => {
+    const value = (contentValues[key] || '').trim();
+    if (!value) {
+      if (key === 'student1') missing.push('שמות התלמידות');
+      else if (key === 'className') missing.push('כיתה');
+      else if (key === 'schoolName') missing.push('שם בית הספר');
+      else missing.push(questionById[key] || key);
+    }
+  });
+
+  listRequired.forEach(fieldId => {
+    const hasAtLeastOne = getListRowIds(fieldId).some(rowId => ((contentValues[rowId] || '').trim()));
+    if (!hasAtLeastOne) missing.push(questionById[fieldId] || fieldId);
+  });
+
+  return missing;
+}
+
+function buildImagePromptBlocks(productType, contentValues) {
+  const productLabel = getProductTypeLabel(productType);
+  const fallback = (val, txt) => (val || '').trim() || txt;
+  const projectName = fallback(contentValues.projectName, 'מיזם תלמידות');
+  const problem = fallback(contentValues.problem, 'צורך יומיומי שדורש פתרון');
+  const audience = fallback(contentValues.audience, 'קהל יעד מוגדר');
+  const solution = fallback(contentValues.solution, 'פתרון מרכזי למענה');
+  const value = fallback(contentValues.value, 'שיפור משמעותי למשתמשות');
+  const usageStep = getListRowIds('howItWorks')
+    .map(rowId => (contentValues[rowId] || '').trim())
+    .find(Boolean) || 'שימוש פשוט וברור בפתרון';
+
+  return [
+    {
+      title: 'פרומפט 1 — הבעיה',
+      text: `צרי אילוסטרציה מקצועית בסגנון נקי לפוסטר תלמידות בנושא "${projectName}". להמחיש בעיה מרכזית: ${problem}. קהל היעד: ${audience}. סוג התוצר: ${productLabel}. קומפוזיציה ברורה, צבעים נעימים, ללא טקסט בתוך התמונה.`
+    },
+    {
+      title: 'פרומפט 2 — רגע השימוש',
+      text: `צרי סצנה שמציגה רגע שימוש ב${productLabel} במסגרת המיזם "${projectName}". לתאר פעולה מרכזית: ${usageStep}. להדגיש את הפתרון: ${solution}. אווירה חיובית, זווית ברורה, פרטים שימושיים, ללא טקסט.`
+    },
+    {
+      title: 'פרומפט 3 — התוצאה',
+      text: `צרי תמונת תוצאה לאחר שימוש ב${productLabel} מתוך "${projectName}". להדגיש את הערך: ${value}. להראות שיפור אמיתי עבור ${audience}. סגנון מציאותי-ידידותי, תאורה טבעית, עומק ויזואלי, ללא טקסט.`
+    }
+  ];
+}
+
 export function WizardStep3({
   productType, contentValues, slotImages, posterSize,
   onContentChange, onSlotUpload, onSlotClear, onNext, onBack
 }) {
+  const { useState: useLocalState } = React;
   const slots = getVisualSlots(posterSize || 'A4', productType);
+  const [toolsUnlocked, setToolsUnlocked] = useLocalState(false);
+  const [validationMessage, setValidationMessage] = useLocalState('');
+  const [promptBlocks, setPromptBlocks] = useLocalState([]);
 
-  const resolveQuestion = field => {
-    if (field.dynamic && DYNAMIC_QUESTIONS[field.dynamic]) {
-      const dq = DYNAMIC_QUESTIONS[field.dynamic][productType] || DYNAMIC_QUESTIONS[field.dynamic].none;
-      return { ...field, question: dq.question, hint: dq.hint };
+  const handleFinishQuestions = () => {
+    const missing = getMissingStep3Fields(contentValues, productType);
+    if (missing.length) {
+      setToolsUnlocked(false);
+      setPromptBlocks([]);
+      setValidationMessage(`כדי להמשיך, צריך להשלים כמה תשובות חסרות: ${missing.slice(0, 4).join(' • ')}`);
+      return;
     }
-    return field;
+    setValidationMessage('');
+    setToolsUnlocked(true);
   };
+
+  const handleBuildPrompts = () => {
+    setPromptBlocks(buildImagePromptBlocks(productType, contentValues));
+  };
+
+  const copyText = (text) => {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text);
+    }
+  };
+
+  const productTypeLabel = getProductTypeLabel(productType);
 
   return h('div', { className: 'wz-screen wz-screen-form' },
     h(StepIndicator, { current: 3 }),
     h('div', { className: 'wz-form-layout' },
       h('div', { className: 'wz-form-sidebar' },
         h('div', { className: 'wz-form-side-text' },
-          h('h2', { className: 'wz-title wz-title-sm' }, 'תוכן הפוסטר'),
-          h('p', { className: 'wz-subtitle wz-subtitle-sm' }, 'ענו על השאלות כדי למלא את הפוסטר')
+          h('h2', { className: 'wz-title wz-title-sm' }, 'עכשיו ממלאים שאלות'),
+          h('p', { className: 'wz-subtitle wz-subtitle-sm' }, 'אחרי שבחרתן סוג תוצר, ממלאים את שאלות הפוסטר. רק בסיום אפשר לעבור לתוצרים.'),
+          h('div', { className: 'wz-side-helper' }, `סוג התוצר שנבחר: ${productTypeLabel}`)
         ),
         h('div', { className: 'wz-form-side-nav' },
           h('button', { className: 'wz-btn wz-btn-ghost wz-btn-full', onClick: onBack  }, '‹ חזרה'),
-          h('button', { className: 'wz-btn wz-btn-primary wz-btn-full', onClick: onNext }, 'בניה ›')
+          h('button', { className: 'wz-btn wz-btn-primary wz-btn-full', onClick: handleFinishQuestions }, 'סיימנו למלא שאלות')
         )
       ),
 
       h('div', { className: 'wz-form-fields' },
+        validationMessage && h('div', { className: 'wz-validation-box' }, validationMessage),
         h('div', { className: 'zone-image-section' },
           h('span', { className: 'zone-image-section-title' }, VISUAL_ZONE_TITLE[productType] || 'אזור חזותי'),
           h(SlotUploadSection, { slots, slotImages, onSlotUpload, onSlotClear })
         ),
         FIELD_DEFINITIONS.map(field => {
-          const resolved = resolveQuestion(field);
+          const resolved = resolveDynamicField(field, productType);
           if (field.type === 'participants') {
             return h(ParticipantsField, { key: field.id, field: resolved, values: contentValues, onContentChange });
           }
@@ -453,7 +547,53 @@ export function WizardStep3({
             value: contentValues[field.id] || '',
             onContentChange
           });
-        })
+        }),
+
+        toolsUnlocked && h('div', { className: 'wz-after-fill' },
+          h('div', { className: 'wz-after-fill-head' },
+            h('div', { className: 'wz-after-fill-title' }, 'מעולה. עכשיו אפשר לעבור לתוצרים'),
+            h('div', { className: 'wz-after-fill-subtitle' }, 'מכאן אפשר לעבור לבנייה, להפיק פרומפטים לתמונה, ובהמשך גם ספיץ\'.')
+          ),
+          h('div', { className: 'wz-output-cards' },
+            h('div', { className: 'wz-output-card' },
+              h('div', { className: 'wz-output-card-title' }, 'לבנייה'),
+              h('div', { className: 'wz-output-card-desc' }, 'מעבר לעורך הבנייה של הפוסטר.'),
+              h('button', { className: 'wz-btn wz-btn-primary wz-btn-full', onClick: onNext }, 'לבנייה')
+            ),
+            h('div', { className: 'wz-output-card' },
+              h('div', { className: 'wz-output-card-title' }, 'פרומפט לתמונה'),
+              h('div', { className: 'wz-output-card-desc' }, '3 פרומפטים: הבעיה, רגע השימוש והתוצאה.'),
+              h('button', { className: 'wz-btn wz-btn-ghost wz-btn-full', onClick: handleBuildPrompts }, 'פרומפט לתמונה')
+            ),
+            h('div', { className: 'wz-output-card wz-output-card-disabled' },
+              h('div', { className: 'wz-output-card-title' }, 'ספיץ\''),
+              h('div', { className: 'wz-output-card-desc' }, 'בקרוב.'),
+              h('button', { className: 'wz-btn wz-btn-ghost wz-btn-full', disabled: true }, 'ספיץ\' (בקרוב)')
+            )
+          ),
+
+          promptBlocks.length > 0 && h('div', { className: 'wz-prompt-results' },
+            h('div', { className: 'wz-prompt-results-head' },
+              h('div', { className: 'wz-prompt-results-title' }, 'פרומפטים מוכנים לתמונה'),
+              h('button', {
+                className: 'wz-btn wz-btn-ghost',
+                onClick: () => copyText(promptBlocks.map(block => `${block.title}\n${block.text}`).join('\n\n'))
+              }, 'העתקת הכול')
+            ),
+            promptBlocks.map((block, index) =>
+              h('div', { key: `${block.title}-${index}`, className: 'wz-prompt-block' },
+                h('div', { className: 'wz-prompt-block-top' },
+                  h('div', { className: 'wz-prompt-block-title' }, block.title),
+                  h('button', {
+                    className: 'wz-btn wz-btn-ghost',
+                    onClick: () => copyText(block.text)
+                  }, 'העתקה')
+                ),
+                h('div', { className: 'wz-prompt-block-text' }, block.text)
+              )
+            )
+          )
+        )
       )
     )
   );
