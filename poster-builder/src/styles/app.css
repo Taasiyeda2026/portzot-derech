@@ -890,7 +890,7 @@ canvas {
   flex: 1;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .wz-screen-centered { justify-content: center; }
@@ -918,7 +918,7 @@ canvas {
   overflow: visible;
   padding-top: 20px;
   padding-bottom: 28px;
-  align-items: flex-start;
+  align-items: stretch;
 }
 
 .wz-step1-top-banner {
@@ -938,6 +938,12 @@ canvas {
   align-self: flex-start;
   display: inline-flex;
   align-items: center;
+  overflow: visible;
+}
+
+.wz-step1-section {
+  width: 100%;
+  padding-top: 16px;
   overflow: visible;
 }
 
@@ -970,10 +976,13 @@ canvas {
   line-height: 1.4;
   overflow-wrap: anywhere;
   padding-top: 2px;
+  margin-top: 0;
+  transform: none;
 }
 
 .wz-step1-hero .wz-subtitle {
   line-height: 1.5;
+  transform: none;
 }
 
 /* ── Section ── */
