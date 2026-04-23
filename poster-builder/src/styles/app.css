@@ -894,6 +894,7 @@ canvas {
 }
 
 .wz-screen-centered { justify-content: center; }
+.wz-screen-step1 { overflow: visible; }
 
 /* ── Scrollable content ── */
 .wz-content {
@@ -913,9 +914,33 @@ canvas {
   justify-content: center;
   min-height: 100%;
 }
+.wz-content-step1 {
+  overflow: visible;
+  padding-top: 20px;
+  padding-bottom: 28px;
+}
+
+.wz-step1-top-banner {
+  width: 100%;
+  margin: 0 0 20px;
+  padding: 16px 22px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #d62f95 0%, #b61f7c 48%, #8f145f 100%);
+  color: #fff;
+  font-size: clamp(24px, 3vw, 34px);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0.01em;
+  text-align: center;
+  box-shadow: 0 14px 30px rgba(143, 20, 95, 0.24), 0 4px 10px rgba(143, 20, 95, 0.2);
+}
 
 /* ── Headings ── */
 .wz-hero { text-align: right; margin-bottom: 28px; }
+.wz-step1-hero {
+  width: 100%;
+  margin-bottom: 34px;
+}
 .wz-opening-headline {
   margin: 0 0 8px;
   padding: 6px 12px;
@@ -932,6 +957,15 @@ canvas {
 .wz-title-sm { font-size: 22px; }
 .wz-subtitle { font-size: 15px; color: #7a6a8a; margin: 0; }
 .wz-subtitle-sm { font-size: 13px; }
+
+.wz-step1-hero .wz-title {
+  line-height: 1.32;
+  overflow-wrap: anywhere;
+}
+
+.wz-step1-hero .wz-subtitle {
+  line-height: 1.5;
+}
 
 /* ── Section ── */
 .wz-section { margin-bottom: 24px; }
