@@ -1398,6 +1398,15 @@ canvas {
   direction: rtl;
   text-align: right;
 }
+.wz-validation-list {
+  margin: 6px 0 0;
+  padding: 0 16px 0 0;
+  display: grid;
+  gap: 2px;
+}
+.wz-validation-list li {
+  font-size: 12px;
+}
 
 .wz-after-fill {
   border: 1px solid #e4d6f1;

@@ -415,7 +415,7 @@ function resolveDynamicField(field, productType) {
 
 function getProductTypeLabel(productType) {
   const type = PRODUCT_TYPES.find(item => item.id === productType);
-  return type ? type.label : 'לא נבחר';
+  return type ? type.label : 'מוצר';
 }
 
 function getMissingStep3Fields(contentValues, productType) {
@@ -485,7 +485,7 @@ export function WizardStep3({
   const { useState: useLocalState } = React;
   const slots = getVisualSlots(posterSize || 'A4', productType);
   const [toolsUnlocked, setToolsUnlocked] = useLocalState(false);
-  const [validationMessage, setValidationMessage] = useLocalState('');
+  const [validationMessage, setValidationMessage] = useLocalState(null);
   const [promptBlocks, setPromptBlocks] = useLocalState([]);
 
   const handleFinishQuestions = () => {
@@ -493,10 +493,13 @@ export function WizardStep3({
     if (missing.length) {
       setToolsUnlocked(false);
       setPromptBlocks([]);
-      setValidationMessage(`כדי להמשיך, צריך להשלים כמה תשובות חסרות: ${missing.slice(0, 4).join(' • ')}`);
+      setValidationMessage({
+        text: 'כדי להמשיך, צריך להשלים כמה תשובות חסרות',
+        missing: missing.slice(0, 4)
+      });
       return;
     }
-    setValidationMessage('');
+    setValidationMessage(null);
     setToolsUnlocked(true);
   };
 
@@ -528,7 +531,12 @@ export function WizardStep3({
       ),
 
       h('div', { className: 'wz-form-fields' },
-        validationMessage && h('div', { className: 'wz-validation-box' }, validationMessage),
+        validationMessage && h('div', { className: 'wz-validation-box' },
+          h('div', null, validationMessage.text),
+          validationMessage.missing.length > 0 && h('ul', { className: 'wz-validation-list' },
+            validationMessage.missing.map((item, idx) => h('li', { key: `${item}-${idx}` }, item))
+          )
+        ),
         h('div', { className: 'zone-image-section' },
           h('span', { className: 'zone-image-section-title' }, VISUAL_ZONE_TITLE[productType] || 'אזור חזותי'),
           h(SlotUploadSection, { slots, slotImages, onSlotUpload, onSlotClear })
