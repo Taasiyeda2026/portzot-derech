@@ -17,7 +17,7 @@ const SHAPES = [
   { value: 20, symbol: '◻', title: 'מעוגל'        }
 ];
 
-const STEP_LABELS = ['עיצוב', 'סוג מוצר', 'תוכן', 'יצירה', 'סיום'];
+const STEP_LABELS = ['סוג מוצר', 'עיצוב', 'תוכן', 'יצירה', 'סיום'];
 const PRESET_COLORS = ['#5E2750','#1a3a6b','#1a5c3a','#7a1a1a','#b5520a','#1a4a5c','#2d2d2d'];
 
 export function StepIndicator({ current }) {
@@ -88,8 +88,52 @@ function BgCatalogModal({ bgImages, previewIdx, currentBackground, onPrev, onNex
 }
 
 export function WizardStep1({
+  productType, onProductTypeChange, onNext
+}) {
+  const { useState: useLocalState } = React;
+  const [selecting, setSelecting] = useLocalState(null);
+
+  const cards = [
+    { id: 'physical', emoji: '📦', label: 'מוצר פיזי',   desc: 'מוצר שניתן לגעת בו, לייצר ולמכור' },
+    { id: 'website',  emoji: '🌐', label: 'אתר',         desc: 'פלטפורמה דיגיטלית נגישה בדפדפן'   },
+    { id: 'app',      emoji: '📱', label: 'אפליקציה',    desc: 'אפליקציה לטלפון חכם'               }
+  ];
+
+  const handleCardClick = (id) => {
+    setSelecting(id);
+    onProductTypeChange(id);
+    setTimeout(onNext, 380);
+  };
+
+  return h('div', { className: 'wz-screen' },
+    h(StepIndicator, { current: 1 }),
+
+    h('div', { className: 'wz-content wz-content-vcenter' },
+      h('div', { className: 'wz-hero' },
+        h('h2', { className: 'wz-opening-headline' }, 'ממתגות ומבססות'),
+        h('h1', { className: 'wz-title' }, 'נתחיל מסוג התוצר'),
+        h('p', { className: 'wz-subtitle' }, 'בוחרים איזה תוצר יוצרים — הבחירה תשפיע על השאלות והמבנה בהמשך.')
+      ),
+      h('div', { className: 'wz-cards' },
+        cards.map(card =>
+          h('button', {
+            key: card.id,
+            className: `wz-card ${productType === card.id || selecting === card.id ? 'active' : ''} ${selecting === card.id ? 'selecting' : ''}`,
+            onClick: () => handleCardClick(card.id)
+          },
+            h('span', { className: 'wz-card-emoji' }, card.emoji),
+            h('span', { className: 'wz-card-label' }, card.label),
+            h('span', { className: 'wz-card-desc'  }, card.desc)
+          )
+        )
+      )
+    )
+  );
+}
+
+export function WizardStep2({
   currentBackground, currentShape, titleFont, titleColor,
-  onBackground, onShape, onTitleFont, onTitleColor, onNext
+  onBackground, onShape, onTitleFont, onTitleColor, onNext, onBack
 }) {
   const { useState: useLocalState } = React;
   const bgImages      = BACKGROUNDS.filter(bg => bg.path);
@@ -106,7 +150,7 @@ export function WizardStep1({
   const selectedBg = bgImages.find(bg => bg.path === currentBackground);
 
   return h('div', { className: 'wz-screen' },
-    h(StepIndicator, { current: 1 }),
+    h(StepIndicator, { current: 2 }),
 
     showBgModal && h(BgCatalogModal, {
       bgImages,
@@ -211,52 +255,8 @@ export function WizardStep1({
     ),
 
     h('div', { className: 'wz-nav' },
+      h('button', { className: 'wz-btn wz-btn-ghost', onClick: onBack }, '‹ חזרה'),
       h('button', { className: 'wz-btn wz-btn-primary', onClick: onNext }, 'הבא ›')
-    )
-  );
-}
-
-export function WizardStep2({ productType, onProductTypeChange, onNext, onBack }) {
-  const { useState: useLocalState } = React;
-  const [selecting, setSelecting] = useLocalState(null);
-
-  const cards = [
-    { id: 'physical', emoji: '📦', label: 'מוצר פיזי',      desc: 'מוצר שניתן לגעת בו, לייצר ולמכור' },
-    { id: 'website',  emoji: '🌐', label: 'אתר אינטרנט',    desc: 'פלטפורמה דיגיטלית נגישה בדפדפן'   },
-    { id: 'app',      emoji: '📱', label: 'אפליקציה',        desc: 'אפליקציה לטלפון חכם'               }
-  ];
-
-  const handleCardClick = (id) => {
-    setSelecting(id);
-    onProductTypeChange(id);
-    setTimeout(onNext, 380);
-  };
-
-  return h('div', { className: 'wz-screen wz-screen-centered' },
-    h(StepIndicator, { current: 2 }),
-
-    h('div', { className: 'wz-content wz-content-vcenter' },
-      h('div', { className: 'wz-hero' },
-        h('h1', { className: 'wz-title' }, 'מה פיתחתן?'),
-        h('p', { className: 'wz-subtitle' }, 'לחצו על סוג המוצר שיצרתן — תעברו מיד לשלב הבא')
-      ),
-      h('div', { className: 'wz-cards' },
-        cards.map(card =>
-          h('button', {
-            key: card.id,
-            className: `wz-card ${productType === card.id || selecting === card.id ? 'active' : ''} ${selecting === card.id ? 'selecting' : ''}`,
-            onClick: () => handleCardClick(card.id)
-          },
-            h('span', { className: 'wz-card-emoji' }, card.emoji),
-            h('span', { className: 'wz-card-label' }, card.label),
-            h('span', { className: 'wz-card-desc'  }, card.desc)
-          )
-        )
-      )
-    ),
-
-    h('div', { className: 'wz-nav' },
-      h('button', { className: 'wz-btn wz-btn-ghost', onClick: onBack }, '‹ חזרה')
     )
   );
 }
