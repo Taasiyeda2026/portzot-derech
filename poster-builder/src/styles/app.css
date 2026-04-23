@@ -916,6 +916,17 @@ canvas {
 
 /* ── Headings ── */
 .wz-hero { text-align: right; margin-bottom: 28px; }
+.wz-opening-kicker {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #f2e8fa;
+  color: #5e2750;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
 .wz-title { font-size: 30px; font-weight: 700; color: #5e2750; margin: 0 0 6px; }
 .wz-title-sm { font-size: 22px; }
 .wz-subtitle { font-size: 15px; color: #7a6a8a; margin: 0; }
