@@ -40,6 +40,7 @@ import { exportPDF } from './poster-builder.js';
 const { useEffect, useRef, useState, useCallback } = React;
 const h = React.createElement;
 const PRESELECTED_PRODUCT_TYPE = window.__POSTER_BUILDER_PRODUCT_TYPE || null;
+const PRESELECTED_START_STEP = Number(window.__POSTER_BUILDER_START_STEP || 0) || null;
 
 const SERIALIZE_PROPS = [
   'lockMovementX','lockMovementY','lockScalingX','lockScalingY','lockRotation',
@@ -82,9 +83,9 @@ function App() {
   const fabricRef      = useRef(null);
   const isHydratingRef = useRef(false);
 
-  const [wizardStep,   setWizardStep]   = useState(PRESELECTED_PRODUCT_TYPE === 'physical' ? 2 : 1);
+  const [wizardStep,   setWizardStep]   = useState(PRESELECTED_START_STEP || (PRESELECTED_PRODUCT_TYPE === 'physical' ? 2 : 1));
   const [posterSize,   setPosterSize]   = useState('A4');
-  const [productType,  setProductType]  = useState(PRESELECTED_PRODUCT_TYPE === 'physical' ? 'physical' : 'physical');
+  const [productType,  setProductType]  = useState(PRESELECTED_PRODUCT_TYPE || 'physical');
   const [currentBackground, setCurrentBackground] = useState(BACKGROUNDS[0].path);
   const [contentValues,    setContentValues]    = useState(EMPTY_CONTENT);
   const [fieldSettings,    setFieldSettings]    = useState(DEFAULT_SETTINGS);
