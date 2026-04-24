@@ -139,7 +139,7 @@ function escapeHtml(text) {
 
 function statusLabel(value, max) {
   if (!value.trim()) return 'חסר';
-  if (value.length >= max) return 'מלא';
+  if (value.length >= max) return 'הושלם';
   return 'תקין';
 }
 
@@ -497,7 +497,7 @@ function renderStep3() {
 
 function renderStep4() {
   seedPosterBuilderState();
-  return `<article class="split-card"><h3>מיפוי לפוסטר הושלם</h3><p>כל תשובות שלב 1, כולל המשוב והשיפור, הוזרמו לבונת הפוסטר הקיימת. מכאן אפשר להמשיך לעיצוב, לבדיקת גלישה נכונה של טקסט, ולייצוא.</p><a class="split-link" href="./editor.html?type=${productType}" target="_blank" rel="noopener">פתחי את gateway של הפוסטר</a></article>`;
+  return `<article class="split-card"><h3>מיפוי לפוסטר הושלם</h3><p>הנתונים נשמרו, וכל תשובות שלב 1 הוזרמו לבונת הפוסטר הקיימת. מכאן אפשר להמשיך ישירות לעיצוב, לבדיקת גלישה נכונה של טקסט, ולייצוא.</p><a class="split-link" href="./editor.html?type=${productType}">פתחי את gateway של הפוסטר</a></article>`;
 }
 
 function renderBody() {
@@ -557,7 +557,7 @@ function render() {
       <p class="split-sub">כל הזרימה מותאמת לשלב החקר, האבטיפוס/הפרומפט והתמונות, עם מיפוי לפוסטר הקיים.</p>
     </header>
     ${renderStepper()}
-    ${state.visibleErrors.length ? '<div class="split-alert">יש להשלים את השדות החסרים לפני המשך.</div>' : ''}
+    ${state.visibleErrors.length ? '<div class="split-alert">יש להשלים את השדות החסרים לפני מעבר לשלב הבא.</div>' : ''}
     <section class="split-body">${renderBody()}</section>
     <nav class="split-nav">
       <button type="button" class="split-btn ghost" data-nav="back" ${state.step === 1 ? 'disabled' : ''}>חזרה</button>
