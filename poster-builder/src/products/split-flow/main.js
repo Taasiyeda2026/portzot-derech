@@ -271,7 +271,7 @@ function renderImages() {
 
 function renderPosterStep() {
   seedPosterBuilderState();
-  return `<section class="split-card"><h3>הכול מוכן לפוסטר</h3><p>התשובות, המשוב, השיפור והמסכים הוכנו והוזרמו לבונה הפוסטר הקיים. עכשיו אפשר להמשיך לעיצוב הסופי.</p><a class="split-link" href="./editor.html?type=${productType}" target="_blank" rel="noopener">פתחי את בונת הפוסטר</a></section>`;
+  return `<section class="split-card"><h3>הכול מוכן לפוסטר</h3><p>התשובות, המשוב, השיפור והמסכים הוכנו והוזרמו לבונה הפוסטר הקיים. עכשיו אפשר להמשיך לעיצוב הסופי.</p><a class="split-link" href="./editor.html?type=${productType}" target="_blank" rel="noopener">פתחי את Gateway בונת הפוסטר</a></section>`;
 }
 
 function renderStepBody() {
