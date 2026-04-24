@@ -13,7 +13,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
-    <link rel="stylesheet" href="./src/styles/app.css" />
 
     <style>
       :root {
@@ -208,24 +207,28 @@
 
       .poster-options {
         display: grid;
-        grid-template-columns: 1fr;
-        gap: 18px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
         margin: 10px auto 0;
-        width: min(490px, 100%);
+        width: min(1032px, 100%);
+        align-items: start;
+        justify-items: center;
       }
 
       .poster-option-btn {
         display: block;
         width: 100%;
+        max-width: 344px;
         border: 1px solid rgba(216, 154, 69, 0.28);
-        border-radius: 22px;
+        border-radius: 18px;
         padding: 0;
         overflow: hidden;
         cursor: pointer;
         background: transparent;
-        box-shadow: 0 16px 34px rgba(15, 26, 61, 0.10);
+        box-shadow: 0 12px 28px rgba(15, 26, 61, 0.10);
         transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
         text-decoration: none;
+        line-height: 0;
       }
 
       .poster-option-btn:hover {
@@ -238,8 +241,8 @@
         display: block;
         width: 100%;
         height: auto;
-        aspect-ratio: 16 / 5.3;
-        object-fit: cover;
+        object-fit: contain;
+        vertical-align: top;
       }
 
       .poster-footer {
@@ -248,10 +251,6 @@
         font-size: 14px;
         font-weight: 600;
         opacity: 0.72;
-      }
-
-      #root {
-        display: none;
       }
 
       @media (min-width: 821px) {
@@ -327,18 +326,16 @@
         }
 
         .poster-options {
-          width: min(430px, 100%);
-          gap: 11px;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          width: min(1032px, 100%);
+          gap: 14px;
           margin-top: 6px;
         }
 
         .poster-option-btn {
+          max-width: 344px;
           border-radius: 18px;
           box-shadow: 0 10px 24px rgba(15, 26, 61, 0.09);
-        }
-
-        .poster-option-btn img {
-          aspect-ratio: 16 / 4.75;
         }
 
         .poster-footer {
@@ -351,6 +348,16 @@
       @media (max-width: 820px) {
         .poster-hero {
           padding: 42px 22px 32px;
+        }
+
+        .poster-options {
+          grid-template-columns: 1fr;
+          width: min(392px, 100%);
+          gap: 14px;
+        }
+
+        .poster-option-btn {
+          max-width: 392px;
         }
       }
 
@@ -400,10 +407,10 @@
           </p>
 
           <div class="poster-choice-note">
-            בחרו מסלול והמשיכו לבניית תיק המוצר:
+            בחרו את סוג המוצר והמשיכו לבניית תיק המוצר:
           </div>
 
-          <nav class="poster-options" aria-label="בחירת מסלול תיק מוצר">
+          <nav class="poster-options" aria-label="בחירת סוג מוצר">
             <a class="poster-option-btn" href="product/physical.html" aria-label="מוצר פיזי">
               <img src="btn-prd-poster/phy-btn.png" alt="מוצר פיזי" />
             </a>
@@ -412,8 +419,8 @@
               <img src="btn-prd-poster/dig-btn.png" alt="מוצר דיגיטלי" />
             </a>
 
-            <a class="poster-option-btn" href="product/app.html" aria-label="מוצר אפליקציה">
-              <img src="btn-prd-poster/app-btn.png" alt="מוצר אפליקציה" />
+            <a class="poster-option-btn" href="product/app.html" aria-label="אפליקציה">
+              <img src="btn-prd-poster/app-btn.png" alt="אפליקציה" />
             </a>
           </nav>
         </section>
@@ -422,12 +429,5 @@
       <footer class="poster-footer">© 2026 פורצות דרך</footer>
     </div>
 
-    <div id="root"></div>
-
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script type="module" src="./src/main.js"></script>
   </body>
 </html>
