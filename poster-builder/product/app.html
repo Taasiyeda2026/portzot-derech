@@ -5,14 +5,330 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>בונות פוסטר חקר - אפליקציה</title>
     <link rel="stylesheet" href="../src/styles/product-builder.css" />
+    <style>
+      body { margin: 0; background: #f4f1f8; color: #1f2937; font-family: "Rubik", "Alef", sans-serif; }
+      .app-shell { max-width: 1100px; margin: 0 auto; padding: 24px 18px 40px; }
+      .title { text-align: center; margin: 0 0 18px; color: #5e2750; }
+      .stepper { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 20px; }
+      .step-btn { border-radius: 999px; border: 1px solid #d1d5db; padding: 8px 12px; background: #fff; font-weight: 600; }
+      .step-btn.active { background: #5e2750; color: #fff; border-color: #5e2750; }
+      .step-btn.completed { background: #ecfdf5; border-color: #16a34a; }
+      .step-btn.locked { opacity: .45; }
+      .screen { display: grid; gap: 14px; }
+      .card { background: #fff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 14px; display: grid; gap: 10px; box-shadow: 0 8px 20px rgba(0,0,0,.04); }
+      .card h3 { margin: 0; color: #5e2750; }
+      .field { display: grid; gap: 6px; }
+      .field input,.field textarea,.field select { border: 1px solid #d1d5db; border-radius: 10px; padding: 10px; font: inherit; }
+      .field textarea { min-height: 86px; resize: vertical; }
+      .meta { font-size: 12px; color: #4b5563; }
+      .meta.ok { color: #047857; }
+      .meta.missing { color: #b45309; }
+      .meta.full { color: #1d4ed8; }
+      .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+      .chip { border: 1px solid #cbd5e1; background: #f8fafc; border-radius: 999px; padding: 7px 10px; cursor: pointer; }
+      .chip.active { background: #5e2750; color: #fff; border-color: #5e2750; }
+      .prompt-box { background: #faf5ff; border: 1px solid #e9d5ff; border-radius: 12px; padding: 10px; }
+      .prompt-text { white-space: pre-wrap; margin: 0; line-height: 1.5; }
+      .actions { display: flex; justify-content: space-between; gap: 10px; margin-top: 6px; }
+      .btn { border: none; border-radius: 10px; padding: 10px 14px; font: inherit; cursor: pointer; }
+      .btn.primary { background: #5e2750; color: #fff; }
+      .btn.secondary { background: #e5e7eb; color: #111827; }
+      .btn:disabled { opacity: .45; cursor: not-allowed; }
+      .copy-row { display: flex; gap: 8px; flex-wrap: wrap; }
+      .poster-link { display: inline-block; margin-top: 10px; background: #5e2750; color: #fff; text-decoration: none; padding: 10px 14px; border-radius: 10px; }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <main class="app-shell" id="appRoot"></main>
 
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script type="module" src="../src/products/app/main.js"></script>
+    <script type="module">
+      import { getPosterFields, getVisualSlots, FIELD_DEFINITIONS } from '../src/products/physical/config.js';
+
+      const STORAGE_KEY = 'poster-builder-autosave-v1';
+      const root = document.getElementById('appRoot');
+      const labels = ['שאלות חקר', 'אבטיפוס', 'תמונות', 'פוסטר'];
+
+      const valueField = FIELD_DEFINITIONS.find((f) => f.id === 'value');
+      const valueRect = getPosterFields('A4', 'app').find((f) => f.id === 'value');
+      const lineChars = Math.floor(valueRect.width / (valueField.fontSize * 0.52));
+      const lines = Math.floor(valueRect.height / (valueField.fontSize * valueField.lineHeight));
+      const baseDerived = Math.max(70, Math.min(160, lineChars * lines));
+
+      const RESEARCH_FIELDS = [
+        { key: 'projectName', label: 'שם המיזם', max: 20, required: true },
+        { key: 'shortDescription', label: 'תיאור קצר של המיזם', max: 75, required: true },
+        { key: 'problem', label: 'מה הבעיה שזיהיתן?', max: 130, required: true },
+        { key: 'audience', label: 'על מי הבעיה משפיעה?', max: 75, required: true },
+        { key: 'researchQuestion', label: 'מה הייתה שאלת החקר הטכנולוגית?', max: 90, required: true },
+        { key: 'research1', label: 'איזה חקר ביצעתן? 1', max: 42, required: true },
+        { key: 'research2', label: 'איזה חקר ביצעתן? 2', max: 42, required: true },
+        { key: 'research3', label: 'איזה חקר ביצעתן? 3', max: 42, required: true },
+        { key: 'insights', label: 'מה גיליתן בעקבות החקר?', max: 110, required: true },
+        { key: 'mustInclude1', label: 'מה היה חשוב שהפתרון יכלול? 1', max: 42, required: true },
+        { key: 'mustInclude2', label: 'מה היה חשוב שהפתרון יכלול? 2', max: 42, required: true },
+        { key: 'mustInclude3', label: 'מה היה חשוב שהפתרון יכלול? 3', max: 42, required: true },
+        { key: 'appDescription', label: 'מהי האפליקציה שפיתחתן?', max: 130, required: true },
+        { key: 'usage1', label: 'איך המשתמשת משתמשת באפליקציה? 1', max: 42, required: true },
+        { key: 'usage2', label: 'איך המשתמשת משתמשת באפליקציה? 2', max: 42, required: true },
+        { key: 'usage3', label: 'איך המשתמשת משתמשת באפליקציה? 3', max: 42, required: true },
+        { key: 'coreValue', label: 'מה הערך המרכזי של הפתרון?', max: 110, required: true },
+        { key: 'feedbackReceived', label: 'איזה משוב קיבלתן?', max: Math.floor(baseDerived * 0.95), required: true },
+        { key: 'improvementsAfterFeedback', label: 'מה שיפרתן בעקבות המשוב?', max: Math.floor(baseDerived * 0.9), required: true }
+      ];
+
+      const SCREEN_TYPES = ['מסך בית', 'מסך פתיחה', 'חיפוש', 'פעולה מרכזית', 'פרופיל', 'מעקב', 'תוצאה', 'הרשמה', 'התחברות', 'הגדרות', "צ'אט / הודעות", 'אחר'];
+      const REQUIRED_COMPONENTS = ['כותרת', 'ניווט תחתון', 'כפתור פעולה ראשי', 'כרטיסיות', 'גרף', 'רשימה', 'טופס', 'פרופיל', 'מפה', 'התראות', 'אזור מידע', 'תמונת פתיחה / אילוסטרציה', 'שדות הזנה', 'תוצאות', 'אחר'];
+      const FOCUS_OPTIONS = ['הפעולה המרכזית', 'הכפתור הראשי', 'הנתונים', 'הניווט', 'הפשטות של המסך', 'התוצאה', 'התוכן', 'האזור האישי', 'אחר'];
+
+      const IMAGE_FOCUS = ['הפעולה המרכזית', 'הכפתור הראשי', 'הניווט', 'הנתונים', 'הפשטות', 'התוצאה', 'העיצוב', 'התוכן', 'אחר'];
+      const IMAGE_STYLES = ['מודרני', 'נקי', 'טכנולוגי', 'ידידותי', 'צעיר', 'מקצועי', 'אסתטי', 'מינימליסטי', 'חם אנושי', 'אחר'];
+      const IMAGE_AVOID = ['טקסט ארוך מדי', 'עומס', 'אלמנטים לא קשורים', 'יותר מדי צבעים', 'מראה ילדותי', 'עיצוב עמוס', 'לוגואים אמיתיים', 'אחר'];
+      const REALISM = ['UI/UX ריאליסטי', 'מוקאפ מסך ריאליסטי', 'אילוסטרטיבי', 'חצי ריאליסטי', 'אחר'];
+
+      const state = {
+        step: 1,
+        researchAnswers: Object.fromEntries(RESEARCH_FIELDS.map((f) => [f.key, ''])),
+        prototypeAnswers: {
+          screen1: { screenType: '', shortName: '', visibleContent: '', userAction: '', requiredComponents: [], keyFocus: [] },
+          screen2: { screenType: '', shortName: '', visibleContent: '', userAction: '', requiredComponents: [], keyFocus: [] },
+          screen3: { screenType: '', shortName: '', visibleContent: '', userAction: '', requiredComponents: [], keyFocus: [] }
+        },
+        promptAnswers: {
+          image1: { focus: [], viewerMessage: '', style: [], realism: '', colors: '', avoid: [], avoidOther: '' },
+          image2: { focus: [], viewerMessage: '', style: [], realism: '', colors: '', avoid: [], avoidOther: '' },
+          image3: { focus: [], viewerMessage: '', style: [], realism: '', colors: '', avoid: [], avoidOther: '' }
+        },
+        derivedPosterSpecs: {
+          image1Slot: getVisualSlots('A4', 'app')[0],
+          image2Slot: getVisualSlots('A4', 'app')[1],
+          image3Slot: getVisualSlots('A4', 'app')[2],
+          feedbackSlot: { maxChars: Math.floor(baseDerived * 0.95) },
+          improvementsSlot: { maxChars: Math.floor(baseDerived * 0.9) }
+        },
+        generatedPrompts: { image1: '', image2: '', image3: '' }
+      };
+
+      const statusText = (value, max) => {
+        if (!value.trim()) return { label: 'חסר', cls: 'missing' };
+        if (value.length >= max) return { label: 'הושלם', cls: 'full' };
+        return { label: 'תקין', cls: 'ok' };
+      };
+
+      const validateStep1 = () => RESEARCH_FIELDS.every((f) => !f.required || state.researchAnswers[f.key].trim());
+      const screenValid = (screen) => screen.screenType && screen.visibleContent.trim() && screen.userAction.trim() && screen.requiredComponents.length >= 1 && screen.requiredComponents.length <= 5 && screen.keyFocus.length >= 1 && screen.keyFocus.length <= 3;
+      const validateStep2 = () => screenValid(state.prototypeAnswers.screen1) && screenValid(state.prototypeAnswers.screen2) && screenValid(state.prototypeAnswers.screen3);
+      const imageValid = (image) => image.focus.length >= 1 && image.focus.length <= 3 && image.viewerMessage.trim() && image.style.length >= 1 && image.style.length <= 2 && image.realism;
+      const validateStep3 = () => imageValid(state.promptAnswers.image1) && imageValid(state.promptAnswers.image2) && imageValid(state.promptAnswers.image3);
+      const canGo = (step) => (step === 1 ? validateStep1() : step === 2 ? validateStep2() : step === 3 ? validateStep3() : true);
+
+      function toggleSelection(list, value, limit) {
+        const idx = list.indexOf(value);
+        if (idx >= 0) list.splice(idx, 1);
+        else if (list.length < limit) list.push(value);
+      }
+
+      function buildPrompt(imageKey, screenKey, slotKey) {
+        const r = state.researchAnswers;
+        const screen = state.prototypeAnswers[screenKey];
+        const image = state.promptAnswers[imageKey];
+        const slot = state.derivedPosterSpecs[slotKey];
+        const avoid = image.avoid.includes('אחר') && image.avoidOther ? [...image.avoid.filter((v) => v !== 'אחר'), image.avoidOther] : image.avoid;
+        return [
+          'Create a high-quality mobile app screen visual for an educational innovation poster.',
+          `שם המיזם: ${r.projectName}. תיאור המיזם: ${r.shortDescription}.`,
+          `הבעיה: ${r.problem}. קהל יעד: ${r.audience}.`,
+          `תיאור האפליקציה: ${r.appDescription}. הערך המרכזי: ${r.coreValue}.`,
+          `סוג המסך: ${screen.screenType}. המשתמשת רואה: ${screen.visibleContent}. המשתמשת עושה: ${screen.userAction}.`,
+          `רכיבים שחובה לכלול במסך: ${screen.requiredComponents.join(', ')}.`,
+          `מה חשוב שיבלוט: ${image.focus.join(', ')}.`,
+          `מה חשוב שהצופה תבין: ${image.viewerMessage}.`,
+          `סגנון עיצובי: ${image.style.join(', ')}. רמת ריאליזם: ${image.realism}. צבעים בולטים: ${image.colors || 'בהלימה למיזם'}.`,
+          avoid.length ? `מה לא לכלול: ${avoid.join(', ')}.` : '',
+          `התאמה ל-slot פוסטר בגודל ${slot.width}x${slot.height}, framing מדויק, composition נקי, safe area מתחשב בטקסטים.` ,
+          'high quality, clean composition, realistic proportions, no watermark, no text overlay, no logo, poster-friendly composition, mobile-app-friendly composition.',
+          'מסך אפליקציה נקי, ברור, אסתטי, חד, מתאים לשילוב בפוסטר, ללא טקסט מיותר וללא עומס חזותי.'
+        ].filter(Boolean).join(' ');
+      }
+
+      function regeneratePrompts() {
+        state.generatedPrompts.image1 = buildPrompt('image1', 'screen1', 'image1Slot');
+        state.generatedPrompts.image2 = buildPrompt('image2', 'screen2', 'image2Slot');
+        state.generatedPrompts.image3 = buildPrompt('image3', 'screen3', 'image3Slot');
+      }
+
+      function pushToPosterBuilder() {
+        const data = {
+          posterSize: 'A4',
+          productType: 'app',
+          contentValues: {
+            projectName: state.researchAnswers.projectName,
+            description: state.researchAnswers.shortDescription,
+            problem: state.researchAnswers.problem,
+            audience: state.researchAnswers.audience,
+            researchQuestion: state.researchAnswers.researchQuestion,
+            research_1: state.researchAnswers.research1,
+            research_2: state.researchAnswers.research2,
+            research_3: state.researchAnswers.research3,
+            findings: state.researchAnswers.insights,
+            requirements_1: state.researchAnswers.mustInclude1,
+            requirements_2: state.researchAnswers.mustInclude2,
+            requirements_3: state.researchAnswers.mustInclude3,
+            solution: state.researchAnswers.appDescription,
+            howItWorks_1: state.researchAnswers.usage1,
+            howItWorks_2: state.researchAnswers.usage2,
+            howItWorks_3: state.researchAnswers.usage3,
+            value: `${state.researchAnswers.coreValue}\nמשוב: ${state.researchAnswers.feedbackReceived}\nשיפור: ${state.researchAnswers.improvementsAfterFeedback}`,
+            student1: '', student2: '', student3: '', className: '', schoolName: ''
+          },
+          updatedAt: Date.now()
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      }
+
+      function renderResearchStep() {
+        return `<section class="card">${RESEARCH_FIELDS.map((f) => {
+          const value = state.researchAnswers[f.key];
+          const meta = statusText(value, f.max);
+          return `<label class="field"><span>${f.label}</span><textarea data-research="${f.key}" maxlength="${f.max}" placeholder="מלאי כאן">${value}</textarea><span class="meta ${meta.cls}">${value.length}/${f.max} · ${meta.label}</span></label>`;
+        }).join('')}</section>`;
+      }
+
+      function chipSet(name, options, selected, limit) {
+        return `<div class="chips">${options.map((opt) => `<button type="button" class="chip ${selected.includes(opt) ? 'active' : ''}" data-chip="${name}" data-value="${opt}" data-limit="${limit}">${opt}</button>`).join('')}</div>`;
+      }
+
+      function renderPrototypeStep() {
+        const buildScreen = (idx) => {
+          const key = `screen${idx}`;
+          const s = state.prototypeAnswers[key];
+          return `<article class="card"><h3>מסך ${idx}</h3>
+            <label class="field"><span>מה סוג המסך?</span><select data-screen="${key}" data-field="screenType"><option value="">בחרי</option>${SCREEN_TYPES.map((t) => `<option ${s.screenType === t ? 'selected' : ''}>${t}</option>`).join('')}</select></label>
+            <label class="field"><span>שם קצר למסך</span><input data-screen="${key}" data-field="shortName" maxlength="40" value="${s.shortName}" placeholder="מלאי אם רלוונטי" /></label>
+            <label class="field"><span>מה המשתמשת רואה במסך?</span><textarea data-screen="${key}" data-field="visibleContent" maxlength="260" placeholder="תארי בקצרה">${s.visibleContent}</textarea></label>
+            <label class="field"><span>מה המשתמשת עושה במסך?</span><textarea data-screen="${key}" data-field="userAction" maxlength="260" placeholder="תארי פעולה מרכזית">${s.userAction}</textarea></label>
+            <div class="field"><span>אילו רכיבים חייבים להופיע?</span>${chipSet(`required-${key}`, REQUIRED_COMPONENTS, s.requiredComponents, 5)}</div>
+            <div class="field"><span>מה חשוב שיבלוט?</span>${chipSet(`focus-${key}`, FOCUS_OPTIONS, s.keyFocus, 3)}</div>
+          </article>`;
+        };
+        return [buildScreen(1), buildScreen(2), buildScreen(3)].join('');
+      }
+
+      function renderImagesStep() {
+        regeneratePrompts();
+        const card = (idx) => {
+          const imageKey = `image${idx}`;
+          const img = state.promptAnswers[imageKey];
+          const showOther = img.avoid.includes('אחר');
+          return `<article class="card"><h3>תמונה ${idx} — מבוססת על מסך ${idx}</h3>
+            <div class="field"><span>מה חשוב שיבלוט?</span>${chipSet(`ifocus-${imageKey}`, IMAGE_FOCUS, img.focus, 3)}</div>
+            <label class="field"><span>מה חשוב שהצופה יבין מהמסך?</span><textarea data-image="${imageKey}" data-field="viewerMessage" maxlength="240" placeholder="תארי תובנה מרכזית">${img.viewerMessage}</textarea></label>
+            <div class="field"><span>סגנון עיצובי</span>${chipSet(`style-${imageKey}`, IMAGE_STYLES, img.style, 2)}</div>
+            <label class="field"><span>רמת ריאליזם</span><select data-image="${imageKey}" data-field="realism"><option value="">בחרי</option>${REALISM.map((r) => `<option ${img.realism === r ? 'selected' : ''}>${r}</option>`).join('')}</select></label>
+            <label class="field"><span>צבעים בולטים</span><input data-image="${imageKey}" data-field="colors" maxlength="80" value="${img.colors}" placeholder="למשל: סגול, טורקיז" /></label>
+            <div class="field"><span>מה לא לכלול</span>${chipSet(`avoid-${imageKey}`, IMAGE_AVOID, img.avoid, 4)}</div>
+            ${showOther ? `<label class="field"><span>מה לא לכלול - פירוט</span><input data-image="${imageKey}" data-field="avoidOther" maxlength="80" value="${img.avoidOther}" placeholder="תארי בקצרה" /></label>` : ''}
+            <div class="prompt-box"><p class="prompt-text">${state.generatedPrompts[imageKey]}</p><div class="copy-row"><button class="btn secondary" data-copy="${imageKey}">העתיקי פרומפט</button></div></div>
+          </article>`;
+        };
+        return `${card(1)}${card(2)}${card(3)}<section class="card"><button class="btn secondary" data-copy-all>העתיקי את כל הפרומפטים</button></section>`;
+      }
+
+      function renderPosterStep() {
+        pushToPosterBuilder();
+        return `<section class="card"><h3>אפשר להמשיך לפוסטר</h3><p>כל התשובות, המשוב, השיפור ופרטי האפליקציה נשמרו והוזרמו לבונה הקיים. בשלב הבא תוכלי להעלות את שלוש התמונות למסכים ולהשלים את הפוסטר.</p><a class="poster-link" href="./editor.html?type=app" target="_blank" rel="noopener">פתחי את בונת הפוסטר</a></section>`;
+      }
+
+      function renderBody() {
+        if (state.step === 1) return renderResearchStep();
+        if (state.step === 2) return renderPrototypeStep();
+        if (state.step === 3) return renderImagesStep();
+        return renderPosterStep();
+      }
+
+      function render() {
+        root.innerHTML = `
+          <h1 class="title">אפליקציה</h1>
+          <nav class="stepper">${labels.map((label, i) => {
+            const step = i + 1;
+            const cls = step < state.step ? 'completed' : step === state.step ? 'active' : (canGo(step - 1) ? '' : 'locked');
+            const locked = step > state.step && !canGo(step - 1);
+            return `<button class="step-btn ${cls}" data-step="${step}" ${locked ? 'disabled' : ''}>${step}. ${label}</button>`;
+          }).join('')}</nav>
+          <section class="screen">${renderBody()}</section>
+          <div class="actions">
+            <button class="btn secondary" data-nav="back" ${state.step === 1 ? 'disabled' : ''}>חזרה</button>
+            <button class="btn primary" data-nav="next" ${state.step === 4 ? 'disabled' : ''}>אפשר להמשיך לשלב הבא</button>
+          </div>
+        `;
+        bind();
+      }
+
+      function bind() {
+        root.querySelectorAll('[data-step]').forEach((btn) => btn.addEventListener('click', () => {
+          const next = Number(btn.dataset.step);
+          if (next <= state.step || canGo(next - 1)) { state.step = next; render(); }
+        }));
+
+        root.querySelectorAll('[data-research]').forEach((el) => el.addEventListener('input', () => {
+          state.researchAnswers[el.dataset.research] = el.value;
+          const max = Number(el.maxLength);
+          const m = statusText(el.value, max);
+          el.nextElementSibling.className = `meta ${m.cls}`;
+          el.nextElementSibling.textContent = `${el.value.length}/${max} · ${m.label}`;
+        }));
+
+        root.querySelectorAll('[data-screen]').forEach((el) => el.addEventListener('input', () => {
+          const screen = state.prototypeAnswers[el.dataset.screen];
+          screen[el.dataset.field] = el.value;
+        }));
+
+        root.querySelectorAll('[data-chip]').forEach((chip) => chip.addEventListener('click', () => {
+          const [kind, key] = chip.dataset.chip.split('-');
+          const value = chip.dataset.value;
+          const limit = Number(chip.dataset.limit);
+          if (kind === 'required') toggleSelection(state.prototypeAnswers[key].requiredComponents, value, limit);
+          if (kind === 'focus') toggleSelection(state.prototypeAnswers[key].keyFocus, value, limit);
+          if (kind === 'ifocus') toggleSelection(state.promptAnswers[key].focus, value, limit);
+          if (kind === 'style') toggleSelection(state.promptAnswers[key].style, value, limit);
+          if (kind === 'avoid') {
+            toggleSelection(state.promptAnswers[key].avoid, value, limit);
+            if (value === 'אחר' && !state.promptAnswers[key].avoid.includes('אחר')) state.promptAnswers[key].avoidOther = '';
+          }
+          render();
+        }));
+
+        root.querySelectorAll('[data-image]').forEach((el) => el.addEventListener('input', () => {
+          state.promptAnswers[el.dataset.image][el.dataset.field] = el.value;
+          if (state.step === 3) render();
+        }));
+
+        root.querySelectorAll('[data-copy]').forEach((btn) => btn.addEventListener('click', async () => {
+          await navigator.clipboard.writeText(state.generatedPrompts[btn.dataset.copy]);
+          btn.textContent = 'הפרומפט הועתק';
+        }));
+
+        const copyAll = root.querySelector('[data-copy-all]');
+        if (copyAll) {
+          copyAll.addEventListener('click', async () => {
+            await navigator.clipboard.writeText(`פרומפט 1:\n${state.generatedPrompts.image1}\n\nפרומפט 2:\n${state.generatedPrompts.image2}\n\nפרומפט 3:\n${state.generatedPrompts.image3}`);
+            copyAll.textContent = 'כל הפרומפטים הועתקו';
+          });
+        }
+
+        const back = root.querySelector('[data-nav="back"]');
+        if (back) back.addEventListener('click', () => { if (state.step > 1) { state.step -= 1; render(); } });
+
+        const next = root.querySelector('[data-nav="next"]');
+        if (next) next.addEventListener('click', () => {
+          if (!canGo(state.step)) {
+            alert('השלימי את כל שדות החובה כדי להמשיך לשלב הבא.');
+            return;
+          }
+          if (state.step < 4) { state.step += 1; render(); }
+        });
+      }
+
+      render();
+    </script>
   </body>
 </html>
