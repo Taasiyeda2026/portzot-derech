@@ -48,9 +48,9 @@ body {
 }
 .poster-back-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(214, 31, 140, 0.28); }
 
-.poster-page-wrapper { width: min(1120px, 100%); margin: 0 auto; padding: 54px 24px 80px; }
+.poster-page-wrapper { width: min(1120px, 100%); margin: 0 auto; padding: 30px 20px 48px; }
 .poster-hero {
-  position: relative; padding: 56px 42px 48px; border: 1px solid var(--border); border-radius: 38px;
+  position: relative; padding: 36px 30px 30px; border: 1px solid var(--border); border-radius: 30px;
   background: linear-gradient(145deg, rgba(255, 255, 255, 0.76), rgba(255, 243, 223, 0.72));
   box-shadow: var(--shadow); overflow: hidden; isolation: isolate;
 }
@@ -64,22 +64,22 @@ body {
   background: radial-gradient(circle, rgba(214, 31, 140, 0.20), transparent 68%); z-index: -1;
 }
 
-.poster-hero h1 { margin: 0 0 18px; font-size: clamp(42px, 7vw, 76px); line-height: 1.02; font-weight: 900; color: var(--deep-blue); text-shadow: 0 12px 34px rgba(214, 31, 140, 0.13); }
+.poster-hero h1 { margin: 0 0 12px; font-size: clamp(34px, 5.4vw, 56px); line-height: 1.04; font-weight: 900; color: var(--deep-blue); text-shadow: 0 10px 24px rgba(214, 31, 140, 0.12); }
 .poster-hero h1 strong { color: var(--fuchsia); font-weight: 900; }
-.poster-lead { max-width: 770px; margin: 0 auto 30px; color: var(--muted); font-size: clamp(18px, 2.1vw, 22px); line-height: 1.7; font-weight: 500; }
-.poster-choice-note { max-width: 780px; margin: 0 auto 24px; color: var(--fuchsia); font-size: 20px; line-height: 1.55; font-weight: 800; }
+.poster-lead { max-width: 760px; margin: 0 auto 18px; color: var(--muted); font-size: clamp(16px, 1.7vw, 19px); line-height: 1.55; font-weight: 500; }
+.poster-choice-note { max-width: 760px; margin: 0 auto 14px; color: var(--fuchsia); font-size: 17px; line-height: 1.4; font-weight: 800; }
 
 .poster-options {
-  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin: 10px auto 0;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 8px auto 0;
   width: min(1032px, 100%); align-items: start; justify-items: center;
 }
 .poster-option-btn {
-  display: block; width: 100%; max-width: 344px; border: 1px solid rgba(216, 154, 69, 0.28);
-  border-radius: 18px; padding: 0; overflow: hidden; cursor: pointer; background: transparent;
-  box-shadow: 0 12px 28px rgba(15, 26, 61, 0.10);
+  display: block; width: 100%; max-width: 300px; border: 1px solid rgba(216, 154, 69, 0.28);
+  border-radius: 14px; padding: 0; overflow: hidden; cursor: pointer; background: transparent;
+  box-shadow: 0 8px 20px rgba(15, 26, 61, 0.10);
   transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
   text-decoration: none; line-height: 0;
 }
 .poster-option-btn:hover { transform: translateY(-6px); border-color: rgba(214, 31, 140, 0.42); box-shadow: 0 24px 48px rgba(214, 31, 140, 0.16); }
 .poster-option-btn img { display: block; width: 100%; height: auto; object-fit: contain; vertical-align: top; }
-.poster-footer { padding: 24px 16px 34px; color: var(--deep-blue); font-size: 14px; font-weight: 600; opacity: 0.72; }
+.poster-footer { padding: 12px 16px 18px; color: var(--deep-blue); font-size: 13px; font-weight: 600; opacity: 0.72; }
