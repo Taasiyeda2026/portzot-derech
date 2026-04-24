@@ -39,6 +39,7 @@ import { exportPDF } from './poster-builder.js';
 
 const { useEffect, useRef, useState, useCallback } = React;
 const h = React.createElement;
+const PRESELECTED_PRODUCT_TYPE = window.__POSTER_BUILDER_PRODUCT_TYPE || null;
 
 const SERIALIZE_PROPS = [
   'lockMovementX','lockMovementY','lockScalingX','lockScalingY','lockRotation',
@@ -81,9 +82,9 @@ function App() {
   const fabricRef      = useRef(null);
   const isHydratingRef = useRef(false);
 
-  const [wizardStep,   setWizardStep]   = useState(1);
+  const [wizardStep,   setWizardStep]   = useState(PRESELECTED_PRODUCT_TYPE === 'physical' ? 2 : 1);
   const [posterSize,   setPosterSize]   = useState('A4');
-  const [productType,  setProductType]  = useState('physical');
+  const [productType,  setProductType]  = useState(PRESELECTED_PRODUCT_TYPE === 'physical' ? 'physical' : 'physical');
   const [currentBackground, setCurrentBackground] = useState(BACKGROUNDS[0].path);
   const [contentValues,    setContentValues]    = useState(EMPTY_CONTENT);
   const [fieldSettings,    setFieldSettings]    = useState(DEFAULT_SETTINGS);
@@ -127,9 +128,10 @@ function App() {
 
   const hydrate = useCallback((saved, canvas = fabricRef.current) => {
     if (!canvas || !saved) return;
-    const validTypes   = ['physical','website','app'];
+      const validTypes   = ['physical','website','app'];
     const nextSize     = normalizePosterSize(saved.posterSize || 'A4');
-    const nextType     = validTypes.includes(saved.productType) ? saved.productType : 'physical';
+      const nextTypeRaw  = validTypes.includes(saved.productType) ? saved.productType : 'physical';
+      const nextType     = PRESELECTED_PRODUCT_TYPE || nextTypeRaw;
     const nextBg       = saved.background || BACKGROUNDS[0].path;
     const nextValues   = { ...EMPTY_CONTENT, ...(saved.contentValues || {}) };
     const nextSettings = { ...DEFAULT_SETTINGS, ...(saved.fieldSettings || {}) };
@@ -225,6 +227,7 @@ function App() {
   }, []);
 
   const handleProductTypeChange = type => {
+    if (PRESELECTED_PRODUCT_TYPE) return;
     setProductType(type);
     productTypeRef.current = type;
     const canvas = fabricRef.current;
@@ -312,8 +315,9 @@ function App() {
   const handleExportPdf = () => exportPDF(fabricRef.current, posterSizeRef.current, contentValuesRef.current);
 
   const goToStep = step => {
-    setWizardStep(step);
-    if (step === 4) {
+    const nextStep = PRESELECTED_PRODUCT_TYPE === 'physical' && step === 1 ? 2 : step;
+    setWizardStep(nextStep);
+    if (nextStep === 4) {
       setTimeout(() => {
         const canvas = fabricRef.current;
         if (canvas) resizeCanvas(canvas, posterSizeRef.current);
@@ -411,7 +415,7 @@ function App() {
     (wizardStep < 4 || wizardStep === 5) && h('div', { className: 'wz-overlay' },
 
       // ── Step 1: product type selection (all types) ──────────
-      wizardStep === 1 && h(WizardStep1, {
+      !PRESELECTED_PRODUCT_TYPE && wizardStep === 1 && h(WizardStep1, {
         productType,
         onProductTypeChange: handleProductTypeChange,
         onNext: () => goToStep(2)
@@ -421,7 +425,13 @@ function App() {
       wizardStep === 2 && productType === 'physical' && h(PhysicalStep1, {
         contentValues,
         onContentChange: onContentFieldChange,
-        onBack: () => goToStep(1),
+        onBack: () => {
+          if (PRESELECTED_PRODUCT_TYPE === 'physical') {
+            window.location.href = '../index.html';
+            return;
+          }
+          goToStep(1);
+        },
         onNext: () => { setPhysicalSubStep(1); goToStep(3); }
       }),
 
