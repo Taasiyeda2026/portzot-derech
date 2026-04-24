@@ -100,6 +100,7 @@ const state = {
   step: 1,
   research: Object.fromEntries(RESEARCH_FIELDS.map(([key]) => [key, ''])),
   errors: {},
+  visibleErrors: [],
   physicalPrompt: {
     main: { appearance: '', highlight: [], material: '', background: '', style: [], realism: '', description: '', colors: '', avoid: [], avoidOther: '' },
     usage: { user: '', peopleCount: '', location: '', action: '', props: [], propsOther: '', highlight: [], takeaway: '', style: [], realism: '', colors: '', avoid: [], avoidOther: '' }
@@ -150,7 +151,7 @@ function validateResearch() {
     if ((state.research[key] || '').length > max) stepErrors[key] = `אפשר להזין עד ${max} תווים.`;
   });
   state.errors = stepErrors;
-  return Object.keys(stepErrors).length === 0;
+  return stepErrors;
 }
 
 function validatePhysicalPrompt() {
@@ -174,14 +175,19 @@ function validatePhysicalPrompt() {
   if (usage.style.length < 1 || usage.style.length > 2) errors.usageStyle = 'בחרי בין סגנון אחד לשניים.';
   if (!usage.realism) errors.usageRealism = 'בחרי רמת ריאליזם.';
 
+  if (main.avoid.includes('אחר') && !main.avoidOther.trim()) errors.mainAvoidOther = 'נבחר "אחר" – השלימי פירוט קצר.';
+  if (usage.props.includes('אחר') && !usage.propsOther.trim()) errors.usagePropsOther = 'נבחר "אחר" – השלימי פירוט קצר.';
+  if (usage.avoid.includes('אחר') && !usage.avoidOther.trim()) errors.usageAvoidOther = 'נבחר "אחר" – השלימי פירוט קצר.';
+
   state.errors = errors;
-  return Object.keys(errors).length === 0;
+  return errors;
 }
 
 function validatePrototype() {
   const errors = {};
   state.prototypeScreens.forEach((screen, idx) => {
     if (!screen.type) errors[`screenType${idx}`] = 'בחרי סוג מסך.';
+    if (screen.type === 'אחר' && !screen.shortName.trim()) errors[`screenShortName${idx}`] = 'נבחר "אחר" – השלימי שם קצר.';
     if (!screen.view.trim()) errors[`screenView${idx}`] = 'תארי מה המשתמשת רואה.';
     if (!screen.action.trim()) errors[`screenAction${idx}`] = 'תארי מה המשתמשת עושה.';
     if (screen.components.length < 1 || screen.components.length > 5) errors[`screenComponents${idx}`] = 'בחרי בין רכיב אחד לחמישה.';
@@ -197,7 +203,7 @@ function validatePrototype() {
   }
 
   state.errors = errors;
-  return Object.keys(errors).length === 0;
+  return errors;
 }
 
 function validateImagesStep() {
@@ -213,14 +219,41 @@ function validateImagesStep() {
     if (!image.realism) errors[`imageRealism${idx}`] = 'בחרי רמת ריאליזם.';
   });
   state.errors = errors;
-  return Object.keys(errors).length === 0;
+  return errors;
 }
 
 function validateStep(step) {
   if (step === 1) return validateResearch();
   if (step === 2) return productType === 'physical' ? validatePhysicalPrompt() : validatePrototype();
-  if (step === 3) return productType === 'physical' ? true : validateImagesStep();
-  return true;
+  if (step === 3) return productType === 'physical' ? {} : validateImagesStep();
+  return {};
+}
+
+const VALIDATION_ORDER = {
+  1: RESEARCH_FIELDS.map(([key]) => key),
+  2: productType === 'physical'
+    ? ['mainAppearance', 'mainHighlight', 'mainMaterial', 'mainBackground', 'mainStyle', 'mainRealism', 'mainDescription', 'mainAvoidOther', 'usageUser', 'usageCount', 'usageLocation', 'usageAction', 'usagePropsOther', 'usageHighlight', 'usageTakeaway', 'usageStyle', 'usageRealism', 'usageAvoidOther']
+    : [
+      ...state.prototypeScreens.flatMap((_, idx) => [`screenType${idx}`, `screenShortName${idx}`, `screenView${idx}`, `screenAction${idx}`, `screenComponents${idx}`, `screenEmphasis${idx}`]),
+      'flowStart', 'flowEnd', 'flowSummary', 'flowBranchToggle', 'flowBranchText'
+    ],
+  3: ['selectedScreens', ...state.images.flatMap((_, idx) => [`imageScreen${idx}`, `imageEmphasis${idx}`, `imageTakeaway${idx}`, `imageStyle${idx}`, `imageRealism${idx}`])]
+};
+
+function firstErrorKey(step, errors) {
+  const ordered = VALIDATION_ORDER[step] || [];
+  return ordered.find((key) => errors[key]) || Object.keys(errors)[0] || null;
+}
+
+function focusFirstInvalidField(step, errors) {
+  const key = firstErrorKey(step, errors);
+  if (!key) return;
+  state.visibleErrors = [key];
+  const field = root.querySelector(`[data-error-key="${key}"]`);
+  if (!field) return;
+  field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  const focusable = field.querySelector('textarea, input, select, button, [tabindex]');
+  if (focusable) focusable.focus({ preventScroll: true });
 }
 
 function slots() {
@@ -297,8 +330,9 @@ function seedPosterBuilderState() {
 }
 
 function renderError(key) {
-  return state.errors[key] ? `<small class="split-error">${state.errors[key]}</small>` : '';
+  return state.errors[key] && state.visibleErrors.includes(key) ? `<small class="split-error">${state.errors[key]}</small>` : '';
 }
+function fieldClass(key) { return `split-field ${state.errors[key] && state.visibleErrors.includes(key) ? 'error' : ''}`; }
 
 function renderTags(tagName, options, selected, max) {
   return `<div class="split-tags">${options.map((option) => {
@@ -311,7 +345,7 @@ function renderStep1() {
   return `<section class="split-card">${RESEARCH_FIELDS.map(([key, label, max]) => {
     const value = state.research[key] || '';
     const rows = max <= 42 ? 2 : 3;
-    return `<label class="split-field">
+    return `<label class="${fieldClass(key)}" data-error-key="${key}">
       <span>${label} <em>*</em></span>
       <textarea data-research="${key}" maxlength="${max}" rows="${rows}" placeholder="כתבי כאן" dir="rtl">${escapeHtml(value)}</textarea>
       <small>${value.length}/${max} · ${statusLabel(value, max)}</small>
@@ -324,12 +358,12 @@ function renderPrototypeScreens() {
   return state.prototypeScreens.map((screen, index) => `
     <article class="split-card">
       <h3>כרטיס מסך ${screen.number}</h3>
-      <label class="split-field"><span>מה סוג המסך? <em>*</em></span><select data-screen="${index}" data-key="type"><option value="">בחרי</option>${SCREEN_TYPE_OPTIONS.map((option) => `<option ${screen.type === option ? 'selected' : ''}>${option}</option>`).join('')}</select>${renderError(`screenType${index}`)}</label>
-      <label class="split-field"><span>שם קצר למסך</span><input data-screen="${index}" data-key="shortName" maxlength="30" value="${escapeHtml(screen.shortName)}" /></label>
-      <label class="split-field"><span>מה המשתמשת רואה במסך? <em>*</em></span><textarea data-screen="${index}" data-key="view" maxlength="220">${escapeHtml(screen.view)}</textarea>${renderError(`screenView${index}`)}</label>
-      <label class="split-field"><span>מה המשתמשת עושה במסך? <em>*</em></span><textarea data-screen="${index}" data-key="action" maxlength="220">${escapeHtml(screen.action)}</textarea>${renderError(`screenAction${index}`)}</label>
-      <div class="split-field"><span>אילו רכיבים חייבים להופיע? <em>*</em></span>${renderTags(`components-${index}`, COMPONENT_OPTIONS, screen.components, 5)}${renderError(`screenComponents${index}`)}</div>
-      <div class="split-field"><span>מה חשוב שיבלוט? <em>*</em></span>${renderTags(`emphasis-${index}`, EMPHASIS_OPTIONS, screen.emphasis, 3)}${renderError(`screenEmphasis${index}`)}</div>
+      <label class="${fieldClass(`screenType${index}`)}" data-error-key="screenType${index}"><span>מה סוג המסך? <em>*</em></span><select data-screen="${index}" data-key="type"><option value="">בחרי</option>${SCREEN_TYPE_OPTIONS.map((option) => `<option ${screen.type === option ? 'selected' : ''}>${option}</option>`).join('')}</select>${renderError(`screenType${index}`)}</label>
+      <label class="${fieldClass(`screenShortName${index}`)}" data-error-key="screenShortName${index}"><span>שם קצר למסך</span><input data-screen="${index}" data-key="shortName" maxlength="30" value="${escapeHtml(screen.shortName)}" /></label>
+      <label class="${fieldClass(`screenView${index}`)}" data-error-key="screenView${index}"><span>מה המשתמשת רואה במסך? <em>*</em></span><textarea data-screen="${index}" data-key="view" maxlength="220">${escapeHtml(screen.view)}</textarea>${renderError(`screenView${index}`)}</label>
+      <label class="${fieldClass(`screenAction${index}`)}" data-error-key="screenAction${index}"><span>מה המשתמשת עושה במסך? <em>*</em></span><textarea data-screen="${index}" data-key="action" maxlength="220">${escapeHtml(screen.action)}</textarea>${renderError(`screenAction${index}`)}</label>
+      <div class="${fieldClass(`screenComponents${index}`)}" data-error-key="screenComponents${index}"><span>אילו רכיבים חייבים להופיע? <em>*</em></span>${renderTags(`components-${index}`, COMPONENT_OPTIONS, screen.components, 5)}${renderError(`screenComponents${index}`)}</div>
+      <div class="${fieldClass(`screenEmphasis${index}`)}" data-error-key="screenEmphasis${index}"><span>מה חשוב שיבלוט? <em>*</em></span>${renderTags(`emphasis-${index}`, EMPHASIS_OPTIONS, screen.emphasis, 3)}${renderError(`screenEmphasis${index}`)}</div>
     </article>
   `).join('');
 }
@@ -339,33 +373,33 @@ function renderStep2Physical() {
   return `
     <article class="split-card">
       <h3>כרטיס תמונה ראשית</h3>
-      <label class="split-field"><span>איך המוצר מופיע? <em>*</em></span><select data-physical="main" data-key="appearance"><option value="">בחרי</option>${PHYSICAL_MAIN_OPTIONS.appearance.map((o) => `<option ${main.appearance === o ? 'selected' : ''}>${o}</option>`).join('')}</select>${renderError('mainAppearance')}</label>
-      <div class="split-field"><span>מה חשוב שיבלוט? <em>*</em></span>${renderTags('main-highlight', PHYSICAL_MAIN_OPTIONS.highlight, main.highlight, 3)}${renderError('mainHighlight')}</div>
-      <label class="split-field"><span>חומר / מרקם המוצר <em>*</em></span><select data-physical="main" data-key="material"><option value="">בחרי</option>${PHYSICAL_MAIN_OPTIONS.material.map((o) => `<option ${main.material === o ? 'selected' : ''}>${o}</option>`).join('')}</select>${renderError('mainMaterial')}</label>
-      <label class="split-field"><span>רקע רצוי <em>*</em></span><select data-physical="main" data-key="background"><option value="">בחרי</option>${PHYSICAL_MAIN_OPTIONS.background.map((o) => `<option ${main.background === o ? 'selected' : ''}>${o}</option>`).join('')}</select>${renderError('mainBackground')}</label>
-      <div class="split-field"><span>סגנון עיצובי <em>*</em></span>${renderTags('main-style', PHYSICAL_MAIN_OPTIONS.style, main.style, 2)}${renderError('mainStyle')}</div>
-      <label class="split-field"><span>רמת ריאליזם <em>*</em></span><select data-physical="main" data-key="realism"><option value="">בחרי</option>${PHYSICAL_MAIN_OPTIONS.realism.map((o) => `<option ${main.realism === o ? 'selected' : ''}>${o}</option>`).join('')}</select>${renderError('mainRealism')}</label>
-      <label class="split-field"><span>מה צריך לראות בתמונה? <em>*</em></span><textarea data-physical="main" data-key="description" maxlength="220">${escapeHtml(main.description)}</textarea>${renderError('mainDescription')}</label>
+      <label class="${fieldClass('mainAppearance')}" data-error-key="mainAppearance"><span>איך המוצר מופיע? <em>*</em></span><select data-physical="main" data-key="appearance"><option value="">בחרי</option>${PHYSICAL_MAIN_OPTIONS.appearance.map((o) => `<option ${main.appearance === o ? 'selected' : ''}>${o}</option>`).join('')}</select>${renderError('mainAppearance')}</label>
+      <div class="${fieldClass('mainHighlight')}" data-error-key="mainHighlight"><span>מה חשוב שיבלוט? <em>*</em></span>${renderTags('main-highlight', PHYSICAL_MAIN_OPTIONS.highlight, main.highlight, 3)}${renderError('mainHighlight')}</div>
+      <label class="${fieldClass('mainMaterial')}" data-error-key="mainMaterial"><span>חומר / מרקם המוצר <em>*</em></span><select data-physical="main" data-key="material"><option value="">בחרי</option>${PHYSICAL_MAIN_OPTIONS.material.map((o) => `<option ${main.material === o ? 'selected' : ''}>${o}</option>`).join('')}</select>${renderError('mainMaterial')}</label>
+      <label class="${fieldClass('mainBackground')}" data-error-key="mainBackground"><span>רקע רצוי <em>*</em></span><select data-physical="main" data-key="background"><option value="">בחרי</option>${PHYSICAL_MAIN_OPTIONS.background.map((o) => `<option ${main.background === o ? 'selected' : ''}>${o}</option>`).join('')}</select>${renderError('mainBackground')}</label>
+      <div class="${fieldClass('mainStyle')}" data-error-key="mainStyle"><span>סגנון עיצובי <em>*</em></span>${renderTags('main-style', PHYSICAL_MAIN_OPTIONS.style, main.style, 2)}${renderError('mainStyle')}</div>
+      <label class="${fieldClass('mainRealism')}" data-error-key="mainRealism"><span>רמת ריאליזם <em>*</em></span><select data-physical="main" data-key="realism"><option value="">בחרי</option>${PHYSICAL_MAIN_OPTIONS.realism.map((o) => `<option ${main.realism === o ? 'selected' : ''}>${o}</option>`).join('')}</select>${renderError('mainRealism')}</label>
+      <label class="${fieldClass('mainDescription')}" data-error-key="mainDescription"><span>מה צריך לראות בתמונה? <em>*</em></span><textarea data-physical="main" data-key="description" maxlength="220">${escapeHtml(main.description)}</textarea>${renderError('mainDescription')}</label>
       <label class="split-field"><span>צבעים בולטים</span><input data-physical="main" data-key="colors" maxlength="80" value="${escapeHtml(main.colors)}" /></label>
       <div class="split-field"><span>מה לא לכלול</span>${renderTags('main-avoid', PHYSICAL_MAIN_OPTIONS.avoid, main.avoid, 4)}</div>
-      <label class="split-field"><span>פירוט נוסף למה לא לכלול</span><input data-physical="main" data-key="avoidOther" maxlength="80" value="${escapeHtml(main.avoidOther)}" /></label>
+      <label class="${fieldClass('mainAvoidOther')}" data-error-key="mainAvoidOther"><span>פירוט נוסף למה לא לכלול</span><input data-physical="main" data-key="avoidOther" maxlength="80" value="${escapeHtml(main.avoidOther)}" />${renderError('mainAvoidOther')}</label>
     </article>
 
     <article class="split-card">
       <h3>כרטיס תמונת שימוש</h3>
-      <label class="split-field"><span>מי משתמשת במוצר? <em>*</em></span><select data-physical="usage" data-key="user"><option value="">בחרי</option>${PHYSICAL_USAGE_OPTIONS.user.map((o) => `<option ${usage.user === o ? 'selected' : ''}>${o}</option>`).join('')}</select>${renderError('usageUser')}</label>
-      <label class="split-field"><span>כמה אנשים בתמונה? <em>*</em></span><select data-physical="usage" data-key="peopleCount"><option value="">בחרי</option>${PHYSICAL_USAGE_OPTIONS.peopleCount.map((o) => `<option ${usage.peopleCount === o ? 'selected' : ''}>${o}</option>`).join('')}</select>${renderError('usageCount')}</label>
-      <label class="split-field"><span>איפה מתרחש השימוש? <em>*</em></span><select data-physical="usage" data-key="location"><option value="">בחרי</option>${PHYSICAL_USAGE_OPTIONS.location.map((o) => `<option ${usage.location === o ? 'selected' : ''}>${o}</option>`).join('')}</select>${renderError('usageLocation')}</label>
-      <label class="split-field"><span>מה הפעולה המוצגת? <em>*</em></span><textarea data-physical="usage" data-key="action" maxlength="220">${escapeHtml(usage.action)}</textarea>${renderError('usageAction')}</label>
+      <label class="${fieldClass('usageUser')}" data-error-key="usageUser"><span>מי משתמשת במוצר? <em>*</em></span><select data-physical="usage" data-key="user"><option value="">בחרי</option>${PHYSICAL_USAGE_OPTIONS.user.map((o) => `<option ${usage.user === o ? 'selected' : ''}>${o}</option>`).join('')}</select>${renderError('usageUser')}</label>
+      <label class="${fieldClass('usageCount')}" data-error-key="usageCount"><span>כמה אנשים בתמונה? <em>*</em></span><select data-physical="usage" data-key="peopleCount"><option value="">בחרי</option>${PHYSICAL_USAGE_OPTIONS.peopleCount.map((o) => `<option ${usage.peopleCount === o ? 'selected' : ''}>${o}</option>`).join('')}</select>${renderError('usageCount')}</label>
+      <label class="${fieldClass('usageLocation')}" data-error-key="usageLocation"><span>איפה מתרחש השימוש? <em>*</em></span><select data-physical="usage" data-key="location"><option value="">בחרי</option>${PHYSICAL_USAGE_OPTIONS.location.map((o) => `<option ${usage.location === o ? 'selected' : ''}>${o}</option>`).join('')}</select>${renderError('usageLocation')}</label>
+      <label class="${fieldClass('usageAction')}" data-error-key="usageAction"><span>מה הפעולה המוצגת? <em>*</em></span><textarea data-physical="usage" data-key="action" maxlength="220">${escapeHtml(usage.action)}</textarea>${renderError('usageAction')}</label>
       <div class="split-field"><span>אילו חפצים נוספים צריכים להופיע?</span>${renderTags('usage-props', PHYSICAL_USAGE_OPTIONS.props, usage.props, 4)}</div>
-      <label class="split-field"><span>פירוט נוסף לחפצים</span><input data-physical="usage" data-key="propsOther" maxlength="80" value="${escapeHtml(usage.propsOther)}" /></label>
-      <div class="split-field"><span>מה צריך לבלוט? <em>*</em></span>${renderTags('usage-highlight', PHYSICAL_USAGE_OPTIONS.highlight, usage.highlight, 3)}${renderError('usageHighlight')}</div>
-      <label class="split-field"><span>מה חשוב שהצופה תבין? <em>*</em></span><textarea data-physical="usage" data-key="takeaway" maxlength="220">${escapeHtml(usage.takeaway)}</textarea>${renderError('usageTakeaway')}</label>
-      <div class="split-field"><span>סגנון עיצובי <em>*</em></span>${renderTags('usage-style', PHYSICAL_USAGE_OPTIONS.style, usage.style, 2)}${renderError('usageStyle')}</div>
-      <label class="split-field"><span>רמת ריאליזם <em>*</em></span><select data-physical="usage" data-key="realism"><option value="">בחרי</option>${PHYSICAL_USAGE_OPTIONS.realism.map((o) => `<option ${usage.realism === o ? 'selected' : ''}>${o}</option>`).join('')}</select>${renderError('usageRealism')}</label>
+      <label class="${fieldClass('usagePropsOther')}" data-error-key="usagePropsOther"><span>פירוט נוסף לחפצים</span><input data-physical="usage" data-key="propsOther" maxlength="80" value="${escapeHtml(usage.propsOther)}" />${renderError('usagePropsOther')}</label>
+      <div class="${fieldClass('usageHighlight')}" data-error-key="usageHighlight"><span>מה צריך לבלוט? <em>*</em></span>${renderTags('usage-highlight', PHYSICAL_USAGE_OPTIONS.highlight, usage.highlight, 3)}${renderError('usageHighlight')}</div>
+      <label class="${fieldClass('usageTakeaway')}" data-error-key="usageTakeaway"><span>מה חשוב שהצופה תבין? <em>*</em></span><textarea data-physical="usage" data-key="takeaway" maxlength="220">${escapeHtml(usage.takeaway)}</textarea>${renderError('usageTakeaway')}</label>
+      <div class="${fieldClass('usageStyle')}" data-error-key="usageStyle"><span>סגנון עיצובי <em>*</em></span>${renderTags('usage-style', PHYSICAL_USAGE_OPTIONS.style, usage.style, 2)}${renderError('usageStyle')}</div>
+      <label class="${fieldClass('usageRealism')}" data-error-key="usageRealism"><span>רמת ריאליזם <em>*</em></span><select data-physical="usage" data-key="realism"><option value="">בחרי</option>${PHYSICAL_USAGE_OPTIONS.realism.map((o) => `<option ${usage.realism === o ? 'selected' : ''}>${o}</option>`).join('')}</select>${renderError('usageRealism')}</label>
       <label class="split-field"><span>צבעים בולטים</span><input data-physical="usage" data-key="colors" maxlength="80" value="${escapeHtml(usage.colors)}" /></label>
       <div class="split-field"><span>מה לא לכלול</span>${renderTags('usage-avoid', PHYSICAL_USAGE_OPTIONS.avoid, usage.avoid, 4)}</div>
-      <label class="split-field"><span>פירוט נוסף למה לא לכלול</span><input data-physical="usage" data-key="avoidOther" maxlength="80" value="${escapeHtml(usage.avoidOther)}" /></label>
+      <label class="${fieldClass('usageAvoidOther')}" data-error-key="usageAvoidOther"><span>פירוט נוסף למה לא לכלול</span><input data-physical="usage" data-key="avoidOther" maxlength="80" value="${escapeHtml(usage.avoidOther)}" />${renderError('usageAvoidOther')}</label>
     </article>`;
 }
 
@@ -375,11 +409,11 @@ function renderStep2() {
   const flowCard = productType === 'website' ? `
     <article class="split-card">
       <h3>כרטיס תרשים זרימה</h3>
-      <label class="split-field"><span>מאיזה מסך מתחיל השימוש? <em>*</em></span><select data-flow="start"><option value="">בחרי</option>${[1, 2, 3, 4, 5].map((num) => `<option ${state.prototypeFlow.start === `מסך ${num}` ? 'selected' : ''}>מסך ${num}</option>`).join('')}</select>${renderError('flowStart')}</label>
-      <label class="split-field"><span>באיזה מסך מסתיים השימוש? <em>*</em></span><select data-flow="end"><option value="">בחרי</option>${[1, 2, 3, 4, 5].map((num) => `<option ${state.prototypeFlow.end === `מסך ${num}` ? 'selected' : ''}>מסך ${num}</option>`).join('')}</select>${renderError('flowEnd')}</label>
-      <label class="split-field"><span>תארי בקצרה את זרימת השימוש <em>*</em></span><textarea data-flow="summary" maxlength="260">${escapeHtml(state.prototypeFlow.summary)}</textarea>${renderError('flowSummary')}</label>
-      <label class="split-field"><span>האם יש הסתעפות? <em>*</em></span><select data-flow="hasBranch"><option value="">בחרי</option><option ${state.prototypeFlow.hasBranch === 'כן' ? 'selected' : ''}>כן</option><option ${state.prototypeFlow.hasBranch === 'לא' ? 'selected' : ''}>לא</option></select>${renderError('flowBranchToggle')}</label>
-      ${state.prototypeFlow.hasBranch === 'כן' ? `<label class="split-field"><span>אם כן: תארי את ההסתעפות <em>*</em></span><textarea data-flow="branch" maxlength="220">${escapeHtml(state.prototypeFlow.branch)}</textarea>${renderError('flowBranchText')}</label>` : ''}
+      <label class="${fieldClass('flowStart')}" data-error-key="flowStart"><span>מאיזה מסך מתחיל השימוש? <em>*</em></span><select data-flow="start"><option value="">בחרי</option>${[1, 2, 3, 4, 5].map((num) => `<option ${state.prototypeFlow.start === `מסך ${num}` ? 'selected' : ''}>מסך ${num}</option>`).join('')}</select>${renderError('flowStart')}</label>
+      <label class="${fieldClass('flowEnd')}" data-error-key="flowEnd"><span>באיזה מסך מסתיים השימוש? <em>*</em></span><select data-flow="end"><option value="">בחרי</option>${[1, 2, 3, 4, 5].map((num) => `<option ${state.prototypeFlow.end === `מסך ${num}` ? 'selected' : ''}>מסך ${num}</option>`).join('')}</select>${renderError('flowEnd')}</label>
+      <label class="${fieldClass('flowSummary')}" data-error-key="flowSummary"><span>תארי בקצרה את זרימת השימוש <em>*</em></span><textarea data-flow="summary" maxlength="260">${escapeHtml(state.prototypeFlow.summary)}</textarea>${renderError('flowSummary')}</label>
+      <label class="${fieldClass('flowBranchToggle')}" data-error-key="flowBranchToggle"><span>האם יש הסתעפות? <em>*</em></span><select data-flow="hasBranch"><option value="">בחרי</option><option ${state.prototypeFlow.hasBranch === 'כן' ? 'selected' : ''}>כן</option><option ${state.prototypeFlow.hasBranch === 'לא' ? 'selected' : ''}>לא</option></select>${renderError('flowBranchToggle')}</label>
+      ${state.prototypeFlow.hasBranch === 'כן' ? `<label class="${fieldClass('flowBranchText')}" data-error-key="flowBranchText"><span>אם כן: תארי את ההסתעפות <em>*</em></span><textarea data-flow="branch" maxlength="220">${escapeHtml(state.prototypeFlow.branch)}</textarea>${renderError('flowBranchText')}</label>` : ''}
     </article>
   ` : '';
 
@@ -408,7 +442,7 @@ function renderStep3() {
   }
 
   const screenPicker = productType === 'website' ? `
-    <article class="split-card">
+    <article class="split-card ${state.errors.selectedScreens && state.visibleErrors.includes('selectedScreens') ? 'error' : ''}" data-error-key="selectedScreens">
       <h3>בחירת 3 מסכים לפוסטר</h3>
       <div class="split-picks">${[1, 2, 3, 4, 5].map((num) => `<label class="split-check"><input type="checkbox" data-website-pick="${num}" ${state.selectedWebsiteScreens.includes(String(num)) ? 'checked' : ''}/> מסך ${num}</label>`).join('')}</div>
       <small>נבחרו ${state.selectedWebsiteScreens.length}/3</small>
@@ -419,17 +453,17 @@ function renderStep3() {
   const cards = state.images.map((image, index) => `
     <article class="split-card">
       <h3>${productType === 'website' ? `תמונה ${index + 1}` : `תמונה ${index + 1} (מסך ${index + 1})`}</h3>
-      <label class="split-field"><span>איזה מסך האבטיפוס התמונה מייצגת? <em>*</em></span>
+      <label class="${fieldClass(`imageScreen${index}`)}" data-error-key="imageScreen${index}"><span>איזה מסך האבטיפוס התמונה מייצגת? <em>*</em></span>
         <select data-image="${index}" data-key="screenRef" ${productType === 'app' ? 'disabled' : ''}>
           <option value="">בחרי</option>
           ${allowedScreens.map((screenNo) => `<option value="${screenNo}" ${image.screenRef === screenNo ? 'selected' : ''}>מסך ${screenNo}</option>`).join('')}
         </select>
         ${renderError(`imageScreen${index}`)}
       </label>
-      <div class="split-field"><span>מה חשוב שיבלוט? <em>*</em></span>${renderTags(`image-emphasis-${index}`, EMPHASIS_OPTIONS, image.emphasis, 3)}${renderError(`imageEmphasis${index}`)}</div>
-      <label class="split-field"><span>${productType === 'app' ? 'מה חשוב שהצופה תבין מהמסך?' : 'מה חשוב שהצופה תבין מהתמונה?'} <em>*</em></span><textarea data-image="${index}" data-key="takeaway" maxlength="220">${escapeHtml(image.takeaway)}</textarea>${renderError(`imageTakeaway${index}`)}</label>
-      <div class="split-field"><span>סגנון עיצובי <em>*</em></span>${renderTags(`image-style-${index}`, STYLE_OPTIONS, image.style, 2)}${renderError(`imageStyle${index}`)}</div>
-      <label class="split-field"><span>רמת ריאליזם <em>*</em></span><select data-image="${index}" data-key="realism"><option value="">בחרי</option>${REALISM_OPTIONS.map((option) => `<option ${image.realism === option ? 'selected' : ''}>${option}</option>`).join('')}</select>${renderError(`imageRealism${index}`)}</label>
+      <div class="${fieldClass(`imageEmphasis${index}`)}" data-error-key="imageEmphasis${index}"><span>מה חשוב שיבלוט? <em>*</em></span>${renderTags(`image-emphasis-${index}`, EMPHASIS_OPTIONS, image.emphasis, 3)}${renderError(`imageEmphasis${index}`)}</div>
+      <label class="${fieldClass(`imageTakeaway${index}`)}" data-error-key="imageTakeaway${index}"><span>${productType === 'app' ? 'מה חשוב שהצופה תבין מהמסך?' : 'מה חשוב שהצופה תבין מהתמונה?'} <em>*</em></span><textarea data-image="${index}" data-key="takeaway" maxlength="220">${escapeHtml(image.takeaway)}</textarea>${renderError(`imageTakeaway${index}`)}</label>
+      <div class="${fieldClass(`imageStyle${index}`)}" data-error-key="imageStyle${index}"><span>סגנון עיצובי <em>*</em></span>${renderTags(`image-style-${index}`, STYLE_OPTIONS, image.style, 2)}${renderError(`imageStyle${index}`)}</div>
+      <label class="${fieldClass(`imageRealism${index}`)}" data-error-key="imageRealism${index}"><span>רמת ריאליזם <em>*</em></span><select data-image="${index}" data-key="realism"><option value="">בחרי</option>${REALISM_OPTIONS.map((option) => `<option ${image.realism === option ? 'selected' : ''}>${option}</option>`).join('')}</select>${renderError(`imageRealism${index}`)}</label>
       <label class="split-field"><span>צבעים בולטים</span><input data-image="${index}" data-key="colors" maxlength="80" value="${escapeHtml(image.colors)}" /></label>
       <div class="split-field"><span>מה לא לכלול</span>${renderTags(`image-avoid-${index}`, AVOID_OPTIONS, image.avoid, 4)}</div>
       <label class="split-field"><span>פירוט נוסף למה לא לכלול</span><input data-image="${index}" data-key="avoidOther" maxlength="80" value="${escapeHtml(image.avoidOther)}" /></label>
@@ -477,6 +511,7 @@ function render() {
     .split-field{display:grid;gap:6px}
     .split-field span em{color:#b91c1c;font-style:normal}
     .split-field textarea,.split-field input,.split-field select{border:1px solid #d4d4d8;border-radius:10px;padding:10px;font:inherit;direction:rtl}
+    .split-field.error textarea,.split-field.error input,.split-field.error select,.split-card.error{border-color:#dc2626;box-shadow:0 0 0 2px rgba(220,38,38,.08)}
     .split-field textarea{min-height:86px;line-height:1.5}
     .split-field small{color:#6b7280}
     .split-error{color:#b91c1c;font-weight:600}
@@ -501,7 +536,7 @@ function render() {
       <p class="split-sub">כל הזרימה מותאמת לשלב החקר, האבטיפוס/הפרומפט והתמונות, עם מיפוי לפוסטר הקיים.</p>
     </header>
     ${renderStepper()}
-    ${Object.keys(state.errors).length ? '<div class="split-alert">יש שדות חובה שעדיין לא הושלמו. השלימי אותן כדי להמשיך.</div>' : ''}
+    ${state.visibleErrors.length ? '<div class="split-alert">יש להשלים את השדות החסרים לפני המשך.</div>' : ''}
     <section class="split-body">${renderBody()}</section>
     <nav class="split-nav">
       <button type="button" class="split-btn ghost" data-nav="back" ${state.step === 1 ? 'disabled' : ''}>חזרה</button>
@@ -565,6 +600,7 @@ function wireEvents() {
       const target = Number(button.dataset.step);
       if (target < state.step) {
         state.errors = {};
+        state.visibleErrors = [];
         state.step = target;
         render();
       }
@@ -575,6 +611,7 @@ function wireEvents() {
     input.addEventListener('input', () => {
       state.research[input.dataset.research] = input.value;
       state.errors[input.dataset.research] = '';
+      state.visibleErrors = state.visibleErrors.filter((key) => key !== input.dataset.research);
       const counter = input.nextElementSibling;
       if (counter) counter.textContent = `${input.value.length}/${input.maxLength} · ${statusLabel(input.value, Number(input.maxLength))}`;
     });
@@ -585,6 +622,7 @@ function wireEvents() {
       const block = input.dataset.physical;
       const key = input.dataset.key;
       state.physicalPrompt[block][key] = input.value;
+      state.visibleErrors = state.visibleErrors.filter((err) => !err.toLowerCase().includes(key.toLowerCase()));
     });
   });
 
@@ -592,12 +630,14 @@ function wireEvents() {
     input.addEventListener('input', () => {
       const screen = state.prototypeScreens[Number(input.dataset.screen)];
       screen[input.dataset.key] = input.value;
+      state.visibleErrors = [];
     });
   });
 
   root.querySelectorAll('[data-flow]').forEach((input) => {
     input.addEventListener('input', () => {
       state.prototypeFlow[input.dataset.flow] = input.value;
+      state.visibleErrors = state.visibleErrors.filter((key) => !key.startsWith('flow'));
       if (input.dataset.flow === 'hasBranch') render();
     });
   });
@@ -605,6 +645,7 @@ function wireEvents() {
   root.querySelectorAll('[data-tag]').forEach((button) => {
     button.addEventListener('click', () => {
       applyTag(button.dataset.tag, button.dataset.value, Number(button.dataset.max));
+      state.visibleErrors = [];
       render();
     });
   });
@@ -634,18 +675,33 @@ function wireEvents() {
     input.addEventListener('input', () => {
       const image = state.images[Number(input.dataset.image)];
       image[input.dataset.key] = input.value;
+      state.visibleErrors = [];
       const promptNode = root.querySelector(`#prompt-${input.dataset.image}`);
       if (promptNode) promptNode.textContent = buildDigitalPrompt(Number(input.dataset.image));
     });
   });
 
   root.querySelectorAll('[data-copy-image]').forEach((button) => {
-    button.addEventListener('click', () => copyText(buildDigitalPrompt(Number(button.dataset.copyImage)), button));
+    button.addEventListener('click', () => {
+      const errors = validateStep(3);
+      if (Object.keys(errors).length) {
+        render();
+        focusFirstInvalidField(3, errors);
+        return;
+      }
+      copyText(buildDigitalPrompt(Number(button.dataset.copyImage)), button);
+    });
   });
 
   const copyAllImages = root.querySelector('[data-copy-all-images]');
   if (copyAllImages) {
     copyAllImages.addEventListener('click', () => {
+      const errors = validateStep(3);
+      if (Object.keys(errors).length) {
+        render();
+        focusFirstInvalidField(3, errors);
+        return;
+      }
       const text = state.images.map((_, idx) => `פרומפט ${idx + 1}:\n${buildDigitalPrompt(idx)}`).join('\n\n');
       copyText(text, copyAllImages);
     });
@@ -664,15 +720,21 @@ function wireEvents() {
     if (state.step > 1) {
       state.step -= 1;
       state.errors = {};
+      state.visibleErrors = [];
       render();
     }
   });
 
   root.querySelector('[data-nav="next"]').addEventListener('click', () => {
     if (state.step < 4) {
-      const valid = validateStep(state.step);
-      if (!valid) return render();
+      const errors = validateStep(state.step);
+      if (Object.keys(errors).length) {
+        render();
+        focusFirstInvalidField(state.step, errors);
+        return;
+      }
       state.errors = {};
+      state.visibleErrors = [];
       state.step += 1;
       render();
     }
