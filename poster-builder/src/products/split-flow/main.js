@@ -166,15 +166,29 @@ function updateCounterForInput(input) {
     container.classList.add(`counter-${stateInfo.key}`);
   }
 
-  let counter = input.parentElement?.querySelector(`.split-counter[data-counter-for="${input.dataset.counterId || ''}"]`);
+  const parent = input.parentElement;
+  if (!parent) return;
+
+  const existingCounters = Array.from(parent.querySelectorAll('.split-counter'));
+  let counter = existingCounters.find((node) => node.dataset.counterFor === input.dataset.counterId)
+    || existingCounters[0];
+
   if (!counter) {
-    const counterId = input.dataset.counterId || `${input.dataset.research || ''}-${input.dataset.physical || ''}-${input.dataset.screen || ''}-${input.dataset.flow || ''}-${input.dataset.image || ''}-${input.dataset.key || ''}-${Math.random().toString(36).slice(2, 8)}`;
-    input.dataset.counterId = counterId;
     counter = document.createElement('small');
     counter.className = 'split-counter';
-    counter.dataset.counterFor = counterId;
     input.insertAdjacentElement('afterend', counter);
   }
+
+  if (!input.dataset.counterId) {
+    const counterId = `${input.dataset.research || ''}-${input.dataset.physical || ''}-${input.dataset.screen || ''}-${input.dataset.flow || ''}-${input.dataset.image || ''}-${input.dataset.key || ''}-${Math.random().toString(36).slice(2, 8)}`;
+    input.dataset.counterId = counterId;
+  }
+  counter.dataset.counterFor = input.dataset.counterId;
+
+  existingCounters.forEach((node) => {
+    if (node !== counter) node.remove();
+  });
+
   counter.className = `split-counter ${stateInfo.key}`;
   counter.textContent = `${stateInfo.label} ${length}/${max}`;
 }
