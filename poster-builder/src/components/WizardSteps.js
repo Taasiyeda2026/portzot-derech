@@ -609,6 +609,439 @@ export function WizardStep3({
   );
 }
 
+// ════════════════════════════════════════════════════════════
+//  PHYSICAL PRODUCT 4-STEP FLOW
+// ════════════════════════════════════════════════════════════
+
+const PHYSICAL_STEP_LABELS = ['שאלות חקר', 'שאלות פרומפט', 'תמונות', 'פוסטר'];
+
+export function PhysicalStepIndicator({ current }) {
+  return h('div', { className: 'wz-indicator' },
+    PHYSICAL_STEP_LABELS.map((label, i) => {
+      const num = i + 1;
+      const state = num < current ? 'done' : num === current ? 'active' : 'pending';
+      return [
+        h('div', { key: `pdot-${num}`, className: 'wz-dot-wrap' },
+          h('div', { className: `wz-dot ${state}` }, state === 'done' ? '✓' : num),
+          h('span', { className: `wz-dot-label ${state}` }, label)
+        ),
+        num < PHYSICAL_STEP_LABELS.length &&
+          h('div', { key: `pline-${num}`, className: `wz-line ${num < current ? 'done' : ''}` })
+      ];
+    }).flat()
+  );
+}
+
+// ── Helper UI components for PhysicalStep2 ──────────────────
+
+function PhysicalChipGroup({ label, hint, options, value, onChange }) {
+  const { useState: useLocalState } = React;
+  const isKnown = options.includes(value);
+  const isOther = Boolean(value) && !isKnown;
+  const [otherMode, setOtherMode] = useLocalState(isOther);
+
+  const handleKnown = opt => {
+    setOtherMode(false);
+    onChange(value === opt ? '' : opt);
+  };
+  const handleOther = () => {
+    setOtherMode(true);
+    if (!isOther) onChange('');
+  };
+
+  return h('div', { className: 'ph-field' },
+    h('label', { className: 'ph-field-label' }, label),
+    hint && h('span', { className: 'ph-field-hint' }, hint),
+    h('div', { className: 'ph-chips' },
+      options.map(opt =>
+        h('button', {
+          key: opt, type: 'button',
+          className: `ph-chip ${value === opt ? 'active' : ''}`,
+          onClick: () => handleKnown(opt)
+        }, opt)
+      ),
+      h('button', {
+        type: 'button',
+        className: `ph-chip ph-chip-other ${otherMode || isOther ? 'active' : ''}`,
+        onClick: handleOther
+      }, 'אחר...')
+    ),
+    (otherMode || isOther) && h('input', {
+      type: 'text', className: 'ph-other-input',
+      placeholder: 'הכניסי כאן...',
+      value: isOther ? value : '',
+      autoFocus: !isOther,
+      onChange: e => onChange(e.target.value)
+    })
+  );
+}
+
+function PhysicalTextField({ label, hint, value, onChange, placeholder }) {
+  return h('div', { className: 'ph-field' },
+    h('label', { className: 'ph-field-label' }, label),
+    hint && h('span', { className: 'ph-field-hint' }, hint),
+    h('input', {
+      type: 'text', className: 'ph-text-input',
+      placeholder: placeholder || '',
+      value: value || '',
+      onChange: e => onChange(e.target.value)
+    })
+  );
+}
+
+// ── Prompt builder ──────────────────────────────────────────
+
+function gcdCalc(a, b) { return b === 0 ? a : gcdCalc(b, a % b); }
+function slotRatio(slot) {
+  const w = slot.width, hh = slot.height;
+  const g = gcdCalc(w, hh);
+  return `${w / g}:${hh / g} (${w > hh ? 'אופקי' : 'אנכי'})`;
+}
+
+function buildPhysicalPrompts(contentValues, promptAnswers, posterSize) {
+  const slots  = getVisualSlots(posterSize || 'A4', 'physical');
+  const mainSl = slots.find(s => s.key === 'visual_1') || { width: 500, height: 420 };
+  const useSl  = slots.find(s => s.key === 'visual_2') || { width: 500, height: 420 };
+
+  const v = contentValues;
+  const p = promptAnswers;
+
+  const name   = (v.projectName  || '').trim() || 'המיזם';
+  const desc   = (v.description  || '').trim();
+  const prob   = (v.problem      || '').trim();
+  const aud    = (v.audience     || '').trim();
+  const sol    = (v.solution     || '').trim();
+  const val    = (v.value        || '').trim();
+  const reqs   = [1,2,3].map(i => (v[`requirements_${i}`] || '').trim()).filter(Boolean);
+  const how    = [1,2,3].map(i => (v[`howItWorks_${i}`]   || '').trim()).filter(Boolean);
+
+  // ── Main image prompt ──
+  const mLines = [`צרי תמונת מוצר מקצועית עבור פוסטר חקר תלמידות.`, ''];
+  const ctx = name + (desc ? ` — ${desc}` : '');
+  mLines.push(`המיזם: "${ctx}".`);
+  if (prob) mLines.push(`הבעיה: ${prob}${aud ? ` (עבור ${aud})` : ''}.`);
+  if (sol)  mLines.push(`המוצר: ${sol}.`);
+  if (val)  mLines.push(`ערך מרכזי: ${val}.`);
+  if (reqs.length) mLines.push(`דרישות הפתרון: ${reqs.join('; ')}.`);
+  mLines.push('');
+  mLines.push('הנחיות לתמונה:');
+  if (p.main_whatToSee)  mLines.push(`• בתמונה יש להציג: ${p.main_whatToSee}.`);
+  if (p.main_appearance) mLines.push(`• אופן הצגת המוצר: ${p.main_appearance}.`);
+  if (p.main_highlight)  mLines.push(`• יש להבליט: ${p.main_highlight}.`);
+  if (p.main_material)   mLines.push(`• חומר/מרקם: ${p.main_material}.`);
+  if (p.main_background) mLines.push(`• רקע: ${p.main_background}.`);
+  if (p.main_style)      mLines.push(`• סגנון עיצובי: ${p.main_style}.`);
+  if (p.main_realism)    mLines.push(`• רמת ריאליזם: ${p.main_realism}.`);
+  if (p.main_colors)     mLines.push(`• צבעים: ${p.main_colors}.`);
+  mLines.push('');
+  mLines.push('ללא טקסט, כיתובים או לוגואים בתוך התמונה.');
+  if (p.main_exclude)    mLines.push(`ללא: ${p.main_exclude}.`);
+  mLines.push(`מפרט: יחס ${slotRatio(mainSl)}, רזולוציה גבוהה, רקע אחיד או מוגדר.`);
+
+  // ── Usage image prompt ──
+  const uLines = [`צרי תמונת שימוש ריאליסטית עבור פוסטר חקר תלמידות.`, ''];
+  uLines.push(`המיזם: "${ctx}".`);
+  if (prob) uLines.push(`הבעיה שנפתרת: ${prob}${aud ? ` עבור ${aud}` : ''}.`);
+  if (sol)  uLines.push(`המוצר שמשתמשים בו: ${sol}.`);
+  const act = how[0] || '';
+  if (act) uLines.push(`הפעולה המרכזית: ${act}.`);
+  if (val) uLines.push(`הערך להמחיש: ${val}.`);
+  uLines.push('');
+  uLines.push('הנחיות לתמונה:');
+  if (p.usage_who)       uLines.push(`• המשתמש/ת: ${p.usage_who}.`);
+  if (p.usage_howMany)   uLines.push(`• מספר אנשים: ${p.usage_howMany}.`);
+  if (p.usage_action)    uLines.push(`• הפעולה המוצגת: ${p.usage_action}.`);
+  if (p.usage_where)     uLines.push(`• מיקום: ${p.usage_where}.`);
+  if (p.usage_understand)uLines.push(`• מה הצופה צריך להבין: ${p.usage_understand}.`);
+  if (p.usage_highlight) uLines.push(`• מה להבליט: ${p.usage_highlight}.`);
+  if (p.usage_style)     uLines.push(`• סגנון: ${p.usage_style}.`);
+  if (p.usage_realism)   uLines.push(`• רמת ריאליזם: ${p.usage_realism}.`);
+  if (p.usage_colors)    uLines.push(`• צבעים: ${p.usage_colors}.`);
+  uLines.push('');
+  uLines.push('ללא טקסט, כיתובים או לוגואים בתוך התמונה.');
+  if (p.usage_exclude)   uLines.push(`ללא: ${p.usage_exclude}.`);
+  uLines.push(`מפרט: יחס ${slotRatio(useSl)}, תמונה חמה ואנושית, רזולוציה גבוהה.`);
+
+  return {
+    mainPrompt:  mLines.join('\n'),
+    usagePrompt: uLines.join('\n')
+  };
+}
+
+// ════════════════════════════════════════════════════════════
+//  PhysicalStep1 — שאלות חקר
+// ════════════════════════════════════════════════════════════
+
+export function PhysicalStep1({ contentValues, onContentChange, onNext, onBack, productType }) {
+  const { useState: useLocalState } = React;
+  const [validationMsg, setValidationMsg] = useLocalState(null);
+
+  const handleNext = () => {
+    const missing = getMissingStep3Fields(contentValues, 'physical');
+    if (missing.length) {
+      setValidationMsg({ text: 'יש למלא את כל השדות לפני המעבר לשלב הבא', missing: missing.slice(0, 5) });
+      return;
+    }
+    setValidationMsg(null);
+    onNext();
+  };
+
+  return h('div', { className: 'wz-screen wz-screen-form' },
+    h(PhysicalStepIndicator, { current: 1 }),
+
+    h('div', { className: 'wz-form-layout' },
+
+      h('aside', { className: 'wz-form-sidebar' },
+        h('div', { className: 'wz-form-side-text' },
+          h('h2', { className: 'wz-title wz-title-sm' }, 'שאלות חקר'),
+          h('p', { className: 'wz-subtitle wz-subtitle-sm' },
+            'מלאי את כל השדות לפי מה שפיתחתן. כל שדה יוצג בפוסטר הסופי.'
+          ),
+          h('div', { className: 'wz-side-helper' }, 'שלב 1 מתוך 4 — מוצר פיזי')
+        ),
+        h('div', { className: 'wz-form-side-nav' },
+          h('button', { className: 'wz-btn wz-btn-ghost', onClick: onBack }, '‹ חזרה'),
+          h('button', { className: 'wz-btn wz-btn-primary', onClick: handleNext }, 'הבא ›')
+        )
+      ),
+
+      h('div', { className: 'wz-form-fields' },
+        validationMsg && h('div', { className: 'wz-validation-box' },
+          h('div', null, validationMsg.text),
+          validationMsg.missing.length > 0 && h('ul', { className: 'wz-validation-list' },
+            validationMsg.missing.map((item, idx) =>
+              h('li', { key: `${item}-${idx}` }, item)
+            )
+          )
+        ),
+
+        FIELD_DEFINITIONS.map(field => {
+          const resolved = resolveDynamicField(field, 'physical');
+          if (field.type === 'participants') {
+            return h(ParticipantsField, {
+              key: field.id, field: resolved,
+              values: contentValues, onContentChange
+            });
+          }
+          if (field.type === 'list') {
+            return h(ListField, {
+              key: field.id, field: resolved,
+              values: contentValues, onContentChange
+            });
+          }
+          return h(RegularField, {
+            key: field.id, field: resolved,
+            value: contentValues[field.id] || '',
+            onContentChange
+          });
+        })
+      )
+    )
+  );
+}
+
+// ════════════════════════════════════════════════════════════
+//  PhysicalStep2 — שאלות פרומפט
+// ════════════════════════════════════════════════════════════
+
+const MAIN_IMAGE_FIELDS = [
+  { key: 'main_appearance', label: 'איך המוצר מופיע?',
+    type: 'chips', options: ['מונח על משטח', 'אוחז ביד', 'פריסה מלאה', 'קלוז-אפ'] },
+  { key: 'main_highlight', label: 'מה חשוב שיבלוט?',
+    type: 'chips', options: ['המוצר כולו', 'חומר ומרקם', 'פרטים טכניים', 'צבע המוצר'] },
+  { key: 'main_material', label: 'חומר / מרקם המוצר',
+    type: 'chips', options: ['פלסטיק', 'מתכת', 'עץ', 'בד / טקסטיל', 'קרטון / נייר', 'מעורב'] },
+  { key: 'main_background', label: 'רקע רצוי',
+    type: 'chips', options: ['לבן נקי', 'אפור מינימלי', 'חוץ / טבע', 'סטודיו מקצועי', 'מופשט'] },
+  { key: 'main_style', label: 'סגנון עיצובי',
+    type: 'chips', options: ['מינימליסטי', 'מקצועי / תעשייתי', 'חם ואנושי', 'מודרני', 'צבעוני'] },
+  { key: 'main_realism', label: 'רמת ריאליזם',
+    type: 'chips', options: ['פוטוריאליסטי', 'אילוסטרציה', 'תלת-ממד (3D)'] },
+  { key: 'main_whatToSee', label: 'מה צריך לראות בתמונה?', type: 'text',
+    placeholder: 'תארי בחופשיות מה המוצר שמוצג ואיפה...' },
+  { key: 'main_colors', label: 'צבעים בולטים', type: 'text',
+    placeholder: 'לדוגמה: כחול ולבן, כתום, טונות אדמה...' },
+  { key: 'main_exclude', label: 'מה לא לכלול', type: 'text',
+    placeholder: 'לדוגמה: אנשים, טקסט, צללים חזקים...' }
+];
+
+const USAGE_IMAGE_FIELDS = [
+  { key: 'usage_who', label: 'מי משתמש/ת במוצר?',
+    type: 'chips', options: ['ילד / ילדה', 'נוער', 'מבוגר/ת', 'קשיש/ה', 'קבוצה'] },
+  { key: 'usage_howMany', label: 'כמה אנשים בתמונה?',
+    type: 'chips', options: ['אדם אחד', 'שניים', 'שלושה ויותר'] },
+  { key: 'usage_where', label: 'איפה מתרחש השימוש?',
+    type: 'chips', options: ['בבית', 'בחוץ', 'בכיתה / לימודים', 'בציבור', 'במשרד'] },
+  { key: 'usage_highlight', label: 'מה צריך לבלוט?',
+    type: 'chips', options: ['פני האדם', 'הידיים', 'המוצר', 'הסביבה', 'הרגש'] },
+  { key: 'usage_style', label: 'סגנון עיצובי',
+    type: 'chips', options: ['ריאליסטי / דוקומנטרי', 'חם ואנושי', 'מינימליסטי', 'דינמי'] },
+  { key: 'usage_realism', label: 'רמת ריאליזם',
+    type: 'chips', options: ['פוטוריאליסטי', 'אילוסטרציה', 'תלת-ממד (3D)'] },
+  { key: 'usage_action', label: 'מה הפעולה המוצגת?', type: 'text',
+    placeholder: 'תארי את הרגע שמוצג בתמונה...' },
+  { key: 'usage_understand', label: 'מה חשוב שהצופה יבין?', type: 'text',
+    placeholder: 'המסר שיעבור מהתמונה...' },
+  { key: 'usage_colors', label: 'צבעים בולטים', type: 'text',
+    placeholder: 'לדוגמה: חמים, כחולים, טבעיים...' },
+  { key: 'usage_exclude', label: 'מה לא לכלול', type: 'text',
+    placeholder: 'לדוגמה: פנים מטושטשות, עמוס מדי...' }
+];
+
+function PhysicalImageSection({ title, fields, promptAnswers, onPromptChange }) {
+  return h('div', { className: 'ph-image-section' },
+    h('h3', { className: 'ph-image-section-title' }, title),
+    h('div', { className: 'ph-image-section-fields' },
+      fields.map(f =>
+        f.type === 'chips'
+          ? h(PhysicalChipGroup, {
+              key: f.key, label: f.label, hint: f.hint,
+              options: f.options,
+              value: promptAnswers[f.key] || '',
+              onChange: v => onPromptChange(f.key, v)
+            })
+          : h(PhysicalTextField, {
+              key: f.key, label: f.label, hint: f.hint,
+              placeholder: f.placeholder,
+              value: promptAnswers[f.key] || '',
+              onChange: v => onPromptChange(f.key, v)
+            })
+      )
+    )
+  );
+}
+
+export function PhysicalStep2({ promptAnswers, onPromptChange, contentValues, onNext, onBack }) {
+  const projectName = (contentValues.projectName || '').trim();
+  const solution    = (contentValues.solution    || '').trim();
+
+  return h('div', { className: 'wz-screen wz-screen-form' },
+    h(PhysicalStepIndicator, { current: 2 }),
+
+    h('div', { className: 'wz-form-layout' },
+
+      h('aside', { className: 'wz-form-sidebar' },
+        h('div', { className: 'wz-form-side-text' },
+          h('h2', { className: 'wz-title wz-title-sm' }, 'שאלות פרומפט'),
+          h('p', { className: 'wz-subtitle wz-subtitle-sm' },
+            'בחרי את הסגנון הוויזואלי לכל תמונה. הבחירות ישמשו לבניית הפרומפט אוטומטית.'
+          ),
+          projectName && h('div', { className: 'wz-side-helper' },
+            `המיזם: ${projectName}${solution ? ` — ${solution.slice(0, 50)}` : ''}`
+          ),
+          h('div', { className: 'wz-side-helper', style: { marginTop: 6 } },
+            'שלב 2 מתוך 4 — מוצר פיזי'
+          )
+        ),
+        h('div', { className: 'wz-form-side-nav' },
+          h('button', { className: 'wz-btn wz-btn-ghost', onClick: onBack }, '‹ חזרה'),
+          h('button', { className: 'wz-btn wz-btn-primary', onClick: onNext }, 'הבא ›')
+        )
+      ),
+
+      h('div', { className: 'wz-form-fields' },
+        h(PhysicalImageSection, {
+          title: 'תמונה ראשית — הצגת המוצר',
+          fields: MAIN_IMAGE_FIELDS,
+          promptAnswers, onPromptChange
+        }),
+        h('div', { className: 'ph-section-divider' }),
+        h(PhysicalImageSection, {
+          title: 'תמונת שימוש — המוצר בפעולה',
+          fields: USAGE_IMAGE_FIELDS,
+          promptAnswers, onPromptChange
+        })
+      )
+    )
+  );
+}
+
+// ════════════════════════════════════════════════════════════
+//  PhysicalStep3 — תמונות (פרומפטים + העלאה)
+// ════════════════════════════════════════════════════════════
+
+export function PhysicalStep3({
+  contentValues, promptAnswers, posterSize,
+  slotImages, onSlotUpload, onSlotClear,
+  onNext, onBack
+}) {
+  const { useState: useLocalState } = React;
+  const [copied, setCopied] = useLocalState(null);
+
+  const { mainPrompt, usagePrompt } = buildPhysicalPrompts(contentValues, promptAnswers, posterSize);
+  const slots = getVisualSlots(posterSize || 'A4', 'physical');
+
+  const copyText = (text, id) => {
+    if (navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(text).then(() => {
+        setCopied(id);
+        setTimeout(() => setCopied(null), 2000);
+      });
+    }
+  };
+
+  const copyBoth = () => copyText(`תמונה ראשית:\n${mainPrompt}\n\n---\n\nתמונת שימוש:\n${usagePrompt}`, 'both');
+
+  const PromptBlock = ({ id, title, text }) =>
+    h('div', { className: 'ph-prompt-block' },
+      h('div', { className: 'ph-prompt-block-head' },
+        h('div', { className: 'ph-prompt-block-title' }, title),
+        h('button', {
+          className: `wz-btn wz-btn-ghost ph-copy-btn ${copied === id ? 'ph-copy-btn-done' : ''}`,
+          onClick: () => copyText(text, id)
+        }, copied === id ? '✓ הועתק' : 'העתק פרומפט')
+      ),
+      h('pre', { className: 'ph-prompt-text' }, text)
+    );
+
+  return h('div', { className: 'wz-screen wz-screen-form' },
+    h(PhysicalStepIndicator, { current: 3 }),
+
+    h('div', { className: 'wz-form-layout' },
+
+      h('aside', { className: 'wz-form-sidebar' },
+        h('div', { className: 'wz-form-side-text' },
+          h('h2', { className: 'wz-title wz-title-sm' }, 'תמונות'),
+          h('p', { className: 'wz-subtitle wz-subtitle-sm' },
+            'העתיקי את הפרומפטים, צרי תמונות בכלי AI, ואז העלי אותן כאן לפני שתמשיכי לפוסטר.'
+          ),
+          h('div', { className: 'wz-side-helper', style: { marginTop: 6 } },
+            'שלב 3 מתוך 4 — מוצר פיזי'
+          )
+        ),
+
+        h('div', { className: 'ph-slot-upload-sidebar' },
+          h('div', { className: 'ph-slot-upload-title' }, 'העלאת תמונות לפוסטר'),
+          h(SlotUploadSection, { slots, slotImages, onSlotUpload, onSlotClear })
+        ),
+
+        h('div', { className: 'wz-form-side-nav' },
+          h('button', { className: 'wz-btn wz-btn-ghost', onClick: onBack }, '‹ חזרה'),
+          h('button', { className: 'wz-btn wz-btn-primary', onClick: onNext }, 'לפוסטר ›')
+        )
+      ),
+
+      h('div', { className: 'wz-form-fields' },
+        h('div', { className: 'ph-prompts-head' },
+          h('div', { className: 'ph-prompts-head-text' },
+            h('div', { className: 'ph-prompts-head-title' }, 'פרומפטים מוכנים ליצירת תמונה'),
+            h('div', { className: 'ph-prompts-head-sub' },
+              'העתיקי כל פרומפט לכלי AI כמו Midjourney, DALL·E או Firefly.'
+            )
+          ),
+          h('button', {
+            className: `wz-btn wz-btn-ghost ${copied === 'both' ? 'ph-copy-btn-done' : ''}`,
+            onClick: copyBoth
+          }, copied === 'both' ? '✓ הועתק' : 'העתק שניהם')
+        ),
+
+        h(PromptBlock, { id: 'main',  title: 'תמונה ראשית — הצגת המוצר', text: mainPrompt }),
+        h(PromptBlock, { id: 'usage', title: 'תמונת שימוש — המוצר בפעולה', text: usagePrompt })
+      )
+    )
+  );
+}
+
 export function WizardStep5({ onExportPdf, onBack }) {
   return h('div', { className: 'wz-screen wz5-screen' },
     h(StepIndicator, { current: 5 }),

@@ -1807,3 +1807,236 @@ canvas {
 .step4-bar .wz-dot.active { transform: scale(1.05); }
 .step4-bar .wz-dot-label { font-size: 10px; }
 .step4-bar .wz-line { min-width: 28px; max-width: 48px; height: 3px; margin-top: 14px; }
+
+/* ════════════════════════════════════════
+   PHYSICAL PRODUCT 4-STEP FLOW
+   ════════════════════════════════════════ */
+
+/* ── Chip group (step 2) ── */
+.ph-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 16px;
+  background: #fcf9ff;
+  border: 1px solid #e5d7f1;
+  border-radius: 12px;
+}
+
+.ph-field-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: #334155;
+  display: block;
+}
+
+.ph-field-hint {
+  font-size: 12px;
+  color: #7a5a8a;
+  line-height: 1.4;
+  display: block;
+  margin-top: -4px;
+}
+
+.ph-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  direction: rtl;
+}
+
+.ph-chip {
+  padding: 7px 16px;
+  border: 2px solid #d5c4e6;
+  border-radius: 999px;
+  background: #fff;
+  color: #4a2a60;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+  user-select: none;
+}
+.ph-chip:hover { border-color: #9b5fa8; background: #f8f0ff; }
+.ph-chip.active {
+  background: #5e2750;
+  border-color: #5e2750;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(94,39,80,0.3);
+}
+.ph-chip-other { border-style: dashed; }
+.ph-chip-other.active { border-style: solid; }
+
+.ph-other-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1.5px solid #b87ac8;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 13px;
+  direction: rtl;
+  text-align: right;
+  color: #1f2937;
+  background: #fff;
+  outline: none;
+}
+.ph-other-input:focus { border-color: #5e2750; box-shadow: 0 0 0 3px rgba(94,39,80,0.1); }
+
+.ph-text-input {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1.5px solid #d5c4e6;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  direction: rtl;
+  text-align: right;
+  color: #1f2937;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.ph-text-input:focus { border-color: #9b5fa8; box-shadow: 0 0 0 3px rgba(94,39,80,0.1); }
+
+/* ── Image section blocks (step 2) ── */
+.ph-image-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  background: #fff;
+  border: 1.5px solid #e0cff0;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(94,39,80,0.05);
+}
+
+.ph-image-section-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #5e2750;
+  margin: 0 0 4px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ece0f8;
+  direction: rtl;
+  text-align: right;
+}
+
+.ph-image-section-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ph-section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #d5c4e6, transparent);
+  margin: 8px 0;
+}
+
+/* ── Prompt blocks (step 3) ── */
+.ph-prompts-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  background: #f0e8fb;
+  border: 1px solid #d5c4e6;
+  border-radius: 12px;
+  direction: rtl;
+}
+
+.ph-prompts-head-text { flex: 1; }
+
+.ph-prompts-head-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #5e2750;
+  margin-bottom: 2px;
+}
+
+.ph-prompts-head-sub {
+  font-size: 12px;
+  color: #7a5a8a;
+  line-height: 1.4;
+}
+
+.ph-prompt-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1.5px solid #e0cff0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(94,39,80,0.05);
+}
+
+.ph-prompt-block-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #f8f3ff;
+  border-bottom: 1px solid #e5d7f1;
+  direction: rtl;
+}
+
+.ph-prompt-block-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #5e2750;
+}
+
+.ph-copy-btn {
+  padding: 6px 16px;
+  font-size: 13px;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+.ph-copy-btn-done {
+  background: #1a5c3a;
+  border-color: #1a5c3a;
+  color: #fff;
+}
+.ph-copy-btn-done:hover { background: #217a4e; }
+
+.ph-prompt-text {
+  font-family: 'IBM Plex Sans Hebrew', monospace;
+  font-size: 13px;
+  line-height: 1.65;
+  color: #334155;
+  direction: rtl;
+  text-align: right;
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 0;
+  padding: 16px;
+  background: #fcfaff;
+  max-height: 340px;
+  overflow-y: auto;
+}
+
+/* ── Slot upload in sidebar (step 3) ── */
+.ph-slot-upload-sidebar {
+  padding: 12px;
+  background: #f5eeff;
+  border: 1px solid #d5c4e6;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ph-slot-upload-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #5e2750;
+}
+
+/* ── Physical stepper in canvas bar ── */
+.step4-bar .wz-dot-wrap { min-width: 42px; }
+
