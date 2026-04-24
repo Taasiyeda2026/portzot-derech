@@ -775,11 +775,15 @@ function buildPhysicalPrompts(contentValues, promptAnswers, posterSize) {
 export function PhysicalStep1({ contentValues, onContentChange, onNext, onBack, productType }) {
   const { useState: useLocalState } = React;
   const [validationMsg, setValidationMsg] = useLocalState(null);
+  const formFieldsRef = React.useRef(null);
 
   const handleNext = () => {
     const missing = getMissingStep3Fields(contentValues, 'physical');
     if (missing.length) {
       setValidationMsg({ text: 'יש למלא את כל השדות לפני המעבר לשלב הבא', missing: missing.slice(0, 5) });
+      if (formFieldsRef.current) {
+        formFieldsRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+      }
       return;
     }
     setValidationMsg(null);
@@ -805,7 +809,7 @@ export function PhysicalStep1({ contentValues, onContentChange, onNext, onBack, 
         )
       ),
 
-      h('div', { className: 'wz-form-fields' },
+      h('div', { className: 'wz-form-fields', ref: formFieldsRef },
         validationMsg && h('div', { className: 'wz-validation-box' },
           h('div', null, validationMsg.text),
           validationMsg.missing.length > 0 && h('ul', { className: 'wz-validation-list' },
