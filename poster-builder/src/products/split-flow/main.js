@@ -7,7 +7,7 @@ const productType = ['physical', 'website', 'app'].includes(window.__POSTER_SPLI
 const root = document.getElementById('root');
 const STEP_LABELS = productType === 'physical'
   ? ['שאלות חקר', 'שאלות פרומפט', 'תמונות', 'פוסטר']
-  : ['שאלות חקר', 'אבטיפוס', 'תמונות', 'פוסטר'];
+  : ['שאלות חקר', 'פרומפט', 'תמונות', 'פוסטר'];
 
 const PRODUCT_TITLE = {
   physical: 'מוצר פיזי',
@@ -527,7 +527,7 @@ function renderStep3() {
   const cards = state.images.map((image, index) => `
     <article class="split-card">
       <h3>${productType === 'website' ? `תמונה ${index + 1}` : `תמונה ${index + 1} (מסך ${index + 1})`}</h3>
-      <label class="${fieldClass(`imageScreen${index}`)}" data-error-key="imageScreen${index}"><span>איזה מסך האבטיפוס התמונה מייצגת? <em>*</em></span>
+      <label class="${fieldClass(`imageScreen${index}`)}" data-error-key="imageScreen${index}"><span>איזה מסך בפרומפט התמונה מייצגת? <em>*</em></span>
         <select data-image="${index}" data-key="screenRef" ${productType === 'app' ? 'disabled' : ''}>
           <option value="">בחרי</option>
           ${allowedScreens.map((screenNo) => `<option value="${screenNo}" ${image.screenRef === screenNo ? 'selected' : ''}>מסך ${screenNo}</option>`).join('')}
@@ -614,7 +614,7 @@ function render() {
   <main class="split-shell">
     <header class="split-header">
       <h1 class="split-title">בונות פוסטר חקר — ${PRODUCT_TITLE[productType]}</h1>
-      <p class="split-sub">כל הזרימה מותאמת לשלב החקר, האבטיפוס/הפרומפט והתמונות, עם מיפוי לפוסטר הקיים.</p>
+      <p class="split-sub">כל הזרימה מותאמת לשלב החקר, הפרומפט והתמונות, עם מיפוי לפוסטר הקיים.</p>
     </header>
     ${renderStepper()}
     ${state.visibleErrors.length ? '<div class="split-alert">יש להשלים את השדות החסרים לפני מעבר לשלב הבא.</div>' : ''}
