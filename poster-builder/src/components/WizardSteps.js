@@ -636,17 +636,32 @@ export function PhysicalStepIndicator({ current }) {
 
 function PhysicalChipGroup({ label, hint, options, value, onChange }) {
   const { useState: useLocalState } = React;
-  const isKnown = options.includes(value);
-  const isOther = Boolean(value) && !isKnown;
-  const [otherMode, setOtherMode] = useLocalState(isOther);
+  const parts        = value ? value.split(', ').filter(Boolean) : [];
+  const selectedKnown = parts.filter(p => options.includes(p));
+  const customPart   = parts.find(p => !options.includes(p)) || '';
+  const [showOther, setShowOther] = useLocalState(Boolean(customPart));
 
-  const handleKnown = opt => {
-    setOtherMode(false);
-    onChange(value === opt ? '' : opt);
+  const toggleKnown = opt => {
+    const next = selectedKnown.includes(opt)
+      ? selectedKnown.filter(s => s !== opt)
+      : [...selectedKnown, opt];
+    const all = customPart ? [...next, customPart] : next;
+    onChange(all.join(', '));
   };
-  const handleOther = () => {
-    setOtherMode(true);
-    if (!isOther) onChange('');
+
+  const handleOtherToggle = () => {
+    if (showOther) {
+      setShowOther(false);
+      onChange(selectedKnown.join(', '));
+    } else {
+      setShowOther(true);
+    }
+  };
+
+  const handleCustomChange = e => {
+    const newCustom = e.target.value;
+    const all = newCustom ? [...selectedKnown, newCustom] : selectedKnown;
+    onChange(all.join(', '));
   };
 
   return h('div', { className: 'ph-field' },
@@ -656,22 +671,22 @@ function PhysicalChipGroup({ label, hint, options, value, onChange }) {
       options.map(opt =>
         h('button', {
           key: opt, type: 'button',
-          className: `ph-chip ${value === opt ? 'active' : ''}`,
-          onClick: () => handleKnown(opt)
+          className: `ph-chip ${selectedKnown.includes(opt) ? 'active' : ''}`,
+          onClick: () => toggleKnown(opt)
         }, opt)
       ),
       h('button', {
         type: 'button',
-        className: `ph-chip ph-chip-other ${otherMode || isOther ? 'active' : ''}`,
-        onClick: handleOther
+        className: `ph-chip ph-chip-other ${showOther ? 'active' : ''}`,
+        onClick: handleOtherToggle
       }, 'אחר...')
     ),
-    (otherMode || isOther) && h('input', {
+    showOther && h('input', {
       type: 'text', className: 'ph-other-input',
       placeholder: 'הכניסי כאן...',
-      value: isOther ? value : '',
-      autoFocus: !isOther,
-      onChange: e => onChange(e.target.value)
+      value: customPart,
+      autoFocus: !customPart,
+      onChange: handleCustomChange
     })
   );
 }

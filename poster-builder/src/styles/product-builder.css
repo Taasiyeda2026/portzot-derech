@@ -1839,16 +1839,17 @@ canvas {
 }
 
 .ph-chips {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   gap: 8px;
   direction: rtl;
 }
 
 .ph-chip {
-  padding: 7px 16px;
+  position: relative;
+  padding: 10px 10px 10px 26px;
   border: 2px solid #d5c4e6;
-  border-radius: 999px;
+  border-radius: 10px;
   background: #fff;
   color: #4a2a60;
   font-size: 13px;
@@ -1856,15 +1857,45 @@ canvas {
   font-family: inherit;
   cursor: pointer;
   transition: all 0.15s;
-  white-space: nowrap;
+  white-space: normal;
+  text-align: center;
   user-select: none;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ph-chip::before {
+  content: '';
+  position: absolute;
+  inset-inline-end: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  border: 2px solid #d5c4e6;
+  border-radius: 4px;
+  background: #fff;
+  transition: all 0.15s;
+  flex-shrink: 0;
 }
 .ph-chip:hover { border-color: #9b5fa8; background: #f8f0ff; }
+.ph-chip:hover::before { border-color: #9b5fa8; }
 .ph-chip.active {
+  background: #f4eafc;
+  border-color: #5e2750;
+  color: #5e2750;
+  box-shadow: 0 2px 8px rgba(94,39,80,0.15);
+}
+.ph-chip.active::before {
   background: #5e2750;
   border-color: #5e2750;
+  content: '✓';
   color: #fff;
-  box-shadow: 0 2px 8px rgba(94,39,80,0.3);
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .ph-chip-other { border-style: dashed; }
 .ph-chip-other.active { border-style: solid; }
