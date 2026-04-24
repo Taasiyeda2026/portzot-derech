@@ -50,17 +50,17 @@ const RESEARCH_FIELDS = [
   ],
   [
     'howItWorks_1',
-    productType === 'physical' ? 'איך משתמשים במוצר? 1' : (productType === 'website' ? 'מה המשתמשת עושה באתר? 1' : 'איך המשתמשת משתמשת באפליקציה? 1'),
+    productType === 'physical' ? 'איך משתמשת במוצר? 1' : (productType === 'website' ? 'מה המשתמשת עושה באתר? 1' : 'איך המשתמשת משתמשת באפליקציה? 1'),
     42
   ],
   [
     'howItWorks_2',
-    productType === 'physical' ? 'איך משתמשים במוצר? 2' : (productType === 'website' ? 'מה המשתמשת עושה באתר? 2' : 'איך המשתמשת משתמשת באפליקציה? 2'),
+    productType === 'physical' ? 'איך משתמשת במוצר? 2' : (productType === 'website' ? 'מה המשתמשת עושה באתר? 2' : 'איך המשתמשת משתמשת באפליקציה? 2'),
     42
   ],
   [
     'howItWorks_3',
-    productType === 'physical' ? 'איך משתמשים במוצר? 3' : (productType === 'website' ? 'מה המשתמשת עושה באתר? 3' : 'איך המשתמשת משתמשת באפליקציה? 3'),
+    productType === 'physical' ? 'איך משתמשת במוצר? 3' : (productType === 'website' ? 'מה המשתמשת עושה באתר? 3' : 'איך המשתמשת משתמשת באפליקציה? 3'),
     42
   ],
   ['value', 'מה הערך המרכזי של הפתרון?', 110],
@@ -139,7 +139,7 @@ function escapeHtml(text) {
 
 function statusLabel(value, max) {
   if (!value.trim()) return 'חסר';
-  if (value.length >= max) return 'מלא';
+  if (value.length >= max) return 'הושלם';
   return 'תקין';
 }
 
@@ -212,6 +212,10 @@ function validateImagesStep() {
     errors.selectedScreens = 'בחרי בדיוק 3 מסכים לפוסטר.';
   }
   state.images.forEach((image, idx) => {
+    if (productType === 'app' && image.screenRef !== `${idx + 1}`) {
+      errors[`imageScreen${idx}`] = `המיפוי באפליקציה קבוע: תמונה ${idx + 1} מחוברת למסך ${idx + 1}.`;
+      image.screenRef = `${idx + 1}`;
+    }
     if (!image.screenRef) errors[`imageScreen${idx}`] = 'בחרי מסך.';
     if (image.emphasis.length < 1 || image.emphasis.length > 3) errors[`imageEmphasis${idx}`] = 'בחרי בין פריט אחד לשלושה.';
     if (!image.takeaway.trim()) errors[`imageTakeaway${idx}`] = 'תארי מה חשוב שהצופה תבין.';
@@ -294,6 +298,13 @@ function buildDigitalPrompt(index) {
 המסך המיוצג: ${screen?.type || 'לא הוגדר'}${screen?.shortName ? ` (${screen.shortName})` : ''}. מה המשתמשת רואה במסך: ${screen?.view || ''}. מה המשתמשת עושה במסך: ${screen?.action || ''}. רכיבים חשובים: ${screen?.components?.join(', ') || ''}. מה חשוב שיבלוט: ${image.emphasis.join(', ')}. מה חשוב שהצופה תבין: ${image.takeaway}. סגנון: ${image.style.join(', ')}. רמת ריאליזם: ${image.realism}. צבעים בולטים: ${image.colors || 'בהתאם לשפה העיצובית של המיזם'}. ${flowLine}${avoidText ? ` אל תכלילי: ${avoidText}.` : ''}`;
 }
 
+function normalizeAppImageMapping() {
+  if (productType !== 'app') return;
+  state.images.forEach((image, index) => {
+    image.screenRef = `${index + 1}`;
+  });
+}
+
 function seedPosterBuilderState() {
   const contentValues = {
     projectName: state.research.projectName,
@@ -325,7 +336,16 @@ function seedPosterBuilderState() {
     ...stored,
     posterSize: stored.posterSize || posterSize,
     productType,
-    contentValues
+    contentValues,
+    splitFlowState: {
+      productType,
+      research: { ...state.research },
+      physicalPrompt: JSON.parse(JSON.stringify(state.physicalPrompt)),
+      prototypeScreens: JSON.parse(JSON.stringify(state.prototypeScreens)),
+      prototypeFlow: { ...state.prototypeFlow },
+      selectedWebsiteScreens: [...state.selectedWebsiteScreens],
+      images: JSON.parse(JSON.stringify(state.images))
+    }
   });
 }
 
@@ -359,7 +379,7 @@ function renderPrototypeScreens() {
     <article class="split-card">
       <h3>כרטיס מסך ${screen.number}</h3>
       <label class="${fieldClass(`screenType${index}`)}" data-error-key="screenType${index}"><span>מה סוג המסך? <em>*</em></span><select data-screen="${index}" data-key="type"><option value="">בחרי</option>${SCREEN_TYPE_OPTIONS.map((option) => `<option ${screen.type === option ? 'selected' : ''}>${option}</option>`).join('')}</select>${renderError(`screenType${index}`)}</label>
-      <label class="${fieldClass(`screenShortName${index}`)}" data-error-key="screenShortName${index}"><span>שם קצר למסך</span><input data-screen="${index}" data-key="shortName" maxlength="30" value="${escapeHtml(screen.shortName)}" /></label>
+      <label class="${fieldClass(`screenShortName${index}`)}" data-error-key="screenShortName${index}"><span>שם קצר למסך</span><input data-screen="${index}" data-key="shortName" maxlength="30" value="${escapeHtml(screen.shortName)}" />${renderError(`screenShortName${index}`)}</label>
       <label class="${fieldClass(`screenView${index}`)}" data-error-key="screenView${index}"><span>מה המשתמשת רואה במסך? <em>*</em></span><textarea data-screen="${index}" data-key="view" maxlength="220">${escapeHtml(screen.view)}</textarea>${renderError(`screenView${index}`)}</label>
       <label class="${fieldClass(`screenAction${index}`)}" data-error-key="screenAction${index}"><span>מה המשתמשת עושה במסך? <em>*</em></span><textarea data-screen="${index}" data-key="action" maxlength="220">${escapeHtml(screen.action)}</textarea>${renderError(`screenAction${index}`)}</label>
       <div class="${fieldClass(`screenComponents${index}`)}" data-error-key="screenComponents${index}"><span>אילו רכיבים חייבים להופיע? <em>*</em></span>${renderTags(`components-${index}`, COMPONENT_OPTIONS, screen.components, 5)}${renderError(`screenComponents${index}`)}</div>
@@ -477,7 +497,7 @@ function renderStep3() {
 
 function renderStep4() {
   seedPosterBuilderState();
-  return `<article class="split-card"><h3>מיפוי לפוסטר הושלם</h3><p>כל תשובות שלב 1, כולל המשוב והשיפור, הוזרמו לבונת הפוסטר הקיימת. מכאן אפשר להמשיך לעיצוב, לבדיקת גלישה נכונה של טקסט, ולייצוא.</p><a class="split-link" href="./editor.html?type=${productType}" target="_blank" rel="noopener">פתחי את gateway של הפוסטר</a></article>`;
+  return `<article class="split-card"><h3>מיפוי לפוסטר הושלם</h3><p>הנתונים נשמרו, וכל תשובות שלב 1 הוזרמו לבונת הפוסטר הקיימת. מכאן אפשר להמשיך ישירות לעיצוב, לבדיקת גלישה נכונה של טקסט, ולייצוא.</p><a class="split-link" href="./editor.html?type=${productType}">פתחי את gateway של הפוסטר</a></article>`;
 }
 
 function renderBody() {
@@ -496,6 +516,7 @@ function renderStepper() {
 }
 
 function render() {
+  normalizeAppImageMapping();
   root.innerHTML = `
   <style>
     .split-shell{max-width:1020px;margin:0 auto;padding:20px 16px 36px;font-family:'IBM Plex Sans Hebrew','Rubik',sans-serif;color:#1f2937;direction:rtl}
@@ -536,7 +557,7 @@ function render() {
       <p class="split-sub">כל הזרימה מותאמת לשלב החקר, האבטיפוס/הפרומפט והתמונות, עם מיפוי לפוסטר הקיים.</p>
     </header>
     ${renderStepper()}
-    ${state.visibleErrors.length ? '<div class="split-alert">יש להשלים את השדות החסרים לפני המשך.</div>' : ''}
+    ${state.visibleErrors.length ? '<div class="split-alert">יש להשלים את השדות החסרים לפני מעבר לשלב הבא.</div>' : ''}
     <section class="split-body">${renderBody()}</section>
     <nav class="split-nav">
       <button type="button" class="split-btn ghost" data-nav="back" ${state.step === 1 ? 'disabled' : ''}>חזרה</button>
