@@ -519,6 +519,8 @@ function render() {
   normalizeAppImageMapping();
   root.innerHTML = `
   <style>
+    html,body,#root{height:auto;min-height:100%}
+    body{overflow-y:auto;overflow-x:hidden}
     .split-shell{max-width:1020px;margin:0 auto;padding:20px 16px 36px;font-family:'IBM Plex Sans Hebrew','Rubik',sans-serif;color:#1f2937;direction:rtl}
     .split-header{margin-bottom:12px;text-align:center}
     .split-title{margin:0;font-size:1.7rem;color:#5E2750}
