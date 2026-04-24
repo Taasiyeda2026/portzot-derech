@@ -1,4 +1,8 @@
-import { WizardStep1, WizardStep2, WizardStep3, WizardStep5, StepIndicator } from './components/WizardSteps.js';
+import {
+  WizardStep1, WizardStep2, WizardStep3, WizardStep5,
+  StepIndicator,
+  PhysicalStepIndicator, PhysicalStep1, PhysicalStep2, PhysicalStep3
+} from './components/WizardSteps.js';
 import {
   normalizePosterSize,
   isBackgroundCompatibleWithSize,
@@ -45,7 +49,16 @@ const SERIALIZE_PROPS = [
   '__posterImageZone','__posterZoneImage','__posterSlotKey'
 ];
 
-const ALL_CONTENT_KEYS   = getAllContentKeys();
+const ALL_CONTENT_KEYS = getAllContentKeys();
+
+const EMPTY_PROMPT_ANSWERS = {
+  main_whatToSee: '', main_appearance: '', main_highlight: '',
+  main_material: '', main_background: '', main_style: '',
+  main_realism: '', main_colors: '', main_exclude: '',
+  usage_who: '', usage_howMany: '', usage_action: '',
+  usage_where: '', usage_understand: '', usage_highlight: '',
+  usage_style: '', usage_realism: '', usage_colors: '', usage_exclude: ''
+};
 const EMPTY_CONTENT      = Object.fromEntries(ALL_CONTENT_KEYS.map(k => [k, '']));
 const DEFAULT_SETTINGS   = Object.fromEntries(
   FIELD_DEFINITIONS.map(f => [f.id, { fontFamily: DEFAULT_FIELD_FONT, color: DEFAULT_FIELD_COLOR, borderRadius: 20 }])
@@ -79,7 +92,9 @@ function App() {
   const [selectedLocked,   setSelectedLocked]   = useState(false);
   const [titleFont,    setTitleFont]    = useState(DEFAULT_TITLE_FONT);
   const [titleColor,   setTitleColor]   = useState(DEFAULT_TITLE_COLOR);
-  const [currentShape, setCurrentShape] = useState(20);
+  const [currentShape,     setCurrentShape]     = useState(20);
+  const [physicalSubStep,  setPhysicalSubStep]  = useState(1);
+  const [promptAnswers,    setPromptAnswers]    = useState(EMPTY_PROMPT_ANSWERS);
 
   const posterSizeRef        = useRef('A4');
   const productTypeRef       = useRef('physical');
@@ -328,11 +343,18 @@ function App() {
         h('div', { className: 'step4-bar-start' },
           h('button', {
             className: 'step4-back-btn',
-            onClick: () => goToStep(3)
-          }, '‹ חזרה לשאלון')
+            onClick: () => {
+              if (productType === 'physical') {
+                setPhysicalSubStep(2);
+              }
+              goToStep(3);
+            }
+          }, '‹ חזרה')
         ),
         h('div', { className: 'step4-bar-center' },
-          h(StepIndicator, { current: 4 })
+          productType === 'physical'
+            ? h(PhysicalStepIndicator, { current: 4 })
+            : h(StepIndicator, { current: 4 })
         ),
         h('div', { className: 'step4-bar-end' },
           h('button', {
@@ -387,13 +409,43 @@ function App() {
     ),
 
     (wizardStep < 4 || wizardStep === 5) && h('div', { className: 'wz-overlay' },
+
+      // ── Step 1: product type selection (all types) ──────────
       wizardStep === 1 && h(WizardStep1, {
         productType,
         onProductTypeChange: handleProductTypeChange,
         onNext: () => goToStep(2)
       }),
 
-      wizardStep === 2 && h(WizardStep2, {
+      // ── Physical product 4-step flow ────────────────────────
+      wizardStep === 2 && productType === 'physical' && h(PhysicalStep1, {
+        contentValues,
+        onContentChange: onContentFieldChange,
+        onBack: () => goToStep(1),
+        onNext: () => { setPhysicalSubStep(1); goToStep(3); }
+      }),
+
+      wizardStep === 3 && productType === 'physical' && physicalSubStep === 1 && h(PhysicalStep2, {
+        promptAnswers,
+        onPromptChange: (key, val) => setPromptAnswers(prev => ({ ...prev, [key]: val })),
+        contentValues,
+        onBack: () => goToStep(2),
+        onNext: () => setPhysicalSubStep(2)
+      }),
+
+      wizardStep === 3 && productType === 'physical' && physicalSubStep === 2 && h(PhysicalStep3, {
+        contentValues,
+        promptAnswers,
+        posterSize,
+        slotImages,
+        onSlotUpload,
+        onSlotClear,
+        onBack: () => setPhysicalSubStep(1),
+        onNext: () => goToStep(4)
+      }),
+
+      // ── Non-physical 5-step flow ────────────────────────────
+      wizardStep === 2 && productType !== 'physical' && h(WizardStep2, {
         currentBackground,
         currentShape,
         titleFont,
@@ -406,7 +458,7 @@ function App() {
         onBack: () => goToStep(1)
       }),
 
-      wizardStep === 3 && h(WizardStep3, {
+      wizardStep === 3 && productType !== 'physical' && h(WizardStep3, {
         productType,
         contentValues,
         slotImages,
@@ -418,6 +470,7 @@ function App() {
         onBack: () => goToStep(2)
       }),
 
+      // ── Completion (all types) ──────────────────────────────
       wizardStep === 5 && h(WizardStep5, {
         onExportPdf: handleExportPdf,
         onBack: () => goToStep(4)
