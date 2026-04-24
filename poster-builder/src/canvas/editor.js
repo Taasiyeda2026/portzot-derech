@@ -72,7 +72,8 @@ function renderCanvas(canvas) {
   canvas.requestRenderAll();
 }
 
-function computeTitleTop(field, titleObj) {
+function computeTitleTop(field, titleObj, insideBox = false) {
+  if (insideBox) return field.y + 12;
   if (!titleObj) return field.y;
   const fontSize = titleObj.fontSize || 52;
   const estimatedHeight = Math.ceil(fontSize * 1.3);
@@ -268,7 +269,7 @@ function buildFieldObjects(canvas, sizeKey, values = {}, settings = {}, productT
           selectable: false,
           evented:    false
         });
-        listTitle.set({ top: computeTitleTop(field, listTitle) });
+        listTitle.set({ top: computeTitleTop(field, listTitle, false) });
         listTitle.__posterFieldTitle = true;
         markPosterManaged(listTitle, field.id);
         canvas.add(listTitle);
@@ -315,7 +316,7 @@ function buildFieldObjects(canvas, sizeKey, values = {}, settings = {}, productT
         selectable: false,
         evented:    false
       });
-      title.set({ top: computeTitleTop(field, title) });
+      title.set({ top: computeTitleTop(field, title, true) });
       title.__posterFieldTitle = true;
       markPosterManaged(title, field.id);
       objectsToAdd.push(title);
@@ -439,16 +440,14 @@ function upsertFixedLogo(canvas) {
 
     const lx0 = Math.round(margin * 0.35);
     const ly0 = Math.round(margin * 0.3);
-    const zoom   = canvas.getZoom() || 1;
-    const retina = canvas.getRetinaScaling ? canvas.getRetinaScaling() : 1;
-    const [,, , , offsetX = 0, offsetY = 0] = canvas.viewportTransform || [];
-    const scale = zoom * retina;
-    const lx = lx0 * scale + offsetX * retina;
-    const ly = ly0 * scale + offsetY * retina;
-    const lw = desiredWidth * scale;
-    const lh = logoHeight * scale;
+    const zoom = canvas.getZoom() || 1;
+    const [,,,, offsetX = 0, offsetY = 0] = canvas.viewportTransform || [];
+    const lx = lx0 * zoom + offsetX;
+    const ly = ly0 * zoom + offsetY;
+    const lw = desiredWidth * zoom;
+    const lh = logoHeight * zoom;
 
-    const glowRadius = Math.round(desiredWidth * 0.18 * scale);
+    const glowRadius = Math.round(desiredWidth * 0.18 * zoom);
 
     const ctx = canvas.getContext();
     ctx.save();
@@ -826,7 +825,7 @@ export function setTitleStyle(canvas, style) {
       if (style.fontFamily !== undefined) o.set({ fontFamily: style.fontFamily });
       const fieldId = o.__posterFieldId;
       const field   = getFieldById(sizeKey, fieldId, productType);
-      if (field) o.set({ top: computeTitleTop(field, o) });
+      if (field) o.set({ top: computeTitleTop(field, o, field.type !== 'list') });
     });
   renderCanvas(canvas);
 }
