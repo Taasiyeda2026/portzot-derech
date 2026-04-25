@@ -1,0 +1,55 @@
+Update the previous instruction:
+
+For website products, do NOT use 5 prototype screens anymore.
+The user should fill only 3 screens from the beginning.
+
+Change the website flow to match the app flow:
+- website has exactly 3 prototype screens
+- app has exactly 3 prototype screens
+- no selectedWebsiteScreens step
+- no “choose 3 screens for the poster” UI
+- no screenRef selection per image
+
+Fixed mapping for both website and app:
+image 1 = screen 1
+image 2 = screen 2
+image 3 = screen 3
+
+Implementation details:
+1. In poster-builder/src/products/split-flow/main.js, change prototypeScreens initialization:
+   - Do not use productType === 'website' ? 5 : 3
+   - Always use 3 screens for website and app.
+
+2. Remove or disable selectedWebsiteScreens logic:
+   - remove selectedWebsiteScreens from state if possible
+   - remove validation that requires exactly 3 selected website screens
+   - remove UI for selecting website screens
+   - remove any prompt-generation dependency on selectedWebsiteScreens
+
+3. Prompt generation:
+   For website and app, generate exactly 3 prompts from prototypeScreens[0], prototypeScreens[1], prototypeScreens[2].
+   Use the fixed mapping:
+   - visual_1 uses screen 1
+   - visual_2 uses screen 2
+   - visual_3 uses screen 3
+
+4. UI wording:
+   Replace any wording like:
+   "בחרו 3 מסכים לפוסטר"
+   with:
+   "מלאו את שלושת המסכים המרכזיים שיופיעו בפוסטר"
+
+5. Recommended helper text in Hebrew:
+   "בחרו מראש את שלושת המסכים שהכי מסבירים את המיזם: מסך פתיחה, מסך פעולה מרכזית ומסך תוצאה או ערך למשתמשת."
+
+6. Backward compatibility:
+   If an old saved website project contains 5 prototype screens, keep only the first 3 or safely ignore screens 4–5.
+   Do not break existing saved data.
+
+Acceptance criteria:
+- Website asks for only 3 screens.
+- App asks for only 3 screens.
+- No website screen-selection step appears.
+- No image screenRef selection appears.
+- Each of the 3 screens automatically generates one image prompt.
+- Shared visual settings are still asked only once and applied to all 3 prompts.

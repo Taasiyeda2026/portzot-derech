@@ -121,7 +121,7 @@ const state = {
       props: [], propsOther: '', highlight: [], highlightOther: '', takeaway: ''
     }
   },
-  prototypeScreens: Array.from({ length: productType === 'website' ? 5 : 3 }, (_, index) => ({
+  prototypeScreens: Array.from({ length: 3 }, (_, index) => ({
     number: index + 1,
     type: '',
     shortName: '',
@@ -133,7 +133,6 @@ const state = {
     emphasisOther: ''
   })),
   prototypeFlow: { start: '', end: '', summary: '', hasBranch: '', branch: '' },
-  selectedWebsiteScreens: ['1', '2', '3'],
   images: Array.from({ length: 3 }, (_, index) => ({
     id: index + 1,
     screenRef: `${index + 1}`,
@@ -188,7 +187,6 @@ function hydrateStateFromStorage() {
     state.prototypeScreens = state.prototypeScreens.map((screen, idx) => ({ ...screen, ...(stored.prototypeScreens[idx] || {}) }));
   }
   Object.assign(state.prototypeFlow, stored.prototypeFlow || {});
-  if (Array.isArray(stored.selectedWebsiteScreens)) state.selectedWebsiteScreens = [...stored.selectedWebsiteScreens];
   if (Array.isArray(stored.images)) {
     state.images = state.images.map((image, idx) => ({ ...image, ...(stored.images[idx] || {}) }));
   }
@@ -387,16 +385,11 @@ function validatePrototype() {
 
 function validateImagesStep() {
   const errors = {};
-  if (productType === 'website' && state.selectedWebsiteScreens.length !== 3) {
-    errors.selectedScreens = 'בחרי בדיוק 3 מסכים לפוסטר.';
-  }
-  state.images.forEach((image, idx) => {
-    if (productType === 'app' && image.screenRef !== `${idx + 1}`) {
-      errors[`imageScreen${idx}`] = `המיפוי באפליקציה קבוע: תמונה ${idx + 1} מחוברת למסך ${idx + 1}.`;
+  if (productType !== 'physical') {
+    state.images.forEach((image, idx) => {
       image.screenRef = `${idx + 1}`;
-    }
-    if (productType === 'website' && !state.selectedWebsiteScreens[idx]) errors[`imageScreen${idx}`] = 'בחרי מסך.';
-  });
+    });
+  }
   state.errors = errors;
   return errors;
 }
@@ -497,9 +490,7 @@ Image-specific details:
 
 function buildDigitalPrompt(index) {
   const slot = slots()[index] || slots()[0];
-  const mappedScreenRef = productType === 'website'
-    ? Number(state.selectedWebsiteScreens[index] || state.images[index]?.screenRef || `${index + 1}`)
-    : index + 1;
+  const mappedScreenRef = index + 1;
   const screen = state.prototypeScreens[mappedScreenRef - 1];
   const flowLine = productType === 'website'
     ? `זרימת השימוש מתחילה ב-${state.prototypeFlow.start} ומסתיימת ב-${state.prototypeFlow.end}. סיכום זרימה: ${state.prototypeFlow.summary}. ${state.prototypeFlow.hasBranch === 'כן' ? `הסתעפות: ${state.prototypeFlow.branch}.` : 'אין הסתעפות.'}`
@@ -578,7 +569,6 @@ function seedPosterBuilderState() {
       physicalPrompt: JSON.parse(JSON.stringify(state.physicalPrompt)),
       prototypeScreens: JSON.parse(JSON.stringify(state.prototypeScreens)),
       prototypeFlow: { ...state.prototypeFlow },
-      selectedWebsiteScreens: [...state.selectedWebsiteScreens],
       images: JSON.parse(JSON.stringify(state.images)),
       design: { ...state.design }
     }
@@ -681,15 +671,16 @@ function renderStep2() {
   const flowCard = productType === 'website' ? `
     <article class="split-card">
       <h3>כרטיס תרשים זרימה</h3>
-      <label class="${fieldClass('flowStart')}" data-error-key="flowStart"><span>מאיזה מסך מתחיל השימוש? <em>*</em></span><select data-flow="start"><option value="">בחרי</option>${[1, 2, 3, 4, 5].map((num) => `<option ${state.prototypeFlow.start === `מסך ${num}` ? 'selected' : ''}>מסך ${num}</option>`).join('')}</select>${renderError('flowStart')}</label>
-      <label class="${fieldClass('flowEnd')}" data-error-key="flowEnd"><span>באיזה מסך מסתיים השימוש? <em>*</em></span><select data-flow="end"><option value="">בחרי</option>${[1, 2, 3, 4, 5].map((num) => `<option ${state.prototypeFlow.end === `מסך ${num}` ? 'selected' : ''}>מסך ${num}</option>`).join('')}</select>${renderError('flowEnd')}</label>
+      <label class="${fieldClass('flowStart')}" data-error-key="flowStart"><span>מאיזה מסך מתחיל השימוש? <em>*</em></span><select data-flow="start"><option value="">בחרי</option>${[1, 2, 3].map((num) => `<option ${state.prototypeFlow.start === `מסך ${num}` ? 'selected' : ''}>מסך ${num}</option>`).join('')}</select>${renderError('flowStart')}</label>
+      <label class="${fieldClass('flowEnd')}" data-error-key="flowEnd"><span>באיזה מסך מסתיים השימוש? <em>*</em></span><select data-flow="end"><option value="">בחרי</option>${[1, 2, 3].map((num) => `<option ${state.prototypeFlow.end === `מסך ${num}` ? 'selected' : ''}>מסך ${num}</option>`).join('')}</select>${renderError('flowEnd')}</label>
       <label class="${fieldClass('flowSummary')}" data-error-key="flowSummary"><span>תארי בקצרה את זרימת השימוש <em>*</em></span><textarea data-flow="summary" maxlength="260">${escapeHtml(state.prototypeFlow.summary)}</textarea>${renderCounter(state.prototypeFlow.summary, 260)}${renderError('flowSummary')}</label>
       <label class="${fieldClass('flowBranchToggle')}" data-error-key="flowBranchToggle"><span>האם יש הסתעפות? <em>*</em></span><select data-flow="hasBranch"><option value="">בחרי</option><option ${state.prototypeFlow.hasBranch === 'כן' ? 'selected' : ''}>כן</option><option ${state.prototypeFlow.hasBranch === 'לא' ? 'selected' : ''}>לא</option></select>${renderError('flowBranchToggle')}</label>
       ${state.prototypeFlow.hasBranch === 'כן' ? `<label class="${fieldClass('flowBranchText')}" data-error-key="flowBranchText"><span>אם כן: תארי את ההסתעפות <em>*</em></span><textarea data-flow="branch" maxlength="220">${escapeHtml(state.prototypeFlow.branch)}</textarea>${renderCounter(state.prototypeFlow.branch, 220)}${renderError('flowBranchText')}</label>` : ''}
     </article>
   ` : '';
 
-  return `${renderPrototypeScreens()}${flowCard}${renderSharedVisualSection()}`;
+  const helperIntro = `<article class="split-card"><p style="margin:0;font-size:15px;color:#4b5563;line-height:1.6">מלאו את שלושת המסכים המרכזיים שיופיעו בפוסטר.<br><small>בחרו מראש את שלושת המסכים שהכי מסבירים את המיזם: מסך פתיחה, מסך פעולה מרכזית ומסך תוצאה או ערך למשתמשת.</small></p></article>`;
+  return `${helperIntro}${renderPrototypeScreens()}${flowCard}${renderSharedVisualSection()}`;
 }
 
 function renderStep3() {
@@ -713,24 +704,15 @@ function renderStep3() {
       </article>`;
   }
 
-  const screenPicker = productType === 'website' ? `
-    <article class="split-card ${state.errors.selectedScreens && state.visibleErrors.includes('selectedScreens') ? 'error' : ''}" data-error-key="selectedScreens">
-      <h3>בחירת 3 מסכים לפוסטר</h3>
-      <div class="split-picks">${[1, 2, 3, 4, 5].map((num) => `<label class="split-check"><input type="checkbox" data-website-pick="${num}" ${state.selectedWebsiteScreens.includes(String(num)) ? 'checked' : ''}/> מסך ${num}</label>`).join('')}</div>
-      <small>נבחרו ${state.selectedWebsiteScreens.length}/3</small>
-      ${renderError('selectedScreens')}
-    </article>` : '';
-
   const cards = state.images.map((image, index) => `
     <article class="split-card">
-      <h3>${productType === 'website' ? `תמונה ${index + 1} (מסך ${state.selectedWebsiteScreens[index] || '-'})` : `תמונה ${index + 1} (מסך ${index + 1})`}</h3>
-      ${productType === 'website' && !state.selectedWebsiteScreens[index] ? `<small class="split-error">${state.errors[`imageScreen${index}`] || ''}</small>` : ''}
+      <h3>תמונה ${index + 1} (מסך ${index + 1})</h3>
       <pre class="split-prompt" id="prompt-${index}">${escapeHtml(buildDigitalPrompt(index))}</pre>
       <button type="button" class="split-btn ghost" data-copy-image="${index}">העתיקי פרומפט</button>
     </article>
   `).join('');
 
-  return `${screenPicker}${cards}<article class="split-card"><button type="button" class="split-btn primary" data-copy-all-images>העתיקי את כל הפרומפטים</button></article>`;
+  return `${cards}<article class="split-card"><button type="button" class="split-btn primary" data-copy-all-images>העתיקי את כל הפרומפטים</button></article>`;
 }
 
 function renderStep4() {
@@ -984,27 +966,6 @@ function wireEvents() {
     button.addEventListener('click', () => {
       applyTag(button.dataset.tag, button.dataset.value, Number(button.dataset.max));
       state.visibleErrors = [];
-      render();
-    });
-  });
-
-  root.querySelectorAll('[data-website-pick]').forEach((checkbox) => {
-    checkbox.addEventListener('change', () => {
-      const value = checkbox.dataset.websitePick;
-      if (checkbox.checked && !state.selectedWebsiteScreens.includes(value) && state.selectedWebsiteScreens.length < 3) {
-        state.selectedWebsiteScreens.push(value);
-      }
-      if (!checkbox.checked) {
-        state.selectedWebsiteScreens = state.selectedWebsiteScreens.filter((item) => item !== value);
-      }
-      if (state.selectedWebsiteScreens.length > 3) {
-        state.selectedWebsiteScreens = state.selectedWebsiteScreens.slice(0, 3);
-      }
-      state.images.forEach((image, idx) => {
-        if (!state.selectedWebsiteScreens.includes(image.screenRef)) {
-          image.screenRef = state.selectedWebsiteScreens[idx] || '';
-        }
-      });
       render();
     });
   });
