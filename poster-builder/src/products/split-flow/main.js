@@ -696,36 +696,42 @@ function renderStep3() {
 
 function renderStep4() {
   seedPosterBuilderState();
-  const fontButtons = AVAILABLE_FONTS.map((font) => `
-    <button type="button" class="split-tag ${state.design.titleFont === font.value ? 'active' : ''}" data-design="titleFont" data-value="${escapeHtml(font.value)}" style="font-family:${escapeHtml(font.value)}">${font.label}</button>
+  const fontTiles = AVAILABLE_FONTS.map((font) => `
+    <button type="button" class="split-font-tile ${state.design.titleFont === font.value ? 'active' : ''}" data-design="titleFont" data-value="${escapeHtml(font.value)}" title="${escapeHtml(font.label)}">
+      <img src="${escapeHtml(font.img)}" alt="${escapeHtml(font.label)}" />
+    </button>
   `).join('');
   const titleColorButtons = DESIGN_COLORS.map((color) => `
-    <button type="button" class="split-tag split-color-tag ${state.design.titleColor === color ? 'active' : ''}" data-design="titleColor" data-value="${color}">
-      <span class="split-color-dot" style="background:${color}"></span> כותרת
+    <button type="button" class="split-tag split-color-tag ${state.design.titleColor === color ? 'active' : ''}" data-design="titleColor" data-value="${color}" title="${color}">
+      <span class="split-color-dot" style="background:${color}"></span>
     </button>
   `).join('');
   const textColorButtons = DESIGN_COLORS.map((color) => `
-    <button type="button" class="split-tag split-color-tag ${state.design.textColor === color ? 'active' : ''}" data-design="textColor" data-value="${color}">
-      <span class="split-color-dot" style="background:${color}"></span> טקסט
+    <button type="button" class="split-tag split-color-tag ${state.design.textColor === color ? 'active' : ''}" data-design="textColor" data-value="${color}" title="${color}">
+      <span class="split-color-dot" style="background:${color}"></span>
     </button>
   `).join('');
+  const bgTiles = `
+    <button type="button" class="split-bg-tile ${!state.design.background ? 'active' : ''}" data-design="background" data-value="">
+      <span class="split-bg-none">ללא רקע</span>
+    </button>
+    ${BACKGROUNDS.map((bg) => `
+      <button type="button" class="split-bg-tile ${state.design.background === bg.path ? 'active' : ''}" data-design="background" data-value="${escapeHtml(bg.path)}" title="${escapeHtml(bg.name)}">
+        <img src="${escapeHtml(bg.path)}" alt="${escapeHtml(bg.name)}" />
+        <span>${escapeHtml(bg.name)}</span>
+      </button>
+    `).join('')}`;
 
   return `<article class="split-card">
     <h3>מיפוי ועיצוב לפוסטר</h3>
-    <p>הנתונים נשמרים ל־gateway כולל בחירת רקע, פונט, צבעים ועיצוב תיבות.</p>
     <div class="split-design-layout">
-      <label class="split-field split-field-compact"><span>רקע לפוסטר</span>
-        <select data-design="background">
-          <option value="">ללא רקע</option>
-          ${BACKGROUNDS.map((bg) => `<option value="${bg.path}" ${state.design.background === bg.path ? 'selected' : ''}>${bg.name}</option>`).join('')}
-        </select>
-      </label>
-      <div class="split-field"><span>פונט</span><div class="split-tags">${fontButtons}</div></div>
+      <div class="split-field"><span>רקע לפוסטר</span><div class="split-bg-grid">${bgTiles}</div></div>
+      <div class="split-field"><span>פונט</span><div class="split-font-grid">${fontTiles}</div></div>
       <div class="split-field"><span>צבע כותרות</span><div class="split-tags">${titleColorButtons}</div></div>
       <div class="split-field"><span>צבע טקסט</span><div class="split-tags">${textColorButtons}</div></div>
       <div class="split-field"><span>עיצוב תיבות</span><div class="split-tags">${SHAPE_OPTIONS.map((shape) => `<button type="button" class="split-tag ${state.design.shape === shape.value ? 'active' : ''}" data-design="shape" data-value="${shape.value}">${shape.label}</button>`).join('')}</div></div>
     </div>
-    <a class="split-link" href="./editor.html?type=${productType}">פתחי את gateway של הפוסטר</a>
+    <a class="split-btn primary" href="./editor.html?type=${productType}">יצירת הפוסטר</a>
   </article>`;
 }
 
@@ -782,11 +788,23 @@ function render() {
     .split-tag{border:1px solid #d8dbe5;border-radius:999px;padding:7px 12px;background:#f8fafc;cursor:pointer;transition:.16s ease;color:#344054}
     .split-tag:hover{border-color:#bfa4fb;background:#f3ecff}
     .split-tag.active{background:linear-gradient(135deg,#5E2750,#7c3aed);color:#fff;border-color:#5E2750;box-shadow:0 5px 12px rgba(94,39,80,.26)}
-    .split-color-tag{display:flex;align-items:center;gap:8px}
-    .split-color-dot{width:14px;height:14px;border-radius:50%;border:1px solid rgba(0,0,0,.16)}
+    .split-color-tag{display:flex;align-items:center;gap:0;padding:5px}
+    .split-color-dot{width:22px;height:22px;border-radius:50%;border:2px solid rgba(0,0,0,.16)}
+    .split-bg-grid{display:flex;gap:7px;flex-wrap:wrap}
+    .split-bg-tile{border:2px solid #e6dafd;border-radius:10px;padding:3px;cursor:pointer;background:#fff;transition:.16s ease;display:flex;flex-direction:column;align-items:center}
+    .split-bg-tile:hover{border-color:#8b5cf6;transform:translateY(-1px)}
+    .split-bg-tile.active{border-color:#5E2750;box-shadow:0 0 0 2px rgba(94,39,80,.3)}
+    .split-bg-tile img{width:64px;height:82px;object-fit:cover;border-radius:6px;display:block}
+    .split-bg-tile span{font-size:10px;color:#4c1d95;margin-top:3px;line-height:1}
+    .split-bg-none{width:64px;height:82px;display:flex;align-items:center;justify-content:center;background:#f3f4f6;border-radius:6px;color:#6b7280;font-size:11px;text-align:center}
+    .split-font-grid{display:flex;gap:7px;flex-wrap:wrap}
+    .split-font-tile{border:2px solid #e6dafd;border-radius:10px;padding:5px 8px;cursor:pointer;background:#fff;transition:.16s ease;display:flex;align-items:center;justify-content:center}
+    .split-font-tile:hover{border-color:#8b5cf6;transform:translateY(-1px)}
+    .split-font-tile.active{border-color:#5E2750;box-shadow:0 0 0 2px rgba(94,39,80,.3)}
+    .split-font-tile img{height:34px;max-width:130px;object-fit:contain;display:block}
     .split-design-layout{display:grid;gap:12px;padding:10px;border-radius:14px;background:rgba(248,245,255,.75);border:1px solid #e6ddfb}
     .split-nav{display:flex;justify-content:space-between;gap:10px;margin-top:18px}
-    .split-btn{border:none;border-radius:11px;padding:10px 22px;cursor:pointer;font:inherit;box-shadow:0 5px 12px rgba(15,23,42,.1);transition:.16s ease;width:fit-content}
+    .split-btn{border:none;border-radius:11px;padding:10px 22px;cursor:pointer;font:inherit;box-shadow:0 5px 12px rgba(15,23,42,.1);transition:.16s ease;width:fit-content;text-decoration:none;display:inline-flex;align-items:center}
     .split-btn:hover{transform:translateY(-1px)}
     .split-btn.primary{background:linear-gradient(135deg,#5E2750,#7c3aed);color:#fff}
     .split-btn.ghost{background:#ede9fe;color:#4c1d95}
