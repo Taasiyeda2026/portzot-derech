@@ -231,14 +231,46 @@ function renderPhys2Poster(canvas, values, style = {}) {
 
 function exportPhys2PDF(canvas, values) {
   const { jsPDF } = window.jspdf;
+  const W = 2480, H = 3508;
+
   const active = canvas.getActiveObject();
   if (active) canvas.discardActiveObject();
+
+  // Save current display state
+  const wrapEl    = canvas.wrapperEl;
+  const prevStyle = wrapEl ? wrapEl.getAttribute('style') : null;
+  const prevVP    = canvas.viewportTransform.slice();
+  const prevW     = canvas.getWidth();
+  const prevH     = canvas.getHeight();
+
+  // Move wrapper off-screen so the canvas resize is invisible to the user
+  if (wrapEl) {
+    wrapEl.style.cssText =
+      `position:fixed;top:-9999px;left:-9999px;` +
+      `width:${W}px;height:${H}px;overflow:hidden;visibility:hidden;`;
+  }
+
+  // Resize to full poster resolution with zoom = 1
+  canvas.setDimensions({ width: W, height: H });
+  canvas.viewportTransform = [1, 0, 0, 1, 0, 0];
   canvas.renderAll();
-  const zoom   = canvas.getZoom() || 1;
-  const dataUrl = canvas.toDataURL({ format: 'png', quality: 1, multiplier: 1 / zoom });
+
+  // Capture at full resolution (logo drawn by after:render is included correctly)
+  const dataUrl = canvas.lowerCanvasEl.toDataURL('image/png', 1);
+
+  // Restore display state
+  canvas.setDimensions({ width: prevW, height: prevH });
+  canvas.viewportTransform = prevVP;
+  if (wrapEl) {
+    if (prevStyle !== null) wrapEl.setAttribute('style', prevStyle);
+    else wrapEl.removeAttribute('style');
+  }
+  canvas.renderAll();
+
+  // Build PDF
   const project = (values.projectName || '').trim().replace(/\s+/g, '-') || 'פוסטר';
-  const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: [2480, 3508] });
-  pdf.addImage(dataUrl, 'PNG', 0, 0, 2480, 3508);
+  const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: [W, H] });
+  pdf.addImage(dataUrl, 'PNG', 0, 0, W, H);
   pdf.save(`${project}.pdf`);
 }
 
