@@ -600,7 +600,7 @@ function renderTags(tagName, options, selected, max) {
 function renderStep1() {
   return `<section class="split-card">${RESEARCH_FIELDS.map(([key, label, max]) => {
     const value = state.research[key] || '';
-    const rows = max <= 42 ? 2 : 3;
+    const rows = max <= 42 ? 1 : 2;
     return `<label class="${fieldClass(key)}" data-error-key="${key}">
       <span>${label} <em>*</em></span>
       <textarea data-research="${key}" maxlength="${max}" rows="${rows}" placeholder="כתבי כאן" dir="rtl">${escapeHtml(value)}</textarea>
@@ -818,7 +818,7 @@ function render() {
     .split-field-compact{justify-items:start}
     .split-field textarea:focus,.split-field input:focus,.split-field select:focus{outline:none;border-color:#8b5cf6;box-shadow:0 0 0 3px rgba(139,92,246,.14)}
     .split-field.error textarea,.split-field.error input,.split-field.error select,.split-card.error{border-color:#dc2626;box-shadow:0 0 0 2px rgba(220,38,38,.08)}
-    .split-field textarea{min-height:86px;line-height:1.5}
+    .split-field textarea{min-height:43px;line-height:1.5;font-size:15px}
     .split-counter{font-size:12px;color:#2f855a;line-height:1.2}
     .split-counter.near-limit{color:#b7791f}
     .split-counter.full,.split-counter.overflow{color:#c53030}
