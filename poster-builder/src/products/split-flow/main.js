@@ -1,4 +1,4 @@
-import { getVisualSlots, getPosterFields, FIELD_DEFINITIONS } from '../physical/config.js';
+import { getVisualSlots, getPosterFields, FIELD_DEFINITIONS, BACKGROUNDS, AVAILABLE_FONTS } from '../physical/config.js';
 import { saveProject, loadProject } from '../../shared/storage.js';
 
 const productType = ['physical', 'website', 'app'].includes(window.__POSTER_SPLIT_PRODUCT__)
@@ -16,6 +16,12 @@ const PRODUCT_TITLE = {
 };
 
 const QUALITY_REQUIREMENTS = 'poster-friendly composition, high quality, clean composition, no watermark, no text overlay, no logo';
+const DESIGN_COLORS = ['#5E2750', '#1a3a6b', '#1a5c3a', '#7a1a1a', '#b5520a', '#1a4a5c', '#2d2d2d', '#1f2937'];
+const SHAPE_OPTIONS = [
+  { value: 0, label: 'חד' },
+  { value: 10, label: 'מעוגל' },
+  { value: 20, label: 'עגול' }
+];
 
 const posterSize = loadProject()?.posterSize || 'A4';
 const valueFieldDef = FIELD_DEFINITIONS.find((field) => field.id === 'value');
@@ -139,7 +145,14 @@ const state = {
     colors: '',
     avoid: [],
     avoidOther: ''
-  }))
+  })),
+  design: {
+    background: loadProject()?.background || null,
+    titleFont: AVAILABLE_FONTS[0]?.value || 'IBM Plex Sans Hebrew',
+    titleColor: '#5E2750',
+    textColor: '#1f2937',
+    shape: 20
+  }
 };
 
 function escapeHtml(text) {
@@ -483,10 +496,27 @@ function seedPosterBuilderState() {
   };
 
   const stored = loadProject() || {};
+  const nextFieldSettings = Object.fromEntries(
+    FIELD_DEFINITIONS.map((field) => [
+      field.id,
+      {
+        ...(stored.fieldSettings?.[field.id] || {}),
+        fontFamily: state.design.titleFont,
+        color: state.design.textColor,
+        borderRadius: state.design.shape
+      }
+    ])
+  );
   saveProject({
     ...stored,
     posterSize: stored.posterSize || posterSize,
     productType,
+    background: state.design.background || null,
+    fieldSettings: nextFieldSettings,
+    titleStyle: {
+      fontFamily: state.design.titleFont,
+      color: state.design.titleColor
+    },
     contentValues,
     splitFlowState: {
       productType,
@@ -495,7 +525,8 @@ function seedPosterBuilderState() {
       prototypeScreens: JSON.parse(JSON.stringify(state.prototypeScreens)),
       prototypeFlow: { ...state.prototypeFlow },
       selectedWebsiteScreens: [...state.selectedWebsiteScreens],
-      images: JSON.parse(JSON.stringify(state.images))
+      images: JSON.parse(JSON.stringify(state.images)),
+      design: { ...state.design }
     }
   });
 }
@@ -665,7 +696,37 @@ function renderStep3() {
 
 function renderStep4() {
   seedPosterBuilderState();
-  return `<article class="split-card"><h3>מיפוי לפוסטר הושלם</h3><p>הנתונים נשמרו, וכל תשובות שלב 1 הוזרמו לבונת הפוסטר הקיימת. מכאן אפשר להמשיך ישירות לעיצוב, לבדיקת גלישה נכונה של טקסט, ולייצוא.</p><a class="split-link" href="./editor.html?type=${productType}">פתחי את gateway של הפוסטר</a></article>`;
+  const fontButtons = AVAILABLE_FONTS.map((font) => `
+    <button type="button" class="split-tag ${state.design.titleFont === font.value ? 'active' : ''}" data-design="titleFont" data-value="${escapeHtml(font.value)}" style="font-family:${escapeHtml(font.value)}">${font.label}</button>
+  `).join('');
+  const titleColorButtons = DESIGN_COLORS.map((color) => `
+    <button type="button" class="split-tag split-color-tag ${state.design.titleColor === color ? 'active' : ''}" data-design="titleColor" data-value="${color}">
+      <span class="split-color-dot" style="background:${color}"></span> כותרת
+    </button>
+  `).join('');
+  const textColorButtons = DESIGN_COLORS.map((color) => `
+    <button type="button" class="split-tag split-color-tag ${state.design.textColor === color ? 'active' : ''}" data-design="textColor" data-value="${color}">
+      <span class="split-color-dot" style="background:${color}"></span> טקסט
+    </button>
+  `).join('');
+
+  return `<article class="split-card">
+    <h3>מיפוי ועיצוב לפוסטר</h3>
+    <p>הנתונים נשמרים ל־gateway כולל בחירת רקע, פונט, צבעים ועיצוב תיבות.</p>
+    <div class="split-design-layout">
+      <label class="split-field split-field-compact"><span>רקע לפוסטר</span>
+        <select data-design="background">
+          <option value="">ללא רקע</option>
+          ${BACKGROUNDS.map((bg) => `<option value="${bg.path}" ${state.design.background === bg.path ? 'selected' : ''}>${bg.name}</option>`).join('')}
+        </select>
+      </label>
+      <div class="split-field"><span>פונט</span><div class="split-tags">${fontButtons}</div></div>
+      <div class="split-field"><span>צבע כותרות</span><div class="split-tags">${titleColorButtons}</div></div>
+      <div class="split-field"><span>צבע טקסט</span><div class="split-tags">${textColorButtons}</div></div>
+      <div class="split-field"><span>עיצוב תיבות</span><div class="split-tags">${SHAPE_OPTIONS.map((shape) => `<button type="button" class="split-tag ${state.design.shape === shape.value ? 'active' : ''}" data-design="shape" data-value="${shape.value}">${shape.label}</button>`).join('')}</div></div>
+    </div>
+    <a class="split-link" href="./editor.html?type=${productType}">פתחי את gateway של הפוסטר</a>
+  </article>`;
 }
 
 function renderBody() {
@@ -690,8 +751,8 @@ function render() {
   <style>
     html,body,#root{height:auto;min-height:100%}
     body{overflow-y:auto;overflow-x:hidden;background:radial-gradient(circle at top,#f8f3ff 0%,#f6f8fc 45%,#f2f5fb 100%)}
-    .split-shell{max-width:900px;margin:0 auto;padding:30px 18px 42px;font-family:'IBM Plex Sans Hebrew','Rubik',sans-serif;color:#1f2937;direction:rtl}
-    .split-header{margin-bottom:14px;text-align:center;padding:12px 16px;border-radius:18px;background:rgba(255,255,255,.7);border:1px solid rgba(196,181,253,.4);box-shadow:0 10px 25px rgba(94,39,80,.08)}
+    .split-shell{max-width:980px;margin:0 auto;padding:30px 18px 42px;font-family:'IBM Plex Sans Hebrew','Rubik',sans-serif;color:#1f2937;direction:rtl}
+    .split-header{margin-bottom:14px;text-align:center;padding:14px 18px;border-radius:18px;background:rgba(255,255,255,.8);border:1px solid rgba(196,181,253,.48);box-shadow:0 12px 28px rgba(94,39,80,.1)}
     .split-title{margin:0;font-size:1.7rem;color:#5E2750}
     .split-sub{margin:8px 0 0;color:#59657a}
     .split-stepper{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:20px 0}
@@ -699,12 +760,15 @@ function render() {
     .split-step:hover{transform:translateY(-1px);box-shadow:0 6px 12px rgba(94,39,80,.12)}
     .split-step.active{background:#5E2750;color:#fff;border-color:#5E2750}
     .split-step.completed{background:#f3e8ff;border-color:#c084fc}
-    .split-body{display:grid;gap:14px}
-    .split-card{background:linear-gradient(180deg,#ffffff 0%,#fdfcff 100%);border:1px solid #e7dbff;border-radius:18px;padding:16px;display:grid;gap:11px;box-shadow:0 12px 26px rgba(15,23,42,.06),0 2px 6px rgba(94,39,80,.05)}
+    .split-body{display:grid;gap:16px;padding:2px}
+    .split-card{background:linear-gradient(180deg,#ffffff 0%,#fdfcff 100%);border:1px solid #e6dafd;border-radius:18px;padding:16px;display:grid;gap:11px;box-shadow:0 14px 30px rgba(15,23,42,.08),0 3px 8px rgba(94,39,80,.08)}
     .split-card h3{margin:0;color:#4c1d95}
     .split-field{display:grid;gap:7px}
     .split-field span em{color:#b91c1c;font-style:normal}
     .split-field textarea,.split-field input,.split-field select{border:1px solid #d4d4d8;border-radius:11px;padding:10px 12px;font:inherit;direction:rtl;background:#fff;transition:border-color .16s ease,box-shadow .16s ease}
+    .split-field input,.split-field textarea{width:min(640px,100%)}
+    .split-field select{width:min(430px,100%);min-width:220px}
+    .split-field-compact{justify-items:start}
     .split-field textarea:focus,.split-field input:focus,.split-field select:focus{outline:none;border-color:#8b5cf6;box-shadow:0 0 0 3px rgba(139,92,246,.14)}
     .split-field.error textarea,.split-field.error input,.split-field.error select,.split-card.error{border-color:#dc2626;box-shadow:0 0 0 2px rgba(220,38,38,.08)}
     .split-field textarea{min-height:86px;line-height:1.5}
@@ -718,6 +782,9 @@ function render() {
     .split-tag{border:1px solid #d8dbe5;border-radius:999px;padding:7px 12px;background:#f8fafc;cursor:pointer;transition:.16s ease;color:#344054}
     .split-tag:hover{border-color:#bfa4fb;background:#f3ecff}
     .split-tag.active{background:linear-gradient(135deg,#5E2750,#7c3aed);color:#fff;border-color:#5E2750;box-shadow:0 5px 12px rgba(94,39,80,.26)}
+    .split-color-tag{display:flex;align-items:center;gap:8px}
+    .split-color-dot{width:14px;height:14px;border-radius:50%;border:1px solid rgba(0,0,0,.16)}
+    .split-design-layout{display:grid;gap:12px;padding:10px;border-radius:14px;background:rgba(248,245,255,.75);border:1px solid #e6ddfb}
     .split-nav{display:flex;justify-content:space-between;gap:10px;margin-top:18px}
     .split-btn{border:none;border-radius:11px;padding:10px 14px;cursor:pointer;font:inherit;box-shadow:0 5px 12px rgba(15,23,42,.1);transition:.16s ease}
     .split-btn:hover{transform:translateY(-1px)}
@@ -730,7 +797,7 @@ function render() {
     .split-picks{display:flex;gap:8px;flex-wrap:wrap}
     .split-check{display:flex;gap:6px;align-items:center}
     @media (max-width:900px){.split-shell{max-width:780px}}
-    @media (max-width:800px){.split-stepper{grid-template-columns:1fr 1fr}.split-shell{padding:20px 12px 34px}}
+    @media (max-width:800px){.split-stepper{grid-template-columns:1fr 1fr}.split-shell{padding:20px 12px 34px}.split-field select,.split-field input,.split-field textarea{width:100%;min-width:0}}
   </style>
   <main class="split-shell">
     <header class="split-header">
@@ -892,6 +959,17 @@ function wireEvents() {
       updateCounterForInput(input);
       const promptNode = root.querySelector(`#prompt-${input.dataset.image}`);
       if (promptNode) promptNode.textContent = buildDigitalPrompt(Number(input.dataset.image));
+    });
+  });
+
+  root.querySelectorAll('[data-design]').forEach((input) => {
+    const eventName = input.tagName === 'SELECT' ? 'change' : 'click';
+    input.addEventListener(eventName, () => {
+      const key = input.dataset.design;
+      const value = input.dataset.value ?? input.value;
+      state.design[key] = key === 'shape' ? Number(value) : value;
+      seedPosterBuilderState();
+      render();
     });
   });
 
