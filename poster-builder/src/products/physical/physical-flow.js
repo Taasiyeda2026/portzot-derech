@@ -469,85 +469,276 @@ function isStep2Valid(hero, usage) { return isHeroValid(hero) && isUsageValid(us
 // PROMPT BUILDING
 // ══════════════════════════════════════════════════════════════
 
-function resolveOther(val, otherVal) { return val === 'אחר' ? (otherVal || 'אחר') : val; }
-function resolveMulti(arr, otherKey) { return arr.map(v => v === 'אחר' ? (otherKey || 'אחר') : v).filter(Boolean); }
+function resolveOther(val, otherVal) { return val === 'אחר' ? (otherVal || '') : (val || ''); }
+function resolveMulti(arr, otherKey) {
+  return (arr || []).map(v => v === 'אחר' ? (otherKey || '') : v).filter(Boolean);
+}
+
+// ── Hebrew → English translation maps ───────────────────────
+const HE_APPEARANCE = {
+  'סגור':             'closed',
+  'פתוח':             'open',
+  'פתוח חלקית':       'partially open',
+  'פריסה מלאה':       'fully unfolded / laid flat',
+  'מונח על משטח':     'resting on a flat surface',
+  'מוחזק ביד':        'held in hand',
+};
+const HE_FOCUS = {
+  'המוצר כולו':      'the full product',
+  'הצורה הכללית':    'the overall shape',
+  'התאים הפנימיים':  'the internal compartments',
+  'הרוכסן / הסגירה': 'the zipper / closure mechanism',
+  'הלולאה / הידית':  'the loop / handle',
+  'החומר / המרקם':   'the material and texture',
+  'הצבעים':          'the colors',
+  'הפרטים הקטנים':   'fine detail and craftsmanship',
+};
+const HE_MATERIAL = {
+  'בד / טקסטיל':    'fabric / textile',
+  'פלסטיק':          'plastic',
+  'מתכת':            'metal',
+  'עץ':              'wood',
+  'סיליקון':         'silicone',
+  'קרטון':           'cardboard',
+  'שילוב חומרים':    'mixed materials',
+};
+const HE_BACKGROUND = {
+  'לבן נקי':             'clean white background',
+  'רקע בהיר ורך':        'soft, light-toned background',
+  'סטודיו מקצועי':       'professional studio setting',
+  'רקע טכנולוגי עדין':   'subtle tech-inspired background',
+  'רקע ביתי עדין':       'soft domestic / home-like background',
+  'שקוף / מנותק רקע':    'transparent / isolated on clean background',
+};
+const HE_STYLE = {
+  'מודרני':       'modern',
+  'מינימליסטי':   'minimalist',
+  'אסתטי':        'aesthetic',
+  'צעיר':         'youthful',
+  'מקצועי':       'professional',
+  'נקי':          'clean',
+  'חם אנושי':     'warm and human',
+  'טכנולוגי':     'high-tech',
+};
+const HE_REALISM = {
+  'פוטוריאליסטי':            'photorealistic',
+  'ריאליסטי':                'realistic',
+  'אילוסטרטיבי':             'illustrative',
+  'הדמיית מוצר תלת־ממד':    '3D product render',
+};
+const HE_USERTYPE = {
+  'ילדה':               'a young girl',
+  'נערה':               'a teenage girl',
+  'נער':                'a teenage boy',
+  'מבוגר/ת':            'an adult',
+  'הורה':               'a parent',
+  'אדם עם מוגבלות':     'a person with a disability',
+  'לא רואים פנים':      'a person (face not fully visible)',
+};
+const HE_PEOPLE = {
+  'אדם אחד':                     'one person',
+  'שניים':                        'two people',
+  'שלושה ויותר':                  'three or more people',
+  'לא חייבים לראות אדם מלא':      'no need to show a full person',
+};
+const HE_LOCATION = {
+  'בבית':             'at home',
+  'בחדר':             'in a room',
+  'ליד תיק פתוח':    'next to an open bag',
+  'בחוץ':             'outdoors',
+  'ברחוב':            'on the street',
+  'במרחב לימודי':     'in a learning environment',
+  'בסביבה ניטרלית':   'in a neutral setting',
+};
+const HE_FOCUS_USAGE = {
+  'המוצר':           'the product itself',
+  'הידיים':          'the hands interacting with the product',
+  'הסיטואציה':       'the overall usage scene',
+  'הסדר בתוך התיק':  'the organized interior of the bag',
+  'שליפה מהירה':     'the ease of quick retrieval',
+  'תחושת נוחות':     'a feeling of comfort and ease',
+};
+const HE_EXTRA = {
+  'אוזניות':       'earphones',
+  'מפתחות':        'keys',
+  'ליפגלוס':       'lip gloss',
+  'מטען':          'charger',
+  'כסף קטן':       'small coins / cash',
+  'טלפון':         'smartphone',
+  'מחברת קטנה':    'small notebook',
+  'איפור קטן':     'compact makeup item',
+};
+const HE_AVOID_HERO = {
+  'אנשים':           'people in the frame',
+  'טקסט':            'any visible text',
+  'רקע עמוס':        'cluttered backgrounds',
+  'צללים חזקים':     'harsh shadows',
+  'לוגואים':         'commercial branding or logos',
+  'מראה ילדותי':     'childish aesthetics',
+  'חפצים מיותרים':   'unnecessary objects',
+};
+const HE_AVOID_USAGE = {
+  'אנשים':           'visible faces',
+  'טקסט':            'any visible text',
+  'רקע עמוס':        'cluttered backgrounds',
+  'צללים חזקים':     'harsh shadows',
+  'לוגואים':         'commercial branding or logos',
+  'מראה ילדותי':     'childish aesthetics',
+  'חפצים מיותרים':   'unnecessary objects',
+};
+
+function tr(map, key) { return (key && (map[key] || key)) || ''; }
+function trList(map, keys) { return keys.map(k => tr(map, k)).filter(Boolean); }
+
+// ── Viewer-message → visual directive translator ─────────────
+function viewerMsgToDirective(msg) {
+  if (!msg) return '';
+  const m = msg.trim();
+  const lower = m.toLowerCase();
+  const includes = (...words) => words.some(w => lower.includes(w));
+
+  if (includes('קלות', 'פשטות', 'פשוט', 'נוח', 'נוחות', 'ידידותי'))
+    return 'The product interaction should look simple, intuitive, comfortable, and easy to use.';
+  if (includes('חדשנות', 'חדשני', 'טכנולוג', 'מתקדם'))
+    return 'The scene should convey innovation, smart design, and modern technology.';
+  if (includes('אמינות', 'איכות', 'מקצועי', 'סמכות'))
+    return 'The image should communicate reliability, quality, and professional craftsmanship.';
+  if (includes('שמחה', 'שמח', 'כיף', 'צעיר', 'חיוביות'))
+    return 'The scene should feel joyful, energetic, and positive.';
+  if (includes('ארגון', 'מסודר', 'סדר', 'נקי', 'ניקיון'))
+    return 'The scene should emphasize order, organization, and cleanliness.';
+  if (includes('עצמאות', 'ביטחון', 'חופש'))
+    return 'The scene should convey confidence, independence, and empowerment.';
+  return `The viewer should understand: ${m}`;
+}
 
 function buildHeroPrompt(ra, ha) {
-  const name    = ra.projectName || 'המיזם';
-  const prob    = ra.problem || '';
-  const aud     = ra.audience || '';
-  const sol     = ra.solution || '';
-  const reqs    = [ra.requirements_1, ra.requirements_2, ra.requirements_3].filter(Boolean).join(', ');
-  const val     = ra.value || '';
-  const appearance  = resolveOther(ha.appearance, ha.appearanceOther);
-  const focus       = resolveMulti(ha.focus, ha.focusOther).join(', ');
-  const material    = (ha.material === 'שילוב חומרים' || ha.material === 'אחר') && ha.materialOther
-    ? `${ha.material} — ${ha.materialOther}` : ha.material;
-  const background  = resolveOther(ha.background, ha.backgroundOther);
-  const style       = resolveMulti(ha.style, ha.styleOther).join(', ');
-  const avoid       = resolveMulti(ha.avoid, ha.avoidOther).join(', ');
-  const L = [];
-  L.push('צרי תמונת מוצר מקצועית ואסתטית באיכות גבוהה עבור פוסטר חקר תלמידות.');
-  L.push('');
-  L.push(`תמונה ראשית — הצגת המוצר הפיזי של מיזם "${name}".`);
-  if (ra.description) L.push(`תיאור המיזם: ${ra.description}.`);
-  if (prob) L.push(`הבעיה שנפתרת: ${prob}${aud ? ` (עבור ${aud})` : ''}.`);
-  if (sol) L.push(`תיאור המוצר: ${sol}.`);
-  if (reqs) L.push(`מה חשוב שהמוצר יכלול: ${reqs}.`);
-  if (val) L.push(`הערך המרכזי: ${val}.`);
-  L.push('');
-  if (ha.description)  L.push(`• מה לראות בתמונה: ${ha.description}.`);
-  if (appearance)      L.push(`• אופן הצגת המוצר: ${appearance}.`);
-  if (focus)           L.push(`• מה חשוב שיבלוט: ${focus}.`);
-  if (material)        L.push(`• חומר / מרקם: ${material}.`);
-  if (background)      L.push(`• רקע: ${background}.`);
-  if (style)           L.push(`• סגנון עיצובי: ${style}.`);
-  if (ha.realism)      L.push(`• רמת ריאליזם: ${ha.realism}.`);
-  if (ha.colors)       L.push(`• צבעים בולטים: ${ha.colors}.`);
-  if (avoid)           L.push(`• ללא: ${avoid}.`);
-  L.push('');
-  L.push('מפרט טכני: יחס 25:21 (ריבועי), high quality, clean composition, realistic proportions, poster-ready, no text overlay, no watermark, no logo.');
-  L.push('');
-  L.push('תמונה נקייה, ברורה, אסתטית, חדה, מתאימה לשילוב בפוסטר, ללא טקסט בתמונה.');
-  return L.join('\n');
+  const name   = (ra.projectName || '').trim();
+  const desc   = (ra.description || '').trim();
+  const prob   = (ra.problem || '').trim();
+  const aud    = (ra.audience || '').trim();
+  const sol    = (ra.solution || '').trim();
+  const val    = (ra.value || '').trim();
+  const reqs   = [ra.requirements_1, ra.requirements_2, ra.requirements_3]
+                   .map(s => (s||'').trim()).filter(Boolean);
+
+  const appearance = tr(HE_APPEARANCE, resolveOther(ha.appearance, ha.appearanceOther));
+  const focusItems = trList(HE_FOCUS,  resolveMulti(ha.focus, ha.focusOther));
+  const matRaw     = resolveOther(ha.material, ha.materialOther);
+  const material   = (ha.material === 'שילוב חומרים' || ha.material === 'אחר') && ha.materialOther
+                       ? `mixed materials: ${ha.materialOther}`
+                       : tr(HE_MATERIAL, matRaw);
+  const background = tr(HE_BACKGROUND, resolveOther(ha.background, ha.backgroundOther));
+  const styleItems = trList(HE_STYLE,  resolveMulti(ha.style, ha.styleOther));
+  const realism    = tr(HE_REALISM,   ha.realism);
+  const haDesc     = ha.description.trim();
+  const colors     = ha.colors.trim();
+  const avoidItems = trList(HE_AVOID_HERO, resolveMulti(ha.avoid, ha.avoidOther));
+
+  const parts = [];
+
+  // 1 — Opening instruction
+  parts.push(`Create a professional, high-quality product image for a student research poster${name ? `, featuring a physical product named "${name}"` : ''}.`);
+
+  // 2 — Product context (only filled fields)
+  const contextParts = [];
+  if (desc)  contextParts.push(`The project is described as: "${desc}".`);
+  if (prob)  contextParts.push(`It was created to solve the following problem: ${prob}${aud ? ` — affecting ${aud}` : ''}.`);
+  if (sol)   contextParts.push(`The product itself: ${sol}.`);
+  if (reqs.length) contextParts.push(`Key design requirements: ${reqs.join(', ')}.`);
+  if (val)   contextParts.push(`Its core value: ${val}.`);
+  if (contextParts.length) parts.push(contextParts.join(' '));
+
+  // 3 — Visual scene description
+  const sceneParts = [];
+  if (haDesc)     sceneParts.push(`Show: ${haDesc}.`);
+  if (appearance) sceneParts.push(`The product should appear ${appearance}.`);
+  if (focusItems.length) sceneParts.push(`Emphasize ${focusItems.join(' and ')}.`);
+  if (material)   sceneParts.push(`Material and texture: ${material}.`);
+  if (background) sceneParts.push(`Background: ${background}.`);
+  if (sceneParts.length) parts.push(sceneParts.join(' '));
+
+  // 4 — Style & realism
+  const styleParts = [];
+  if (styleItems.length) styleParts.push(`Visual style: ${styleItems.join(', ')}.`);
+  if (realism)           styleParts.push(`Realism level: ${realism}.`);
+  if (colors)            styleParts.push(`Prominent colors: ${colors}.`);
+  if (styleParts.length) parts.push(styleParts.join(' '));
+
+  // 5 — Fixed composition requirements
+  parts.push('Poster-friendly composition, 500:420 ratio, accurate framing, important details placed in the safe center area, clean composition, high quality.');
+
+  // 6 — Prohibitions (fixed + user additions)
+  const prohibit = ['no text overlay', 'no watermark', 'no logo', 'no real brand logos'];
+  if (avoidItems.length) prohibit.push(...avoidItems.map(a => `no ${a}`));
+  parts.push(prohibit.join(', ') + '.');
+
+  return parts.join('\n\n');
 }
 
 function buildUsagePrompt(ra, ua) {
-  const name        = ra.projectName || 'המיזם';
-  const prob        = ra.problem || '';
-  const aud         = ra.audience || '';
-  const sol         = ra.solution || '';
-  const uses        = [ra.howItWorks_1, ra.howItWorks_2, ra.howItWorks_3].filter(Boolean).join(' / ');
-  const userType    = resolveOther(ua.userType, ua.userTypeOther);
-  const location    = resolveOther(ua.location, ua.locationOther);
-  const extraObjects = resolveMulti(ua.extraObjects, ua.extraObjectsOther).join(', ');
-  const focus       = resolveMulti(ua.focus, ua.focusOther).join(', ');
-  const style       = resolveMulti(ua.style, ua.styleOther).join(', ');
-  const avoid       = resolveMulti(ua.avoid, ua.avoidOther).join(', ');
-  const L = [];
-  L.push('צרי תמונת שימוש ריאליסטית ואסתטית עבור פוסטר חקר תלמידות.');
-  L.push('');
-  L.push(`תמונת שימוש — המוצר הפיזי "${name}" בפעולה.`);
-  if (prob) L.push(`הבעיה שנפתרת: ${prob}${aud ? ` (עבור ${aud})` : ''}.`);
-  if (sol) L.push(`המוצר: ${sol}.`);
-  if (uses) L.push(`איך משתמשים: ${uses}.`);
-  L.push('');
-  if (ua.actionDescription) L.push(`• הפעולה המוצגת: ${ua.actionDescription}.`);
-  if (userType)              L.push(`• מי משתמש/ת: ${userType}.`);
-  if (ua.peopleCount)        L.push(`• כמה אנשים: ${ua.peopleCount}.`);
-  if (location)              L.push(`• מיקום: ${location}.`);
-  if (extraObjects)          L.push(`• חפצים נוספים: ${extraObjects}.`);
-  if (focus)                 L.push(`• מה צריך לבלוט: ${focus}.`);
-  if (ua.viewerMessage)      L.push(`• מה חשוב שהצופה יבין: ${ua.viewerMessage}.`);
-  if (style)                 L.push(`• סגנון עיצובי: ${style}.`);
-  if (ua.realism)            L.push(`• רמת ריאליזם: ${ua.realism}.`);
-  if (ua.colors)             L.push(`• צבעים בולטים: ${ua.colors}.`);
-  if (avoid)                 L.push(`• ללא: ${avoid}.`);
-  L.push('');
-  L.push('מפרט טכני: יחס 25:21 (ריבועי), high quality, clean composition, realistic proportions, poster-ready, no text overlay, no watermark, no logo.');
-  L.push('');
-  L.push('תמונה אמינה, טבעית, ברורה, אסתטית, מתאימה לשילוב בפוסטר, ללא טקסט בתוך התמונה.');
-  return L.join('\n');
+  const name    = (ra.projectName || '').trim();
+  const prob    = (ra.problem || '').trim();
+  const aud     = (ra.audience || '').trim();
+  const sol     = (ra.solution || '').trim();
+  const uses    = [ra.howItWorks_1, ra.howItWorks_2, ra.howItWorks_3]
+                    .map(s => (s||'').trim()).filter(Boolean);
+
+  const userType    = tr(HE_USERTYPE, resolveOther(ua.userType, ua.userTypeOther));
+  const peopleCount = tr(HE_PEOPLE,   ua.peopleCount);
+  const location    = tr(HE_LOCATION, resolveOther(ua.location, ua.locationOther));
+  const actionDesc  = (ua.actionDescription || '').trim();
+  const extraItems  = trList(HE_EXTRA, resolveMulti(ua.extraObjects, ua.extraObjectsOther));
+  const focusItems  = trList(HE_FOCUS_USAGE, resolveMulti(ua.focus, ua.focusOther));
+  const viewerDir   = viewerMsgToDirective((ua.viewerMessage || '').trim());
+  const styleItems  = trList(HE_STYLE, resolveMulti(ua.style, ua.styleOther));
+  const realism     = tr(HE_REALISM, ua.realism);
+  const colors      = (ua.colors || '').trim();
+  const avoidItems  = trList(HE_AVOID_USAGE, resolveMulti(ua.avoid, ua.avoidOther));
+
+  const parts = [];
+
+  // 1 — Opening instruction
+  parts.push(`Create a professional product-use image for a student research poster${name ? `, featuring a physical product named "${name}"` : ''}.`);
+
+  // 2 — Product context
+  const contextParts = [];
+  if (prob) contextParts.push(`The product addresses: ${prob}${aud ? ` (target audience: ${aud})` : ''}.`);
+  if (sol)  contextParts.push(`Product description: ${sol}.`);
+  if (uses.length) contextParts.push(`How it is used: ${uses.join(' / ')}.`);
+  if (contextParts.length) parts.push(contextParts.join(' '));
+
+  // 3 — Usage scene
+  const sceneParts = [];
+  if (actionDesc)   sceneParts.push(`Scene: ${actionDesc}.`);
+  if (userType)     sceneParts.push(`The person using the product is ${userType}.`);
+  if (peopleCount)  sceneParts.push(`Number of people in the frame: ${peopleCount}.`);
+  if (location)     sceneParts.push(`Setting: ${location}.`);
+  if (extraItems.length) sceneParts.push(`Also visible in the scene: ${extraItems.join(', ')}.`);
+  if (sceneParts.length) parts.push(sceneParts.join(' '));
+
+  // 4 — Visual focus & message
+  const visualParts = [];
+  if (focusItems.length) visualParts.push(`The composition should highlight ${focusItems.join(' and ')}.`);
+  if (viewerDir)         visualParts.push(viewerDir);
+  if (visualParts.length) parts.push(visualParts.join(' '));
+
+  // 5 — Style & realism
+  const styleParts = [];
+  if (styleItems.length) styleParts.push(`Visual style: ${styleItems.join(', ')}.`);
+  if (realism)           styleParts.push(`Realism level: ${realism}.`);
+  if (colors)            styleParts.push(`Prominent colors: ${colors}.`);
+  if (styleParts.length) parts.push(styleParts.join(' '));
+
+  // 6 — Fixed composition requirements
+  parts.push('Poster-friendly composition, 500:420 ratio, accurate framing, important details placed in the safe center area, clean composition, high quality.');
+
+  // 7 — Prohibitions
+  const prohibit = ['no text overlay', 'no watermark', 'no logo', 'no real brand logos'];
+  if (avoidItems.length) prohibit.push(...avoidItems.map(a => `no ${a}`));
+  parts.push(prohibit.join(', ') + '.');
+
+  return parts.join('\n\n');
 }
 
 // ══════════════════════════════════════════════════════════════
