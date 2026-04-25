@@ -47,6 +47,45 @@ const PHYS2_FIELDS = [
   { id:'participants',              x:1240, y:3240, width:2200, height:200,  center:true, noLabel:true, fontSize:46,  minFontSize:30, lineHeight:1.35, fontWeight:400, verticalCenter:true, align:'center', shortLabel:'', type:'participants' }
 ];
 
+// ── Character-limit calculation (derived from poster geometry) ───────────────
+// Each limit is computed so that text fills the box at the field's intended
+// fontSize and lineHeight — guaranteeing correct size when the box is full.
+//
+// Hebrew character width ≈ fontSize × 0.52 (regular) or × 0.60 (bold-700).
+// Layout mirrors fitText(): topPad = noLabel ? 20 : 80, textH = height-topPad-10.
+// For list sub-boxes: subBoxH = floor((height−58−12−LIST_SUB_GAP×2)/3),
+//                     textH   = max(30, subBoxH − 22).
+
+const PHYS2_BY_ID = Object.fromEntries(PHYS2_FIELDS.map(f => [f.id, f]));
+
+function calcMaxChars(fieldId) {
+  const f  = PHYS2_BY_ID[fieldId];
+  if (!f) return 80;
+  const ratio  = (f.fontWeight || 400) >= 700 ? 0.60 : 0.52;
+  const textW  = f.width - (f.center ? 20 : 36);
+  const topPad = f.noLabel ? 20 : 80;
+  const textH  = Math.max(30, f.height - topPad - 10);
+  const fs     = f.fontSize || 42;
+  const lh     = f.lineHeight || 1.3;
+  const cpl    = Math.floor(textW / (fs * ratio));
+  const lines  = Math.max(1, Math.floor(textH / (fs * lh)));
+  return cpl * lines;
+}
+
+function calcMaxCharsPerItem(fieldId) {
+  const f         = PHYS2_BY_ID[fieldId];
+  if (!f) return 42;
+  const textW     = f.width - 36;
+  const fs        = f.fontSize || 42;
+  const lh        = f.lineHeight || 1.25;
+  const available = f.height - 58 - 12;
+  const subBoxH   = Math.floor((available - LIST_SUB_GAP * 2) / 3);
+  const textH     = Math.max(30, subBoxH - 22);
+  const cpl       = Math.floor(textW / (fs * 0.52));
+  const lines     = Math.max(1, Math.floor(textH / (fs * lh)));
+  return Math.max(10, cpl * lines - 3);
+}
+
 // ── Poster field drawing utilities ───────────────────────────
 
 function fitText(textObj, field, topPadOverride) {
@@ -340,43 +379,43 @@ const initUsage = () => ({
 // ══════════════════════════════════════════════════════════════
 
 const STEP1_FIELDS = [
-  { id:'projectName',              label:'שם המיזם',                              hint:'כתבו את שם המיזם בשם קצר, ברור וזכיר.',                                                             maxChars:20,  required:true },
-  { id:'description',              label:'תיאור קצר של המיזם',                    hint:'במשפט אחד הסבירו מהו המיזם ומה הרעיון המרכזי שלו.',                                               maxChars:75,  required:true },
-  { id:'problem',                  label:'מה הבעיה שזיהיתן?',                     hint:'תארו בקצרה את הקושי, הצורך או המצב שהוביל אתכן לחפש פתרון.',                                     maxChars:130, required:true },
-  { id:'audience',                 label:'על מי הבעיה משפיעה?',                   hint:'כתבו מי קהל היעד שסובל מהבעיה או מתמודד איתה ביומיום.',                                           maxChars:75,  required:true },
-  { id:'researchQuestion',         label:'מה הייתה שאלת החקר הטכנולוגית?',        hint:'נסחו את שאלת החקר שהובילה את תהליך הבדיקה, ההשוואה או התכנון.',                                   maxChars:90,  required:true },
+  { id:'projectName',              label:'שם המיזם',                              hint:'כתבו את שם המיזם בשם קצר, ברור וזכיר.',                                                             maxChars:calcMaxChars('projectName'),              required:true },
+  { id:'description',              label:'תיאור קצר של המיזם',                    hint:'במשפט אחד הסבירו מהו המיזם ומה הרעיון המרכזי שלו.',                                               maxChars:calcMaxChars('description'),              required:true },
+  { id:'problem',                  label:'מה הבעיה שזיהיתן?',                     hint:'תארו בקצרה את הקושי, הצורך או המצב שהוביל אתכן לחפש פתרון.',                                     maxChars:calcMaxChars('problem'),                  required:true },
+  { id:'audience',                 label:'על מי הבעיה משפיעה?',                   hint:'כתבו מי קהל היעד שסובל מהבעיה או מתמודד איתה ביומיום.',                                           maxChars:calcMaxChars('audience'),                 required:true },
+  { id:'researchQuestion',         label:'מה הייתה שאלת החקר הטכנולוגית?',        hint:'נסחו את שאלת החקר שהובילה את תהליך הבדיקה, ההשוואה או התכנון.',                                   maxChars:calcMaxChars('researchQuestion'),          required:true },
 ];
 
 const STEP1_RESEARCH = [
-  { id:'research_1', label:'1', maxChars:42, required:true },
-  { id:'research_2', label:'2', maxChars:42, required:false },
-  { id:'research_3', label:'3', maxChars:42, required:false },
+  { id:'research_1', label:'1', maxChars:calcMaxCharsPerItem('research'), required:true  },
+  { id:'research_2', label:'2', maxChars:calcMaxCharsPerItem('research'), required:false },
+  { id:'research_3', label:'3', maxChars:calcMaxCharsPerItem('research'), required:false },
 ];
 
 const STEP1_MID = [
-  { id:'findings',   label:'מה גיליתן בעקבות החקר?',           hint:'סכמו מה למדתן, מה הבנתן, ומה היה חשוב לכן לקחת מהבדיקה אל הפתרון.',   maxChars:110, required:true },
+  { id:'findings', label:'מה גיליתן בעקבות החקר?', hint:'סכמו מה למדתן, מה הבנתן, ומה היה חשוב לכן לקחת מהבדיקה אל הפתרון.', maxChars:calcMaxChars('findings'), required:true },
 ];
 
 const STEP1_REQUIREMENTS = [
-  { id:'requirements_1', label:'1', maxChars:42, required:true },
-  { id:'requirements_2', label:'2', maxChars:42, required:false },
-  { id:'requirements_3', label:'3', maxChars:42, required:false },
+  { id:'requirements_1', label:'1', maxChars:calcMaxCharsPerItem('requirements'), required:true  },
+  { id:'requirements_2', label:'2', maxChars:calcMaxCharsPerItem('requirements'), required:false },
+  { id:'requirements_3', label:'3', maxChars:calcMaxCharsPerItem('requirements'), required:false },
 ];
 
 const STEP1_SOLUTION = [
-  { id:'solution', label:'מהו המוצר הפיזי שפיתחתן?', hint:'תארו בקצרה מהו המוצר שפיתחתן, מה הוא עושה, ואיך הוא נותן מענה לבעיה.', maxChars:130, required:true },
+  { id:'solution', label:'מהו המוצר הפיזי שפיתחתן?', hint:'תארו בקצרה מהו המוצר שפיתחתן, מה הוא עושה, ואיך הוא נותן מענה לבעיה.', maxChars:calcMaxChars('solution'), required:true },
 ];
 
 const STEP1_HOWITWORKS = [
-  { id:'howItWorks_1', label:'1', maxChars:42, required:true },
-  { id:'howItWorks_2', label:'2', maxChars:42, required:false },
-  { id:'howItWorks_3', label:'3', maxChars:42, required:false },
+  { id:'howItWorks_1', label:'1', maxChars:calcMaxCharsPerItem('howItWorks'), required:true  },
+  { id:'howItWorks_2', label:'2', maxChars:calcMaxCharsPerItem('howItWorks'), required:false },
+  { id:'howItWorks_3', label:'3', maxChars:calcMaxCharsPerItem('howItWorks'), required:false },
 ];
 
 const STEP1_END = [
-  { id:'value',                     label:'מה הערך המרכזי של הפתרון?',       hint:'כתבו מה התועלת המרכזית של הפתרון ולמה הוא משמעותי עבור המשתמשים.',      maxChars:110, required:true },
-  { id:'feedbackReceived',          label:'איזה משוב קיבלתן?',               hint:'תארו את המשוב שקיבלתן מהמשתמשים או מהסביבה על המוצר.',                   maxChars:85,  required:true },
-  { id:'improvementsAfterFeedback', label:'מה שיפרתן בעקבות המשוב?',         hint:'תארו מה שינִיתן או שיפרתן במוצר בעקבות המשוב שקיבלתן.',                  maxChars:85,  required:true },
+  { id:'value',                     label:'מה הערך המרכזי של הפתרון?',       hint:'כתבו מה התועלת המרכזית של הפתרון ולמה הוא משמעותי עבור המשתמשים.',      maxChars:calcMaxChars('value'),                     required:true },
+  { id:'feedbackReceived',          label:'איזה משוב קיבלתן?',               hint:'תארו את המשוב שקיבלתן מהמשתמשים או מהסביבה על המוצר.',                   maxChars:calcMaxChars('feedbackReceived'),          required:true },
+  { id:'improvementsAfterFeedback', label:'מה שיפרתן בעקבות המשוב?',         hint:'תארו מה שינִיתן או שיפרתן במוצר בעקבות המשוב שקיבלתן.',                  maxChars:calcMaxChars('improvementsAfterFeedback'), required:true },
 ];
 
 // ══════════════════════════════════════════════════════════════
