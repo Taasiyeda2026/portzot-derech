@@ -750,6 +750,8 @@ function renderStep4() {
       <span class="split-color-dot" style="background:${color}"></span>
     </button>
   `).join('');
+  const titleColorPicker = `<input type="color" class="split-color-picker" data-design="titleColor" value="${state.design.titleColor}" title="בחירת צבע חופשי לכותרות" />`;
+  const textColorPicker  = `<input type="color" class="split-color-picker" data-design="textColor"  value="${state.design.textColor}"  title="בחירת צבע חופשי לטקסט" />`;
   const bgTiles = `
     <button type="button" class="split-bg-tile ${!state.design.background ? 'active' : ''}" data-design="background" data-value="">
       <span class="split-bg-none">ללא רקע</span>
@@ -766,8 +768,8 @@ function renderStep4() {
     <div class="split-design-layout">
       <div class="split-field"><span>רקע לפוסטר</span><div class="split-bg-grid">${bgTiles}</div></div>
       <div class="split-field"><span>פונט</span><div class="split-font-grid">${fontTiles}</div></div>
-      <div class="split-field"><span>צבע כותרות</span><div class="split-tags">${titleColorButtons}</div></div>
-      <div class="split-field"><span>צבע טקסט</span><div class="split-tags">${textColorButtons}</div></div>
+      <div class="split-field"><span>צבע כותרות</span><div class="split-tags">${titleColorButtons}${titleColorPicker}</div></div>
+      <div class="split-field"><span>צבע טקסט</span><div class="split-tags">${textColorButtons}${textColorPicker}</div></div>
       <div class="split-field"><span>עיצוב תיבות</span><div class="split-tags">${SHAPE_OPTIONS.map((shape) => `<button type="button" class="split-tag ${state.design.shape === shape.value ? 'active' : ''}" data-design="shape" data-value="${shape.value}">${shape.label}</button>`).join('')}</div></div>
     </div>
     <a class="split-btn primary" href="./editor.html?type=${productType}">יצירת הפוסטר</a>
@@ -829,18 +831,24 @@ function render() {
     .split-tag.active{background:linear-gradient(135deg,#5E2750,#7c3aed);color:#fff;border-color:#5E2750;box-shadow:0 5px 12px rgba(94,39,80,.26)}
     .split-color-tag{display:flex;align-items:center;gap:0;padding:5px}
     .split-color-dot{width:22px;height:22px;border-radius:50%;border:2px solid rgba(0,0,0,.16)}
-    .split-bg-grid{display:flex;gap:7px;flex-wrap:wrap}
+    .split-bg-grid{display:grid;grid-template-columns:repeat(6,auto);gap:7px;justify-content:start}
     .split-bg-tile{border:2px solid #e6dafd;border-radius:10px;padding:3px;cursor:pointer;background:#fff;transition:.16s ease;display:flex;flex-direction:column;align-items:center}
     .split-bg-tile:hover{border-color:#8b5cf6;transform:translateY(-1px)}
     .split-bg-tile.active{border-color:#5E2750;box-shadow:0 0 0 2px rgba(94,39,80,.3)}
     .split-bg-tile img{width:64px;height:82px;object-fit:cover;border-radius:6px;display:block}
     .split-bg-tile span{font-size:10px;color:#4c1d95;margin-top:3px;line-height:1}
     .split-bg-none{width:64px;height:82px;display:flex;align-items:center;justify-content:center;background:#f3f4f6;border-radius:6px;color:#6b7280;font-size:11px;text-align:center}
-    .split-font-grid{display:flex;gap:7px;flex-wrap:wrap}
+    .split-font-grid{display:grid;grid-template-columns:repeat(4,auto);gap:7px;justify-content:start}
     .split-font-tile{border:2px solid #e6dafd;border-radius:10px;padding:5px 8px;cursor:pointer;background:#fff;transition:.16s ease;display:flex;align-items:center;justify-content:center}
     .split-font-tile:hover{border-color:#8b5cf6;transform:translateY(-1px)}
     .split-font-tile.active{border-color:#5E2750;box-shadow:0 0 0 2px rgba(94,39,80,.3)}
     .split-font-tile img{height:34px;max-width:130px;object-fit:contain;display:block}
+    .split-color-picker{-webkit-appearance:none;appearance:none;width:36px;height:36px;border-radius:50%;border:2px solid #e6dafd;padding:2px;cursor:pointer;background:none;flex-shrink:0;transition:border-color .16s}
+    .split-color-picker:hover{border-color:#8b5cf6}
+    .split-color-picker::-webkit-color-swatch-wrapper{padding:0;border-radius:50%}
+    .split-color-picker::-webkit-color-swatch{border-radius:50%;border:none}
+    .split-color-picker::-moz-color-swatch{border-radius:50%;border:none}
+    @media(max-width:600px){.split-bg-grid{grid-template-columns:repeat(3,auto)}.split-font-grid{grid-template-columns:repeat(2,auto)}}
     .split-design-layout{display:grid;gap:12px;padding:10px;border-radius:14px;background:rgba(248,245,255,.75);border:1px solid #e6ddfb}
     .split-nav{display:flex;justify-content:space-between;gap:10px;margin-top:18px}
     .split-btn{border:none;border-radius:11px;padding:10px 22px;cursor:pointer;font:inherit;box-shadow:0 5px 12px rgba(15,23,42,.1);transition:.16s ease;width:fit-content;text-decoration:none;display:inline-flex;align-items:center}
@@ -1002,7 +1010,7 @@ function wireEvents() {
   });
 
   root.querySelectorAll('[data-design]').forEach((input) => {
-    const eventName = input.tagName === 'SELECT' ? 'change' : 'click';
+    const eventName = (input.tagName === 'SELECT' || (input.tagName === 'INPUT' && input.type === 'color')) ? 'change' : 'click';
     input.addEventListener(eventName, () => {
       const key = input.dataset.design;
       const value = input.dataset.value ?? input.value;
