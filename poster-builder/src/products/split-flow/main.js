@@ -15,7 +15,7 @@ const PRODUCT_TITLE = {
   app: 'אפליקציה'
 };
 
-const QUALITY_REQUIREMENTS = 'poster-friendly composition, high quality, clean composition, no watermark, no text overlay, no logo';
+const QUALITY_REQUIREMENTS = 'poster-friendly composition, correct image ratio according to the poster visual slot, precise framing, important details inside the safe center area, high quality, clean composition, no watermark, no text overlay, no logo';
 const DESIGN_COLORS = ['#5E2750', '#1a3a6b', '#1a5c3a', '#7a1a1a', '#b5520a', '#1a4a5c', '#2d2d2d', '#1f2937'];
 const SHAPE_OPTIONS = [
   { value: 0, label: 'חד' },
@@ -80,15 +80,21 @@ const EMPHASIS_OPTIONS = ['הפעולה המרכזית', 'הכפתור הראש�
 const STYLE_OPTIONS = ['מודרני', 'נקי', 'טכנולוגי', 'ידידותי', 'צעיר', 'מקצועי', 'מינימליסטי', 'חם אנושי', 'אחר'];
 const REALISM_OPTIONS = ['ריאליסטי', 'חצי ריאליסטי', 'אילוסטרטיבי', 'מוקאפ UI/UX', 'אחר'];
 const AVOID_OPTIONS = ['עומס', 'טקסט ארוך מדי', 'אלמנטים לא קשורים', 'יותר מדי צבעים', 'לוגואים אמיתיים', 'עיצוב עמוס', 'אחר'];
+const SHARED_VISUAL_DEFAULTS = {
+  style: [],
+  styleOther: '',
+  realism: '',
+  realismOther: '',
+  colors: '',
+  avoid: [],
+  avoidOther: ''
+};
 
 const PHYSICAL_MAIN_OPTIONS = {
   appearance: ['מונח על משטח', 'מוחזק ביד', 'בתצוגה ישירה', 'בזווית דינמית', 'אחר'],
   highlight: ['המנגנון המרכזי', 'פשטות השימוש', 'החדשנות', 'החומריות', 'הגודל היחסי', 'אחר'],
   material: ['פלסטיק', 'מתכת', 'עץ', 'בד', 'שילוב חומרים', 'אחר'],
-  background: ['רקע נקי ובהיר', 'רקע כיתה', 'רקע מעבדה', 'רקע ביתי', 'רקע טכנולוגי', 'אחר'],
-  style: STYLE_OPTIONS,
-  realism: REALISM_OPTIONS,
-  avoid: AVOID_OPTIONS
+  background: ['רקע נקי ובהיר', 'רקע כיתה', 'רקע מעבדה', 'רקע ביתי', 'רקע טכנולוגי', 'אחר']
 };
 
 const PHYSICAL_USAGE_OPTIONS = {
@@ -96,10 +102,7 @@ const PHYSICAL_USAGE_OPTIONS = {
   peopleCount: ['משתמשת אחת', 'שתיים', 'שלוש ומעלה', 'אחר'],
   location: ['כיתה', 'בית', 'מעבדה', 'חצר בית ספר', 'מרחב קהילתי', 'אחר'],
   props: ['שולחן עבודה', 'מחברת', 'טלפון', 'מחשב נייד', 'כלי כתיבה', 'אחר'],
-  highlight: ['אופן השימוש', 'הפעולה המרכזית', 'קלות שימוש', 'הקשר לבעיה', 'האינטראקציה', 'אחר'],
-  style: STYLE_OPTIONS,
-  realism: REALISM_OPTIONS,
-  avoid: AVOID_OPTIONS
+  highlight: ['אופן השימוש', 'הפעולה המרכזית', 'קלות שימוש', 'הקשר לבעיה', 'האינטראקציה', 'אחר']
 };
 
 const state = {
@@ -107,16 +110,15 @@ const state = {
   research: Object.fromEntries(RESEARCH_FIELDS.map(([key]) => [key, ''])),
   errors: {},
   visibleErrors: [],
+  sharedVisualPrompt: { ...SHARED_VISUAL_DEFAULTS },
   physicalPrompt: {
     main: {
       appearance: '', appearanceOther: '', highlight: [], highlightOther: '', material: '', materialOther: '',
-      background: '', backgroundOther: '', style: [], styleOther: '', realism: '', realismOther: '',
-      description: '', colors: '', avoid: [], avoidOther: ''
+      background: '', backgroundOther: '', description: ''
     },
     usage: {
       user: '', userOther: '', peopleCount: '', peopleCountOther: '', location: '', locationOther: '', action: '',
-      props: [], propsOther: '', highlight: [], highlightOther: '', takeaway: '', style: [], styleOther: '',
-      realism: '', realismOther: '', colors: '', avoid: [], avoidOther: ''
+      props: [], propsOther: '', highlight: [], highlightOther: '', takeaway: ''
     }
   },
   prototypeScreens: Array.from({ length: productType === 'website' ? 5 : 3 }, (_, index) => ({
@@ -137,14 +139,7 @@ const state = {
     screenRef: `${index + 1}`,
     emphasis: [],
     emphasisOther: '',
-    takeaway: '',
-    style: [],
-    styleOther: '',
-    realism: '',
-    realismOther: '',
-    colors: '',
-    avoid: [],
-    avoidOther: ''
+    takeaway: ''
   })),
   design: {
     background: loadProject()?.background || null,
@@ -154,6 +149,51 @@ const state = {
     shape: 20
   }
 };
+
+function migrateSharedVisualPrompt(splitFlowState = {}) {
+  const nextShared = {
+    ...SHARED_VISUAL_DEFAULTS,
+    ...(splitFlowState.sharedVisualPrompt || {})
+  };
+  if (nextShared.style.length && nextShared.realism) return nextShared;
+
+  const oldPhysicalMain = splitFlowState.physicalPrompt?.main || {};
+  const oldPhysicalUsage = splitFlowState.physicalPrompt?.usage || {};
+  const oldFirstImage = splitFlowState.images?.[0] || {};
+  const fallback = oldPhysicalMain.style?.length
+    ? oldPhysicalMain
+    : (oldPhysicalUsage.style?.length ? oldPhysicalUsage : oldFirstImage);
+
+  return {
+    ...nextShared,
+    style: nextShared.style.length ? nextShared.style : (fallback.style || []),
+    styleOther: nextShared.styleOther || fallback.styleOther || '',
+    realism: nextShared.realism || fallback.realism || '',
+    realismOther: nextShared.realismOther || fallback.realismOther || '',
+    colors: nextShared.colors || fallback.colors || '',
+    avoid: nextShared.avoid.length ? nextShared.avoid : (fallback.avoid || []),
+    avoidOther: nextShared.avoidOther || fallback.avoidOther || ''
+  };
+}
+
+function hydrateStateFromStorage() {
+  const stored = loadProject()?.splitFlowState;
+  if (!stored || stored.productType !== productType) return;
+
+  Object.assign(state.research, stored.research || {});
+  Object.assign(state.design, stored.design || {});
+  if (stored.physicalPrompt?.main) Object.assign(state.physicalPrompt.main, stored.physicalPrompt.main);
+  if (stored.physicalPrompt?.usage) Object.assign(state.physicalPrompt.usage, stored.physicalPrompt.usage);
+  if (Array.isArray(stored.prototypeScreens)) {
+    state.prototypeScreens = state.prototypeScreens.map((screen, idx) => ({ ...screen, ...(stored.prototypeScreens[idx] || {}) }));
+  }
+  Object.assign(state.prototypeFlow, stored.prototypeFlow || {});
+  if (Array.isArray(stored.selectedWebsiteScreens)) state.selectedWebsiteScreens = [...stored.selectedWebsiteScreens];
+  if (Array.isArray(stored.images)) {
+    state.images = state.images.map((image, idx) => ({ ...image, ...(stored.images[idx] || {}) }));
+  }
+  state.sharedVisualPrompt = migrateSharedVisualPrompt(stored);
+}
 
 function escapeHtml(text) {
   return text
@@ -252,22 +292,20 @@ function clearWhenOtherNotSelected(container, listKey, otherKey) {
 
 function sanitizeOtherFields() {
   const { main, usage } = state.physicalPrompt;
+  const shared = state.sharedVisualPrompt;
   clearWhenOtherNotSelected(main, 'appearance', 'appearanceOther');
   clearWhenOtherNotSelected(main, 'highlight', 'highlightOther');
   clearWhenOtherNotSelected(main, 'material', 'materialOther');
   clearWhenOtherNotSelected(main, 'background', 'backgroundOther');
-  clearWhenOtherNotSelected(main, 'style', 'styleOther');
-  clearWhenOtherNotSelected(main, 'realism', 'realismOther');
-  clearWhenOtherNotSelected(main, 'avoid', 'avoidOther');
 
   clearWhenOtherNotSelected(usage, 'user', 'userOther');
   clearWhenOtherNotSelected(usage, 'peopleCount', 'peopleCountOther');
   clearWhenOtherNotSelected(usage, 'location', 'locationOther');
   clearWhenOtherNotSelected(usage, 'props', 'propsOther');
   clearWhenOtherNotSelected(usage, 'highlight', 'highlightOther');
-  clearWhenOtherNotSelected(usage, 'style', 'styleOther');
-  clearWhenOtherNotSelected(usage, 'realism', 'realismOther');
-  clearWhenOtherNotSelected(usage, 'avoid', 'avoidOther');
+  clearWhenOtherNotSelected(shared, 'style', 'styleOther');
+  clearWhenOtherNotSelected(shared, 'realism', 'realismOther');
+  clearWhenOtherNotSelected(shared, 'avoid', 'avoidOther');
 
   state.prototypeScreens.forEach((screen) => {
     clearWhenOtherNotSelected(screen, 'type', 'shortName');
@@ -277,9 +315,6 @@ function sanitizeOtherFields() {
 
   state.images.forEach((image) => {
     clearWhenOtherNotSelected(image, 'emphasis', 'emphasisOther');
-    clearWhenOtherNotSelected(image, 'style', 'styleOther');
-    clearWhenOtherNotSelected(image, 'realism', 'realismOther');
-    clearWhenOtherNotSelected(image, 'avoid', 'avoidOther');
   });
 }
 
@@ -291,8 +326,6 @@ function validatePhysicalPrompt() {
   if (main.highlight.length < 1 || main.highlight.length > 3) errors.mainHighlight = 'בחרי בין פריט אחד לשלושה.';
   if (!main.material) errors.mainMaterial = 'בחרי חומר או מרקם.';
   if (!main.background) errors.mainBackground = 'בחרי רקע רצוי.';
-  if (main.style.length < 1 || main.style.length > 2) errors.mainStyle = 'בחרי בין סגנון אחד לשניים.';
-  if (!main.realism) errors.mainRealism = 'בחרי רמת ריאליזם.';
   if (!main.description.trim()) errors.mainDescription = 'תארי מה צריך לראות בתמונה.';
 
   if (!usage.user) errors.usageUser = 'בחרי מי משתמשת במוצר.';
@@ -301,31 +334,34 @@ function validatePhysicalPrompt() {
   if (!usage.action.trim()) errors.usageAction = 'תארי את הפעולה המוצגת.';
   if (usage.highlight.length < 1 || usage.highlight.length > 3) errors.usageHighlight = 'בחרי בין פריט אחד לשלושה.';
   if (!usage.takeaway.trim()) errors.usageTakeaway = 'תארי מה חשוב שהצופה תבין.';
-  if (usage.style.length < 1 || usage.style.length > 2) errors.usageStyle = 'בחרי בין סגנון אחד לשניים.';
-  if (!usage.realism) errors.usageRealism = 'בחרי רמת ריאליזם.';
 
   if (main.appearance === 'אחר' && !main.appearanceOther.trim()) errors.mainAppearanceOther = 'נבחר "אחר" – השלימי פירוט קצר.';
   if (main.highlight.includes('אחר') && !main.highlightOther.trim()) errors.mainHighlightOther = 'נבחר "אחר" – השלימי פירוט קצר.';
   if (main.material === 'אחר' && !main.materialOther.trim()) errors.mainMaterialOther = 'נבחר "אחר" – השלימי פירוט קצר.';
   if (main.background === 'אחר' && !main.backgroundOther.trim()) errors.mainBackgroundOther = 'נבחר "אחר" – השלימי פירוט קצר.';
-  if (main.style.includes('אחר') && !main.styleOther.trim()) errors.mainStyleOther = 'נבחר "אחר" – השלימי פירוט קצר.';
-  if (main.realism === 'אחר' && !main.realismOther.trim()) errors.mainRealismOther = 'נבחר "אחר" – השלימי פירוט קצר.';
-  if (main.avoid.includes('אחר') && !main.avoidOther.trim()) errors.mainAvoidOther = 'נבחר "אחר" – השלימי פירוט קצר.';
   if (usage.user === 'אחר' && !usage.userOther.trim()) errors.usageUserOther = 'נבחר "אחר" – השלימי פירוט קצר.';
   if (usage.peopleCount === 'אחר' && !usage.peopleCountOther.trim()) errors.usageCountOther = 'נבחר "אחר" – השלימי פירוט קצר.';
   if (usage.location === 'אחר' && !usage.locationOther.trim()) errors.usageLocationOther = 'נבחר "אחר" – השלימי פירוט קצר.';
   if (usage.props.includes('אחר') && !usage.propsOther.trim()) errors.usagePropsOther = 'נבחר "אחר" – השלימי פירוט קצר.';
   if (usage.highlight.includes('אחר') && !usage.highlightOther.trim()) errors.usageHighlightOther = 'נבחר "אחר" – השלימי פירוט קצר.';
-  if (usage.style.includes('אחר') && !usage.styleOther.trim()) errors.usageStyleOther = 'נבחר "אחר" – השלימי פירוט קצר.';
-  if (usage.realism === 'אחר' && !usage.realismOther.trim()) errors.usageRealismOther = 'נבחר "אחר" – השלימי פירוט קצר.';
-  if (usage.avoid.includes('אחר') && !usage.avoidOther.trim()) errors.usageAvoidOther = 'נבחר "אחר" – השלימי פירוט קצר.';
+  Object.assign(errors, validateSharedVisualPrompt({}));
 
   state.errors = errors;
   return errors;
 }
 
+function validateSharedVisualPrompt(errors = {}) {
+  const shared = state.sharedVisualPrompt;
+  if (shared.style.length < 1 || shared.style.length > 2) errors.sharedStyle = 'בחרי בין סגנון אחד לשניים.';
+  if (!shared.realism) errors.sharedRealism = 'בחרי רמת ריאליזם.';
+  if (shared.style.includes('אחר') && !shared.styleOther.trim()) errors.sharedStyleOther = 'נבחר "אחר" – השלימי פירוט קצר.';
+  if (shared.realism === 'אחר' && !shared.realismOther.trim()) errors.sharedRealismOther = 'נבחר "אחר" – השלימי פירוט קצר.';
+  if (shared.avoid.includes('אחר') && !shared.avoidOther.trim()) errors.sharedAvoidOther = 'נבחר "אחר" – השלימי פירוט קצר.';
+  return errors;
+}
+
 function validatePrototype() {
-  const errors = {};
+  const errors = validateSharedVisualPrompt({});
   state.prototypeScreens.forEach((screen, idx) => {
     if (!screen.type) errors[`screenType${idx}`] = 'בחרי סוג מסך.';
     if (screen.type === 'אחר' && !screen.shortName.trim()) errors[`screenShortName${idx}`] = 'נבחר "אחר" – השלימי שם קצר.';
@@ -359,15 +395,7 @@ function validateImagesStep() {
       errors[`imageScreen${idx}`] = `המיפוי באפליקציה קבוע: תמונה ${idx + 1} מחוברת למסך ${idx + 1}.`;
       image.screenRef = `${idx + 1}`;
     }
-    if (!image.screenRef) errors[`imageScreen${idx}`] = 'בחרי מסך.';
-    if (image.emphasis.length < 1 || image.emphasis.length > 3) errors[`imageEmphasis${idx}`] = 'בחרי בין פריט אחד לשלושה.';
-    if (!image.takeaway.trim()) errors[`imageTakeaway${idx}`] = 'תארי מה חשוב שהצופה תבין.';
-    if (image.style.length < 1 || image.style.length > 2) errors[`imageStyle${idx}`] = 'בחרי בין סגנון אחד לשניים.';
-    if (!image.realism) errors[`imageRealism${idx}`] = 'בחרי רמת ריאליזם.';
-    if (image.emphasis.includes('אחר') && !image.emphasisOther.trim()) errors[`imageEmphasisOther${idx}`] = 'נבחר "אחר" – השלימי דגש נוסף.';
-    if (image.style.includes('אחר') && !image.styleOther.trim()) errors[`imageStyleOther${idx}`] = 'נבחר "אחר" – השלימי סגנון נוסף.';
-    if (image.realism === 'אחר' && !image.realismOther.trim()) errors[`imageRealismOther${idx}`] = 'נבחר "אחר" – השלימי רמת ריאליזם.';
-    if (image.avoid.includes('אחר') && !image.avoidOther.trim()) errors[`imageAvoidOther${idx}`] = 'נבחר "אחר" – השלימי פירוט קצר.';
+    if (productType === 'website' && !state.selectedWebsiteScreens[idx]) errors[`imageScreen${idx}`] = 'בחרי מסך.';
   });
   state.errors = errors;
   return errors;
@@ -383,12 +411,12 @@ function validateStep(step) {
 const VALIDATION_ORDER = {
   1: RESEARCH_FIELDS.map(([key]) => key),
   2: productType === 'physical'
-    ? ['mainAppearance', 'mainAppearanceOther', 'mainHighlight', 'mainHighlightOther', 'mainMaterial', 'mainMaterialOther', 'mainBackground', 'mainBackgroundOther', 'mainStyle', 'mainStyleOther', 'mainRealism', 'mainRealismOther', 'mainDescription', 'mainAvoidOther', 'usageUser', 'usageUserOther', 'usageCount', 'usageCountOther', 'usageLocation', 'usageLocationOther', 'usageAction', 'usagePropsOther', 'usageHighlight', 'usageHighlightOther', 'usageTakeaway', 'usageStyle', 'usageStyleOther', 'usageRealism', 'usageRealismOther', 'usageAvoidOther']
+    ? ['mainAppearance', 'mainAppearanceOther', 'mainHighlight', 'mainHighlightOther', 'mainMaterial', 'mainMaterialOther', 'mainBackground', 'mainBackgroundOther', 'mainDescription', 'usageUser', 'usageUserOther', 'usageCount', 'usageCountOther', 'usageLocation', 'usageLocationOther', 'usageAction', 'usagePropsOther', 'usageHighlight', 'usageHighlightOther', 'usageTakeaway', 'sharedStyle', 'sharedStyleOther', 'sharedRealism', 'sharedRealismOther', 'sharedAvoidOther']
     : [
       ...state.prototypeScreens.flatMap((_, idx) => [`screenType${idx}`, `screenShortName${idx}`, `screenView${idx}`, `screenAction${idx}`, `screenComponents${idx}`, `screenComponentsOther${idx}`, `screenEmphasis${idx}`, `screenEmphasisOther${idx}`]),
-      'flowStart', 'flowEnd', 'flowSummary', 'flowBranchToggle', 'flowBranchText'
+      'flowStart', 'flowEnd', 'flowSummary', 'flowBranchToggle', 'flowBranchText', 'sharedStyle', 'sharedStyleOther', 'sharedRealism', 'sharedRealismOther', 'sharedAvoidOther'
     ],
-  3: ['selectedScreens', ...state.images.flatMap((_, idx) => [`imageScreen${idx}`, `imageEmphasis${idx}`, `imageEmphasisOther${idx}`, `imageTakeaway${idx}`, `imageStyle${idx}`, `imageStyleOther${idx}`, `imageRealism${idx}`, `imageRealismOther${idx}`, `imageAvoidOther${idx}`])]
+  3: ['selectedScreens', ...state.images.flatMap((_, idx) => [`imageScreen${idx}`])]
 };
 
 function firstErrorKey(step, errors) {
@@ -412,54 +440,79 @@ function slots() {
 }
 
 function basePromptContext(slot, imageRole) {
-  return `התמונה מיועדת לפוסטר חקר, עבור ${PRODUCT_TITLE[productType]} בשם "${state.research.projectName}". הבעיה שזיהינו: ${state.research.problem}. קהל יעד: ${state.research.audience}. הפתרון: ${state.research.solution}. הערך המרכזי: ${state.research.value}. התאמה למסגרת בפוסטר: יחס ${slot.width}:${slot.height}, מסגור מדויק, קומפוזיציה שמתאימה למסגרת, פרטים חשובים במרכז הבטוח. ${imageRole}. ${QUALITY_REQUIREMENTS}.`;
+  return `Create a clear, high-quality poster-ready image based on the following project context and image-specific details.
+Project: ${state.research.projectName}
+Product type: ${PRODUCT_TITLE[productType]}
+Project description: ${state.research.description}
+Problem: ${state.research.problem}
+Audience: ${state.research.audience}
+Solution: ${state.research.solution}
+Core value: ${state.research.value}
+Requirements: ${state.research.requirements_1}; ${state.research.requirements_2}; ${state.research.requirements_3}
+How it works: ${state.research.howItWorks_1}; ${state.research.howItWorks_2}; ${state.research.howItWorks_3}
+Poster visual slot ratio: ${slot.width}:${slot.height}
+Image role: ${imageRole}
+Technical requirements (must follow): ${QUALITY_REQUIREMENTS}.`;
+}
+
+function sharedVisualPromptText() {
+  const shared = state.sharedVisualPrompt;
+  const styleText = resolveOtherList(shared.style, shared.styleOther).join(', ');
+  const realismText = resolveOtherValue(shared.realism, shared.realismOther);
+  const avoidText = resolveOtherList(shared.avoid, shared.avoidOther).join(', ');
+  return `Shared visual settings for all images:
+Visual style: ${styleText}
+Realism level: ${realismText}
+Preferred colors: ${shared.colors || 'match the project visual language'}
+Avoid: ${avoidText || 'none specified'}`;
 }
 
 function buildPhysicalPrompt(kind) {
   const slot = slots()[kind === 'main' ? 0 : 1] || slots()[0];
   const data = state.physicalPrompt[kind];
+  const sharedBlock = sharedVisualPromptText();
 
   if (kind === 'main') {
-    const avoidText = resolveOtherList(data.avoid, data.avoidOther).join(', ');
     const appearanceText = resolveOtherValue(data.appearance, data.appearanceOther);
     const highlightText = resolveOtherList(data.highlight, data.highlightOther).join(', ');
     const materialText = resolveOtherValue(data.material, data.materialOther);
     const backgroundText = resolveOtherValue(data.background, data.backgroundOther);
-    const styleText = resolveOtherList(data.style, data.styleOther).join(', ');
-    const realismText = resolveOtherValue(data.realism, data.realismOther);
     return `${basePromptContext(slot, 'מדובר בתמונה ראשית של המוצר.')}
-המוצר מופיע כך: ${appearanceText}. חשוב שיבלוט: ${highlightText}. חומר/מרקם: ${materialText}. רקע: ${backgroundText}. סגנון: ${styleText}. רמת ריאליזם: ${realismText}. צריך לראות בתמונה: ${data.description}. צבעים בולטים: ${data.colors || 'בהתאם לשפה העיצובית של המיזם'}.${avoidText ? ` אל תכלילי: ${avoidText}.` : ''}`;
+${sharedBlock}
+Image-specific details:
+המוצר מופיע כך: ${appearanceText}. חשוב שיבלוט: ${highlightText}. חומר/מרקם: ${materialText}. רקע: ${backgroundText}. צריך לראות בתמונה: ${data.description}.`;
   }
 
-  const avoidText = resolveOtherList(data.avoid, data.avoidOther).join(', ');
   const props = resolveOtherList(data.props, data.propsOther).join(', ');
   const userText = resolveOtherValue(data.user, data.userOther);
   const countText = resolveOtherValue(data.peopleCount, data.peopleCountOther);
   const locationText = resolveOtherValue(data.location, data.locationOther);
   const highlightText = resolveOtherList(data.highlight, data.highlightOther).join(', ');
-  const styleText = resolveOtherList(data.style, data.styleOther).join(', ');
-  const realismText = resolveOtherValue(data.realism, data.realismOther);
   return `${basePromptContext(slot, 'מדובר בתמונת שימוש שממחישה אינטראקציה עם המוצר.')}
+${sharedBlock}
+Image-specific details:
 מי משתמשת: ${userText}. מספר אנשים: ${countText}. מיקום: ${locationText}. הפעולה המוצגת: ${data.action}. חפצים נוספים: ${props || 'ללא חפצים נוספים'}.
-מה צריך לבלוט: ${highlightText}. מה חשוב שהצופה תבין: ${data.takeaway}. סגנון: ${styleText}. רמת ריאליזם: ${realismText}. צבעים בולטים: ${data.colors || 'בהתאם לשפה העיצובית של המיזם'}.${avoidText ? ` אל תכלילי: ${avoidText}.` : ''}`;
+מה צריך לבלוט: ${highlightText}. מה חשוב שהצופה תבין: ${data.takeaway}.`;
 }
 
 function buildDigitalPrompt(index) {
-  const image = state.images[index];
   const slot = slots()[index] || slots()[0];
-  const screen = state.prototypeScreens[Number(image.screenRef) - 1];
+  const mappedScreenRef = productType === 'website'
+    ? Number(state.selectedWebsiteScreens[index] || state.images[index]?.screenRef || `${index + 1}`)
+    : index + 1;
+  const screen = state.prototypeScreens[mappedScreenRef - 1];
   const flowLine = productType === 'website'
     ? `זרימת השימוש מתחילה ב-${state.prototypeFlow.start} ומסתיימת ב-${state.prototypeFlow.end}. סיכום זרימה: ${state.prototypeFlow.summary}. ${state.prototypeFlow.hasBranch === 'כן' ? `הסתעפות: ${state.prototypeFlow.branch}.` : 'אין הסתעפות.'}`
     : '';
-  const avoidText = resolveOtherList(image.avoid, image.avoidOther).join(', ');
-  const emphasisText = resolveOtherList(image.emphasis, image.emphasisOther).join(', ');
-  const styleText = resolveOtherList(image.style, image.styleOther).join(', ');
-  const realismText = resolveOtherValue(image.realism, image.realismOther);
+  const emphasisText = resolveOtherList(screen?.emphasis || [], screen?.emphasisOther || '').join(', ');
   const screenType = resolveOtherValue(screen?.type || '', screen?.shortName || '');
   const screenComponents = resolveOtherList(screen?.components || [], screen?.componentsOther || '').join(', ');
+  const sharedBlock = sharedVisualPromptText();
 
   return `${basePromptContext(slot, `מדובר בתמונת מסך מספר ${index + 1} לפוסטר.`)}
-המסך המיוצג: ${screenType || 'לא הוגדר'}. מה המשתמשת רואה במסך: ${screen?.view || ''}. מה המשתמשת עושה במסך: ${screen?.action || ''}. רכיבים חשובים: ${screenComponents}. מה חשוב שיבלוט: ${emphasisText}. מה חשוב שהצופה תבין: ${image.takeaway}. סגנון: ${styleText}. רמת ריאליזם: ${realismText}. צבעים בולטים: ${image.colors || 'בהתאם לשפה העיצובית של המיזם'}. ${flowLine}${avoidText ? ` אל תכלילי: ${avoidText}.` : ''}`;
+${sharedBlock}
+Screen-specific details:
+המסך המיוצג: ${screenType || 'לא הוגדר'}. מה המשתמשת רואה במסך: ${screen?.view || ''}. מה המשתמשת עושה במסך: ${screen?.action || ''}. רכיבים חשובים: ${screenComponents}. מה חשוב שיבלוט: ${emphasisText}. ${flowLine}`;
 }
 
 function normalizeAppImageMapping() {
@@ -521,6 +574,7 @@ function seedPosterBuilderState() {
     splitFlowState: {
       productType,
       research: { ...state.research },
+      sharedVisualPrompt: JSON.parse(JSON.stringify(state.sharedVisualPrompt)),
       physicalPrompt: JSON.parse(JSON.stringify(state.physicalPrompt)),
       prototypeScreens: JSON.parse(JSON.stringify(state.prototypeScreens)),
       prototypeFlow: { ...state.prototypeFlow },
@@ -556,6 +610,21 @@ function renderStep1() {
   }).join('')}</section>`;
 }
 
+function renderSharedVisualSection() {
+  const shared = state.sharedVisualPrompt;
+  return `
+    <article class="split-card">
+      <h3>הגדרות עיצוב לכל התמונות</h3>
+      <div class="${fieldClass('sharedStyle')}" data-error-key="sharedStyle"><span>באיזה סגנון חזותי להשתמש בכל התמונות? <em>*</em></span>${renderTags('shared-style', STYLE_OPTIONS, shared.style, 2)}${renderError('sharedStyle')}</div>
+      ${shared.style.includes('אחר') ? `<label class="${fieldClass('sharedStyleOther')}" data-error-key="sharedStyleOther"><span>אם נבחר \"אחר\" – פירוט</span><input data-shared="styleOther" maxlength="60" value="${escapeHtml(shared.styleOther)}"/>${renderCounter(shared.styleOther, 60)}${renderError('sharedStyleOther')}</label>` : ''}
+      <label class="${fieldClass('sharedRealism')}" data-error-key="sharedRealism"><span>מה רמת הריאליזם הרצויה? <em>*</em></span><select data-shared="realism"><option value="">בחרי</option>${REALISM_OPTIONS.map((o) => `<option ${shared.realism === o ? 'selected' : ''}>${o}</option>`).join('')}</select>${renderError('sharedRealism')}</label>
+      ${shared.realism === 'אחר' ? `<label class="${fieldClass('sharedRealismOther')}" data-error-key="sharedRealismOther"><span>אם נבחר \"אחר\" – פירוט</span><input data-shared="realismOther" maxlength="60" value="${escapeHtml(shared.realismOther)}"/>${renderCounter(shared.realismOther, 60)}${renderError('sharedRealismOther')}</label>` : ''}
+      <label class="split-field"><span>האם יש צבעים או צבעוניות שחשוב לשמור?</span><input data-shared="colors" maxlength="80" value="${escapeHtml(shared.colors)}"/>${renderCounter(shared.colors, 80)}</label>
+      <div class="split-field"><span>מה חשוב שלא יופיע בתמונות?</span>${renderTags('shared-avoid', AVOID_OPTIONS, shared.avoid, 4)}</div>
+      ${shared.avoid.includes('אחר') ? `<label class="${fieldClass('sharedAvoidOther')}" data-error-key="sharedAvoidOther"><span>אם נבחר \"אחר\" – פירוט</span><input data-shared="avoidOther" maxlength="80" value="${escapeHtml(shared.avoidOther)}"/>${renderCounter(shared.avoidOther, 80)}${renderError('sharedAvoidOther')}</label>` : ''}
+    </article>`;
+}
+
 function renderPrototypeScreens() {
   return state.prototypeScreens.map((screen, index) => `
     <article class="split-card">
@@ -585,14 +654,7 @@ function renderStep2Physical() {
       ${main.material === 'אחר' ? `<label class="${fieldClass('mainMaterialOther')}" data-error-key="mainMaterialOther"><span>אם נבחר \"אחר\" – פירוט</span><input data-physical="main" data-key="materialOther" maxlength="60" value="${escapeHtml(main.materialOther)}"/>${renderCounter(main.materialOther, 60)}${renderError('mainMaterialOther')}</label>` : ''}
       <label class="${fieldClass('mainBackground')}" data-error-key="mainBackground"><span>רקע רצוי <em>*</em></span><select data-physical="main" data-key="background"><option value="">בחרי</option>${PHYSICAL_MAIN_OPTIONS.background.map((o) => `<option ${main.background === o ? 'selected' : ''}>${o}</option>`).join('')}</select>${renderError('mainBackground')}</label>
       ${main.background === 'אחר' ? `<label class="${fieldClass('mainBackgroundOther')}" data-error-key="mainBackgroundOther"><span>אם נבחר \"אחר\" – פירוט</span><input data-physical="main" data-key="backgroundOther" maxlength="60" value="${escapeHtml(main.backgroundOther)}"/>${renderCounter(main.backgroundOther, 60)}${renderError('mainBackgroundOther')}</label>` : ''}
-      <div class="${fieldClass('mainStyle')}" data-error-key="mainStyle"><span>סגנון עיצובי <em>*</em></span>${renderTags('main-style', PHYSICAL_MAIN_OPTIONS.style, main.style, 2)}${renderError('mainStyle')}</div>
-      ${main.style.includes('אחר') ? `<label class="${fieldClass('mainStyleOther')}" data-error-key="mainStyleOther"><span>אם נבחר \"אחר\" – פירוט</span><input data-physical="main" data-key="styleOther" maxlength="60" value="${escapeHtml(main.styleOther)}"/>${renderCounter(main.styleOther, 60)}${renderError('mainStyleOther')}</label>` : ''}
-      <label class="${fieldClass('mainRealism')}" data-error-key="mainRealism"><span>רמת ריאליזם <em>*</em></span><select data-physical="main" data-key="realism"><option value="">בחרי</option>${PHYSICAL_MAIN_OPTIONS.realism.map((o) => `<option ${main.realism === o ? 'selected' : ''}>${o}</option>`).join('')}</select>${renderError('mainRealism')}</label>
-      ${main.realism === 'אחר' ? `<label class="${fieldClass('mainRealismOther')}" data-error-key="mainRealismOther"><span>אם נבחר \"אחר\" – פירוט</span><input data-physical="main" data-key="realismOther" maxlength="60" value="${escapeHtml(main.realismOther)}"/>${renderCounter(main.realismOther, 60)}${renderError('mainRealismOther')}</label>` : ''}
       <label class="${fieldClass('mainDescription')}" data-error-key="mainDescription"><span>מה צריך לראות בתמונה? <em>*</em></span><textarea data-physical="main" data-key="description" maxlength="220">${escapeHtml(main.description)}</textarea>${renderCounter(main.description, 220)}${renderError('mainDescription')}</label>
-      <label class="split-field"><span>צבעים בולטים</span><input data-physical="main" data-key="colors" maxlength="80" value="${escapeHtml(main.colors)}" />${renderCounter(main.colors, 80)}</label>
-      <div class="split-field"><span>מה לא לכלול</span>${renderTags('main-avoid', PHYSICAL_MAIN_OPTIONS.avoid, main.avoid, 4)}</div>
-      ${main.avoid.includes('אחר') ? `<label class="${fieldClass('mainAvoidOther')}" data-error-key="mainAvoidOther"><span>פירוט נוסף למה לא לכלול</span><input data-physical="main" data-key="avoidOther" maxlength="80" value="${escapeHtml(main.avoidOther)}" />${renderCounter(main.avoidOther, 80)}${renderError('mainAvoidOther')}</label>` : ''}
     </article>
 
     <article class="split-card">
@@ -609,14 +671,8 @@ function renderStep2Physical() {
       <div class="${fieldClass('usageHighlight')}" data-error-key="usageHighlight"><span>מה צריך לבלוט? <em>*</em></span>${renderTags('usage-highlight', PHYSICAL_USAGE_OPTIONS.highlight, usage.highlight, 3)}${renderError('usageHighlight')}</div>
       ${usage.highlight.includes('אחר') ? `<label class="${fieldClass('usageHighlightOther')}" data-error-key="usageHighlightOther"><span>אם נבחר \"אחר\" – פירוט</span><input data-physical="usage" data-key="highlightOther" maxlength="60" value="${escapeHtml(usage.highlightOther)}" />${renderCounter(usage.highlightOther, 60)}${renderError('usageHighlightOther')}</label>` : ''}
       <label class="${fieldClass('usageTakeaway')}" data-error-key="usageTakeaway"><span>מה חשוב שהצופה תבין? <em>*</em></span><textarea data-physical="usage" data-key="takeaway" maxlength="220">${escapeHtml(usage.takeaway)}</textarea>${renderCounter(usage.takeaway, 220)}${renderError('usageTakeaway')}</label>
-      <div class="${fieldClass('usageStyle')}" data-error-key="usageStyle"><span>סגנון עיצובי <em>*</em></span>${renderTags('usage-style', PHYSICAL_USAGE_OPTIONS.style, usage.style, 2)}${renderError('usageStyle')}</div>
-      ${usage.style.includes('אחר') ? `<label class="${fieldClass('usageStyleOther')}" data-error-key="usageStyleOther"><span>אם נבחר \"אחר\" – פירוט</span><input data-physical="usage" data-key="styleOther" maxlength="60" value="${escapeHtml(usage.styleOther)}" />${renderCounter(usage.styleOther, 60)}${renderError('usageStyleOther')}</label>` : ''}
-      <label class="${fieldClass('usageRealism')}" data-error-key="usageRealism"><span>רמת ריאליזם <em>*</em></span><select data-physical="usage" data-key="realism"><option value="">בחרי</option>${PHYSICAL_USAGE_OPTIONS.realism.map((o) => `<option ${usage.realism === o ? 'selected' : ''}>${o}</option>`).join('')}</select>${renderError('usageRealism')}</label>
-      ${usage.realism === 'אחר' ? `<label class="${fieldClass('usageRealismOther')}" data-error-key="usageRealismOther"><span>אם נבחר \"אחר\" – פירוט</span><input data-physical="usage" data-key="realismOther" maxlength="60" value="${escapeHtml(usage.realismOther)}" />${renderCounter(usage.realismOther, 60)}${renderError('usageRealismOther')}</label>` : ''}
-      <label class="split-field"><span>צבעים בולטים</span><input data-physical="usage" data-key="colors" maxlength="80" value="${escapeHtml(usage.colors)}" />${renderCounter(usage.colors, 80)}</label>
-      <div class="split-field"><span>מה לא לכלול</span>${renderTags('usage-avoid', PHYSICAL_USAGE_OPTIONS.avoid, usage.avoid, 4)}</div>
-      ${usage.avoid.includes('אחר') ? `<label class="${fieldClass('usageAvoidOther')}" data-error-key="usageAvoidOther"><span>פירוט נוסף למה לא לכלול</span><input data-physical="usage" data-key="avoidOther" maxlength="80" value="${escapeHtml(usage.avoidOther)}" />${renderCounter(usage.avoidOther, 80)}${renderError('usageAvoidOther')}</label>` : ''}
-    </article>`;
+    </article>
+    ${renderSharedVisualSection()}`;
 }
 
 function renderStep2() {
@@ -633,7 +689,7 @@ function renderStep2() {
     </article>
   ` : '';
 
-  return `${renderPrototypeScreens()}${flowCard}`;
+  return `${renderPrototypeScreens()}${flowCard}${renderSharedVisualSection()}`;
 }
 
 function renderStep3() {
@@ -665,27 +721,10 @@ function renderStep3() {
       ${renderError('selectedScreens')}
     </article>` : '';
 
-  const allowedScreens = productType === 'website' ? state.selectedWebsiteScreens : ['1', '2', '3'];
   const cards = state.images.map((image, index) => `
     <article class="split-card">
-      <h3>${productType === 'website' ? `תמונה ${index + 1}` : `תמונה ${index + 1} (מסך ${index + 1})`}</h3>
-      <label class="${fieldClass(`imageScreen${index}`)}" data-error-key="imageScreen${index}"><span>איזה מסך בפרומפט התמונה מייצגת? <em>*</em></span>
-        <select data-image="${index}" data-key="screenRef" ${productType === 'app' ? 'disabled' : ''}>
-          <option value="">בחרי</option>
-          ${allowedScreens.map((screenNo) => `<option value="${screenNo}" ${image.screenRef === screenNo ? 'selected' : ''}>מסך ${screenNo}</option>`).join('')}
-        </select>
-        ${renderError(`imageScreen${index}`)}
-      </label>
-      <div class="${fieldClass(`imageEmphasis${index}`)}" data-error-key="imageEmphasis${index}"><span>מה חשוב שיבלוט? <em>*</em></span>${renderTags(`image-emphasis-${index}`, EMPHASIS_OPTIONS, image.emphasis, 3)}${renderError(`imageEmphasis${index}`)}</div>
-      ${image.emphasis.includes('אחר') ? `<label class="${fieldClass(`imageEmphasisOther${index}`)}" data-error-key="imageEmphasisOther${index}"><span>אם נבחר \"אחר\" – פירוט דגש</span><input data-image="${index}" data-key="emphasisOther" maxlength="60" value="${escapeHtml(image.emphasisOther)}" />${renderCounter(image.emphasisOther, 60)}${renderError(`imageEmphasisOther${index}`)}</label>` : ''}
-      <label class="${fieldClass(`imageTakeaway${index}`)}" data-error-key="imageTakeaway${index}"><span>${productType === 'app' ? 'מה חשוב שהצופה תבין מהמסך?' : 'מה חשוב שהצופה תבין מהתמונה?'} <em>*</em></span><textarea data-image="${index}" data-key="takeaway" maxlength="220">${escapeHtml(image.takeaway)}</textarea>${renderCounter(image.takeaway, 220)}${renderError(`imageTakeaway${index}`)}</label>
-      <div class="${fieldClass(`imageStyle${index}`)}" data-error-key="imageStyle${index}"><span>סגנון עיצובי <em>*</em></span>${renderTags(`image-style-${index}`, STYLE_OPTIONS, image.style, 2)}${renderError(`imageStyle${index}`)}</div>
-      ${image.style.includes('אחר') ? `<label class="${fieldClass(`imageStyleOther${index}`)}" data-error-key="imageStyleOther${index}"><span>אם נבחר \"אחר\" – פירוט סגנון</span><input data-image="${index}" data-key="styleOther" maxlength="60" value="${escapeHtml(image.styleOther)}" />${renderCounter(image.styleOther, 60)}${renderError(`imageStyleOther${index}`)}</label>` : ''}
-      <label class="${fieldClass(`imageRealism${index}`)}" data-error-key="imageRealism${index}"><span>רמת ריאליזם <em>*</em></span><select data-image="${index}" data-key="realism"><option value="">בחרי</option>${REALISM_OPTIONS.map((option) => `<option ${image.realism === option ? 'selected' : ''}>${option}</option>`).join('')}</select>${renderError(`imageRealism${index}`)}</label>
-      ${image.realism === 'אחר' ? `<label class="${fieldClass(`imageRealismOther${index}`)}" data-error-key="imageRealismOther${index}"><span>אם נבחר \"אחר\" – פירוט ריאליזם</span><input data-image="${index}" data-key="realismOther" maxlength="60" value="${escapeHtml(image.realismOther)}" />${renderCounter(image.realismOther, 60)}${renderError(`imageRealismOther${index}`)}</label>` : ''}
-      <label class="split-field"><span>צבעים בולטים</span><input data-image="${index}" data-key="colors" maxlength="80" value="${escapeHtml(image.colors)}" />${renderCounter(image.colors, 80)}</label>
-      <div class="split-field"><span>מה לא לכלול</span>${renderTags(`image-avoid-${index}`, AVOID_OPTIONS, image.avoid, 4)}</div>
-      ${image.avoid.includes('אחר') ? `<label class="${fieldClass(`imageAvoidOther${index}`)}" data-error-key="imageAvoidOther${index}"><span>פירוט נוסף למה לא לכלול</span><input data-image="${index}" data-key="avoidOther" maxlength="80" value="${escapeHtml(image.avoidOther)}" />${renderCounter(image.avoidOther, 80)}${renderError(`imageAvoidOther${index}`)}</label>` : ''}
+      <h3>${productType === 'website' ? `תמונה ${index + 1} (מסך ${state.selectedWebsiteScreens[index] || '-'})` : `תמונה ${index + 1} (מסך ${index + 1})`}</h3>
+      ${productType === 'website' && !state.selectedWebsiteScreens[index] ? `<small class="split-error">${state.errors[`imageScreen${index}`] || ''}</small>` : ''}
       <pre class="split-prompt" id="prompt-${index}">${escapeHtml(buildDigitalPrompt(index))}</pre>
       <button type="button" class="split-btn ghost" data-copy-image="${index}">העתיקי פרומפט</button>
     </article>
@@ -851,28 +890,11 @@ function applyTag(tag, value, max) {
     toggleArray(state.prototypeScreens[i].emphasis, value, max);
     return;
   }
-  if (tag.startsWith('image-emphasis-')) {
-    const i = Number(tag.replace('image-emphasis-', ''));
-    toggleArray(state.images[i].emphasis, value, max);
-    return;
-  }
-  if (tag.startsWith('image-style-')) {
-    const i = Number(tag.replace('image-style-', ''));
-    toggleArray(state.images[i].style, value, max);
-    return;
-  }
-  if (tag.startsWith('image-avoid-')) {
-    const i = Number(tag.replace('image-avoid-', ''));
-    toggleArray(state.images[i].avoid, value, max);
-    return;
-  }
+  if (tag === 'shared-style') return toggleArray(state.sharedVisualPrompt.style, value, max);
+  if (tag === 'shared-avoid') return toggleArray(state.sharedVisualPrompt.avoid, value, max);
   if (tag === 'main-highlight') return toggleArray(state.physicalPrompt.main.highlight, value, max);
-  if (tag === 'main-style') return toggleArray(state.physicalPrompt.main.style, value, max);
-  if (tag === 'main-avoid') return toggleArray(state.physicalPrompt.main.avoid, value, max);
   if (tag === 'usage-props') return toggleArray(state.physicalPrompt.usage.props, value, max);
   if (tag === 'usage-highlight') return toggleArray(state.physicalPrompt.usage.highlight, value, max);
-  if (tag === 'usage-style') return toggleArray(state.physicalPrompt.usage.style, value, max);
-  if (tag === 'usage-avoid') return toggleArray(state.physicalPrompt.usage.avoid, value, max);
 }
 
 async function copyText(text, button) {
@@ -931,6 +953,16 @@ function wireEvents() {
     });
   });
 
+  root.querySelectorAll('[data-shared]').forEach((input) => {
+    input.addEventListener('input', () => {
+      const key = input.dataset.shared;
+      state.sharedVisualPrompt[key] = input.value;
+      state.visibleErrors = state.visibleErrors.filter((err) => !err.startsWith('shared'));
+      if (OTHER_TRIGGER_KEYS.has(key)) return render();
+      updateCounterForInput(input);
+    });
+  });
+
   root.querySelectorAll('[data-flow]').forEach((input) => {
     input.addEventListener('input', () => {
       state.prototypeFlow[input.dataset.flow] = input.value;
@@ -966,18 +998,6 @@ function wireEvents() {
         }
       });
       render();
-    });
-  });
-
-  root.querySelectorAll('[data-image]').forEach((input) => {
-    input.addEventListener('input', () => {
-      const image = state.images[Number(input.dataset.image)];
-      image[input.dataset.key] = input.value;
-      state.visibleErrors = [];
-      if (OTHER_TRIGGER_KEYS.has(input.dataset.key)) return render();
-      updateCounterForInput(input);
-      const promptNode = root.querySelector(`#prompt-${input.dataset.image}`);
-      if (promptNode) promptNode.textContent = buildDigitalPrompt(Number(input.dataset.image));
     });
   });
 
@@ -1055,4 +1075,5 @@ function wireEvents() {
   });
 }
 
+hydrateStateFromStorage();
 render();
