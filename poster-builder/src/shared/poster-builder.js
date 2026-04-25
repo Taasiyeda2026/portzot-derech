@@ -2,10 +2,7 @@ import { POSTER_SIZES } from '../products/physical/config.js';
 
 function buildFilename(contentValues, sizeKey) {
   const project = (contentValues?.projectName || '').trim().replace(/\s+/g, '-');
-  const school = (contentValues?.schoolName || '').trim().replace(/\s+/g, '-');
-  const cls = (contentValues?.className || '').trim().replace(/\s+/g, '');
-  const parts = [project, school, cls].filter(Boolean);
-  const base = parts.length ? parts.join('_') : `פוסטר-${sizeKey.toLowerCase()}`;
+  const base = project || `פוסטר-${sizeKey.toLowerCase()}`;
   return `${base}.pdf`;
 }
 
