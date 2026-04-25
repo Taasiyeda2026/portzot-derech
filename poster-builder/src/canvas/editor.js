@@ -179,7 +179,7 @@ function buildListSubBoxes(canvas, field, values, setting) {
   const color         = (setting && setting.color)      || '#1f2937';
   const borderRadius  = (setting && setting.borderRadius !== undefined) ? setting.borderRadius : 14;
   const hPad          = 18;
-  const titleSpacing  = field.noLabel ? 16 : Math.min(field.titleSpacing || 80, 58);
+  const titleSpacing  = field.noLabel ? 16 : (field.titleSpacing || 80);
   const bottomPad     = 12;
   const available     = field.height - titleSpacing - bottomPad;
   const subBoxH       = Math.floor((available - LIST_SUB_GAP * 2) / 3);
@@ -269,7 +269,7 @@ function buildFieldObjects(canvas, sizeKey, values = {}, settings = {}, productT
           selectable: false,
           evented:    false
         });
-        listTitle.set({ top: computeTitleTop(field, listTitle, false) });
+        listTitle.set({ top: computeTitleTop(field, listTitle, true) });
         listTitle.__posterFieldTitle = true;
         markPosterManaged(listTitle, field.id);
         canvas.add(listTitle);
