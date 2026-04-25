@@ -371,6 +371,11 @@ function App() {
           h('button', {
             className: 'step4-back-btn',
             onClick: () => {
+              if (PRESELECTED_START_STEP === 4) {
+                const splitFlowPage = { physical: './physical.html', website: './website.html', app: './app.html' };
+                window.location.href = splitFlowPage[productType] || './physical.html';
+                return;
+              }
               if (productType === 'physical') {
                 setPhysicalSubStep(2);
               }
