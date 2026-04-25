@@ -786,11 +786,12 @@ function render() {
     .split-color-dot{width:14px;height:14px;border-radius:50%;border:1px solid rgba(0,0,0,.16)}
     .split-design-layout{display:grid;gap:12px;padding:10px;border-radius:14px;background:rgba(248,245,255,.75);border:1px solid #e6ddfb}
     .split-nav{display:flex;justify-content:space-between;gap:10px;margin-top:18px}
-    .split-btn{border:none;border-radius:11px;padding:10px 14px;cursor:pointer;font:inherit;box-shadow:0 5px 12px rgba(15,23,42,.1);transition:.16s ease}
+    .split-btn{border:none;border-radius:11px;padding:10px 22px;cursor:pointer;font:inherit;box-shadow:0 5px 12px rgba(15,23,42,.1);transition:.16s ease;width:fit-content}
     .split-btn:hover{transform:translateY(-1px)}
     .split-btn.primary{background:linear-gradient(135deg,#5E2750,#7c3aed);color:#fff}
     .split-btn.ghost{background:#ede9fe;color:#4c1d95}
     .split-btn:disabled{opacity:.5;cursor:not-allowed}
+    .split-nav .split-btn{width:auto}
     .split-alert{background:#fee2e2;color:#991b1b;border:1px solid #fecaca;border-radius:10px;padding:8px 10px}
     .split-prompt{white-space:pre-wrap;direction:ltr;text-align:left;background:linear-gradient(180deg,#f8fafc,#f3f4f6);border:1px dashed #b9a5f8;border-radius:12px;padding:12px;line-height:1.58;box-shadow:inset 0 1px 2px rgba(15,23,42,.05)}
     .split-link{display:inline-block;background:linear-gradient(135deg,#5E2750,#7c3aed);color:#fff;text-decoration:none;border-radius:10px;padding:10px 14px;box-shadow:0 8px 14px rgba(94,39,80,.22)}
