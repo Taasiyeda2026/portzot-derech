@@ -35,7 +35,7 @@ import {
   isPosterManagedObject
 } from '../canvas/editor.js';
 import { saveProject, loadProject, clearProject } from './storage.js';
-import { exportPDF } from './poster-builder.js';
+import { exportPDF, exportPDFA1 } from './poster-builder.js';
 
 const { useEffect, useRef, useState, useCallback } = React;
 const h = React.createElement;
@@ -97,6 +97,8 @@ function App() {
   const [currentShape,     setCurrentShape]     = useState(20);
   const [physicalSubStep,  setPhysicalSubStep]  = useState(1);
   const [promptAnswers,    setPromptAnswers]    = useState(EMPTY_PROMPT_ANSWERS);
+  const [hasSavedA4,       setHasSavedA4]       = useState(false);
+  const [showA4Warning,    setShowA4Warning]    = useState(false);
 
   const posterSizeRef        = useRef('A4');
   const productTypeRef       = useRef('physical');
@@ -321,7 +323,19 @@ function App() {
     saveNow();
   };
 
-  const handleExportPdf = () => exportPDF(fabricRef.current, posterSizeRef.current, contentValuesRef.current);
+  const handleExportPdf = () => {
+    exportPDF(fabricRef.current, posterSizeRef.current, contentValuesRef.current);
+    setHasSavedA4(true);
+    setShowA4Warning(false);
+  };
+
+  const handleExportA1Pdf = () => {
+    if (!hasSavedA4) {
+      setShowA4Warning(true);
+      return;
+    }
+    exportPDFA1(fabricRef.current, contentValuesRef.current);
+  };
 
   const goToStep = step => {
     const nextStep = PRESELECTED_PRODUCT_TYPE === 'physical' && step === 1 ? 2 : step;
@@ -370,10 +384,19 @@ function App() {
             : h(StepIndicator, { current: 4 })
         ),
         h('div', { className: 'step4-bar-end' },
-          h('button', {
-            className: 'step4-export-btn',
-            onClick: handleExportPdf
-          }, 'ייצוא PDF'),
+          h('div', { className: 'step4-export-group' },
+            h('button', {
+              className: 'step4-export-btn',
+              onClick: handleExportPdf,
+              title: 'שמירת הפוסטר כקובץ PDF בגודל A4'
+            }, 'ייצוא A4'),
+            h('button', {
+              className: `step4-export-btn step4-export-a1-btn ${!hasSavedA4 ? 'step4-export-a1-locked' : ''}`,
+              onClick: handleExportA1Pdf,
+              title: hasSavedA4 ? 'שמירת הפוסטר כקובץ PDF בגודל A1' : 'יש לשמור A4 קודם'
+            }, 'ייצוא A1'),
+            showA4Warning && h('span', { className: 'step4-a4-warning' }, 'יש לשמור A4 קודם')
+          ),
           h('button', {
             className: 'step4-finish-btn',
             onClick: () => goToStep(5)

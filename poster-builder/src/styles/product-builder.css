@@ -1661,6 +1661,22 @@ canvas {
 }
 .step4-export-btn:hover { background: #7a3268; transform: translateY(-2px); box-shadow: 0 5px 16px rgba(94,39,80,0.45); }
 
+.step4-export-group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.step4-export-a1-btn { background: #3b1d36; }
+.step4-export-a1-btn:hover { background: #5e2750; }
+.step4-export-a1-locked { opacity: 0.45; cursor: not-allowed; }
+.step4-export-a1-locked:hover { background: #3b1d36; transform: none; box-shadow: 0 3px 10px rgba(94,39,80,0.35); }
+.step4-a4-warning {
+  font-size: 12px;
+  color: #b91c1c;
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+  border-radius: 8px;
+  padding: 4px 10px;
+  white-space: nowrap;
+  font-weight: 600;
+}
+
 .step4-finish-btn {
   padding: 9px 22px;
   background: #1a5c3a;
