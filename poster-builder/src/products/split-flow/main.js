@@ -39,6 +39,9 @@ const IMPROVEMENT_MAX = deriveCharsByFieldPortion(0.4);
 
 const RESEARCH_FIELDS = [
   ['projectName', 'שם המיזם', 20],
+  ['studentNames', 'שמות התלמידות', 80],
+  ['className', 'כיתה', 30],
+  ['schoolName', 'בית הספר', 50],
   ['description', 'תיאור קצר של המיזם', 75],
   ['problem', 'מה הבעיה שזיהיתן?', 130],
   ['audience', 'על מי הבעיה משפיעה?', 75],
@@ -71,8 +74,7 @@ const RESEARCH_FIELDS = [
     42
   ],
   ['value', 'מה הערך המרכזי של הפתרון?', 110],
-  ['feedback', 'איזה משוב קיבלתן?', FEEDBACK_MAX],
-  ['improvement', 'מה שיפרתן בעקבות המשוב?', IMPROVEMENT_MAX]
+  ['feedbackAndImprovements', 'מה המשוב שקיבלנו ומה שיפרנו', Math.max(FEEDBACK_MAX + IMPROVEMENT_MAX, 170)]
 ];
 
 const SCREEN_TYPE_OPTIONS = ['מסך פתיחה', 'מסך בית', 'חיפוש', 'פעולה מרכזית', 'תוצאות', 'אזור אישי', 'פרופיל', 'הרשמה', 'התחברות', 'מעקב', 'אחר'];
@@ -177,10 +179,23 @@ function migrateSharedVisualPrompt(splitFlowState = {}) {
 }
 
 function hydrateStateFromStorage() {
-  const stored = loadProject()?.splitFlowState;
+  const project = loadProject();
+  const stored = project?.splitFlowState;
   if (!stored || stored.productType !== productType) return;
 
   Object.assign(state.research, stored.research || {});
+  if (!state.research.feedbackAndImprovements) {
+    const mergedFeedback = [state.research.feedback || '', state.research.improvement || ''].filter(Boolean).join('\n');
+    if (mergedFeedback) state.research.feedbackAndImprovements = mergedFeedback;
+  }
+  if (!state.research.studentNames) {
+    const names = [project?.contentValues?.student1, project?.contentValues?.student2, project?.contentValues?.student3]
+      .filter((value) => typeof value === 'string' && value.trim())
+      .join(', ');
+    state.research.studentNames = names;
+  }
+  if (!state.research.className && typeof project?.contentValues?.className === 'string') state.research.className = project.contentValues.className;
+  if (!state.research.schoolName && typeof project?.contentValues?.schoolName === 'string') state.research.schoolName = project.contentValues.schoolName;
   Object.assign(state.design, stored.design || {});
   if (stored.physicalPrompt?.main) Object.assign(state.physicalPrompt.main, stored.physicalPrompt.main);
   if (stored.physicalPrompt?.usage) Object.assign(state.physicalPrompt.usage, stored.physicalPrompt.usage);
@@ -192,6 +207,68 @@ function hydrateStateFromStorage() {
     state.images = state.images.map((image, idx) => ({ ...image, ...(stored.images[idx] || {}) }));
   }
   state.sharedVisualPrompt = migrateSharedVisualPrompt(stored);
+}
+
+function splitStudentNames(rawNames) {
+  const names = (rawNames || '')
+    .split(/[\n,;|]+/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+  return [names[0] || '', names[1] || '', names[2] || ''];
+}
+
+function buildPosterContentValues() {
+  const [student1, student2, student3] = splitStudentNames(state.research.studentNames);
+  const feedbackSummary = state.research.feedbackAndImprovements || '';
+  return {
+    projectName: state.research.projectName,
+    description: state.research.description,
+    problem: state.research.problem,
+    audience: state.research.audience,
+    researchQuestion: state.research.researchQuestion,
+    research_1: state.research.research_1,
+    research_2: state.research.research_2,
+    research_3: state.research.research_3,
+    findings: state.research.findings,
+    requirements_1: state.research.requirements_1,
+    requirements_2: state.research.requirements_2,
+    requirements_3: state.research.requirements_3,
+    solution: state.research.solution,
+    howItWorks_1: state.research.howItWorks_1,
+    howItWorks_2: state.research.howItWorks_2,
+    howItWorks_3: state.research.howItWorks_3,
+    value: state.research.value,
+    feedbackReceived: feedbackSummary,
+    improvementsAfterFeedback: feedbackSummary,
+    student1,
+    student2,
+    student3,
+    className: state.research.className || '',
+    schoolName: state.research.schoolName || ''
+  };
+}
+
+function persistSplitFlowState() {
+  const stored = loadProject() || {};
+  saveProject({
+    ...stored,
+    productType,
+    contentValues: {
+      ...(stored.contentValues || {}),
+      ...buildPosterContentValues()
+    },
+    splitFlowState: {
+      ...(stored.splitFlowState || {}),
+      productType,
+      research: { ...state.research },
+      sharedVisualPrompt: JSON.parse(JSON.stringify(state.sharedVisualPrompt)),
+      physicalPrompt: JSON.parse(JSON.stringify(state.physicalPrompt)),
+      prototypeScreens: JSON.parse(JSON.stringify(state.prototypeScreens)),
+      prototypeFlow: { ...state.prototypeFlow },
+      images: JSON.parse(JSON.stringify(state.images)),
+      design: { ...state.design }
+    }
+  });
 }
 
 function escapeHtml(text) {
@@ -515,32 +592,7 @@ function normalizeAppImageMapping() {
 }
 
 function seedPosterBuilderState() {
-  const contentValues = {
-    projectName: state.research.projectName,
-    description: state.research.description,
-    problem: state.research.problem,
-    audience: state.research.audience,
-    researchQuestion: state.research.researchQuestion,
-    research_1: state.research.research_1,
-    research_2: state.research.research_2,
-    research_3: state.research.research_3,
-    findings: state.research.findings,
-    requirements_1: state.research.requirements_1,
-    requirements_2: state.research.requirements_2,
-    requirements_3: state.research.requirements_3,
-    solution: state.research.solution,
-    howItWorks_1: state.research.howItWorks_1,
-    howItWorks_2: state.research.howItWorks_2,
-    howItWorks_3: state.research.howItWorks_3,
-    value: state.research.value,
-    feedbackReceived: state.research.feedback,
-    improvementsAfterFeedback: state.research.improvement,
-    student1: '',
-    student2: '',
-    student3: '',
-    className: '',
-    schoolName: ''
-  };
+  const contentValues = buildPosterContentValues();
 
   const stored = loadProject() || {};
   const nextFieldSettings = Object.fromEntries(
@@ -922,6 +974,7 @@ function wireEvents() {
       state.errors[input.dataset.research] = '';
       state.visibleErrors = state.visibleErrors.filter((key) => key !== input.dataset.research);
       updateCounterForInput(input);
+      persistSplitFlowState();
     });
   });
 
@@ -931,6 +984,7 @@ function wireEvents() {
       const key = input.dataset.key;
       state.physicalPrompt[block][key] = input.value;
       state.visibleErrors = state.visibleErrors.filter((err) => !err.toLowerCase().includes(key.toLowerCase()));
+      persistSplitFlowState();
       if (OTHER_TRIGGER_KEYS.has(key)) return render();
       updateCounterForInput(input);
     });
@@ -941,6 +995,7 @@ function wireEvents() {
       const screen = state.prototypeScreens[Number(input.dataset.screen)];
       screen[input.dataset.key] = input.value;
       state.visibleErrors = [];
+      persistSplitFlowState();
       if (OTHER_TRIGGER_KEYS.has(input.dataset.key)) return render();
       updateCounterForInput(input);
     });
@@ -951,6 +1006,7 @@ function wireEvents() {
       const key = input.dataset.shared;
       state.sharedVisualPrompt[key] = input.value;
       state.visibleErrors = state.visibleErrors.filter((err) => !err.startsWith('shared'));
+      persistSplitFlowState();
       if (OTHER_TRIGGER_KEYS.has(key)) return render();
       updateCounterForInput(input);
     });
@@ -961,6 +1017,7 @@ function wireEvents() {
       state.prototypeFlow[input.dataset.flow] = input.value;
       state.visibleErrors = state.visibleErrors.filter((key) => !key.startsWith('flow'));
       updateCounterForInput(input);
+      persistSplitFlowState();
       if (input.dataset.flow === 'hasBranch') render();
     });
   });
@@ -969,6 +1026,7 @@ function wireEvents() {
     button.addEventListener('click', () => {
       applyTag(button.dataset.tag, button.dataset.value, Number(button.dataset.max));
       state.visibleErrors = [];
+      persistSplitFlowState();
       render();
     });
   });
@@ -979,6 +1037,7 @@ function wireEvents() {
       const key = input.dataset.design;
       const value = input.dataset.value ?? input.value;
       state.design[key] = key === 'shape' ? Number(value) : value;
+      persistSplitFlowState();
       seedPosterBuilderState();
       render();
     });
@@ -1027,6 +1086,7 @@ function wireEvents() {
       state.step = Math.max(1, state.step - 1);
       state.errors = {};
       state.visibleErrors = [];
+      persistSplitFlowState();
       render();
     }
   });
@@ -1042,6 +1102,7 @@ function wireEvents() {
       state.errors = {};
       state.visibleErrors = [];
       state.step = Math.min(MAX_STEP, state.step + 1);
+      persistSplitFlowState();
       render();
     }
   });
