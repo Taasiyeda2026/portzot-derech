@@ -4,6 +4,7 @@ import {
   getPosterFields,
   getVisualSlots,
   buildListText,
+  buildParticipantsText,
   DEFAULT_FIELD_FONT
 } from '../data/config.js';
 
@@ -328,7 +329,9 @@ function buildFieldObjects(canvas, sizeKey, values = {}, settings = {}, productT
 
     const rawContent = field.type === 'list'
       ? buildListText(field.id, values)
-      : truncateValue(field, values[field.id]);
+      : field.type === 'participants'
+        ? buildParticipantsText(values)
+        : truncateValue(field, values[field.id]);
 
     const valueText = new fabric.Textbox(rawContent, {
       originX,
