@@ -838,7 +838,7 @@ function render() {
     .split-bg-tile img{width:64px;height:82px;object-fit:cover;border-radius:6px;display:block}
     .split-bg-tile span{font-size:10px;color:#4c1d95;margin-top:3px;line-height:1}
     .split-bg-none{width:64px;height:82px;display:flex;align-items:center;justify-content:center;background:#f3f4f6;border-radius:6px;color:#6b7280;font-size:11px;text-align:center}
-    .split-font-grid{display:grid;grid-template-columns:repeat(4,auto);gap:7px;justify-content:start}
+    .split-font-grid{display:grid;grid-template-columns:repeat(3,auto);gap:7px;justify-content:start}
     .split-font-tile{border:2px solid #e6dafd;border-radius:10px;padding:5px 8px;cursor:pointer;background:#fff;transition:.16s ease;display:flex;align-items:center;justify-content:center}
     .split-font-tile:hover{border-color:#8b5cf6;transform:translateY(-1px)}
     .split-font-tile.active{border-color:#5E2750;box-shadow:0 0 0 2px rgba(94,39,80,.3)}
