@@ -6,8 +6,9 @@ const productType = ['physical', 'website', 'app'].includes(window.__POSTER_SPLI
   : 'website';
 const root = document.getElementById('root');
 const STEP_LABELS = productType === 'physical'
-  ? ['שאלות חקר', 'שאלות פרומפט', 'תמונות', 'פוסטר']
+  ? ['שאלות חקר', 'פרומפט ותמונות', 'פוסטר']
   : ['שאלות חקר', 'פרומפט', 'תמונות', 'פוסטר'];
+const MAX_STEP = STEP_LABELS.length;
 
 const PRODUCT_TITLE = {
   physical: 'מוצר פיזי',
@@ -666,7 +667,24 @@ function renderStep2Physical() {
 }
 
 function renderStep2() {
-  if (productType === 'physical') return renderStep2Physical();
+  if (productType === 'physical') {
+    const mainPrompt = buildPhysicalPrompt('main');
+    const usagePrompt = buildPhysicalPrompt('usage');
+    return `${renderStep2Physical()}
+      <article class="split-card">
+        <h3>פרומפט לתמונה ראשית</h3>
+        <pre class="split-prompt" id="prompt-main">${escapeHtml(mainPrompt)}</pre>
+        <button type="button" class="split-btn ghost" data-copy-physical="main">העתיקי פרומפט</button>
+      </article>
+      <article class="split-card">
+        <h3>פרומפט לתמונת שימוש</h3>
+        <pre class="split-prompt" id="prompt-usage">${escapeHtml(usagePrompt)}</pre>
+        <button type="button" class="split-btn ghost" data-copy-physical="usage">העתיקי פרומפט</button>
+      </article>
+      <article class="split-card">
+        <button type="button" class="split-btn primary" data-copy-physical="all">העתיקי את שני הפרומפטים</button>
+      </article>`;
+  }
 
   const flowCard = productType === 'website' ? `
     <article class="split-card">
@@ -684,26 +702,6 @@ function renderStep2() {
 }
 
 function renderStep3() {
-  if (productType === 'physical') {
-    const mainPrompt = buildPhysicalPrompt('main');
-    const usagePrompt = buildPhysicalPrompt('usage');
-
-    return `
-      <article class="split-card">
-        <h3>פרומפט לתמונה ראשית</h3>
-        <pre class="split-prompt" id="prompt-main">${escapeHtml(mainPrompt)}</pre>
-        <button type="button" class="split-btn ghost" data-copy-physical="main">העתיקי פרומפט</button>
-      </article>
-      <article class="split-card">
-        <h3>פרומפט לתמונת שימוש</h3>
-        <pre class="split-prompt" id="prompt-usage">${escapeHtml(usagePrompt)}</pre>
-        <button type="button" class="split-btn ghost" data-copy-physical="usage">העתיקי פרומפט</button>
-      </article>
-      <article class="split-card">
-        <button type="button" class="split-btn primary" data-copy-physical="all">העתיקי את שני הפרומפטים</button>
-      </article>`;
-  }
-
   const cards = state.images.map((image, index) => `
     <article class="split-card">
       <h3>תמונה ${index + 1} (מסך ${index + 1})</h3>
@@ -761,8 +759,8 @@ function renderStep4() {
 function renderBody() {
   if (state.step === 1) return renderStep1();
   if (state.step === 2) return renderStep2();
-  if (state.step === 3) return renderStep3();
-  return renderStep4();
+  if (state.step === MAX_STEP) return renderStep4();
+  return renderStep3();
 }
 
 function renderStepper() {
@@ -784,7 +782,7 @@ function render() {
     .split-header{margin-bottom:14px;text-align:center;padding:18px 22px;border-radius:20px;background:linear-gradient(155deg,#fff 0%,#f6f0ff 100%);border:1px solid rgba(196,181,253,.5);box-shadow:0 8px 32px rgba(94,39,80,.12),0 2px 6px rgba(94,39,80,.06)}
     .split-title{margin:0;font-size:1.7rem;color:#5E2750}
     .split-sub{margin:8px 0 0;color:#59657a}
-    .split-stepper{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:20px 0}
+    .split-stepper{display:grid;grid-template-columns:repeat(${MAX_STEP},minmax(0,1fr));gap:9px;margin:20px 0}
     .split-step{border:1.5px solid #d8b4d8;background:linear-gradient(180deg,#fff,#fdfaff);border-radius:999px;padding:10px 6px;cursor:pointer;font:inherit;font-weight:500;color:#5E2750;box-shadow:0 2px 8px rgba(94,39,80,.08);transition:.2s ease}
     .split-step:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(94,39,80,.18);border-color:#b07ad0}
     .split-step.active{background:linear-gradient(135deg,#5E2750,#7c3aed);color:#fff;border-color:transparent;box-shadow:0 6px 18px rgba(94,39,80,.34)}
@@ -860,7 +858,7 @@ function render() {
     <section class="split-body">${renderBody()}</section>
     <nav class="split-nav">
       <button type="button" class="split-btn ghost" data-nav="back" ${state.step === 1 ? 'disabled' : ''}>חזרה</button>
-      <button type="button" class="split-btn primary" data-nav="next">${state.step === 4 ? 'סיום' : 'המשיכי לשלב הבא'}</button>
+      <button type="button" class="split-btn primary" data-nav="next">${state.step === MAX_STEP ? 'סיום' : 'המשיכי לשלב הבא'}</button>
     </nav>
   </main>`;
   wireEvents();
@@ -1024,7 +1022,7 @@ function wireEvents() {
 
   root.querySelector('[data-nav="back"]').addEventListener('click', () => {
     if (state.step > 1) {
-      state.step -= 1;
+      state.step = Math.max(1, state.step - 1);
       state.errors = {};
       state.visibleErrors = [];
       render();
@@ -1032,7 +1030,7 @@ function wireEvents() {
   });
 
   root.querySelector('[data-nav="next"]').addEventListener('click', () => {
-    if (state.step < 4) {
+    if (state.step < MAX_STEP) {
       const errors = validateStep(state.step);
       if (Object.keys(errors).length) {
         render();
@@ -1041,7 +1039,7 @@ function wireEvents() {
       }
       state.errors = {};
       state.visibleErrors = [];
-      state.step += 1;
+      state.step = Math.min(MAX_STEP, state.step + 1);
       render();
     }
   });
