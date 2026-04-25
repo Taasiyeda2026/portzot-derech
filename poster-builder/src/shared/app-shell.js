@@ -122,10 +122,11 @@ function App() {
       background:    currentBackgroundRef.current,
       contentValues: contentValuesRef.current,
       fieldSettings: fieldSettingsRef.current,
+      titleStyle:    canvas._titleStyle || { color: titleColor, fontFamily: titleFont },
       slotImages:    slotImagesRef.current,
       userObjects:   { objects: userObjects.map(o => o.toObject(SERIALIZE_PROPS)) }
     });
-  }, []);
+  }, [titleColor, titleFont]);
 
   const hydrate = useCallback((saved, canvas = fabricRef.current) => {
     if (!canvas || !saved) return;
@@ -137,6 +138,10 @@ function App() {
     const nextValues   = { ...EMPTY_CONTENT, ...(saved.contentValues || {}) };
     const nextSettings = { ...DEFAULT_SETTINGS, ...(saved.fieldSettings || {}) };
     const nextSlots    = { ...EMPTY_SLOT_IMAGES, ...(saved.slotImages || {}) };
+    const nextTitleStyle = {
+      fontFamily: saved?.titleStyle?.fontFamily || DEFAULT_TITLE_FONT,
+      color: saved?.titleStyle?.color || DEFAULT_TITLE_COLOR
+    };
 
     isHydratingRef.current = true;
     posterSizeRef.current        = nextSize;
@@ -151,10 +156,13 @@ function App() {
     setContentValues(nextValues);
     setFieldSettings(nextSettings);
     setSlotImages(nextSlots);
+    setTitleFont(nextTitleStyle.fontFamily);
+    setTitleColor(nextTitleStyle.color);
     resizeCanvas(canvas, nextSize);
 
     const afterLoad = () => {
       applyBackground(canvas, nextBg);
+      setTitleStyle(canvas, nextTitleStyle);
       initializePosterFields(canvas, nextValues, nextSize, nextSettings, nextSlots, nextType);
       canvas.renderAll();
       isHydratingRef.current = false;

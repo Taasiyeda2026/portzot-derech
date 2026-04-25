@@ -15,7 +15,16 @@ const h = React.createElement;
 
 const DEFAULT_TEXT_FONT   = 'IBM Plex Sans Hebrew';
 const DEFAULT_TITLE_COLOR = '#5E2750';
+const DEFAULT_TEXT_COLOR  = '#1f2937';
 const LIST_SUB_GAP        = 14;
+const POSTER_STYLE_STORAGE_KEY = 'physical-flow-poster-style-v1';
+const STYLE_FONTS = ['IBM Plex Sans Hebrew', 'Gveret Levin', 'Alef', 'Alice', 'Choco', 'Yehuda'];
+const STYLE_SHAPES = [
+  { label: 'חד', value: 0 },
+  { label: 'מעוגל', value: 10 },
+  { label: 'עגול', value: 20 }
+];
+const PRESET_COLORS = ['#5E2750', '#1a3a6b', '#1a5c3a', '#7a1a1a', '#b5520a', '#1a4a5c', '#2d2d2d', '#1f2937'];
 
 // Portrait A4: 2480 × 3508
 // Right column  x:2360  (right edge), width:1080  → spans x:1280–2360
@@ -194,18 +203,24 @@ function clearPhys2Fields(canvas) {
   canvas.getObjects().filter(o => o._phys2).forEach(o => canvas.remove(o));
 }
 
-function renderPhys2Poster(canvas, values) {
+function renderPhys2Poster(canvas, values, style = {}) {
   clearPhys2Fields(canvas);
-  const ts = canvas._titleStyle || { color: DEFAULT_TITLE_COLOR, fontFamily: DEFAULT_TEXT_FONT };
+  const titleStyle = {
+    color: style.titleColor || DEFAULT_TITLE_COLOR,
+    fontFamily: style.titleFont || DEFAULT_TEXT_FONT
+  };
+  canvas._titleStyle = titleStyle;
+  const textColor = style.textColor || DEFAULT_TEXT_COLOR;
+  const borderRadius = Number.isFinite(style.borderRadius) ? style.borderRadius : 20;
 
   PHYS2_FIELDS.forEach(field => {
     if (field.type === 'list') {
-      drawListField(canvas, field, values, ts);
+      drawListField(canvas, field, values, titleStyle, Math.max(8, borderRadius - 6), textColor, titleStyle.fontFamily);
     } else {
       const text = field.type === 'participants'
         ? buildParticipantsText(values)
         : (values[field.id] || '');
-      drawTextField(canvas, field, text, ts);
+      drawTextField(canvas, field, text, titleStyle, borderRadius, textColor, titleStyle.fontFamily);
     }
   });
 
@@ -225,6 +240,25 @@ function exportPhys2PDF(canvas, values) {
   const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: [2480, 3508] });
   pdf.addImage(dataUrl, 'PNG', 0, 0, 2480, 3508);
   pdf.save(`${project}.pdf`);
+}
+
+function loadPosterStylePrefs() {
+  try {
+    const raw = localStorage.getItem(POSTER_STYLE_STORAGE_KEY);
+    if (!raw) return {};
+    const parsed = JSON.parse(raw);
+    return typeof parsed === 'object' && parsed ? parsed : {};
+  } catch (_) {
+    return {};
+  }
+}
+
+function savePosterStylePrefs(prefs) {
+  try {
+    localStorage.setItem(POSTER_STYLE_STORAGE_KEY, JSON.stringify(prefs));
+  } catch (_) {
+    // noop
+  }
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -909,11 +943,16 @@ const BACKGROUNDS_LIST = Array.from({ length: 11 }, (_, i) => ({
 }));
 
 function Step4({ ra }) {
+  const stylePrefs = loadPosterStylePrefs();
   const canvasRef  = useRef(null);
   const fabricRef  = useRef(null);
-  const [bg, setBg]         = useState(null);
+  const [bg, setBg]         = useState(stylePrefs.bg || null);
   const [slot1, setSlot1]   = useState(null);
   const [slot2, setSlot2]   = useState(null);
+  const [titleFont, setTitleFont] = useState(stylePrefs.titleFont || DEFAULT_TEXT_FONT);
+  const [titleColor, setTitleColor] = useState(stylePrefs.titleColor || DEFAULT_TITLE_COLOR);
+  const [textColor, setTextColor] = useState(stylePrefs.textColor || DEFAULT_TEXT_COLOR);
+  const [boxRadius, setBoxRadius] = useState(Number.isFinite(stylePrefs.boxRadius) ? stylePrefs.boxRadius : 20);
   const [ready, setReady]   = useState(false);
   const slot1Ref = useRef(null);
   const slot2Ref = useRef(null);
@@ -926,8 +965,9 @@ function Step4({ ra }) {
       const canvas = createEditor(canvasRef.current, 'A4');
       canvas._productType = 'physical';
       fabricRef.current   = canvas;
-      renderPhys2Poster(canvas, ra);
+      renderPhys2Poster(canvas, ra, { titleFont, titleColor, textColor, borderRadius: boxRadius });
       applyVisualSlots(canvas, 'A4', 'physical', {});
+      applyBackground(canvas, bg);
       setReady(true);
     });
 
@@ -942,12 +982,17 @@ function Step4({ ra }) {
   // Re-render poster when research answers change (fields from step 1)
   useEffect(() => {
     if (!fabricRef.current || !ready) return;
-    renderPhys2Poster(fabricRef.current, ra);
+    renderPhys2Poster(fabricRef.current, ra, { titleFont, titleColor, textColor, borderRadius: boxRadius });
     applyVisualSlots(fabricRef.current, 'A4', 'physical', {
       visual_1: slot1,
       visual_2: slot2
     });
-  }, [ra, ready]);
+    applyBackground(fabricRef.current, bg);
+  }, [ra, ready, slot1, slot2, bg, titleFont, titleColor, textColor, boxRadius]);
+
+  useEffect(() => {
+    savePosterStylePrefs({ bg, titleFont, titleColor, textColor, boxRadius });
+  }, [bg, titleFont, titleColor, textColor, boxRadius]);
 
   const handleBg = useCallback((path) => {
     const newBg = path === bg ? null : path;
@@ -994,6 +1039,69 @@ function Step4({ ra }) {
                 onClick: () => handleBg(b.path),
                 alt: b.id
               })
+            )
+          )
+        ),
+
+        h('div', { className:'pf-sidebar-panel' },
+          h('p', { className:'pf-sidebar-panel-title' }, 'פונט'),
+          h('div', { className:'pf-chip-grid' },
+            STYLE_FONTS.map(font =>
+              h('button', {
+                key: font,
+                type: 'button',
+                className: `pf-chip${titleFont === font ? ' active' : ''}`,
+                onClick: () => setTitleFont(font),
+                style: { fontFamily: font }
+              },
+              h('span', { className:'pf-chip-label' }, font))
+            )
+          )
+        ),
+
+        h('div', { className:'pf-sidebar-panel' },
+          h('p', { className:'pf-sidebar-panel-title' }, 'צבעים'),
+          h('div', { className:'pf-chip-grid' },
+            PRESET_COLORS.map(color =>
+              h('button', {
+                key: `title-${color}`,
+                type: 'button',
+                className: `pf-chip${titleColor === color ? ' active' : ''}`,
+                onClick: () => setTitleColor(color)
+              },
+              h('span', { className:'pf-chip-label' }, 'כותרת'),
+              h('span', { style: { width: 18, height: 18, borderRadius: '50%', background: color, border: '1px solid #cbd5e1' } }))
+            ),
+            h('label', { className:'pf-chip', style: { gap: 8 } },
+              h('span', { className:'pf-chip-label' }, 'מותאם'),
+              h('input', { type:'color', value:titleColor, onInput: e => setTitleColor(e.target.value) })
+            )
+          ),
+          h('div', { className:'pf-chip-grid', style: { marginTop: 8 } },
+            PRESET_COLORS.map(color =>
+              h('button', {
+                key: `text-${color}`,
+                type: 'button',
+                className: `pf-chip${textColor === color ? ' active' : ''}`,
+                onClick: () => setTextColor(color)
+              },
+              h('span', { className:'pf-chip-label' }, 'טקסט'),
+              h('span', { style: { width: 18, height: 18, borderRadius: '50%', background: color, border: '1px solid #cbd5e1' } }))
+            )
+          )
+        ),
+
+        h('div', { className:'pf-sidebar-panel' },
+          h('p', { className:'pf-sidebar-panel-title' }, 'עיצוב תיבות'),
+          h('div', { className:'pf-chip-grid' },
+            STYLE_SHAPES.map(shape =>
+              h('button', {
+                key: shape.value,
+                type: 'button',
+                className: `pf-chip${boxRadius === shape.value ? ' active' : ''}`,
+                onClick: () => setBoxRadius(shape.value)
+              },
+              h('span', { className:'pf-chip-label' }, shape.label))
             )
           )
         ),
