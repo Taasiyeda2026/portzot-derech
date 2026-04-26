@@ -1104,6 +1104,7 @@ function wireEvents() {
       state.step = Math.min(MAX_STEP, state.step + 1);
       persistSplitFlowState();
       render();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   });
 }

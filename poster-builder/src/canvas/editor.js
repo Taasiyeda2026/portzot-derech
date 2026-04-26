@@ -227,7 +227,7 @@ function buildListSubBoxes(canvas, field, values, setting) {
       selectable:      false,
       evented:         false,
       editable:        false,
-      splitByGrapheme: true,
+      splitByGrapheme: false,
       lineHeight:      field.lineHeight
     });
 
@@ -281,26 +281,31 @@ function buildFieldObjects(canvas, sizeKey, values = {}, settings = {}, productT
     }
 
     const isParticipants = field.type === 'participants';
-    const container = new fabric.Rect({
-      left:        field.x,
-      top:         field.y,
-      width:       field.width,
-      height:      field.height,
-      rx: borderRadius, ry: borderRadius,
-      fill:        '#ffffff',
-      stroke:      isParticipants ? '#C4B0D8' : '#D5DDEA',
-      strokeWidth: isParticipants ? 1 : 2,
-      strokeDashArray: isParticipants ? [16, 8] : null,
-      shadow: new fabric.Shadow({ color: 'rgba(0,0,0,0.16)', blur: 28, offsetX: 0, offsetY: 5 }),
-      originX,
-      originY:     'top',
-      selectable:  false,
-      evented:     false
-    });
-    container.__posterFieldContainer = true;
-    markPosterManaged(container, field.id);
+    const isProjectName  = field.id === 'projectName';
 
-    const objectsToAdd = [container];
+    const objectsToAdd = [];
+
+    if (!isProjectName) {
+      const container = new fabric.Rect({
+        left:        field.x,
+        top:         field.y,
+        width:       field.width,
+        height:      field.height,
+        rx: borderRadius, ry: borderRadius,
+        fill:        '#ffffff',
+        stroke:      isParticipants ? '#C4B0D8' : '#D5DDEA',
+        strokeWidth: isParticipants ? 1 : 2,
+        strokeDashArray: isParticipants ? [16, 8] : null,
+        shadow: new fabric.Shadow({ color: 'rgba(0,0,0,0.16)', blur: 28, offsetX: 0, offsetY: 5 }),
+        originX,
+        originY:     'top',
+        selectable:  false,
+        evented:     false
+      });
+      container.__posterFieldContainer = true;
+      markPosterManaged(container, field.id);
+      objectsToAdd.push(container);
+    }
 
     if (!field.noLabel) {
       const title = new fabric.Text(field.shortLabel, {
@@ -333,12 +338,14 @@ function buildFieldObjects(canvas, sizeKey, values = {}, settings = {}, productT
         ? buildParticipantsText(values)
         : truncateValue(field, values[field.id]);
 
+    const textFill = field.id === 'projectName' ? ts.color : color;
+
     const valueText = new fabric.Textbox(rawContent, {
       originX,
       originY:         'top',
       textAlign:       field.align,
       direction:       'rtl',
-      fill:            color,
+      fill:            textFill,
       fontFamily,
       fontWeight:      field.fontWeight || 400,
       fontSize:        field.fontSize,
@@ -348,7 +355,7 @@ function buildFieldObjects(canvas, sizeKey, values = {}, settings = {}, productT
       selectable:      false,
       evented:         false,
       editable:        false,
-      splitByGrapheme: true,
+      splitByGrapheme: false,
       lineHeight:      field.lineHeight
     });
 
@@ -436,13 +443,13 @@ function upsertFixedLogo(canvas) {
     const logoImg = canvas.__posterFixedLogoImage;
     if (!logoImg || !logoImg.complete || !logoImg.naturalWidth || !logoImg.naturalHeight) return;
 
-    const { width } = getPosterDimensions(canvas);
+    const { width, height } = getPosterDimensions(canvas);
     const margin       = Math.round(width * 0.03);
     const desiredWidth = Math.round(width * 0.14);
     const logoHeight   = Math.round((desiredWidth / logoImg.naturalWidth) * logoImg.naturalHeight);
 
     const lx0 = Math.round(margin * 0.35);
-    const ly0 = Math.round(margin * 0.3);
+    const ly0 = Math.round(height * 0.087) - Math.round(logoHeight * 0.3);
     const zoom = canvas.getZoom() || 1;
     const [,,,, offsetX = 0, offsetY = 0] = canvas.viewportTransform || [];
     const lx = lx0 * zoom + offsetX;
@@ -824,11 +831,17 @@ export function setTitleStyle(canvas, style) {
   canvas.getObjects()
     .filter(o => o.__posterFieldTitle)
     .forEach(o => {
-      if (style.color     !== undefined) o.set({ fill:       style.color });
+      if (style.color      !== undefined) o.set({ fill:       style.color });
       if (style.fontFamily !== undefined) o.set({ fontFamily: style.fontFamily });
       const fieldId = o.__posterFieldId;
       const field   = getFieldById(sizeKey, fieldId, productType);
       if (field) o.set({ top: computeTitleTop(field, o, field.type !== 'list') });
+    });
+  canvas.getObjects()
+    .filter(o => o.__posterFieldObject && o.__posterFieldId === 'projectName')
+    .forEach(o => {
+      if (style.color      !== undefined) o.set({ fill:       style.color });
+      if (style.fontFamily !== undefined) o.set({ fontFamily: style.fontFamily });
     });
   renderCanvas(canvas);
 }
