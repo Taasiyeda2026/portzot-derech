@@ -74,7 +74,8 @@ const RESEARCH_FIELDS = [
     42
   ],
   ['value', 'מה הערך המרכזי של הפתרון?', 110],
-  ['feedbackAndImprovements', 'מה המשוב שקיבלנו ומה שיפרנו', Math.max(FEEDBACK_MAX + IMPROVEMENT_MAX, 170)]
+  ['feedbackReceived', 'מה המשוב שקיבלנו?', Math.max(FEEDBACK_MAX, 110)],
+  ['improvementsAfterFeedback', 'מה שיפרנו בעקבות המשוב?', Math.max(IMPROVEMENT_MAX, 110)]
 ];
 
 const SCREEN_TYPE_OPTIONS = ['מסך פתיחה', 'מסך בית', 'חיפוש', 'פעולה מרכזית', 'תוצאות', 'אזור אישי', 'פרופיל', 'הרשמה', 'התחברות', 'מעקב', 'אחר'];
@@ -149,7 +150,8 @@ const state = {
     titleColor: '#5E2750',
     textColor: '#1f2937',
     shape: 20
-  }
+  },
+  slotImages: { visual_1: null, visual_2: null, visual_3: null }
 };
 
 function migrateSharedVisualPrompt(splitFlowState = {}) {
@@ -184,9 +186,10 @@ function hydrateStateFromStorage() {
   if (!stored || stored.productType !== productType) return;
 
   Object.assign(state.research, stored.research || {});
-  if (!state.research.feedbackAndImprovements) {
-    const mergedFeedback = [state.research.feedback || '', state.research.improvement || ''].filter(Boolean).join('\n');
-    if (mergedFeedback) state.research.feedbackAndImprovements = mergedFeedback;
+  if (!state.research.feedbackReceived && !state.research.improvementsAfterFeedback) {
+    const legacy = state.research.feedbackAndImprovements
+      || [state.research.feedback || '', state.research.improvement || ''].filter(Boolean).join('\n');
+    if (legacy) state.research.feedbackReceived = legacy;
   }
   if (!state.research.studentNames) {
     const names = [project?.contentValues?.student1, project?.contentValues?.student2, project?.contentValues?.student3]
@@ -207,6 +210,7 @@ function hydrateStateFromStorage() {
     state.images = state.images.map((image, idx) => ({ ...image, ...(stored.images[idx] || {}) }));
   }
   state.sharedVisualPrompt = migrateSharedVisualPrompt(stored);
+  state.slotImages = { visual_1: null, visual_2: null, visual_3: null, ...(project?.slotImages || {}) };
 }
 
 function splitStudentNames(rawNames) {
@@ -219,7 +223,6 @@ function splitStudentNames(rawNames) {
 
 function buildPosterContentValues() {
   const [student1, student2, student3] = splitStudentNames(state.research.studentNames);
-  const feedbackSummary = state.research.feedbackAndImprovements || '';
   return {
     projectName: state.research.projectName,
     description: state.research.description,
@@ -238,8 +241,8 @@ function buildPosterContentValues() {
     howItWorks_2: state.research.howItWorks_2,
     howItWorks_3: state.research.howItWorks_3,
     value: state.research.value,
-    feedbackReceived: feedbackSummary,
-    improvementsAfterFeedback: feedbackSummary,
+    feedbackReceived: state.research.feedbackReceived || '',
+    improvementsAfterFeedback: state.research.improvementsAfterFeedback || '',
     student1,
     student2,
     student3,
@@ -253,6 +256,7 @@ function persistSplitFlowState() {
   saveProject({
     ...stored,
     productType,
+    slotImages: { ...state.slotImages },
     contentValues: {
       ...(stored.contentValues || {}),
       ...buildPosterContentValues()
@@ -611,6 +615,7 @@ function seedPosterBuilderState() {
     posterSize: stored.posterSize || posterSize,
     productType,
     background: state.design.background || null,
+    slotImages: { ...state.slotImages },
     fieldSettings: nextFieldSettings,
     titleStyle: {
       fontFamily: state.design.titleFont,
@@ -720,6 +725,51 @@ function renderStep2Physical() {
     ${renderSharedVisualSection()}`;
 }
 
+function getSlotDefs() {
+  if (productType === 'physical') {
+    return [
+      { key: 'visual_1', label: 'תמונה ראשית' },
+      { key: 'visual_2', label: 'תמונת שימוש' }
+    ];
+  }
+  return [
+    { key: 'visual_1', label: 'מסך 1' },
+    { key: 'visual_2', label: 'מסך 2' },
+    { key: 'visual_3', label: 'מסך 3' }
+  ];
+}
+
+function renderSlotUploads() {
+  const slotDefs = getSlotDefs();
+  const cols = slotDefs.length;
+  return `
+    <article class="split-card">
+      <h3>העלאת תמונות לפוסטר</h3>
+      <p style="margin:0;font-size:14px;color:#4b5563;line-height:1.6">לאחר יצירת התמונות בעזרת הפרומפטים למעלה, העלי אותן כאן כדי שיופיעו ישירות בפוסטר.</p>
+      <div class="split-slot-grid split-slot-grid-${cols}">
+        ${slotDefs.map((slot) => {
+          const img = state.slotImages[slot.key];
+          return `
+            <div class="split-slot-item">
+              <div class="split-slot-preview${img ? ' has-image' : ''}">
+                ${img
+                  ? `<img src="${img}" alt="${escapeHtml(slot.label)}" />`
+                  : `<span class="split-slot-placeholder">+ ${escapeHtml(slot.label)}</span>`}
+              </div>
+              <span class="split-slot-label">${escapeHtml(slot.label)}</span>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
+                <label class="split-btn ghost split-slot-upload-lbl">
+                  ${img ? 'החלפה' : 'העלאת תמונה'}
+                  <input type="file" accept="image/*" data-slot-upload="${slot.key}" style="display:none" />
+                </label>
+                ${img ? `<button type="button" class="split-btn ghost" data-slot-clear="${slot.key}" style="font-size:13px;padding:8px 14px">הסרה</button>` : ''}
+              </div>
+            </div>`;
+        }).join('')}
+      </div>
+    </article>`;
+}
+
 function renderStep2() {
   if (productType === 'physical') {
     const mainPrompt = buildPhysicalPrompt('main');
@@ -737,7 +787,8 @@ function renderStep2() {
       </article>
       <article class="split-card">
         <button type="button" class="split-btn primary" data-copy-physical="all">העתיקי את שני הפרומפטים</button>
-      </article>`;
+      </article>
+      ${renderSlotUploads()}`;
   }
 
   const flowCard = productType === 'website' ? `
@@ -764,7 +815,7 @@ function renderStep3() {
     </article>
   `).join('');
 
-  return `${cards}<article class="split-card"><button type="button" class="split-btn primary" data-copy-all-images>העתיקי את כל הפרומפטים</button></article>`;
+  return `${cards}<article class="split-card"><button type="button" class="split-btn primary" data-copy-all-images>העתיקי את כל הפרומפטים</button></article>${renderSlotUploads()}`;
 }
 
 function renderStep4() {
@@ -899,8 +950,18 @@ function render() {
     .split-link{display:inline-block;background:linear-gradient(135deg,#5E2750,#7c3aed);color:#fff;text-decoration:none;border-radius:12px;padding:11px 16px;box-shadow:0 8px 18px rgba(94,39,80,.28)}
     .split-picks{display:flex;gap:8px;flex-wrap:wrap}
     .split-check{display:flex;gap:6px;align-items:center}
+    .split-slot-grid{display:grid;gap:16px}
+    .split-slot-grid-2{grid-template-columns:repeat(2,1fr)}
+    .split-slot-grid-3{grid-template-columns:repeat(3,1fr)}
+    .split-slot-item{display:flex;flex-direction:column;align-items:center;gap:10px}
+    .split-slot-preview{width:100%;aspect-ratio:3/4;border:2px dashed #b9a5f8;border-radius:14px;display:flex;align-items:center;justify-content:center;background:linear-gradient(155deg,#f8f5ff,#ede9fe);overflow:hidden;transition:border-color .18s}
+    .split-slot-preview.has-image{border-style:solid;border-color:#7c3aed;background:#000}
+    .split-slot-preview img{width:100%;height:100%;object-fit:cover;border-radius:12px;display:block}
+    .split-slot-placeholder{font-size:13px;color:#7c3aed;text-align:center;padding:12px;line-height:1.5}
+    .split-slot-label{font-size:13px;font-weight:700;color:#4c1d95;text-align:center}
+    .split-slot-upload-lbl{cursor:pointer;font-size:13px;padding:8px 14px}
     @media (max-width:900px){.split-shell{max-width:780px}}
-    @media (max-width:800px){.split-stepper{grid-template-columns:1fr 1fr}.split-shell{padding:20px 12px 34px}.split-field select,.split-field input,.split-field textarea{width:100%;min-width:0}}
+    @media (max-width:800px){.split-stepper{grid-template-columns:1fr 1fr}.split-shell{padding:20px 12px 34px}.split-field select,.split-field input,.split-field textarea{width:100%;min-width:0}.split-slot-grid-3{grid-template-columns:repeat(2,1fr)}}
   </style>
   <main class="split-shell">
     <header class="split-header">
@@ -1078,6 +1139,29 @@ function wireEvents() {
     });
   });
 
+  root.querySelectorAll('[data-slot-upload]').forEach((input) => {
+    input.addEventListener('change', () => {
+      const slotKey = input.dataset.slotUpload;
+      const file = input.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        state.slotImages[slotKey] = e.target.result;
+        persistSplitFlowState();
+        render();
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+      };
+      reader.readAsDataURL(file);
+    });
+  });
+
+  root.querySelectorAll('[data-slot-clear]').forEach((button) => {
+    button.addEventListener('click', () => {
+      state.slotImages[button.dataset.slotClear] = null;
+      persistSplitFlowState();
+      render();
+    });
+  });
 
   initializeCounters();
 
