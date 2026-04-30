@@ -502,7 +502,8 @@ function firstErrorKey(step, errors) {
 function focusFirstInvalidField(step, errors) {
   const key = firstErrorKey(step, errors);
   if (!key) return;
-  state.visibleErrors = [key];
+  state.visibleErrors = Object.keys(errors);
+  render();
   const field = root.querySelector(`[data-error-key="${key}"]`);
   if (!field) return;
   field.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -757,6 +758,7 @@ function renderSlotUploads() {
                   : `<span class="split-slot-placeholder">+ ${escapeHtml(slot.label)}</span>`}
               </div>
               <span class="split-slot-label">${escapeHtml(slot.label)}</span>
+              ${img ? `<span style="font-size:13px;color:#16a34a;font-weight:600">✓ הועלתה בהצלחה</span>` : ''}
               <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
                 <label class="split-btn ghost split-slot-upload-lbl">
                   ${img ? 'החלפה' : 'העלאת תמונה'}
@@ -1149,7 +1151,6 @@ function wireEvents() {
         state.slotImages[slotKey] = e.target.result;
         persistSplitFlowState();
         render();
-        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
       };
       reader.readAsDataURL(file);
     });
@@ -1179,7 +1180,6 @@ function wireEvents() {
     if (state.step < MAX_STEP) {
       const errors = validateStep(state.step);
       if (Object.keys(errors).length) {
-        render();
         focusFirstInvalidField(state.step, errors);
         return;
       }
