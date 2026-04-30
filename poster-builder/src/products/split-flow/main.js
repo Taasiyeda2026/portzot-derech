@@ -648,17 +648,28 @@ function renderTags(tagName, options, selected, max) {
   }).join('')}</div>`;
 }
 
+const STEP1_BOTTOM_KEYS = ['value', 'feedbackReceived', 'improvementsAfterFeedback'];
+
+function renderResearchField([key, label, max]) {
+  const value = state.research[key] || '';
+  const rows = max <= 42 ? 1 : 2;
+  return `<label class="${fieldClass(key)}" data-error-key="${key}">
+    <span>${label} <em>*</em></span>
+    <textarea data-research="${key}" maxlength="${max}" rows="${rows}" placeholder="כתבי כאן" dir="rtl">${escapeHtml(value)}</textarea>
+    ${renderCounter(value, max)}
+    ${renderError(key)}
+  </label>`;
+}
+
 function renderStep1() {
-  return `<section class="split-card">${RESEARCH_FIELDS.map(([key, label, max]) => {
-    const value = state.research[key] || '';
-    const rows = max <= 42 ? 1 : 2;
-    return `<label class="${fieldClass(key)}" data-error-key="${key}">
-      <span>${label} <em>*</em></span>
-      <textarea data-research="${key}" maxlength="${max}" rows="${rows}" placeholder="כתבי כאן" dir="rtl">${escapeHtml(value)}</textarea>
-      ${renderCounter(value, max)}
-      ${renderError(key)}
-    </label>`;
-  }).join('')}</section>`;
+  const mainFields = RESEARCH_FIELDS.filter(([key]) => !STEP1_BOTTOM_KEYS.includes(key));
+  const bottomFields = RESEARCH_FIELDS.filter(([key]) => STEP1_BOTTOM_KEYS.includes(key));
+  return `
+    <article class="split-card">${mainFields.map(renderResearchField).join('')}</article>
+    <article class="split-card">
+      <h3>ערך, משוב ושיפורים</h3>
+      ${bottomFields.map(renderResearchField).join('')}
+    </article>`;
 }
 
 function renderSharedVisualSection() {
