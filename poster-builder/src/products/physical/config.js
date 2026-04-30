@@ -88,9 +88,9 @@ export const FIELD_DEFINITIONS = [
   { id: 'requirements',     question: 'מה היה חשוב שהפתרון יכלול?',          shortLabel: 'דרישות הפתרון',   hint: 'כתבו 3 דברים מרכזיים שהיה חשוב לשלב בפתרון כדי שייתן מענה טוב לבעיה.',                                     type: 'list', maxCharsPerRow: 42, align: 'right', fontSize: 42, minFontSize: 30, lineHeight: 1.25 },
   { id: 'solution',         question: 'מה הפתרון שפיתחתן?',                  shortLabel: 'הפתרון שפיתחנו',  hint: '',                                                                                                            maxChars: 130, align: 'right', fontSize: 42, minFontSize: 30, lineHeight: 1.3, dynamic: 'solution' },
   { id: 'howItWorks',       question: 'איך הפתרון עובד?',                     shortLabel: 'איך זה עובד',     hint: '',                                                                                                            type: 'list', maxCharsPerRow: 42, align: 'right', fontSize: 42, minFontSize: 30, lineHeight: 1.25, dynamic: 'howItWorks' },
-  { id: 'value',                     question: 'מה הערך המרכזי של הפתרון?', shortLabel: 'הערך המרכזי',    hint: 'כתבו מה התועלת המרכזית של הפתרון ולמה הוא משמעותי עבור המשתמשים.',   maxChars: 110, align: 'right', fontSize: 38, minFontSize: 26, lineHeight: 1.2, noLabel: true },
-  { id: 'feedbackReceived',          question: 'המשוב שקיבלנו',              shortLabel: 'המשוב שקיבלנו', hint: 'תארו בקצרה את המשוב שקיבלתן מהמשתמשים.',                              maxChars: 110, align: 'right', fontSize: 38, minFontSize: 26, lineHeight: 1.2, noLabel: true },
-  { id: 'improvementsAfterFeedback', question: 'מה שיפרנו',                  shortLabel: 'מה שיפרנו',     hint: 'תארו מה שיפרתן בעקבות המשוב שקיבלתן.',                                maxChars: 110, align: 'right', fontSize: 38, minFontSize: 26, lineHeight: 1.2, noLabel: true },
+  { id: 'value',                     question: 'מה הערך המרכזי של הפתרון?', shortLabel: 'הערך המרכזי',    hint: 'כתבו מה התועלת המרכזית של הפתרון ולמה הוא משמעותי עבור המשתמשים.',   maxChars: 110, align: 'right', fontSize: 38, minFontSize: 26, lineHeight: 1.2, noLabel: true, verticalCenter: true },
+  { id: 'feedbackReceived',          question: 'המשוב שקיבלנו',              shortLabel: 'המשוב שקיבלנו', hint: 'תארו בקצרה את המשוב שקיבלתן מהמשתמשים.',                              maxChars: 110, align: 'right', fontSize: 38, minFontSize: 26, lineHeight: 1.2, noLabel: true, verticalCenter: true },
+  { id: 'improvementsAfterFeedback', question: 'מה שיפרנו',                  shortLabel: 'מה שיפרנו',     hint: 'תארו מה שיפרתן בעקבות המשוב שקיבלתן.',                                maxChars: 110, align: 'right', fontSize: 38, minFontSize: 26, lineHeight: 1.2, noLabel: true, verticalCenter: true },
   {
     id: 'participants', question: 'פרטי המשתתפות', shortLabel: '',
     type: 'participants', maxChars: 200,
@@ -159,10 +159,10 @@ const PORTRAIT_RECTS = {
   requirements:     { x: 1160, y:  720, width: 1040, height: 500  },
   solution:         { x: 1160, y: 1780, width: 1040, height: 350  },
   howItWorks:       { x: 1160, y: 2200, width: 1040, height: 620  },
-  value:                     { x: 1160, y: 2890, width: 1040, height: 96   },
-  feedbackReceived:          { x: 1160, y: 2994, width: 1040, height: 98   },
-  improvementsAfterFeedback: { x: 1160, y: 3100, width: 1040, height: 98   },
-  participants:              { x: 1240, y: 3240, width: 2200, height: 200  }
+  value:                     { x: 1160, y: 2840, width: 1040, height: 120  },
+  feedbackReceived:          { x: 1160, y: 2980, width: 1040, height: 120  },
+  improvementsAfterFeedback: { x: 1160, y: 3120, width: 1040, height: 120  },
+  participants:              { x: 1240, y: 3260, width: 2200, height: 200  }
 };
 
 const LANDSCAPE_RECTS = {
@@ -176,9 +176,9 @@ const LANDSCAPE_RECTS = {
   requirements:     { x: 1674, y: 450,  width: 1576, height: 380  },
   solution:         { x: 1674, y: 1200, width: 1576, height: 180  },
   howItWorks:       { x: 1674, y: 1440, width: 1576, height: 380  },
-  value:                     { x: 1674, y: 1880, width: 1576, height: 36   },
-  feedbackReceived:          { x: 1674, y: 1920, width: 1576, height: 36   },
-  improvementsAfterFeedback: { x: 1674, y: 1960, width: 1576, height: 36   },
+  value:                     { x: 1674, y: 1826, width: 1576, height: 70   },
+  feedbackReceived:          { x: 1674, y: 1903, width: 1576, height: 70   },
+  improvementsAfterFeedback: { x: 1674, y: 1980, width: 1576, height: 70   },
   participants:              { x: 1754, y: 2060, width: 3312, height: 140  }
 };
 
