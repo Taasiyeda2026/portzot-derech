@@ -417,9 +417,9 @@
                     <button class="secondary-btn" onclick="resetActivity()">איפוס פעילות</button>
                 </div>
 
-                <!-- כפתור זיווג - מופיע רק כאשר הכל הושלם -->
+                <!-- כפתור חלוקה לקבוצות - מופיע רק כאשר הכל הושלם -->
                 <div class="button-group" id="matchingButtonContainer" style="display: none; margin-top: 20px;">
-                    <button onclick="goToMatching()" style="background: linear-gradient(135deg, #ff1493, #ff69b4); font-size: 18px; font-weight: 700; padding: 18px 32px;">💝 הרצי זיווג שותפות</button>
+                    <button onclick="goToMatching()" style="background: linear-gradient(135deg, #ff1493, #ff69b4); font-size: 18px; font-weight: 700; padding: 18px 32px;">💝 הציגי חלוקה לקבוצות</button>
                 </div>
 
                 <div class="success-message" id="successMessage">
@@ -581,7 +581,7 @@
 
             if (completed >= total && total > 0) {
                 document.getElementById('successMessage').classList.add('show');
-                document.getElementById('matchingButtonContainer').style.display = 'block'; // הצגת כפתור זיווג 💝
+                document.getElementById('matchingButtonContainer').style.display = 'block'; // הצגת כפתור חלוקה לקבוצות 💝
                 stopRefreshTimer();
                 stopStopwatch(); // עצירת שעון כשכולם סיימו ✅
             }
@@ -672,7 +672,7 @@
                 document.getElementById('trackingScreen').classList.remove('active');
                 document.getElementById('setupScreen').style.display = 'block';
                 document.getElementById('successMessage').classList.remove('show');
-                document.getElementById('matchingButtonContainer').style.display = 'none'; // הסתרת כפתור זיווג 💝
+                document.getElementById('matchingButtonContainer').style.display = 'none'; // הסתרת כפתור חלוקה לקבוצות 💝
                 
                 alert('✅ הפעילות אופסה בהצלחה!');
             } catch (error) {
@@ -681,14 +681,14 @@
             }
         };
 
-        // פונקציה למעבר למסך הזיווג 💝
+        // פונקציה למעבר למסך החלוקה לקבוצות 💝
         window.goToMatching = function() {
             if (!currentSessionId) {
                 alert('שגיאה: לא נמצא session פעיל');
                 return;
             }
             
-            console.log('🚀 מעביר למסך זיווג עם session:', currentSessionId);
+            console.log('🚀 מעביר למסך חלוקה לקבוצות עם session:', currentSessionId);
             window.location.href = `matching.html?session=${currentSessionId}`;
         };
 

@@ -1,261 +1,160 @@
-// אלגוריתם חישוב ניקוד התאמה בין שותפות
-// 10 תחומים: תחושת גוף, חיים דיגיטליים, למידה בלחץ, חיים חברתיים, בחירות יומיומיות, פנאי ויצירה, סביבה וחיות, הבית שלי, מרחב ותנועה, מבט קדימה
+const MATCH_LABELS = [
+  { min: 74, label: 'גבוהה' },
+  { min: 58, label: 'טובה' },
+  { min: 0, label: 'מאוזנת' }
+];
 
-export function calculateScore(a, b) {
+const ROLE_MAP = {
+  ideas: ['ideas', 'initiator', 'prototype_fast', 'inspiration_research'],
+  organization: ['organization', 'task_organizer', 'planner', 'checklist_oriented', 'clarity_structure'],
+  execution: ['focused_executor', 'task_execution', 'persistence_trial_error', 'technical_checking', 'design', 'presentation']
+};
+
+function pick(v, fallback) { return v || fallback || ''; }
+function normalize(r) {
+  return {
+    ...r,
+    displayName: r.displayName || r.name || 'משתתפת',
+    mainDomain: pick(r.mainDomain, r.domain),
+    problemType: pick(r.problemType, r.lifeInterest),
+    infoProcessingStyle: pick(r.infoProcessingStyle, r.communicationStyle),
+    planningStyle: pick(r.planningStyle, r.workStyle),
+    choiceDriver: pick(r.choiceDriver, r.motivationSource),
+    naturalTeamContribution: pick(r.naturalTeamContribution, r.teamRole),
+    problemSolvingStyle: pick(r.problemSolvingStyle, r.pressureResponse),
+    visualCommunicationStyle: pick(r.visualCommunicationStyle, r.communicationStyle),
+    groupBehaviorPattern: pick(r.groupBehaviorPattern, r.teamStyle),
+    conflictStyle: pick(r.conflictStyle, r.conflictStyle),
+    groupNeed: pick(r.groupNeed, r.importanceLevel),
+    groupComfortLevel: pick(r.groupComfortLevel, ''),
+    neededTeamSupport: pick(r.neededTeamSupport, ''),
+    startStyle: pick(r.startStyle, r.workPace)
+  };
+}
+
+export function getPreferredGroupSizes(count) {
+  if (count <= 1) return [];
+  if (count === 2) return [2];
+  if (count === 3) return [3];
+  if (count === 4) return [4];
+  if (count === 5) return [3, 2];
+  const sizes = [];
+  const rem = count % 3;
+  if (rem === 0) {
+    return Array(count / 3).fill(3);
+  }
+  if (rem === 1) {
+    sizes.push(4);
+    return sizes.concat(Array((count - 4) / 3).fill(3));
+  }
+  // rem === 2: prefer two groups of 4 when possible
+  if (count >= 8) {
+    sizes.push(4, 4);
+    return sizes.concat(Array((count - 8) / 3).fill(3));
+  }
+  return [3, 2];
+}
+
+export function calculatePairScore(aRaw, bRaw) {
+  const a = normalize(aRaw), b = normalize(bRaw);
   let score = 0;
-  let reasons = [];
+  if (a.mainDomain && a.mainDomain === b.mainDomain) score += 14;
+  if (a.problemType && a.problemType === b.problemType) score += 10;
+  ['planningStyle','startStyle','infoProcessingStyle','problemSolvingStyle','conflictStyle'].forEach(k => {
+    if (a[k] && a[k] === b[k]) score += 6;
+  });
+  if (a.naturalTeamContribution && b.naturalTeamContribution && a.naturalTeamContribution !== b.naturalTeamContribution) score += 8;
+  if (a.groupBehaviorPattern && b.groupBehaviorPattern && a.groupBehaviorPattern !== b.groupBehaviorPattern) score += 6;
+  if (a.groupNeed && b.groupNeed && a.groupNeed === b.groupNeed) score += 4;
+  if (a.groupComfortLevel && b.groupComfortLevel && a.groupComfortLevel === b.groupComfortLevel) score += 3;
+  return Math.min(100, score);
+}
 
-  // === תחומי עניין (30 נקודות מקס) ===
-  if (a.mainDomain === b.mainDomain) {
-    score += 20;
-    reasons.push(`שתיכן בחרתן ב"${a.mainDomain}" כתחום עיקרי`);
-  }
-  
-  if (a.mainDomain === b.secondDomain && b.secondDomain !== "אני מעדיפה להתמקד בתחום אחד") {
-    score += 5;
-    reasons.push(`התחום העיקרי שלך מעניין גם את השותפה`);
-  }
-  if (b.mainDomain === a.secondDomain && a.secondDomain !== "אני מעדיפה להתמקד בתחום אחד") {
-    score += 5;
-    reasons.push(`התחום העיקרי של השותפה מעניין גם אותך`);
-  }
-  
-  if (a.secondDomain === b.secondDomain && 
-      a.secondDomain !== "אני מעדיפה להתמקד בתחום אחד") {
-    score += 5;
-    reasons.push(`שתיכן מתעניינות גם ב"${a.secondDomain}"`);
-  }
-
-  // === תחומי חיים (lifeInterest) - 15 נקודות ===
-  if (a.lifeInterest && b.lifeInterest && a.lifeInterest === b.lifeInterest) {
-    score += 15;
-    reasons.push(`שתיכן מתעניינות באותו תוכן ביום-יום`);
-  }
-
-  // === סגנון עבודה (25 נקודות מקס) ===
-  
-  // workStyle - התנסות vs תכנון
-  if (a.workStyle === b.workStyle) {
-    score += 8;
-    reasons.push(`סגנון עבודה דומה במשימות חדשות`);
-  }
-  
-  // teamStyle - חשיבה בקול vs עבודה בשקט
-  if (a.teamStyle === b.teamStyle) {
-    score += 7;
-    reasons.push(`אותה העדפה לעבודה משותפת`);
-  }
-  
-  // workPace - קצב עבודה
-  if (a.workPace === b.workPace) {
-    score += 10;
-    reasons.push(`קצב עבודה תואם`);
-  } else if (a.workPace === "תלוי במשימה – גמישה" || b.workPace === "תלוי במשימה – גמישה") {
-    score += 5;
-    reasons.push(`אחת מכן גמישה בקצב`);
-  }
-
-  // === תפקיד בצוות ומוטיבציה (20 נקודות מקס) ===
-  
-  // teamRole - תפקידים משלימים עדיפים
-  const complementaryRoles = {
-    "למצוא רעיונות מקוריים ולהתחיל דברים חדשים": "לארגן משימות ולוודא שהכול זורם בזמן",
-    "לארגן משימות ולוודא שהכול זורם בזמן": "למצוא רעיונות מקוריים ולהתחיל דברים חדשים",
-    "לעזור לאחרות להבין ולהסביר מושגים מורכבים": "לפתור בעיות טכניות כשמשהו תקוע",
-    "לפתור בעיות טכניות כשמשהו תקוע": "לעזור לאחרות להבין ולהסביר מושגים מורכבים"
-  };
-  
-  if (complementaryRoles[a.teamRole] === b.teamRole) {
-    score += 12;
-    reasons.push(`תפקידים משלימים בצוות`);
-  } else if (a.teamRole === b.teamRole) {
-    score += 6;
-    reasons.push(`אותו תפקיד מועדף בצוות`);
-  }
-  
-  // motivationSource
-  if (a.motivationSource === b.motivationSource) {
-    score += 8;
-    reasons.push(`אותו מקור מוטיבציה`);
-  }
-
-  // === תקשורת ומתח (20 נקודות מקס) ===
-  
-  // pressureResponse
-  if (a.pressureResponse === b.pressureResponse) {
-    score += 7;
-    reasons.push(`מגיבות דומה ללחץ`);
-  }
-  
-  // conflictStyle
-  if (a.conflictStyle === b.conflictStyle) {
-    score += 6;
-    reasons.push(`סגנון דומה בפתרון מחלוקות`);
-  } else if (a.conflictStyle === "מחפשת פשרה" || b.conflictStyle === "מחפשת פשרה") {
-    score += 3;
-    reasons.push(`אחת מכן מחפשת פשרה`);
-  }
-  
-  // communicationStyle
-  if (a.communicationStyle === b.communicationStyle) {
-    score += 7;
-    reasons.push(`אותה העדפת תקשורת`);
-  } else if (a.communicationStyle === "גמישה" || b.communicationStyle === "גמישה") {
-    score += 4;
-    reasons.push(`אחת מכן גמישה בתקשורת`);
-  }
-
-  // === מכפיל חשיבות ===
-  let importanceMultiplier = 1;
-  if (a.importanceLevel === "מאוד חשוב – רוצה התאמה הכי טובה") {
-    importanceMultiplier += 0.1;
-  }
-  if (b.importanceLevel === "מאוד חשוב – רוצה התאמה הכי טובה") {
-    importanceMultiplier += 0.1;
-  }
-  
-  score = Math.round(score * importanceMultiplier);
-
+function inferRoleTags(m) {
+  const s = [m.naturalTeamContribution, m.groupBehaviorPattern, m.startStyle, m.planningStyle, m.groupNeed].join(' ');
   return {
-    score,
-    reasons,
-    maxPossible: 110
+    ideas: ROLE_MAP.ideas.some(t => s.includes(t)),
+    organization: ROLE_MAP.organization.some(t => s.includes(t)),
+    execution: ROLE_MAP.execution.some(t => s.includes(t))
   };
 }
 
-// אלגוריתם חמדני למציאת הזוגות הטובים ביותר
-export function pickBestPairs(students) {
-  if (!students || students.length < 2) {
-    return { pairs: [], leftover: students || [] };
-  }
+export function calculateGroupBalance(groupRaw) {
+  const group = groupRaw.map(normalize);
+  const roles = group.map(inferRoleTags);
+  const hasIdeas = roles.some(r => r.ideas);
+  const hasOrg = roles.some(r => r.organization);
+  const hasExec = roles.some(r => r.execution);
+  const uniqueContrib = new Set(group.map(m => m.naturalTeamContribution).filter(Boolean)).size;
+  const supportMatches = group.some(a => group.some(b => a !== b && a.neededTeamSupport && b.naturalTeamContribution && a.neededTeamSupport.replace('needs_','').includes(b.naturalTeamContribution.split('_')[0])));
 
-  let available = [...students];
-  let pairs = [];
-  
-  while (available.length > 1) {
-    let bestPair = { i: -1, j: -1, scoreData: { score: -Infinity } };
-    
-    // מציאת הזוג עם הניקוד הגבוה ביותר
-    for (let i = 0; i < available.length; i++) {
-      for (let j = i + 1; j < available.length; j++) {
-        const scoreData = calculateScore(available[i], available[j]);
-        if (scoreData.score > bestPair.scoreData.score) {
-          bestPair = { i, j, scoreData };
-        }
-      }
-    }
-    
-    if (bestPair.i !== -1) {
-      pairs.push({
-        id: crypto.randomUUID(),
-        members: [available[bestPair.i].id, available[bestPair.j].id],
-        memberNames: [
-          available[bestPair.i].displayName || 'משתתפת',
-          available[bestPair.j].displayName || 'משתתפת'
-        ],
-        memberData: [available[bestPair.i], available[bestPair.j]],
-        score: bestPair.scoreData.score,
-        reasons: bestPair.scoreData.reasons,
-        createdAt: Date.now()
-      });
-      
-      // הסרת המשתתפות שזווגו
-      available = available.filter((_, idx) => 
-        idx !== bestPair.i && idx !== bestPair.j
-      );
-    } else {
-      break;
-    }
-  }
-  
-  return { pairs, leftover: available };
+  let bonus = 0;
+  if (uniqueContrib >= 2) bonus += 8;
+  if (group.length === 3 && uniqueContrib >= 3) bonus += 8;
+  if (hasOrg) bonus += 7;
+  if (hasIdeas) bonus += 7;
+  if (hasExec) bonus += 7;
+  if (supportMatches) bonus += 6;
+  return { bonus, hasIdeas, hasOrg, hasExec, uniqueContrib, supportMatches };
 }
 
-// טיפול בשאריות - יצירת שלשות אם יש מספר אי-זוגי
-export function handleLeftovers(pairs, leftover) {
-  if (leftover.length === 0) {
-    return pairs;
-  }
-  
-  if (leftover.length === 1 && pairs.length > 0) {
-    // מציאת הזוג הכי מתאים להפוך לשלשה
-    let bestPairIndex = -1;
-    let bestExtraScore = -Infinity;
-    
-    const singleStudent = leftover[0];
-    
-    for (let i = 0; i < pairs.length; i++) {
-      const pair = pairs[i];
-      const scoreA = calculateScore(singleStudent, pair.memberData[0]);
-      const scoreB = calculateScore(singleStudent, pair.memberData[1]);
-      const avgScore = (scoreA.score + scoreB.score) / 2;
-      
-      if (avgScore > bestExtraScore) {
-        bestExtraScore = avgScore;
-        bestPairIndex = i;
-      }
-    }
-    
-    if (bestPairIndex !== -1) {
-      // הפיכת הזוג לשלשה
-      const pair = pairs[bestPairIndex];
-      pair.members.push(singleStudent.id);
-      pair.memberNames.push(singleStudent.displayName || 'משתתפת');
-      pair.memberData.push(singleStudent);
-      pair.isTriple = true;
-      pair.reasons.push(`שלשה נוצרה להתאמה מיטבית`);
-    }
-  }
-  
-  return pairs;
+export function calculateGroupScore(group) {
+  const pairs = [];
+  for (let i=0;i<group.length;i++) for (let j=i+1;j<group.length;j++) pairs.push(calculatePairScore(group[i], group[j]));
+  const avg = pairs.reduce((a,b)=>a+b,0)/(pairs.length||1);
+  const balance = calculateGroupBalance(group);
+  return Math.round(Math.min(100, avg + balance.bonus * 0.8));
 }
 
-// פונקציה ראשית ליצירת זיווגים
-export function generatePairs(responses) {
-  if (!responses || responses.length === 0) {
-    return [];
-  }
-  
-  if (responses.length === 1) {
-    return [{
-      id: crypto.randomUUID(),
-      members: [responses[0].id],
-      memberNames: [responses[0].displayName || 'משתתפת'],
-      memberData: [responses[0]],
-      score: 0,
-      reasons: ['משתתפת יחידה - ממתינה לשותפות'],
-      isSingle: true,
-      createdAt: Date.now()
-    }];
-  }
-  
-  const { pairs, leftover } = pickBestPairs(responses);
-  const finalPairs = handleLeftovers(pairs, leftover);
-  
-  // מיון לפי ניקוד (הגבוה ביותר ראשון)
-  finalPairs.sort((a, b) => b.score - a.score);
-  
-  return finalPairs;
+function groupReasons(balance, members) {
+  const reasons = [];
+  if (members.some((m,_,arr)=>arr.filter(x=>x.mainDomain===m.mainDomain && m.mainDomain).length>=2)) reasons.push('יש לכן תחום עניין משותף.');
+  if (balance.hasIdeas && balance.hasOrg && balance.hasExec) reasons.push('יש בקבוצה שילוב טוב של רעיונות, סדר ועשייה.');
+  if (balance.uniqueContrib >= 2) reasons.push('דרכי העבודה שלכן יכולות להשתלב.');
+  if (balance.supportMatches) reasons.push('כל אחת יכולה להביא לקבוצה חוזקה אחרת.');
+  if (!reasons.length) reasons.push('יש לכן בסיס טוב לעבודה משותפת.');
+  return reasons;
 }
 
-// פונקציה לקבלת סטטיסטיקות
-export function getPairingStats(pairs) {
-  if (!pairs || pairs.length === 0) {
-    return { total: 0, pairs: 0, triples: 0, singles: 0, avgScore: 0 };
-  }
-  
-  const pairsCount = pairs.filter(p => !p.isTriple && !p.isSingle).length;
-  const triplesCount = pairs.filter(p => p.isTriple).length;
-  const singlesCount = pairs.filter(p => p.isSingle).length;
-  const scores = pairs.filter(p => !p.isSingle).map(p => p.score);
-  const avgScore = scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
-  
-  return {
-    total: pairs.length,
-    pairs: pairsCount,
-    triples: triplesCount,
-    singles: singlesCount,
-    avgScore,
-    participants: pairsCount * 2 + triplesCount * 3 + singlesCount
-  };
+export function generateGroups(responses) {
+  const pool = (responses || []).map(normalize);
+  const sizes = getPreferredGroupSizes(pool.length);
+  const remaining = [...pool];
+  const groups = [];
+  sizes.forEach((size, idx) => {
+    let best = null;
+    const indices = [...remaining.keys()];
+    const combos = [];
+    function build(start, pick) {
+      if (pick.length === size) return combos.push([...pick]);
+      for (let i=start;i<indices.length;i++) build(i+1, [...pick, indices[i]]);
+    }
+    build(0, []);
+    combos.forEach(c => {
+      const members = c.map(i => remaining[i]);
+      const score = calculateGroupScore(members);
+      if (!best || score > best.score) best = { c, members, score, balance: calculateGroupBalance(members) };
+    });
+    if (!best) return;
+    groups.push({
+      id: crypto.randomUUID(), groupNumber: idx + 1, size,
+      members: best.members.map(m => m.id), memberNames: best.members.map(m => m.displayName),
+      memberData: best.members, score: best.score,
+      matchLevel: MATCH_LABELS.find(l => best.score >= l.min).label,
+      reasons: groupReasons(best.balance, best.members),
+      balanceProfile: best.balance, createdAt: Date.now()
+    });
+    best.c.sort((a,b)=>b-a).forEach(i=>remaining.splice(i,1));
+  });
+  return groups;
 }
+
+export function getGroupStats(groups) {
+  const sizes = groups.map(g => g.size);
+  const participants = sizes.reduce((a,b)=>a+b,0);
+  const avg = groups.length ? Math.round(groups.reduce((a,g)=>a+g.score,0)/groups.length) : 0;
+  return { totalGroups: groups.length, groupsOf2: sizes.filter(s=>s===2).length, groupsOf3: sizes.filter(s=>s===3).length, groupsOf4: sizes.filter(s=>s===4).length, participants, averageMatchLevel: avg };
+}
+
+export function generatePairs(responses) { return generateGroups(responses); }
+export function getPairingStats(pairs) { return getGroupStats(pairs); }
