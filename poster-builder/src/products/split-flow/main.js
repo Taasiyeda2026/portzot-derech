@@ -1224,11 +1224,6 @@ function wireEvents() {
 
   root.querySelectorAll('[data-copy-image]').forEach((button) => {
     button.addEventListener('click', () => {
-      const errors = validateStep(3);
-      if (Object.keys(errors).length) {
-        focusFirstInvalidField(3, errors);
-        return;
-      }
       copyText(buildDigitalPrompt(Number(button.dataset.copyImage)), button);
     });
   });
@@ -1236,11 +1231,6 @@ function wireEvents() {
   const copyAllImages = root.querySelector('[data-copy-all-images]');
   if (copyAllImages) {
     copyAllImages.addEventListener('click', () => {
-      const errors = validateStep(3);
-      if (Object.keys(errors).length) {
-        focusFirstInvalidField(3, errors);
-        return;
-      }
       const text = state.images.map((_, idx) => `פרומפט ${idx + 1}:\n${buildDigitalPrompt(idx)}`).join('\n\n');
       copyText(text, copyAllImages);
     });
