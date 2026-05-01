@@ -753,31 +753,22 @@ function getSlotDefs() {
 
 function renderSlotUploads() {
   const slotDefs = getSlotDefs();
-  const cols = slotDefs.length;
   return `
     <article class="split-card">
       <h3>העלאת תמונות לפוסטר</h3>
       <p style="margin:0;font-size:14px;color:#4b5563;line-height:1.6">לאחר יצירת התמונות בעזרת הפרומפטים למעלה, העלי אותן כאן כדי שיופיעו ישירות בפוסטר.</p>
-      <div class="split-slot-grid split-slot-grid-${cols}">
+      <div style="display:flex;flex-direction:column;gap:8px">
         ${slotDefs.map((slot) => {
           const img = state.slotImages[slot.key];
-          return `
-            <div class="split-slot-item">
-              <div class="split-slot-preview${img ? ' has-image' : ''}">
-                ${img
-                  ? `<img src="${img}" alt="${escapeHtml(slot.label)}" />`
-                  : `<span class="split-slot-placeholder">+ ${escapeHtml(slot.label)}</span>`}
-              </div>
-              <span class="split-slot-label">${escapeHtml(slot.label)}</span>
-              ${img ? `<span style="font-size:13px;color:#16a34a;font-weight:600">✓ הועלתה בהצלחה</span>` : ''}
-              <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
-                <label class="split-btn ghost split-slot-upload-lbl">
-                  ${img ? 'החלפה' : 'העלאת תמונה'}
-                  <input type="file" accept="image/*" data-slot-upload="${slot.key}" style="display:none" />
-                </label>
-                ${img ? `<button type="button" class="split-btn ghost" data-slot-clear="${slot.key}" style="font-size:13px;padding:8px 14px">הסרה</button>` : ''}
-              </div>
-            </div>`;
+          return `<div style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:12px;background:${img ? '#f0fdf4' : '#faf8ff'};border:1px solid ${img ? '#86efac' : '#e2d4fb'}">
+            <span style="font-size:20px">${img ? '✅' : '⬜'}</span>
+            <span style="font-weight:600;font-size:14px;color:#3b1f5c;flex:1">${escapeHtml(slot.label)}</span>
+            <label class="split-btn ghost split-slot-upload-lbl" style="font-size:13px;padding:7px 14px;margin:0">
+              ${img ? 'החלפה' : 'העלאה'}
+              <input type="file" accept="image/*" data-slot-upload="${slot.key}" style="display:none" />
+            </label>
+            ${img ? `<button type="button" class="split-btn ghost" data-slot-clear="${slot.key}" style="font-size:13px;padding:7px 14px">הסרה</button>` : ''}
+          </div>`;
         }).join('')}
       </div>
     </article>`;
@@ -789,17 +780,13 @@ function renderStep2() {
     const usagePrompt = buildPhysicalPrompt('usage');
     return `${renderStep2Physical()}
       <article class="split-card">
-        <h3>פרומפט לתמונה ראשית</h3>
-        <pre class="split-prompt" id="prompt-main">${escapeHtml(mainPrompt)}</pre>
-        <button type="button" class="split-btn ghost" data-copy-physical="main">העתיקי פרומפט</button>
-      </article>
-      <article class="split-card">
-        <h3>פרומפט לתמונת שימוש</h3>
-        <pre class="split-prompt" id="prompt-usage">${escapeHtml(usagePrompt)}</pre>
-        <button type="button" class="split-btn ghost" data-copy-physical="usage">העתיקי פרומפט</button>
-      </article>
-      <article class="split-card">
-        <button type="button" class="split-btn primary" data-copy-physical="all">העתיקי את שני הפרומפטים</button>
+        <h3>פרומפטים לתמונות</h3>
+        <p style="margin:0;font-size:14px;color:#4b5563">העתיקי כל פרומפט והדביקי אותו בכלי AI ליצירת תמונות.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button type="button" class="split-btn ghost" data-copy-physical="main" style="font-size:14px">1. העתיקי פרומפט — תמונה ראשית</button>
+          <button type="button" class="split-btn ghost" data-copy-physical="usage" style="font-size:14px">2. העתיקי פרומפט — תמונת שימוש</button>
+          <button type="button" class="split-btn primary" data-copy-physical="all" style="font-size:14px">העתיקי את שניהם</button>
+        </div>
       </article>
       ${renderSlotUploads()}`;
   }
@@ -820,15 +807,18 @@ function renderStep2() {
 }
 
 function renderStep3() {
-  const cards = state.images.map((image, index) => `
-    <article class="split-card">
-      <h3>תמונה ${index + 1} (מסך ${index + 1})</h3>
-      <pre class="split-prompt" id="prompt-${index}">${escapeHtml(buildDigitalPrompt(index))}</pre>
-      <button type="button" class="split-btn ghost" data-copy-image="${index}">העתיקי פרומפט</button>
-    </article>
-  `).join('');
+  const buttons = state.images.map((_, index) =>
+    `<button type="button" class="split-btn ghost" data-copy-image="${index}" style="font-size:14px">${index + 1}. העתיקי פרומפט — מסך ${index + 1}</button>`
+  ).join('');
 
-  return `${cards}<article class="split-card"><button type="button" class="split-btn primary" data-copy-all-images>העתיקי את כל הפרומפטים</button></article>${renderSlotUploads()}`;
+  return `<article class="split-card">
+    <h3>פרומפטים לתמונות</h3>
+    <p style="margin:0;font-size:14px;color:#4b5563">העתיקי כל פרומפט והדביקי אותו בכלי AI ליצירת תמונות.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      ${buttons}
+      <button type="button" class="split-btn primary" data-copy-all-images style="font-size:14px">העתיקי את כולם</button>
+    </div>
+  </article>${renderSlotUploads()}`;
 }
 
 function renderStep4() {
@@ -1121,7 +1111,6 @@ function wireEvents() {
     button.addEventListener('click', () => {
       const errors = validateStep(3);
       if (Object.keys(errors).length) {
-        render();
         focusFirstInvalidField(3, errors);
         return;
       }
@@ -1134,7 +1123,6 @@ function wireEvents() {
     copyAllImages.addEventListener('click', () => {
       const errors = validateStep(3);
       if (Object.keys(errors).length) {
-        render();
         focusFirstInvalidField(3, errors);
         return;
       }

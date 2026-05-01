@@ -532,19 +532,35 @@ function buildSlotPlaceholder(canvas, slot) {
 function applySlotImage(canvas, slot, dataUrl) {
   fabric.Image.fromURL(dataUrl, (img) => {
     if (!img) return;
-    const scale = Math.min(slot.width / img.width, slot.height / img.height);
-    const sw = img.width  * scale;
-    const sh = img.height * scale;
+    const scale = Math.max(slot.width / img.width, slot.height / img.height);
 
+    const clipRadius = Math.round(Math.min(slot.width, slot.height) * 0.06);
     img.set({
-      left:      slot.left + (slot.width  - sw) / 2,
-      top:       slot.top  + (slot.height - sh) / 2,
-      scaleX:    scale,
-      scaleY:    scale,
-      selectable: true,
-      evented:    true,
+      left:        slot.left + slot.width  / 2,
+      top:         slot.top  + slot.height / 2,
+      originX:     'center',
+      originY:     'center',
+      scaleX:      scale,
+      scaleY:      scale,
+      selectable:  true,
+      evented:     true,
       hasControls: true,
-      hasBorders:  true
+      hasBorders:  true,
+      clipPath: new fabric.Rect({
+        left:               slot.left,
+        top:                slot.top,
+        width:              slot.width,
+        height:             slot.height,
+        rx:                 clipRadius,
+        ry:                 clipRadius,
+        absolutePositioned: true
+      }),
+      shadow: new fabric.Shadow({
+        color:   'rgba(0,0,0,0.18)',
+        blur:    Math.round(Math.min(slot.width, slot.height) * 0.04),
+        offsetX: 0,
+        offsetY: 0
+      })
     });
     img.__posterZoneImage = true;
     img.__posterSlotKey   = slot.key;
