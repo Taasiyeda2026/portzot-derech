@@ -107,7 +107,8 @@ const PHYSICAL_USAGE_OPTIONS = {
   peopleCount: ['משתמשת אחת', 'שתיים', 'שלוש ומעלה', 'אחר'],
   location: ['כיתה', 'בית', 'מעבדה', 'חצר בית ספר', 'מרחב קהילתי', 'אחר'],
   props: ['שולחן עבודה', 'מחברת', 'טלפון', 'מחשב נייד', 'כלי כתיבה', 'אחר'],
-  highlight: ['אופן השימוש', 'הפעולה המרכזית', 'קלות שימוש', 'הקשר לבעיה', 'האינטראקציה', 'אחר']
+  highlight: ['אופן השימוש', 'הפעולה המרכזית', 'קלות שימוש', 'הקשר לבעיה', 'האינטראקציה', 'אחר'],
+  feeling: ['בטוח', 'רגוע', 'יעיל', 'נוח', 'חכם', 'אחר']
 };
 
 const state = {
@@ -124,7 +125,7 @@ const state = {
     },
     usage: {
       user: '', userOther: '', peopleCount: '', peopleCountOther: '', location: '', locationOther: '', action: '',
-      props: [], propsOther: '', highlight: [], highlightOther: '', takeaway: ''
+      props: [], propsOther: '', highlight: [], highlightOther: '', takeaway: '', feeling: '', feelingOther: ''
     }
   },
   prototypeScreens: Array.from({ length: 3 }, (_, index) => ({
@@ -460,6 +461,7 @@ function validatePhysicalPrompt() {
   if (!usage.action.trim()) errors.usageAction = 'תארי את הפעולה המוצגת.';
   if (usage.highlight.length < 1 || usage.highlight.length > 3) errors.usageHighlight = 'בחרי בין פריט אחד לשלושה.';
   if (!usage.takeaway.trim()) errors.usageTakeaway = 'תארי מה חשוב שהצופה תבין.';
+  if (!usage.feeling) errors.usageFeeling = 'בחרי תחושה רצויה.';
 
   if (main.appearance === 'אחר' && !main.appearanceOther.trim()) errors.mainAppearanceOther = 'נבחר "אחר" – השלימי פירוט קצר.';
   if (main.highlight.includes('אחר') && !main.highlightOther.trim()) errors.mainHighlightOther = 'נבחר "אחר" – השלימי פירוט קצר.';
@@ -471,6 +473,7 @@ function validatePhysicalPrompt() {
   if (usage.location === 'אחר' && !usage.locationOther.trim()) errors.usageLocationOther = 'נבחר "אחר" – השלימי פירוט קצר.';
   if (usage.props.includes('אחר') && !usage.propsOther.trim()) errors.usagePropsOther = 'נבחר "אחר" – השלימי פירוט קצר.';
   if (usage.highlight.includes('אחר') && !usage.highlightOther.trim()) errors.usageHighlightOther = 'נבחר "אחר" – השלימי פירוט קצר.';
+  if (usage.feeling === 'אחר' && !usage.feelingOther.trim()) errors.usageFeelingOther = 'נבחר "אחר" – השלימי פירוט קצר.';
   Object.assign(errors, validateSharedVisualPrompt({}));
 
   state.errors = errors;
@@ -542,7 +545,7 @@ function validateStep(step) {
 const VALIDATION_ORDER = {
   1: RESEARCH_FIELDS.map(([key]) => key),
   2: productType === 'physical'
-    ? ['mainAppearance', 'mainAppearanceOther', 'mainHighlight', 'mainHighlightOther', 'mainMaterial', 'mainMaterialOther', 'mainBackground', 'mainBackgroundOther', 'mainMessage', 'mainAngle', 'mainAngleOther', 'mainDescription', 'usageUser', 'usageUserOther', 'usageCount', 'usageCountOther', 'usageLocation', 'usageLocationOther', 'usageAction', 'usagePropsOther', 'usageHighlight', 'usageHighlightOther', 'usageTakeaway', 'sharedStyle', 'sharedStyleOther', 'sharedRealism', 'sharedRealismOther', 'sharedAvoidOther']
+    ? ['mainAppearance', 'mainAppearanceOther', 'mainHighlight', 'mainHighlightOther', 'mainMaterial', 'mainMaterialOther', 'mainBackground', 'mainBackgroundOther', 'mainMessage', 'mainAngle', 'mainAngleOther', 'mainDescription', 'usageUser', 'usageUserOther', 'usageCount', 'usageCountOther', 'usageLocation', 'usageLocationOther', 'usageAction', 'usagePropsOther', 'usageHighlight', 'usageHighlightOther', 'usageTakeaway', 'usageFeeling', 'usageFeelingOther', 'sharedStyle', 'sharedStyleOther', 'sharedRealism', 'sharedRealismOther', 'sharedAvoidOther']
     : [
       ...state.prototypeScreens.flatMap((_, idx) => [`screenType${idx}`, `screenShortName${idx}`, `screenView${idx}`, `screenAction${idx}`, `screenComponents${idx}`, `screenComponentsOther${idx}`, `screenEmphasis${idx}`, `screenEmphasisOther${idx}`]),
       'flowStart', 'flowEnd', 'flowSummary', 'flowBranchToggle', 'flowBranchText', 'sharedStyle', 'sharedStyleOther', 'sharedRealism', 'sharedRealismOther', 'sharedAvoidOther'
@@ -680,11 +683,52 @@ Functional clarity: The product should look realistic, usable, and clearly desig
   const countText = resolveOtherValue(data.peopleCount, data.peopleCountOther);
   const locationText = resolveOtherValue(data.location, data.locationOther);
   const highlightText = resolveOtherList(data.highlight, data.highlightOther).join(', ');
-  return `${basePromptContext(slot, 'מדובר בתמונת שימוש שממחישה אינטראקציה עם המוצר.')}
-${sharedBlock}
+  const feelingText = resolveOtherValue(data.feeling, data.feelingOther);
+  const shared = state.sharedVisualPrompt;
+  const styleText = resolveOtherList(shared.style, shared.styleOther).join(', ');
+  const realismText = resolveOtherValue(shared.realism, shared.realismOther);
+  const avoidText = resolveOtherList(shared.avoid, shared.avoidOther).join(', ');
+  return `Create a clear, high-quality, poster-ready image based on the following project context.
+
+Project name: ${state.research.projectName}
+Product type: Physical product
+Description: ${state.research.description}
+Problem: ${state.research.problem}
+Audience: ${state.research.audience}
+Solution: ${state.research.solution}
+Value: ${state.research.value}
+Requirements: ${state.research.requirements_1}; ${state.research.requirements_2}; ${state.research.requirements_3}
+How it works: ${state.research.howItWorks_1}; ${state.research.howItWorks_2}; ${state.research.howItWorks_3}
+
+Output aspect ratio: 1:1 square.
+Image role: This is a usage image that demonstrates interaction with the product.
+
+Technical requirements:
+Create a clean, sharp, high-resolution image suitable for a professional poster.
+The image must clearly show how the product is used in a real and understandable situation.
+The composition must work well in a square format.
+The interaction should be readable immediately at first glance.
+The product must remain clearly visible and must not be hidden by hands, clothing, or background objects.
+Use a natural and believable user interaction.
+Avoid clutter, unnecessary objects, distorted hands, distorted faces, fake branding, real brand logos, long text, or messy backgrounds.
+
+Shared visual settings for all images:
+Visual style: ${styleText}
+Realism level: ${realismText}
+Preferred colors: ${shared.colors || 'match the project visual language'}
+Avoid: ${avoidText || 'none specified'}
+
 Image-specific details:
-מי משתמשת: ${userText}. מספר אנשים: ${countText}. מיקום: ${locationText}. הפעולה המוצגת: ${data.action}. חפצים נוספים: ${props || 'ללא חפצים נוספים'}.
-מה צריך לבלוט: ${highlightText}. מה חשוב שהצופה תבין: ${data.takeaway}.`;
+Who is using the product: ${userText}.
+Number of people: ${countText}.
+Location: ${locationText}.
+Action shown: ${data.action}.
+Additional objects: ${props || 'none'}.
+Main visual message: At first glance, the viewer should immediately understand how the user interacts with the product and why it is useful.
+What should stand out most: ${highlightText}.
+What the viewer should understand: ${data.takeaway}.
+Desired feeling: ${feelingText}.
+Functional clarity: The action must look natural, realistic, and easy to understand.`;
 }
 
 function buildDigitalPrompt(index) {
@@ -862,6 +906,8 @@ function renderStep2Physical() {
       <div class="${fieldClass('usageHighlight')}" data-error-key="usageHighlight"><span>מה צריך לבלוט? <em>*</em></span>${renderTags('usage-highlight', PHYSICAL_USAGE_OPTIONS.highlight, usage.highlight, 3)}${renderError('usageHighlight')}</div>
       ${usage.highlight.includes('אחר') ? `<label class="${fieldClass('usageHighlightOther')}" data-error-key="usageHighlightOther"><span>אם נבחר \"אחר\" – פירוט</span><input data-physical="usage" data-key="highlightOther" maxlength="60" value="${escapeHtml(usage.highlightOther)}" />${renderCounter(usage.highlightOther, 60)}${renderError('usageHighlightOther')}</label>` : ''}
       <label class="${fieldClass('usageTakeaway')}" data-error-key="usageTakeaway"><span>מה חשוב שהצופה תבין? <em>*</em></span><textarea data-physical="usage" data-key="takeaway" maxlength="220">${escapeHtml(usage.takeaway)}</textarea>${renderCounter(usage.takeaway, 220)}${renderError('usageTakeaway')}</label>
+      <label class="${fieldClass('usageFeeling')}" data-error-key="usageFeeling"><span>תחושה רצויה <em>*</em></span><select data-physical="usage" data-key="feeling"><option value="">בחרי</option>${PHYSICAL_USAGE_OPTIONS.feeling.map((o) => `<option ${usage.feeling === o ? 'selected' : ''}>${o}</option>`).join('')}</select>${renderError('usageFeeling')}</label>
+      ${usage.feeling === 'אחר' ? `<label class="${fieldClass('usageFeelingOther')}" data-error-key="usageFeelingOther"><span>אם נבחר "אחר" – פירוט</span><input data-physical="usage" data-key="feelingOther" maxlength="60" value="${escapeHtml(usage.feelingOther)}" />${renderCounter(usage.feelingOther, 60)}${renderError('usageFeelingOther')}</label>` : ''}
     </article>
     ${renderSharedVisualSection()}`;
 }
