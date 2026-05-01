@@ -504,7 +504,7 @@ function validatePrototype() {
     if (screen.emphasis.length < 1 || screen.emphasis.length > 3) errors[`screenEmphasis${idx}`] = 'בחרי בין פריט אחד לשלושה.';
     if (screen.components.includes('אחר') && !screen.componentsOther.trim()) errors[`screenComponentsOther${idx}`] = 'נבחר "אחר" – השלימי רכיב נוסף.';
     if (screen.emphasis.includes('אחר') && !screen.emphasisOther.trim()) errors[`screenEmphasisOther${idx}`] = 'נבחר "אחר" – השלימי דגש נוסף.';
-    if (productType === 'app') {
+    if (productType === 'app' || productType === 'website') {
       if (!screen.viewerUnderstand.trim()) errors[`screenViewerUnderstand${idx}`] = 'תארי מה הצופה צריכה להבין מיד.';
       if (!screen.primaryFocus.trim()) errors[`screenPrimaryFocus${idx}`] = 'תארי את המוקד הראשי במסך.';
     }
@@ -626,12 +626,14 @@ Do not leave empty margins around the device.
 The final result must look like a close-up smartphone presentation image, not a floating mockup.`;
   }
 
-  return `CRITICAL — OUTPUT FORMAT REQUIREMENT (highest priority, overrides everything else):
-Generate a browser or laptop screen mockup showing the website. The device must fill the ENTIRE image from edge to edge — no empty space, no background color, no colored backdrop behind the device.
-The screen frame and content together must occupy 100% of the image dimensions. Wide 16:9 landscape ratio.
-DO NOT include: any background color or scene behind the screen, colored backdrop, gradient background, desk, room, wall, sparkle effects, decorative elements, or empty space around the device.
-The device should appear on a plain white or very light neutral background, cropped tightly so the screen fills the full image.
-Style: clean modern screen mockup, flat UI inside the browser, simple layout, no photorealistic rendering.`;
+  return `CRITICAL — OUTPUT FORMAT REQUIREMENT:
+Generate a wide website screen image.
+The website screen must fill the entire image from edge to edge.
+Show the website as a clean, close-up horizontal screen presentation.
+If a browser frame is shown, keep it minimal and integrated tightly with the screen.
+Do not show a desk, room, laptop body, hands, decorative background, or surrounding environment.
+Do not add gradient backdrops, sparkles, floating elements, or empty margins around the screen.
+The final result must look like a clean wide website screen prepared for a poster, not a floating mockup.`;
 }
 
 function buildPhysicalPrompt(kind) {
@@ -802,13 +804,49 @@ UI hierarchy: Make the primary action visually dominant and supporting informati
 Functional clarity: The interface must look realistic, well-organized, and clearly usable.`;
   }
 
-  const sharedBlock = sharedVisualPromptText();
   return `${screenOnlyRequirements}
 
-${basePromptContext(slot, `מדובר בתמונת מסך מספר ${index + 1} לפוסטר.`)}
-${sharedBlock}
+Create a clear, high-quality, poster-ready image based on the following project context.
+
+Project name: ${state.research.projectName}
+Product type: Website
+Description: ${state.research.description}
+Problem: ${state.research.problem}
+Audience: ${state.research.audience}
+Solution: ${state.research.solution}
+Value: ${state.research.value}
+Requirements: ${state.research.requirements_1}; ${state.research.requirements_2}; ${state.research.requirements_3}
+How it works: ${state.research.howItWorks_1}; ${state.research.howItWorks_2}; ${state.research.howItWorks_3}
+
+Output aspect ratio: 16:9 horizontal.
+Image role: This is website screen number ${index + 1} for the poster.
+
+Technical requirements:
+Create a clean, sharp, high-resolution website screen suitable for a professional poster.
+The screen must be clear, readable, and visually structured.
+Use a clean, modern, realistic website layout.
+Use only short readable interface text.
+Avoid long paragraphs, tiny unreadable labels, cluttered layouts, fake branding, real brand logos, and too many interface elements.
+The page should feel realistic, functional, and easy to understand.
+
+Shared visual settings for all images:
+Visual style: ${styleText}
+Realism level: Clean realistic website UI
+Preferred colors: ${shared.colors || 'match the project visual language'}
+Avoid: ${avoidText || 'none specified'}
+
 Screen-specific details:
-המסך המיוצג: ${screenType || 'לא הוגדר'}. מה המשתמשת רואה במסך: ${screen?.view || ''}. מה המשתמשת עושה במסך: ${screen?.action || ''}. רכיבים חשובים: ${screenComponents}. מה חשוב שיבלוט: ${emphasisText}. ${flowLine}`;
+Screen represented: ${screenType || 'not defined'}.
+What the user sees: ${screen?.view || ''}.
+What the user does: ${screen?.action || ''}.
+Important components: ${screenComponents}.
+What should stand out: ${emphasisText}.
+What the viewer should immediately understand: ${screen?.viewerUnderstand || ''}.
+User flow: Starts with ${state.prototypeFlow.start || ''} and ends with ${state.prototypeFlow.end || ''}.
+Primary focal point: ${screen?.primaryFocus || ''}.
+Secondary elements: ${screen?.secondaryElements || 'none'}.
+UI hierarchy: Make the primary action or key content area visually dominant and supporting information secondary.
+Functional clarity: The interface must look realistic, well-organized, and clearly usable.`;
 }
 
 function normalizeAppImageMapping() {
@@ -928,7 +966,7 @@ function renderPrototypeScreens() {
       ${screen.components.includes('אחר') ? `<label class="${fieldClass(`screenComponentsOther${index}`)}" data-error-key="screenComponentsOther${index}"><span>אם נבחר \"אחר\" – פירוט רכיב נוסף <em>*</em></span><input data-screen="${index}" data-key="componentsOther" maxlength="60" value="${escapeHtml(screen.componentsOther)}" />${renderCounter(screen.componentsOther, 60)}${renderError(`screenComponentsOther${index}`)}</label>` : ''}
       <div class="${fieldClass(`screenEmphasis${index}`)}" data-error-key="screenEmphasis${index}"><span>מה חשוב שיבלוט? <em>*</em></span>${renderTags(`emphasis-${index}`, EMPHASIS_OPTIONS, screen.emphasis, 3)}${renderError(`screenEmphasis${index}`)}</div>
       ${screen.emphasis.includes('אחר') ? `<label class="${fieldClass(`screenEmphasisOther${index}`)}" data-error-key="screenEmphasisOther${index}"><span>אם נבחר \"אחר\" – פירוט דגש נוסף <em>*</em></span><input data-screen="${index}" data-key="emphasisOther" maxlength="60" value="${escapeHtml(screen.emphasisOther)}" />${renderCounter(screen.emphasisOther, 60)}${renderError(`screenEmphasisOther${index}`)}</label>` : ''}
-      ${productType === 'app' ? `
+      ${(productType === 'app' || productType === 'website') ? `
       <label class="${fieldClass(`screenViewerUnderstand${index}`)}" data-error-key="screenViewerUnderstand${index}"><span>מה הצופה צריכה להבין מיד? <em>*</em></span><textarea data-screen="${index}" data-key="viewerUnderstand" maxlength="160">${escapeHtml(screen.viewerUnderstand)}</textarea>${renderCounter(screen.viewerUnderstand, 160)}${renderError(`screenViewerUnderstand${index}`)}</label>
       <label class="${fieldClass(`screenPrimaryFocus${index}`)}" data-error-key="screenPrimaryFocus${index}"><span>מהו המוקד הראשי במסך? <em>*</em></span><input data-screen="${index}" data-key="primaryFocus" maxlength="100" value="${escapeHtml(screen.primaryFocus)}" />${renderCounter(screen.primaryFocus, 100)}${renderError(`screenPrimaryFocus${index}`)}</label>
       <label class="split-field"><span>אלמנטים משניים</span><input data-screen="${index}" data-key="secondaryElements" maxlength="100" value="${escapeHtml(screen.secondaryElements)}" />${renderCounter(screen.secondaryElements, 100)}</label>
