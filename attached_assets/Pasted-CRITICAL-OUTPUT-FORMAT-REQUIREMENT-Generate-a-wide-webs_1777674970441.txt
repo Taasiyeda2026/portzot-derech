@@ -1,0 +1,50 @@
+CRITICAL — OUTPUT FORMAT REQUIREMENT:
+Generate a wide website screen image.
+The website screen must fill the entire image from edge to edge.
+Show the website as a clean, close-up horizontal screen presentation.
+If a browser frame is shown, keep it minimal and integrated tightly with the screen.
+Do not show a desk, room, laptop body, hands, decorative background, or surrounding environment.
+Do not add gradient backdrops, sparkles, floating elements, or empty margins around the screen.
+The final result must look like a clean wide website screen prepared for a poster, not a floating mockup.
+
+Create a clear, high-quality, poster-ready image based on the following project context.
+
+Project name: [שם המיזם]
+Product type: Website
+Description: [תיאור קצר של האתר]
+Problem: [מה הבעיה]
+Audience: [קהל היעד]
+Solution: [מה הפתרון]
+Value: [מה הערך המרכזי]
+Requirements: [דרישות חשובות]
+How it works: [איך זה עובד]
+
+Output aspect ratio: 16:9 horizontal.
+Image role: This is website screen number [X] for the poster.
+
+Technical requirements:
+Create a clean, sharp, high-resolution website screen suitable for a professional poster.
+The screen must be clear, readable, and visually structured.
+Use a clean, modern, realistic website layout.
+Use only short readable interface text.
+Avoid long paragraphs, tiny unreadable labels, cluttered layouts, fake branding, real brand logos, and too many interface elements.
+The page should feel realistic, functional, and easy to understand.
+
+Shared visual settings for all images:
+Visual style: [סגנון חזותי]
+Realism level: Clean realistic website UI
+Preferred colors: [צבעים חשובים]
+Avoid: [מה חשוב שלא יופיע]
+
+Screen-specific details:
+Screen represented: [שם המסך]
+What the user sees: [מה המשתמשת רואה]
+What the user does: [מה המשתמשת עושה]
+Important components: [רכיבים חשובים]
+What should stand out: [מה יבלוט]
+What the viewer should immediately understand: [מה הצופה צריכה להבין מיד]
+User flow: Starts with [תחילת הפעולה] and ends with [סיום הפעולה]
+Primary focal point: [המוקד הראשי במסך]
+Secondary elements: [אלמנטים משניים בלבד]
+UI hierarchy: Make the primary action or key content area visually dominant and supporting information secondary.
+Functional clarity: The interface must look realistic, well-organized, and clearly usable.

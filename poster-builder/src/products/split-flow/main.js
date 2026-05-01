@@ -98,7 +98,8 @@ const PHYSICAL_MAIN_OPTIONS = {
   appearance: ['מונח על משטח', 'מוחזק ביד', 'בתצוגה ישירה', 'בזווית דינמית', 'אחר'],
   highlight: ['המנגנון המרכזי', 'פשטות השימוש', 'החדשנות', 'החומריות', 'הגודל היחסי', 'אחר'],
   material: ['פלסטיק', 'מתכת', 'עץ', 'בד', 'שילוב חומרים', 'אחר'],
-  background: ['רקע נקי ובהיר', 'רקע כיתה', 'רקע מעבדה', 'רקע ביתי', 'רקע טכנולוגי', 'אחר']
+  background: ['רקע נקי ובהיר', 'רקע כיתה', 'רקע מעבדה', 'רקע ביתי', 'רקע טכנולוגי', 'אחר'],
+  angle: ['חזית', 'זווית 3/4', 'מלמעלה', 'מקרוב', 'אחר']
 };
 
 const PHYSICAL_USAGE_OPTIONS = {
@@ -119,7 +120,7 @@ const state = {
   physicalPrompt: {
     main: {
       appearance: '', appearanceOther: '', highlight: [], highlightOther: '', material: '', materialOther: '',
-      background: '', backgroundOther: '', description: ''
+      background: '', backgroundOther: '', description: '', mainMessage: '', angle: '', angleOther: ''
     },
     usage: {
       user: '', userOther: '', peopleCount: '', peopleCountOther: '', location: '', locationOther: '', action: '',
@@ -449,6 +450,8 @@ function validatePhysicalPrompt() {
   if (main.highlight.length < 1 || main.highlight.length > 3) errors.mainHighlight = 'בחרי בין פריט אחד לשלושה.';
   if (!main.material) errors.mainMaterial = 'בחרי חומר או מרקם.';
   if (!main.background) errors.mainBackground = 'בחרי רקע רצוי.';
+  if (!main.mainMessage.trim()) errors.mainMessage = 'תארי את המסר המרכזי של המוצר.';
+  if (!main.angle) errors.mainAngle = 'בחרי זווית צילום מועדפת.';
   if (!main.description.trim()) errors.mainDescription = 'תארי מה צריך לראות בתמונה.';
 
   if (!usage.user) errors.usageUser = 'בחרי מי משתמשת במוצר.';
@@ -462,6 +465,7 @@ function validatePhysicalPrompt() {
   if (main.highlight.includes('אחר') && !main.highlightOther.trim()) errors.mainHighlightOther = 'נבחר "אחר" – השלימי פירוט קצר.';
   if (main.material === 'אחר' && !main.materialOther.trim()) errors.mainMaterialOther = 'נבחר "אחר" – השלימי פירוט קצר.';
   if (main.background === 'אחר' && !main.backgroundOther.trim()) errors.mainBackgroundOther = 'נבחר "אחר" – השלימי פירוט קצר.';
+  if (main.angle === 'אחר' && !main.angleOther.trim()) errors.mainAngleOther = 'נבחר "אחר" – השלימי פירוט קצר.';
   if (usage.user === 'אחר' && !usage.userOther.trim()) errors.usageUserOther = 'נבחר "אחר" – השלימי פירוט קצר.';
   if (usage.peopleCount === 'אחר' && !usage.peopleCountOther.trim()) errors.usageCountOther = 'נבחר "אחר" – השלימי פירוט קצר.';
   if (usage.location === 'אחר' && !usage.locationOther.trim()) errors.usageLocationOther = 'נבחר "אחר" – השלימי פירוט קצר.';
@@ -538,7 +542,7 @@ function validateStep(step) {
 const VALIDATION_ORDER = {
   1: RESEARCH_FIELDS.map(([key]) => key),
   2: productType === 'physical'
-    ? ['mainAppearance', 'mainAppearanceOther', 'mainHighlight', 'mainHighlightOther', 'mainMaterial', 'mainMaterialOther', 'mainBackground', 'mainBackgroundOther', 'mainDescription', 'usageUser', 'usageUserOther', 'usageCount', 'usageCountOther', 'usageLocation', 'usageLocationOther', 'usageAction', 'usagePropsOther', 'usageHighlight', 'usageHighlightOther', 'usageTakeaway', 'sharedStyle', 'sharedStyleOther', 'sharedRealism', 'sharedRealismOther', 'sharedAvoidOther']
+    ? ['mainAppearance', 'mainAppearanceOther', 'mainHighlight', 'mainHighlightOther', 'mainMaterial', 'mainMaterialOther', 'mainBackground', 'mainBackgroundOther', 'mainMessage', 'mainAngle', 'mainAngleOther', 'mainDescription', 'usageUser', 'usageUserOther', 'usageCount', 'usageCountOther', 'usageLocation', 'usageLocationOther', 'usageAction', 'usagePropsOther', 'usageHighlight', 'usageHighlightOther', 'usageTakeaway', 'sharedStyle', 'sharedStyleOther', 'sharedRealism', 'sharedRealismOther', 'sharedAvoidOther']
     : [
       ...state.prototypeScreens.flatMap((_, idx) => [`screenType${idx}`, `screenShortName${idx}`, `screenView${idx}`, `screenAction${idx}`, `screenComponents${idx}`, `screenComponentsOther${idx}`, `screenEmphasis${idx}`, `screenEmphasisOther${idx}`]),
       'flowStart', 'flowEnd', 'flowSummary', 'flowBranchToggle', 'flowBranchText', 'sharedStyle', 'sharedStyleOther', 'sharedRealism', 'sharedRealismOther', 'sharedAvoidOther'
@@ -626,10 +630,49 @@ function buildPhysicalPrompt(kind) {
     const highlightText = resolveOtherList(data.highlight, data.highlightOther).join(', ');
     const materialText = resolveOtherValue(data.material, data.materialOther);
     const backgroundText = resolveOtherValue(data.background, data.backgroundOther);
-    return `${basePromptContext(slot, 'מדובר בתמונה ראשית של המוצר.')}
-${sharedBlock}
+    const angleText = resolveOtherValue(data.angle, data.angleOther);
+    const shared = state.sharedVisualPrompt;
+    const styleText = resolveOtherList(shared.style, shared.styleOther).join(', ');
+    const realismText = resolveOtherValue(shared.realism, shared.realismOther);
+    const avoidText = resolveOtherList(shared.avoid, shared.avoidOther).join(', ');
+    return `Create a clear, high-quality, poster-ready image based on the following project context.
+
+Project name: ${state.research.projectName}
+Product type: Physical product
+Description: ${state.research.description}
+Problem: ${state.research.problem}
+Audience: ${state.research.audience}
+Solution: ${state.research.solution}
+Value: ${state.research.value}
+Requirements: ${state.research.requirements_1}; ${state.research.requirements_2}; ${state.research.requirements_3}
+How it works: ${state.research.howItWorks_1}; ${state.research.howItWorks_2}; ${state.research.howItWorks_3}
+
+Output aspect ratio: 1:1 square.
+Image role: This is the main product image for the poster.
+
+Technical requirements:
+Create a clean, sharp, high-resolution image suitable for a professional poster.
+The product must be the clear main focus of the image.
+The composition must work well in a square format.
+Show the product clearly and prominently, with clean spacing around it.
+Use a professional, polished, realistic presentation.
+Avoid clutter, unnecessary props, distorted shapes, distorted proportions, fake branding, real brand logos, long text, or busy backgrounds.
+
+Shared visual settings for all images:
+Visual style: ${styleText}
+Realism level: ${realismText}
+Preferred colors: ${shared.colors || 'match the project visual language'}
+Avoid: ${avoidText || 'none specified'}
+
 Image-specific details:
-המוצר מופיע כך: ${appearanceText}. חשוב שיבלוט: ${highlightText}. חומר/מרקם: ${materialText}. רקע: ${backgroundText}. צריך לראות בתמונה: ${data.description}.`;
+The product appears as: ${appearanceText}.
+Main visual message: At first glance, the viewer should immediately understand that ${data.mainMessage}.
+What should stand out most: ${highlightText}.
+Material / texture: ${materialText}.
+Preferred view angle: ${angleText}.
+Background: ${backgroundText}.
+The image must clearly show: ${data.description}.
+Functional clarity: The product should look realistic, usable, and clearly designed for its purpose.`;
   }
 
   const props = resolveOtherList(data.props, data.propsOther).join(', ');
@@ -799,6 +842,9 @@ function renderStep2Physical() {
       ${main.material === 'אחר' ? `<label class="${fieldClass('mainMaterialOther')}" data-error-key="mainMaterialOther"><span>אם נבחר \"אחר\" – פירוט</span><input data-physical="main" data-key="materialOther" maxlength="60" value="${escapeHtml(main.materialOther)}"/>${renderCounter(main.materialOther, 60)}${renderError('mainMaterialOther')}</label>` : ''}
       <label class="${fieldClass('mainBackground')}" data-error-key="mainBackground"><span>רקע רצוי <em>*</em></span><select data-physical="main" data-key="background"><option value="">בחרי</option>${PHYSICAL_MAIN_OPTIONS.background.map((o) => `<option ${main.background === o ? 'selected' : ''}>${o}</option>`).join('')}</select>${renderError('mainBackground')}</label>
       ${main.background === 'אחר' ? `<label class="${fieldClass('mainBackgroundOther')}" data-error-key="mainBackgroundOther"><span>אם נבחר \"אחר\" – פירוט</span><input data-physical="main" data-key="backgroundOther" maxlength="60" value="${escapeHtml(main.backgroundOther)}"/>${renderCounter(main.backgroundOther, 60)}${renderError('mainBackgroundOther')}</label>` : ''}
+      <label class="${fieldClass('mainMessage')}" data-error-key="mainMessage"><span>מה המסר המרכזי? <em>*</em></span><textarea data-physical="main" data-key="mainMessage" maxlength="160">${escapeHtml(main.mainMessage)}</textarea>${renderCounter(main.mainMessage, 160)}${renderError('mainMessage')}</label>
+      <label class="${fieldClass('mainAngle')}" data-error-key="mainAngle"><span>זווית צילום מועדפת <em>*</em></span><select data-physical="main" data-key="angle"><option value="">בחרי</option>${PHYSICAL_MAIN_OPTIONS.angle.map((o) => `<option ${main.angle === o ? 'selected' : ''}>${o}</option>`).join('')}</select>${renderError('mainAngle')}</label>
+      ${main.angle === 'אחר' ? `<label class="${fieldClass('mainAngleOther')}" data-error-key="mainAngleOther"><span>אם נבחר \"אחר\" – פירוט</span><input data-physical="main" data-key="angleOther" maxlength="60" value="${escapeHtml(main.angleOther)}"/>${renderCounter(main.angleOther, 60)}${renderError('mainAngleOther')}</label>` : ''}
       <label class="${fieldClass('mainDescription')}" data-error-key="mainDescription"><span>מה צריך לראות בתמונה? <em>*</em></span><textarea data-physical="main" data-key="description" maxlength="220">${escapeHtml(main.description)}</textarea>${renderCounter(main.description, 220)}${renderError('mainDescription')}</label>
     </article>
 
