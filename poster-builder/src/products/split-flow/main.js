@@ -599,26 +599,21 @@ Avoid: ${avoidText || 'none specified'}`;
 function getDigitalScreenOnlyRequirements(type) {
   if (type !== 'app' && type !== 'website') return '';
 
-  const ratioLine = type === 'app'
-    ? 'Create only the app screen UI itself, in a vertical 9:16 portrait ratio. The screen must fill the entire image edge-to-edge, with no surrounding space or frame.'
-    : 'Create only the website screen UI itself, in a wide 16:9 landscape ratio. The screen must fill the entire image edge-to-edge, with no surrounding space or frame.';
+  if (type === 'app') {
+    return `CRITICAL — OUTPUT FORMAT REQUIREMENT (highest priority, overrides everything else):
+This image must show ONLY the app screen user interface. The entire image frame must be filled 100% edge-to-edge with the app UI content.
+DO NOT include: phone device, phone frame, phone shell, phone silhouette, device mockup, rounded device corners from a phone, hands holding a phone, desk, table, room, wall, background color, colored backdrop, gradient background, sparkle, stars, decorative elements, or any object that is not part of the app screen itself.
+Think of this as a direct screenshot taken from inside the phone — you see only the screen pixels, nothing outside the screen.
+Image ratio: vertical 9:16 portrait (tall). Fill the full image with the UI.
+Style: clean flat UI mockup, simple layout, readable Hebrew text if any, light or white background within the UI, no photorealistic effects.`;
+  }
 
-  const deviceLine = type === 'app'
-    ? 'Do not include a phone frame, a device mockup, hands, desk, room, classroom, background scene, or any objects around the screen.'
-    : 'Do not include a laptop frame, browser chrome, desk, room, people, background scene, or any objects around the screen unless explicitly required.';
-
-  return [
-    ratioLine,
-    deviceLine,
-    'No outer scene.',
-    'Generate a lightweight web-optimized UI screen mockup.',
-    'Keep the design visually simple and clean.',
-    'Use a clean flat or semi-flat UI style.',
-    'Avoid photorealistic device rendering, heavy shadows, glow effects, complex textures, detailed decorative backgrounds, and unnecessary visual details.',
-    'The image should remain clear after resizing and should be suitable for upload into a poster builder.',
-    'Do not generate a heavy high-resolution render.',
-    'No watermark, no external logos.'
-  ].join(' ');
+  return `CRITICAL — OUTPUT FORMAT REQUIREMENT (highest priority, overrides everything else):
+This image must show ONLY the website screen user interface. The entire image frame must be filled 100% edge-to-edge with the website UI content.
+DO NOT include: laptop, computer, monitor frame, browser chrome, browser bar, desk, room, wall, background color behind the screen, decorative backdrop, gradient, people, hands, or any object that is not part of the website screen itself.
+Think of this as a direct screenshot taken from the browser — you see only the webpage pixels, nothing outside the browser viewport.
+Image ratio: wide 16:9 landscape (horizontal). Fill the full image with the UI.
+Style: clean flat web UI mockup, simple layout, readable text, light background within the UI, no photorealistic effects.`;
 }
 
 function buildPhysicalPrompt(kind) {
@@ -662,9 +657,10 @@ function buildDigitalPrompt(index) {
   const sharedBlock = sharedVisualPromptText();
   const screenOnlyRequirements = getDigitalScreenOnlyRequirements(productType);
 
-  return `${basePromptContext(slot, `מדובר בתמונת מסך מספר ${index + 1} לפוסטר.`)}
+  return `${screenOnlyRequirements}
+
+${basePromptContext(slot, `מדובר בתמונת מסך מספר ${index + 1} לפוסטר.`)}
 ${sharedBlock}
-${screenOnlyRequirements}
 Screen-specific details:
 המסך המיוצג: ${screenType || 'לא הוגדר'}. מה המשתמשת רואה במסך: ${screen?.view || ''}. מה המשתמשת עושה במסך: ${screen?.action || ''}. רכיבים חשובים: ${screenComponents}. מה חשוב שיבלוט: ${emphasisText}. ${flowLine}`;
 }
