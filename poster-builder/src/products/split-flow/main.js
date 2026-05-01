@@ -508,11 +508,17 @@ function validatePrototype() {
   return errors;
 }
 
+function getRequiredImageSlotKeys() {
+  return ['visual_1', 'visual_2', 'visual_3'];
+}
+
 function validateImagesStep() {
   const errors = {};
-  const requiredSlots = getSlotDefs().map((slot) => slot.key);
+  const requiredSlots = getRequiredImageSlotKeys();
+  const hasUploading = requiredSlots.some((slotKey) => state.slotUploadStatus[slotKey] === 'uploading');
+  if (hasUploading) errors.slotUploads = 'יש תמונה שעדיין עולה. חכי רגע ונסי שוב.';
   const missingSlots = requiredSlots.filter((slotKey) => !state.slotImages[slotKey]);
-  if (missingSlots.length) errors.slotUploads = 'כדי להמשיך, צריך להעלות תמונה לכל אחד משלושת המסכים.';
+  if (!errors.slotUploads && missingSlots.length) errors.slotUploads = 'כדי להמשיך, צריך להעלות תמונה לכל אחד משלושת המסכים.';
   if (productType !== 'physical') {
     state.images.forEach((image, idx) => {
       image.screenRef = `${idx + 1}`;
@@ -1308,7 +1314,7 @@ function wireEvents() {
   root.querySelector('[data-nav="next"]').addEventListener('click', () => {
     if (state.step < MAX_STEP) {
       if (state.step === 3 && productType !== 'physical') {
-        const requiredSlots = ['visual_1', 'visual_2', 'visual_3'];
+        const requiredSlots = getRequiredImageSlotKeys();
         const hasUploading = requiredSlots.some((slotKey) => state.slotUploadStatus[slotKey] === 'uploading');
         if (hasUploading) {
           state.errors.slotUploads = 'יש תמונה שעדיין עולה. חכי רגע ונסי שוב.';
@@ -1348,7 +1354,13 @@ function wireEvents() {
       state.errors = {};
       state.visibleErrors = [];
       state.navErrorMessage = '';
-      persistSplitFlowState();
+      try {
+        persistSplitFlowState();
+      } catch (err) {
+        state.navErrorMessage = 'לא הצלחנו לשמור את ההתקדמות. נסי שוב.';
+        render();
+        return;
+      }
       state.step = Math.min(MAX_STEP, state.step + 1);
       render();
       window.scrollTo({ top: 0, behavior: 'smooth' });
