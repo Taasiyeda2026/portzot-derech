@@ -15,20 +15,20 @@ function normalize(r) {
   return {
     ...r,
     displayName: r.displayName || r.name || 'משתתפת',
-    mainDomain: pick(r.mainDomain, r.domain),
-    problemType: pick(r.problemType, r.lifeInterest),
-    infoProcessingStyle: pick(r.infoProcessingStyle, r.communicationStyle),
-    planningStyle: pick(r.planningStyle, r.workStyle),
-    choiceDriver: pick(r.choiceDriver, r.motivationSource),
-    naturalTeamContribution: pick(r.naturalTeamContribution, r.teamRole),
-    problemSolvingStyle: pick(r.problemSolvingStyle, r.pressureResponse),
-    visualCommunicationStyle: pick(r.visualCommunicationStyle, r.communicationStyle),
-    groupBehaviorPattern: pick(r.groupBehaviorPattern, r.teamStyle),
-    conflictStyle: pick(r.conflictStyle, r.conflictStyle),
-    groupNeed: pick(r.groupNeed, r.importanceLevel),
-    groupComfortLevel: pick(r.groupComfortLevel, ''),
-    neededTeamSupport: pick(r.neededTeamSupport, ''),
-    startStyle: pick(r.startStyle, r.workPace)
+    mainDomain: pick(r.mainDomainCode, pick(r.mainDomain, r.domain)),
+    problemType: pick(r.problemTypeCode, pick(r.problemType, r.lifeInterest)),
+    infoProcessingStyle: pick(r.infoProcessingStyleCode, pick(r.infoProcessingStyle, r.communicationStyle)),
+    planningStyle: pick(r.planningStyleCode, pick(r.planningStyle, r.workStyle)),
+    choiceDriver: pick(r.choiceDriverCode, pick(r.choiceDriver, r.motivationSource)),
+    naturalTeamContribution: pick(r.naturalTeamContributionCode, pick(r.naturalTeamContribution, r.teamRole)),
+    problemSolvingStyle: pick(r.problemSolvingStyleCode, pick(r.problemSolvingStyle, r.pressureResponse)),
+    visualCommunicationStyle: pick(r.visualCommunicationStyleCode, pick(r.visualCommunicationStyle, r.communicationStyle)),
+    groupBehaviorPattern: pick(r.groupBehaviorPatternCode, pick(r.groupBehaviorPattern, r.teamStyle)),
+    conflictStyle: pick(r.conflictStyleCode, pick(r.conflictStyle, r.conflictStyle)),
+    groupNeed: pick(r.groupNeedCode, pick(r.groupNeed, r.importanceLevel)),
+    groupComfortLevel: pick(r.groupComfortLevelCode, pick(r.groupComfortLevel, '')),
+    neededTeamSupport: pick(r.neededTeamSupportCode, pick(r.neededTeamSupport, '')),
+    startStyle: pick(r.startStyleCode, pick(r.startStyle, r.workPace))
   };
 }
 

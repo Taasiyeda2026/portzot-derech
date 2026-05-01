@@ -1,16 +1,174 @@
-<!DOCTYPE html><html lang="he" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>שאלון קבוצות עבודה - פורצות דרך</title></head><body>
-<div><h1>🌟 שאלון לקבוצות עבודה 🌟</h1><p>לפני שמתחילות לעבוד בקבוצות, נכיר קצת את הדרך שבה את חושבת, בוחרת, מתארגנת ועובדת עם אחרות.<br>זה שאלון קצר וקליל — אין בו תשובות נכונות או לא נכונות. בחרי את מה שהכי דומה לך ביומיום.<br>התשובות יעזרו ליצור קבוצות עבודה נעימות, מאוזנות ומתאימות יותר לתהליך.</p></div>
-<form id="q"></form><button id="submit">סיימתי - מוכנה לקבוצה</button>
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>שאלון היכרות לקבוצות - פורצות דרך</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: "Segoe UI", Tahoma, sans-serif; background: linear-gradient(135deg, #1f1147, #4a2070 40%, #d73990 100%); color: #fff; min-height: 100vh; display: grid; place-items: center; padding: 20px; }
+    .card { width: min(760px, 100%); background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); border-radius: 22px; padding: 24px; backdrop-filter: blur(8px); box-shadow: 0 20px 60px rgba(14,7,37,.35); }
+    .top { margin-bottom: 16px; }
+    .title { font-size: 1.8rem; margin: 0 0 8px; }
+    .subtitle { margin: 0; opacity: .95; }
+    .meta { display:flex; justify-content:space-between; margin: 18px 0 10px; font-weight: 600; }
+    .progress-track { background: rgba(255,255,255,.2); height: 10px; border-radius: 999px; overflow: hidden; }
+    .progress-fill { height:100%; width:0; background: linear-gradient(90deg,#59d5ff,#ff7dc4); transition: width .25s ease; }
+    .question-card { background: rgba(0,0,0,.22); border-radius: 16px; padding: 20px; margin-top: 18px; }
+    .question-text { font-size: 1.2rem; margin: 0 0 14px; }
+    #textAnswer { width: 100%; padding: 14px; border: 0; border-radius: 12px; font-size: 1rem; }
+    .options { display: grid; gap: 10px; }
+    .option-btn { width:100%; text-align:right; background: rgba(255,255,255,.12); color:#fff; border:1px solid rgba(255,255,255,.3); border-radius:12px; padding:12px 14px; cursor:pointer; font-size:1rem; }
+    .option-btn:hover { background: rgba(255,255,255,.22); }
+    .option-btn.active { background: linear-gradient(135deg,#ff4aa2,#7b6dff); border-color: transparent; }
+    .hint { min-height: 22px; color: #ffd5ef; margin-top: 10px; font-size: .95rem; }
+    .actions { margin-top: 18px; display:flex; gap:10px; }
+    .btn { border:none; border-radius:12px; padding:12px 16px; font-size:1rem; cursor:pointer; }
+    .btn-secondary { background: rgba(255,255,255,.18); color:#fff; }
+    .btn-primary { background: linear-gradient(135deg,#4ed7ff,#ff6eb8); color:#1e1240; font-weight:700; flex:1; }
+    .saving { text-align:center; padding: 26px 8px; font-size:1.1rem; display:none; }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="top">
+      <h1 class="title">✨ משחק היכרות קצר לקבוצות</h1>
+      <p class="subtitle">כמה שאלות קטנות ואנחנו מסודרות. אין נכון/לא נכון — רק מה שהכי את 💜</p>
+    </div>
+
+    <div class="meta"><span id="stepLabel">שאלה 1 מתוך 15</span><span id="progressText">7%</span></div>
+    <div class="progress-track"><div id="progressFill" class="progress-fill"></div></div>
+
+    <section class="question-card" id="questionCard">
+      <h2 class="question-text" id="questionText"></h2>
+      <input id="textAnswer" type="text" autocomplete="name" placeholder="כתבי כאן את השם שלך" style="display:none;">
+      <div class="options" id="options"></div>
+      <div class="hint" id="hint"></div>
+      <div class="actions">
+        <button class="btn btn-secondary" id="backBtn" type="button">חזרה</button>
+        <button class="btn btn-primary" id="nextBtn" type="button">הבא</button>
+      </div>
+    </section>
+
+    <div class="saving" id="savingMessage">התשובות נשמרו, עוברת למסך ההמתנה...</div>
+  </main>
+
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getFirestore, doc, setDoc, updateDoc, increment } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
 const cfg={apiKey:"AIzaSyCFSq5b-HgkTxFNhBJIBdOe2ian5TZvMPE",authDomain:"portzot-derech.firebaseapp.com",projectId:"portzot-derech",storageBucket:"portzot-derech.firebasestorage.app",messagingSenderId:"236417614890",appId:"1:236417614890:web:587b0eb3c5eedfa352af53"};
-const db=getFirestore(initializeApp(cfg)); const sessionId=new URLSearchParams(location.search).get('session'); if(!sessionId) location.href='pairing.html';
-const maps={
-infoProcessingStyle:{'קוראת הכול מהתחלה כדי להבין':'thorough_reader','שואלת ישר “אז מה הוחלט?”':'decision_focused','מחפשת את ההודעה הכי חשובה':'key_info_finder','מחכה שמישהי תסכם':'summary_dependent','שולחת הודעה שמסדרת את הדברים':'organizer','מתעלמת עד שזה באמת חשוב':'selective_attention'},
-planningStyle:{'הכול כבר מוכן מראש':'planner','אני מתארגנת מהר ומסתדרת תוך כדי':'quick_executor','אני מתחילה ואז נזכרת בעוד דברים':'improviser','אני צריכה רשימה כדי לא לשכוח':'checklist_oriented','אני בודקת עם חברה מה צריך להביא':'collaborative_planner','אני זורמת, העיקר לצאת בזמן':'flexible'}
+const db=getFirestore(initializeApp(cfg));
+const sessionId=new URLSearchParams(location.search).get('session');
+if(!sessionId) location.href='pairing.html';
+
+const maps = {
+  mainDomain:{'חיים דיגיטליים וטכנולוגיה ביום־יום':'digital_life','למידה, לחץ והתארגנות':'learning_stress_organization','חיים חברתיים ותקשורת בין אנשים':'social_communication','סביבה, טבע ובעלי חיים':'environment_animals','בחירות יומיומיות והרגלים':'daily_choices_habits','פנאי, יצירה ותחביבים':'leisure_creativity_hobbies','גוף, בריאות ותחושת ביטחון':'health_wellbeing','בית, משפחה וסביבה קרובה':'home_family','מרחב, תנועה ובטיחות':'space_mobility_safety','מבט קדימה ורעיונות לעתיד':'future_ideas'},
+  problemType:{'בעיה שמפריעה ביום־יום':'daily_life_issue','בעיה חברתית בין אנשים':'social_issue','בעיה שקשורה ללמידה או לבית הספר':'learning_issue','בעיה שקשורה לבטיחות':'safety_issue','בעיה שקשורה לסביבה או לבעלי חיים':'environment_issue','בעיה שקשורה לנוחות, זמן או סדר':'efficiency_issue','בעיה שקשורה לתקשורת או חוסר הבנה':'communication_issue','בעיה שקשורה לביטחון עצמי או תחושת מסוגלות':'self_efficacy_issue'},
+  infoProcessingStyle:{'קוראת הכול מהתחלה כדי להבין':'thorough_reader','שואלת ישר “אז מה הוחלט?”':'decision_focused','מחפשת את ההודעה הכי חשובה':'key_info_finder','מחכה שמישהי תסכם':'summary_dependent','שולחת הודעה שמסדרת את הדברים':'organizer','מתעלמת עד שזה באמת חשוב':'selective_attention'},
+  planningStyle:{'הכול כבר מוכן מראש':'planner','אני מתארגנת מהר ומסתדרת תוך כדי':'quick_executor','אני מתחילה ואז נזכרת בעוד דברים':'improviser','אני צריכה רשימה כדי לא לשכוח':'checklist_oriented','אני בודקת עם חברה מה צריך להביא':'collaborative_planner','אני זורמת, העיקר לצאת בזמן':'flexible'},
+  choiceDriver:{'המלצה של חברה':'social_influence','הטריילר או איך שזה נראה':'visual_thinker','הסיפור והרעיון':'concept_oriented','הדמויות':'empathy_user_focus','מה שכולם מדברים עליו':'trend_sensitive','אני בודקת ביקורות לפני':'researcher'},
+  naturalTeamContribution:{'להעלות רעיונות לקונספט':'ideas','לארגן מי מביאה מה':'organization','לעצב הזמנה או תמונה':'design','לדאוג שלא שכחו אף אחת':'empathy_inclusion','להכין פעילות או משחק':'experience_builder','להציג, לברך או להוביל את הרגע':'presentation','להיות זו שעוזרת מאחורי הקלעים':'support'},
+  problemSolvingStyle:{'מנסה לבד עד שזה מסתדר':'persistence_trial_error','מחפשת בגוגל או בטיקטוק פתרון':'independent_research','שואלת מישהי שמבינה':'asks_for_help','סוגרת ופותחת מחדש':'simple_reset','מתעצבנת ועוזבת את זה רגע':'needs_pause','בודקת בהגדרות מה השתנה':'technical_checking'},
+  visualCommunicationStyle:{'שזה ייראה יפה':'aesthetics','שזה יעביר בדיוק את התחושה':'emotional_message','שזה יהיה מצחיק או מקורי':'originality','שזה יהיה ברור ולא עמוס':'clarity','שזה יתאים למה שאני רוצה להגיד':'message_fit','אני לא משקיעה בזה יותר מדי':'practical_minimal'},
+  groupBehaviorPattern:{'אני מנסה להבין מה כולן רוצות לעשות':'listener','אני מציעה רעיון להתחלה':'initiator','אני שואלת מי עושה מה':'task_organizer','אני מחכה לראות איפה צריך אותי':'adaptive','אני לוקחת חלק אחד ועושה אותו טוב':'focused_executor','אני עוזרת לחבר בין כולן':'connector'},
+  conflictStyle:{'לדבר ולמצוא פשרה':'compromise','להצביע ולקבל החלטה':'vote_decision','לבדוק מה הכי מתאים למטרה':'goal_oriented','לתת לכל אחת להסביר את עצמה':'inclusive_discussion','לבקש עזרה מהמדריכה':'facilitator_help','לקחת רגע לחשוב ואז לחזור לשיחה':'reflection_pause'},
+  groupNeed:{'שיש מקום לרעיונות שלי':'voice_space','שיש סדר ובהירות':'clarity_structure','שאפשר לשאול בלי להתבייש':'psychological_safety','שכולן משתתפות':'participation','שמתקדמים ולא נתקעים':'progress','שיש אווירה נעימה':'positive_atmosphere','שאני יודעת מה התפקיד שלי':'role_clarity'},
+  groupComfortLevel:{'ממש נוח לי':'high_comfort','די נוח לי':'medium_high_comfort','לוקח לי רגע, אבל אני משתלבת':'gradual_comfort','אני צריכה שמישהי תעזור לי להיכנס':'needs_inclusion_support','תלוי בקבוצה':'context_dependent'},
+  neededTeamSupport:{'מישהי שמארגנת ומסדרת':'needs_organization','מישהי שמעלה רעיונות':'needs_ideas','מישהי שמרגיעה כשיש לחץ':'needs_calm','מישהי שמובילה החלטות':'needs_decision_leader','מישהי שטובה בהצגה':'needs_presentation','מישהי שטובה בביצוע ובנייה':'needs_execution','מישהי שמקשיבה ועוזרת לכולן להשתלב':'needs_connector'},
+  startStyle:{'להתחיל מהר ולשפר תוך כדי':'prototype_fast','להבין קודם מה המטרה':'goal_first','לראות דוגמה ואז לנסות':'example_based','לדבר עם הקבוצה ולבנות כיוון':'collaborative_direction','לחלק משימות ולהתחיל לעבוד':'task_execution','לחפש רעיונות לפני שמחליטים':'inspiration_research'}
 };
-const questions=[['displayName','איך תרצי שנכתוב את השם שלך?',[]],['mainDomain','איזה תחום הכי מסקרן אותך לעבוד עליו?',['חיים דיגיטליים וטכנולוגיה ביום־יום','למידה, לחץ והתארגנות','חיים חברתיים ותקשורת בין אנשים','סביבה, טבע ובעלי חיים','בחירות יומיומיות והרגלים','פנאי, יצירה ותחביבים','גוף, בריאות ותחושת ביטחון','בית, משפחה וסביבה קרובה','מרחב, תנועה ובטיחות','מבט קדימה ורעיונות לעתיד']],['problemType','איזה סוג של בעיה הכי מעניין אותך לחקור?',['בעיה שמפריעה ביום־יום','בעיה חברתית בין אנשים','בעיה שקשורה ללמידה או לבית הספר','בעיה שקשורה לבטיחות','בעיה שקשורה לסביבה או לבעלי חיים','בעיה שקשורה לנוחות, זמן או סדר','בעיה שקשורה לתקשורת או חוסר הבנה','בעיה שקשורה לביטחון עצמי או תחושת מסוגלות']],['infoProcessingStyle','כשיש בקבוצת וואטסאפ מלא הודעות ואת לא מבינה מה נסגר, מה את עושה?',['קוראת הכול מהתחלה כדי להבין','שואלת ישר “אז מה הוחלט?”','מחפשת את ההודעה הכי חשובה','מחכה שמישהי תסכם','שולחת הודעה שמסדרת את הדברים','מתעלמת עד שזה באמת חשוב']],['planningStyle','את צריכה לצאת מהבית עוד 20 דקות. מה הכי דומה לך?',['הכול כבר מוכן מראש','אני מתארגנת מהר ומסתדרת תוך כדי','אני מתחילה ואז נזכרת בעוד דברים','אני צריכה רשימה כדי לא לשכוח','אני בודקת עם חברה מה צריך להביא','אני זורמת, העיקר לצאת בזמן']],['choiceDriver','כשאת בוחרת סדרה או סרט לראות, מה הכי משפיע עלייך?',['המלצה של חברה','הטריילר או איך שזה נראה','הסיפור והרעיון','הדמויות','מה שכולם מדברים עליו','אני בודקת ביקורות לפני']],['naturalTeamContribution','כשמתכננים יום הולדת לחברה, איזה חלק הכי מתאים לך לקחת?',['להעלות רעיונות לקונספט','לארגן מי מביאה מה','לעצב הזמנה או תמונה','לדאוג שלא שכחו אף אחת','להכין פעילות או משחק','להציג, לברך או להוביל את הרגע','להיות זו שעוזרת מאחורי הקלעים']],['problemSolvingStyle','אם משהו בטלפון לא עובד, מה את עושה בדרך כלל?',['מנסה לבד עד שזה מסתדר','מחפשת בגוגל או בטיקטוק פתרון','שואלת מישהי שמבינה','סוגרת ופותחת מחדש','מתעצבנת ועוזבת את זה רגע','בודקת בהגדרות מה השתנה']],['visualCommunicationStyle','כשאת מעלה סטורי או תמונה, מה הכי חשוב לך?',['שזה ייראה יפה','שזה יעביר בדיוק את התחושה','שזה יהיה מצחיק או מקורי','שזה יהיה ברור ולא עמוס','שזה יתאים למה שאני רוצה להגיד','אני לא משקיעה בזה יותר מדי']],['groupBehaviorPattern','כשיש עבודה בקבוצה, מה בדרך כלל קורה לך?',['אני מנסה להבין מה כולן רוצות לעשות','אני מציעה רעיון להתחלה','אני שואלת מי עושה מה','אני מחכה לראות איפה צריך אותי','אני לוקחת חלק אחד ועושה אותו טוב','אני עוזרת לחבר בין כולן']],['conflictStyle','כשיש דעות שונות בקבוצה, מה בדרך כלל עוזר לך?',['לדבר ולמצוא פשרה','להצביע ולקבל החלטה','לבדוק מה הכי מתאים למטרה','לתת לכל אחת להסביר את עצמה','לבקש עזרה מהמדריכה','לקחת רגע לחשוב ואז לחזור לשיחה']],['groupNeed','מה הכי חשוב לך להרגיש בקבוצה?',['שיש מקום לרעיונות שלי','שיש סדר ובהירות','שאפשר לשאול בלי להתבייש','שכולן משתתפות','שמתקדמים ולא נתקעים','שיש אווירה נעימה','שאני יודעת מה התפקיד שלי']],['groupComfortLevel','עד כמה את מרגישה נוח להשתלב בקבוצה חדשה?',['ממש נוח לי','די נוח לי','לוקח לי רגע, אבל אני משתלבת','אני צריכה שמישהי תעזור לי להיכנס','תלוי בקבוצה']],['neededTeamSupport','איזו חברה הכי עוזרת לך לעבוד טוב?',['מישהי שמארגנת ומסדרת','מישהי שמעלה רעיונות','מישהי שמרגיעה כשיש לחץ','מישהי שמובילה החלטות','מישהי שטובה בהצגה','מישהי שטובה בביצוע ובנייה','מישהי שמקשיבה ועוזרת לכולן להשתלב']],['startStyle','מה הכי מתאים לך כשצריך להתחיל משהו חדש?',['להתחיל מהר ולשפר תוך כדי','להבין קודם מה המטרה','לראות דוגמה ואז לנסות','לדבר עם הקבוצה ולבנות כיוון','לחלק משימות ולהתחיל לעבוד','לחפש רעיונות לפני שמחליטים']]];
-const f=document.getElementById('q');questions.forEach(([k,t,opts])=>{const d=document.createElement('div');d.innerHTML=`<label>${t}</label>`+(opts.length?`<select name="${k}" required><option value="">בחרי</option>${opts.map(o=>`<option>${o}</option>`).join('')}</select>`:`<input name="${k}" required>`);f.appendChild(d);});
-document.getElementById('submit').onclick=async()=>{const form=new FormData(f);const p={id:crypto.randomUUID(),sessionId,submittedAt:new Date().toISOString()};for(const [k] of questions){const v=form.get(k);if(!v) return alert('נא למלא הכול');p[k]=v;p[`${k}Code`]=maps[k]?.[v]||v;}await setDoc(doc(db,'responses',p.id),p);await updateDoc(doc(db,'sessions',sessionId),{completedCount:increment(1)});localStorage.setItem('displayName',p.displayName);localStorage.setItem('responseId',p.id);location.href=`waiting.html?session=${sessionId}`;}
-</script></body></html>
+
+const questions = [
+  ['displayName','איך תרצי שנכתוב את השם שלך?',[]],
+  ['mainDomain','איזה תחום הכי מסקרן אותך לעבוד עליו?',["חיים דיגיטליים וטכנולוגיה ביום־יום","למידה, לחץ והתארגנות","חיים חברתיים ותקשורת בין אנשים","סביבה, טבע ובעלי חיים","בחירות יומיומיות והרגלים","פנאי, יצירה ותחביבים","גוף, בריאות ותחושת ביטחון","בית, משפחה וסביבה קרובה","מרחב, תנועה ובטיחות","מבט קדימה ורעיונות לעתיד"]],
+  ['problemType','איזה סוג של בעיה הכי מעניין אותך לחקור?',["בעיה שמפריעה ביום־יום","בעיה חברתית בין אנשים","בעיה שקשורה ללמידה או לבית הספר","בעיה שקשורה לבטיחות","בעיה שקשורה לסביבה או לבעלי חיים","בעיה שקשורה לנוחות, זמן או סדר","בעיה שקשורה לתקשורת או חוסר הבנה","בעיה שקשורה לביטחון עצמי או תחושת מסוגלות"]],
+  ['infoProcessingStyle','כשיש בקבוצת וואטסאפ מלא הודעות ואת לא מבינה מה נסגר, מה את עושה?',["קוראת הכול מהתחלה כדי להבין","שואלת ישר “אז מה הוחלט?”","מחפשת את ההודעה הכי חשובה","מחכה שמישהי תסכם","שולחת הודעה שמסדרת את הדברים","מתעלמת עד שזה באמת חשוב"]],
+  ['planningStyle','את צריכה לצאת מהבית עוד 20 דקות. מה הכי דומה לך?',["הכול כבר מוכן מראש","אני מתארגנת מהר ומסתדרת תוך כדי","אני מתחילה ואז נזכרת בעוד דברים","אני צריכה רשימה כדי לא לשכוח","אני בודקת עם חברה מה צריך להביא","אני זורמת, העיקר לצאת בזמן"]],
+  ['choiceDriver','כשאת בוחרת סדרה או סרט לראות, מה הכי משפיע עלייך?',["המלצה של חברה","הטריילר או איך שזה נראה","הסיפור והרעיון","הדמויות","מה שכולם מדברים עליו","אני בודקת ביקורות לפני"]],
+  ['naturalTeamContribution','כשמתכננים יום הולדת לחברה, איזה חלק הכי מתאים לך לקחת?',["להעלות רעיונות לקונספט","לארגן מי מביאה מה","לעצב הזמנה או תמונה","לדאוג שלא שכחו אף אחת","להכין פעילות או משחק","להציג, לברך או להוביל את הרגע","להיות זו שעוזרת מאחורי הקלעים"]],
+  ['problemSolvingStyle','אם משהו בטלפון לא עובד, מה את עושה בדרך כלל?',["מנסה לבד עד שזה מסתדר","מחפשת בגוגל או בטיקטוק פתרון","שואלת מישהי שמבינה","סוגרת ופותחת מחדש","מתעצבנת ועוזבת את זה רגע","בודקת בהגדרות מה השתנה"]],
+  ['visualCommunicationStyle','כשאת מעלה סטורי או תמונה, מה הכי חשוב לך?',["שזה ייראה יפה","שזה יעביר בדיוק את התחושה","שזה יהיה מצחיק או מקורי","שזה יהיה ברור ולא עמוס","שזה יתאים למה שאני רוצה להגיד","אני לא משקיעה בזה יותר מדי"]],
+  ['groupBehaviorPattern','כשיש עבודה בקבוצה, מה בדרך כלל קורה לך?',["אני מנסה להבין מה כולן רוצות לעשות","אני מציעה רעיון להתחלה","אני שואלת מי עושה מה","אני מחכה לראות איפה צריך אותי","אני לוקחת חלק אחד ועושה אותו טוב","אני עוזרת לחבר בין כולן"]],
+  ['conflictStyle','כשיש דעות שונות בקבוצה, מה בדרך כלל עוזר לך?',["לדבר ולמצוא פשרה","להצביע ולקבל החלטה","לבדוק מה הכי מתאים למטרה","לתת לכל אחת להסביר את עצמה","לבקש עזרה מהמדריכה","לקחת רגע לחשוב ואז לחזור לשיחה"]],
+  ['groupNeed','מה הכי חשוב לך להרגיש בקבוצה?',["שיש מקום לרעיונות שלי","שיש סדר ובהירות","שאפשר לשאול בלי להתבייש","שכולן משתתפות","שמתקדמים ולא נתקעים","שיש אווירה נעימה","שאני יודעת מה התפקיד שלי"]],
+  ['groupComfortLevel','עד כמה את מרגישה נוח להשתלב בקבוצה חדשה?',["ממש נוח לי","די נוח לי","לוקח לי רגע, אבל אני משתלבת","אני צריכה שמישהי תעזור לי להיכנס","תלוי בקבוצה"]],
+  ['neededTeamSupport','איזו חברה הכי עוזרת לך לעבוד טוב?',["מישהי שמארגנת ומסדרת","מישהי שמעלה רעיונות","מישהי שמרגיעה כשיש לחץ","מישהי שמובילה החלטות","מישהי שטובה בהצגה","מישהי שטובה בביצוע ובנייה","מישהי שמקשיבה ועוזרת לכולן להשתלב"]],
+  ['startStyle','מה הכי מתאים לך כשצריך להתחיל משהו חדש?',["להתחיל מהר ולשפר תוך כדי","להבין קודם מה המטרה","לראות דוגמה ואז לנסות","לדבר עם הקבוצה ולבנות כיוון","לחלק משימות ולהתחיל לעבוד","לחפש רעיונות לפני שמחליטים"]]
+];
+
+const answers = {};
+let step = 0;
+const questionText = document.getElementById('questionText');
+const optionsEl = document.getElementById('options');
+const textAnswer = document.getElementById('textAnswer');
+const hint = document.getElementById('hint');
+const stepLabel = document.getElementById('stepLabel');
+const progressText = document.getElementById('progressText');
+const progressFill = document.getElementById('progressFill');
+const backBtn = document.getElementById('backBtn');
+const nextBtn = document.getElementById('nextBtn');
+
+function renderQuestion() {
+  const [key, title, opts] = questions[step];
+  questionText.textContent = title;
+  stepLabel.textContent = `שאלה ${step + 1} מתוך ${questions.length}`;
+  const progress = Math.round(((step + 1) / questions.length) * 100);
+  progressText.textContent = `${progress}%`;
+  progressFill.style.width = `${progress}%`;
+  hint.textContent = '';
+  backBtn.disabled = step === 0;
+  nextBtn.textContent = step === questions.length - 1 ? 'סיימתי — מוכנה לקבוצה' : 'הבא';
+
+  if (!opts.length) {
+    textAnswer.style.display = 'block';
+    optionsEl.style.display = 'none';
+    textAnswer.value = answers[key] || '';
+    textAnswer.focus();
+    return;
+  }
+
+  textAnswer.style.display = 'none';
+  optionsEl.style.display = 'grid';
+  optionsEl.innerHTML = opts.map(opt => `<button type="button" class="option-btn ${answers[key]===opt?'active':''}" data-value="${opt}">${opt}</button>`).join('');
+}
+
+optionsEl.addEventListener('click', (e) => {
+  const btn = e.target.closest('.option-btn');
+  if (!btn) return;
+  answers[questions[step][0]] = btn.dataset.value;
+  renderQuestion();
+});
+
+backBtn.addEventListener('click', () => {
+  if (step > 0) { step--; renderQuestion(); }
+});
+
+nextBtn.addEventListener('click', async () => {
+  const [key] = questions[step];
+  if (key === 'displayName') {
+    const v = textAnswer.value.trim();
+    if (!v) { hint.textContent = 'בחרי תשובה כדי להמשיך'; return; }
+    answers[key] = v;
+  }
+  if (!answers[key]) { hint.textContent = 'בחרי תשובה כדי להמשיך'; return; }
+  if (step < questions.length - 1) { step++; renderQuestion(); return; }
+
+  const p={id:crypto.randomUUID(),sessionId,submittedAt:new Date().toISOString()};
+  for (const [field] of questions) {
+    p[field] = answers[field];
+    if (field !== 'displayName') p[`${field}Code`] = maps[field]?.[answers[field]] || answers[field];
+  }
+  document.getElementById('questionCard').style.display='none';
+  document.getElementById('savingMessage').style.display='block';
+  await setDoc(doc(db,'responses',p.id),p);
+  await updateDoc(doc(db,'sessions',sessionId),{completedCount:increment(1)});
+  localStorage.setItem('displayName',p.displayName);
+  localStorage.setItem('responseId',p.id);
+  setTimeout(() => { location.href=`waiting.html?session=${sessionId}`; }, 700);
+});
+
+renderQuestion();
+</script>
+</body>
+</html>
