@@ -789,17 +789,13 @@ function renderStep2() {
     const usagePrompt = buildPhysicalPrompt('usage');
     return `${renderStep2Physical()}
       <article class="split-card">
-        <h3>פרומפט לתמונה ראשית</h3>
-        <pre class="split-prompt" id="prompt-main">${escapeHtml(mainPrompt)}</pre>
-        <button type="button" class="split-btn ghost" data-copy-physical="main">העתיקי פרומפט</button>
-      </article>
-      <article class="split-card">
-        <h3>פרומפט לתמונת שימוש</h3>
-        <pre class="split-prompt" id="prompt-usage">${escapeHtml(usagePrompt)}</pre>
-        <button type="button" class="split-btn ghost" data-copy-physical="usage">העתיקי פרומפט</button>
-      </article>
-      <article class="split-card">
-        <button type="button" class="split-btn primary" data-copy-physical="all">העתיקי את שני הפרומפטים</button>
+        <h3>פרומפטים לתמונות</h3>
+        <p style="margin:0;font-size:14px;color:#4b5563">העתיקי כל פרומפט והדביקי אותו בכלי AI ליצירת תמונות.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button type="button" class="split-btn ghost" data-copy-physical="main" style="font-size:14px">1. העתיקי פרומפט — תמונה ראשית</button>
+          <button type="button" class="split-btn ghost" data-copy-physical="usage" style="font-size:14px">2. העתיקי פרומפט — תמונת שימוש</button>
+          <button type="button" class="split-btn primary" data-copy-physical="all" style="font-size:14px">העתיקי את שניהם</button>
+        </div>
       </article>
       ${renderSlotUploads()}`;
   }
@@ -820,15 +816,18 @@ function renderStep2() {
 }
 
 function renderStep3() {
-  const cards = state.images.map((image, index) => `
-    <article class="split-card">
-      <h3>תמונה ${index + 1} (מסך ${index + 1})</h3>
-      <pre class="split-prompt" id="prompt-${index}">${escapeHtml(buildDigitalPrompt(index))}</pre>
-      <button type="button" class="split-btn ghost" data-copy-image="${index}">העתיקי פרומפט</button>
-    </article>
-  `).join('');
+  const buttons = state.images.map((_, index) =>
+    `<button type="button" class="split-btn ghost" data-copy-image="${index}" style="font-size:14px">${index + 1}. העתיקי פרומפט — מסך ${index + 1}</button>`
+  ).join('');
 
-  return `${cards}<article class="split-card"><button type="button" class="split-btn primary" data-copy-all-images>העתיקי את כל הפרומפטים</button></article>${renderSlotUploads()}`;
+  return `<article class="split-card">
+    <h3>פרומפטים לתמונות</h3>
+    <p style="margin:0;font-size:14px;color:#4b5563">העתיקי כל פרומפט והדביקי אותו בכלי AI ליצירת תמונות.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      ${buttons}
+      <button type="button" class="split-btn primary" data-copy-all-images style="font-size:14px">העתיקי את כולם</button>
+    </div>
+  </article>${renderSlotUploads()}`;
 }
 
 function renderStep4() {
