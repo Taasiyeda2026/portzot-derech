@@ -601,19 +601,19 @@ function getDigitalScreenOnlyRequirements(type) {
 
   if (type === 'app') {
     return `CRITICAL — OUTPUT FORMAT REQUIREMENT (highest priority, overrides everything else):
-This image must show ONLY the app screen user interface. The entire image frame must be filled 100% edge-to-edge with the app UI content.
-DO NOT include: phone device, phone frame, phone shell, phone silhouette, device mockup, rounded device corners from a phone, hands holding a phone, desk, table, room, wall, background color, colored backdrop, gradient background, sparkle, stars, decorative elements, or any object that is not part of the app screen itself.
-Think of this as a direct screenshot taken from inside the phone — you see only the screen pixels, nothing outside the screen.
-Image ratio: vertical 9:16 portrait (tall). Fill the full image with the UI.
-Style: clean flat UI mockup, simple layout, readable Hebrew text if any, light or white background within the UI, no photorealistic effects.`;
+Generate a phone device mockup showing the app screen. The phone must fill the ENTIRE image from edge to edge — no empty space, no background color, no colored backdrop behind the phone.
+The phone frame and screen together must occupy 100% of the image dimensions. Vertical 9:16 portrait ratio.
+DO NOT include: any background color or scene behind the phone, colored backdrop, purple/gradient background, desk, table, room, wall, sparkle effects, decorative elements, or empty space around the phone.
+The phone should appear on a plain white or very light neutral background, cropped tightly so the device fills the full image.
+Style: clean modern phone mockup, flat UI inside the screen, simple layout, no photorealistic rendering.`;
   }
 
   return `CRITICAL — OUTPUT FORMAT REQUIREMENT (highest priority, overrides everything else):
-This image must show ONLY the website screen user interface. The entire image frame must be filled 100% edge-to-edge with the website UI content.
-DO NOT include: laptop, computer, monitor frame, browser chrome, browser bar, desk, room, wall, background color behind the screen, decorative backdrop, gradient, people, hands, or any object that is not part of the website screen itself.
-Think of this as a direct screenshot taken from the browser — you see only the webpage pixels, nothing outside the browser viewport.
-Image ratio: wide 16:9 landscape (horizontal). Fill the full image with the UI.
-Style: clean flat web UI mockup, simple layout, readable text, light background within the UI, no photorealistic effects.`;
+Generate a browser or laptop screen mockup showing the website. The device must fill the ENTIRE image from edge to edge — no empty space, no background color, no colored backdrop behind the device.
+The screen frame and content together must occupy 100% of the image dimensions. Wide 16:9 landscape ratio.
+DO NOT include: any background color or scene behind the screen, colored backdrop, gradient background, desk, room, wall, sparkle effects, decorative elements, or empty space around the device.
+The device should appear on a plain white or very light neutral background, cropped tightly so the screen fills the full image.
+Style: clean modern screen mockup, flat UI inside the browser, simple layout, no photorealistic rendering.`;
 }
 
 function buildPhysicalPrompt(kind) {
