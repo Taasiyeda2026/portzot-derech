@@ -1120,7 +1120,6 @@ function wireEvents() {
     button.addEventListener('click', () => {
       const errors = validateStep(3);
       if (Object.keys(errors).length) {
-        render();
         focusFirstInvalidField(3, errors);
         return;
       }
@@ -1133,7 +1132,6 @@ function wireEvents() {
     copyAllImages.addEventListener('click', () => {
       const errors = validateStep(3);
       if (Object.keys(errors).length) {
-        render();
         focusFirstInvalidField(3, errors);
         return;
       }
