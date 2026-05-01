@@ -137,7 +137,10 @@ const state = {
     components: [],
     componentsOther: '',
     emphasis: [],
-    emphasisOther: ''
+    emphasisOther: '',
+    viewerUnderstand: '',
+    primaryFocus: '',
+    secondaryElements: ''
   })),
   prototypeFlow: { start: '', end: '', summary: '', hasBranch: '', branch: '' },
   images: Array.from({ length: 3 }, (_, index) => ({
@@ -501,6 +504,10 @@ function validatePrototype() {
     if (screen.emphasis.length < 1 || screen.emphasis.length > 3) errors[`screenEmphasis${idx}`] = 'בחרי בין פריט אחד לשלושה.';
     if (screen.components.includes('אחר') && !screen.componentsOther.trim()) errors[`screenComponentsOther${idx}`] = 'נבחר "אחר" – השלימי רכיב נוסף.';
     if (screen.emphasis.includes('אחר') && !screen.emphasisOther.trim()) errors[`screenEmphasisOther${idx}`] = 'נבחר "אחר" – השלימי דגש נוסף.';
+    if (productType === 'app') {
+      if (!screen.viewerUnderstand.trim()) errors[`screenViewerUnderstand${idx}`] = 'תארי מה הצופה צריכה להבין מיד.';
+      if (!screen.primaryFocus.trim()) errors[`screenPrimaryFocus${idx}`] = 'תארי את המוקד הראשי במסך.';
+    }
   });
 
   if (productType === 'website') {
@@ -547,7 +554,7 @@ const VALIDATION_ORDER = {
   2: productType === 'physical'
     ? ['mainAppearance', 'mainAppearanceOther', 'mainHighlight', 'mainHighlightOther', 'mainMaterial', 'mainMaterialOther', 'mainBackground', 'mainBackgroundOther', 'mainMessage', 'mainAngle', 'mainAngleOther', 'mainDescription', 'usageUser', 'usageUserOther', 'usageCount', 'usageCountOther', 'usageLocation', 'usageLocationOther', 'usageAction', 'usagePropsOther', 'usageHighlight', 'usageHighlightOther', 'usageTakeaway', 'usageFeeling', 'usageFeelingOther', 'sharedStyle', 'sharedStyleOther', 'sharedRealism', 'sharedRealismOther', 'sharedAvoidOther']
     : [
-      ...state.prototypeScreens.flatMap((_, idx) => [`screenType${idx}`, `screenShortName${idx}`, `screenView${idx}`, `screenAction${idx}`, `screenComponents${idx}`, `screenComponentsOther${idx}`, `screenEmphasis${idx}`, `screenEmphasisOther${idx}`]),
+      ...state.prototypeScreens.flatMap((_, idx) => [`screenType${idx}`, `screenShortName${idx}`, `screenView${idx}`, `screenAction${idx}`, `screenComponents${idx}`, `screenComponentsOther${idx}`, `screenEmphasis${idx}`, `screenEmphasisOther${idx}`, `screenViewerUnderstand${idx}`, `screenPrimaryFocus${idx}`]),
       'flowStart', 'flowEnd', 'flowSummary', 'flowBranchToggle', 'flowBranchText', 'sharedStyle', 'sharedStyleOther', 'sharedRealism', 'sharedRealismOther', 'sharedAvoidOther'
     ],
   3: ['selectedScreens', ...state.images.flatMap((_, idx) => [`imageScreen${idx}`])]
@@ -607,12 +614,16 @@ function getDigitalScreenOnlyRequirements(type) {
   if (type !== 'app' && type !== 'website') return '';
 
   if (type === 'app') {
-    return `CRITICAL — OUTPUT FORMAT REQUIREMENT (highest priority, overrides everything else):
-Generate a phone device mockup showing the app screen. The phone must fill the ENTIRE image from edge to edge — no empty space, no background color, no colored backdrop behind the phone.
-The phone frame and screen together must occupy 100% of the image dimensions. Vertical 9:16 portrait ratio.
-DO NOT include: any background color or scene behind the phone, colored backdrop, purple/gradient background, desk, table, room, wall, sparkle effects, decorative elements, or empty space around the phone.
-The phone should appear on a plain white or very light neutral background, cropped tightly so the device fills the full image.
-Style: clean modern phone mockup, flat UI inside the screen, simple layout, no photorealistic rendering.`;
+    return `CRITICAL — OUTPUT FORMAT REQUIREMENT:
+Generate a vertical smartphone app image.
+The smartphone must fill the entire image from edge to edge, like a close-up phone screen prepared for a poster.
+The phone frame should be visible, with rounded corners and a clean modern look.
+The app screen must appear inside the phone and fill almost all of the phone area.
+Do not place the phone on a visible background.
+Do not show hands, table, room, desk, floating icons, sparkle effects, decorative backdrop, or surrounding environment.
+Do not create a small phone mockup floating in the center.
+Do not leave empty margins around the device.
+The final result must look like a close-up smartphone presentation image, not a floating mockup.`;
   }
 
   return `CRITICAL — OUTPUT FORMAT REQUIREMENT (highest priority, overrides everything else):
@@ -741,9 +752,57 @@ function buildDigitalPrompt(index) {
   const emphasisText = resolveOtherList(screen?.emphasis || [], screen?.emphasisOther || '').join(', ');
   const screenType = resolveOtherValue(screen?.type || '', screen?.shortName || '');
   const screenComponents = resolveOtherList(screen?.components || [], screen?.componentsOther || '').join(', ');
-  const sharedBlock = sharedVisualPromptText();
   const screenOnlyRequirements = getDigitalScreenOnlyRequirements(productType);
+  const shared = state.sharedVisualPrompt;
+  const styleText = resolveOtherList(shared.style, shared.styleOther).join(', ');
+  const avoidText = resolveOtherList(shared.avoid, shared.avoidOther).join(', ');
 
+  if (productType === 'app') {
+    return `${screenOnlyRequirements}
+
+Create a clear, high-quality, poster-ready image based on the following project context.
+
+Project name: ${state.research.projectName}
+Product type: Mobile app
+Description: ${state.research.description}
+Problem: ${state.research.problem}
+Audience: ${state.research.audience}
+Solution: ${state.research.solution}
+Value: ${state.research.value}
+Requirements: ${state.research.requirements_1}; ${state.research.requirements_2}; ${state.research.requirements_3}
+How it works: ${state.research.howItWorks_1}; ${state.research.howItWorks_2}; ${state.research.howItWorks_3}
+
+Output aspect ratio: 9:16 vertical.
+Image role: This is app screen number ${index + 1} for the poster.
+
+Technical requirements:
+Create a clean, sharp, high-resolution mobile app screen suitable for a professional poster.
+The screen must be clear, readable, and visually focused.
+Use a clean, modern, realistic UI.
+Use only short readable interface text.
+Avoid long paragraphs, tiny unreadable labels, cluttered layouts, fake branding, real brand logos, and too many interface elements.
+The screen should feel realistic, functional, and easy to understand.
+
+Shared visual settings for all images:
+Visual style: ${styleText}
+Realism level: Clean realistic mobile UI inside a smartphone frame
+Preferred colors: ${shared.colors || 'match the project visual language'}
+Avoid: ${avoidText || 'none specified'}
+
+Screen-specific details:
+Screen represented: ${screenType || 'not defined'}.
+What the user sees: ${screen?.view || ''}.
+What the user does: ${screen?.action || ''}.
+Important components: ${screenComponents}.
+What should stand out: ${emphasisText}.
+What the viewer should immediately understand: ${screen?.viewerUnderstand || ''}.
+Primary focal point: ${screen?.primaryFocus || ''}.
+Secondary elements: ${screen?.secondaryElements || 'none'}.
+UI hierarchy: Make the primary action visually dominant and supporting information secondary.
+Functional clarity: The interface must look realistic, well-organized, and clearly usable.`;
+  }
+
+  const sharedBlock = sharedVisualPromptText();
   return `${screenOnlyRequirements}
 
 ${basePromptContext(slot, `מדובר בתמונת מסך מספר ${index + 1} לפוסטר.`)}
@@ -869,6 +928,11 @@ function renderPrototypeScreens() {
       ${screen.components.includes('אחר') ? `<label class="${fieldClass(`screenComponentsOther${index}`)}" data-error-key="screenComponentsOther${index}"><span>אם נבחר \"אחר\" – פירוט רכיב נוסף <em>*</em></span><input data-screen="${index}" data-key="componentsOther" maxlength="60" value="${escapeHtml(screen.componentsOther)}" />${renderCounter(screen.componentsOther, 60)}${renderError(`screenComponentsOther${index}`)}</label>` : ''}
       <div class="${fieldClass(`screenEmphasis${index}`)}" data-error-key="screenEmphasis${index}"><span>מה חשוב שיבלוט? <em>*</em></span>${renderTags(`emphasis-${index}`, EMPHASIS_OPTIONS, screen.emphasis, 3)}${renderError(`screenEmphasis${index}`)}</div>
       ${screen.emphasis.includes('אחר') ? `<label class="${fieldClass(`screenEmphasisOther${index}`)}" data-error-key="screenEmphasisOther${index}"><span>אם נבחר \"אחר\" – פירוט דגש נוסף <em>*</em></span><input data-screen="${index}" data-key="emphasisOther" maxlength="60" value="${escapeHtml(screen.emphasisOther)}" />${renderCounter(screen.emphasisOther, 60)}${renderError(`screenEmphasisOther${index}`)}</label>` : ''}
+      ${productType === 'app' ? `
+      <label class="${fieldClass(`screenViewerUnderstand${index}`)}" data-error-key="screenViewerUnderstand${index}"><span>מה הצופה צריכה להבין מיד? <em>*</em></span><textarea data-screen="${index}" data-key="viewerUnderstand" maxlength="160">${escapeHtml(screen.viewerUnderstand)}</textarea>${renderCounter(screen.viewerUnderstand, 160)}${renderError(`screenViewerUnderstand${index}`)}</label>
+      <label class="${fieldClass(`screenPrimaryFocus${index}`)}" data-error-key="screenPrimaryFocus${index}"><span>מהו המוקד הראשי במסך? <em>*</em></span><input data-screen="${index}" data-key="primaryFocus" maxlength="100" value="${escapeHtml(screen.primaryFocus)}" />${renderCounter(screen.primaryFocus, 100)}${renderError(`screenPrimaryFocus${index}`)}</label>
+      <label class="split-field"><span>אלמנטים משניים</span><input data-screen="${index}" data-key="secondaryElements" maxlength="100" value="${escapeHtml(screen.secondaryElements)}" />${renderCounter(screen.secondaryElements, 100)}</label>
+      ` : ''}
     </article>
   `).join('');
 }
