@@ -363,8 +363,10 @@ function buildFieldObjects(canvas, sizeKey, values = {}, settings = {}, productT
 
     if (field.verticalCenter) {
       valueText.initDimensions();
-      const textH      = valueText.height;
-      const centeredTop = field.y + Math.max(0, (field.height - textH) / 2);
+      const textH     = valueText.height;
+      const topOffset = field.noLabel ? 0 : (field.titleSpacing || 80);
+      const contentH  = field.height - topOffset;
+      const centeredTop = field.y + topOffset + Math.max(0, (contentH - textH) / 2);
       valueText.set({ top: centeredTop });
       if (valueText.clipPath) {
         valueText.clipPath.set({ top: centeredTop, height: Math.max(40, textH + 10) });
@@ -716,8 +718,10 @@ export function updatePosterField(canvas, fieldId, rawValue, sizeKey = canvas._p
 
   if (field.verticalCenter) {
     target.initDimensions();
-    const textH      = target.height;
-    const centeredTop = field.y + Math.max(0, (field.height - textH) / 2);
+    const textH     = target.height;
+    const topOffset = field.noLabel ? 0 : (field.titleSpacing || 80);
+    const contentH  = field.height - topOffset;
+    const centeredTop = field.y + topOffset + Math.max(0, (contentH - textH) / 2);
     target.set({ top: centeredTop });
     if (target.clipPath) {
       target.clipPath.set({ top: centeredTop, height: Math.max(40, textH + 10) });
