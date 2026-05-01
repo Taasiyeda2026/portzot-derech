@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>שאלון היכרות לקבוצות - פורצות דרך</title>
+  <title>מי את בקבוצה? — פורצות דרך</title>
   <style>
     * { box-sizing: border-box; }
     :root { font-size: 17px; }
@@ -12,48 +12,56 @@
     .card { width: min(620px, 100%); max-width: 620px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); border-radius: 22px; padding: 20px; backdrop-filter: blur(8px); box-shadow: 0 20px 60px rgba(14,7,37,.35); }
     .top { margin-bottom: 16px; }
     .title { font-size: 1.8rem; margin: 0 0 8px; }
-    .subtitle { margin: 0; opacity: .95; }
+    .subtitle { margin: 0 0 5px; opacity: .95; }
+    .subtitle-note { margin: 0; opacity: .72; font-size: .87rem; }
     .meta { display:flex; justify-content:space-between; margin: 18px 0 10px; font-weight: 600; }
     .progress-track { background: rgba(255,255,255,.2); height: 10px; border-radius: 999px; overflow: hidden; }
     .progress-fill { height:100%; width:0; background: linear-gradient(90deg,#59d5ff,#ff7dc4); transition: width .25s ease; }
     .question-card { background: rgba(0,0,0,.22); border-radius: 16px; padding: 17px; margin-top: 18px; }
+    .eyebrow { display: inline-block; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.22); border-radius: 20px; padding: 3px 11px; font-size: .81rem; margin-bottom: 9px; }
     .question-text { font-size: 1.2rem; margin: 0 0 14px; }
     #textAnswer { width: 100%; padding: 12px; border: 0; border-radius: 12px; font-size: 1rem; }
     .options { display: grid; gap: 10px; }
-    .option-btn { width:100%; text-align:right; background: rgba(255,255,255,.12); color:#fff; border:1px solid rgba(255,255,255,.3); border-radius:12px; padding:10px 12px; cursor:pointer; font-size:1rem; }
+    .option-btn { width:100%; text-align:right; background: rgba(255,255,255,.12); color:#fff; border:1px solid rgba(255,255,255,.3); border-radius:12px; padding:10px 12px; cursor:pointer; font-size:1rem; line-height: 1.4; }
     .option-btn:hover { background: rgba(255,255,255,.22); }
     .option-btn.active { background: linear-gradient(135deg,#ff4aa2,#7b6dff); border-color: transparent; }
     .hint { min-height: 22px; color: #ffd5ef; margin-top: 10px; font-size: .95rem; }
     .actions { margin-top: 16px; display:flex; gap:10px; align-items: center; }
     .btn { border:none; border-radius:12px; padding:9px 14px; font-size:.98rem; cursor:pointer; }
     .btn-secondary { background: rgba(255,255,255,.18); color:#fff; }
-    .btn-primary { background: linear-gradient(135deg,#4ed7ff,#ff6eb8); color:#1e1240; font-weight:700; flex:0 0 auto; min-width:140px; }
-    @media (max-width: 640px) { .actions { justify-content: space-between; } .btn-primary { min-width: 120px; } }
+    .btn-primary { background: linear-gradient(135deg,#4ed7ff,#ff6eb8); color:#1e1240; font-weight:700; flex:0 0 auto; }
+    @media (max-width: 640px) { .actions { justify-content: space-between; } }
     .saving { text-align:center; padding: 26px 8px; font-size:1.1rem; display:none; }
+    .saving-sub { font-size:.9rem; opacity:.82; display:block; margin-top:6px; }
   </style>
 </head>
 <body>
   <main class="card">
     <div class="top">
-      <h1 class="title">✨ משחק היכרות קצר לקבוצות</h1>
-      <p class="subtitle">כמה שאלות קטנות ואנחנו מסודרות. אין נכון/לא נכון — רק מה שהכי את 💜</p>
+      <h1 class="title">מי את בקבוצה? 💜</h1>
+      <p class="subtitle">כמה שאלות קלילות, קצת מצחיקות, והרבה את.<br>אין נכון או לא נכון — רק לבחור מה הכי דומה לך.</p>
+      <p class="subtitle-note">התשובות יעזרו ליצור קבוצות עבודה נעימות ומתאימות יותר.</p>
     </div>
 
     <div class="meta"><span id="stepLabel">שאלה 1 מתוך 15</span><span id="progressText">7%</span></div>
     <div class="progress-track"><div id="progressFill" class="progress-fill"></div></div>
 
     <section class="question-card" id="questionCard">
+      <span class="eyebrow" id="eyebrow"></span>
       <h2 class="question-text" id="questionText"></h2>
-      <input id="textAnswer" type="text" autocomplete="name" placeholder="כתבי כאן את השם שלך" style="display:none;">
+      <input id="textAnswer" type="text" autocomplete="name" placeholder="שם פרטי מספיק לגמרי" style="display:none;">
       <div class="options" id="options"></div>
       <div class="hint" id="hint"></div>
       <div class="actions">
-        <button class="btn btn-secondary" id="backBtn" type="button">חזרה</button>
-        <button class="btn btn-primary" id="nextBtn" type="button">הבא</button>
+        <button class="btn btn-secondary" id="backBtn" type="button">חזרה רגע</button>
+        <button class="btn btn-primary" id="nextBtn" type="button">קדימה</button>
       </div>
     </section>
 
-    <div class="saving" id="savingMessage">התשובות נשמרו, עוברת למסך ההמתנה...</div>
+    <div class="saving" id="savingMessage">
+      סגור, קלטנו אותך ✨
+      <span class="saving-sub">עוד רגע ממשיכות לקבוצה שלך...</span>
+    </div>
   </main>
 
 <script type="module">
@@ -65,43 +73,211 @@ const db=getFirestore(initializeApp(cfg));
 const sessionId=new URLSearchParams(location.search).get('session');
 if(!sessionId) location.href='pairing.html';
 
-const maps = {
-  mainDomain:{'חיים דיגיטליים וטכנולוגיה ביום־יום':'digital_life','למידה, לחץ והתארגנות':'learning_stress_organization','חיים חברתיים ותקשורת בין אנשים':'social_communication','סביבה, טבע ובעלי חיים':'environment_animals','בחירות יומיומיות והרגלים':'daily_choices_habits','פנאי, יצירה ותחביבים':'leisure_creativity_hobbies','גוף, בריאות ותחושת ביטחון':'health_wellbeing','בית, משפחה וסביבה קרובה':'home_family','מרחב, תנועה ובטיחות':'space_mobility_safety','מבט קדימה ורעיונות לעתיד':'future_ideas'},
-  problemType:{'בעיה שמפריעה ביום־יום':'daily_life_issue','בעיה חברתית בין אנשים':'social_issue','בעיה שקשורה ללמידה או לבית הספר':'learning_issue','בעיה שקשורה לבטיחות':'safety_issue','בעיה שקשורה לסביבה או לבעלי חיים':'environment_issue','בעיה שקשורה לנוחות, זמן או סדר':'efficiency_issue','בעיה שקשורה לתקשורת או חוסר הבנה':'communication_issue','בעיה שקשורה לביטחון עצמי או תחושת מסוגלות':'self_efficacy_issue'},
-  infoProcessingStyle:{'קוראת הכול מהתחלה כדי להבין':'thorough_reader','שואלת ישר “אז מה הוחלט?”':'decision_focused','מחפשת את ההודעה הכי חשובה':'key_info_finder','מחכה שמישהי תסכם':'summary_dependent','שולחת הודעה שמסדרת את הדברים':'organizer','מתעלמת עד שזה באמת חשוב':'selective_attention'},
-  planningStyle:{'הכול כבר מוכן מראש':'planner','אני מתארגנת מהר ומסתדרת תוך כדי':'quick_executor','אני מתחילה ואז נזכרת בעוד דברים':'improviser','אני צריכה רשימה כדי לא לשכוח':'checklist_oriented','אני בודקת עם חברה מה צריך להביא':'collaborative_planner','אני זורמת, העיקר לצאת בזמן':'flexible'},
-  choiceDriver:{'המלצה של חברה':'social_influence','הטריילר או איך שזה נראה':'visual_thinker','הסיפור והרעיון':'concept_oriented','הדמויות':'empathy_user_focus','מה שכולם מדברים עליו':'trend_sensitive','אני בודקת ביקורות לפני':'researcher'},
-  naturalTeamContribution:{'להעלות רעיונות לקונספט':'ideas','לארגן מי מביאה מה':'organization','לעצב הזמנה או תמונה':'design','לדאוג שלא שכחו אף אחת':'empathy_inclusion','להכין פעילות או משחק':'experience_builder','להציג, לברך או להוביל את הרגע':'presentation','להיות זו שעוזרת מאחורי הקלעים':'support'},
-  problemSolvingStyle:{'מנסה לבד עד שזה מסתדר':'persistence_trial_error','מחפשת בגוגל או בטיקטוק פתרון':'independent_research','שואלת מישהי שמבינה':'asks_for_help','סוגרת ופותחת מחדש':'simple_reset','מתעצבנת ועוזבת את זה רגע':'needs_pause','בודקת בהגדרות מה השתנה':'technical_checking'},
-  visualCommunicationStyle:{'שזה ייראה יפה':'aesthetics','שזה יעביר בדיוק את התחושה':'emotional_message','שזה יהיה מצחיק או מקורי':'originality','שזה יהיה ברור ולא עמוס':'clarity','שזה יתאים למה שאני רוצה להגיד':'message_fit','אני לא משקיעה בזה יותר מדי':'practical_minimal'},
-  groupBehaviorPattern:{'אני מנסה להבין מה כולן רוצות לעשות':'listener','אני מציעה רעיון להתחלה':'initiator','אני שואלת מי עושה מה':'task_organizer','אני מחכה לראות איפה צריך אותי':'adaptive','אני לוקחת חלק אחד ועושה אותו טוב':'focused_executor','אני עוזרת לחבר בין כולן':'connector'},
-  conflictStyle:{'לדבר ולמצוא פשרה':'compromise','להצביע ולקבל החלטה':'vote_decision','לבדוק מה הכי מתאים למטרה':'goal_oriented','לתת לכל אחת להסביר את עצמה':'inclusive_discussion','לבקש עזרה מהמדריכה':'facilitator_help','לקחת רגע לחשוב ואז לחזור לשיחה':'reflection_pause'},
-  groupNeed:{'שיש מקום לרעיונות שלי':'voice_space','שיש סדר ובהירות':'clarity_structure','שאפשר לשאול בלי להתבייש':'psychological_safety','שכולן משתתפות':'participation','שמתקדמים ולא נתקעים':'progress','שיש אווירה נעימה':'positive_atmosphere','שאני יודעת מה התפקיד שלי':'role_clarity'},
-  groupComfortLevel:{'ממש נוח לי':'high_comfort','די נוח לי':'medium_high_comfort','לוקח לי רגע, אבל אני משתלבת':'gradual_comfort','אני צריכה שמישהי תעזור לי להיכנס':'needs_inclusion_support','תלוי בקבוצה':'context_dependent'},
-  neededTeamSupport:{'מישהי שמארגנת ומסדרת':'needs_organization','מישהי שמעלה רעיונות':'needs_ideas','מישהי שמרגיעה כשיש לחץ':'needs_calm','מישהי שמובילה החלטות':'needs_decision_leader','מישהי שטובה בהצגה':'needs_presentation','מישהי שטובה בביצוע ובנייה':'needs_execution','מישהי שמקשיבה ועוזרת לכולן להשתלב':'needs_connector'},
-  startStyle:{'להתחיל מהר ולשפר תוך כדי':'prototype_fast','להבין קודם מה המטרה':'goal_first','לראות דוגמה ואז לנסות':'example_based','לדבר עם הקבוצה ולבנות כיוון':'collaborative_direction','לחלק משימות ולהתחיל לעבוד':'task_execution','לחפש רעיונות לפני שמחליטים':'inspiration_research'}
-};
-
 const questions = [
-  ['displayName','איך תרצי שנכתוב את השם שלך?',[]],
-  ['mainDomain','איזה תחום הכי מסקרן אותך לעבוד עליו?',["חיים דיגיטליים וטכנולוגיה ביום־יום","למידה, לחץ והתארגנות","חיים חברתיים ותקשורת בין אנשים","סביבה, טבע ובעלי חיים","בחירות יומיומיות והרגלים","פנאי, יצירה ותחביבים","גוף, בריאות ותחושת ביטחון","בית, משפחה וסביבה קרובה","מרחב, תנועה ובטיחות","מבט קדימה ורעיונות לעתיד"]],
-  ['problemType','איזה סוג של בעיה הכי מעניין אותך לחקור?',["בעיה שמפריעה ביום־יום","בעיה חברתית בין אנשים","בעיה שקשורה ללמידה או לבית הספר","בעיה שקשורה לבטיחות","בעיה שקשורה לסביבה או לבעלי חיים","בעיה שקשורה לנוחות, זמן או סדר","בעיה שקשורה לתקשורת או חוסר הבנה","בעיה שקשורה לביטחון עצמי או תחושת מסוגלות"]],
-  ['infoProcessingStyle','כשיש בקבוצת וואטסאפ מלא הודעות ואת לא מבינה מה נסגר, מה את עושה?',["קוראת הכול מהתחלה כדי להבין","שואלת ישר “אז מה הוחלט?”","מחפשת את ההודעה הכי חשובה","מחכה שמישהי תסכם","שולחת הודעה שמסדרת את הדברים","מתעלמת עד שזה באמת חשוב"]],
-  ['planningStyle','את צריכה לצאת מהבית עוד 20 דקות. מה הכי דומה לך?',["הכול כבר מוכן מראש","אני מתארגנת מהר ומסתדרת תוך כדי","אני מתחילה ואז נזכרת בעוד דברים","אני צריכה רשימה כדי לא לשכוח","אני בודקת עם חברה מה צריך להביא","אני זורמת, העיקר לצאת בזמן"]],
-  ['choiceDriver','כשאת בוחרת סדרה או סרט לראות, מה הכי משפיע עלייך?',["המלצה של חברה","הטריילר או איך שזה נראה","הסיפור והרעיון","הדמויות","מה שכולם מדברים עליו","אני בודקת ביקורות לפני"]],
-  ['naturalTeamContribution','כשמתכננים יום הולדת לחברה, איזה חלק הכי מתאים לך לקחת?',["להעלות רעיונות לקונספט","לארגן מי מביאה מה","לעצב הזמנה או תמונה","לדאוג שלא שכחו אף אחת","להכין פעילות או משחק","להציג, לברך או להוביל את הרגע","להיות זו שעוזרת מאחורי הקלעים"]],
-  ['problemSolvingStyle','אם משהו בטלפון לא עובד, מה את עושה בדרך כלל?',["מנסה לבד עד שזה מסתדר","מחפשת בגוגל או בטיקטוק פתרון","שואלת מישהי שמבינה","סוגרת ופותחת מחדש","מתעצבנת ועוזבת את זה רגע","בודקת בהגדרות מה השתנה"]],
-  ['visualCommunicationStyle','כשאת מעלה סטורי או תמונה, מה הכי חשוב לך?',["שזה ייראה יפה","שזה יעביר בדיוק את התחושה","שזה יהיה מצחיק או מקורי","שזה יהיה ברור ולא עמוס","שזה יתאים למה שאני רוצה להגיד","אני לא משקיעה בזה יותר מדי"]],
-  ['groupBehaviorPattern','כשיש עבודה בקבוצה, מה בדרך כלל קורה לך?',["אני מנסה להבין מה כולן רוצות לעשות","אני מציעה רעיון להתחלה","אני שואלת מי עושה מה","אני מחכה לראות איפה צריך אותי","אני לוקחת חלק אחד ועושה אותו טוב","אני עוזרת לחבר בין כולן"]],
-  ['conflictStyle','כשיש דעות שונות בקבוצה, מה בדרך כלל עוזר לך?',["לדבר ולמצוא פשרה","להצביע ולקבל החלטה","לבדוק מה הכי מתאים למטרה","לתת לכל אחת להסביר את עצמה","לבקש עזרה מהמדריכה","לקחת רגע לחשוב ואז לחזור לשיחה"]],
-  ['groupNeed','מה הכי חשוב לך להרגיש בקבוצה?',["שיש מקום לרעיונות שלי","שיש סדר ובהירות","שאפשר לשאול בלי להתבייש","שכולן משתתפות","שמתקדמים ולא נתקעים","שיש אווירה נעימה","שאני יודעת מה התפקיד שלי"]],
-  ['groupComfortLevel','עד כמה את מרגישה נוח להשתלב בקבוצה חדשה?',["ממש נוח לי","די נוח לי","לוקח לי רגע, אבל אני משתלבת","אני צריכה שמישהי תעזור לי להיכנס","תלוי בקבוצה"]],
-  ['neededTeamSupport','איזו חברה הכי עוזרת לך לעבוד טוב?',["מישהי שמארגנת ומסדרת","מישהי שמעלה רעיונות","מישהי שמרגיעה כשיש לחץ","מישהי שמובילה החלטות","מישהי שטובה בהצגה","מישהי שטובה בביצוע ובנייה","מישהי שמקשיבה ועוזרת לכולן להשתלב"]],
-  ['startStyle','מה הכי מתאים לך כשצריך להתחיל משהו חדש?',["להתחיל מהר ולשפר תוך כדי","להבין קודם מה המטרה","לראות דוגמה ואז לנסות","לדבר עם הקבוצה ולבנות כיוון","לחלק משימות ולהתחיל לעבוד","לחפש רעיונות לפני שמחליטים"]]
+  {
+    field: 'displayName',
+    eyebrow: 'רגע, איך קוראים לך? ✨',
+    text: 'איך לקרוא לך בקבוצה?',
+    options: []
+  },
+  {
+    field: 'mainDomain',
+    eyebrow: 'מה מסקרן אותך? 🔎',
+    text: 'איזה עולם הכי בא לך לחקור בלי שזה ירגיש כמו שיעור?',
+    options: [
+      { label: 'חיים דיגיטליים, טלפונים וכל מה שקורה לנו במסך', code: 'digital_life' },
+      { label: 'לחץ, לימודים, התארגנות וכל ה"יש לי מלא דברים לעשות"', code: 'learning_stress_organization' },
+      { label: 'חברות, הודעות, שיחות וכל הדרמות הקטנות שבדרך', code: 'social_communication' },
+      { label: 'טבע, חיות, סביבה וכל מה שצריך לשמור עליו', code: 'environment_animals' },
+      { label: 'הרגלים, בחירות יומיומיות והדברים הקטנים שמשפיעים עלינו', code: 'daily_choices_habits' },
+      { label: 'יצירה, תחביבים, פנאי וכל מה שעושה קצת כיף', code: 'leisure_creativity_hobbies' },
+      { label: 'גוף, בריאות, ביטחון ותחושה טובה עם עצמי', code: 'health_wellbeing' },
+      { label: 'בית, משפחה והסביבה הקרובה', code: 'home_family' },
+      { label: 'תנועה, מרחב, בטיחות ואיך מסתדרים בדרך', code: 'space_mobility_safety' },
+      { label: 'העתיד, רעיונות חדשים ודברים שעוד לא קיימים', code: 'future_ideas' }
+    ]
+  },
+  {
+    field: 'problemType',
+    eyebrow: 'איזו בעיה מדגדגת לך? 🧩',
+    text: 'איזה סוג בעיה הכי בא לך לפצח?',
+    options: [
+      { label: 'משהו שמפריע ביום־יום וכולם כבר התרגלו אליו', code: 'daily_life_issue' },
+      { label: 'משהו חברתי בין אנשים, הודעות, הבנות ואי־הבנות', code: 'social_issue' },
+      { label: 'משהו שקשור ללמידה, בית ספר או עומס', code: 'learning_issue' },
+      { label: 'משהו שקשור לבטיחות או לזהירות', code: 'safety_issue' },
+      { label: 'משהו שקשור לסביבה, טבע או בעלי חיים', code: 'environment_issue' },
+      { label: 'משהו שקשור לזמן, סדר, נוחות או "למה זה כזה מסובך?"', code: 'efficiency_issue' },
+      { label: 'משהו שקשור לתקשורת, בלבול או חוסר הבנה', code: 'communication_issue' },
+      { label: 'משהו שקשור לביטחון עצמי, אומץ או תחושת מסוגלות', code: 'self_efficacy_issue' }
+    ]
+  },
+  {
+    field: 'infoProcessingStyle',
+    eyebrow: 'רגע של וואטסאפ 💬',
+    text: 'הקבוצה התפוצצה מ־73 הודעות ואין לך מושג מה נסגר. מה הכי את?',
+    options: [
+      { label: 'חוזרת להתחלה וקוראת הכול כמו בלשית. אין מצב שאני מפספסת פרט.', code: 'thorough_reader' },
+      { label: 'כותבת ישר: "רגע, אז מה הוחלט בסוף?"', code: 'decision_focused' },
+      { label: 'מחפשת רק את ההודעה החשובה ומדלגת על כל הדרמה.', code: 'key_info_finder' },
+      { label: 'מחכה שמישהי תסכם, כי בשביל זה יש חברות טובות.', code: 'summary_dependent' },
+      { label: 'נכנסת לתפקיד המסדרת: "בנות, רגע, אני עושה סדר".', code: 'organizer' },
+      { label: 'שמה על השתק. אם זה חשוב — כבר ימצאו אותי 😅', code: 'selective_attention' }
+    ]
+  },
+  {
+    field: 'planningStyle',
+    eyebrow: 'יציאה מהבית ⏰',
+    text: 'יש לך 20 דקות לצאת ואת עדיין לא באמת מוכנה. מה הכי את?',
+    options: [
+      { label: 'הכול כבר מוכן מראש. ברור.', code: 'planner' },
+      { label: 'מתארגנת מהר ומסתדרת תוך כדי.', code: 'quick_executor' },
+      { label: 'מתחילה ואז נזכרת בעוד חמישה דברים.', code: 'improviser' },
+      { label: 'צריכה רשימה, אחרת משהו בטוח נשאר בבית.', code: 'checklist_oriented' },
+      { label: 'בודקת עם חברה מה צריך להביא.', code: 'collaborative_planner' },
+      { label: 'זורקת הכול לתיק ומקווה שהיקום איתי.', code: 'flexible' },
+      { label: 'יושבת על המיטה "שנייה לנשום", ואז מגלה שעברו 21 דקות.', code: 'needs_transition_time' }
+    ]
+  },
+  {
+    field: 'choiceDriver',
+    eyebrow: 'רגע של סדרה 🎬',
+    text: 'כשאת בוחרת מה לראות, מה הכי קונה אותך?',
+    options: [
+      { label: 'חברה המליצה, וזה מספיק כדי לתת לזה צ׳אנס.', code: 'social_influence' },
+      { label: 'הטריילר נראה טוב, אז אני בפנים.', code: 'visual_thinker' },
+      { label: 'הסיפור נשמע מעניין, זה מה שתופס אותי.', code: 'concept_oriented' },
+      { label: 'הדמויות. אם התחברתי אליהן — הלך עליי.', code: 'empathy_user_focus' },
+      { label: 'אם כולן מדברות על זה, אני חייבת להבין על מה הרעש.', code: 'trend_sensitive' },
+      { label: 'קודם בודקת ביקורות. לא נופלת בפח כל כך מהר.', code: 'researcher' }
+    ]
+  },
+  {
+    field: 'naturalTeamContribution',
+    eyebrow: 'הפקת יום הולדת 🎉',
+    text: 'מתכננות יום הולדת לחברה. איזה תפקיד נופל עלייך טבעי?',
+    options: [
+      { label: 'זורקת רעיונות לקונספט כאילו אני משרד פרסום.', code: 'ideas' },
+      { label: 'מסדרת מי מביאה מה, כי אחרת זה ייגמר בשלוש עוגות ובלי כוסות.', code: 'organization' },
+      { label: 'מעצבת הזמנה / תמונה / משהו שייראה טוב.', code: 'design' },
+      { label: 'בודקת שלא שכחו אף אחת, כי זה באמת חשוב.', code: 'empathy_inclusion' },
+      { label: 'מכינה פעילות או משחק, שיהיה משהו מעבר ל"יאללה עוגה".', code: 'experience_builder' },
+      { label: 'מברכת, מציגה או מובילה את הרגע.', code: 'presentation' },
+      { label: 'עושה מאחורי הקלעים את הדברים שאף אחת לא שמה לב אליהם — אבל בלעדיהם כלום לא קורה.', code: 'support' }
+    ]
+  },
+  {
+    field: 'problemSolvingStyle',
+    eyebrow: 'משבר טלפון 📱',
+    text: 'הטלפון החליט לעשות דווקא. מה הצעד הראשון שלך?',
+    options: [
+      { label: 'מנסה לבד עד שזה מסתדר. אני והטלפון נסגור את זה בינינו.', code: 'persistence_trial_error' },
+      { label: 'מחפשת בגוגל או בטיקטוק פתרון. בטוח מישהי כבר סבלה מזה לפניי.', code: 'independent_research' },
+      { label: 'שואלת מישהי שמבינה. אין לי כוח להמציא את הגלגל.', code: 'asks_for_help' },
+      { label: 'סוגרת, פותחת, מתפללת. הקלאסיקה.', code: 'simple_reset' },
+      { label: 'מתעצבנת, עוזבת את זה רגע, וחוזרת כשאני פחות דרמטית.', code: 'needs_pause' },
+      { label: 'נכנסת להגדרות ובודקת מה השתנה.', code: 'technical_checking' }
+    ]
+  },
+  {
+    field: 'visualCommunicationStyle',
+    eyebrow: 'סטורי זה רציני 📸',
+    text: 'עלית לסטורי. מה הכי חשוב לך שלא יתפקשש?',
+    options: [
+      { label: 'שייראה יפה. בואו, יש סטנדרטים.', code: 'aesthetics' },
+      { label: 'שיעביר בדיוק את התחושה.', code: 'emotional_message' },
+      { label: 'שיהיה מצחיק או מקורי, לא עוד סטורי משעמם.', code: 'originality' },
+      { label: 'שיהיה ברור ולא עמוס. אנשים צריכים להבין מהר.', code: 'clarity' },
+      { label: 'שיתאים למה שרציתי להגיד.', code: 'message_fit' },
+      { label: 'אני לא משקיעה בזה יותר מדי. סטורי זה סטורי.', code: 'practical_minimal' }
+    ]
+  },
+  {
+    field: 'groupBehaviorPattern',
+    eyebrow: 'עבודה בקבוצה 🤝',
+    text: 'כשבאמת מתחילה עבודה בקבוצה, איפה את נכנסת לתמונה?',
+    options: [
+      { label: 'קודם מבינה מה כולן רוצות לעשות, ואז נכנסת חכם.', code: 'listener' },
+      { label: 'מציעה רעיון להתחלה, רק שיהיה מאיפה לזוז.', code: 'initiator' },
+      { label: 'שואלת "רגע, מי עושה מה?" כי מישהי צריכה לעשות סדר.', code: 'task_organizer' },
+      { label: 'מחכה רגע לראות איפה באמת צריך אותי.', code: 'adaptive' },
+      { label: 'לוקחת חלק אחד ועושה אותו טוב עד הסוף.', code: 'focused_executor' },
+      { label: 'מחברת בין כולן כשזה מתחיל להתפזר.', code: 'connector' }
+    ]
+  },
+  {
+    field: 'conflictStyle',
+    eyebrow: 'כשיש קצת בלגן 🌀',
+    text: 'יש דעות שונות בקבוצה. מה בדרך כלל עוזר לך?',
+    options: [
+      { label: 'לדבר רגע ולמצוא פשרה.', code: 'compromise' },
+      { label: 'להצביע ולהחליט. דמוקרטיה וזה.', code: 'vote_decision' },
+      { label: 'לבדוק מה הכי מתאים למטרה, לא למי צעקה יותר חזק.', code: 'goal_oriented' },
+      { label: 'לתת לכל אחת להסביר את עצמה.', code: 'inclusive_discussion' },
+      { label: 'לקרוא למדריכה לפני שזה נהיה פרק בסדרה.', code: 'facilitator_help' },
+      { label: 'לקחת רגע לחשוב ואז לחזור לשיחה.', code: 'reflection_pause' }
+    ]
+  },
+  {
+    field: 'groupNeed',
+    eyebrow: 'מה את צריכה שם? 💜',
+    text: 'אם כבר להיות בקבוצה — מה הכי חשוב לך להרגיש שם?',
+    options: [
+      { label: 'שיש מקום לרעיונות שלי.', code: 'voice_space' },
+      { label: 'שיש סדר ובהירות, כי כאוס זה לא תחביב.', code: 'clarity_structure' },
+      { label: 'שאפשר לשאול בלי להתבייש.', code: 'psychological_safety' },
+      { label: 'שכולן באמת משתתפות.', code: 'participation' },
+      { label: 'שמתקדמים ולא נתקעים שעה על "מה נעשה?"', code: 'progress' },
+      { label: 'שיש אווירה נעימה.', code: 'positive_atmosphere' },
+      { label: 'שאני יודעת מה התפקיד שלי ולא מרחפת באוויר.', code: 'role_clarity' }
+    ]
+  },
+  {
+    field: 'groupComfortLevel',
+    eyebrow: 'קבוצה חדשה ✨',
+    text: 'נכנסת לקבוצה חדשה. איך זה מרגיש לך בדרך כלל?',
+    options: [
+      { label: 'ממש נוח לי. אני נכנסת כאילו הייתי שם מההתחלה.', code: 'high_comfort' },
+      { label: 'די נוח לי, לוקח רגע וזה מסתדר.', code: 'medium_high_comfort' },
+      { label: 'לוקח לי קצת זמן, אבל בסוף אני משתלבת.', code: 'gradual_comfort' },
+      { label: 'אני צריכה שמישהי תעזור לי להיכנס לעניינים.', code: 'needs_inclusion_support' },
+      { label: 'תלוי בקבוצה. יש קבוצות שאני זורמת ויש קבוצות שאני על מצב שקט.', code: 'context_dependent' }
+    ]
+  },
+  {
+    field: 'neededTeamSupport',
+    eyebrow: 'מי עוזרת לך לפרוח? 🌱',
+    text: 'איזה סוג של חברה הכי עוזר לך לעבוד טוב?',
+    options: [
+      { label: 'מישהי שמארגנת ומסדרת.', code: 'needs_organization' },
+      { label: 'מישהי שמעלה רעיונות.', code: 'needs_ideas' },
+      { label: 'מישהי שמרגיעה כשיש לחץ.', code: 'needs_calm' },
+      { label: 'מישהי שמובילה החלטות כשכולן מתלבטות.', code: 'needs_decision_leader' },
+      { label: 'מישהי שטובה בהצגה.', code: 'needs_presentation' },
+      { label: 'מישהי שטובה בביצוע ובנייה.', code: 'needs_execution' },
+      { label: 'מישהי שמקשיבה ועוזרת לכולן להשתלב.', code: 'needs_connector' }
+    ]
+  },
+  {
+    field: 'startStyle',
+    eyebrow: 'יוצאות לדרך 🚀',
+    text: 'יש משימה חדשה על הפרק. מה האינסטינקט הראשון שלך?',
+    options: [
+      { label: 'להתחיל מהר ולשפר תוך כדי.', code: 'prototype_fast' },
+      { label: 'להבין קודם מה המטרה.', code: 'goal_first' },
+      { label: 'לראות דוגמה ואז לנסות.', code: 'example_based' },
+      { label: 'לדבר עם הקבוצה ולבנות כיוון.', code: 'collaborative_direction' },
+      { label: 'לחלק משימות ולהתחיל לעבוד.', code: 'task_execution' },
+      { label: 'לחפש רעיונות לפני שמחליטים.', code: 'inspiration_research' }
+    ]
+  }
 ];
 
 const answers = {};
+const codes = {};
 let step = 0;
+
+const eyebrowEl = document.getElementById('eyebrow');
 const questionText = document.getElementById('questionText');
 const optionsEl = document.getElementById('options');
 const textAnswer = document.getElementById('textAnswer');
@@ -113,62 +289,75 @@ const backBtn = document.getElementById('backBtn');
 const nextBtn = document.getElementById('nextBtn');
 
 function renderQuestion() {
-  const [key, title, opts] = questions[step];
-  questionText.textContent = title;
-  stepLabel.textContent = `שאלה ${step + 1} מתוך ${questions.length}`;
+  const q = questions[step];
+  eyebrowEl.textContent = q.eyebrow;
+  questionText.textContent = q.text;
+  stepLabel.textContent = 'שאלה ' + (step + 1) + ' מתוך ' + questions.length;
   const progress = Math.round(((step + 1) / questions.length) * 100);
-  progressText.textContent = `${progress}%`;
-  progressFill.style.width = `${progress}%`;
+  progressText.textContent = progress + '%';
+  progressFill.style.width = progress + '%';
   hint.textContent = '';
   backBtn.disabled = step === 0;
-  nextBtn.textContent = step === questions.length - 1 ? 'סיימתי — מוכנה לקבוצה' : 'הבא';
+  nextBtn.textContent = step === questions.length - 1 ? 'סיימתי — אפשר להמשיך 💜' : 'קדימה';
 
-  if (!opts.length) {
+  if (!q.options.length) {
     textAnswer.style.display = 'block';
     optionsEl.style.display = 'none';
-    textAnswer.value = answers[key] || '';
+    textAnswer.value = answers[q.field] || '';
     textAnswer.focus();
     return;
   }
 
   textAnswer.style.display = 'none';
   optionsEl.style.display = 'grid';
-  optionsEl.innerHTML = opts.map(opt => `<button type="button" class="option-btn ${answers[key]===opt?'active':''}" data-value="${opt}">${opt}</button>`).join('');
+  optionsEl.innerHTML = '';
+  q.options.forEach(function(opt) {
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'option-btn' + (answers[q.field] === opt.label ? ' active' : '');
+    btn.textContent = opt.label;
+    btn.dataset.label = opt.label;
+    btn.dataset.code = opt.code;
+    optionsEl.appendChild(btn);
+  });
 }
 
-optionsEl.addEventListener('click', (e) => {
-  const btn = e.target.closest('.option-btn');
+optionsEl.addEventListener('click', function(e) {
+  var btn = e.target.closest('.option-btn');
   if (!btn) return;
-  answers[questions[step][0]] = btn.dataset.value;
+  var q = questions[step];
+  answers[q.field] = btn.dataset.label;
+  codes[q.field] = btn.dataset.code;
   renderQuestion();
 });
 
-backBtn.addEventListener('click', () => {
+backBtn.addEventListener('click', function() {
   if (step > 0) { step--; renderQuestion(); }
 });
 
-nextBtn.addEventListener('click', async () => {
-  const [key] = questions[step];
-  if (key === 'displayName') {
-    const v = textAnswer.value.trim();
-    if (!v) { hint.textContent = 'בחרי תשובה כדי להמשיך'; return; }
-    answers[key] = v;
+nextBtn.addEventListener('click', async function() {
+  var q = questions[step];
+  if (q.field === 'displayName') {
+    var v = textAnswer.value.trim();
+    if (!v) { hint.textContent = 'רגע, צריך לבחור משהו לפני שממשיכות 🙂'; return; }
+    answers[q.field] = v;
   }
-  if (!answers[key]) { hint.textContent = 'בחרי תשובה כדי להמשיך'; return; }
+  if (!answers[q.field]) { hint.textContent = 'רגע, צריך לבחור משהו לפני שממשיכות 🙂'; return; }
   if (step < questions.length - 1) { step++; renderQuestion(); return; }
 
-  const p={id:crypto.randomUUID(),sessionId,submittedAt:new Date().toISOString()};
-  for (const [field] of questions) {
+  var p = { id: crypto.randomUUID(), sessionId: sessionId, submittedAt: new Date().toISOString() };
+  for (var i = 0; i < questions.length; i++) {
+    var field = questions[i].field;
     p[field] = answers[field];
-    if (field !== 'displayName') p[`${field}Code`] = maps[field]?.[answers[field]] || answers[field];
+    if (field !== 'displayName') p[field + 'Code'] = codes[field] || answers[field];
   }
-  document.getElementById('questionCard').style.display='none';
-  document.getElementById('savingMessage').style.display='block';
-  await setDoc(doc(db,'responses',p.id),p);
-  await updateDoc(doc(db,'sessions',sessionId),{completedCount:increment(1)});
-  localStorage.setItem('displayName',p.displayName);
-  localStorage.setItem('responseId',p.id);
-  setTimeout(() => { location.href=`waiting.html?session=${sessionId}`; }, 700);
+  document.getElementById('questionCard').style.display = 'none';
+  document.getElementById('savingMessage').style.display = 'block';
+  await setDoc(doc(db, 'responses', p.id), p);
+  await updateDoc(doc(db, 'sessions', sessionId), { completedCount: increment(1) });
+  localStorage.setItem('displayName', p.displayName);
+  localStorage.setItem('responseId', p.id);
+  setTimeout(function() { location.href = 'waiting.html?session=' + sessionId; }, 700);
 });
 
 renderQuestion();
