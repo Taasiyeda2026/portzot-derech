@@ -16,6 +16,17 @@
             box-sizing: border-box;
         }
 
+        :root {
+            font-size: 17px;
+        }
+
+        html,
+        body {
+            min-height: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #000;
@@ -23,9 +34,10 @@
             min-height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             padding: 20px;
             position: relative;
+            zoom: 0.8;
         }
 
         body::before {
