@@ -753,31 +753,22 @@ function getSlotDefs() {
 
 function renderSlotUploads() {
   const slotDefs = getSlotDefs();
-  const cols = slotDefs.length;
   return `
     <article class="split-card">
       <h3>העלאת תמונות לפוסטר</h3>
       <p style="margin:0;font-size:14px;color:#4b5563;line-height:1.6">לאחר יצירת התמונות בעזרת הפרומפטים למעלה, העלי אותן כאן כדי שיופיעו ישירות בפוסטר.</p>
-      <div class="split-slot-grid split-slot-grid-${cols}">
+      <div style="display:flex;flex-direction:column;gap:8px">
         ${slotDefs.map((slot) => {
           const img = state.slotImages[slot.key];
-          return `
-            <div class="split-slot-item">
-              <div class="split-slot-preview${img ? ' has-image' : ''}">
-                ${img
-                  ? `<img src="${img}" alt="${escapeHtml(slot.label)}" />`
-                  : `<span class="split-slot-placeholder">+ ${escapeHtml(slot.label)}</span>`}
-              </div>
-              <span class="split-slot-label">${escapeHtml(slot.label)}</span>
-              ${img ? `<span style="font-size:13px;color:#16a34a;font-weight:600">✓ הועלתה בהצלחה</span>` : ''}
-              <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
-                <label class="split-btn ghost split-slot-upload-lbl">
-                  ${img ? 'החלפה' : 'העלאת תמונה'}
-                  <input type="file" accept="image/*" data-slot-upload="${slot.key}" style="display:none" />
-                </label>
-                ${img ? `<button type="button" class="split-btn ghost" data-slot-clear="${slot.key}" style="font-size:13px;padding:8px 14px">הסרה</button>` : ''}
-              </div>
-            </div>`;
+          return `<div style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:12px;background:${img ? '#f0fdf4' : '#faf8ff'};border:1px solid ${img ? '#86efac' : '#e2d4fb'}">
+            <span style="font-size:20px">${img ? '✅' : '⬜'}</span>
+            <span style="font-weight:600;font-size:14px;color:#3b1f5c;flex:1">${escapeHtml(slot.label)}</span>
+            <label class="split-btn ghost split-slot-upload-lbl" style="font-size:13px;padding:7px 14px;margin:0">
+              ${img ? 'החלפה' : 'העלאה'}
+              <input type="file" accept="image/*" data-slot-upload="${slot.key}" style="display:none" />
+            </label>
+            ${img ? `<button type="button" class="split-btn ghost" data-slot-clear="${slot.key}" style="font-size:13px;padding:7px 14px">הסרה</button>` : ''}
+          </div>`;
         }).join('')}
       </div>
     </article>`;
