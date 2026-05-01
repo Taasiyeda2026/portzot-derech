@@ -598,14 +598,18 @@ Avoid: ${avoidText || 'none specified'}`;
 
 function getDigitalScreenOnlyRequirements(type) {
   if (type !== 'app' && type !== 'website') return '';
+
+  const ratioLine = type === 'app'
+    ? 'Create only the app screen UI itself, in a vertical 9:16 portrait ratio. The screen must fill the entire image edge-to-edge, with no surrounding space or frame.'
+    : 'Create only the website screen UI itself, in a wide 16:9 landscape ratio. The screen must fill the entire image edge-to-edge, with no surrounding space or frame.';
+
+  const deviceLine = type === 'app'
+    ? 'Do not include a phone frame, a device mockup, hands, desk, room, classroom, background scene, or any objects around the screen.'
+    : 'Do not include a laptop frame, browser chrome, desk, room, people, background scene, or any objects around the screen unless explicitly required.';
+
   return [
-    'Create only the screen UI itself.',
-    'The image must contain only the app/website screen.',
-    'Do not include a realistic phone frame.',
-    'Do not include a laptop frame.',
-    'Do not include a browser frame unless explicitly required for website.',
-    'Do not include desk, room, classroom, hands, people, environment, decorative background, or objects around the screen.',
-    'The screen should fill the image edge-to-edge.',
+    ratioLine,
+    deviceLine,
     'No outer scene.',
     'Generate a lightweight web-optimized UI screen mockup.',
     'Keep the design visually simple and clean.',
@@ -726,10 +730,17 @@ function renderTags(tagName, options, selected, max) {
 
 const STEP1_BOTTOM_KEYS = ['value', 'feedbackReceived', 'improvementsAfterFeedback'];
 
+function fieldSizeClass(max) {
+  if (max <= 80)  return 'short-field';
+  if (max <= 130) return 'medium-field';
+  return 'long-field';
+}
+
 function renderResearchField([key, label, max]) {
   const value = state.research[key] || '';
-  const rows = max <= 42 ? 1 : 2;
-  return `<label class="${fieldClass(key)}" data-error-key="${key}">
+  const rows  = max <= 80 ? 1 : max <= 130 ? 2 : 3;
+  const sc    = fieldSizeClass(max);
+  return `<label class="${fieldClass(key)} ${sc}" data-error-key="${key}">
     <span>${label} <em>*</em></span>
     <textarea data-research="${key}" maxlength="${max}" rows="${rows}" placeholder="כתבי כאן" dir="rtl">${escapeHtml(value)}</textarea>
     ${renderCounter(value, max)}
@@ -998,6 +1009,9 @@ function render() {
     .split-field textarea:focus,.split-field input:focus,.split-field select:focus{outline:none;border-color:#8b5cf6;box-shadow:0 0 0 3px rgba(139,92,246,.16),0 2px 8px rgba(94,39,80,.08)}
     .split-field.error textarea,.split-field.error input,.split-field.error select,.split-card.error{border-color:#dc2626;box-shadow:0 0 0 2px rgba(220,38,38,.08)}
     .split-field textarea{min-height:43px;line-height:1.5;font-size:15px}
+    .split-field.short-field textarea{height:44px;min-height:44px;resize:none;overflow:hidden}
+    .split-field.medium-field textarea{min-height:68px}
+    .split-field.long-field textarea{min-height:96px}
     .split-counter{font-size:12px;color:#2f855a;line-height:1.2}
     .split-counter.near-limit{color:#b7791f}
     .split-counter.full,.split-counter.overflow{color:#c53030}
@@ -1046,7 +1060,7 @@ function render() {
     .split-slot-grid-2{grid-template-columns:repeat(2,1fr)}
     .split-slot-grid-3{grid-template-columns:repeat(3,1fr)}
     .split-slot-item{display:flex;flex-direction:column;align-items:center;gap:10px}
-    .split-slot-preview{width:100%;aspect-ratio:3/4;border:2px dashed #b9a5f8;border-radius:14px;display:flex;align-items:center;justify-content:center;background:linear-gradient(155deg,#f8f5ff,#ede9fe);overflow:hidden;transition:border-color .18s}
+    .split-slot-preview{width:100%;aspect-ratio:${productType === 'app' ? '9/16' : productType === 'website' ? '16/9' : '3/4'};border:2px dashed #b9a5f8;border-radius:14px;display:flex;align-items:center;justify-content:center;background:linear-gradient(155deg,#f8f5ff,#ede9fe);overflow:hidden;transition:border-color .18s}
     .split-slot-preview.has-image{border-style:solid;border-color:#7c3aed;background:#000}
     .split-slot-preview img{width:100%;height:100%;object-fit:cover;border-radius:12px;display:block}
     .split-slot-placeholder{font-size:13px;color:#7c3aed;text-align:center;padding:12px;line-height:1.5}

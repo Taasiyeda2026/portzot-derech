@@ -88,9 +88,9 @@ export const FIELD_DEFINITIONS = [
   { id: 'requirements',     question: 'מה היה חשוב שהפתרון יכלול?',          shortLabel: 'דרישות הפתרון',   hint: 'כתבו 3 דברים מרכזיים שהיה חשוב לשלב בפתרון כדי שייתן מענה טוב לבעיה.',                                     type: 'list', maxCharsPerRow: 42, align: 'right', fontSize: 42, minFontSize: 30, lineHeight: 1.25 },
   { id: 'solution',         question: 'מה הפתרון שפיתחתן?',                  shortLabel: 'הפתרון שפיתחנו',  hint: '',                                                                                                            maxChars: 130, align: 'right', fontSize: 42, minFontSize: 30, lineHeight: 1.3, dynamic: 'solution', verticalCenter: true },
   { id: 'howItWorks',       question: 'איך הפתרון עובד?',                     shortLabel: 'איך זה עובד',     hint: '',                                                                                                            type: 'list', maxCharsPerRow: 42, align: 'right', fontSize: 42, minFontSize: 30, lineHeight: 1.25, dynamic: 'howItWorks' },
-  { id: 'value',                     question: 'מה הערך המרכזי של הפתרון?', shortLabel: 'הערך המרכזי',    hint: 'כתבו מה התועלת המרכזית של הפתרון ולמה הוא משמעותי עבור המשתמשים.',   maxChars: 110, align: 'right', fontSize: 38, minFontSize: 26, lineHeight: 1.2, noLabel: true, verticalCenter: true },
-  { id: 'feedbackReceived',          question: 'המשוב שקיבלנו',              shortLabel: 'המשוב שקיבלנו', hint: 'תארו בקצרה את המשוב שקיבלתן מהמשתמשים.',                              maxChars: 110, align: 'right', fontSize: 38, minFontSize: 26, lineHeight: 1.2, noLabel: true, verticalCenter: true },
-  { id: 'improvementsAfterFeedback', question: 'מה שיפרנו',                  shortLabel: 'מה שיפרנו',     hint: 'תארו מה שיפרתן בעקבות המשוב שקיבלתן.',                                maxChars: 110, align: 'right', fontSize: 38, minFontSize: 26, lineHeight: 1.2, noLabel: true, verticalCenter: true },
+  { id: 'value',                     question: 'מה הערך המרכזי של הפתרון?', shortLabel: 'הערך המרכזי',    hint: 'כתבו מה התועלת המרכזית של הפתרון ולמה הוא משמעותי עבור המשתמשים.',   maxChars: 110, align: 'right', fontSize: 34, minFontSize: 22, lineHeight: 1.2, titleSpacing: 68, verticalCenter: true },
+  { id: 'feedbackReceived',          question: 'המשוב שקיבלנו',              shortLabel: 'המשוב שקיבלנו', hint: 'תארו בקצרה את המשוב שקיבלתן מהמשתמשים.',                              maxChars: 110, align: 'right', fontSize: 34, minFontSize: 22, lineHeight: 1.2, titleSpacing: 68, verticalCenter: true },
+  { id: 'improvementsAfterFeedback', question: 'מה שיפרנו',                  shortLabel: 'מה שיפרנו',     hint: 'תארו מה שיפרתן בעקבות המשוב שקיבלתן.',                                maxChars: 110, align: 'right', fontSize: 34, minFontSize: 22, lineHeight: 1.2, titleSpacing: 68, verticalCenter: true },
   {
     id: 'participants', question: 'פרטי המשתתפות', shortLabel: '',
     type: 'participants', maxChars: 200,
@@ -149,37 +149,37 @@ export function getFieldDef(fieldId, productType = 'none') {
 }
 
 const PORTRAIT_RECTS = {
-  projectName:      { x: 1240, y:  120, width: 2200, height: 180  },
-  description:      { x: 1240, y:  320, width: 2200, height: 110  },
-  problem:          { x: 2360, y:  720, width: 1080, height: 440  },
-  audience:         { x: 2360, y: 1230, width: 1080, height: 330  },
-  researchQuestion: { x: 2360, y: 1630, width: 1080, height: 330  },
-  research:         { x: 2360, y: 2030, width: 1080, height: 620  },
-  findings:         { x: 2360, y: 2720, width: 1080, height: 480  },
-  requirements:     { x: 1160, y:  720, width: 1040, height: 500  },
-  solution:         { x: 1160, y: 1780, width: 1040, height: 350  },
-  howItWorks:       { x: 1160, y: 2200, width: 1040, height: 620  },
-  value:                     { x: 1160, y: 2840, width: 1040, height: 120  },
-  feedbackReceived:          { x: 1160, y: 2980, width: 1040, height: 120  },
-  improvementsAfterFeedback: { x: 1160, y: 3120, width: 1040, height: 120  },
-  participants:              { x: 1240, y: 3260, width: 2200, height: 200  }
+  projectName:               { x: 1240, y:  120, width: 2200, height: 180  },
+  description:               { x: 1240, y:  320, width: 2200, height: 110  },
+  problem:                   { x: 2360, y:  580, width: 1080, height: 440  },
+  audience:                  { x: 2360, y: 1090, width: 1080, height: 330  },
+  researchQuestion:          { x: 2360, y: 1490, width: 1080, height: 330  },
+  research:                  { x: 2360, y: 1890, width: 1080, height: 620  },
+  findings:                  { x: 2360, y: 2580, width: 1080, height: 480  },
+  requirements:              { x: 1160, y:  580, width: 1040, height: 500  },
+  solution:                  { x: 1160, y: 1640, width: 1040, height: 350  },
+  howItWorks:                { x: 1160, y: 2060, width: 1040, height: 620  },
+  value:                     { x: 1160, y: 2700, width: 1040, height: 160  },
+  feedbackReceived:          { x: 1160, y: 2870, width: 1040, height: 160  },
+  improvementsAfterFeedback: { x: 1160, y: 3040, width: 1040, height: 160  },
+  participants:              { x: 1240, y: 3210, width: 2200, height: 200  }
 };
 
 const LANDSCAPE_RECTS = {
-  projectName:      { x: 2055, y: 24,   width: 2710, height: 140  },
-  description:      { x: 2055, y: 174,  width: 2710, height: 98   },
-  problem:          { x: 3410, y: 450,  width: 1576, height: 240  },
-  audience:         { x: 3410, y: 770,  width: 1576, height: 180  },
-  researchQuestion: { x: 3410, y: 1030, width: 1576, height: 200  },
-  research:         { x: 3410, y: 1310, width: 1576, height: 380  },
-  findings:         { x: 3410, y: 1770, width: 1576, height: 220  },
-  requirements:     { x: 1674, y: 450,  width: 1576, height: 380  },
-  solution:         { x: 1674, y: 1200, width: 1576, height: 180  },
-  howItWorks:       { x: 1674, y: 1440, width: 1576, height: 380  },
-  value:                     { x: 1674, y: 1826, width: 1576, height: 70   },
-  feedbackReceived:          { x: 1674, y: 1903, width: 1576, height: 70   },
-  improvementsAfterFeedback: { x: 1674, y: 1980, width: 1576, height: 70   },
-  participants:              { x: 1754, y: 2060, width: 3312, height: 140  }
+  projectName:               { x: 2055, y:   24, width: 2710, height: 140  },
+  description:               { x: 2055, y:  174, width: 2710, height: 98   },
+  problem:                   { x: 3410, y:  350, width: 1576, height: 240  },
+  audience:                  { x: 3410, y:  670, width: 1576, height: 180  },
+  researchQuestion:          { x: 3410, y:  930, width: 1576, height: 200  },
+  research:                  { x: 3410, y: 1210, width: 1576, height: 380  },
+  findings:                  { x: 3410, y: 1670, width: 1576, height: 220  },
+  requirements:              { x: 1674, y:  350, width: 1576, height: 380  },
+  solution:                  { x: 1674, y: 1100, width: 1576, height: 180  },
+  howItWorks:                { x: 1674, y: 1340, width: 1576, height: 380  },
+  value:                     { x: 1674, y: 1726, width: 1576, height: 120  },
+  feedbackReceived:          { x: 1674, y: 1854, width: 1576, height: 120  },
+  improvementsAfterFeedback: { x: 1674, y: 1982, width: 1576, height: 120  },
+  participants:              { x: 1754, y: 2110, width: 3312, height: 140  }
 };
 
 function withLayout(layoutRects, productType = 'none') {
@@ -224,48 +224,79 @@ export function getVisualSlots(sizeKey, productType = 'none') {
   if (safe === 'A4_LANDSCAPE') {
     const left   = 98;
     const totalW = 1576;
-    const top    = 890;
-    const h      = 250;
+    const top    = 790;
+
     if (productType === 'physical') {
+      const h = 250;
       const w = Math.floor((totalW - gap) / 2);
       return [
         { key: 'visual_1', label: 'תמונה ראשית', left: left + w + gap, top, width: w, height: h },
         { key: 'visual_2', label: 'תמונת שימוש', left,                  top, width: w, height: h }
       ];
     }
-    if (productType === 'website' || productType === 'app') {
-      const g = 30;
-      const w = Math.floor((totalW - g * 2) / 3);
+    if (productType === 'app') {
+      const slotH = 250;
+      const slotW = Math.round(slotH * 9 / 16);
+      const g = 20;
+      const totalSlotW = 3 * slotW + 2 * g;
+      const startLeft  = left + Math.floor((totalW - totalSlotW) / 2);
       return [
-        { key: 'visual_1', label: 'מסך 1', left: left + 2 * (w + g), top, width: w, height: h },
-        { key: 'visual_2', label: 'מסך 2', left: left + w + g,        top, width: w, height: h },
-        { key: 'visual_3', label: 'מסך 3', left,                       top, width: w, height: h }
+        { key: 'visual_1', label: 'מסך 1', left: startLeft + 2 * (slotW + g), top, width: slotW, height: slotH },
+        { key: 'visual_2', label: 'מסך 2', left: startLeft + slotW + g,        top, width: slotW, height: slotH },
+        { key: 'visual_3', label: 'מסך 3', left: startLeft,                    top, width: slotW, height: slotH }
       ];
     }
+    if (productType === 'website') {
+      const slotH = 230;
+      const slotW = Math.round(slotH * 16 / 9);
+      const g = 20;
+      const totalSlotW = 3 * slotW + 2 * g;
+      const startLeft  = left + Math.floor((totalW - totalSlotW) / 2);
+      return [
+        { key: 'visual_1', label: 'מסך 1', left: startLeft + 2 * (slotW + g), top, width: slotW, height: slotH },
+        { key: 'visual_2', label: 'מסך 2', left: startLeft + slotW + g,        top, width: slotW, height: slotH },
+        { key: 'visual_3', label: 'מסך 3', left: startLeft,                    top, width: slotW, height: slotH }
+      ];
+    }
+    const h = 250;
     return [{ key: 'visual', label: 'אזור חזותי', left, top, width: totalW, height: h }];
   }
 
   const left   = 120;
   const totalW = 1040;
-  const top    = 1290;
-  const h      = 420;
+  const top    = 1150;
 
   if (productType === 'physical') {
+    const h = 420;
     const w = Math.floor((totalW - gap) / 2);
     return [
       { key: 'visual_1', label: 'תמונה ראשית', left: left + w + gap, top, width: w, height: h },
       { key: 'visual_2', label: 'תמונת שימוש', left,                  top, width: w, height: h }
     ];
   }
-  if (productType === 'website' || productType === 'app') {
-    const g = 30;
-    const w = Math.floor((totalW - g * 2) / 3);
+  if (productType === 'app') {
+    const slotH = 460;
+    const slotW = Math.round(slotH * 9 / 16);
+    const g = 20;
+    const totalSlotW = 3 * slotW + 2 * g;
+    const startLeft  = left + Math.floor((totalW - totalSlotW) / 2);
     return [
-      { key: 'visual_1', label: 'מסך 1', left: left + 2 * (w + g), top, width: w, height: h },
-      { key: 'visual_2', label: 'מסך 2', left: left + w + g,        top, width: w, height: h },
-      { key: 'visual_3', label: 'מסך 3', left,                       top, width: w, height: h }
+      { key: 'visual_1', label: 'מסך 1', left: startLeft + 2 * (slotW + g), top, width: slotW, height: slotH },
+      { key: 'visual_2', label: 'מסך 2', left: startLeft + slotW + g,        top, width: slotW, height: slotH },
+      { key: 'visual_3', label: 'מסך 3', left: startLeft,                    top, width: slotW, height: slotH }
     ];
   }
+  if (productType === 'website') {
+    const g = 20;
+    const slotW = Math.floor((totalW - 2 * g) / 3);
+    const slotH = Math.round(slotW * 9 / 16);
+    return [
+      { key: 'visual_1', label: 'מסך 1', left: left + 2 * (slotW + g), top, width: slotW, height: slotH },
+      { key: 'visual_2', label: 'מסך 2', left: left + slotW + g,        top, width: slotW, height: slotH },
+      { key: 'visual_3', label: 'מסך 3', left,                          top, width: slotW, height: slotH }
+    ];
+  }
+  const h = 420;
   return [{ key: 'visual', label: 'אזור חזותי', left, top, width: totalW, height: h }];
 }
 
