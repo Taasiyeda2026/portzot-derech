@@ -114,6 +114,7 @@ const state = {
   research: Object.fromEntries(RESEARCH_FIELDS.map(([key]) => [key, ''])),
   errors: {},
   visibleErrors: [],
+  navErrorMessage: '',
   sharedVisualPrompt: { ...SHARED_VISUAL_DEFAULTS },
   physicalPrompt: {
     main: {
@@ -467,6 +468,9 @@ function validatePrototype() {
 
 function validateImagesStep() {
   const errors = {};
+  const requiredSlots = getSlotDefs().map((slot) => slot.key);
+  const missingSlots = requiredSlots.filter((slotKey) => !state.slotImages[slotKey]);
+  if (missingSlots.length) errors.slotUploads = 'כדי להמשיך, צריך להעלות את כל התמונות למסכים';
   if (productType !== 'physical') {
     state.images.forEach((image, idx) => {
       image.screenRef = `${idx + 1}`;
@@ -753,16 +757,22 @@ function getSlotDefs() {
 
 function renderSlotUploads() {
   const slotDefs = getSlotDefs();
+  const hasSlotUploadError = Boolean(state.visibleErrors.includes('slotUploads') && state.errors.slotUploads);
   return `
     <article class="split-card">
       <h3>העלאת תמונות לפוסטר</h3>
       <p style="margin:0;font-size:14px;color:#4b5563;line-height:1.6">לאחר יצירת התמונות בעזרת הפרומפטים למעלה, העלי אותן כאן כדי שיופיעו ישירות בפוסטר.</p>
+      ${hasSlotUploadError ? `<p class="split-upload-error">${escapeHtml(state.errors.slotUploads)}</p>` : ''}
       <div style="display:flex;flex-direction:column;gap:8px">
         ${slotDefs.map((slot) => {
           const img = state.slotImages[slot.key];
-          return `<div style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:12px;background:${img ? '#f0fdf4' : '#faf8ff'};border:1px solid ${img ? '#86efac' : '#e2d4fb'}">
-            <span style="font-size:20px">${img ? '✅' : '⬜'}</span>
-            <span style="font-weight:600;font-size:14px;color:#3b1f5c;flex:1">${escapeHtml(slot.label)}</span>
+          return `<div class="split-upload-slot ${img ? 'is-uploaded' : ''}">
+            <div class="split-upload-slot-main">
+              <span class="split-upload-slot-check" aria-hidden="true">${img ? '✓' : ''}</span>
+              <span style="font-weight:600;font-size:14px;color:#3b1f5c;flex:1">${escapeHtml(slot.label)}</span>
+              ${img ? '<span class="split-upload-slot-status">✓ התמונה עלתה</span>' : ''}
+            </div>
+            ${img ? `<div class="split-upload-slot-preview"><img src="${escapeHtml(img)}" alt="${escapeHtml(slot.label)}" /></div>` : ''}
             <label class="split-btn ghost split-slot-upload-lbl" style="font-size:13px;padding:7px 14px;margin:0">
               ${img ? 'החלפה' : 'העלאה'}
               <input type="file" accept="image/*" data-slot-upload="${slot.key}" style="display:none" />
@@ -963,6 +973,15 @@ function render() {
     .split-slot-placeholder{font-size:13px;color:#7c3aed;text-align:center;padding:12px;line-height:1.5}
     .split-slot-label{font-size:13px;font-weight:700;color:#4c1d95;text-align:center}
     .split-slot-upload-lbl{cursor:pointer;font-size:13px;padding:8px 14px}
+    .split-upload-error{margin:0;padding:10px 12px;border-radius:10px;background:#fff1f2;color:#b91c1c;border:1px solid #fecdd3;font-size:13px;font-weight:600}
+    .split-upload-slot{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:12px;background:#faf8ff;border:1px solid #e2d4fb}
+    .split-upload-slot.is-uploaded{background:#f0fdf4;border-color:#86efac}
+    .split-upload-slot-main{display:flex;align-items:center;gap:10px;min-width:0;flex:1}
+    .split-upload-slot-check{width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:#e5e7eb;color:#fff;font-size:15px;font-weight:800;flex:0 0 auto}
+    .split-upload-slot.is-uploaded .split-upload-slot-check{background:#16a34a}
+    .split-upload-slot-status{font-size:12px;font-weight:700;color:#166534}
+    .split-upload-slot-preview{width:44px;height:44px;border-radius:8px;overflow:hidden;border:1px solid #bbf7d0;flex:0 0 auto;background:#dcfce7}
+    .split-upload-slot-preview img{width:100%;height:100%;object-fit:cover;display:block}
     @media (max-width:900px){.split-shell{max-width:780px}}
     @media (max-width:800px){.split-stepper{grid-template-columns:1fr 1fr}.split-shell{padding:20px 12px 34px}.split-field select,.split-field input,.split-field textarea{width:100%;min-width:0}.split-slot-grid-3{grid-template-columns:repeat(2,1fr)}}
   </style>
@@ -1148,10 +1167,13 @@ function wireEvents() {
       const reader = new FileReader();
       reader.onload = (e) => {
         state.slotImages[slotKey] = e.target.result;
+        state.errors.slotUploads = '';
+        state.visibleErrors = state.visibleErrors.filter((key) => key !== 'slotUploads');
         persistSplitFlowState();
         render();
       };
       reader.readAsDataURL(file);
+      input.value = '';
     });
   });
 
@@ -1179,6 +1201,13 @@ function wireEvents() {
     if (state.step < MAX_STEP) {
       const errors = validateStep(state.step);
       if (Object.keys(errors).length) {
+        if (errors.slotUploads) {
+          state.visibleErrors = ['slotUploads'];
+          render();
+          const uploadsCard = root.querySelector('.split-upload-error');
+          uploadsCard?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          return;
+        }
         focusFirstInvalidField(state.step, errors);
         return;
       }
