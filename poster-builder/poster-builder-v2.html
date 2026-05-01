@@ -1,0 +1,1800 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>בונות פוסטר חקר | פורצות דרך</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&family=Frank+Ruhl+Libre:wght@400;700;900&display=swap" rel="stylesheet" />
+<style>
+
+/* ============================================================
+   משתנים
+   ============================================================ */
+:root {
+  --plum:       #5E2750;
+  --plum-mid:   #7a3268;
+  --plum-light: #f0e6f8;
+  --plum-soft:  #faf5ff;
+  --fuchsia:    #d61f8c;
+  --cream:      #fff8ed;
+  --cream-dark: #fff0d6;
+  --border:     #e0cff0;
+  --border-light: #ede4f8;
+  --text:       #1f1030;
+  --text-mid:   #4a3060;
+  --text-muted: #8a7aa0;
+  --success:    #1a6640;
+  --warn:       #b45309;
+  --error:      #be123c;
+  --radius:     14px;
+  --radius-sm:  9px;
+  --shadow:     0 4px 24px rgba(94,39,80,.12);
+  --shadow-lg:  0 12px 48px rgba(94,39,80,.18);
+}
+
+/* ============================================================
+   בסיס
+   ============================================================ */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body { height: 100%; overflow: hidden; }
+
+body {
+  font-family: 'Rubik', sans-serif;
+  background: var(--plum-soft);
+  color: var(--text);
+  direction: rtl;
+}
+
+/* ============================================================
+   פריסת האפליקציה — header + main
+   ============================================================ */
+.app {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== כותרת ===== */
+.app-header {
+  flex-shrink: 0;
+  background: var(--plum);
+  padding: 0 28px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 12px rgba(94,39,80,.35);
+  z-index: 10;
+}
+.app-header-brand {
+  font-size: 17px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 0.3px;
+}
+.app-header-brand span { color: #f0b8d8; }
+
+/* ===== פס שלבים ===== */
+.stepper {
+  flex-shrink: 0;
+  background: #fff;
+  border-bottom: 1px solid var(--border-light);
+  padding: 0 28px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  box-shadow: 0 1px 8px rgba(94,39,80,.06);
+}
+.step-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0 18px;
+  height: 100%;
+  position: relative;
+  cursor: default;
+}
+.step-item + .step-item::before {
+  content: '‹';
+  position: absolute;
+  right: 0;
+  color: var(--border);
+  font-size: 16px;
+  line-height: 1;
+}
+.step-num {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: var(--border-light);
+  color: var(--text-muted);
+  font-size: 12px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: background .25s, color .25s;
+}
+.step-label {
+  font-size: 12px; font-weight: 600;
+  color: var(--text-muted);
+  white-space: nowrap;
+  transition: color .25s;
+}
+.step-item.active .step-num  { background: var(--plum); color: #fff; box-shadow: 0 2px 8px rgba(94,39,80,.4); }
+.step-item.active .step-label { color: var(--plum); }
+.step-item.done .step-num    { background: var(--success); color: #fff; }
+.step-item.done .step-label  { color: var(--text-mid); }
+
+/* ===== גוף ===== */
+.app-body {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ============================================================
+   שלב 1 — בחירת סוג מוצר
+   ============================================================ */
+.page { display: none; height: 100%; }
+.page.active { display: flex; }
+
+/* שלב 1: מרכוז */
+#page-1 {
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(160deg, #fdf5ff 0%, var(--cream) 100%);
+  padding: 24px;
+}
+.type-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  width: 100%;
+  max-width: 740px;
+}
+.type-title {
+  font-family: 'Frank Ruhl Libre', serif;
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--plum);
+  text-align: center;
+}
+.type-sub {
+  font-size: 14px;
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: -18px;
+}
+.type-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  width: 100%;
+}
+.type-card {
+  background: #fff;
+  border: 2px solid var(--border-light);
+  border-radius: 20px;
+  padding: 30px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color .2s, box-shadow .2s, transform .2s;
+  box-shadow: 0 2px 10px rgba(94,39,80,.06);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.type-card:hover { border-color: #b87ac8; box-shadow: var(--shadow); transform: translateY(-3px); }
+.type-card.selected {
+  border-color: var(--plum);
+  background: var(--plum-light);
+  box-shadow: 0 0 0 4px rgba(94,39,80,.12), var(--shadow);
+}
+.type-card-icon { font-size: 40px; }
+.type-card-name {
+  font-size: 17px; font-weight: 700;
+  color: var(--plum);
+}
+.type-card-desc {
+  font-size: 12px; color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* ============================================================
+   שלב 2 — טופס מחקר
+   ============================================================ */
+#page-2 {
+  flex-direction: column;
+  overflow: hidden;
+}
+.form-layout {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  overflow: hidden;
+}
+
+/* סיידבר הטופס */
+.form-sidebar {
+  background: #fff;
+  border-left: 1px solid var(--border-light);
+  padding: 20px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow: hidden;
+}
+.form-sidebar-title {
+  font-family: 'Frank Ruhl Libre', serif;
+  font-size: 16px;
+  color: var(--plum);
+  font-weight: 700;
+}
+.form-sidebar-hint {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  padding: 10px 12px;
+  background: var(--plum-soft);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light);
+}
+.sidebar-type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  background: var(--plum);
+  color: #fff;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  width: fit-content;
+}
+.form-sidebar-nav {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* אזור השדות */
+.form-fields-scroll {
+  overflow-y: auto;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overscroll-behavior: contain;
+}
+
+/* קטגוריית שדות */
+.field-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.field-section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+}
+.field-section-icon {
+  width: 28px; height: 28px;
+  background: var(--plum-light);
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
+}
+.field-section-title {
+  font-size: 13px; font-weight: 700;
+  color: var(--plum);
+}
+.field-section-line {
+  flex: 1; height: 1px;
+  background: var(--border-light);
+}
+
+/* כרטיס שדות */
+.fields-card {
+  background: #fff;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 1px 6px rgba(94,39,80,.05);
+}
+
+/* שדה בודד */
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field label {
+  font-size: 12px; font-weight: 600;
+  color: var(--text-mid);
+  display: flex; align-items: center; gap: 4px;
+}
+.field label .req { color: var(--fuchsia); font-size: 14px; line-height: 1; }
+.field label .opt { color: var(--text-muted); font-size: 10px; font-weight: 400; }
+
+.input-wrap { position: relative; }
+.input-wrap input,
+.input-wrap textarea {
+  width: 100%;
+  background: var(--plum-soft);
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: 'Rubik', sans-serif;
+  font-size: 13.5px;
+  padding: 8px 11px;
+  padding-left: 44px; /* מקום למונה */
+  direction: rtl;
+  resize: none;
+  transition: border-color .18s, box-shadow .18s, background .18s;
+  line-height: 1.55;
+}
+.input-wrap textarea { min-height: 62px; max-height: 120px; resize: vertical; }
+.input-wrap input:focus,
+.input-wrap textarea:focus {
+  outline: none;
+  border-color: #9b5fa8;
+  box-shadow: 0 0 0 3px rgba(94,39,80,.1);
+  background: #fff;
+}
+
+/* מונה תווים */
+.char-counter {
+  position: absolute;
+  left: 7px; bottom: 7px;
+  font-size: 9.5px; font-weight: 700;
+  color: var(--text-muted);
+  background: var(--border-light);
+  border-radius: 4px;
+  padding: 1px 5px;
+  pointer-events: none;
+  direction: ltr;
+  transition: color .18s, background .18s;
+  line-height: 1.4;
+}
+.char-counter.warn { color: var(--warn); background: #fef3c7; }
+.char-counter.full { color: var(--error); background: #fee2e2; }
+
+/* שורת 3 שדות */
+.fields-row-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+}
+.fields-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+/* שורת שגיאה */
+.validation-banner {
+  display: none;
+  background: #fff1f2;
+  border: 1px solid #fecdd3;
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--error);
+  direction: rtl;
+}
+.validation-banner.visible { display: block; }
+
+/* ============================================================
+   שלב 3 — תמונות + פוסטר
+   ============================================================ */
+#page-3 {
+  flex-direction: row;
+  overflow: hidden;
+}
+
+/* סיידבר שלב 3 */
+.poster-sidebar {
+  width: 280px;
+  flex-shrink: 0;
+  background: #fff;
+  border-left: 1px solid var(--border-light);
+  overflow-y: auto;
+  padding: 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overscroll-behavior: contain;
+}
+.ps-title {
+  font-family: 'Frank Ruhl Libre', serif;
+  font-size: 15px;
+  color: var(--plum);
+  font-weight: 700;
+}
+.ps-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ps-section-label {
+  font-size: 11px; font-weight: 700;
+  color: var(--plum);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+/* בחירת רקע */
+.bg-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+.bg-thumb {
+  aspect-ratio: 3/4;
+  border-radius: 7px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: border-color .18s, transform .15s;
+  position: relative;
+  background: var(--border-light);
+}
+.bg-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.bg-thumb:hover { border-color: #b87ac8; transform: scale(1.04); }
+.bg-thumb.selected { border-color: var(--plum); }
+.bg-thumb.selected::after {
+  content: '✓';
+  position: absolute;
+  inset: 0;
+  background: rgba(94,39,80,.4);
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+}
+.bg-none {
+  aspect-ratio: 3/4;
+  border-radius: 7px;
+  border: 2px dashed var(--border);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: var(--text-muted);
+  transition: border-color .18s;
+}
+.bg-none:hover { border-color: var(--plum); }
+.bg-none.selected { border-color: var(--plum); background: var(--plum-light); color: var(--plum); font-weight: 700; }
+
+/* העלאת תמונות */
+.upload-slots {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.upload-slot {
+  background: var(--plum-soft);
+  border: 1.5px dashed var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  cursor: pointer;
+  position: relative;
+  transition: border-color .18s, background .18s;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 60px;
+  overflow: hidden;
+}
+.upload-slot:hover { border-color: var(--plum); background: var(--plum-light); }
+.upload-slot.loaded { border-style: solid; border-color: var(--success); background: #f0fdf4; }
+.upload-slot input[type="file"] {
+  position: absolute; inset: 0;
+  opacity: 0; cursor: pointer;
+  width: 100%; height: 100%;
+}
+.upload-slot-label {
+  font-size: 12px; font-weight: 700;
+  color: var(--text-mid);
+}
+.upload-slot-hint { font-size: 11px; color: var(--text-muted); }
+.upload-slot-ok {
+  font-size: 11px; font-weight: 700;
+  color: var(--success);
+  display: none;
+}
+.upload-slot.loaded .upload-slot-hint { display: none; }
+.upload-slot.loaded .upload-slot-ok { display: block; }
+.upload-slot-preview {
+  position: absolute;
+  left: 8px; top: 50%;
+  transform: translateY(-50%);
+  width: 36px; height: 36px;
+  border-radius: 5px;
+  object-fit: cover;
+  display: none;
+  border: 1px solid #bbf7d0;
+}
+.upload-slot.loaded .upload-slot-preview { display: block; }
+.upload-slot.loaded { padding-left: 52px; }
+
+/* כפתורי פעולה */
+.btn-primary {
+  padding: 10px 20px;
+  background: linear-gradient(135deg, var(--plum), var(--plum-mid));
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  font-family: 'Rubik', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(94,39,80,.35);
+  transition: opacity .18s, transform .15s, box-shadow .18s;
+  text-align: center;
+}
+.btn-primary:hover { opacity: .91; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(94,39,80,.42); }
+.btn-primary:active { transform: translateY(0); }
+.btn-primary:disabled { opacity: .4; cursor: not-allowed; transform: none; }
+
+.btn-ghost {
+  padding: 9px 18px;
+  background: transparent;
+  border: 1.5px solid var(--border);
+  border-radius: 30px;
+  color: var(--text-muted);
+  font-family: 'Rubik', sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  transition: border-color .18s, color .18s;
+  text-align: center;
+}
+.btn-ghost:hover { border-color: #9b5fa8; color: var(--plum); }
+
+.btn-pdf {
+  padding: 11px 22px;
+  background: linear-gradient(135deg, #1a5c3a, #217a4e);
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  font-family: 'Rubik', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(26,92,58,.35);
+  transition: opacity .18s, transform .15s;
+}
+.btn-pdf:hover { opacity: .91; transform: translateY(-1px); }
+
+/* ============================================================
+   אזור הפוסטר
+   ============================================================ */
+.poster-preview-area {
+  flex: 1;
+  min-width: 0;
+  background: #ede4f8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px;
+  overflow-y: auto;
+  gap: 14px;
+  overscroll-behavior: contain;
+}
+
+.poster-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 14px;
+  text-align: center;
+  color: var(--text-muted);
+}
+.poster-placeholder-icon { font-size: 52px; opacity: .3; }
+.poster-placeholder-title {
+  font-family: 'Frank Ruhl Libre', serif;
+  font-size: 20px;
+  color: var(--plum);
+  opacity: .4;
+}
+.poster-placeholder-hint { font-size: 13px; opacity: .35; }
+
+/* ============================================================
+   הפוסטר עצמו — A4 proportional (794 × 1123)
+   ============================================================ */
+#poster {
+  display: none;
+  width: 794px;
+  min-height: 1123px;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Rubik', sans-serif;
+  direction: rtl;
+  background: #fff;
+  box-shadow: 0 16px 56px rgba(94,39,80,.2), 0 4px 16px rgba(0,0,0,.08);
+  flex-shrink: 0;
+}
+
+/* רקע */
+.poster-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.poster-bg img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* תוכן הפוסטר מעל הרקע */
+.poster-body {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  min-height: 1123px;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+/* פס עליון */
+.poster-top-bar {
+  height: 5px;
+  background: linear-gradient(90deg, var(--plum), #d61f8c, #9b40c0, var(--plum));
+  background-size: 200%;
+  flex-shrink: 0;
+}
+
+/* === אזור כותרת ===
+   שליש עליון של הפוסטר
+*/
+.poster-hero {
+  padding: 20px 32px 14px;
+  text-align: center;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.poster-project-name {
+  font-family: 'Frank Ruhl Libre', serif;
+  font-weight: 900;
+  line-height: 1.1;
+  color: #1a0a2e;
+  /* גודל גופן אדפטיבי — יחושב ב-JS */
+  font-size: 48px;
+  margin-bottom: 8px;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.poster-divider {
+  width: 52px; height: 3px;
+  background: linear-gradient(90deg, var(--plum), #d61f8c);
+  border-radius: 2px;
+  margin: 0 auto 10px;
+}
+
+.poster-description {
+  font-size: 13.5px;
+  color: #5a3a5a;
+  max-width: 480px;
+  margin: 0 auto;
+  line-height: 1.65;
+  font-weight: 400;
+}
+
+/* תג צוות — פינה שמאל עליון */
+.poster-team-badge {
+  position: absolute;
+  top: 18px; left: 22px;
+  background: rgba(255,255,255,.88);
+  border: 1px solid rgba(94,39,80,.2);
+  border-radius: 10px;
+  padding: 7px 11px;
+  text-align: left;
+  max-width: 165px;
+  backdrop-filter: blur(4px);
+}
+.poster-team-cap {
+  font-size: 7.5px; font-weight: 700;
+  color: var(--plum);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+.poster-team-names {
+  font-size: 9.5px;
+  color: #2a1a3a;
+  line-height: 1.7;
+}
+.poster-team-school {
+  font-size: 8.5px;
+  color: var(--text-muted);
+  margin-top: 3px;
+}
+
+/* === שורה: בעיה + חקר ===
+   2 עמודות
+*/
+.poster-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+  padding: 0 24px;
+  margin-bottom: 9px;
+  flex-shrink: 0;
+}
+
+/* === אזור תמונות ===
+   במרכז הפוסטר — מוקד ויזואלי ראשי
+*/
+.poster-images-zone {
+  padding: 0 24px;
+  margin-bottom: 9px;
+  flex-shrink: 0;
+}
+.poster-images-label {
+  font-size: 7.5px; font-weight: 700;
+  color: var(--plum);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  text-align: center;
+  margin-bottom: 7px;
+}
+
+/* 2 תמונות — פיזי */
+.poster-images-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.poster-img-frame-2 {
+  height: 205px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid rgba(94,39,80,.18);
+  background: #f5eef2;
+  box-shadow: 0 4px 16px rgba(94,39,80,.12);
+}
+
+/* 3 תמונות — אפליקציה/אתר */
+.poster-images-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 9px;
+}
+.poster-img-frame-3 {
+  height: 250px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 2.5px solid rgba(94,39,80,.2);
+  background: #f5eef2;
+  box-shadow: 0 6px 20px rgba(94,39,80,.14);
+  position: relative;
+}
+/* נוצ'ר לאפליקציה */
+.poster-img-frame-3.notch::before {
+  content: '';
+  position: absolute;
+  top: 8px; left: 50%;
+  transform: translateX(-50%);
+  width: 26px; height: 4px;
+  background: #d0b0c8;
+  border-radius: 2px;
+  z-index: 2;
+}
+
+.poster-img-frame img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.poster-img-ph {
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  color: #c8a8c0; font-size: 10px; gap: 5px;
+}
+.poster-img-ph span { font-size: 26px; }
+
+/* === שורה: 3 עמודות ===
+   חקר + תובנות + דרישות
+*/
+.poster-row-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  padding: 0 24px;
+  margin-bottom: 8px;
+  flex-shrink: 0;
+}
+
+/* === שורה תחתונה: פתרון + שימוש ===
+*/
+.poster-row-2-bottom {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+  padding: 0 24px;
+  margin-bottom: 8px;
+  flex-shrink: 0;
+}
+
+/* === שורת משוב + ערך ===
+*/
+.poster-row-3-bottom {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  padding: 0 24px;
+  margin-bottom: 8px;
+  flex-shrink: 0;
+}
+
+/* ===== כרטיס פוסטר גנרי ===== */
+.p-card {
+  background: rgba(255,255,255,.86);
+  border: 1px solid rgba(94,39,80,.14);
+  border-radius: 10px;
+  padding: 9px 12px;
+  backdrop-filter: blur(2px);
+}
+.p-card.accent {
+  background: linear-gradient(135deg, rgba(94,39,80,.07), rgba(214,31,140,.04));
+  border-color: rgba(94,39,80,.2);
+}
+.p-card-cap {
+  font-size: 7.5px; font-weight: 700;
+  color: var(--plum);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 5px;
+  display: flex; align-items: center; gap: 5px;
+}
+.p-card-cap::before {
+  content: '';
+  display: inline-block;
+  width: 12px; height: 2px;
+  background: var(--plum);
+  border-radius: 1px;
+}
+.p-card-body {
+  font-size: 10.5px;
+  color: #1f1030;
+  line-height: 1.65;
+  word-break: break-word;
+}
+.p-card-sub {
+  font-size: 9.5px;
+  color: var(--text-muted);
+  margin-top: 4px;
+  line-height: 1.5;
+}
+
+/* רשימת bullets */
+.p-bullets { list-style: none; margin-top: 3px; }
+.p-bullets li {
+  font-size: 10px; color: #1f1030;
+  line-height: 1.55;
+  padding-right: 12px;
+  position: relative;
+  margin-bottom: 3px;
+}
+.p-bullets li::before {
+  content: '◆';
+  position: absolute; right: 0; top: 2px;
+  font-size: 5.5px; color: var(--plum);
+}
+
+/* === רצועת סיום === */
+.poster-footer-bar {
+  margin-top: auto;
+  background: linear-gradient(135deg, #4a1f40, var(--plum), #9b40c0);
+  padding: 10px 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.poster-slogan {
+  font-family: 'Frank Ruhl Libre', serif;
+  font-style: italic;
+  font-size: 13px;
+  color: rgba(255,255,255,.95);
+  letter-spacing: 0.3px;
+}
+.poster-brand {
+  font-size: 9.5px;
+  color: rgba(255,255,255,.6);
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   כפתורי ניווט (תחתית כל שלב)
+   ============================================================ */
+.nav-bar {
+  flex-shrink: 0;
+  background: #fff;
+  border-top: 1px solid var(--border-light);
+  padding: 12px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 -2px 8px rgba(94,39,80,.06);
+}
+
+/* ============================================================
+   Overlay לודינג
+   ============================================================ */
+.loading-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(250,245,255,.88);
+  backdrop-filter: blur(6px);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 14px;
+}
+.loading-overlay.visible { display: flex; }
+.spinner {
+  width: 44px; height: 44px;
+  border: 4px solid var(--border-light);
+  border-top-color: var(--plum);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-text { font-size: 14px; color: var(--plum); font-weight: 600; }
+
+</style>
+</head>
+<body>
+
+<!-- לודינג -->
+<div class="loading-overlay" id="loading">
+  <div class="spinner"></div>
+  <div class="loading-text">מייצרת PDF...</div>
+</div>
+
+<div class="app">
+
+  <!-- כותרת -->
+  <header class="app-header">
+    <div class="app-header-brand">בונות פוסטר חקר <span>| פורצות דרך</span></div>
+  </header>
+
+  <!-- פס שלבים -->
+  <div class="stepper">
+    <div class="step-item active" id="si-1">
+      <div class="step-num">1</div>
+      <div class="step-label">סוג המוצר</div>
+    </div>
+    <div class="step-item" id="si-2">
+      <div class="step-num">2</div>
+      <div class="step-label">פרטי המחקר</div>
+    </div>
+    <div class="step-item" id="si-3">
+      <div class="step-num">3</div>
+      <div class="step-label">תמונות ופוסטר</div>
+    </div>
+  </div>
+
+  <!-- גוף -->
+  <div class="app-body">
+
+    <!-- ===== שלב 1 ===== -->
+    <div class="page active" id="page-1">
+      <div class="type-wrap">
+        <div>
+          <div class="type-title">מה סוג המוצר שפיתחתן?</div>
+          <div class="type-sub" style="margin-top:8px">הבחירה תשפיע על השאלות ועל מבנה הפוסטר</div>
+        </div>
+        <div class="type-cards">
+          <div class="type-card" id="tc-physical" onclick="selectType('physical')">
+            <div class="type-card-icon">🛍️</div>
+            <div class="type-card-name">מוצר פיזי</div>
+            <div class="type-card-desc">מוצר מוחשי שניתן לגעת בו ולהשתמש בו</div>
+          </div>
+          <div class="type-card" id="tc-app" onclick="selectType('app')">
+            <div class="type-card-icon">📱</div>
+            <div class="type-card-name">אפליקציה</div>
+            <div class="type-card-desc">אפליקציה לנייד לסמארטפון</div>
+          </div>
+          <div class="type-card" id="tc-website" onclick="selectType('website')">
+            <div class="type-card-icon">🌐</div>
+            <div class="type-card-name">אתר אינטרנט</div>
+            <div class="type-card-desc">פתרון דיגיטלי דרך הדפדפן</div>
+          </div>
+        </div>
+        <!-- ניווט שלב 1 -->
+        <div style="display:flex;justify-content:flex-start;width:100%">
+          <button class="btn-primary" id="btn-1-next" onclick="goTo(2)" disabled>המשך לשלב הבא ←</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== שלב 2 ===== -->
+    <div class="page" id="page-2">
+      <div class="form-layout">
+
+        <!-- סיידבר -->
+        <aside class="form-sidebar">
+          <div class="form-sidebar-title">שאלות המחקר</div>
+          <div class="sidebar-type-badge" id="type-badge">📱 אפליקציה</div>
+          <div class="form-sidebar-hint">
+            מלאו את כל השדות. כל מה שתכתבו יופיע בפוסטר הסופי בדיוק כפי שכתוב.
+          </div>
+          <div class="form-sidebar-nav">
+            <button class="btn-ghost" onclick="goTo(1)">← חזרה</button>
+            <button class="btn-primary" onclick="tryGoTo3()">המשך לתמונות ←</button>
+          </div>
+        </aside>
+
+        <!-- שדות -->
+        <div class="form-fields-scroll">
+          <div class="validation-banner" id="val-banner">יש למלא את כל שדות החובה לפני המשך</div>
+
+          <!-- 1. מהות המיזם -->
+          <div class="field-section">
+            <div class="field-section-header">
+              <div class="field-section-icon">🎯</div>
+              <div class="field-section-title">מהות המיזם</div>
+              <div class="field-section-line"></div>
+            </div>
+            <div class="fields-card">
+              <div class="field">
+                <label>שם המיזם <span class="req">*</span></label>
+                <div class="input-wrap">
+                  <input type="text" id="f-name" maxlength="20" placeholder="עד 20 תווים">
+                  <span class="char-counter" data-max="20">0/20</span>
+                </div>
+              </div>
+              <div class="field">
+                <label>תיאור קצר של המיזם <span class="req">*</span></label>
+                <div class="input-wrap">
+                  <textarea id="f-desc" maxlength="75" placeholder="עד 75 תווים"></textarea>
+                  <span class="char-counter" data-max="75">0/75</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. פרטי הצוות -->
+          <div class="field-section">
+            <div class="field-section-header">
+              <div class="field-section-icon">👩‍💻</div>
+              <div class="field-section-title">פרטי הצוות</div>
+              <div class="field-section-line"></div>
+            </div>
+            <div class="fields-card">
+              <div class="field">
+                <label>שמות התלמידות <span class="req">*</span></label>
+                <div class="input-wrap">
+                  <textarea id="f-names" maxlength="80" placeholder="שורה לכל שם" style="min-height:68px"></textarea>
+                  <span class="char-counter" data-max="80">0/80</span>
+                </div>
+              </div>
+              <div class="fields-row-2">
+                <div class="field">
+                  <label>כיתה <span class="req">*</span></label>
+                  <div class="input-wrap">
+                    <input type="text" id="f-class" maxlength="10" placeholder="למשל: י׳2">
+                    <span class="char-counter" data-max="10">0/10</span>
+                  </div>
+                </div>
+                <div class="field">
+                  <label>בית הספר <span class="req">*</span></label>
+                  <div class="input-wrap">
+                    <input type="text" id="f-school" maxlength="30" placeholder="עד 30 תווים">
+                    <span class="char-counter" data-max="30">0/30</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. הבעיה -->
+          <div class="field-section">
+            <div class="field-section-header">
+              <div class="field-section-icon">🔍</div>
+              <div class="field-section-title">הבעיה</div>
+              <div class="field-section-line"></div>
+            </div>
+            <div class="fields-card">
+              <div class="field">
+                <label>מה הבעיה שזיהיתן? <span class="req">*</span></label>
+                <div class="input-wrap">
+                  <textarea id="f-problem" maxlength="130" placeholder="עד 130 תווים"></textarea>
+                  <span class="char-counter" data-max="130">0/130</span>
+                </div>
+              </div>
+              <div class="field">
+                <label>על מי הבעיה משפיעה? <span class="req">*</span></label>
+                <div class="input-wrap">
+                  <textarea id="f-audience" maxlength="75" placeholder="עד 75 תווים"></textarea>
+                  <span class="char-counter" data-max="75">0/75</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. החקר -->
+          <div class="field-section">
+            <div class="field-section-header">
+              <div class="field-section-icon">🔬</div>
+              <div class="field-section-title">החקר הטכנולוגי</div>
+              <div class="field-section-line"></div>
+            </div>
+            <div class="fields-card">
+              <div class="field">
+                <label>מה הייתה שאלת החקר הטכנולוגית? <span class="req">*</span></label>
+                <div class="input-wrap">
+                  <textarea id="f-rq" maxlength="90" placeholder="עד 90 תווים"></textarea>
+                  <span class="char-counter" data-max="90">0/90</span>
+                </div>
+              </div>
+              <div class="fields-row-3">
+                <div class="field">
+                  <label>חקר 1 <span class="req">*</span></label>
+                  <div class="input-wrap">
+                    <input type="text" id="f-r1" maxlength="42" placeholder="עד 42">
+                    <span class="char-counter" data-max="42">0/42</span>
+                  </div>
+                </div>
+                <div class="field">
+                  <label>חקר 2 <span class="opt">(אופ׳)</span></label>
+                  <div class="input-wrap">
+                    <input type="text" id="f-r2" maxlength="42" placeholder="עד 42">
+                    <span class="char-counter" data-max="42">0/42</span>
+                  </div>
+                </div>
+                <div class="field">
+                  <label>חקר 3 <span class="opt">(אופ׳)</span></label>
+                  <div class="input-wrap">
+                    <input type="text" id="f-r3" maxlength="42" placeholder="עד 42">
+                    <span class="char-counter" data-max="42">0/42</span>
+                  </div>
+                </div>
+              </div>
+              <div class="field">
+                <label>מה גיליתן בעקבות החקר? <span class="req">*</span></label>
+                <div class="input-wrap">
+                  <textarea id="f-findings" maxlength="110" placeholder="עד 110 תווים"></textarea>
+                  <span class="char-counter" data-max="110">0/110</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 5. הפתרון -->
+          <div class="field-section">
+            <div class="field-section-header">
+              <div class="field-section-icon">💡</div>
+              <div class="field-section-title">הפתרון</div>
+              <div class="field-section-line"></div>
+            </div>
+            <div class="fields-card">
+              <div class="fields-row-3">
+                <div class="field">
+                  <label>דרישה 1 <span class="req">*</span></label>
+                  <div class="input-wrap">
+                    <input type="text" id="f-req1" maxlength="42" placeholder="עד 42">
+                    <span class="char-counter" data-max="42">0/42</span>
+                  </div>
+                </div>
+                <div class="field">
+                  <label>דרישה 2 <span class="opt">(אופ׳)</span></label>
+                  <div class="input-wrap">
+                    <input type="text" id="f-req2" maxlength="42" placeholder="עד 42">
+                    <span class="char-counter" data-max="42">0/42</span>
+                  </div>
+                </div>
+                <div class="field">
+                  <label>דרישה 3 <span class="opt">(אופ׳)</span></label>
+                  <div class="input-wrap">
+                    <input type="text" id="f-req3" maxlength="42" placeholder="עד 42">
+                    <span class="char-counter" data-max="42">0/42</span>
+                  </div>
+                </div>
+              </div>
+              <div class="field">
+                <label id="lbl-solution">מהו הפתרון? <span class="req">*</span></label>
+                <div class="input-wrap">
+                  <textarea id="f-solution" maxlength="130" placeholder="עד 130 תווים"></textarea>
+                  <span class="char-counter" data-max="130">0/130</span>
+                </div>
+              </div>
+              <div class="fields-row-3">
+                <div class="field">
+                  <label id="lbl-u1">שלב 1 <span class="req">*</span></label>
+                  <div class="input-wrap">
+                    <input type="text" id="f-u1" maxlength="42" placeholder="עד 42">
+                    <span class="char-counter" data-max="42">0/42</span>
+                  </div>
+                </div>
+                <div class="field">
+                  <label id="lbl-u2">שלב 2 <span class="opt">(אופ׳)</span></label>
+                  <div class="input-wrap">
+                    <input type="text" id="f-u2" maxlength="42" placeholder="עד 42">
+                    <span class="char-counter" data-max="42">0/42</span>
+                  </div>
+                </div>
+                <div class="field">
+                  <label id="lbl-u3">שלב 3 <span class="opt">(אופ׳)</span></label>
+                  <div class="input-wrap">
+                    <input type="text" id="f-u3" maxlength="42" placeholder="עד 42">
+                    <span class="char-counter" data-max="42">0/42</span>
+                  </div>
+                </div>
+              </div>
+              <div class="field">
+                <label>מה הערך המרכזי של הפתרון? <span class="req">*</span></label>
+                <div class="input-wrap">
+                  <textarea id="f-value" maxlength="110" placeholder="עד 110 תווים"></textarea>
+                  <span class="char-counter" data-max="110">0/110</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 6. משוב -->
+          <div class="field-section">
+            <div class="field-section-header">
+              <div class="field-section-icon">⭐</div>
+              <div class="field-section-title">משוב ושיפור</div>
+              <div class="field-section-line"></div>
+            </div>
+            <div class="fields-card">
+              <div class="field">
+                <label>מה המשוב שקיבלתן? <span class="req">*</span></label>
+                <div class="input-wrap">
+                  <textarea id="f-feedback" maxlength="110" placeholder="עד 110 תווים"></textarea>
+                  <span class="char-counter" data-max="110">0/110</span>
+                </div>
+              </div>
+              <div class="field">
+                <label>מה שיפרתן בעקבות המשוב? <span class="req">*</span></label>
+                <div class="input-wrap">
+                  <textarea id="f-improved" maxlength="110" placeholder="עד 110 תווים"></textarea>
+                  <span class="char-counter" data-max="110">0/110</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 7. סלוגן -->
+          <div class="field-section">
+            <div class="field-section-header">
+              <div class="field-section-icon">✨</div>
+              <div class="field-section-title">סלוגן</div>
+              <div class="field-section-line"></div>
+            </div>
+            <div class="fields-card">
+              <div class="field">
+                <label>סלוגן לתחתית הפוסטר <span class="req">*</span></label>
+                <div class="input-wrap">
+                  <input type="text" id="f-slogan" maxlength="60" placeholder="עד 60 תווים">
+                  <span class="char-counter" data-max="60">0/60</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- מרווח תחתון -->
+          <div style="height:20px"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== שלב 3 ===== -->
+    <div class="page" id="page-3">
+
+      <!-- סיידבר שלב 3 -->
+      <aside class="poster-sidebar">
+        <div class="ps-title">עיצוב ותמונות</div>
+
+        <!-- בחירת רקע -->
+        <div class="ps-section">
+          <div class="ps-section-label">רקע לפוסטר</div>
+          <div class="bg-grid" id="bg-grid">
+            <div class="bg-none selected" id="bg-none" onclick="selectBg(null)">ללא</div>
+            <!-- תמונות רקע יוזרקו ב-JS -->
+          </div>
+        </div>
+
+        <!-- העלאת תמונות -->
+        <div class="ps-section">
+          <div class="ps-section-label" id="upload-label">תמונות האפליקציה</div>
+          <div class="upload-slots" id="upload-slots">
+            <!-- slots יוזרקו ב-JS -->
+          </div>
+        </div>
+
+        <!-- כפתורים -->
+        <div class="ps-section" style="margin-top:auto;gap:10px">
+          <button class="btn-primary" onclick="buildPoster()" style="width:100%">🌸 צרו את הפוסטר</button>
+          <button class="btn-pdf" onclick="downloadPDF()" id="btn-pdf" style="width:100%;display:none">⬇️ הורדת PDF</button>
+          <button class="btn-ghost" onclick="goTo(2)" style="width:100%">← חזרה לשאלות</button>
+        </div>
+      </aside>
+
+      <!-- אזור הפוסטר -->
+      <div class="poster-preview-area">
+
+        <!-- placeholder -->
+        <div class="poster-placeholder" id="poster-ph">
+          <div class="poster-placeholder-icon">🌸</div>
+          <div class="poster-placeholder-title">הפוסטר יופיע כאן</div>
+          <div class="poster-placeholder-hint">בחרו רקע, העלו תמונות ולחצו "צרו את הפוסטר"</div>
+        </div>
+
+        <!-- הפוסטר -->
+        <div id="poster">
+          <!-- רקע -->
+          <div class="poster-bg" id="poster-bg"></div>
+
+          <div class="poster-body">
+            <div class="poster-top-bar"></div>
+
+            <!-- כותרת -->
+            <div class="poster-hero">
+              <!-- תג צוות -->
+              <div class="poster-team-badge" id="p-team">
+                <div class="poster-team-cap">הצוות שלנו</div>
+                <div class="poster-team-names" id="p-names">—</div>
+                <div class="poster-team-school" id="p-school"></div>
+              </div>
+
+              <div class="poster-project-name" id="p-name">שם המיזם</div>
+              <div class="poster-divider"></div>
+              <div class="poster-description" id="p-desc"></div>
+            </div>
+
+            <!-- בעיה + חקר -->
+            <div class="poster-row-2">
+              <div class="p-card">
+                <div class="p-card-cap">הבעיה שזיהינו</div>
+                <div class="p-card-body" id="p-problem"></div>
+                <div class="p-card-sub" id="p-audience"></div>
+              </div>
+              <div class="p-card">
+                <div class="p-card-cap">שאלת החקר</div>
+                <div class="p-card-body" id="p-rq"></div>
+              </div>
+            </div>
+
+            <!-- תמונות -->
+            <div class="poster-images-zone">
+              <div class="poster-images-label" id="p-images-label">האפליקציה שלנו</div>
+              <!-- 2 תמונות -->
+              <div class="poster-images-2" id="p-images-2" style="display:none">
+                <div class="p-card p-img-frame poster-img-frame-2" id="p-img-0">
+                  <div class="poster-img-ph"><span>📷</span><small>תמונה ראשית</small></div>
+                </div>
+                <div class="p-card p-img-frame poster-img-frame-2" id="p-img-1">
+                  <div class="poster-img-ph"><span>🤝</span><small>תמונת שימוש</small></div>
+                </div>
+              </div>
+              <!-- 3 תמונות -->
+              <div class="poster-images-3" id="p-images-3" style="display:none">
+                <div class="p-img-frame poster-img-frame-3 notch" id="p-img-0">
+                  <div class="poster-img-ph"><span>📱</span><small>מסך 1</small></div>
+                </div>
+                <div class="p-img-frame poster-img-frame-3 notch" id="p-img-1">
+                  <div class="poster-img-ph"><span>📱</span><small>מסך 2</small></div>
+                </div>
+                <div class="p-img-frame poster-img-frame-3 notch" id="p-img-2">
+                  <div class="poster-img-ph"><span>📱</span><small>מסך 3</small></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- חקר × 3 + תובנות + דרישות -->
+            <div class="poster-row-3">
+              <div class="p-card">
+                <div class="p-card-cap">החקר שביצענו</div>
+                <ul class="p-bullets" id="p-research"></ul>
+              </div>
+              <div class="p-card">
+                <div class="p-card-cap">מה גילינו</div>
+                <div class="p-card-body" id="p-findings"></div>
+              </div>
+              <div class="p-card">
+                <div class="p-card-cap">דרישות הפתרון</div>
+                <ul class="p-bullets" id="p-reqs"></ul>
+              </div>
+            </div>
+
+            <!-- פתרון + שימוש -->
+            <div class="poster-row-2-bottom">
+              <div class="p-card">
+                <div class="p-card-cap" id="p-solution-cap">האפליקציה שלנו</div>
+                <div class="p-card-body" id="p-solution"></div>
+              </div>
+              <div class="p-card">
+                <div class="p-card-cap" id="p-usage-cap">איך זה עובד</div>
+                <ul class="p-bullets" id="p-usage"></ul>
+              </div>
+            </div>
+
+            <!-- משוב + שיפור + ערך -->
+            <div class="poster-row-3-bottom">
+              <div class="p-card accent">
+                <div class="p-card-cap">המשוב שקיבלנו</div>
+                <div class="p-card-body" id="p-feedback"></div>
+              </div>
+              <div class="p-card accent">
+                <div class="p-card-cap">מה שיפרנו</div>
+                <div class="p-card-body" id="p-improved"></div>
+              </div>
+              <div class="p-card accent">
+                <div class="p-card-cap">הערך המרכזי</div>
+                <div class="p-card-body" id="p-value"></div>
+              </div>
+            </div>
+
+            <!-- רצועת סיום -->
+            <div class="poster-footer-bar">
+              <div class="poster-slogan" id="p-slogan">הסלוגן שלנו</div>
+              <div class="poster-brand">פורצות דרך ✦ 2026</div>
+            </div>
+          </div>
+        </div><!-- /poster -->
+      </div><!-- /poster-preview-area -->
+    </div><!-- /page-3 -->
+
+  </div><!-- /app-body -->
+</div><!-- /app -->
+
+<script>
+/* ============================================================
+   מצב גלובלי
+   ============================================================ */
+let productType = null;
+const images = [null, null, null];
+let selectedBg = null;
+
+/* ============================================================
+   רקעים — נתיבים לפי הריפו הקיים
+   ============================================================ */
+const BG_PATHS = Array.from({length:11}, (_,i) =>
+  `/poster-builder/assets/backgrounds/bg-tech${i+1}.png`
+);
+
+/* ============================================================
+   שלב 1 — בחירת סוג
+   ============================================================ */
+function selectType(type) {
+  productType = type;
+  ['physical','app','website'].forEach(t => {
+    document.getElementById(`tc-${t}`).classList.toggle('selected', t === type);
+  });
+  document.getElementById('btn-1-next').disabled = false;
+}
+
+/* ============================================================
+   מונה תווים
+   ============================================================ */
+document.querySelectorAll('.input-wrap input[maxlength], .input-wrap textarea[maxlength]').forEach(el => {
+  const counter = el.closest('.input-wrap').querySelector('.char-counter');
+  if (!counter) return;
+  const max = parseInt(counter.dataset.max);
+  el.addEventListener('input', () => {
+    const len = el.value.length;
+    counter.textContent = `${len}/${max}`;
+    counter.className = 'char-counter' +
+      (len >= max ? ' full' : len / max > 0.88 ? ' warn' : '');
+  });
+});
+
+/* ============================================================
+   ניווט בין שלבים
+   ============================================================ */
+function goTo(step) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(`page-${step}`).classList.add('active');
+
+  document.querySelectorAll('.step-item').forEach((s,i) => {
+    s.classList.remove('active','done');
+    if (i+1 < step)  s.classList.add('done');
+    if (i+1 === step) s.classList.add('active');
+  });
+
+  if (step === 2) applyTypeLabels();
+  if (step === 3) initStep3();
+  window.scrollTo(0,0);
+}
+
+function applyTypeLabels() {
+  const L = {
+    physical: { badge:'🛍️ מוצר פיזי', solution:'מהו המוצר הפיזי?', u:'איך משתמשים במוצר?' },
+    app:      { badge:'📱 אפליקציה',   solution:'מהי האפליקציה?',   u:'איך משתמשים באפליקציה?' },
+    website:  { badge:'🌐 אתר',         solution:'מהו האתר?',         u:'מה המשתמשת עושה באתר?' },
+  }[productType] || {};
+
+  document.getElementById('type-badge').textContent = L.badge || '';
+  if (L.solution) document.getElementById('lbl-solution').innerHTML =
+    L.solution + ' <span class="req">*</span>';
+  if (L.u) {
+    document.getElementById('lbl-u1').innerHTML = 'שלב 1 <span class="req">*</span>';
+    document.getElementById('lbl-u2').innerHTML = 'שלב 2 <span class="opt">(אופ׳)</span>';
+    document.getElementById('lbl-u3').innerHTML = 'שלב 3 <span class="opt">(אופ׳)</span>';
+  }
+}
+
+function tryGoTo3() {
+  const required = ['f-name','f-desc','f-names','f-class','f-school',
+    'f-problem','f-audience','f-rq','f-r1','f-findings',
+    'f-req1','f-solution','f-u1','f-value','f-feedback','f-improved','f-slogan'];
+
+  const missing = required.filter(id => !document.getElementById(id)?.value?.trim());
+
+  if (missing.length) {
+    const banner = document.getElementById('val-banner');
+    banner.classList.add('visible');
+    document.getElementById(missing[0])?.focus();
+    return;
+  }
+  document.getElementById('val-banner').classList.remove('visible');
+  goTo(3);
+}
+
+/* ============================================================
+   שלב 3 — אתחול רשת רקעים וסלוטים
+   ============================================================ */
+function initStep3() {
+  buildBgGrid();
+  buildUploadSlots();
+  applyTypeToStep3();
+}
+
+function buildBgGrid() {
+  const grid = document.getElementById('bg-grid');
+  // נקה קיים (חוץ מ-none)
+  grid.querySelectorAll('.bg-thumb').forEach(el => el.remove());
+
+  BG_PATHS.forEach((path, i) => {
+    const div = document.createElement('div');
+    div.className = 'bg-thumb' + (selectedBg === path ? ' selected' : '');
+    div.onclick = () => selectBg(path);
+    const img = document.createElement('img');
+    img.src = path;
+    img.alt = `רקע ${i+1}`;
+    div.appendChild(img);
+    grid.appendChild(div);
+  });
+
+  document.getElementById('bg-none').className =
+    'bg-none' + (selectedBg === null ? ' selected' : '');
+}
+
+function selectBg(path) {
+  selectedBg = path;
+
+  // עדכון UI
+  document.getElementById('bg-none').className =
+    'bg-none' + (path === null ? ' selected' : '');
+  document.querySelectorAll('.bg-thumb').forEach((el, i) => {
+    el.classList.toggle('selected', BG_PATHS[i] === path);
+  });
+
+  // עדכון פוסטר אם קיים
+  const bgEl = document.getElementById('poster-bg');
+  if (path) {
+    bgEl.innerHTML = `<img src="${path}" alt="רקע">`;
+  } else {
+    bgEl.innerHTML = '';
+  }
+}
+
+function buildUploadSlots() {
+  const isPhysical = productType === 'physical';
+  const count = isPhysical ? 2 : 3;
+  const labels = isPhysical
+    ? ['תמונה ראשית','תמונת שימוש']
+    : ['מסך 1','מסך 2','מסך 3'];
+  const hints = isPhysical
+    ? ['תמונת המוצר עצמו','תמונת שימוש במוצר']
+    : ['צילום מסך ראשון','צילום מסך שני','צילום מסך שלישי'];
+
+  document.getElementById('upload-label').textContent =
+    isPhysical ? 'תמונות המוצר' : (productType === 'app' ? 'מסכי האפליקציה' : 'מסכי האתר');
+
+  const container = document.getElementById('upload-slots');
+  container.innerHTML = '';
+
+  for (let i = 0; i < count; i++) {
+    const slot = document.createElement('div');
+    slot.className = 'upload-slot' + (images[i] ? ' loaded' : '');
+    slot.id = `slot-${i}`;
+    slot.innerHTML = `
+      <input type="file" accept="image/*" onchange="loadImg(this,${i})">
+      <img class="upload-slot-preview" id="slot-prev-${i}" ${images[i] ? `src="${images[i]}"` : ''}>
+      <div class="upload-slot-label">${labels[i]}</div>
+      <div class="upload-slot-hint">${hints[i]}</div>
+      <div class="upload-slot-ok">✓ נטענה</div>
+    `;
+    container.appendChild(slot);
+  }
+}
+
+function applyTypeToStep3() {
+  const isPhysical = productType === 'physical';
+  document.getElementById('p-images-2').style.display = isPhysical ? 'grid' : 'none';
+  document.getElementById('p-images-3').style.display = isPhysical ? 'none' : 'grid';
+
+  const labels = {
+    physical: { images:'המוצר שלנו', solution:'המוצר שלנו', usage:'איך משתמשים' },
+    app:      { images:'מסכי האפליקציה', solution:'האפליקציה שלנו', usage:'איך זה עובד' },
+    website:  { images:'מסכי האתר', solution:'האתר שלנו', usage:'איך זה עובד' },
+  }[productType] || {};
+
+  setText('p-images-label', labels.images);
+  setText('p-solution-cap', labels.solution);
+  setText('p-usage-cap', labels.usage);
+}
+
+/* ============================================================
+   טעינת תמונה
+   ============================================================ */
+function loadImg(input, index) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    images[index] = e.target.result;
+
+    const slot = document.getElementById(`slot-${index}`);
+    const prev = document.getElementById(`slot-prev-${index}`);
+    if (slot) slot.classList.add('loaded');
+    if (prev) prev.src = e.target.result;
+
+    // עדכון בפוסטר אם כבר בנוי
+    setImageInPoster(index, e.target.result);
+  };
+  reader.readAsDataURL(file);
+}
+
+function setImageInPoster(index, src) {
+  const frame = document.getElementById(`p-img-${index}`);
+  if (!frame) return;
+  frame.innerHTML = `<img src="${src}" alt="תמונה ${index+1}" style="width:100%;height:100%;object-fit:cover;display:block;">`;
+}
+
+/* ============================================================
+   בניית הפוסטר
+   ============================================================ */
+function buildPoster() {
+  applyTypeToStep3();
+
+  // כותרת
+  const nameEl = document.getElementById('p-name');
+  const nameVal = val('f-name') || 'שם המיזם';
+  nameEl.textContent = nameVal;
+  // גודל גופן אדפטיבי לשם
+  const nameLen = nameVal.length;
+  nameEl.style.fontSize = nameLen <= 8 ? '52px' :
+                          nameLen <= 14 ? '44px' :
+                          nameLen <= 18 ? '36px' : '28px';
+
+  setText('p-desc', val('f-desc'));
+
+  // צוות
+  const names = val('f-names').split('\n').filter(n=>n.trim()).join(' · ');
+  setText('p-names', names || '—');
+  const school = [val('f-school'), val('f-class')].filter(Boolean).join(' | ');
+  setText('p-school', school);
+
+  // בעיה
+  setText('p-problem', val('f-problem'));
+  setText('p-audience', val('f-audience') ? '👥 ' + val('f-audience') : '');
+
+  // חקר
+  setText('p-rq', val('f-rq'));
+  setList('p-research', [val('f-r1'), val('f-r2'), val('f-r3')]);
+  setText('p-findings', val('f-findings'));
+
+  // פתרון
+  setList('p-reqs', [val('f-req1'), val('f-req2'), val('f-req3')]);
+  setText('p-solution', val('f-solution'));
+  setList('p-usage', [val('f-u1'), val('f-u2'), val('f-u3')]);
+  setText('p-value', val('f-value'));
+
+  // משוב
+  setText('p-feedback', val('f-feedback'));
+  setText('p-improved', val('f-improved'));
+
+  // סלוגן
+  setText('p-slogan', val('f-slogan') || 'הפתרון שלנו לעולם טוב יותר');
+
+  // תמונות
+  images.forEach((src, i) => { if (src) setImageInPoster(i, src); });
+
+  // הצג
+  document.getElementById('poster-ph').style.display = 'none';
+  document.getElementById('poster').style.display = 'block';
+  document.getElementById('btn-pdf').style.display = 'block';
+}
+
+/* ============================================================
+   הורדת PDF
+   ============================================================ */
+async function downloadPDF() {
+  document.getElementById('loading').classList.add('visible');
+  try {
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+
+    const poster = document.getElementById('poster');
+    const canvas = await html2canvas(poster, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: '#ffffff',
+      logging: false,
+      width: 794,
+      height: poster.scrollHeight,
+      windowWidth: 794,
+    });
+
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ orientation:'portrait', unit:'mm', format:'a4' });
+    const imgData = canvas.toDataURL('image/jpeg', 0.96);
+    pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297);
+
+    const name = val('f-name') || 'פוסטר';
+    pdf.save(`פוסטר-${name}.pdf`);
+  } catch(e) {
+    console.error(e);
+    alert('שגיאה ביצירת ה-PDF. נסי שוב.');
+  } finally {
+    document.getElementById('loading').classList.remove('visible');
+  }
+}
+
+/* ============================================================
+   כלי עזר
+   ============================================================ */
+function val(id) {
+  return (document.getElementById(id)?.value || '').trim();
+}
+function setText(id, text) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = text || '';
+}
+function setList(id, items) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = items.filter(Boolean)
+    .map(t => `<li>${t}</li>`).join('');
+}
+function loadScript(src) {
+  return new Promise((res, rej) => {
+    if (document.querySelector(`script[src="${src}"]`)) { res(); return; }
+    const s = document.createElement('script');
+    s.src = src; s.onload = res; s.onerror = rej;
+    document.head.appendChild(s);
+  });
+}
+</script>
+</body>
+</html>
