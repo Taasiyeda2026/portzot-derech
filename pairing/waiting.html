@@ -8,7 +8,7 @@
   <link rel="apple-touch-icon" href="../icon/favicon.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ממתינות לזיווג | שותפה לדרך</title>
+    <title>ממתינות לחלוקה לקבוצה | פורצות דרך</title>
     <style>
         * {
             margin: 0;
@@ -329,14 +329,14 @@
             </div>
 
             <div class="message" style="margin-top: 40px; font-size: 18px; opacity: 0.8;">
-                💝 המדריכה תשדך לך שותפה מושלמת בקרוב
+                💝 המדריכה תפעיל חלוקה לקבוצות בקרוב
             </div>
         </div>
 
         <!-- מסך תוצאה -->
         <div class="result-screen" id="resultScreen">
             <div class="icon">💕</div>
-            <h1 id="resultTitle">מצאנו לך שותפה!</h1>
+            <h1 id="resultTitle">מצאנו לך קבוצה!</h1>
             
             <div class="partner-card">
                 <div id="teamBadge" class="team-badge" style="display: none;">
@@ -344,14 +344,14 @@
                 </div>
                 
                 <div class="message" style="margin-bottom: 10px;">
-                    <span id="partnerLabel">השותפה שלך היא:</span>
+                    <span id="partnerLabel">הקבוצה שלך היא:</span>
                 </div>
                 
                 <div class="partner-name" id="partnerName">...</div>
                 
                 <div id="teamMembers" class="team-members" style="display: none;"></div>
                 
-                <div class="match-percent" id="matchPercent">...</div>
+                
                 
                 <div class="positive-message" id="positiveMessage">...</div>
             </div>
@@ -359,152 +359,20 @@
     </div>
 
     <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getFirestore, doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyCFSq5b-HgkTxFNhBJIBdOe2ian5TZvMPE",
-            authDomain: "portzot-derech.firebaseapp.com",
-            projectId: "portzot-derech",
-            storageBucket: "portzot-derech.firebasestorage.app",
-            messagingSenderId: "236417614890",
-            appId: "1:236417614890:web:587b0eb3c5eedfa352af53"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        db._settings.experimentalForceLongPolling = true;
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const sessionId = urlParams.get('session');
-        const myName = localStorage.getItem('displayName');
-
-        if (!sessionId) {
-            alert('שגיאה: לא נמצא קוד פעילות');
-            window.location.href = 'pairing.html';
-        }
-
-        let resetTimer = null;
-
-        // מאזין לעדכון session
-        const sessionRef = doc(db, 'sessions', sessionId);
-        onSnapshot(sessionRef, (docSnap) => {
-            if (docSnap.exists()) {
-                const data = docSnap.data();
-                const completedCount = data.completedCount || 0;
-                const participantCount = data.participantCount || 0;
-
-                document.getElementById('completedCount').textContent = 
-                    `${completedCount}/${participantCount}`;
-
-                console.log('📊 עדכון:', completedCount, 'מתוך', participantCount);
-            }
-        });
-
-        // מאזין לזיווגים
-        const pairingsRef = doc(db, 'pairings', sessionId);
-        onSnapshot(pairingsRef, (docSnap) => {
-            if (docSnap.exists()) {
-                const data = docSnap.data();
-                const pairs = data.pairs || [];
-                
-                console.log('💝 נמצאו זיווגים:', pairs);
-                
-                // מציאת השותפה/צוות שלי
-                const myPairing = pairs.find(pair => 
-                    pair.person1 === myName || 
-                    pair.person2 === myName || 
-                    pair.person3 === myName
-                );
-                
-                if (myPairing) {
-                    console.log('✅ נמצא הזיווג שלי:', myPairing);
-                    showResult(myPairing);
-                    
-                    // טיימר 5 דקות
-                    if (resetTimer) clearTimeout(resetTimer);
-                    resetTimer = setTimeout(() => {
-                        console.log('⏰ 5 דקות עברו - מתאפס');
-                        resetToWaiting();
-                    }, 5 * 60 * 1000);
-                }
-            }
-        });
-
-        function showResult(pairing) {
-            document.getElementById('waitingScreen').classList.add('hide');
-            document.getElementById('resultScreen').classList.add('show');
-            
-            const percent = Math.round((pairing.score / 143) * 100);
-            
-            if (pairing.isTeam) {
-                // צוות של 3
-                document.getElementById('teamBadge').style.display = 'inline-block';
-                document.getElementById('resultTitle').textContent = 'הצוות שלך מוכן! 👥';
-                document.getElementById('partnerLabel').textContent = 'את חלק מצוות של 3:';
-                
-                const members = [pairing.person1, pairing.person2, pairing.person3].filter(Boolean);
-                document.getElementById('partnerName').textContent = members.join(' • ');
-                
-                document.getElementById('matchPercent').textContent = `🎯 ${percent}%`;
-                document.getElementById('positiveMessage').textContent = 
-                    generateTeamMessage(percent, pairing.reasons);
-                    
-            } else if (pairing.isLeftover) {
-                // אחת לבד
-                document.getElementById('resultTitle').textContent = 'עדכון 💝';
-                document.getElementById('partnerLabel').textContent = '';
-                document.getElementById('partnerName').textContent = 'המדריכה תיצור איתך קשר בקרוב';
-                document.getElementById('matchPercent').textContent = '';
-                document.getElementById('positiveMessage').textContent = 
-                    'נשמח לשדך לך שותפה בהזדמנות הקרובה! 💕';
-                    
-            } else {
-                // זוג רגיל
-                const partnerName = pairing.person1 === myName ? pairing.person2 : pairing.person1;
-                document.getElementById('partnerName').textContent = partnerName;
-                document.getElementById('matchPercent').textContent = `🎯 ${percent}%`;
-                document.getElementById('positiveMessage').textContent = 
-                    generatePositiveMessage(percent, pairing.reasons);
-            }
-        }
-
-        function generatePositiveMessage(percent, reasons) {
-            const topReason = reasons && reasons.length > 0 ? reasons[0] : '';
-            
-            if (percent >= 95) {
-                return `זה שידוך מושלם! 💕 ${topReason}`;
-            } else if (percent >= 90) {
-                return `שתיכן תפרחו ביחד! ${topReason}`;
-            } else if (percent >= 85) {
-                return `זה שידוך מעולה! ${topReason}`;
-            } else if (percent >= 80) {
-                return `אתן תשלימו אחת את השנייה בצורה נהדרת! ${topReason}`;
-            } else {
-                return `יש לכן הרבה פוטנציאל לצמיחה משותפת! 💝`;
-            }
-        }
-
-        function generateTeamMessage(percent, reasons) {
-            if (percent >= 85) {
-                return 'צוות מעולה! יש לכן הרבה משותף והשלמה מדהימה! 💕';
-            } else if (percent >= 75) {
-                return 'צוות נהדר! תוכלו ללמוד הרבה אחת מהשנייה! 🌟';
-            } else {
-                return 'צוות עם פוטנציאל גדול! תיהנו מהגיוון והשוני! 💝';
-            }
-        }
-
-        function resetToWaiting() {
-            document.getElementById('waitingScreen').classList.remove('hide');
-            document.getElementById('resultScreen').classList.remove('show');
-            
-            document.getElementById('teamBadge').style.display = 'none';
-            document.getElementById('resultTitle').textContent = 'מצאנו לך שותפה!';
-            document.getElementById('partnerLabel').textContent = 'השותפה שלך היא:';
-            document.getElementById('teamMembers').style.display = 'none';
-        }
-    </script>
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+import { getFirestore, doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+const cfg={apiKey:"AIzaSyCFSq5b-HgkTxFNhBJIBdOe2ian5TZvMPE",authDomain:"portzot-derech.firebaseapp.com",projectId:"portzot-derech",storageBucket:"portzot-derech.firebasestorage.app",messagingSenderId:"236417614890",appId:"1:236417614890:web:587b0eb3c5eedfa352af53"};
+const db=getFirestore(initializeApp(cfg)); const sessionId=new URLSearchParams(location.search).get('session');
+const myName=localStorage.getItem('displayName'); const myId=localStorage.getItem('responseId');
+onSnapshot(doc(db,'pairings',sessionId),(snap)=>{if(!snap.exists()) return;const data=snap.data();const groups=data.groups||data.pairs||[];const group=groups.find(g=> (myId && g.members?.includes(myId)) || (myName && g.memberNames?.includes(myName)));if(!group) return;
+document.getElementById('waitingScreen').classList.add('hide');document.getElementById('resultScreen').classList.add('show');
+document.getElementById('resultTitle').textContent='מצאנו לך קבוצה';document.getElementById('partnerLabel').textContent='את בקבוצה עם:';
+document.getElementById('partnerName').innerHTML=group.memberNames.join('<br>');
+let msg='יש לכן שילוב טוב של תחומי עניין, דרך עבודה ותפקידים בקבוצה. עכשיו תוכלו להתחיל לחשוב יחד, לחלק תפקידים ולהתקדם לרעיון משותף.';
+if(group.size===2) msg='את בקבוצה קטנה של 2. זו קבוצה ממוקדת שתוכל לעבוד מקרוב, לחשוב יחד ולהתקדם בקצב נוח.';
+if(group.size===4) msg='את בקבוצה של 4. יש לכן מגוון רחב יותר של רעיונות, תפקידים ודרכי עבודה. כדאי לחלק תפקידים בצורה ברורה כדי שכל אחת תוכל להשתתף.';
+document.getElementById('positiveMessage').textContent=msg;});
+</script>
 
 <script>
   if ("serviceWorker" in navigator) {
