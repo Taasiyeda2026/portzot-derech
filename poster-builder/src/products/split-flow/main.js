@@ -470,7 +470,7 @@ function validateImagesStep() {
   const errors = {};
   const requiredSlots = getSlotDefs().map((slot) => slot.key);
   const missingSlots = requiredSlots.filter((slotKey) => !state.slotImages[slotKey]);
-  if (missingSlots.length) errors.slotUploads = 'כדי להמשיך, צריך להעלות את כל התמונות למסכים';
+  if (missingSlots.length) errors.slotUploads = 'כדי להמשיך, צריך להעלות תמונה לכל אחד משלושת המסכים.';
   if (productType !== 'physical') {
     state.images.forEach((image, idx) => {
       image.screenRef = `${idx + 1}`;
@@ -993,6 +993,7 @@ function render() {
     ${renderStepper()}
     ${state.visibleErrors.length ? '<div class="split-alert">יש להשלים את השדות החסרים לפני מעבר לשלב הבא.</div>' : ''}
     <section class="split-body">${renderBody()}</section>
+    ${state.navErrorMessage ? `<p class="split-upload-error" style="margin-top:10px">${escapeHtml(state.navErrorMessage)}</p>` : ''}
     <nav class="split-nav">
       <button type="button" class="split-btn ghost" data-nav="back" ${state.step === 1 ? 'disabled' : ''}>חזרה</button>
       <button type="button" class="split-btn primary" data-nav="next">${state.step === MAX_STEP ? 'סיום' : 'המשיכי לשלב הבא'}</button>
@@ -1165,10 +1166,11 @@ function wireEvents() {
       const file = input.files?.[0];
       if (!file) return;
       const reader = new FileReader();
-      reader.onload = (e) => {
-        state.slotImages[slotKey] = e.target.result;
+      reader.onload = () => {
+        state.slotImages[slotKey] = reader.result;
         state.errors.slotUploads = '';
         state.visibleErrors = state.visibleErrors.filter((key) => key !== 'slotUploads');
+        state.navErrorMessage = '';
         persistSplitFlowState();
         render();
       };
@@ -1180,6 +1182,7 @@ function wireEvents() {
   root.querySelectorAll('[data-slot-clear]').forEach((button) => {
     button.addEventListener('click', () => {
       state.slotImages[button.dataset.slotClear] = null;
+      state.navErrorMessage = '';
       persistSplitFlowState();
       render();
     });
@@ -1192,6 +1195,7 @@ function wireEvents() {
       state.step = Math.max(1, state.step - 1);
       state.errors = {};
       state.visibleErrors = [];
+      state.navErrorMessage = '';
       persistSplitFlowState();
       render();
     }
@@ -1199,22 +1203,39 @@ function wireEvents() {
 
   root.querySelector('[data-nav="next"]').addEventListener('click', () => {
     if (state.step < MAX_STEP) {
-      const errors = validateStep(state.step);
-      if (Object.keys(errors).length) {
-        if (errors.slotUploads) {
+      if (state.step === 3 && productType !== 'physical') {
+        const requiredSlots = ['visual_1', 'visual_2', 'visual_3'];
+        const hasAllRequiredSlots = requiredSlots.every((slotKey) => Boolean(state.slotImages[slotKey]));
+        if (!hasAllRequiredSlots) {
+          state.errors.slotUploads = 'כדי להמשיך, צריך להעלות תמונה לכל אחד משלושת המסכים.';
           state.visibleErrors = ['slotUploads'];
+          state.navErrorMessage = state.errors.slotUploads;
           render();
           const uploadsCard = root.querySelector('.split-upload-error');
           uploadsCard?.scrollIntoView({ behavior: 'smooth', block: 'center' });
           return;
         }
+      }
+
+      const errors = validateStep(state.step);
+      if (Object.keys(errors).length) {
+        if (errors.slotUploads) {
+          state.visibleErrors = ['slotUploads'];
+          state.navErrorMessage = errors.slotUploads;
+          render();
+          const uploadsCard = root.querySelector('.split-upload-error');
+          uploadsCard?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          return;
+        }
+        state.navErrorMessage = '';
         focusFirstInvalidField(state.step, errors);
         return;
       }
       state.errors = {};
       state.visibleErrors = [];
-      state.step = Math.min(MAX_STEP, state.step + 1);
+      state.navErrorMessage = '';
       persistSplitFlowState();
+      state.step = Math.min(MAX_STEP, state.step + 1);
       render();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
