@@ -152,7 +152,8 @@ const state = {
     textColor: '#1f2937',
     shape: 20
   },
-  slotImages: { visual_1: null, visual_2: null, visual_3: null }
+  slotImages: { visual_1: null, visual_2: null, visual_3: null },
+  slotUploadStatus: { visual_1: 'empty', visual_2: 'empty', visual_3: 'empty' }
 };
 
 function migrateSharedVisualPrompt(splitFlowState = {}) {
@@ -212,6 +213,9 @@ function hydrateStateFromStorage() {
   }
   state.sharedVisualPrompt = migrateSharedVisualPrompt(stored);
   state.slotImages = { visual_1: null, visual_2: null, visual_3: null, ...(project?.slotImages || {}) };
+  Object.keys(state.slotUploadStatus).forEach((slotKey) => {
+    state.slotUploadStatus[slotKey] = state.slotImages[slotKey] ? 'done' : 'empty';
+  });
 }
 
 function splitStudentNames(rawNames) {
@@ -274,6 +278,44 @@ function persistSplitFlowState() {
       design: { ...state.design }
     }
   });
+}
+
+
+async function compressImageFile(file, maxWidth = 900, maxHeight = 1200, quality = 0.8) {
+  const sourceDataUrl = await new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(new Error('קובץ התמונה לא נקרא בהצלחה.'));
+    reader.readAsDataURL(file);
+  });
+
+  const image = await new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error('התמונה לא נתמכת או פגומה.'));
+    img.src = sourceDataUrl;
+  });
+
+  const widthScale = maxWidth / image.width;
+  const heightScale = maxHeight / image.height;
+  const scale = Math.min(1, widthScale, heightScale);
+  const targetWidth = Math.max(1, Math.round(image.width * scale));
+  const targetHeight = Math.max(1, Math.round(image.height * scale));
+
+  const canvas = document.createElement('canvas');
+  canvas.width = targetWidth;
+  canvas.height = targetHeight;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error('לא ניתן לעבד את התמונה כרגע.');
+  ctx.drawImage(image, 0, 0, targetWidth, targetHeight);
+
+  const webp = canvas.toDataURL('image/webp', quality);
+  if (webp && webp.startsWith('data:image/webp')) return webp;
+  return canvas.toDataURL('image/jpeg', quality);
+}
+
+function getSlotUploadStatus(slotKey) {
+  return state.slotUploadStatus[slotKey] || 'empty';
 }
 
 function escapeHtml(text) {
@@ -547,6 +589,28 @@ Preferred colors: ${shared.colors || 'match the project visual language'}
 Avoid: ${avoidText || 'none specified'}`;
 }
 
+
+function getDigitalScreenOnlyRequirements(type) {
+  if (type !== 'app' && type !== 'website') return '';
+  return [
+    'Create only the screen UI itself.',
+    'The image must contain only the app/website screen.',
+    'Do not include a realistic phone frame.',
+    'Do not include a laptop frame.',
+    'Do not include a browser frame unless explicitly required for website.',
+    'Do not include desk, room, classroom, hands, people, environment, decorative background, or objects around the screen.',
+    'The screen should fill the image edge-to-edge.',
+    'No outer scene.',
+    'Generate a lightweight web-optimized UI screen mockup.',
+    'Keep the design visually simple and clean.',
+    'Use a clean flat or semi-flat UI style.',
+    'Avoid photorealistic device rendering, heavy shadows, glow effects, complex textures, detailed decorative backgrounds, and unnecessary visual details.',
+    'The image should remain clear after resizing and should be suitable for upload into a poster builder.',
+    'Do not generate a heavy high-resolution render.',
+    'No watermark, no external logos.'
+  ].join(' ');
+}
+
 function buildPhysicalPrompt(kind) {
   const slot = slots()[kind === 'main' ? 0 : 1] || slots()[0];
   const data = state.physicalPrompt[kind];
@@ -586,9 +650,11 @@ function buildDigitalPrompt(index) {
   const screenType = resolveOtherValue(screen?.type || '', screen?.shortName || '');
   const screenComponents = resolveOtherList(screen?.components || [], screen?.componentsOther || '').join(', ');
   const sharedBlock = sharedVisualPromptText();
+  const screenOnlyRequirements = getDigitalScreenOnlyRequirements(productType);
 
   return `${basePromptContext(slot, `מדובר בתמונת מסך מספר ${index + 1} לפוסטר.`)}
 ${sharedBlock}
+${screenOnlyRequirements}
 Screen-specific details:
 המסך המיוצג: ${screenType || 'לא הוגדר'}. מה המשתמשת רואה במסך: ${screen?.view || ''}. מה המשתמשת עושה במסך: ${screen?.action || ''}. רכיבים חשובים: ${screenComponents}. מה חשוב שיבלוט: ${emphasisText}. ${flowLine}`;
 }
@@ -766,11 +832,18 @@ function renderSlotUploads() {
       <div style="display:flex;flex-direction:column;gap:8px">
         ${slotDefs.map((slot) => {
           const img = state.slotImages[slot.key];
-          return `<div class="split-upload-slot ${img ? 'is-uploaded' : ''}">
+          const status = getSlotUploadStatus(slot.key);
+          const isUploading = status === 'uploading';
+          const isDone = status === 'done' && Boolean(img);
+          const isError = status === 'error';
+          const statusText = isUploading
+            ? 'מעלה תמונה...'
+            : (isDone ? '✓ התמונה עלתה' : (isError ? 'התמונה גדולה מדי או לא נשמרה. נסי שוב עם תמונה קלה יותר.' : ''));
+          return `<div class="split-upload-slot ${isDone ? 'is-uploaded' : ''} ${isUploading ? 'is-uploading' : ''} ${isError ? 'is-error' : ''}">
             <div class="split-upload-slot-main">
-              <span class="split-upload-slot-check" aria-hidden="true">${img ? '✓' : ''}</span>
+              <span class="split-upload-slot-check" aria-hidden="true">${isDone ? '✓' : (isUploading ? '…' : '')}</span>
               <span style="font-weight:600;font-size:14px;color:#3b1f5c;flex:1">${escapeHtml(slot.label)}</span>
-              ${img ? '<span class="split-upload-slot-status">✓ התמונה עלתה</span>' : ''}
+              ${statusText ? `<span class="split-upload-slot-status">${escapeHtml(statusText)}</span>` : ''}
             </div>
             ${img ? `<div class="split-upload-slot-preview"><img src="${escapeHtml(img)}" alt="${escapeHtml(slot.label)}" /></div>` : ''}
             <label class="split-btn ghost split-slot-upload-lbl" style="font-size:13px;padding:7px 14px;margin:0">
@@ -976,6 +1049,8 @@ function render() {
     .split-upload-error{margin:0;padding:10px 12px;border-radius:10px;background:#fff1f2;color:#b91c1c;border:1px solid #fecdd3;font-size:13px;font-weight:600}
     .split-upload-slot{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:12px;background:#faf8ff;border:1px solid #e2d4fb}
     .split-upload-slot.is-uploaded{background:#f0fdf4;border-color:#86efac}
+    .split-upload-slot.is-uploading{background:#eff6ff;border-color:#93c5fd}
+    .split-upload-slot.is-error{background:#fff1f2;border-color:#fecdd3}
     .split-upload-slot-main{display:flex;align-items:center;gap:10px;min-width:0;flex:1}
     .split-upload-slot-check{width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:#e5e7eb;color:#fff;font-size:15px;font-weight:800;flex:0 0 auto}
     .split-upload-slot.is-uploaded .split-upload-slot-check{background:#16a34a}
@@ -1161,27 +1236,56 @@ function wireEvents() {
   });
 
   root.querySelectorAll('[data-slot-upload]').forEach((input) => {
-    input.addEventListener('change', () => {
+    input.addEventListener('change', async () => {
       const slotKey = input.dataset.slotUpload;
       const file = input.files?.[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = () => {
-        state.slotImages[slotKey] = reader.result;
+      if (!file || !slotKey) return;
+
+      if (!file.type.startsWith('image/')) {
+        state.slotUploadStatus[slotKey] = 'error';
+        state.navErrorMessage = 'אפשר להעלות רק קבצי תמונה.';
+        render();
+        input.value = '';
+        return;
+      }
+
+      state.slotUploadStatus[slotKey] = 'uploading';
+      state.navErrorMessage = '';
+      render();
+
+      try {
+        const compressedDataUrl = await compressImageFile(file);
+        state.slotImages[slotKey] = compressedDataUrl;
+        state.slotUploadStatus[slotKey] = 'done';
         state.errors.slotUploads = '';
         state.visibleErrors = state.visibleErrors.filter((key) => key !== 'slotUploads');
-        state.navErrorMessage = '';
-        persistSplitFlowState();
+
+        try {
+          persistSplitFlowState();
+        } catch (err) {
+          state.slotImages[slotKey] = null;
+          state.slotUploadStatus[slotKey] = 'error';
+          state.navErrorMessage = 'התמונה גדולה מדי או לא נשמרה. נסי שוב עם תמונה קלה יותר.';
+          render();
+          input.value = '';
+          return;
+        }
+
         render();
-      };
-      reader.readAsDataURL(file);
-      input.value = '';
+      } catch (err) {
+        state.slotUploadStatus[slotKey] = 'error';
+        state.navErrorMessage = 'התמונה לא עלתה. נסי תמונה אחרת.';
+        render();
+      } finally {
+        input.value = '';
+      }
     });
   });
 
   root.querySelectorAll('[data-slot-clear]').forEach((button) => {
     button.addEventListener('click', () => {
       state.slotImages[button.dataset.slotClear] = null;
+      state.slotUploadStatus[button.dataset.slotClear] = 'empty';
       state.navErrorMessage = '';
       persistSplitFlowState();
       render();
@@ -1205,6 +1309,16 @@ function wireEvents() {
     if (state.step < MAX_STEP) {
       if (state.step === 3 && productType !== 'physical') {
         const requiredSlots = ['visual_1', 'visual_2', 'visual_3'];
+        const hasUploading = requiredSlots.some((slotKey) => state.slotUploadStatus[slotKey] === 'uploading');
+        if (hasUploading) {
+          state.errors.slotUploads = 'יש תמונה שעדיין עולה. חכי רגע ונסי שוב.';
+          state.visibleErrors = ['slotUploads'];
+          state.navErrorMessage = state.errors.slotUploads;
+          render();
+          const uploadsCard = root.querySelector('.split-upload-error');
+          uploadsCard?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          return;
+        }
         const hasAllRequiredSlots = requiredSlots.every((slotKey) => Boolean(state.slotImages[slotKey]));
         if (!hasAllRequiredSlots) {
           state.errors.slotUploads = 'כדי להמשיך, צריך להעלות תמונה לכל אחד משלושת המסכים.';
