@@ -10,12 +10,24 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
   setText('ph-names',['student1','student2','student3'].map(k=>(contentValues[k]||'').trim()).filter(Boolean).join(' · ')||'—');
   setText('ph-school',[contentValues.schoolName,contentValues.className].filter(Boolean).join(' | '));
   setList('ph-research',[contentValues.research_1,contentValues.research_2,contentValues.research_3]); setList('ph-reqs',[contentValues.requirements_1,contentValues.requirements_2,contentValues.requirements_3]); setList('ph-usage',[contentValues.howItWorks_1,contentValues.howItWorks_2,contentValues.howItWorks_3]);
-  setText('ph-solution-cap',{physical:'המוצר שלנו',website:'האתר שלנו',app:'האפליקציה שלנו'}[productType]||'הפתרון שלנו');
-  setText('ph-usage-cap',{physical:'איך משתמשים',website:'מה עושים באתר',app:'איך זה עובד'}[productType]||'איך זה עובד');
-  setText('ph-images-label',{physical:'המוצר שלנו',app:'מסכי האפליקציה',website:'מסכי האתר'}[productType]||'');
+  setText('ph-solution-cap',{physical:'המוצר שלנו',website:'האתר שלנו',app:'האפליקציה שלנו',digital:'המוצר הדיגיטלי שלנו'}[productType]||'הפתרון שלנו');
+  setText('ph-usage-cap',{physical:'איך משתמשים',website:'מה עושים באתר',app:'איך זה עובד',digital:'איך זה עובד'}[productType]||'איך זה עובד');
+  setText('ph-images-label',{physical:'המוצר שלנו',app:'מסכי האפליקציה',website:'מסכי האתר',digital:'מוצר דיגיטלי'}[productType]||'');
   document.getElementById('ph-images-2').style.display=productType==='physical'?'grid':'none';
   document.getElementById('ph-images-app').style.display=productType==='app'?'grid':'none';
-  document.getElementById('ph-images-web').style.display=productType==='website'?'grid':'none';
+  document.getElementById('ph-images-web').style.display=(productType==='website' || productType==='digital')?'grid':'none';
+  const frameRatio = productType === 'app' ? '9 / 16' : productType === 'physical' ? '1 / 1' : '16 / 9';
+  document.querySelectorAll('[id^="ph-img-"]').forEach((frame) => {
+    frame.style.height = 'auto';
+    frame.style.aspectRatio = frameRatio;
+  });
+
+  const backgroundSizeByType = {
+    app: 'contain',
+    website: 'contain',
+    digital: 'contain',
+    physical: 'cover'
+  };
 
   // Use background-image instead of <img> so html2canvas renders correctly
   const keys = productType==='physical' ? ['visual_1','visual_2'] : ['visual_1','visual_2','visual_3'];
@@ -23,7 +35,8 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
     document.querySelectorAll(`#ph-img-${i}`).forEach(frame => {
       if (slotImages[k]) {
         frame.style.backgroundImage = `url('${slotImages[k]}')`;
-        frame.style.backgroundSize = 'cover';
+        frame.style.backgroundSize = backgroundSizeByType[productType] || 'contain';
+        frame.style.backgroundRepeat = 'no-repeat';
         frame.style.backgroundPosition = 'center';
         frame.innerHTML = '';
       } else {
@@ -42,8 +55,10 @@ export async function exportHTMLPosterToPDF(contentValues) {
   const prevHeight = poster.style.height;
   const prevOverflow = poster.style.overflow;
   const prevMinHeight = poster.style.minHeight;
+  const prevMaxHeight = poster.style.maxHeight;
   poster.style.height = '1123px';
   poster.style.minHeight = '1123px';
+  poster.style.maxHeight = '1123px';
   poster.style.overflow = 'hidden';
 
   // Wait a frame for layout to settle
@@ -63,6 +78,7 @@ export async function exportHTMLPosterToPDF(contentValues) {
   // Restore
   poster.style.height = prevHeight;
   poster.style.minHeight = prevMinHeight;
+  poster.style.maxHeight = prevMaxHeight;
   poster.style.overflow = prevOverflow;
 
   const { jsPDF } = window.jspdf;
