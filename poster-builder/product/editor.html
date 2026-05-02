@@ -8,17 +8,6 @@
   </head>
   <body>
     <div id="root"></div>
-    <script>
-      const params = new URLSearchParams(window.location.search);
-      const requestedType = params.get('type') || 'website';
-      const legacyMap = { digital: 'website' };
-      const normalizedType = legacyMap[requestedType] || requestedType;
-      const validTypes = ['physical', 'website', 'app'];
-      const type = validTypes.includes(normalizedType) ? normalizedType : 'website';
-
-      // Entry pages may pass type, but the poster itself stays unified in split-flow/main.js
-      window.__POSTER_SPLIT_PRODUCT__ = type;
-    </script>
     <script type="module" src="../src/products/split-flow/main.js"></script>
   </body>
 </html>
