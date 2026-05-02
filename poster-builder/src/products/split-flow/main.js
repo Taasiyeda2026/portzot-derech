@@ -52,44 +52,44 @@ const FEEDBACK_MAX = deriveCharsByFieldPortion(0.45);
 const IMPROVEMENT_MAX = deriveCharsByFieldPortion(0.4);
 
 const RESEARCH_FIELDS = [
-  ['projectName', 'שם המיזם', productType === 'app' ? 25 : 20],
+  ['projectName', 'שם המיזם', requestedProductType === 'app' ? 25 : 20],
   ['studentNames', 'שמות התלמידות', 80],
   ['className', 'כיתה', 30],
   ['schoolName', 'בית הספר', 50],
-  ['description', 'תיאור קצר של המיזם', productType === 'app' ? 70 : 75],
-  ['problem', 'מה הבעיה שזיהיתן?', productType === 'app' ? 120 : 130],
+  ['description', 'תיאור קצר של המיזם', requestedProductType === 'app' ? 70 : 75],
+  ['problem', 'מה הבעיה שזיהיתן?', requestedProductType === 'app' ? 120 : 130],
   ['audience', 'על מי הבעיה משפיעה?', 75],
   ['researchQuestion', 'מה הייתה שאלת החקר הטכנולוגית?', 90],
-  ['research_1', 'איזה חקר ביצעתן? 1', productType === 'app' ? 45 : 42],
-  ['research_2', 'איזה חקר ביצעתן? 2', productType === 'app' ? 45 : 42],
-  ['research_3', 'איזה חקר ביצעתן? 3', productType === 'app' ? 45 : 42],
-  ['findings', 'מה גיליתן בעקבות החקר?', productType === 'app' ? 120 : 110],
-  ['requirements_1', 'מה היה חשוב שהפתרון יכלול? 1', productType === 'app' ? 45 : 42],
-  ['requirements_2', 'מה היה חשוב שהפתרון יכלול? 2', productType === 'app' ? 45 : 42],
-  ['requirements_3', 'מה היה חשוב שהפתרון יכלול? 3', productType === 'app' ? 45 : 42],
+  ['research_1', 'איזה חקר ביצעתן? 1', requestedProductType === 'app' ? 45 : 42],
+  ['research_2', 'איזה חקר ביצעתן? 2', requestedProductType === 'app' ? 45 : 42],
+  ['research_3', 'איזה חקר ביצעתן? 3', requestedProductType === 'app' ? 45 : 42],
+  ['findings', 'מה גיליתן בעקבות החקר?', requestedProductType === 'app' ? 120 : 110],
+  ['requirements_1', 'מה היה חשוב שהפתרון יכלול? 1', requestedProductType === 'app' ? 45 : 42],
+  ['requirements_2', 'מה היה חשוב שהפתרון יכלול? 2', requestedProductType === 'app' ? 45 : 42],
+  ['requirements_3', 'מה היה חשוב שהפתרון יכלול? 3', requestedProductType === 'app' ? 45 : 42],
   [
     'solution',
-    productType === 'physical' ? 'מהו המוצר הפיזי שפיתחתן?' : (productType === 'website' ? 'מהו האתר שפיתחתן?' : 'מהי האפליקציה שפיתחתן?'),
-    productType === 'app' ? 120 : 130
+    requestedProductType === 'physical' ? 'מהו המוצר הפיזי שפיתחתן?' : (requestedProductType === 'website' ? 'מהו האתר שפיתחתן?' : 'מהי האפליקציה שפיתחתן?'),
+    requestedProductType === 'app' ? 120 : 130
   ],
   [
     'howItWorks_1',
-    productType === 'physical' ? 'איך משתמשת במוצר? 1' : (productType === 'website' ? 'מה המשתמשת עושה באתר? 1' : 'איך המשתמשת משתמשת באפליקציה? 1'),
-    productType === 'app' ? 45 : 42
+    requestedProductType === 'physical' ? 'איך משתמשת במוצר? 1' : (requestedProductType === 'website' ? 'מה המשתמשת עושה באתר? 1' : 'איך המשתמשת משתמשת באפליקציה? 1'),
+    requestedProductType === 'app' ? 45 : 42
   ],
   [
     'howItWorks_2',
-    productType === 'physical' ? 'איך משתמשת במוצר? 2' : (productType === 'website' ? 'מה המשתמשת עושה באתר? 2' : 'איך המשתמשת משתמשת באפליקציה? 2'),
-    productType === 'app' ? 45 : 42
+    requestedProductType === 'physical' ? 'איך משתמשת במוצר? 2' : (requestedProductType === 'website' ? 'מה המשתמשת עושה באתר? 2' : 'איך המשתמשת משתמשת באפליקציה? 2'),
+    requestedProductType === 'app' ? 45 : 42
   ],
   [
     'howItWorks_3',
-    productType === 'physical' ? 'איך משתמשת במוצר? 3' : (productType === 'website' ? 'מה המשתמשת עושה באתר? 3' : 'איך המשתמשת משתמשת באפליקציה? 3'),
-    productType === 'app' ? 45 : 42
+    requestedProductType === 'physical' ? 'איך משתמשת במוצר? 3' : (requestedProductType === 'website' ? 'מה המשתמשת עושה באתר? 3' : 'איך המשתמשת משתמשת באפליקציה? 3'),
+    requestedProductType === 'app' ? 45 : 42
   ],
-  ['value', 'מה הערך המרכזי של הפתרון?', productType === 'app' ? 90 : 110],
-  ['feedbackReceived', 'מה המשוב שקיבלנו?', productType === 'app' ? 90 : Math.max(FEEDBACK_MAX, 110)],
-  ['improvementsAfterFeedback', 'מה שיפרנו בעקבות המשוב?', productType === 'app' ? 90 : Math.max(IMPROVEMENT_MAX, 110)],
+  ['value', 'מה הערך המרכזי של הפתרון?', requestedProductType === 'app' ? 90 : 110],
+  ['feedbackReceived', 'מה המשוב שקיבלנו?', requestedProductType === 'app' ? 90 : Math.max(FEEDBACK_MAX, 110)],
+  ['improvementsAfterFeedback', 'מה שיפרנו בעקבות המשוב?', requestedProductType === 'app' ? 90 : Math.max(IMPROVEMENT_MAX, 110)],
   ['slogan', 'סלוגן לתחתית הפוסטר', 60]
 ];
 
