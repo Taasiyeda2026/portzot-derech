@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gateway — בונת הפוסטר</title>
+    <title>בונות פוסטר חקר - שער כניסה</title>
     <link rel="stylesheet" href="../src/styles/product-builder.css" />
   </head>
   <body>
@@ -16,14 +16,9 @@
       const validTypes = ['physical', 'website', 'app'];
       const type = validTypes.includes(normalizedType) ? normalizedType : 'website';
 
-      // Gateway בלבד: מגדיר תצורה לבונה האחודה ואז טוען אותה.
-      window.__POSTER_BUILDER_PRODUCT_TYPE = type;
-      window.__POSTER_BUILDER_START_STEP = 4;
+      // Entry pages may pass type, but the poster itself stays unified in split-flow/main.js
+      window.__POSTER_SPLIT_PRODUCT__ = type;
     </script>
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script type="module" src="../src/shared/app-shell.js"></script>
+    <script type="module" src="../src/products/split-flow/main.js"></script>
   </body>
 </html>

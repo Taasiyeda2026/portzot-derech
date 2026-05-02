@@ -1,9 +1,13 @@
 import { getVisualSlots, getPosterFields, FIELD_DEFINITIONS, BACKGROUNDS, AVAILABLE_FONTS } from '../physical/config.js';
 import { saveProject, loadProject } from '../../shared/storage.js';
 
-const productType = ['physical', 'website', 'app'].includes(window.__POSTER_SPLIT_PRODUCT__)
+const requestedProductType = ['physical', 'website', 'app'].includes(window.__POSTER_SPLIT_PRODUCT__)
   ? window.__POSTER_SPLIT_PRODUCT__
   : 'website';
+
+// Source of truth: all entry points use exactly the same research-poster flow and structure.
+// We still keep the requested type for telemetry/compatibility, but it does not alter the poster.
+const productType = 'website';
 const root = document.getElementById('root');
 const STEP_LABELS = productType === 'physical'
   ? ['שאלות חקר', 'פרומפט ותמונות', 'פוסטר']
