@@ -1767,8 +1767,8 @@ canvas {
 
 .step4-body {
   flex: 1;
-  display: grid;
-  grid-template-columns: 230px minmax(0,1fr);
+  display: flex;
+  flex-direction: row;
   min-height: 0;
   overflow: hidden;
 }
@@ -2087,3 +2087,16 @@ canvas {
 /* ── Physical stepper in canvas bar ── */
 .step4-bar .wz-dot-wrap { min-width: 42px; }
 
+
+/* ===== אזור הפוסטר HTML בשלב 4 ===== */
+.html-poster-area {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 24px;
+  overflow-y: auto;
+  overflow-x: auto;
+  background: #ede4f8;
+  overscroll-behavior: contain;
+}
