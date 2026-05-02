@@ -234,7 +234,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script type="module">
   import { loadProject } from '../src/shared/storage.js';
-  import { renderHTMLPoster } from '../src/canvas/html-poster.js';
+  import { renderHTMLPoster, exportHTMLPosterToPDF } from '../src/canvas/html-poster.js';
 
   const params = new URLSearchParams(window.location.search);
   const productType = params.get('type') || 'website';
@@ -258,12 +258,7 @@
     btn.disabled = true;
     btn.textContent = 'מייצא...';
     try {
-      const poster = document.getElementById('poster-html');
-      const canvas = await html2canvas(poster, { scale: 2, useCORS: true, backgroundColor: '#ffffff', logging: false, width: 794, height: poster.scrollHeight, windowWidth: 794 });
-      const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-      pdf.addImage(canvas.toDataURL('image/jpeg', 0.96), 'JPEG', 0, 0, 210, 297);
-      pdf.save(`${((contentValues.projectName || 'פוסטר').trim().replace(/\s+/g, '-'))}.pdf`);
+      await exportHTMLPosterToPDF(contentValues);
     } finally {
       btn.disabled = false;
       btn.textContent = 'ייצוא PDF';
