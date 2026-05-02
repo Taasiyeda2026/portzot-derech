@@ -1,12 +1,21 @@
 import { getVisualSlots, getPosterFields, FIELD_DEFINITIONS, BACKGROUNDS, AVAILABLE_FONTS } from '../physical/config.js';
 import { saveProject, loadProject } from '../../shared/storage.js';
 
-const requestedProductType = ['physical', 'website', 'app'].includes(window.__POSTER_SPLIT_PRODUCT__)
-  ? window.__POSTER_SPLIT_PRODUCT__
-  : 'website';
+const PRODUCT_TYPES = ['app', 'physical', 'website', 'digital'];
+
+function resolveRequestedProductType() {
+  const params = new URLSearchParams(window.location.search);
+  const typeFromUrl = params.get('type');
+  const requested = typeof typeFromUrl === 'string' && typeFromUrl.trim()
+    ? typeFromUrl.trim().toLowerCase()
+    : (window.__POSTER_SPLIT_PRODUCT__ || '').toString().trim().toLowerCase();
+
+  return PRODUCT_TYPES.includes(requested) ? requested : 'website';
+}
 
 // Source of truth: all entry points use exactly the same research-poster flow and structure.
-// We still keep the requested type for telemetry/compatibility, but it does not alter the poster.
+// productType is auxiliary metadata only.
+const requestedProductType = resolveRequestedProductType();
 const productType = 'website';
 const root = document.getElementById('root');
 const STEP_LABELS = productType === 'physical'
@@ -17,7 +26,8 @@ const MAX_STEP = STEP_LABELS.length;
 const PRODUCT_TITLE = {
   physical: 'מוצר פיזי',
   website: 'אתר',
-  app: 'אפליקציה'
+  app: 'אפליקציה',
+  digital: 'מוצר דיגיטלי'
 };
 
 const QUALITY_REQUIREMENTS = 'poster-friendly composition, correct image ratio according to the poster visual slot, precise framing, important details inside the safe center area, high quality, clean composition, no watermark, no text overlay, no logo';
@@ -588,7 +598,7 @@ function slots() {
 function basePromptContext(slot, imageRole) {
   return `Create a clear, high-quality poster-ready image based on the following project context and image-specific details.
 Project: ${state.research.projectName}
-Product type: ${PRODUCT_TITLE[productType]}
+Product type: ${PRODUCT_TITLE[requestedProductType] || PRODUCT_TITLE.website}
 Project description: ${state.research.description}
 Problem: ${state.research.problem}
 Audience: ${state.research.audience}
@@ -1154,7 +1164,7 @@ function renderStep4() {
       <div class="split-field"><span>צבע טקסט</span><div class="split-tags">${textColorButtons}${textColorPicker}</div></div>
       <div class="split-field"><span>עיצוב תיבות</span><div class="split-tags">${SHAPE_OPTIONS.map((shape) => `<button type="button" class="split-tag ${state.design.shape === shape.value ? 'active' : ''}" data-design="shape" data-value="${shape.value}">${shape.label}</button>`).join('')}</div></div>
     </div>
-    <a class="split-btn primary" href="./editor.html?type=${productType}">יצירת הפוסטר</a>
+    <a class="split-btn primary" href="./editor.html?type=${requestedProductType}">יצירת הפוסטר</a>
   </article>`;
 }
 
@@ -1254,7 +1264,7 @@ function render() {
     .split-slot-grid-2{grid-template-columns:repeat(2,1fr)}
     .split-slot-grid-3{grid-template-columns:repeat(3,1fr)}
     .split-slot-item{display:flex;flex-direction:column;align-items:center;gap:10px}
-    .split-slot-preview{width:100%;aspect-ratio:${productType === 'app' ? '9/16' : productType === 'website' ? '16/9' : '3/4'};border:2px dashed #b9a5f8;border-radius:14px;display:flex;align-items:center;justify-content:center;background:linear-gradient(155deg,#f8f5ff,#ede9fe);overflow:hidden;transition:border-color .18s}
+    .split-slot-preview{width:100%;aspect-ratio:${requestedProductType === 'app' ? '9/16' : requestedProductType === 'physical' ? '3/4' : '16/9'};border:2px dashed #b9a5f8;border-radius:14px;display:flex;align-items:center;justify-content:center;background:linear-gradient(155deg,#f8f5ff,#ede9fe);overflow:hidden;transition:border-color .18s}
     .split-slot-preview.has-image{border-style:solid;border-color:#7c3aed;background:#000}
     .split-slot-preview img{width:100%;height:100%;object-fit:cover;border-radius:12px;display:block}
     .split-slot-placeholder{font-size:13px;color:#7c3aed;text-align:center;padding:12px;line-height:1.5}
@@ -1276,7 +1286,7 @@ function render() {
   </style>
   <main class="split-shell">
     <header class="split-header">
-      <h1 class="split-title">בונות פוסטר חקר — ${PRODUCT_TITLE[productType]}</h1>
+      <h1 class="split-title">בונות פוסטר חקר — ${PRODUCT_TITLE[requestedProductType] || PRODUCT_TITLE.website}</h1>
       <p class="split-sub">כל הזרימה מותאמת לשלב החקר, הפרומפט והתמונות, עם מיפוי לפוסטר הקיים.</p>
     </header>
     ${renderStepper()}

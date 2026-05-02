@@ -3,18 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>הפניה: מוצר דיגיטלי → אתר</title>
-    <meta http-equiv="refresh" content="0; url=./website.html" />
+    <title>בונות פוסטר חקר - מוצר דיגיטלי</title>
     <link rel="stylesheet" href="../src/styles/product-builder.css" />
   </head>
   <body>
-    <main style="max-width:740px;margin:40px auto;padding:24px;background:#fff;border:1px solid #e5e7eb;border-radius:14px;font-family:Rubik,Arial,sans-serif;line-height:1.6">
-      <h1 style="margin-top:0">עמוד מעבר (Legacy)</h1>
-      <p>
-        הקובץ <strong>digital.html</strong> נשאר זמנית לתאימות לקישורים ישנים בלבד.
-        המסלול הדיגיטלי הרשמי עבר ל־<strong>website.html</strong>.
-      </p>
-      <p><a href="./website.html">מעבר לעמוד אתר</a></p>
-    </main>
+    <div id="root"></div>
+    <script>
+      window.__POSTER_SPLIT_PRODUCT__ = 'digital';
+    </script>
+    <script type="module" src="../src/products/split-flow/main.js"></script>
   </body>
 </html>
