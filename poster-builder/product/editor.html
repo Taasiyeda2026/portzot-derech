@@ -37,11 +37,22 @@
 
     /* ===== עטיפת הפוסטר ===== */
     .poster-page { display: flex; justify-content: center; padding: 32px 20px 60px; }
-    .poster-scale-wrapper { transform-origin: top center; }
+    .poster-scale-wrapper {
+      --poster-scale: 1;
+      width: calc(794px * var(--poster-scale));
+      height: calc(1123px * var(--poster-scale));
+      flex: 0 0 auto;
+    }
+    .poster-scale-inner {
+      width: 794px;
+      height: 1123px;
+      transform-origin: top center;
+      transform: scale(var(--poster-scale));
+    }
 
     /* ===== מבנה הפוסטר ===== */
     #poster-html {
-      width: 794px; min-height: 1123px;
+      width: 794px; height: 1123px; min-height: 1123px; max-height: 1123px;
       position: relative; overflow: hidden;
       direction: rtl; background: #fff;
       display: flex; flex-direction: column;
@@ -98,11 +109,7 @@
 
     /* ===== רספונסיבי ===== */
     @media (max-width: 860px) {
-      .poster-scale-wrapper { transform: scale(0.75); width: 794px; }
       .poster-page { padding: 16px 0 40px; overflow-x: auto; }
-    }
-    @media (max-width: 560px) {
-      .poster-scale-wrapper { transform: scale(0.48); }
     }
   </style>
 </head>
@@ -121,6 +128,7 @@
 
 <div class="poster-page">
   <div class="poster-scale-wrapper">
+    <div class="poster-scale-inner">
     <div id="poster-html">
       <div id="poster-bg"></div>
       <div style="position:relative;z-index:1;display:flex;flex-direction:column;min-height:1123px">
@@ -227,6 +235,7 @@
 
       </div>
     </div>
+    </div>
   </div>
 </div>
 
@@ -237,7 +246,9 @@
   import { renderHTMLPoster, exportHTMLPosterToPDF } from '../src/canvas/html-poster.js';
 
   const params = new URLSearchParams(window.location.search);
-  const productType = params.get('type') || 'website';
+  const validTypes = new Set(['app', 'physical', 'website', 'digital']);
+  const rawType = (params.get('type') || '').toLowerCase().trim();
+  const productType = validTypes.has(rawType) ? rawType : 'website';
 
   const project = loadProject() || {};
   const contentValues = project.contentValues || {};
@@ -249,7 +260,7 @@
   renderHTMLPoster(contentValues, productType, titleFont, titleColor, background, slotImages);
 
   document.getElementById('btn-back').addEventListener('click', () => {
-    const map = { physical: './physical.html', website: './website.html', app: './app.html' };
+    const map = { physical: './physical.html', website: './website.html', app: './app.html', digital: './digital.html' };
     window.location.href = map[productType] || './website.html';
   });
 
@@ -264,6 +275,16 @@
       btn.textContent = 'ייצוא PDF';
     }
   });
+
+  function updatePosterScale() {
+    const wrapper = document.querySelector('.poster-scale-wrapper');
+    const viewportWidth = window.innerWidth - 20;
+    const viewportHeight = window.innerHeight - 130;
+    const scale = Math.min(1, viewportWidth / 794, viewportHeight / 1123);
+    wrapper?.style.setProperty('--poster-scale', `${Math.max(0.35, scale)}`);
+  }
+  updatePosterScale();
+  window.addEventListener('resize', updatePosterScale);
 </script>
 </body>
 </html>

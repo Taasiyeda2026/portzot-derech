@@ -16,7 +16,7 @@ function resolveRequestedProductType() {
 // Source of truth: all entry points use exactly the same research-poster flow and structure.
 // productType is auxiliary metadata only.
 const requestedProductType = resolveRequestedProductType();
-const productType = 'website';
+const productType = requestedProductType;
 const root = document.getElementById('root');
 const STEP_LABELS = productType === 'physical'
   ? ['שאלות חקר', 'פרומפט ותמונות', 'פוסטר']
@@ -1266,7 +1266,7 @@ function render() {
     .split-slot-grid-2{grid-template-columns:repeat(2,1fr)}
     .split-slot-grid-3{grid-template-columns:repeat(3,1fr)}
     .split-slot-item{display:flex;flex-direction:column;align-items:center;gap:10px}
-    .split-slot-preview{width:100%;aspect-ratio:${requestedProductType === 'app' ? '9/16' : requestedProductType === 'physical' ? '3/4' : '16/9'};border:2px dashed #b9a5f8;border-radius:14px;display:flex;align-items:center;justify-content:center;background:linear-gradient(155deg,#f8f5ff,#ede9fe);overflow:hidden;transition:border-color .18s}
+    .split-slot-preview{width:100%;aspect-ratio:${requestedProductType === 'app' ? '9/16' : requestedProductType === 'physical' ? '1/1' : '16/9'};border:2px dashed #b9a5f8;border-radius:14px;display:flex;align-items:center;justify-content:center;background:linear-gradient(155deg,#f8f5ff,#ede9fe);overflow:hidden;transition:border-color .18s}
     .split-slot-preview.has-image{border-style:solid;border-color:#7c3aed;background:#000}
     .split-slot-preview img{width:100%;height:100%;object-fit:cover;border-radius:12px;display:block}
     .split-slot-placeholder{font-size:13px;color:#7c3aed;text-align:center;padding:12px;line-height:1.5}
