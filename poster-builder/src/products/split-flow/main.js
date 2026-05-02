@@ -89,7 +89,8 @@ const RESEARCH_FIELDS = [
   ],
   ['value', 'מה הערך המרכזי של הפתרון?', productType === 'app' ? 90 : 110],
   ['feedbackReceived', 'מה המשוב שקיבלנו?', productType === 'app' ? 90 : Math.max(FEEDBACK_MAX, 110)],
-  ['improvementsAfterFeedback', 'מה שיפרנו בעקבות המשוב?', productType === 'app' ? 90 : Math.max(IMPROVEMENT_MAX, 110)]
+  ['improvementsAfterFeedback', 'מה שיפרנו בעקבות המשוב?', productType === 'app' ? 90 : Math.max(IMPROVEMENT_MAX, 110)],
+  ['slogan', 'סלוגן לתחתית הפוסטר', 60]
 ];
 
 const SCREEN_TYPE_OPTIONS = ['מסך פתיחה', 'מסך בית', 'חיפוש', 'פעולה מרכזית', 'תוצאות', 'אזור אישי', 'פרופיל', 'הרשמה', 'התחברות', 'מעקב', 'אחר'];
@@ -267,6 +268,7 @@ function buildPosterContentValues() {
     value: state.research.value,
     feedbackReceived: state.research.feedbackReceived || '',
     improvementsAfterFeedback: state.research.improvementsAfterFeedback || '',
+    slogan: state.research.slogan || '',
     student1,
     student2,
     student3,
