@@ -81,12 +81,20 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
   setText('ph-images-label',
     { physical: 'המוצר שלנו', app: 'מסכי האפליקציה', website: 'מסכי האתר', digital: 'מוצר דיגיטלי' }[productType] || '');
 
-  // ── Apply textColor to all body / bullet elements ────────────────────────────
+  // ── Apply textColor to regular body / bullet elements ────────────────────────
   document.querySelectorAll('.ph-body, .ph-sub').forEach(el => {
+    if (el.closest('.ph-card-accent')) return; // accent cards handled below
     el.style.color = resolvedText;
   });
   document.querySelectorAll('.ph-bullets li').forEach(el => {
     el.style.color = resolvedText;
+  });
+
+  // ── Accent card bodies → title color + bold ───────────────────────────────────
+  document.querySelectorAll('.ph-card-accent .ph-body').forEach(el => {
+    el.style.color      = resolvedTitle;
+    el.style.fontWeight = '700';
+    el.style.fontSize   = '12.5px';
   });
 
   // ── Apply titleColor to .ph-cap and ::before accent line ─────────────────────

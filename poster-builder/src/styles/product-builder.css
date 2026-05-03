@@ -2100,3 +2100,55 @@ canvas {
   background: #ede4f8;
   overscroll-behavior: contain;
 }
+
+/* ===== כרטיסיות פוסטר HTML (step 4) ===== */
+.ph-card {
+  background: rgba(255,255,255,.86);
+  border: 1px solid rgba(94,39,80,.14);
+  border-radius: 10px;
+  padding: 9px 12px;
+}
+.ph-card-accent {
+  background: linear-gradient(135deg, rgba(255,255,255,.92), rgba(248,238,255,.86));
+  border: 1.5px solid rgba(94,39,80,.28);
+  border-right: 3.5px solid var(--ph-title-color, #5E2750);
+}
+.ph-cap {
+  font-size: 9px; font-weight: 900; color: var(--ph-title-color, #5E2750);
+  text-transform: uppercase; letter-spacing: 1px;
+  margin-bottom: 6px; display: flex; align-items: center; gap: 5px;
+}
+.ph-cap::before {
+  content: ''; display: inline-block;
+  width: 14px; height: 2.5px; background: var(--ph-title-color, #5E2750); border-radius: 1px;
+}
+.ph-body { font-size: 12px; color: var(--ph-text-color, #1f1030); line-height: 1.65; word-break: break-word; overflow-wrap: anywhere; }
+.ph-sub  { font-size: 10.5px; color: #8a7aa0; margin-top: 4px; line-height: 1.5; }
+.ph-card-accent .ph-body {
+  color: var(--ph-title-color, #5E2750);
+  font-weight: 700;
+  font-size: 12.5px;
+}
+.ph-bullets { list-style: none; margin-top: 3px; padding: 0; }
+.ph-bullets li {
+  font-size: 12px; color: var(--ph-text-color, #1f1030); line-height: 1.55;
+  padding-right: 14px; position: relative; margin-bottom: 3px;
+}
+.ph-bullets li::before {
+  content: '◆'; position: absolute; right: 0; top: 2px;
+  font-size: 6px; color: var(--ph-title-color, #5E2750);
+}
+.ph-img-frame {
+  border-radius: 12px; overflow: hidden;
+  border: 2px solid rgba(94,39,80,.18);
+  background: #f5eef2;
+  box-shadow: 0 4px 16px rgba(94,39,80,.12);
+  display: flex; align-items: center; justify-content: center;
+}
+.ph-notch { position: relative; border-radius: 16px; }
+.ph-notch::before {
+  content: ''; position: absolute; top: 8px; left: 50%;
+  transform: translateX(-50%);
+  width: 26px; height: 4px; background: #d0b0c8;
+  border-radius: 2px; z-index: 2;
+}
