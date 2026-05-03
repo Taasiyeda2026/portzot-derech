@@ -111,6 +111,25 @@
     @media (max-width: 860px) {
       .poster-page { padding: 16px 0 40px; overflow-x: auto; }
     }
+
+    /* ===== הדפסה — A4 מדויק, רק הפוסטר ===== */
+    @media print {
+      @page { size: A4 portrait; margin: 0; }
+      html, body { margin: 0; padding: 0; background: #fff; }
+      .poster-bar, .poster-page { display: none !important; }
+      #print-frame {
+        display: block !important;
+        position: fixed; inset: 0;
+        width: 210mm; height: 297mm;
+        overflow: hidden;
+      }
+      #print-frame #poster-html {
+        width: 210mm; height: 297mm;
+        min-height: 297mm; max-height: 297mm;
+        box-shadow: none;
+        transform: none;
+      }
+    }
   </style>
 </head>
 <body>
@@ -239,11 +258,12 @@
   </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<!-- מסגרת הדפסה — מוסתרת במסך, מוצגת בהדפסה בלבד -->
+<div id="print-frame" style="display:none"></div>
+
 <script type="module">
   import { loadProject } from '../src/shared/storage.js';
-  import { renderHTMLPoster, exportHTMLPosterToPDF } from '../src/canvas/html-poster.js';
+  import { renderHTMLPoster } from '../src/canvas/html-poster.js';
 
   const params = new URLSearchParams(window.location.search);
   const validTypes = new Set(['app', 'physical', 'website', 'digital']);
@@ -264,16 +284,14 @@
     window.location.href = map[productType] || './website.html';
   });
 
-  document.getElementById('btn-export').addEventListener('click', async () => {
-    const btn = document.getElementById('btn-export');
-    btn.disabled = true;
-    btn.textContent = 'מייצא...';
-    try {
-      await exportHTMLPosterToPDF(contentValues);
-    } finally {
-      btn.disabled = false;
-      btn.textContent = 'ייצוא PDF';
-    }
+  document.getElementById('btn-export').addEventListener('click', () => {
+    // שכפל את הפוסטר ל-print-frame כדי להדפיס ללא שכבת scale
+    const printFrame = document.getElementById('print-frame');
+    const original = document.getElementById('poster-html');
+    printFrame.innerHTML = '';
+    printFrame.appendChild(original.cloneNode(true));
+    window.print();
+    printFrame.innerHTML = '';
   });
 
   function updatePosterScale() {
