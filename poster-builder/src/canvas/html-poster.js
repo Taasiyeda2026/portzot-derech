@@ -163,10 +163,24 @@ export async function exportHTMLPosterToPDF(contentValues) {
   const original = document.getElementById('poster-html');
   if (!original) return;
 
-  // 1. Wait for all fonts
+  // 1. Wait for all fonts declared in @font-face to finish loading
   await document.fonts.ready;
 
-  // 2. Offscreen clone — exact 794×1123, no scale transform, no shadow
+  // 2. Force-load the selected font at the weights used in the poster
+  //    (needed because @font-face with font-display:block may not have been
+  //    triggered yet if the font wasn't rendered on-screen at those weights)
+  const selectedFont = original.style.fontFamily || "'IBM Plex Sans Hebrew'";
+  const fontLoadPromises = [];
+  for (const weight of ['400', '700', '900']) {
+    fontLoadPromises.push(
+      document.fonts.load(`${weight} 16px ${selectedFont}`).catch(() => {})
+    );
+  }
+  await Promise.all(fontLoadPromises);
+  // One more check after explicit loads
+  await document.fonts.ready;
+
+  // 3. Offscreen clone — exact 794×1123, no scale transform, no shadow
   const clone = original.cloneNode(true);
   Object.assign(clone.style, {
     position:  'fixed',
