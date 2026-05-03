@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#ec4899" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <title>דף פעילות – מתכוננות לפיץ' הסופי | פורצות דרך</title>
+  <title>הפיץ׳ שלנו | פורצות דרך</title>
   <link rel="icon" type="image/png" href="../icon/favicon.png" />
   <link rel="apple-touch-icon" href="../icon/favicon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -127,15 +127,9 @@
     .sec-title { font-size: 17px; font-weight: 800; color: var(--dark); }
     .sec-sub   { font-size: 13px; color: var(--muted); margin-top: 2px; }
 
-    .sec-desc {
-      font-size: 14.5px; color: var(--muted); line-height: 1.8;
-      margin-bottom: 18px;
-    }
-
     /* ── FORM FIELDS ── */
     .fields { display: flex; flex-direction: column; gap: 14px; }
     .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-
     .field-wrap {}
     .field-label {
       font-size: 12.5px; font-weight: 700; color: var(--dark);
@@ -160,82 +154,84 @@
     textarea { min-height: 76px; }
     input[type="text"] { min-height: 44px; }
 
-    /* inline prefix/suffix on a fill-in line */
-    .fill-line {
-      display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;
-      font-size: 14.5px; color: var(--text); margin-bottom: 10px;
-    }
-    .fill-line .prefix { flex-shrink: 0; font-weight: 600; color: var(--dark); }
-    .fill-line input[type="text"] {
-      flex: 1; min-width: 140px; min-height: 40px; padding: 8px 12px;
-    }
-
-    /* ── PITCH BLOCK ── */
-    .pitch-block {
-      border-radius: 16px; padding: 18px 20px; margin-bottom: 12px;
-      border: 1px solid rgba(236,72,153,0.1);
+    /* ── PITCH TEXTAREA ── */
+    .pitch-textarea {
+      width: 100%;
+      font-family: 'Rubik', sans-serif;
+      font-size: 15px;
+      color: var(--text);
+      line-height: 2;
+      border: 1.5px solid rgba(139,92,246,0.2);
+      border-radius: 16px;
+      padding: 20px 22px;
       background: linear-gradient(150deg, #fdfaff, #f9f7ff);
+      resize: vertical;
+      direction: rtl;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      min-height: 320px;
     }
-    .pitch-block-title {
-      font-size: 14px; font-weight: 800; color: var(--purple);
-      margin-bottom: 10px; display: flex; align-items: center; gap: 8px;
+    .pitch-textarea:focus {
+      outline: none;
+      border-color: var(--purple);
+      box-shadow: 0 0 0 3px rgba(139,92,246,0.11);
+      background: var(--white);
     }
-    .pitch-block-num {
-      width: 24px; height: 24px; border-radius: 50%;
-      background: var(--purple); color: #fff; font-size: 12px; font-weight: 800;
-      display: inline-flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
+    .elevator-textarea {
+      min-height: 140px;
+      font-size: 14.5px;
+      line-height: 1.95;
     }
 
-    /* ── TABS (team size) ── */
-    .tabs { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
-    .tab-btn {
+    /* ── REGEN BUTTON ── */
+    .btn-regenerate {
+      display: inline-flex; align-items: center; gap: 7px;
       padding: 8px 18px; border-radius: 999px;
-      background: rgba(139,92,246,0.07); border: 1.5px solid rgba(139,92,246,0.18);
-      color: var(--purple); font-size: 13px; font-weight: 700;
+      background: rgba(139,92,246,0.07);
+      color: var(--purple);
+      font-size: 13px; font-weight: 700;
+      border: 1.5px solid rgba(139,92,246,0.22);
       cursor: pointer; font-family: inherit;
-      transition: all 0.18s;
+      transition: background 0.18s, transform 0.15s;
+      margin-top: 10px;
     }
-    .tab-btn:hover { background: rgba(139,92,246,0.13); }
-    .tab-btn.active {
-      background: linear-gradient(135deg, var(--pink), var(--purple));
-      color: #fff; border-color: transparent;
-      box-shadow: 0 4px 14px rgba(139,92,246,0.3);
-    }
-    .tab-panel { display: none; }
-    .tab-panel.active { display: block; }
+    .btn-regenerate:hover { background: rgba(139,92,246,0.13); transform: scale(1.02); }
 
+    .auto-note {
+      font-size: 12px; color: var(--muted);
+      margin-top: 8px; display: flex; align-items: center; gap: 6px;
+    }
+
+    /* ── SOURCE SECTION ── */
+    .source-toggle {
+      width: 100%; background: none; border: none;
+      display: flex; align-items: center; gap: 13px;
+      cursor: pointer; font-family: inherit; text-align: right;
+      padding: 0; margin-bottom: 0;
+    }
+    .source-toggle:hover .sec-title { color: var(--purple); }
+    .source-chevron {
+      font-size: 13px; color: var(--purple);
+      margin-right: auto; transition: transform 0.2s; flex-shrink: 0;
+    }
+    .source-chevron.open { transform: rotate(180deg); }
+    #source-fields { margin-top: 16px; }
+
+    /* ── TEAM CARDS ── */
     .team-card {
       background: linear-gradient(150deg, #fdf4ff, #f5f0ff);
       border: 1px solid rgba(139,92,246,0.14); border-radius: 16px;
-      padding: 16px 18px; margin-bottom: 10px;
+      padding: 14px 18px; margin-bottom: 10px;
+      display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
     }
+    .team-card:last-child { margin-bottom: 0; }
     .team-card-role {
-      font-size: 13px; font-weight: 800; color: var(--purple); margin-bottom: 4px;
+      font-size: 14px; font-weight: 800; color: var(--purple);
+      flex-shrink: 0; min-width: 80px;
     }
-    .team-card-parts { font-size: 13.5px; color: var(--text); line-height: 1.65; }
+    .team-card-dash { color: var(--muted); flex-shrink: 0; }
+    .team-card-parts { font-size: 14px; color: var(--text); line-height: 1.6; flex: 1; }
 
-    /* ── ROLE TABLE ── */
-    .role-table {
-      width: 100%; border-collapse: collapse; font-size: 13.5px;
-    }
-    .role-table th {
-      background: linear-gradient(135deg, rgba(236,72,153,0.08), rgba(139,92,246,0.08));
-      color: var(--dark); font-size: 12.5px; font-weight: 800;
-      padding: 10px 14px; border: 1px solid rgba(139,92,246,0.12);
-      text-align: right;
-    }
-    .role-table td {
-      padding: 8px 10px; border: 1px solid rgba(139,92,246,0.1);
-      vertical-align: middle;
-    }
-    .role-table td:first-child { font-weight: 600; color: var(--dark); font-size: 13px; }
-    .role-table input[type="text"] {
-      min-height: 36px; padding: 6px 10px; font-size: 13px;
-      border-radius: 9px; border-width: 1.5px;
-    }
-
-    /* ── TRANSITION PHRASES ── */
+    /* ── TRANSITIONS ── */
     .phrase-list { display: flex; flex-direction: column; gap: 10px; }
     .phrase-item {
       background: linear-gradient(150deg, #fdf4ff, #f0f4ff);
@@ -243,26 +239,14 @@
       border-radius: 14px; padding: 13px 16px;
       display: flex; align-items: flex-start; gap: 12px;
     }
-    .phrase-arrow {
-      flex-shrink: 0; font-size: 16px; color: var(--purple); margin-top: 1px;
-    }
+    .phrase-arrow { flex-shrink: 0; font-size: 16px; color: var(--purple); margin-top: 1px; }
     .phrase-text { font-size: 14px; color: var(--text); line-height: 1.65; }
-    .phrase-blank {
-      display: inline-block;
-      border-bottom: 1.5px solid var(--purple);
-      min-width: 80px; height: 20px;
-      vertical-align: bottom;
-    }
 
-    /* ── GOLDEN RULES ── */
-    .rules-list { display: flex; flex-direction: column; gap: 10px; }
-    .rule-item {
-      display: flex; align-items: flex-start; gap: 12px;
-      font-size: 14.5px; color: var(--text); line-height: 1.65;
-    }
-    .rule-dot {
-      width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 6px;
-      background: linear-gradient(135deg, var(--pink), var(--purple));
+    /* ── EMPTY NOTE ── */
+    .empty-note {
+      font-size: 14px; color: var(--muted); text-align: center;
+      padding: 20px; background: rgba(139,92,246,0.04);
+      border-radius: 12px; border: 1px dashed rgba(139,92,246,0.2);
     }
 
     /* ── CHECKLIST ── */
@@ -289,7 +273,7 @@
       display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;
       gap: 14px; background: linear-gradient(135deg, rgba(236,72,153,0.07), rgba(139,92,246,0.1));
       border: 1px solid rgba(139,92,246,0.16); border-radius: 18px; padding: 18px 24px;
-      margin-top: 10px;
+      margin-top: 14px;
     }
     .timer-info {}
     .timer-label  { font-size: 14px; font-weight: 700; color: var(--dark); }
@@ -356,7 +340,8 @@
 
     /* ── PRINT ── */
     @media print {
-      .header, .actions, .timer-btn, .tabs, .no-print { display: none !important; }
+      .header, .actions, .timer-btn, .btn-regenerate,
+      .source-toggle, #source-fields, .no-print { display: none !important; }
       body { background: white; }
       .page { padding: 16px; max-width: 100%; }
       .sec {
@@ -364,11 +349,13 @@
         page-break-inside: avoid; margin-bottom: 14px; padding: 20px 22px;
       }
       .sec::before { display: none; }
-      textarea, input[type="text"] { border: 1px solid #ccc; background: white; }
-      .tab-panel { display: block !important; }
-      .tabs { display: none; }
-      .closing-banner { background: #1e1b2e !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-      .pitch-block { border: 1px solid #ddd; }
+      .pitch-textarea, textarea, input[type="text"] {
+        border: 1px solid #ccc; background: white;
+      }
+      .closing-banner {
+        background: #1e1b2e !important;
+        -webkit-print-color-adjust: exact; print-color-adjust: exact;
+      }
     }
 
     /* ── MOBILE ── */
@@ -377,9 +364,8 @@
       .page { padding: 28px 14px 70px; }
       .sec { padding: 20px 18px; }
       .field-row { grid-template-columns: 1fr; }
-      .role-table { font-size: 12px; }
-      .role-table th, .role-table td { padding: 8px 8px; }
       .timer-card { justify-content: center; text-align: center; }
+      .team-card { flex-direction: column; gap: 4px; }
     }
   </style>
 </head>
@@ -405,15 +391,13 @@
         </svg>
         דף פעילות קבוצתי
       </div>
-      <h1>מתכוננות לפיץ' הסופי</h1>
+      <h1>הפיץ׳ שלנו מוכן!</h1>
       <p class="intro">
-        בשלב הזה הקבוצה הופכת את כל העבודה שעשתה — הבעיה, קהל היעד,
-        הפתרון, התמונות והפוסטר — להצגה קצרה וברורה.
-        הפיץ' לא צריך להיות ארוך. הוא צריך לספר סיפור אחד.
+        הנתונים שמילאתן הפכו לפיץ׳ מוכן לקריאה ולהצגה.
+        קראו, ערכו אם צריך, חלקו תפקידים ותרגלו.
       </p>
       <div class="intro-note">
-        מלאו את התבנית, חלקו תפקידים בצוות, תרגלו בקול,
-        ובסוף ייצאו את הדף כ-PDF לשמירה או הדפסה.
+        לא צריך למלא שוב — רק לקרוא, לדייק ולתרגל בקול.
       </div>
     </div>
 
@@ -423,7 +407,7 @@
         <div class="sec-num">1</div>
         <div>
           <div class="sec-title">פרטי הקבוצה</div>
-          <div class="sec-sub">מלאו לפני שמתחילות</div>
+          <div class="sec-sub">הנתונים האלה מזינים את כל הדף אוטומטית</div>
         </div>
       </div>
       <div class="fields">
@@ -440,6 +424,7 @@
         <div class="field-row">
           <div class="field-wrap">
             <label class="field-label" for="f-students">שמות התלמידות</label>
+            <span class="field-hint">הפרידו בפסיקים: שרה, מיכל, נועה</span>
             <input type="text" id="f-students" placeholder="שם, שם, שם..." data-save="students" />
           </div>
           <div class="field-wrap">
@@ -450,488 +435,166 @@
       </div>
     </div>
 
-    <!-- ════ 2 · תבנית פיץ' לקבוצה ════ -->
+    <!-- ════ נתוני הפיץ׳ (מתקפל) ════ -->
+    <div class="sec">
+      <button class="source-toggle" onclick="toggleSource()" aria-expanded="false" aria-controls="source-fields">
+        <div class="sec-icon purple">✏️</div>
+        <div style="flex:1;text-align:right">
+          <div class="sec-title">נתוני הפיץ׳ — לחצו לעריכה</div>
+          <div class="sec-sub">ערכו כאן אם הפיץ׳ זקוק לדיוק, ואז לחצו ↻ צרי מחדש</div>
+        </div>
+        <div class="source-chevron" id="source-chevron">▼</div>
+      </button>
+
+      <div id="source-fields" style="display:none">
+        <div class="fields">
+          <div class="field-wrap">
+            <label class="field-label" for="p2a">הבעיה שזיהינו</label>
+            <input type="text" id="p2a" placeholder="תארו בקצרה את הבעיה" data-save="p2a" />
+          </div>
+          <div class="field-wrap">
+            <label class="field-label" for="p3a">קהל היעד — מי מושפע?</label>
+            <input type="text" id="p3a" placeholder="מי סובל מהבעיה הזו" data-save="p3a" />
+          </div>
+          <div class="field-wrap">
+            <label class="field-label" for="p4a">הפתרון שפיתחנו</label>
+            <input type="text" id="p4a" placeholder="תארו בקצרה את הפתרון" data-save="p4a" />
+          </div>
+          <div class="field-wrap">
+            <label class="field-label" for="p4b">איך הפתרון עוזר</label>
+            <input type="text" id="p4b" placeholder="מה הפתרון עושה עבור המשתמשות" data-save="p4b" />
+          </div>
+          <div class="field-row">
+            <div class="field-wrap">
+              <label class="field-label" for="p5a">שלב ראשון בשימוש</label>
+              <input type="text" id="p5a" placeholder="המשתמשת מתחילה ב..." data-save="p5a" />
+            </div>
+            <div class="field-wrap">
+              <label class="field-label" for="p5b">שלב שני</label>
+              <input type="text" id="p5b" placeholder="אחר כך היא..." data-save="p5b" />
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-wrap">
+              <label class="field-label" for="p5c">תוצאה סופית</label>
+              <input type="text" id="p5c" placeholder="בסוף היא מקבלת / רואה..." data-save="p5c" />
+            </div>
+            <div class="field-wrap">
+              <label class="field-label" for="p6a">הערך המרכזי</label>
+              <input type="text" id="p6a" placeholder="הערך המרכזי של המיזם" data-save="p6a" />
+            </div>
+          </div>
+          <div class="field-wrap">
+            <label class="field-label" for="p6b">למה זה חשוב</label>
+            <input type="text" id="p6b" placeholder="הסיבה שהמיזם משמעותי" data-save="p6b" />
+          </div>
+        </div>
+        <button class="btn-regenerate" onclick="regenerateAll()">↻ צרי פיץ׳ מחדש מהנתונים</button>
+      </div>
+    </div>
+
+    <!-- ════ 2 · הפיץ׳ שלנו ════ -->
     <div class="sec">
       <div class="sec-head">
         <div class="sec-num">2</div>
         <div>
-          <div class="sec-title">תבנית הפיץ' הקבוצתי</div>
-          <div class="sec-sub">מלאו כל בלוק — אלה יהיו הנקודות של ההצגה</div>
+          <div class="sec-title">הפיץ׳ שלנו</div>
+          <div class="sec-sub">קראו, ערכו אם צריך — זהו הנאום המלא</div>
         </div>
       </div>
-
-      <!-- 2.1 פתיחה חזקה -->
-      <div class="pitch-block">
-        <div class="pitch-block-title"><span class="pitch-block-num">1</span> פתיחה חזקה</div>
-        <div class="fields">
-          <div class="field-wrap">
-            <label class="field-label" for="p1a">אפשרות א'</label>
-            <div class="fill-line">
-              <span class="prefix">מכירות את הרגע שבו</span>
-              <input type="text" id="p1a" placeholder="...תארו את הרגע" data-save="p1a" />
-            </div>
-          </div>
-          <div class="field-wrap">
-            <label class="field-label" for="p1b">אפשרות ב'</label>
-            <div class="fill-line">
-              <span class="prefix">הבעיה שזיהינו היא ש-</span>
-              <input type="text" id="p1b" placeholder="...תארו בקצרה" data-save="p1b" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 2.2 הבעיה -->
-      <div class="pitch-block">
-        <div class="pitch-block-title"><span class="pitch-block-num">2</span> הבעיה</div>
-        <div class="fields">
-          <div class="field-wrap">
-            <label class="field-label" for="p2a">הגדרת הבעיה</label>
-            <div class="fill-line">
-              <span class="prefix">הבעיה שלנו היא</span>
-              <input type="text" id="p2a" placeholder="" data-save="p2a" />
-            </div>
-          </div>
-          <div class="field-wrap">
-            <label class="field-label" for="p2b">מתי זה קורה</label>
-            <div class="fill-line">
-              <span class="prefix">זה קורה כאשר</span>
-              <input type="text" id="p2b" placeholder="" data-save="p2b" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 2.3 קהל היעד -->
-      <div class="pitch-block">
-        <div class="pitch-block-title"><span class="pitch-block-num">3</span> קהל היעד</div>
-        <div class="fields">
-          <div class="field-wrap">
-            <label class="field-label" for="p3a">מי מושפע?</label>
-            <div class="fill-line">
-              <span class="prefix">הבעיה משפיעה בעיקר על</span>
-              <input type="text" id="p3a" placeholder="" data-save="p3a" />
-            </div>
-          </div>
-          <div class="field-wrap">
-            <label class="field-label" for="p3b">למה בחרתן בהן?</label>
-            <div class="fill-line">
-              <span class="prefix">בחרנו להתמקד בהן כי</span>
-              <input type="text" id="p3b" placeholder="" data-save="p3b" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 2.4 הפתרון -->
-      <div class="pitch-block">
-        <div class="pitch-block-title"><span class="pitch-block-num">4</span> הפתרון שלנו</div>
-        <div class="fields">
-          <div class="field-wrap">
-            <label class="field-label" for="p4a">מה פיתחתן?</label>
-            <div class="fill-line">
-              <span class="prefix">לכן פיתחנו רעיון ל-</span>
-              <input type="text" id="p4a" placeholder="" data-save="p4a" />
-            </div>
-          </div>
-          <div class="field-wrap">
-            <label class="field-label" for="p4b">איך הוא עוזר?</label>
-            <div class="fill-line">
-              <span class="prefix">הפתרון שלנו עוזר בכך שהוא</span>
-              <input type="text" id="p4b" placeholder="" data-save="p4b" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 2.5 איך זה עובד -->
-      <div class="pitch-block">
-        <div class="pitch-block-title"><span class="pitch-block-num">5</span> איך זה עובד בקצרה</div>
-        <div class="fields">
-          <div class="field-wrap">
-            <label class="field-label" for="p5a">שלב ראשון</label>
-            <div class="fill-line">
-              <span class="prefix">המשתמשת מתחילה ב-</span>
-              <input type="text" id="p5a" placeholder="" data-save="p5a" />
-            </div>
-          </div>
-          <div class="field-wrap">
-            <label class="field-label" for="p5b">שלב שני</label>
-            <div class="fill-line">
-              <span class="prefix">אחר כך היא</span>
-              <input type="text" id="p5b" placeholder="" data-save="p5b" />
-            </div>
-          </div>
-          <div class="field-wrap">
-            <label class="field-label" for="p5c">התוצאה</label>
-            <div class="fill-line">
-              <span class="prefix">בסוף היא מקבלת / רואה / עושה</span>
-              <input type="text" id="p5c" placeholder="" data-save="p5c" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 2.6 הערך המרכזי -->
-      <div class="pitch-block">
-        <div class="pitch-block-title"><span class="pitch-block-num">6</span> הערך המרכזי</div>
-        <div class="fields">
-          <div class="field-wrap">
-            <label class="field-label" for="p6a">מה הערך?</label>
-            <div class="fill-line">
-              <span class="prefix">הערך המרכזי של הפתרון הוא</span>
-              <input type="text" id="p6a" placeholder="" data-save="p6a" />
-            </div>
-          </div>
-          <div class="field-wrap">
-            <label class="field-label" for="p6b">למה זה חשוב?</label>
-            <div class="fill-line">
-              <span class="prefix">הוא חשוב כי</span>
-              <input type="text" id="p6b" placeholder="" data-save="p6b" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 2.7 חיבור לפוסטר -->
-      <div class="pitch-block">
-        <div class="pitch-block-title"><span class="pitch-block-num">7</span> חיבור לפוסטר</div>
-        <div class="fields">
-          <div class="field-wrap">
-            <label class="field-label" for="p7a">מה רואים בפוסטר?</label>
-            <div class="fill-line">
-              <span class="prefix">בפוסטר אפשר לראות את</span>
-              <input type="text" id="p7a" placeholder="" data-save="p7a" />
-            </div>
-          </div>
-          <div class="field-wrap">
-            <label class="field-label" for="p7b">מה רואים בתמונות?</label>
-            <div class="fill-line">
-              <span class="prefix">בתמונות של המיזם רואים</span>
-              <input type="text" id="p7b" placeholder="" data-save="p7b" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 2.8 משפט סיום -->
-      <div class="pitch-block">
-        <div class="pitch-block-title"><span class="pitch-block-num">8</span> משפט סיום</div>
-        <div class="fields">
-          <div class="field-wrap">
-            <label class="field-label" for="p8a">משפט סיום שלכן</label>
-            <div class="fill-line">
-              <span class="prefix">אנחנו מאמינות שהרעיון שלנו חשוב כי</span>
-              <input type="text" id="p8a" placeholder="" data-save="p8a" />
-            </div>
-          </div>
-          <div class="field-wrap">
-            <span class="field-hint">או השתמשו במשפט המוכן:</span>
-            <div style="font-size:14px;color:var(--muted);font-style:italic;line-height:1.7;padding:10px 14px;background:#f9f7ff;border-radius:12px;border:1px dashed rgba(139,92,246,0.2);">
-              "הפתרון שלנו מראה שאפשר לקחת צורך אמיתי ולהפוך אותו לרעיון שיש לו ערך."
-            </div>
-          </div>
-        </div>
+      <textarea
+        id="full-pitch"
+        class="pitch-textarea"
+        rows="18"
+        data-save="full_pitch_text"
+        placeholder="ממתינות לנתונים... מלאו את פרטי הקבוצה למעלה ולחצו ↻ צרי פיץ׳ מחדש"
+      ></textarea>
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-top:8px">
+        <button class="btn-regenerate no-print" onclick="regenerateAll()">↻ צרי מחדש מהנתונים</button>
+        <span class="auto-note no-print">💡 הטקסט נוצר אוטומטית — ערכו ישירות לפי הצורך</span>
       </div>
     </div>
 
-    <!-- ════ 3 · גרסה מוכנה לקריאה ════ -->
+    <!-- ════ 3 · נאום מעלית ════ -->
     <div class="sec">
       <div class="sec-head">
         <div class="sec-num">3</div>
-        <div>
-          <div class="sec-title">גרסה מוכנה לקריאה בפיץ'</div>
-          <div class="sec-sub">ערכו את הטקסט — זהו הנאום המלא</div>
-        </div>
-      </div>
-      <p class="sec-desc">מלאו את הפסקאות — זו הגרסה שתרגלו ממנה ותקראו בהצגה.</p>
-      <div class="fields">
-        <div class="field-wrap">
-          <label class="field-label" for="r1">שלב 1 — פתיחה והיכרות</label>
-          <textarea id="r1" rows="2" placeholder="שלום, אנחנו ________. הבעיה שזיהינו היא ________." data-save="r1"></textarea>
-        </div>
-        <div class="field-wrap">
-          <label class="field-label" for="r2">שלב 2 — בעיה וקהל יעד</label>
-          <textarea id="r2" rows="2" placeholder="הבעיה משפיעה בעיקר על ________. בחרנו להתמקד בהן כי ________." data-save="r2"></textarea>
-        </div>
-        <div class="field-wrap">
-          <label class="field-label" for="r3">שלב 3 — הפתרון</label>
-          <textarea id="r3" rows="2" placeholder="לכן פיתחנו רעיון ל-________. הפתרון שלנו עובד כך: ________." data-save="r3"></textarea>
-        </div>
-        <div class="field-wrap">
-          <label class="field-label" for="r4">שלב 4 — פוסטר וסיום</label>
-          <textarea id="r4" rows="2" placeholder="בפוסטר אפשר לראות את ________. הערך המרכזי הוא ________. אנחנו מאמינות שהמיזם שלנו חשוב כי ________." data-save="r4"></textarea>
-        </div>
-      </div>
-    </div>
-
-    <!-- ════ 4 · נאום מעלית ════ -->
-    <div class="sec">
-      <div class="sec-head">
-        <div class="sec-num">4</div>
         <div>
           <div class="sec-title">נאום מעלית — 20–30 שניות</div>
           <div class="sec-sub">גרסה קצרה וחדה למי שפוגשים אתכן בדרך</div>
         </div>
       </div>
-      <p class="sec-desc">מלאו את המשפטים הקצרים — זו הגרסה לשלושים שניות.</p>
-      <div class="fields">
-        <div class="fill-line">
-          <span class="prefix">המיזם שלנו הוא</span>
-          <input type="text" id="e1" placeholder="" data-save="e1" />
-        </div>
-        <div class="fill-line">
-          <span class="prefix">הוא מיועד ל-</span>
-          <input type="text" id="e2" placeholder="" data-save="e2" />
-        </div>
-        <div class="fill-line">
-          <span class="prefix">הוא נותן מענה לבעיה של</span>
-          <input type="text" id="e3" placeholder="" data-save="e3" />
-        </div>
-        <div class="fill-line">
-          <span class="prefix">הפתרון שלנו עוזר בכך שהוא</span>
-          <input type="text" id="e4" placeholder="" data-save="e4" />
-        </div>
-        <div class="fill-line">
-          <span class="prefix">הערך המרכזי שלו הוא</span>
-          <input type="text" id="e5" placeholder="" data-save="e5" />
-        </div>
+      <textarea
+        id="elevator-pitch"
+        class="pitch-textarea elevator-textarea"
+        rows="6"
+        data-save="elevator_pitch_text"
+        placeholder="ממתינות לנתונים..."
+      ></textarea>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px">
+        <button class="btn-regenerate no-print" onclick="regenerateElevator()">↻ צרי מחדש</button>
       </div>
-      <!-- timer -->
       <div class="timer-card">
         <div class="timer-info">
-          <div class="timer-label">טיימר לתרגול</div>
-          <div class="timer-sublbl">מטרה: 30 שניות לנאום מעלית</div>
+          <div class="timer-label">טיימר לנאום מעלית</div>
+          <div class="timer-sublbl">מטרה: 30 שניות</div>
         </div>
         <div class="timer-num" id="elev-display">00:30</div>
-        <button class="timer-btn" id="elev-btn" onclick="toggleTimer('elev', 30)">▶ התחלה</button>
+        <button class="timer-btn no-print" id="elev-btn" onclick="toggleTimer('elev', 30)">▶ התחלה</button>
       </div>
     </div>
 
-    <!-- ════ 5 · חלוקת הפיץ' בצוות ════ -->
+    <!-- ════ 4 · חלוקת תפקידים ════ -->
+    <div class="sec">
+      <div class="sec-head">
+        <div class="sec-num">4</div>
+        <div>
+          <div class="sec-title">חלוקת תפקידים</div>
+          <div class="sec-sub" id="roles-sub">לפי השמות שהוזנו בפרטי הקבוצה</div>
+        </div>
+      </div>
+      <div id="roles-container">
+        <p class="empty-note">הזינו שמות תלמידות בפרטי הקבוצה למעלה כדי לראות חלוקה אוטומטית.</p>
+      </div>
+    </div>
+
+    <!-- ════ 5 · משפטי מעבר ════ -->
     <div class="sec">
       <div class="sec-head">
         <div class="sec-num">5</div>
-        <div>
-          <div class="sec-title">חלוקת הפיץ' בצוות</div>
-          <div class="sec-sub">כל אחת מובילה חלק — כולן מספרות סיפור אחד</div>
-        </div>
-      </div>
-      <p class="sec-desc">
-        כדי שההצגה תהיה ברורה, חשוב שכל אחת תדע בדיוק איזה חלק היא מובילה.
-        המטרה היא לא שכל אחת תגיד הכול, אלא שכל אחת תוביל חלק אחד.
-      </p>
-
-      <div class="tabs" role="tablist" aria-label="חלוקה לפי מספר תלמידות">
-        <button class="tab-btn active" onclick="switchTab('team',this,'t2')" role="tab" aria-selected="true">2 תלמידות</button>
-        <button class="tab-btn" onclick="switchTab('team',this,'t3')" role="tab" aria-selected="false">3 תלמידות</button>
-        <button class="tab-btn" onclick="switchTab('team',this,'t4')" role="tab" aria-selected="false">4 תלמידות</button>
-        <button class="tab-btn" onclick="switchTab('team',this,'t5')" role="tab" aria-selected="false">5 תלמידות</button>
-      </div>
-
-      <!-- 2 תלמידות -->
-      <div class="tab-panel active" id="t2">
-        <div class="team-card">
-          <div class="team-card-role">תלמידה 1</div>
-          <div class="team-card-parts">פתיחה חזקה · הבעיה · קהל היעד</div>
-        </div>
-        <div class="team-card">
-          <div class="team-card-role">תלמידה 2</div>
-          <div class="team-card-parts">הפתרון · איך זה עובד · הערך המרכזי וסגירה</div>
-        </div>
-      </div>
-
-      <!-- 3 תלמידות -->
-      <div class="tab-panel" id="t3">
-        <div class="team-card">
-          <div class="team-card-role">תלמידה 1</div>
-          <div class="team-card-parts">פתיחה חזקה · הבעיה · קהל יעד</div>
-        </div>
-        <div class="team-card">
-          <div class="team-card-role">תלמידה 2</div>
-          <div class="team-card-parts">הפתרון · איך זה עובד</div>
-        </div>
-        <div class="team-card">
-          <div class="team-card-role">תלמידה 3</div>
-          <div class="team-card-parts">הערך המרכזי · חיבור לפוסטר · משפט סיום</div>
-        </div>
-      </div>
-
-      <!-- 4 תלמידות -->
-      <div class="tab-panel" id="t4">
-        <div class="team-card">
-          <div class="team-card-role">תלמידה 1</div>
-          <div class="team-card-parts">פתיחה חזקה · הבעיה</div>
-        </div>
-        <div class="team-card">
-          <div class="team-card-role">תלמידה 2</div>
-          <div class="team-card-parts">קהל יעד · מה גילינו בחקר</div>
-        </div>
-        <div class="team-card">
-          <div class="team-card-role">תלמידה 3</div>
-          <div class="team-card-parts">הפתרון · איך הוא עובד</div>
-        </div>
-        <div class="team-card">
-          <div class="team-card-role">תלמידה 4</div>
-          <div class="team-card-parts">הערך המרכזי · סגירה · הזמנה לשאלות</div>
-        </div>
-      </div>
-
-      <!-- 5 תלמידות -->
-      <div class="tab-panel" id="t5">
-        <div class="team-card">
-          <div class="team-card-role">תלמידה 1</div>
-          <div class="team-card-parts">פתיחה חזקה · הבעיה</div>
-        </div>
-        <div class="team-card">
-          <div class="team-card-role">תלמידה 2</div>
-          <div class="team-card-parts">קהל יעד · מה גילינו</div>
-        </div>
-        <div class="team-card">
-          <div class="team-card-role">תלמידה 3</div>
-          <div class="team-card-parts">הפתרון</div>
-        </div>
-        <div class="team-card">
-          <div class="team-card-role">תלמידה 4</div>
-          <div class="team-card-parts">איך זה עובד · הצבעה על תמונות בפוסטר</div>
-        </div>
-        <div class="team-card">
-          <div class="team-card-role">תלמידה 5</div>
-          <div class="team-card-parts">הערך המרכזי · סגירה</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ════ 6 · טבלת חלוקת תפקידים ════ -->
-    <div class="sec">
-      <div class="sec-head">
-        <div class="sec-num">6</div>
-        <div>
-          <div class="sec-title">טבלת חלוקת תפקידים</div>
-          <div class="sec-sub">כתבו מי אומרת מה ומה תהיה פתיחת המשפט שלה</div>
-        </div>
-      </div>
-      <div style="overflow-x:auto;">
-        <table class="role-table" aria-label="טבלת תפקידים">
-          <thead>
-            <tr>
-              <th>חלק בפיץ'</th>
-              <th>מי אומרת?</th>
-              <th>משפט פתיחה</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>פתיחה והבעיה</td>
-              <td><input type="text" placeholder="שם" aria-label="מי מציגה פתיחה" data-save="role1" /></td>
-              <td><input type="text" placeholder="הבעיה שזיהינו היא…" aria-label="משפט פתיחה" data-save="rolestart1" /></td>
-            </tr>
-            <tr>
-              <td>קהל יעד</td>
-              <td><input type="text" placeholder="שם" aria-label="מי מציגה קהל יעד" data-save="role2" /></td>
-              <td><input type="text" placeholder="הבעיה משפיעה בעיקר על…" aria-label="משפט פתיחה" data-save="rolestart2" /></td>
-            </tr>
-            <tr>
-              <td>הפתרון</td>
-              <td><input type="text" placeholder="שם" aria-label="מי מציגה פתרון" data-save="role3" /></td>
-              <td><input type="text" placeholder="לכן פיתחנו…" aria-label="משפט פתיחה" data-save="rolestart3" /></td>
-            </tr>
-            <tr>
-              <td>איך זה עובד</td>
-              <td><input type="text" placeholder="שם" aria-label="מי מציגה תהליך" data-save="role4" /></td>
-              <td><input type="text" placeholder="הפתרון עובד כך…" aria-label="משפט פתיחה" data-save="rolestart4" /></td>
-            </tr>
-            <tr>
-              <td>הערך וסגירה</td>
-              <td><input type="text" placeholder="שם" aria-label="מי מסיימת" data-save="role5" /></td>
-              <td><input type="text" placeholder="הערך המרכזי הוא…" aria-label="משפט פתיחה" data-save="rolestart5" /></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- ════ 7 · משפטי מעבר ════ -->
-    <div class="sec">
-      <div class="sec-head">
-        <div class="sec-num">7</div>
         <div>
           <div class="sec-title">משפטי מעבר בין דוברות</div>
           <div class="sec-sub">השתמשו בהם כדי שההצגה תישמע כמו סיפור אחד</div>
         </div>
       </div>
-      <div class="phrase-list">
-        <div class="phrase-item">
-          <div class="phrase-arrow">←</div>
-          <div class="phrase-text">אחרי שהבנו את הבעיה, אני אעביר ל-<span class="phrase-blank"></span> שתסביר על מי היא משפיעה.</div>
-        </div>
-        <div class="phrase-item">
-          <div class="phrase-arrow">←</div>
-          <div class="phrase-text">עכשיו <span class="phrase-blank"></span> תציג את הפתרון שפיתחנו.</div>
-        </div>
-        <div class="phrase-item">
-          <div class="phrase-arrow">←</div>
-          <div class="phrase-text">כדי להבין איך זה עובד בפועל, <span class="phrase-blank"></span> תסביר את שלבי השימוש.</div>
-        </div>
-        <div class="phrase-item">
-          <div class="phrase-arrow">←</div>
-          <div class="phrase-text">ולסיום, <span class="phrase-blank"></span> תציג את הערך המרכזי של המיזם.</div>
-        </div>
+      <div class="phrase-list" id="transitions-container">
+        <p class="empty-note">משפטי המעבר יופיעו אחרי שתזינו שמות תלמידות.</p>
       </div>
     </div>
 
-    <!-- ════ 8 · כללי זהב ════ -->
+    <!-- ════ 6 · מתרגלות ובודקות מוכנות ════ -->
     <div class="sec">
       <div class="sec-head">
-        <div class="sec-num">8</div>
+        <div class="sec-num">6</div>
         <div>
-          <div class="sec-title">כללי זהב להצגה בצוות</div>
-          <div class="sec-sub">שמרו על אלה ורמת ההצגה תעלה</div>
+          <div class="sec-title">מתרגלות ובודקות מוכנות</div>
+          <div class="sec-sub">תרגלו בקול ובדקו שאתן מוכנות לפני ההצגה</div>
         </div>
       </div>
-      <div class="rules-list">
-        <div class="rule-item"><div class="rule-dot"></div><span>כל אחת אומרת חלק קצר וברור — לא את הכול.</span></div>
-        <div class="rule-item"><div class="rule-dot"></div><span>מחלקות לפי רצף הסיפור, לא לפי מי רוצה לדבר הכי הרבה.</span></div>
-        <div class="rule-item"><div class="rule-dot"></div><span>כל אחת אחראית על חלק אחד — ויודעת אותו בעל-פה.</span></div>
-        <div class="rule-item"><div class="rule-dot"></div><span>מתרגלות בקול לפחות פעם אחת לפני ההצגה.</span></div>
-        <div class="rule-item"><div class="rule-dot"></div><span>מישהי אחת אחראית זמן ובודקת שהפיץ' לא מתארך מ-3 דקות.</span></div>
-        <div class="rule-item"><div class="rule-dot"></div><span>המעברים בין הדוברות ברורים — משתמשות במשפטי החיבור.</span></div>
-      </div>
-    </div>
 
-    <!-- ════ 9 · תרגול עם טיימר ════ -->
-    <div class="sec">
-      <div class="sec-head">
-        <div class="sec-num">9</div>
-        <div>
-          <div class="sec-title">תרגול עם טיימר</div>
-          <div class="sec-sub">תרגלו את הפיץ' המלא — מטרה: 3 דקות</div>
-        </div>
-      </div>
-      <p class="sec-desc">לחצו על "התחלה", קראו את הנאום המלא מחלק 3, ובדקו שאתן בזמן.</p>
       <div class="timer-card">
         <div class="timer-info">
-          <div class="timer-label">טיימר לפיץ' המלא</div>
+          <div class="timer-label">טיימר לפיץ׳ המלא</div>
           <div class="timer-sublbl">מטרה: 3 דקות</div>
         </div>
         <div class="timer-num" id="full-display">03:00</div>
-        <button class="timer-btn" id="full-btn" onclick="toggleTimer('full', 180)">▶ התחלה</button>
+        <button class="timer-btn no-print" id="full-btn" onclick="toggleTimer('full', 180)">▶ התחלה</button>
       </div>
-    </div>
 
-    <!-- ════ 10 · בדיקת מוכנות ════ -->
-    <div class="sec">
-      <div class="sec-head">
-        <div class="sec-num">10</div>
-        <div>
-          <div class="sec-title">בדיקת מוכנות קבוצתית</div>
-          <div class="sec-sub">סמנו כל סעיף לפני שמגיעות להצגה</div>
-        </div>
-      </div>
-      <div class="checklist" id="checklist">
+      <div class="checklist" id="checklist" style="margin-top: 20px;">
         <div class="check-row">
           <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
-          <span>כל אחת יודעת בדיוק מה היא אומרת</span>
+          <span>כל אחת יודעת מה היא אומרת</span>
         </div>
         <div class="check-row">
           <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
@@ -939,7 +602,7 @@
         </div>
         <div class="check-row">
           <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
-          <span>הפיץ' נשמע כמו סיפור אחד ולא כמו חלקים נפרדים</span>
+          <span>הפיץ׳ נשמע כמו סיפור אחד</span>
         </div>
         <div class="check-row">
           <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
@@ -953,15 +616,11 @@
           <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
           <span>תרגלנו בקול לפחות פעם אחת</span>
         </div>
-        <div class="check-row">
-          <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
-          <span>הכנו תשובה לשאלה "למה בחרתן בבעיה הזו?"</span>
-        </div>
       </div>
     </div>
 
-    <!-- ════ 11 · משפט סיום ════ -->
-    <div class="closing-banner" aria-label="משפט סיום מעורר השראה">
+    <!-- ════ CLOSING ════ -->
+    <div class="closing-banner" aria-label="משפט סיום">
       <div style="position:relative;z-index:1;">
         <div class="closing-line1">כל אחת מובילה חלק.</div>
         <div class="closing-line2">כולן מספרות סיפור אחד.</div>
@@ -969,14 +628,14 @@
     </div>
 
     <!-- ════ ACTIONS ════ -->
-    <div class="actions">
-      <button class="btn-primary" onclick="exportPDF()" aria-label="ייצוא דף הפעילות כ-PDF">
+    <div class="actions no-print">
+      <button class="btn-primary" onclick="exportPDF()" aria-label="ייצוא הפיץ׳ כ-PDF">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
           <path d="M3 14v2a1 1 0 001 1h12a1 1 0 001-1v-2M10 3v10M6 9l4 4 4-4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        ייצוא דף הפעילות כ-PDF
+        ייצוא הפיץ׳ כ-PDF
       </button>
-      <a href="FinalPitch.html" class="btn-secondary">→ חזרה לעמוד הפיץ'</a>
+      <a href="FinalPitch.html" class="btn-secondary">→ חזרה לעמוד הפיץ׳</a>
     </div>
 
     <p class="footer-note">פורצות דרך · קורס יזמות לנוער</p>
@@ -984,9 +643,9 @@
   </main>
 
   <script>
-    // ── LocalStorage persistence ──────────────────────────────
     var STORE_KEY = 'pd_pitch_activity';
 
+    // ── Persistence ───────────────────────────────────────────
     function loadSaved() {
       try {
         var raw = localStorage.getItem(STORE_KEY);
@@ -1009,36 +668,227 @@
       } catch(e) {}
     }
 
-    document.addEventListener('input', saveAll);
-    loadSaved();
-
-    // ── Checklist ─────────────────────────────────────────────
-    document.querySelectorAll('.check-box').forEach(function(box) {
-      function toggle() {
-        var c = box.classList.toggle('checked');
-        box.setAttribute('aria-checked', String(c));
-      }
-      box.addEventListener('click', toggle);
-      box.addEventListener('keydown', function(e) {
-        if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggle(); }
-      });
-    });
-
-    // ── Tabs ──────────────────────────────────────────────────
-    function switchTab(group, btn, panelId) {
-      var allBtns   = btn.parentElement.querySelectorAll('.tab-btn');
-      var allPanels = btn.closest('.sec').querySelectorAll('.tab-panel');
-      allBtns.forEach(function(b) { b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
-      allPanels.forEach(function(p) { p.classList.remove('active'); });
-      btn.classList.add('active');
-      btn.setAttribute('aria-selected', 'true');
-      document.getElementById(panelId).classList.add('active');
+    // ── Helpers ───────────────────────────────────────────────
+    function getVal(id) {
+      var el = document.getElementById(id);
+      return el ? el.value.trim() : '';
     }
 
-    // ── Timers ────────────────────────────────────────────────
+    function fill(val, placeholder) {
+      return val || placeholder;
+    }
+
+    function escHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    function parseNames(raw) {
+      if (!raw) return [];
+      return raw.split(/[,،\n]+/)
+        .map(function(n) { return n.trim(); })
+        .filter(Boolean);
+    }
+
+    // ── Pitch Generation ─────────────────────────────────────
+    function buildFullPitch() {
+      var project  = fill(getVal('f-project'), 'השלימו שם מיזם');
+      var problem  = fill(getVal('p2a'), 'השלימו את הבעיה בקצרה');
+      var audience = fill(getVal('p3a'), 'השלימו את קהל היעד');
+      var solution = fill(getVal('p4a'), 'השלימו את תיאור הפתרון');
+      var helps    = fill(getVal('p4b'), 'השלימו כיצד הפתרון עוזר');
+      var step1    = fill(getVal('p5a'), 'השלימו את שלב ראשון');
+      var step2    = fill(getVal('p5b'), 'השלימו את שלב שני');
+      var step3    = fill(getVal('p5c'), 'השלימו את התוצאה');
+      var value    = fill(getVal('p6a'), 'השלימו את הערך המרכזי');
+      var why      = fill(getVal('p6b'), 'השלימו למה זה חשוב');
+
+      return [
+        'מכירות את הרגע שבו ' + problem + '?',
+        '',
+        'אנחנו זיהינו בעיה שקשורה ל-' + audience + '.',
+        'הבעיה שלנו היא ש-' + problem + '.',
+        'היא משפיעה בעיקר על ' + audience + '.',
+        '',
+        'לכן פיתחנו את ' + project + ' — ' + solution + '.',
+        'הפתרון שלנו עוזר בכך שהוא ' + helps + '.',
+        '',
+        'כך זה עובד:',
+        'המשתמשת מתחילה ב-' + step1 + '.',
+        'אחר כך היא ' + step2 + '.',
+        'בסוף היא ' + step3 + '.',
+        '',
+        'הערך המרכזי של המיזם הוא ' + value + '.',
+        'הוא חשוב כי ' + why + '.',
+        '',
+        'בפוסטר אפשר לראות את הבעיה, הפתרון, קהל היעד והאופן שבו המיזם עובד.',
+        '',
+        'אנחנו מאמינות שהמיזם שלנו חשוב כי הוא לוקח צורך אמיתי והופך אותו לרעיון טכנולוגי שיכול לעזור.'
+      ].join('\n');
+    }
+
+    function buildElevatorPitch() {
+      var project  = fill(getVal('f-project'), 'השלימו שם מיזם');
+      var audience = fill(getVal('p3a'), 'השלימו קהל יעד');
+      var problem  = fill(getVal('p2a'), 'השלימו את הבעיה');
+      var helps    = fill(getVal('p4b'), 'השלימו כיצד עוזר');
+      var value    = fill(getVal('p6a'), 'השלימו ערך מרכזי');
+
+      return [
+        'המיזם שלנו הוא ' + project + '.',
+        'הוא מיועד ל-' + audience + '.',
+        'הוא נותן מענה לבעיה של ' + problem + '.',
+        'הפתרון שלנו עוזר בכך שהוא ' + helps + '.',
+        'הערך המרכזי שלו הוא ' + value + '.'
+      ].join('\n');
+    }
+
+    function regenerateAll() {
+      var pitchEl = document.getElementById('full-pitch');
+      if (pitchEl) pitchEl.value = buildFullPitch();
+      regenerateElevator();
+      saveAll();
+    }
+
+    function regenerateElevator() {
+      var el = document.getElementById('elevator-pitch');
+      if (el) el.value = buildElevatorPitch();
+      saveAll();
+    }
+
+    // ── Role Division ────────────────────────────────────────
+    function getRoleParts(count) {
+      if (count === 2) return [
+        'פתיחה, הבעיה וקהל היעד',
+        'הפתרון, איך זה עובד, הערך והסיום'
+      ];
+      if (count === 3) return [
+        'פתיחה והבעיה',
+        'קהל יעד והפתרון',
+        'איך זה עובד, הערך והסיום'
+      ];
+      if (count === 4) return [
+        'פתיחה והבעיה',
+        'קהל יעד ומה גילינו',
+        'הפתרון ואיך הוא עובד',
+        'הערך, חיבור לפוסטר וסיום'
+      ];
+
+      // 5+
+      var base = [
+        'פתיחה והבעיה',
+        'קהל יעד ומה גילינו',
+        'הפתרון',
+        'איך זה עובד והצבעה על הפוסטר',
+        'הערך המרכזי והסיום'
+      ];
+      var parts = base.slice(0, Math.min(count, 5));
+      for (var i = 5; i < count; i++) {
+        var shared = base[Math.min(i, base.length - 1)];
+        parts.push('חלק משותף — ' + shared);
+      }
+      return parts;
+    }
+
+    function renderRoles() {
+      var container = document.getElementById('roles-container');
+      var sub = document.getElementById('roles-sub');
+      if (!container) return;
+
+      var names = parseNames(getVal('f-students'));
+
+      if (names.length === 0) {
+        container.innerHTML = '<p class="empty-note">הזינו שמות תלמידות בפרטי הקבוצה למעלה כדי לראות חלוקה אוטומטית.</p>';
+        if (sub) sub.textContent = 'לפי השמות שהוזנו בפרטי הקבוצה';
+        return;
+      }
+
+      if (names.length === 1) {
+        container.innerHTML =
+          '<div class="team-card">' +
+          '<div class="team-card-role">' + escHtml(names[0]) + '</div>' +
+          '<div class="team-card-dash">—</div>' +
+          '<div class="team-card-parts">פתיחה, הבעיה, קהל היעד, הפתרון, איך זה עובד, הערך וסיום</div>' +
+          '</div>';
+        if (sub) sub.textContent = 'תלמידה אחת — מציגה הכול';
+        return;
+      }
+
+      if (sub) sub.textContent = names.length + ' תלמידות — חלוקה אוטומטית';
+
+      var parts = getRoleParts(names.length);
+      var html = '';
+      for (var i = 0; i < names.length; i++) {
+        var part = parts[i] || parts[parts.length - 1];
+        html +=
+          '<div class="team-card">' +
+          '<div class="team-card-role">' + escHtml(names[i]) + '</div>' +
+          '<div class="team-card-dash">—</div>' +
+          '<div class="team-card-parts">' + escHtml(part) + '</div>' +
+          '</div>';
+      }
+      container.innerHTML = html;
+    }
+
+    // ── Transition Phrases ───────────────────────────────────
+    function renderTransitions() {
+      var container = document.getElementById('transitions-container');
+      if (!container) return;
+
+      var names = parseNames(getVal('f-students'));
+
+      var phrases = [];
+
+      if (names.length < 2) {
+        phrases = [
+          'אחרי שהצגנו את הבעיה, נעבור לחלק הבא — מי מושפעת ממנה.',
+          'עכשיו נציג את הפתרון שפיתחנו.',
+          'כדי להבין איך זה עובד בפועל, נסביר את שלבי השימוש.',
+          'ולסיום, נציג את הערך המרכזי של המיזם.'
+        ];
+      } else {
+        if (names[1]) phrases.push('אחרי שהבנו את הבעיה, אני אעביר ל-' + names[1] + ' שתסביר על מי היא משפיעה.');
+        if (names[2]) phrases.push('עכשיו ' + names[2] + ' תציג את הפתרון שפיתחנו.');
+        if (names[3]) phrases.push('כדי להבין איך זה עובד בפועל, ' + names[3] + ' תסביר את שלבי השימוש.');
+
+        var lastIdx = Math.min(names.length - 1, 4);
+        var lastName = names[lastIdx];
+        if (names.length === 2) {
+          phrases.push('ולסיום, ' + names[1] + ' תציג את הפתרון, הערך וסיום ההצגה.');
+        } else if (names.length >= 3) {
+          phrases.push('ולסיום, ' + lastName + ' תציג את הערך המרכזי של המיזם.');
+        }
+      }
+
+      var html = '';
+      phrases.forEach(function(phrase) {
+        html +=
+          '<div class="phrase-item">' +
+          '<div class="phrase-arrow">←</div>' +
+          '<div class="phrase-text">' + escHtml(phrase) + '</div>' +
+          '</div>';
+      });
+      container.innerHTML = html || '<p class="empty-note">הזינו שמות תלמידות כדי לקבל משפטי מעבר.</p>';
+    }
+
+    // ── Source Toggle ────────────────────────────────────────
+    function toggleSource() {
+      var fields = document.getElementById('source-fields');
+      var chevron = document.getElementById('source-chevron');
+      var btn = document.querySelector('.source-toggle');
+      if (!fields) return;
+      var isOpen = fields.style.display !== 'none';
+      fields.style.display = isOpen ? 'none' : 'block';
+      if (chevron) chevron.classList.toggle('open', !isOpen);
+      if (btn) btn.setAttribute('aria-expanded', String(!isOpen));
+    }
+
+    // ── Timers ───────────────────────────────────────────────
     var timers = {};
 
-    function pad(n) { return String(n).padStart(2,'0'); }
+    function pad(n) { return String(n).padStart(2, '0'); }
 
     function toggleTimer(id, total) {
       var t = timers[id];
@@ -1071,12 +921,53 @@
       }
     }
 
-    // ── PDF export ────────────────────────────────────────────
+    // ── Checklist ────────────────────────────────────────────
+    document.querySelectorAll('.check-box').forEach(function(box) {
+      function toggle() {
+        var c = box.classList.toggle('checked');
+        box.setAttribute('aria-checked', String(c));
+      }
+      box.addEventListener('click', toggle);
+      box.addEventListener('keydown', function(e) {
+        if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggle(); }
+      });
+    });
+
+    // ── PDF Export ───────────────────────────────────────────
     function exportPDF() {
-      var proj = document.getElementById('f-project').value || 'הפיץ';
-      document.title = 'דף פעילות – מתכוננות לפיץ\' הסופי – ' + proj;
+      var proj = getVal('f-project') || 'הפיץ';
+      document.title = 'הפיץ׳ שלנו – ' + proj;
       window.print();
     }
+
+    // ── Init ─────────────────────────────────────────────────
+    loadSaved();
+
+    // Auto-generate pitch if not yet saved
+    var pitchEl = document.getElementById('full-pitch');
+    if (pitchEl && !pitchEl.value.trim()) {
+      pitchEl.value = buildFullPitch();
+    }
+    var elevEl = document.getElementById('elevator-pitch');
+    if (elevEl && !elevEl.value.trim()) {
+      elevEl.value = buildElevatorPitch();
+    }
+
+    // Render role division and transitions
+    renderRoles();
+    renderTransitions();
+
+    // Re-render roles/transitions when student names change
+    var studentsEl = document.getElementById('f-students');
+    if (studentsEl) {
+      studentsEl.addEventListener('input', function() {
+        renderRoles();
+        renderTransitions();
+      });
+    }
+
+    // Save on any input
+    document.addEventListener('input', saveAll);
   </script>
 
 </body>
