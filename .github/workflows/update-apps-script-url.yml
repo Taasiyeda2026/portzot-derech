@@ -1,0 +1,58 @@
+name: Update Apps Script URL
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/update-apps-script-url.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  update-url:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Replace Apps Script URL in p.nativ files
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          new_url = 'https://script.google.com/macros/s/AKfycbxSs_RWKnDkxPpm5p8Wg9eRU7uPSZF8NY2HkTM_F7pKDm6oniyAHkJC_abkKw60G5hI/exec'
+          pattern = re.compile(r'https://script\.google\.com/macros/s/AKfy[^"\'\s<>]+/exec')
+          paths = [
+              Path('p.nativ/goals.html'),
+              Path('p.nativ/domain.html'),
+              Path('p.nativ/game/index.html'),
+          ]
+
+          changed = []
+          for path in paths:
+              if not path.exists():
+                  continue
+              text = path.read_text(encoding='utf-8')
+              updated = pattern.sub(new_url, text)
+              if updated != text:
+                  path.write_text(updated, encoding='utf-8', newline='')
+                  changed.append(str(path))
+
+          print('Changed files:', ', '.join(changed) if changed else 'none')
+          PY
+      - name: Remove one-time workflow
+        run: rm -f .github/workflows/update-apps-script-url.yml
+      - name: Commit URL update
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add p.nativ/goals.html p.nativ/domain.html p.nativ/game/index.html .github/workflows/update-apps-script-url.yml
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update Apps Script endpoint URL"
+            git push
+          fi
