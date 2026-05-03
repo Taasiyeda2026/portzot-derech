@@ -14,16 +14,24 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
     e.innerHTML = (items || []).filter(i => (i || '').trim()).map(i => `<li>${i.trim()}</li>`).join('');
   };
 
-  // ── Title font, size, colour ────────────────────────────────────────────────
+  // ── Theme tokens (CSS custom properties cascade to pseudo-elements) ─────────
   const resolvedTitle  = titleColor || '#5E2750';
   const resolvedText   = textColor  || '#1f1030';
   const resolvedFont   = titleFont  || 'IBM Plex Sans Hebrew';
 
+  const posterRoot = document.getElementById('poster-html');
+  if (posterRoot) {
+    posterRoot.style.setProperty('--ph-title-color', resolvedTitle);
+    posterRoot.style.setProperty('--ph-text-color',  resolvedText);
+    posterRoot.style.fontFamily = `'${resolvedFont}', 'IBM Plex Sans Hebrew', sans-serif`;
+  }
+
+  // ── Title font, size, colour ────────────────────────────────────────────────
   const name = (contentValues.projectName || '').trim();
   const n = document.getElementById('ph-name');
   if (n) {
     n.textContent = name || 'שם המיזם';
-    n.style.fontFamily = resolvedFont;
+    n.style.fontFamily = `'${resolvedFont}', 'IBM Plex Sans Hebrew', sans-serif`;
     n.style.color      = resolvedTitle;
     const l = name.length;
     n.style.fontSize = l <= 6 ? '52px' : l <= 10 ? '44px' : l <= 15 ? '36px' : l <= 18 ? '30px' : '24px';

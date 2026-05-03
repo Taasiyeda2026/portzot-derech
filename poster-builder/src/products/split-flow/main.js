@@ -236,6 +236,7 @@ function hydrateStateFromStorage() {
   Object.keys(state.slotUploadStatus).forEach((slotKey) => {
     state.slotUploadStatus[slotKey] = state.slotImages[slotKey] ? 'done' : 'empty';
   });
+  if (stored.step) state.step = stored.step;
 }
 
 function splitStudentNames(rawNames) {
@@ -290,6 +291,7 @@ function persistSplitFlowState() {
     splitFlowState: {
       ...(stored.splitFlowState || {}),
       productType,
+      step: state.step,
       research: { ...state.research },
       sharedVisualPrompt: JSON.parse(JSON.stringify(state.sharedVisualPrompt)),
       physicalPrompt: JSON.parse(JSON.stringify(state.physicalPrompt)),
@@ -1157,14 +1159,38 @@ function renderStep4() {
       </button>
     `).join('')}`;
 
+  const { titleFont, titleColor, textColor, background, shape } = state.design;
+  const previewName = escapeHtml((state.research.projectName || 'שם המיזם').trim());
+  const previewBg   = background ? `background-image:url('${background}');background-size:cover;background-position:center;` : 'background:linear-gradient(135deg,#f5f3ff,#ede9fe);';
+  const previewBr   = shape === 0 ? '3px' : shape === 10 ? '7px' : '13px';
+
   return `<article class="split-card">
     <h3>מיפוי ועיצוב לפוסטר</h3>
-    <div class="split-design-layout">
-      <div class="split-field"><span>רקע לפוסטר</span><div class="split-bg-grid">${bgTiles}</div></div>
-      <div class="split-field"><span>פונט</span><div class="split-font-grid">${fontTiles}</div></div>
-      <div class="split-field"><span>צבע כותרות</span><div class="split-tags">${titleColorButtons}${titleColorPicker}</div></div>
-      <div class="split-field"><span>צבע טקסט</span><div class="split-tags">${textColorButtons}${textColorPicker}</div></div>
-      <div class="split-field"><span>עיצוב תיבות</span><div class="split-tags">${SHAPE_OPTIONS.map((shape) => `<button type="button" class="split-tag ${state.design.shape === shape.value ? 'active' : ''}" data-design="shape" data-value="${shape.value}">${shape.label}</button>`).join('')}</div></div>
+    <div class="split-design-wrap">
+      <div class="split-design-layout">
+        <div class="split-field"><span>רקע לפוסטר</span><div class="split-bg-grid">${bgTiles}</div></div>
+        <div class="split-field"><span>פונט</span><div class="split-font-grid">${fontTiles}</div></div>
+        <div class="split-field"><span>צבע כותרות</span><div class="split-tags">${titleColorButtons}${titleColorPicker}</div></div>
+        <div class="split-field"><span>צבע טקסט</span><div class="split-tags">${textColorButtons}${textColorPicker}</div></div>
+        <div class="split-field"><span>עיצוב תיבות</span><div class="split-tags">${SHAPE_OPTIONS.map((s) => `<button type="button" class="split-tag ${state.design.shape === s.value ? 'active' : ''}" data-design="shape" data-value="${s.value}">${s.label}</button>`).join('')}</div></div>
+      </div>
+      <div class="split-design-preview" style="${previewBg}">
+        <div class="split-preview-inner">
+          <div class="split-preview-title" style="font-family:'${titleFont}',sans-serif;color:${titleColor};">${previewName}</div>
+          <div class="split-preview-line" style="background:linear-gradient(90deg,${titleColor},#d61f8c);"></div>
+          <div class="split-preview-cards">
+            <div class="split-preview-card" style="border-radius:${previewBr};border-color:${titleColor}33;">
+              <div class="split-preview-cap" style="color:${titleColor};">הבעיה שזיהינו</div>
+              <div class="split-preview-body" style="color:${textColor};font-family:'${titleFont}',sans-serif;">תיאור הבעיה שזיהינו</div>
+            </div>
+            <div class="split-preview-card" style="border-radius:${previewBr};border-color:${titleColor}33;">
+              <div class="split-preview-cap" style="color:${titleColor};">תובנות מהחקר</div>
+              <div class="split-preview-body" style="color:${textColor};font-family:'${titleFont}',sans-serif;">ממצאי המחקר שלנו</div>
+            </div>
+          </div>
+          <div class="split-preview-footer" style="background:${titleColor};">פורצות דרך ✦ 2026</div>
+        </div>
+      </div>
     </div>
     <a class="split-btn primary" href="./editor.html?type=${requestedProductType}">יצירת הפוסטר</a>
   </article>`;
@@ -1247,7 +1273,19 @@ function render() {
     .split-color-picker-dot{display:block;width:100%;height:100%;border-radius:50%;background:conic-gradient(red,#ff0,lime,cyan,blue,magenta,red);pointer-events:none}
     .split-color-picker-wrap input[type=color]{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;border:none;padding:0}
     @media(max-width:600px){.split-bg-grid{grid-template-columns:repeat(3,auto)}.split-font-grid{grid-template-columns:repeat(2,auto)}}
+    .split-design-wrap{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:start}
+    @media(max-width:700px){.split-design-wrap{grid-template-columns:1fr}}
     .split-design-layout{display:grid;gap:12px;padding:14px;border-radius:16px;background:linear-gradient(155deg,rgba(248,245,255,.9),rgba(237,233,254,.6));border:1px solid #ddd0f5;box-shadow:0 2px 10px rgba(94,39,80,.06)}
+    .split-design-preview{width:200px;border-radius:16px;overflow:hidden;box-shadow:0 8px 32px rgba(94,39,80,.22);flex-shrink:0;position:sticky;top:80px}
+    @media(max-width:700px){.split-design-preview{width:100%;position:static}}
+    .split-preview-inner{padding:12px 10px 0;background:rgba(255,255,255,.12);backdrop-filter:blur(4px);display:flex;flex-direction:column;gap:8px}
+    .split-preview-title{font-size:14px;font-weight:900;text-align:center;line-height:1.2;padding:0 4px;word-break:break-word}
+    .split-preview-line{height:2px;border-radius:2px;margin:0 auto;width:60px}
+    .split-preview-cards{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+    .split-preview-card{background:rgba(255,255,255,.82);border:1px solid #ddd0f5;padding:6px 7px;display:flex;flex-direction:column;gap:3px}
+    .split-preview-cap{font-size:6.5px;font-weight:800;text-transform:uppercase;letter-spacing:.6px}
+    .split-preview-body{font-size:7.5px;line-height:1.4;color:#444}
+    .split-preview-footer{padding:6px 10px;font-size:7px;font-weight:700;letter-spacing:.8px;color:rgba(255,255,255,.85);text-align:center;margin-top:8px}
     .split-nav{display:flex;justify-content:space-between;gap:10px;margin-top:18px}
     .split-btn{border:none;border-radius:12px;padding:11px 24px;cursor:pointer;font:inherit;font-weight:600;box-shadow:0 4px 14px rgba(15,23,42,.12);transition:.18s ease;width:fit-content;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
     .split-btn:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(15,23,42,.16)}
