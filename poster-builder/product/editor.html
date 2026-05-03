@@ -98,7 +98,6 @@
       box-shadow: 0 4px 16px rgba(94,39,80,.12);
       display: flex; align-items: center; justify-content: center;
     }
-    .ph-img-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .ph-notch { position: relative; border-radius: 16px; }
     .ph-notch::before {
       content: ''; position: absolute; top: 8px; left: 50%;
@@ -110,25 +109,6 @@
     /* ===== רספונסיבי ===== */
     @media (max-width: 860px) {
       .poster-page { padding: 16px 0 40px; overflow-x: auto; }
-    }
-
-    /* ===== הדפסה — A4 מדויק, רק הפוסטר ===== */
-    @media print {
-      @page { size: A4 portrait; margin: 0; }
-      html, body { margin: 0; padding: 0; background: #fff; }
-      .poster-bar, .poster-page { display: none !important; }
-      #print-frame {
-        display: block !important;
-        position: fixed; inset: 0;
-        width: 210mm; height: 297mm;
-        overflow: hidden;
-      }
-      #print-frame #poster-html {
-        width: 210mm; height: 297mm;
-        min-height: 297mm; max-height: 297mm;
-        box-shadow: none;
-        transform: none;
-      }
     }
   </style>
 </head>
@@ -158,7 +138,8 @@
         <!-- כותרת -->
         <div style="padding:20px 32px 14px;text-align:center;position:relative;flex-shrink:0">
           <div style="position:absolute;top:14px;left:22px">
-            <img src="/poster-builder/assets/logoposter.png" alt="פורצות דרך" style="height:52px;width:auto;object-fit:contain;filter:drop-shadow(0 0 12px rgba(255,255,255,1)) drop-shadow(0 0 24px rgba(255,255,255,.8)) drop-shadow(0 2px 6px rgba(255,255,255,.6))" />
+            <img src="/poster-builder/assets/logoposter.png" alt="פורצות דרך" crossorigin="anonymous"
+              style="height:52px;width:auto;object-fit:contain;filter:drop-shadow(0 0 12px rgba(255,255,255,1)) drop-shadow(0 0 24px rgba(255,255,255,.8)) drop-shadow(0 2px 6px rgba(255,255,255,.6))" />
           </div>
           <div id="ph-team" style="position:absolute;top:18px;right:22px;background:rgba(255,255,255,.88);border:1px solid rgba(94,39,80,.2);border-radius:10px;padding:7px 11px;max-width:165px">
             <div style="font-size:7.5px;font-weight:700;color:#5E2750;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">הצוות שלנו</div>
@@ -186,19 +167,25 @@
         <!-- תמונות -->
         <div style="padding:0 24px;margin-bottom:9px;flex-shrink:0">
           <div id="ph-images-label" style="font-size:7.5px;font-weight:700;color:#5E2750;text-transform:uppercase;letter-spacing:1.5px;text-align:center;margin-bottom:7px"></div>
+
+          <!-- פיזי: 2 תמונות -->
           <div id="ph-images-2" style="display:none;grid-template-columns:1fr 1fr;gap:10px">
-            <div id="ph-img-0" class="ph-img-frame" style="height:205px"></div>
-            <div id="ph-img-1" class="ph-img-frame" style="height:205px"></div>
+            <div class="ph-img-frame" data-ph-img="0" data-layout="physical"></div>
+            <div class="ph-img-frame" data-ph-img="1" data-layout="physical"></div>
           </div>
+
+          <!-- אפליקציה: 3 תמונות אנכיות -->
           <div id="ph-images-app" style="display:none;grid-template-columns:1fr 1fr 1fr;gap:9px">
-            <div id="ph-img-0" class="ph-img-frame ph-notch" style="height:250px"></div>
-            <div id="ph-img-1" class="ph-img-frame ph-notch" style="height:250px"></div>
-            <div id="ph-img-2" class="ph-img-frame ph-notch" style="height:250px"></div>
+            <div class="ph-img-frame ph-notch" data-ph-img="0" data-layout="app"></div>
+            <div class="ph-img-frame ph-notch" data-ph-img="1" data-layout="app"></div>
+            <div class="ph-img-frame ph-notch" data-ph-img="2" data-layout="app"></div>
           </div>
+
+          <!-- אתר/דיגיטלי: 3 תמונות רוחביות -->
           <div id="ph-images-web" style="display:none;grid-template-columns:1fr 1fr 1fr;gap:9px">
-            <div id="ph-img-0" class="ph-img-frame" style="height:145px"></div>
-            <div id="ph-img-1" class="ph-img-frame" style="height:145px"></div>
-            <div id="ph-img-2" class="ph-img-frame" style="height:145px"></div>
+            <div class="ph-img-frame" data-ph-img="0" data-layout="website"></div>
+            <div class="ph-img-frame" data-ph-img="1" data-layout="website"></div>
+            <div class="ph-img-frame" data-ph-img="2" data-layout="website"></div>
           </div>
         </div>
 
@@ -258,12 +245,11 @@
   </div>
 </div>
 
-<!-- מסגרת הדפסה — מוסתרת במסך, מוצגת בהדפסה בלבד -->
-<div id="print-frame" style="display:none"></div>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script type="module">
   import { loadProject } from '../src/shared/storage.js';
-  import { renderHTMLPoster } from '../src/canvas/html-poster.js';
+  import { renderHTMLPoster, exportHTMLPosterToPDF } from '../src/canvas/html-poster.js';
 
   const params = new URLSearchParams(window.location.search);
   const validTypes = new Set(['app', 'physical', 'website', 'digital']);
@@ -284,19 +270,24 @@
     window.location.href = map[productType] || './website.html';
   });
 
-  document.getElementById('btn-export').addEventListener('click', () => {
-    // שכפל את הפוסטר ל-print-frame כדי להדפיס ללא שכבת scale
-    const printFrame = document.getElementById('print-frame');
-    const original = document.getElementById('poster-html');
-    printFrame.innerHTML = '';
-    printFrame.appendChild(original.cloneNode(true));
-    window.print();
-    printFrame.innerHTML = '';
+  document.getElementById('btn-export').addEventListener('click', async () => {
+    const btn = document.getElementById('btn-export');
+    btn.disabled = true;
+    btn.textContent = 'מייצא...';
+    try {
+      await exportHTMLPosterToPDF(contentValues);
+    } catch (err) {
+      console.error('PDF export failed:', err);
+      alert('שגיאה בייצוא — נסי שנית');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'ייצוא PDF';
+    }
   });
 
   function updatePosterScale() {
     const wrapper = document.querySelector('.poster-scale-wrapper');
-    const viewportWidth = window.innerWidth - 20;
+    const viewportWidth  = window.innerWidth - 20;
     const viewportHeight = window.innerHeight - 130;
     const scale = Math.min(1, viewportWidth / 794, viewportHeight / 1123);
     wrapper?.style.setProperty('--poster-scale', `${Math.max(0.35, scale)}`);
