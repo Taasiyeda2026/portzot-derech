@@ -1144,8 +1144,8 @@ function renderStep4() {
       <span class="split-color-dot" style="background:${color}"></span>
     </button>
   `).join('');
-  const titleColorPicker = `<input type="color" class="split-color-picker" data-design="titleColor" value="${state.design.titleColor}" title="בחירת צבע חופשי לכותרות" />`;
-  const textColorPicker  = `<input type="color" class="split-color-picker" data-design="textColor"  value="${state.design.textColor}"  title="בחירת צבע חופשי לטקסט" />`;
+  const titleColorPicker = `<label class="split-color-picker-wrap" title="בחירת צבע חופשי לכותרות"><span class="split-color-picker-dot"></span><input type="color" data-design="titleColor" value="${state.design.titleColor}" /></label>`;
+  const textColorPicker  = `<label class="split-color-picker-wrap" title="בחירת צבע חופשי לטקסט"><span class="split-color-picker-dot"></span><input type="color" data-design="textColor"  value="${state.design.textColor}"  /></label>`;
   const bgTiles = `
     <button type="button" class="split-bg-tile ${!state.design.background ? 'active' : ''}" data-design="background" data-value="">
       <span class="split-bg-none">ללא רקע</span>
@@ -1242,11 +1242,10 @@ function render() {
     .split-font-tile:hover{border-color:#8b5cf6;transform:translateY(-2px);box-shadow:0 6px 16px rgba(94,39,80,.18)}
     .split-font-tile.active{border-color:#5E2750;box-shadow:0 0 0 2px rgba(94,39,80,.28),0 4px 12px rgba(94,39,80,.12)}
     .split-font-tile img{height:34px;max-width:130px;object-fit:contain;display:block}
-    .split-color-picker{-webkit-appearance:none;appearance:none;width:36px;height:36px;border-radius:50%;border:2px solid #ddd0f5;padding:2px;cursor:pointer;background:none;flex-shrink:0;transition:border-color .18s;box-shadow:0 1px 4px rgba(94,39,80,.1)}
-    .split-color-picker:hover{border-color:#8b5cf6}
-    .split-color-picker::-webkit-color-swatch-wrapper{padding:0;border-radius:50%}
-    .split-color-picker::-webkit-color-swatch{border-radius:50%;border:none}
-    .split-color-picker::-moz-color-swatch{border-radius:50%;border:none}
+    .split-color-picker-wrap{position:relative;width:36px;height:36px;border-radius:50%;border:2px solid #ddd0f5;cursor:pointer;flex-shrink:0;overflow:hidden;box-shadow:0 1px 4px rgba(94,39,80,.1);transition:border-color .18s,box-shadow .18s;display:inline-block}
+    .split-color-picker-wrap:hover{border-color:#8b5cf6;box-shadow:0 0 0 3px rgba(139,92,246,.18)}
+    .split-color-picker-dot{display:block;width:100%;height:100%;border-radius:50%;background:conic-gradient(red,#ff0,lime,cyan,blue,magenta,red);pointer-events:none}
+    .split-color-picker-wrap input[type=color]{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;border:none;padding:0}
     @media(max-width:600px){.split-bg-grid{grid-template-columns:repeat(3,auto)}.split-font-grid{grid-template-columns:repeat(2,auto)}}
     .split-design-layout{display:grid;gap:12px;padding:14px;border-radius:16px;background:linear-gradient(155deg,rgba(248,245,255,.9),rgba(237,233,254,.6));border:1px solid #ddd0f5;box-shadow:0 2px 10px rgba(94,39,80,.06)}
     .split-nav{display:flex;justify-content:space-between;gap:10px;margin-top:18px}
