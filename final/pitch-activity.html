@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#ec4899" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <title>דף פעילות – הפיץ' הסופי | פורצות דרך</title>
+  <link rel="icon" type="image/png" href="../icon/favicon.png" />
+  <link rel="apple-touch-icon" href="../icon/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --pink:   #ec4899;
+      --purple: #8b5cf6;
+      --dark:   #4c1d6e;
+      --text:   #1e1b2e;
+      --muted:  #6b6880;
+      --radius: 24px;
+    }
+
+    body {
+      font-family: 'Rubik', sans-serif;
+      background: linear-gradient(150deg, #fdf4ff 0%, #f0f4ff 100%);
+      min-height: 100vh;
+      color: var(--text);
+      direction: rtl;
+    }
+
+    /* ── Header ── */
+    .header {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 28px;
+      background: rgba(255,255,255,0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(236,72,153,0.12);
+      box-shadow: 0 2px 16px rgba(139,92,246,0.08);
+    }
+
+    .header-logo {
+      display: flex; align-items: center; gap: 10px; text-decoration: none;
+    }
+    .header-logo img { width: 38px; height: 38px; border-radius: 50%; object-fit: contain; }
+    .header-logo span { font-size: 17px; font-weight: 700; color: var(--pink); }
+
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 18px;
+      background: linear-gradient(135deg, var(--pink), var(--purple));
+      color: #fff; font-size: 14px; font-weight: 600;
+      border-radius: 20px; text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .back-btn:hover { transform: scale(1.05); box-shadow: 0 6px 20px rgba(236,72,153,0.38); }
+
+    /* ── Page ── */
+    .page {
+      max-width: 700px; margin: 0 auto;
+      padding: 44px 20px 80px;
+    }
+
+    .page-title-wrap { text-align: center; margin-bottom: 36px; }
+    .page-title-wrap .eyebrow {
+      font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--pink); margin-bottom: 10px;
+    }
+    .page-title-wrap h1 {
+      font-size: clamp(24px, 4.5vw, 34px); font-weight: 900;
+      background: linear-gradient(135deg, #c026a8, #7c3aed);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      line-height: 1.25; margin-bottom: 10px;
+    }
+    .page-title-wrap p {
+      font-size: 15px; color: var(--muted); line-height: 1.7;
+    }
+
+    /* ── Activity sections ── */
+    .activity-section {
+      background: #fff;
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 30px rgba(76,29,110,0.08);
+      border: 1px solid rgba(236,72,153,0.08);
+      position: relative; overflow: hidden;
+    }
+
+    .activity-section::before {
+      content: '';
+      position: absolute; right: 0; top: 0; bottom: 0;
+      width: 5px;
+      background: linear-gradient(180deg, var(--pink), var(--purple));
+    }
+
+    .section-header {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 18px;
+    }
+    .section-num {
+      width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--pink), var(--purple));
+      color: #fff; font-weight: 800; font-size: 14px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .section-title { font-size: 17px; font-weight: 800; color: var(--dark); }
+
+    .section-desc {
+      font-size: 14.5px; color: var(--muted); line-height: 1.75;
+      margin-bottom: 16px;
+    }
+
+    /* Input fields */
+    .field-group { display: flex; flex-direction: column; gap: 12px; }
+    .field-label {
+      font-size: 13px; font-weight: 700; color: var(--dark); margin-bottom: 4px;
+    }
+    .field-sublabel { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+
+    textarea, input[type="text"] {
+      width: 100%; font-family: 'Rubik', sans-serif; font-size: 14px;
+      color: var(--text); line-height: 1.7;
+      border: 1.5px solid rgba(139,92,246,0.2);
+      border-radius: 14px; padding: 12px 14px;
+      background: #fafaff; resize: vertical;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      direction: rtl;
+    }
+    textarea:focus, input[type="text"]:focus {
+      outline: none;
+      border-color: var(--purple);
+      box-shadow: 0 0 0 3px rgba(139,92,246,0.12);
+      background: #fff;
+    }
+    textarea { min-height: 80px; }
+
+    /* Role grid */
+    .role-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+    }
+    .role-card {
+      background: linear-gradient(150deg, #fdf4ff, #f5f0ff);
+      border: 1px solid rgba(139,92,246,0.15);
+      border-radius: 16px; padding: 14px 16px;
+    }
+    .role-card .field-label { font-size: 12px; color: var(--purple); }
+
+    /* Tips checklist */
+    .checklist { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .checklist li {
+      display: flex; align-items: flex-start; gap: 12px;
+      font-size: 14.5px; color: var(--muted); line-height: 1.6;
+    }
+    .check-box {
+      width: 22px; height: 22px; border-radius: 8px; flex-shrink: 0; margin-top: 1px;
+      border: 2px solid rgba(139,92,246,0.35);
+      background: #fff; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .check-box:hover { border-color: var(--purple); background: rgba(139,92,246,0.06); }
+    .check-box.checked {
+      background: linear-gradient(135deg, var(--pink), var(--purple));
+      border-color: var(--purple);
+    }
+    .check-box.checked::after {
+      content: '✓'; color: #fff; font-size: 13px; font-weight: 800;
+    }
+
+    /* ── Practice timer ── */
+    .timer-wrap {
+      display: flex; align-items: center; justify-content: space-between;
+      background: linear-gradient(135deg, rgba(236,72,153,0.07), rgba(139,92,246,0.1));
+      border-radius: 18px; padding: 18px 22px;
+      border: 1px solid rgba(139,92,246,0.15);
+      margin-top: 8px;
+    }
+    .timer-label { font-size: 14px; font-weight: 700; color: var(--dark); }
+    .timer-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .timer-display {
+      font-size: 28px; font-weight: 900;
+      background: linear-gradient(135deg, var(--pink), var(--purple));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.02em; min-width: 72px; text-align: center;
+    }
+    .timer-btn {
+      display: flex; align-items: center; gap: 6px;
+      padding: 9px 18px; border-radius: 999px;
+      background: linear-gradient(135deg, var(--pink), var(--purple));
+      color: #fff; font-size: 13px; font-weight: 700;
+      border: none; cursor: pointer; font-family: inherit;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .timer-btn:hover { transform: scale(1.05); box-shadow: 0 4px 16px rgba(139,92,246,0.3); }
+
+    /* ── Action buttons ── */
+    .actions {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 14px; margin-top: 36px;
+    }
+    .btn-primary {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%; max-width: 400px; padding: 17px 32px;
+      background: linear-gradient(135deg, var(--pink), var(--purple));
+      color: #fff; font-size: 16px; font-weight: 800;
+      border-radius: 999px; text-decoration: none; border: none;
+      cursor: pointer; font-family: inherit;
+      box-shadow: 0 8px 28px rgba(139,92,246,0.35);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-primary:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 14px 40px rgba(139,92,246,0.45);
+    }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 28px;
+      background: rgba(139,92,246,0.07);
+      color: var(--purple); font-size: 14px; font-weight: 700;
+      border-radius: 999px; border: 1.5px solid rgba(139,92,246,0.25);
+      cursor: pointer; font-family: inherit;
+      transition: background 0.2s, border-color 0.2s, transform 0.2s;
+    }
+    .btn-secondary:hover {
+      background: rgba(139,92,246,0.13); border-color: rgba(139,92,246,0.4);
+      transform: translateY(-2px);
+    }
+
+    .footer-note { margin-top: 48px; text-align: center; font-size: 13px; color: #aaa; }
+
+    /* ── Print ── */
+    @media print {
+      .header, .actions, .timer-btn { display: none !important; }
+      body { background: white; }
+      .page { padding: 20px; max-width: 100%; }
+      .activity-section { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+      textarea, input[type="text"] { border: 1px solid #ccc; }
+    }
+
+    /* ── Mobile ── */
+    @media (max-width: 600px) {
+      .header { padding: 12px 16px; }
+      .page { padding: 28px 14px 60px; }
+      .activity-section { padding: 22px 18px; }
+      .role-grid { grid-template-columns: 1fr; }
+      .timer-wrap { flex-wrap: wrap; gap: 12px; justify-content: center; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <a href="../index.html" class="header-logo">
+      <img src="../icon/favicon.png" alt="פורצות דרך" />
+      <span>פורצות דרך</span>
+    </a>
+    <a href="FinalPitch.html" class="back-btn">→ חזרה</a>
+  </header>
+
+  <main class="page">
+
+    <div class="page-title-wrap">
+      <div class="eyebrow">דף פעילות · הפיץ' הסופי</div>
+      <h1>הכנה להצגת המיזם</h1>
+      <p>מלאו את הסעיפים יחד עם הקבוצה לפני ההצגה</p>
+    </div>
+
+    <!-- Section 1: The story -->
+    <div class="activity-section">
+      <div class="section-header">
+        <div class="section-num">1</div>
+        <div class="section-title">הסיפור של המיזם שלכן</div>
+      </div>
+      <p class="section-desc">ענו על כל שאלה במשפט קצר — אלה יהיו הנקודות המרכזיות של הפיץ'.</p>
+      <div class="field-group">
+        <div>
+          <div class="field-label">מה הבעיה שזיהיתן?</div>
+          <div class="field-sublabel">תארו בבירור את הבעיה ואת מי היא פוגעת</div>
+          <textarea placeholder="לדוגמה: גילינו שנשים צעירות מתקשות למצוא..."></textarea>
+        </div>
+        <div>
+          <div class="field-label">מה הפתרון שיצרתן?</div>
+          <div class="field-sublabel">תארו בקצרה את המוצר / השירות שפיתחתן</div>
+          <textarea placeholder="לדוגמה: פיתחנו אפליקציה / אתר / מוצר שמאפשר..."></textarea>
+        </div>
+        <div>
+          <div class="field-label">מה ההשפעה שאתן מקוות לה?</div>
+          <div class="field-sublabel">מה ישתנה בזכות המיזם שלכן?</div>
+          <textarea placeholder="לדוגמה: נשים יוכלו לגשת בקלות ל..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: Roles -->
+    <div class="activity-section">
+      <div class="section-header">
+        <div class="section-num">2</div>
+        <div class="section-title">חלוקת תפקידים בקבוצה</div>
+      </div>
+      <p class="section-desc">כל אחת מציגה חלק — כך ההצגה תהיה שיתופית ומגוונת.</p>
+      <div class="role-grid">
+        <div class="role-card">
+          <div class="field-label">פתיחה ובעיה</div>
+          <input type="text" placeholder="שם חברת הקבוצה" />
+        </div>
+        <div class="role-card">
+          <div class="field-label">תיאור הפתרון</div>
+          <input type="text" placeholder="שם חברת הקבוצה" />
+        </div>
+        <div class="role-card">
+          <div class="field-label">דמות היעד / מחקר</div>
+          <input type="text" placeholder="שם חברת הקבוצה" />
+        </div>
+        <div class="role-card">
+          <div class="field-label">סיכום והשפעה</div>
+          <input type="text" placeholder="שם חברת הקבוצה" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: Checklist -->
+    <div class="activity-section">
+      <div class="section-header">
+        <div class="section-num">3</div>
+        <div class="section-title">רשימת תיוג לפני ההצגה</div>
+      </div>
+      <ul class="checklist" id="checklist">
+        <li>
+          <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
+          <span>קראנו את כל הסעיפים בדף הפעילות</span>
+        </li>
+        <li>
+          <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
+          <span>חילקנו תפקידים וכל אחת יודעת מה היא מציגה</span>
+        </li>
+        <li>
+          <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
+          <span>תרגלנו את ההצגה בקול לפחות פעם אחת</span>
+        </li>
+        <li>
+          <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
+          <span>ההצגה שלנו לא עולה על 3 דקות</span>
+        </li>
+        <li>
+          <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
+          <span>הכנו תשובה לשאלה "למה בחרתן בבעיה הזו?"</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Section 4: Timer -->
+    <div class="activity-section">
+      <div class="section-header">
+        <div class="section-num">4</div>
+        <div class="section-title">תרגול עם טיימר</div>
+      </div>
+      <p class="section-desc">השתמשו בטיימר כדי להתאמן על ההצגה ולוודא שאתן בזמן.</p>
+      <div class="timer-wrap">
+        <div>
+          <div class="timer-label">טיימר לתרגול</div>
+          <div class="timer-sub">מטרה: 3 דקות</div>
+        </div>
+        <div class="timer-display" id="timer-display">03:00</div>
+        <button class="timer-btn" id="timer-btn" onclick="toggleTimer()">
+          ▶ התחלה
+        </button>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="actions">
+      <button class="btn-primary" onclick="window.print()" aria-label="ייצוא כ-PDF">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M3 13v3a1 1 0 001 1h12a1 1 0 001-1v-3M10 3v10M6 9l4 4 4-4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        ייצוא דף הפעילות כ-PDF
+      </button>
+      <a href="FinalPitch.html" class="btn-secondary">
+        → חזרה לעמוד הפיץ'
+      </a>
+    </div>
+
+    <p class="footer-note">פורצות דרך · קורס יזמות לנוער</p>
+
+  </main>
+
+  <script>
+    // Checklist toggle
+    document.querySelectorAll('.check-box').forEach(function(box) {
+      function toggle() {
+        const checked = box.classList.toggle('checked');
+        box.setAttribute('aria-checked', String(checked));
+      }
+      box.addEventListener('click', toggle);
+      box.addEventListener('keydown', function(e) {
+        if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggle(); }
+      });
+    });
+
+    // Timer
+    var timerInterval = null;
+    var timerSeconds  = 180;
+    var timerRunning  = false;
+
+    function pad(n) { return String(n).padStart(2, '0'); }
+
+    function updateDisplay() {
+      var m = Math.floor(timerSeconds / 60);
+      var s = timerSeconds % 60;
+      document.getElementById('timer-display').textContent = pad(m) + ':' + pad(s);
+    }
+
+    function toggleTimer() {
+      var btn = document.getElementById('timer-btn');
+      if (timerRunning) {
+        clearInterval(timerInterval);
+        timerRunning = false;
+        btn.textContent = '▶ המשך';
+      } else {
+        if (timerSeconds <= 0) { timerSeconds = 180; updateDisplay(); }
+        timerRunning = true;
+        btn.textContent = '⏸ עצור';
+        timerInterval = setInterval(function() {
+          if (timerSeconds <= 0) {
+            clearInterval(timerInterval);
+            timerRunning = false;
+            btn.textContent = '🔁 שוב';
+            document.getElementById('timer-display').textContent = '00:00';
+            return;
+          }
+          timerSeconds--;
+          updateDisplay();
+        }, 1000);
+      }
+    }
+  </script>
+
+</body>
+</html>
