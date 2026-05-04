@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#ec4899" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <title>הפיץ' הסופי – פורצות דרך</title>
+  <title>הפיץ׳ שלנו | פורצות דרך</title>
   <link rel="icon" type="image/png" href="../icon/favicon.png" />
   <link rel="apple-touch-icon" href="../icon/favicon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -16,474 +16,1368 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --pink:   #ec4899;
-      --purple: #8b5cf6;
-      --dark:   #4c1d6e;
-      --text:   #1e1b2e;
-      --muted:  #6b6880;
-      --bg:     #faf5ff;
-      --card:   #ffffff;
-      --radius: 28px;
+      --pink:     #ec4899;
+      --pink-l:   #fce7f3;
+      --purple:   #8b5cf6;
+      --purple-l: #f5f3ff;
+      --orange:   #f97316;
+      --orange-l: #fff7ed;
+      --dark:     #1e1b2e;
+      --text:     #374151;
+      --muted:    #6b7280;
+      --bg:       #fdfaff;
+      --white:    #ffffff;
+      --border:   rgba(139,92,246,0.15);
+      --radius:   20px;
     }
+
+    html { scroll-behavior: smooth; }
 
     body {
       font-family: 'Rubik', sans-serif;
-      background: linear-gradient(150deg, #fdf4ff 0%, #f0f4ff 100%);
-      min-height: 100vh;
+      background: var(--bg);
       color: var(--text);
       direction: rtl;
+      line-height: 1.7;
     }
 
-    /* ── Header ── */
+    /* ── HEADER ── */
     .header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 28px;
-      background: rgba(255,255,255,0.88);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(236,72,153,0.12);
-      box-shadow: 0 2px 16px rgba(139,92,246,0.08);
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 13px 26px;
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1.5px solid rgba(236,72,153,0.1);
+      box-shadow: 0 2px 14px rgba(139,92,246,0.07);
     }
-
-    .header-logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-    }
-
-    .header-logo img {
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      object-fit: contain;
-    }
-
-    .header-logo span {
-      font-size: 17px;
-      font-weight: 700;
-      color: var(--pink);
-    }
-
+    .header-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .header-logo img { width: 36px; height: 36px; border-radius: 50%; }
+    .header-logo span { font-size: 16px; font-weight: 700; color: var(--pink); }
     .back-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 18px;
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 18px; border-radius: 999px;
       background: linear-gradient(135deg, var(--pink), var(--purple));
-      color: #fff;
-      font-size: 14px;
-      font-weight: 600;
-      border-radius: 20px;
-      text-decoration: none;
-      transition: transform 0.2s, box-shadow 0.2s;
-      font-family: inherit;
-      border: none;
-      cursor: pointer;
+      color: #fff; font-size: 13px; font-weight: 700;
+      text-decoration: none; transition: transform 0.18s, box-shadow 0.18s;
     }
+    .back-btn:hover { transform: scale(1.04); box-shadow: 0 5px 18px rgba(139,92,246,0.35); }
 
-    .back-btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 20px rgba(236,72,153,0.38);
+    /* ── PAGE ── */
+    .page { max-width: 740px; margin: 0 auto; padding: 44px 20px 90px; }
+
+    /* ── HERO ── */
+    .page-hero { text-align: center; margin-bottom: 40px; }
+    .page-hero .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--pink); background: var(--pink-l);
+      padding: 5px 14px; border-radius: 999px;
+      border: 1px solid rgba(236,72,153,0.2);
+      margin-bottom: 14px;
     }
-
-    /* ── Page wrapper ── */
-    .page {
-      max-width: 660px;
-      margin: 0 auto;
-      padding: 48px 20px 80px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0;
-    }
-
-    /* ── Stage icon ── */
-    .stage-icon {
-      width: 96px;
-      height: 96px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, rgba(236,72,153,0.12), rgba(139,92,246,0.18));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 28px;
-      box-shadow: 0 8px 32px rgba(139,92,246,0.18), 0 0 0 12px rgba(236,72,153,0.06);
-    }
-
-    .stage-icon svg {
-      width: 50px;
-      height: 50px;
-    }
-
-    /* ── Badge ── */
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 5px 14px;
-      background: linear-gradient(135deg, rgba(236,72,153,0.12), rgba(139,92,246,0.14));
-      border: 1px solid rgba(236,72,153,0.25);
-      border-radius: 999px;
-      font-size: 12.5px;
-      font-weight: 700;
-      color: var(--dark);
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      margin-bottom: 18px;
-    }
-
-    .badge-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--pink), var(--purple));
-      flex-shrink: 0;
-    }
-
-    /* ── Title ── */
-    h1 {
-      font-size: clamp(26px, 5vw, 38px);
-      font-weight: 900;
-      line-height: 1.2;
-      text-align: center;
-      margin-bottom: 10px;
+    .page-hero h1 {
+      font-size: clamp(24px, 4.5vw, 36px); font-weight: 900;
       background: linear-gradient(135deg, #c026a8, #7c3aed);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      line-height: 1.2; margin-bottom: 14px;
+    }
+    .page-hero .intro {
+      font-size: 15px; color: var(--muted); line-height: 1.8;
+      max-width: 580px; margin: 0 auto 10px;
+    }
+    .page-hero .intro-note {
+      font-size: 14px; color: var(--text); font-weight: 500;
+      background: linear-gradient(135deg, #fff7ed, #fce7f3);
+      border: 1px solid rgba(249,115,22,0.2);
+      border-radius: 14px; padding: 12px 18px;
+      margin-top: 16px; display: inline-block;
     }
 
-    /* ── Main card ── */
-    .card {
-      width: 100%;
-      background: var(--card);
-      border-radius: var(--radius);
-      padding: 40px 44px;
-      box-shadow: 0 20px 60px rgba(76,29,110,0.1), 0 4px 16px rgba(139,92,246,0.08);
-      border: 1px solid rgba(236,72,153,0.1);
-      margin-top: 32px;
-      position: relative;
-      overflow: hidden;
+    /* ── SECTION CARD ── */
+    .sec {
+      background: var(--white); border-radius: var(--radius);
+      padding: 28px 30px; margin-bottom: 18px;
+      box-shadow: 0 6px 26px rgba(76,29,110,0.08);
+      border: 1px solid rgba(236,72,153,0.07);
+      position: relative; overflow: hidden;
     }
-
-    .card::before {
+    .sec::before {
       content: '';
-      position: absolute;
-      top: 0; right: 0;
-      width: 200px; height: 200px;
-      background: radial-gradient(circle at top right, rgba(236,72,153,0.07), transparent 70%);
-      pointer-events: none;
+      position: absolute; right: 0; top: 0; bottom: 0; width: 5px;
+      background: linear-gradient(180deg, var(--pink), var(--purple));
     }
 
-    .card::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0;
-      width: 160px; height: 160px;
-      background: radial-gradient(circle at bottom left, rgba(139,92,246,0.07), transparent 70%);
-      pointer-events: none;
-    }
-
-    .card-section {
-      position: relative;
-      z-index: 1;
-    }
-
-    .card-section + .card-section {
-      margin-top: 28px;
-      padding-top: 28px;
-      border-top: 1px solid rgba(139,92,246,0.1);
-    }
-
-    .section-label {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 12px;
-      font-weight: 800;
-      color: var(--pink);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      margin-bottom: 10px;
-    }
-
-    .section-label-line {
-      flex: 1;
-      height: 1px;
-      background: linear-gradient(90deg, rgba(236,72,153,0.3), transparent);
-    }
-
-    .card p {
-      font-size: 16px;
-      line-height: 1.85;
-      color: var(--muted);
-    }
-
-    .card p strong {
-      color: var(--text);
-      font-weight: 700;
-    }
-
-    /* ── Tips row ── */
-    .tips-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-top: 20px;
-    }
-
-    .tip {
-      background: linear-gradient(150deg, #fdf4ff, #f5f0ff);
-      border: 1px solid rgba(139,92,246,0.15);
-      border-radius: 16px;
-      padding: 14px 12px;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .tip-icon {
-      font-size: 22px;
-      line-height: 1;
-    }
-
-    .tip-text {
-      font-size: 12.5px;
-      font-weight: 600;
-      color: var(--dark);
-      line-height: 1.4;
-    }
-
-    /* ── CTA buttons ── */
-    .actions {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 14px;
-      margin-top: 40px;
-      width: 100%;
-    }
-
-    .btn-primary {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      width: 100%;
-      max-width: 400px;
-      padding: 18px 32px;
+    .sec-head { display: flex; align-items: center; gap: 13px; margin-bottom: 16px; }
+    .sec-num {
+      width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
       background: linear-gradient(135deg, var(--pink), var(--purple));
-      color: #fff;
-      font-size: 17px;
-      font-weight: 800;
-      border-radius: 999px;
-      text-decoration: none;
-      border: none;
-      cursor: pointer;
-      font-family: inherit;
-      box-shadow: 0 8px 28px rgba(139,92,246,0.35), 0 2px 8px rgba(236,72,153,0.2);
-      transition: transform 0.2s, box-shadow 0.2s;
-      letter-spacing: 0.01em;
+      color: #fff; font-size: 14px; font-weight: 900;
+      display: flex; align-items: center; justify-content: center;
     }
-
-    .btn-primary:hover {
-      transform: translateY(-3px) scale(1.02);
-      box-shadow: 0 14px 40px rgba(139,92,246,0.45), 0 4px 12px rgba(236,72,153,0.3);
-    }
-
-    .btn-secondary {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 12px 28px;
-      background: rgba(139,92,246,0.07);
-      color: var(--purple);
-      font-size: 14px;
-      font-weight: 700;
-      border-radius: 999px;
-      border: 1.5px solid rgba(139,92,246,0.25);
-      cursor: pointer;
-      font-family: inherit;
-      transition: background 0.2s, border-color 0.2s, transform 0.2s;
-      text-decoration: none;
-    }
-
-    .btn-secondary:hover {
-      background: rgba(139,92,246,0.13);
-      border-color: rgba(139,92,246,0.4);
-      transform: translateY(-2px);
-    }
-
-    /* ── Decorative sparkle strip ── */
-    .sparkle-strip {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      margin: 40px 0 0;
-      opacity: 0.5;
+    .sec-icon {
+      width: 36px; height: 36px; border-radius: 12px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
       font-size: 18px;
     }
+    .sec-icon.pink   { background: var(--pink-l); }
+    .sec-icon.purple { background: var(--purple-l); }
+    .sec-icon.orange { background: var(--orange-l); }
+    .sec-title { font-size: 17px; font-weight: 800; color: var(--dark); }
+    .sec-sub   { font-size: 13px; color: var(--muted); margin-top: 2px; }
 
-    /* ── Footer note ── */
-    .footer-note {
-      margin-top: 48px;
-      text-align: center;
+    /* ── FORM FIELDS ── */
+    .fields { display: flex; flex-direction: column; gap: 14px; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .field-wrap {}
+    .field-label {
+      font-size: 12.5px; font-weight: 700; color: var(--dark);
+      margin-bottom: 5px; display: block;
+    }
+    .field-hint { font-size: 11.5px; color: var(--muted); margin-bottom: 5px; display: block; }
+
+    textarea, input[type="text"] {
+      width: 100%; font-family: 'Rubik', sans-serif;
+      font-size: 14px; color: var(--text); line-height: 1.7;
+      border: 1.5px solid var(--border); border-radius: 13px;
+      padding: 11px 14px; background: #fafaff; resize: vertical;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      direction: rtl;
+    }
+    textarea:focus, input[type="text"]:focus {
+      outline: none;
+      border-color: var(--purple);
+      box-shadow: 0 0 0 3px rgba(139,92,246,0.11);
+      background: var(--white);
+    }
+    textarea { min-height: 76px; }
+    input[type="text"] { min-height: 44px; }
+
+    /* ── PITCH TEXTAREA ── */
+    .pitch-textarea {
+      width: 100%;
+      font-family: 'Rubik', sans-serif;
+      font-size: 15px;
+      color: var(--text);
+      line-height: 2;
+      border: 1.5px solid rgba(139,92,246,0.2);
+      border-radius: 16px;
+      padding: 20px 22px;
+      background: linear-gradient(150deg, #fdfaff, #f9f7ff);
+      resize: vertical;
+      direction: rtl;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      min-height: 320px;
+    }
+    .pitch-textarea:focus {
+      outline: none;
+      border-color: var(--purple);
+      box-shadow: 0 0 0 3px rgba(139,92,246,0.11);
+      background: var(--white);
+    }
+    .elevator-textarea {
+      min-height: 140px;
+      font-size: 14.5px;
+      line-height: 1.95;
+    }
+
+    /* ── REGEN BUTTON ── */
+    .btn-regenerate {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 8px 18px; border-radius: 999px;
+      background: rgba(139,92,246,0.07);
+      color: var(--purple);
+      font-size: 13px; font-weight: 700;
+      border: 1.5px solid rgba(139,92,246,0.22);
+      cursor: pointer; font-family: inherit;
+      transition: background 0.18s, transform 0.15s;
+      margin-top: 10px;
+    }
+    .btn-regenerate:hover { background: rgba(139,92,246,0.13); transform: scale(1.02); }
+
+    .auto-note {
+      font-size: 12px; color: var(--muted);
+      margin-top: 8px; display: flex; align-items: center; gap: 6px;
+    }
+
+    /* ── SOURCE SECTION ── */
+    .source-toggle {
+      width: 100%; background: none; border: none;
+      display: flex; align-items: center; gap: 13px;
+      cursor: pointer; font-family: inherit; text-align: right;
+      padding: 0; margin-bottom: 0;
+    }
+    .source-toggle:hover .sec-title { color: var(--purple); }
+    .source-chevron {
+      font-size: 13px; color: var(--purple);
+      margin-right: auto; transition: transform 0.2s; flex-shrink: 0;
+    }
+    .source-chevron.open { transform: rotate(180deg); }
+    #source-fields { margin-top: 16px; }
+
+    /* ── TEAM CARDS ── */
+    .team-card {
+      background: linear-gradient(150deg, #fdf4ff, #f5f0ff);
+      border: 1px solid rgba(139,92,246,0.14); border-radius: 16px;
+      padding: 14px 18px; margin-bottom: 10px;
+      display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
+    }
+    .team-card:last-child { margin-bottom: 0; }
+    .team-card-role {
+      font-size: 14px; font-weight: 800; color: var(--purple);
+      flex-shrink: 0; min-width: 80px;
+    }
+    .team-card-dash { color: var(--muted); flex-shrink: 0; }
+    .team-card-parts { font-size: 14px; color: var(--text); line-height: 1.6; flex: 1; }
+    .role-script-label {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--purple);
+      margin-bottom: 6px;
+    }
+    .role-script-text {
+      white-space: pre-line;
+      line-height: 1.85;
+    }
+    .readonly-note {
+      font-size: 12.5px;
+      color: var(--muted);
+      margin-top: 8px;
+      padding: 9px 12px;
+      border-radius: 12px;
+      background: rgba(139,92,246,0.06);
+      border: 1px solid rgba(139,92,246,0.12);
+    }
+
+    /* ── SPEAKER SELECTOR ── */
+    .speaker-select-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+      border: 1px solid rgba(139,92,246,0.16);
+      border-radius: 16px;
+      background: #fafaff;
+    }
+    .speaker-select-title {
       font-size: 13px;
-      color: #aaa;
+      font-weight: 800;
+      color: var(--dark);
+    }
+    .speaker-select-hint {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: -4px;
+    }
+    .speaker-select-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 2px;
+    }
+    .speaker-option {
+      position: relative;
+      cursor: pointer;
+    }
+    .speaker-option input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .speaker-option span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 42px;
+      height: 38px;
+      padding: 0 14px;
+      border: 1.5px solid rgba(139,92,246,0.24);
+      border-radius: 10px;
+      background: var(--white);
+      color: var(--dark);
+      font-size: 14px;
+      font-weight: 800;
+      transition: background 0.18s, border-color 0.18s, color 0.18s, box-shadow 0.18s;
+    }
+    .speaker-option input:checked + span {
+      background: var(--dark);
+      color: var(--white);
+      border-color: var(--dark);
+      box-shadow: 0 4px 14px rgba(30,27,46,0.18);
     }
 
-    /* ── Print styles ── */
+    /* ── TRANSITIONS ── */
+    .phrase-list { display: flex; flex-direction: column; gap: 10px; }
+    .phrase-item {
+      background: linear-gradient(150deg, #fdf4ff, #f0f4ff);
+      border: 1px solid rgba(139,92,246,0.12);
+      border-radius: 14px; padding: 13px 16px;
+      display: flex; align-items: flex-start; gap: 12px;
+    }
+    .phrase-arrow { flex-shrink: 0; font-size: 16px; color: var(--purple); margin-top: 1px; }
+    .phrase-text { font-size: 14px; color: var(--text); line-height: 1.65; }
+
+    /* ── EMPTY NOTE ── */
+    .empty-note {
+      font-size: 14px; color: var(--muted); text-align: center;
+      padding: 20px; background: rgba(139,92,246,0.04);
+      border-radius: 12px; border: 1px dashed rgba(139,92,246,0.2);
+    }
+
+    /* ── CHECKLIST ── */
+    .checklist { display: flex; flex-direction: column; gap: 10px; }
+    .check-row {
+      display: flex; align-items: flex-start; gap: 12px;
+      font-size: 14.5px; color: var(--text); line-height: 1.65;
+    }
+    .check-box {
+      width: 24px; height: 24px; border-radius: 8px; flex-shrink: 0; margin-top: 1px;
+      border: 2px solid rgba(139,92,246,0.3); background: var(--white);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .check-box:hover { border-color: var(--purple); background: rgba(139,92,246,0.06); }
+    .check-box.checked {
+      background: linear-gradient(135deg, var(--pink), var(--purple));
+      border-color: transparent;
+    }
+    .check-box.checked::after { content: '✓'; color: #fff; font-size: 13px; font-weight: 800; }
+
+    /* ── TIMER ── */
+    .timer-card {
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;
+      gap: 14px; background: linear-gradient(135deg, rgba(236,72,153,0.07), rgba(139,92,246,0.1));
+      border: 1px solid rgba(139,92,246,0.16); border-radius: 18px; padding: 18px 24px;
+      margin-top: 14px;
+    }
+    .timer-info {}
+    .timer-label  { font-size: 14px; font-weight: 700; color: var(--dark); }
+    .timer-sublbl { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .timer-num {
+      font-size: 30px; font-weight: 900; min-width: 78px; text-align: center;
+      background: linear-gradient(135deg, var(--pink), var(--purple));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      font-variant-numeric: tabular-nums; letter-spacing: 0.03em;
+    }
+    .timer-btn {
+      padding: 10px 22px; border-radius: 999px;
+      background: linear-gradient(135deg, var(--pink), var(--purple));
+      color: #fff; font-size: 14px; font-weight: 700;
+      border: none; cursor: pointer; font-family: inherit;
+      transition: transform 0.18s, box-shadow 0.18s;
+    }
+    .timer-btn:hover { transform: scale(1.05); box-shadow: 0 5px 18px rgba(139,92,246,0.3); }
+
+    /* ── CLOSING BANNER ── */
+    .closing-banner {
+      text-align: center; padding: 32px 28px;
+      background: linear-gradient(150deg, #1e1b2e, #3b0764);
+      border-radius: 24px; color: #fff; margin-bottom: 18px;
+      position: relative; overflow: hidden;
+    }
+    .closing-banner::before {
+      content:''; position:absolute; inset:0;
+      background: radial-gradient(circle at 30% 60%, rgba(236,72,153,.2), transparent 55%),
+                  radial-gradient(circle at 80% 20%, rgba(139,92,246,.2), transparent 50%);
+      pointer-events: none;
+    }
+    .closing-line1 { font-size: clamp(17px, 3vw, 22px); font-weight: 800; margin-bottom: 6px; }
+    .closing-line2 { font-size: clamp(14px, 2.5vw, 18px); color: rgba(255,255,255,0.75); }
+
+    /* ── ACTIONS ── */
+    .actions {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 12px; margin-top: 28px;
+    }
+    .btn-primary {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%; max-width: 400px; padding: 17px 28px;
+      background: linear-gradient(135deg, var(--pink), var(--purple));
+      color: #fff; font-size: 16px; font-weight: 800;
+      border-radius: 999px; border: none; cursor: pointer; font-family: inherit;
+      text-decoration: none;
+      box-shadow: 0 8px 28px rgba(139,92,246,0.35);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-pdf-export {
+      width: auto;
+      min-width: 220px;
+      max-width: 260px;
+      padding: 13px 22px;
+      font-size: 14px;
+    }
+
+    .btn-primary:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 14px 40px rgba(139,92,246,0.45); }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 11px 26px; border-radius: 999px;
+      background: rgba(139,92,246,0.07); color: var(--purple);
+      font-size: 14px; font-weight: 700;
+      border: 1.5px solid rgba(139,92,246,0.22); cursor: pointer;
+      font-family: inherit; text-decoration: none;
+      transition: background 0.18s, transform 0.18s;
+    }
+    .btn-secondary:hover { background: rgba(139,92,246,0.13); transform: translateY(-2px); }
+
+    .footer-note { text-align: center; font-size: 12.5px; color: #bbb; margin-top: 36px; }
+
+
+
+    /* ── COLLAPSIBLE STEPS ── */
+    .step-sec .sec-head {
+      cursor: pointer;
+      user-select: none;
+      align-items: center;
+    }
+    .step-sec .sec-head:focus-visible {
+      outline: 3px solid rgba(139,92,246,0.22);
+      outline-offset: 6px;
+      border-radius: 14px;
+    }
+    .step-state {
+      margin-right: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(139,92,246,0.07);
+      color: var(--purple);
+      font-size: 12px;
+      font-weight: 800;
+      border: 1px solid rgba(139,92,246,0.18);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .step-state::before {
+      content: '⌄';
+      font-size: 14px;
+      line-height: 1;
+      transition: transform 0.2s ease;
+    }
+    .step-sec:not(.collapsed) .step-state::before { transform: rotate(180deg); }
+    .step-sec.collapsed .sec-body { display: none; }
+    .sec-body { padding-top: 2px; }
+    .step-next-wrap {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(139,92,246,0.12);
+    }
+    .step-next-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: 1.5px solid rgba(139,92,246,0.22);
+      background: rgba(139,92,246,0.08);
+      color: var(--purple);
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: background 0.18s, transform 0.18s;
+    }
+    .step-next-btn:hover {
+      background: rgba(139,92,246,0.14);
+      transform: translateY(-1px);
+    }
+
+    /* ── PRINT ── */
     @media print {
-      .header, .actions, .back-btn, .sparkle-strip { display: none !important; }
+      .header, .actions, .timer-btn, .btn-regenerate,
+      .source-toggle, #source-fields, .speaker-select-wrap, .no-print { display: none !important; }
+
+      .step-sec.collapsed .sec-body { display: block !important; }
+      .step-state, .step-next-wrap { display: none !important; }
+
       body { background: white; }
-      .page { padding: 24px 16px; }
-      .card { box-shadow: none; border: 1px solid #ddd; }
+      .page { padding: 16px; max-width: 100%; }
+      .sec {
+        box-shadow: none; border: 1px solid #ddd;
+        page-break-inside: avoid; margin-bottom: 14px; padding: 20px 22px;
+      }
+      .sec::before { display: none; }
+      .pitch-textarea, textarea, input[type="text"] {
+        border: 1px solid #ccc; background: white;
+      }
+      .closing-banner {
+        background: #1e1b2e !important;
+        -webkit-print-color-adjust: exact; print-color-adjust: exact;
+      }
     }
 
-    /* ── Mobile ── */
+    /* ── MOBILE ── */
     @media (max-width: 600px) {
-      .header { padding: 12px 16px; }
-      .page { padding: 32px 14px 60px; }
-      .card { padding: 28px 22px; border-radius: 22px; }
-      .tips-row { grid-template-columns: 1fr 1fr; }
-      .btn-primary { font-size: 16px; padding: 16px 24px; }
+      .header { padding: 11px 16px; }
+      .page { padding: 28px 14px 70px; }
+      .sec { padding: 20px 18px; }
+      .field-row { grid-template-columns: 1fr; }
+      .timer-card { justify-content: center; text-align: center; }
+      .team-card { flex-direction: column; gap: 4px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Header -->
+  <!-- ── HEADER ── -->
   <header class="header">
     <a href="../index.html" class="header-logo">
       <img src="../icon/favicon.png" alt="פורצות דרך" />
       <span>פורצות דרך</span>
     </a>
-    <a href="final.html" class="back-btn">→ חזרה</a>
+    <a href="FinalPitch.html" class="back-btn">→ חזרה</a>
   </header>
 
-  <!-- Main content -->
   <main class="page">
 
-    <!-- Icon -->
-    <div class="stage-icon" aria-hidden="true">
-      <svg viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="25" cy="18" r="8" fill="url(#mic-grad)" />
-        <rect x="21" y="26" width="8" height="10" rx="4" fill="url(#mic-grad)" opacity="0.7"/>
-        <path d="M14 26c0 6.075 4.925 11 11 11s11-4.925 11-11" stroke="url(#mic-grad)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-        <line x1="25" y1="37" x2="25" y2="43" stroke="url(#mic-grad)" stroke-width="2.5" stroke-linecap="round"/>
-        <line x1="19" y1="43" x2="31" y2="43" stroke="url(#mic-grad)" stroke-width="2.5" stroke-linecap="round"/>
-        <defs>
-          <linearGradient id="mic-grad" x1="0" y1="0" x2="50" y2="50" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#ec4899"/>
-            <stop offset="1" stop-color="#8b5cf6"/>
-          </linearGradient>
-        </defs>
-      </svg>
-    </div>
-
-    <!-- Badge -->
-    <div class="badge">
-      <span class="badge-dot"></span>
-      שלב אחרון בקורס
-    </div>
-
-    <!-- Title -->
-    <h1>הפיץ' הסופי –<br>מציגות את המיזם שלכן</h1>
-
-    <!-- Card -->
-    <div class="card">
-
-      <!-- Section 1: About the pitch -->
-      <div class="card-section">
-        <div class="section-label">
-          מה זה הפיץ'?
-          <span class="section-label-line"></span>
-        </div>
-        <p>
-          הגעתן לשלב הסופי של הקורס.
-          בשלב הזה כל קבוצה מציגה את המיזם שפיתחה:
-          <strong>מה הבעיה שזיהיתן</strong>, למי היא מיועדת,
-          <strong>מה הפתרון שיצרתן</strong>, ואיך הוא יכול להשפיע.
-        </p>
-        <br/>
-        <p>
-          הפיץ' הוא ההזדמנות שלכן לספר את הסיפור של המיזם בצורה ברורה, מעניינת ומשכנעת —
-          <strong>כמו יזמיות אמיתיות.</strong>
-        </p>
+    <!-- ════ HERO ════ -->
+    <div class="page-hero">
+      <div class="eyebrow">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+          <circle cx="7" cy="7" r="6" fill="#ec4899" opacity=".25"/>
+          <circle cx="7" cy="7" r="3" fill="#ec4899"/>
+        </svg>
+        דף פעילות קבוצתי
       </div>
+      <h1>בונות את הפיץ׳ שלנו</h1>
+      <p class="intro">
+        זהו דף עבודה קבוצתי לבניית הפיץ׳ הסופי.
+        פתחו כל שלב לפי הסדר, מלאו וחדדו את התשובות, חלקו תפקידים ותרגלו בקול.
+        אחרי פרטי הקבוצה עוברים לנתוני הפיץ׳ לעריכה, ומשם לפיץ׳ שלנו.
+        בסיום כל שלב לחצו “סיימנו — לשלב הבא”.
+      </p>
+    </div>
 
-      <!-- Section 2: Prep tips -->
-      <div class="card-section">
-        <div class="section-label">
-          לפני שמתחילות
-          <span class="section-label-line"></span>
+    <!-- ════ 1 · פרטי הקבוצה ════ -->
+    <div class="sec">
+      <div class="sec-head">
+        <div class="sec-num">1</div>
+        <div>
+          <div class="sec-title">פרטי הקבוצה</div>
+          <div class="sec-sub">הנתונים האלה מזינים את כל הדף אוטומטית</div>
         </div>
-        <p>
-          לפני ההצגה, עברו על דף הפעילות, סדרו את הרעיונות המרכזיים,
-          חלקו תפקידים בקבוצה והתאמנו על ההצגה בקול.
-        </p>
-
-        <div class="tips-row">
-          <div class="tip">
-            <span class="tip-icon">📋</span>
-            <span class="tip-text">קיראו את דף הפעילות</span>
+      </div>
+      <div class="fields">
+        <div class="field-row">
+          <div class="field-wrap">
+            <label class="field-label" for="f-project">שם המיזם</label>
+            <input type="text" id="f-project" placeholder="שם המיזם שלכן" data-save="project" />
           </div>
-          <div class="tip">
-            <span class="tip-icon">🎭</span>
-            <span class="tip-text">חלקו תפקידים</span>
+          <div class="field-wrap">
+            <label class="field-label" for="f-school">שם בית הספר</label>
+            <input type="text" id="f-school" placeholder="בית הספר" data-save="school" />
           </div>
-          <div class="tip">
-            <span class="tip-icon">🎙️</span>
-            <span class="tip-text">התאמנו בקול</span>
+        </div>
+        <div class="field-row">
+          <div class="field-wrap">
+            <label class="field-label" for="f-students">שמות התלמידות</label>
+            <input type="text" id="f-students" placeholder="שם, שם, שם..." data-save="students" />
+          </div>
+          <div class="field-wrap">
+            <label class="field-label" for="f-class">כיתה</label>
+            <input type="text" id="f-class" placeholder="למשל: ט'2" data-save="class" />
           </div>
         </div>
       </div>
-
     </div>
 
-    <!-- CTA Buttons -->
-    <div class="actions">
-      <a
-        href="pitch-activity.html"
-        class="btn-primary"
-        aria-label="מעבר לדף הפעילות של הפיץ'"
-      >
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-          <path d="M4 10h12M10 4l6 6-6 6" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        מעבר לדף הפעילות
-      </a>
-
-      <button
-        class="btn-secondary"
-        onclick="window.print()"
-        aria-label="ייצוא העמוד כ-PDF"
-      >
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-          <path d="M3 11v2a1 1 0 001 1h8a1 1 0 001-1v-2M8 2v8M5 7l3 3 3-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        ייצוא PDF
+    <!-- ════ נתוני הפיץ׳ (מתקפל) ════ -->
+    <div class="sec pitch-data-sec" id="pitch-data-step">
+      <button class="source-toggle" onclick="toggleSource()" aria-expanded="false" aria-controls="source-fields">
+        <div class="sec-icon purple">✏️</div>
+        <div style="flex:1;text-align:right">
+          <div class="sec-title">נתוני הפיץ׳ — שלב עריכה לפני הפיץ׳ המלא</div>
+          <div class="sec-sub">עברו על הנתונים, דייקו אם צריך, ואז המשיכו לפיץ׳ שלנו</div>
+        </div>
+        <div class="source-chevron" id="source-chevron">▼</div>
       </button>
+
+      <div id="source-fields" style="display:none">
+        <div class="fields">
+          <div class="field-wrap">
+            <label class="field-label" for="p2a">הבעיה שזיהינו</label>
+            <input type="text" id="p2a" placeholder="תארו בקצרה את הבעיה" data-save="p2a" />
+          </div>
+          <div class="field-wrap">
+            <label class="field-label" for="p3a">קהל היעד — מי מושפע?</label>
+            <input type="text" id="p3a" placeholder="מי סובל מהבעיה הזו" data-save="p3a" />
+          </div>
+          <div class="field-wrap">
+            <label class="field-label" for="p4a">הפתרון שפיתחנו</label>
+            <input type="text" id="p4a" placeholder="תארו בקצרה את הפתרון" data-save="p4a" />
+          </div>
+          <div class="field-wrap">
+            <label class="field-label" for="p4b">איך הפתרון עוזר</label>
+            <input type="text" id="p4b" placeholder="מה הפתרון עושה עבור המשתמשות" data-save="p4b" />
+          </div>
+          <div class="field-row">
+            <div class="field-wrap">
+              <label class="field-label" for="p5a">שלב ראשון בשימוש</label>
+              <input type="text" id="p5a" placeholder="המשתמשת מתחילה ב..." data-save="p5a" />
+            </div>
+            <div class="field-wrap">
+              <label class="field-label" for="p5b">שלב שני</label>
+              <input type="text" id="p5b" placeholder="אחר כך היא..." data-save="p5b" />
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-wrap">
+              <label class="field-label" for="p5c">תוצאה סופית</label>
+              <input type="text" id="p5c" placeholder="בסוף היא מקבלת / רואה..." data-save="p5c" />
+            </div>
+            <div class="field-wrap">
+              <label class="field-label" for="p6a">הערך המרכזי</label>
+              <input type="text" id="p6a" placeholder="הערך המרכזי של המיזם" data-save="p6a" />
+            </div>
+          </div>
+          <div class="field-wrap">
+            <label class="field-label" for="p6b">למה זה חשוב</label>
+            <input type="text" id="p6b" placeholder="הסיבה שהמיזם משמעותי" data-save="p6b" />
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:10px">
+          <button class="btn-regenerate" onclick="regenerateAll()">↻ צרי פיץ׳ מחדש מהנתונים</button>
+          <button type="button" class="step-next-btn no-print" onclick="finishPitchDataStep()">סיימנו — לפיץ׳ שלנו ←</button>
+        </div>
+      </div>
     </div>
 
-    <!-- Decorative -->
-    <div class="sparkle-strip" aria-hidden="true">
-      ✦ &nbsp; ✦ &nbsp; ✦
+    <!-- ════ 2 · הפיץ׳ שלנו ════ -->
+    <div class="sec">
+      <div class="sec-head">
+        <div class="sec-num">2</div>
+        <div>
+          <div class="sec-title">הפיץ׳ שלנו</div>
+          <div class="sec-sub">קראו, ערכו אם צריך — זהו הנאום המלא</div>
+        </div>
+      </div>
+      <textarea
+        id="full-pitch"
+        class="pitch-textarea"
+        rows="18"
+        data-save="full_pitch_text"
+        placeholder="ממתינות לנתונים... מלאו את פרטי הקבוצה למעלה ולחצו ↻ צרי פיץ׳ מחדש"
+      ></textarea>
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-top:8px">
+        <button class="btn-regenerate no-print" onclick="regenerateAll()">↻ צרי מחדש מהנתונים</button>
+        <span class="auto-note no-print">💡 הטקסט נוצר אוטומטית — ערכו ישירות לפי הצורך</span>
+      </div>
     </div>
 
-    <p class="footer-note">פורצות דרך · קורס יזמות לנוער</p>
+    <!-- ════ 3 · נאום מעלית ════ -->
+    <div class="sec">
+      <div class="sec-head">
+        <div class="sec-num">3</div>
+        <div>
+          <div class="sec-title">נאום מעלית — 20–30 שניות</div>
+          <div class="sec-sub">נוסח קצר שנוצר אוטומטית מתוך הפיץ׳ המלא — שלב ביניים לתרגול, לא לעריכה</div>
+        </div>
+      </div>
+      <textarea
+        id="elevator-pitch"
+        class="pitch-textarea elevator-textarea"
+        rows="6"
+        placeholder="ממתינות לנתונים..."
+        readonly
+        aria-readonly="true"
+      ></textarea>
+      <div class="readonly-note">זהו נוסח מותאם לקריאה קצרה. לא עורכות כאן — אם צריך לדייק, חוזרות לפיץ׳ המלא או לנתוני הפיץ׳.</div>
+      <div class="timer-card">
+        <div class="timer-info">
+          <div class="timer-label">טיימר לנאום מעלית</div>
+          <div class="timer-sublbl">מטרה: 30 שניות</div>
+        </div>
+        <div class="timer-num" id="elev-display">00:30</div>
+        <button class="timer-btn no-print" id="elev-btn" onclick="toggleTimer('elev', 30)">▶ התחלה</button>
+      </div>
+    </div>
+
+    <!-- ════ 4 · חלוקת תפקידים ════ -->
+    <div class="sec">
+      <div class="sec-head">
+        <div class="sec-num">4</div>
+        <div>
+          <div class="sec-title">חלוקת תפקידים</div>
+          <div class="sec-sub" id="roles-sub">לפי השמות שהוזנו בפרטי הקבוצה</div>
+        </div>
+      </div>
+      <div class="speaker-select-wrap">
+        <div class="speaker-select-title">כמה דוברות מציגות את הפיץ׳?</div>
+        <div class="speaker-select-hint">בחרי מספר דוברות, והפיץ׳ המלא יחולק לטקסטים שכל אחת אומרת.</div>
+        <div class="speaker-select-buttons" role="radiogroup" aria-label="מספר דוברות בפיץ׳">
+          <label class="speaker-option"><input type="radio" name="speaker-count" value="1" data-save="speaker_count" /><span>1</span></label>
+          <label class="speaker-option"><input type="radio" name="speaker-count" value="2" data-save="speaker_count" /><span>2</span></label>
+          <label class="speaker-option"><input type="radio" name="speaker-count" value="3" data-save="speaker_count" /><span>3</span></label>
+          <label class="speaker-option"><input type="radio" name="speaker-count" value="4" data-save="speaker_count" /><span>4</span></label>
+          <label class="speaker-option"><input type="radio" name="speaker-count" value="5" data-save="speaker_count" /><span>5</span></label>
+        </div>
+      </div>
+      <div id="roles-container">
+        <p class="empty-note">בחרי מספר דוברות כדי לראות את הטקסט שכל דוברת אומרת.</p>
+      </div>
+    </div>
+
+    <!-- ════ 5 · משפטי מעבר ════ -->
+    <div class="sec">
+      <div class="sec-head">
+        <div class="sec-num">5</div>
+        <div>
+          <div class="sec-title">משפטי מעבר בין דוברות</div>
+          <div class="sec-sub">השתמשו בהם כדי שההצגה תישמע כמו סיפור אחד</div>
+        </div>
+      </div>
+      <div class="phrase-list" id="transitions-container">
+        <p class="empty-note">משפטי המעבר יופיעו אחרי שתזינו שמות תלמידות.</p>
+      </div>
+    </div>
+
+    <!-- ════ 6 · מתרגלות ובודקות מוכנות ════ -->
+    <div class="sec">
+      <div class="sec-head">
+        <div class="sec-num">6</div>
+        <div>
+          <div class="sec-title">מתרגלות ובודקות מוכנות</div>
+          <div class="sec-sub">תרגלו בקול ובדקו שאתן מוכנות לפני ההצגה</div>
+        </div>
+      </div>
+
+      <div class="timer-card">
+        <div class="timer-info">
+          <div class="timer-label">טיימר לפיץ׳ המלא</div>
+          <div class="timer-sublbl">מטרה: 3 דקות</div>
+        </div>
+        <div class="timer-num" id="full-display">03:00</div>
+        <button class="timer-btn no-print" id="full-btn" onclick="toggleTimer('full', 180)">▶ התחלה</button>
+      </div>
+
+      <div class="checklist" id="checklist" style="margin-top: 20px;">
+        <div class="check-row">
+          <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
+          <span>ניסוח קצר וברור</span>
+        </div>
+        <div class="check-row">
+          <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
+          <span>רצף הגיוני של הפיץ׳</span>
+        </div>
+        <div class="check-row">
+          <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
+          <span>חלוקה נכונה בין הדוברות</span>
+        </div>
+        <div class="check-row">
+          <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
+          <span>מעברים טבעיים</span>
+        </div>
+        <div class="check-row">
+          <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
+          <span>ערך מרכזי ברור</span>
+        </div>
+        <div class="check-row">
+          <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
+          <span>תרגול בקבוצה</span>
+        </div>
+        <div class="check-row">
+          <div class="check-box" role="checkbox" aria-checked="false" tabindex="0"></div>
+          <span>עמידה בזמן — עד 3 דקות</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ CLOSING ════ -->
+    <div class="closing-banner" aria-label="משפט סיום">
+      <div style="position:relative;z-index:1;">
+        <div class="closing-line1">כל אחת מובילה חלק.</div>
+        <div class="closing-line2">כולן מספרות סיפור אחד.</div>
+      </div>
+    </div>
+
+    <!-- ════ ACTIONS ════ -->
+    <div class="actions no-print">
+      <button class="btn-primary btn-pdf-export" onclick="exportPDF()" aria-label="ייצוא הפיץ׳ כ-PDF">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M3 14v2a1 1 0 001 1h12a1 1 0 001-1v-2M10 3v10M6 9l4 4 4-4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        ייצוא הפיץ׳ כ-PDF
+      </button>
+      <a href="FinalPitch.html" class="btn-secondary">→ חזרה לעמוד הפיץ׳</a>
+    </div>
+
+    <p class="footer-note">© 2026 פורצות דרך</p>
 
   </main>
+
+  <script>
+    var STORE_KEY = 'pd_pitch_activity';
+
+    // ── Persistence ───────────────────────────────────────────
+    function loadSaved() {
+      try {
+        var raw = localStorage.getItem(STORE_KEY);
+        if (!raw) return;
+        var data = JSON.parse(raw);
+        document.querySelectorAll('[data-save]').forEach(function(el) {
+          var k = el.getAttribute('data-save');
+          if (data[k] === undefined) return;
+          if (el.type === 'radio') {
+            el.checked = String(el.value) === String(data[k]);
+          } else {
+            el.value = data[k];
+          }
+        });
+      } catch(e) {}
+    }
+
+    function saveAll() {
+      try {
+        var data = {};
+        document.querySelectorAll('[data-save]').forEach(function(el) {
+          var k = el.getAttribute('data-save');
+          if (el.type === 'radio') {
+            if (el.checked) data[k] = el.value;
+          } else {
+            data[k] = el.value;
+          }
+        });
+        localStorage.setItem(STORE_KEY, JSON.stringify(data));
+      } catch(e) {}
+    }
+
+    // ── Helpers ───────────────────────────────────────────────
+    function getVal(id) {
+      var el = document.getElementById(id);
+      return el ? el.value.trim() : '';
+    }
+
+    function fill(val, placeholder) {
+      return val || placeholder;
+    }
+
+    function escHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    function parseNames(raw) {
+      if (!raw) return [];
+      return raw.split(/[,،\n]+/)
+        .map(function(n) { return n.trim(); })
+        .filter(Boolean);
+    }
+
+    // ── Pitch Generation ─────────────────────────────────────
+    function getPitchData() {
+      return {
+        project:  fill(getVal('f-project'), 'השלימו שם מיזם'),
+        problem:  fill(getVal('p2a'), 'השלימו את הבעיה בקצרה'),
+        audience: fill(getVal('p3a'), 'השלימו את קהל היעד'),
+        solution: fill(getVal('p4a'), 'השלימו את תיאור הפתרון'),
+        helps:    fill(getVal('p4b'), 'השלימו כיצד הפתרון עוזר'),
+        step1:    fill(getVal('p5a'), 'השלימו את שלב ראשון'),
+        step2:    fill(getVal('p5b'), 'השלימו את שלב שני'),
+        step3:    fill(getVal('p5c'), 'השלימו את התוצאה'),
+        value:    fill(getVal('p6a'), 'השלימו את הערך המרכזי'),
+        why:      fill(getVal('p6b'), 'השלימו למה זה חשוב')
+      };
+    }
+
+    function getPitchSections() {
+      var d = getPitchData();
+      return {
+        opening: 'מכירות את הרגע שבו ' + d.problem + '?',
+        problem: [
+          'אנחנו זיהינו בעיה שקשורה ל-' + d.audience + '.',
+          'הבעיה שלנו היא ש-' + d.problem + '.',
+          'היא משפיעה בעיקר על ' + d.audience + '.'
+        ].join('\n'),
+        audience: 'הבעיה משפיעה בעיקר על ' + d.audience + ', ולכן בחרנו להתמקד בקהל הזה.',
+        solution: [
+          'לכן פיתחנו את ' + d.project + ' — ' + d.solution + '.',
+          'הפתרון שלנו עוזר בכך שהוא ' + d.helps + '.'
+        ].join('\n'),
+        flow: [
+          'כך זה עובד:',
+          'המשתמשת מתחילה ב-' + d.step1 + '.',
+          'אחר כך היא ' + d.step2 + '.',
+          'בסוף היא ' + d.step3 + '.'
+        ].join('\n'),
+        value: [
+          'הערך המרכזי של המיזם הוא ' + d.value + '.',
+          'הוא חשוב כי ' + d.why + '.'
+        ].join('\n'),
+        poster: 'בפוסטר אפשר לראות את הבעיה, הפתרון, קהל היעד והאופן שבו המיזם עובד.',
+        closing: 'אנחנו מאמינות שהמיזם שלנו חשוב כי הוא לוקח צורך אמיתי והופך אותו לרעיון טכנולוגי שיכול לעזור.'
+      };
+    }
+
+    function buildFullPitch() {
+      var p = getPitchSections();
+      return [
+        p.opening,
+        '',
+        p.problem,
+        '',
+        p.solution,
+        '',
+        p.flow,
+        '',
+        p.value,
+        '',
+        p.poster,
+        '',
+        p.closing
+      ].join('\n');
+    }
+
+    function buildElevatorPitch() {
+      var d = getPitchData();
+      return [
+        'המיזם שלנו הוא ' + d.project + '.',
+        'הוא מיועד ל-' + d.audience + '.',
+        'הוא נותן מענה לבעיה של ' + d.problem + '.',
+        'הפתרון שלנו עוזר בכך שהוא ' + d.helps + '.',
+        'הערך המרכזי שלו הוא ' + d.value + '.'
+      ].join('\n');
+    }
+
+    function regenerateAll() {
+      var pitchEl = document.getElementById('full-pitch');
+      if (pitchEl) pitchEl.value = buildFullPitch();
+      regenerateElevator();
+      renderRoles();
+      renderTransitions();
+      saveAll();
+    }
+
+    function regenerateElevator() {
+      var el = document.getElementById('elevator-pitch');
+      if (el) el.value = buildElevatorPitch();
+    }
+
+    // ── Role Division ────────────────────────────────────────
+    function getSpeakerCount() {
+      var checked = document.querySelector('input[name="speaker-count"]:checked');
+      var val = checked ? parseInt(checked.value, 10) : 3;
+      if (isNaN(val)) val = 3;
+      return Math.max(1, Math.min(5, val));
+    }
+
+    function setSpeakerCount(count) {
+      var safeCount = Math.max(1, Math.min(5, count || 3));
+      var el = document.querySelector('input[name="speaker-count"][value="' + safeCount + '"]');
+      if (el) el.checked = true;
+    }
+
+    function setDefaultSpeakerCountIfNeeded() {
+      var checked = document.querySelector('input[name="speaker-count"]:checked');
+      if (checked) return;
+
+      var names = parseNames(getVal('f-students'));
+      var defaultCount = names.length ? Math.min(names.length, 5) : 3;
+      setSpeakerCount(defaultCount);
+    }
+
+    function getSpeakerNames() {
+      var count = getSpeakerCount();
+      var names = parseNames(getVal('f-students')).slice(0, count);
+
+      for (var i = names.length; i < count; i++) {
+        names.push('דוברת ' + (i + 1));
+      }
+
+      return names;
+    }
+
+    function getRoleScripts(count) {
+      var p = getPitchSections();
+      var plans = {
+        1: [
+          {
+            title: 'כל הפיץ׳ המלא',
+            text: buildFullPitch()
+          }
+        ],
+        2: [
+          {
+            title: 'פתיחה, הבעיה וקהל היעד',
+            text: [p.opening, '', p.problem].join('\n')
+          },
+          {
+            title: 'הפתרון, אופן הפעולה, הערך וסיכום',
+            text: [p.solution, '', p.flow, '', p.value, '', p.poster, '', p.closing].join('\n')
+          }
+        ],
+        3: [
+          {
+            title: 'פתיחה, הבעיה וקהל היעד',
+            text: [p.opening, '', p.problem].join('\n')
+          },
+          {
+            title: 'הפתרון ואיך הוא עובד',
+            text: [p.solution, '', p.flow].join('\n')
+          },
+          {
+            title: 'הערך המרכזי, החיבור לפוסטר וסיכום',
+            text: [p.value, '', p.poster, '', p.closing].join('\n')
+          }
+        ],
+        4: [
+          {
+            title: 'פתיחה והצגת הבעיה',
+            text: [p.opening, '', 'הבעיה שלנו היא ש-' + getPitchData().problem + '.'].join('\n')
+          },
+          {
+            title: 'קהל היעד ולמה התמקדנו בו',
+            text: [p.audience].join('\n')
+          },
+          {
+            title: 'הפתרון ואיך הוא עובד',
+            text: [p.solution, '', p.flow].join('\n')
+          },
+          {
+            title: 'הערך המרכזי, החיבור לפוסטר וסיכום',
+            text: [p.value, '', p.poster, '', p.closing].join('\n')
+          }
+        ],
+        5: [
+          {
+            title: 'פתיחה',
+            text: p.opening
+          },
+          {
+            title: 'הבעיה',
+            text: 'הבעיה שלנו היא ש-' + getPitchData().problem + '.'
+          },
+          {
+            title: 'קהל היעד',
+            text: p.audience
+          },
+          {
+            title: 'הפתרון ואיך הוא עובד',
+            text: [p.solution, '', p.flow].join('\n')
+          },
+          {
+            title: 'הערך המרכזי, החיבור לפוסטר וסיכום',
+            text: [p.value, '', p.poster, '', p.closing].join('\n')
+          }
+        ]
+      };
+
+      return plans[count] || plans[3];
+    }
+
+    function renderRoles() {
+      var container = document.getElementById('roles-container');
+      var sub = document.getElementById('roles-sub');
+      if (!container) return;
+
+      var count = getSpeakerCount();
+      var names = getSpeakerNames();
+      var scripts = getRoleScripts(count);
+
+      if (sub) {
+        sub.textContent = count === 1
+          ? 'דוברת אחת — מקבלת את כל הפיץ׳ המלא'
+          : count + ' דוברות — הפיץ׳ המלא חולק לטקסטים לפי הבורר';
+      }
+
+      var html = '';
+      for (var i = 0; i < count; i++) {
+        var script = scripts[i] || { title: 'חלק להצגה', text: '' };
+        html +=
+          '<div class="team-card">' +
+          '<div class="team-card-role">' + escHtml(names[i]) + '</div>' +
+          '<div class="team-card-dash">—</div>' +
+          '<div class="team-card-parts">' +
+          '<div class="role-script-label">' + escHtml(script.title) + '</div>' +
+          '<div class="role-script-text">' + escHtml(script.text) + '</div>' +
+          '</div>' +
+          '</div>';
+      }
+
+      container.innerHTML = html;
+    }
+
+    // ── Transition Phrases ───────────────────────────────────
+    function renderTransitions() {
+      var container = document.getElementById('transitions-container');
+      if (!container) return;
+
+      var count = getSpeakerCount();
+      var names = getSpeakerNames();
+      var phrases = [];
+
+      if (count === 1) {
+        phrases = [
+          'אחרי שהצגתי את הבעיה, אעבור לפתרון שפיתחנו.'
+        ];
+      } else if (count === 2) {
+        phrases = [
+          'ועכשיו אעביר ל־' + names[1] + ', שתציג את הפתרון שפיתחנו.'
+        ];
+      } else if (count === 3) {
+        phrases = [
+          'ועכשיו אעביר ל־' + names[1] + ', שתציג את הפתרון שלנו.',
+          'ועכשיו ' + names[2] + ' תסביר למה הפתרון חשוב ומה הערך שלו.'
+        ];
+      } else if (count === 4) {
+        phrases = [
+          'ועכשיו אעביר ל־' + names[1] + ', שתסביר על מי הבעיה משפיעה.',
+          'ועכשיו ' + names[2] + ' תציג את הפתרון שפיתחנו.',
+          'ועכשיו ' + names[3] + ' תסכם את הערך המרכזי של המיזם.'
+        ];
+      } else {
+        phrases = [
+          'ועכשיו אעביר ל־' + names[1] + ', שתציג את הבעיה שזיהינו.',
+          'ועכשיו ' + names[2] + ' תסביר על מי הבעיה משפיעה.',
+          'ועכשיו ' + names[3] + ' תציג את הפתרון שלנו.',
+          'ועכשיו ' + names[4] + ' תסכם למה המיזם חשוב ומה הערך שלו.'
+        ];
+      }
+
+      var html = '';
+      phrases.forEach(function(phrase) {
+        html +=
+          '<div class="phrase-item">' +
+          '<div class="phrase-arrow">←</div>' +
+          '<div class="phrase-text">' + escHtml(phrase) + '</div>' +
+          '</div>';
+      });
+      container.innerHTML = html;
+    }
+
+    // ── Source Toggle ────────────────────────────────────────
+    function setSourceOpen(isOpen) {
+      var fields = document.getElementById('source-fields');
+      var chevron = document.getElementById('source-chevron');
+      var btn = document.querySelector('.source-toggle');
+      if (!fields) return;
+      fields.style.display = isOpen ? 'block' : 'none';
+      if (chevron) chevron.classList.toggle('open', isOpen);
+      if (btn) btn.setAttribute('aria-expanded', String(isOpen));
+    }
+
+    function openPitchDataStep() {
+      document.querySelectorAll('.step-sec').forEach(function(sec) { setStepOpen(sec, false); });
+      setSourceOpen(true);
+      var target = document.getElementById('pitch-data-step');
+      if (target) {
+        setTimeout(function() {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 60);
+      }
+    }
+
+    function finishPitchDataStep() {
+      regenerateAll();
+      setSourceOpen(false);
+      openStep(1);
+    }
+
+    function toggleSource() {
+      var fields = document.getElementById('source-fields');
+      if (!fields) return;
+      var shouldOpen = fields.style.display === 'none';
+      if (shouldOpen) {
+        document.querySelectorAll('.step-sec').forEach(function(sec) { setStepOpen(sec, false); });
+      }
+      setSourceOpen(shouldOpen);
+    }
+
+    // ── Timers ───────────────────────────────────────────────
+    var timers = {};
+
+    function pad(n) { return String(n).padStart(2, '0'); }
+
+    function toggleTimer(id, total) {
+      var t = timers[id];
+      if (!t) { t = { running: false, secs: total, interval: null }; timers[id] = t; }
+
+      var display = document.getElementById(id + '-display');
+      var btn     = document.getElementById(id + '-btn');
+
+      if (t.running) {
+        clearInterval(t.interval);
+        t.running = false;
+        btn.textContent = '▶ המשך';
+      } else {
+        if (t.secs <= 0) { t.secs = total; }
+        t.running = true;
+        btn.textContent = '⏸ עצור';
+        t.interval = setInterval(function() {
+          if (t.secs <= 0) {
+            clearInterval(t.interval);
+            t.running = false;
+            btn.textContent = '🔁 שוב';
+            display.textContent = '00:00';
+            t.secs = 0;
+            return;
+          }
+          t.secs--;
+          var m = Math.floor(t.secs / 60), s = t.secs % 60;
+          display.textContent = pad(m) + ':' + pad(s);
+        }, 1000);
+      }
+    }
+
+
+
+    // ── Collapsible step windows ─────────────────────────────
+    function setStepOpen(sec, isOpen) {
+      if (!sec) return;
+      sec.classList.toggle('collapsed', !isOpen);
+      var head = sec.querySelector('.sec-head');
+      var state = sec.querySelector('.step-state');
+      if (head) head.setAttribute('aria-expanded', String(isOpen));
+      if (state) state.textContent = isOpen ? 'פתוח' : 'לפתיחה';
+    }
+
+    function openStep(index) {
+      var sections = Array.prototype.slice.call(document.querySelectorAll('.step-sec'));
+      sections.forEach(function(sec, i) { setStepOpen(sec, i === index); });
+      var target = sections[index];
+      if (target) {
+        setTimeout(function() {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 60);
+      }
+    }
+
+    function initCollapsibleSteps() {
+      var sections = Array.prototype.slice.call(document.querySelectorAll('main.page > .sec'))
+        .filter(function(sec) { return !!sec.querySelector(':scope > .sec-head'); });
+
+      sections.forEach(function(sec, index) {
+        if (sec.dataset.stepReady === '1') return;
+        sec.dataset.stepReady = '1';
+        sec.classList.add('step-sec', 'collapsed');
+
+        var head = sec.querySelector(':scope > .sec-head');
+        var body = document.createElement('div');
+        body.className = 'sec-body';
+
+        var node = head.nextSibling;
+        while (node) {
+          var next = node.nextSibling;
+          body.appendChild(node);
+          node = next;
+        }
+        sec.appendChild(body);
+
+        head.setAttribute('role', 'button');
+        head.setAttribute('tabindex', '0');
+        head.setAttribute('aria-expanded', 'false');
+
+        if (!head.querySelector('.step-state')) {
+          var state = document.createElement('div');
+          state.className = 'step-state';
+          state.textContent = 'לפתיחה';
+          head.appendChild(state);
+        }
+
+        head.addEventListener('click', function() {
+          var isOpen = !sec.classList.contains('collapsed');
+          if (isOpen) {
+            setStepOpen(sec, false);
+          } else {
+            openStep(index);
+          }
+        });
+
+        head.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            head.click();
+          }
+        });
+
+        if (index < sections.length - 1 && !body.querySelector('.step-next-wrap')) {
+          var nextWrap = document.createElement('div');
+          nextWrap.className = 'step-next-wrap no-print';
+          var nextBtn = document.createElement('button');
+          nextBtn.type = 'button';
+          nextBtn.className = 'step-next-btn';
+          nextBtn.textContent = 'סיימנו — לשלב הבא ←';
+          nextBtn.addEventListener('click', function() {
+            if (index === 0) {
+              openPitchDataStep();
+            } else {
+              setSourceOpen(false);
+              openStep(index + 1);
+            }
+          });
+          nextWrap.appendChild(nextBtn);
+          body.appendChild(nextWrap);
+        }
+      });
+    }
+
+    // ── Checklist ────────────────────────────────────────────
+    document.querySelectorAll('.check-box').forEach(function(box) {
+      function toggle() {
+        var c = box.classList.toggle('checked');
+        box.setAttribute('aria-checked', String(c));
+      }
+      box.addEventListener('click', toggle);
+      box.addEventListener('keydown', function(e) {
+        if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggle(); }
+      });
+    });
+
+    // ── PDF Export ───────────────────────────────────────────
+    function exportPDF() {
+      var proj = getVal('f-project') || 'הפיץ';
+      document.title = 'הפיץ׳ שלנו – ' + proj;
+      window.print();
+    }
+
+    // ── Init ─────────────────────────────────────────────────
+    initCollapsibleSteps();
+    loadSaved();
+    setDefaultSpeakerCountIfNeeded();
+
+    // Auto-generate pitch if not yet saved
+    var pitchEl = document.getElementById('full-pitch');
+    if (pitchEl && !pitchEl.value.trim()) {
+      pitchEl.value = buildFullPitch();
+    }
+    var elevEl = document.getElementById('elevator-pitch');
+    if (elevEl && !elevEl.value.trim()) {
+      elevEl.value = buildElevatorPitch();
+    }
+
+    // Render role division and transitions
+    renderRoles();
+    renderTransitions();
+
+    // Re-render roles/transitions when speaker count changes
+    document.querySelectorAll('input[name="speaker-count"]').forEach(function(el) {
+      el.addEventListener('change', function() {
+        renderRoles();
+        renderTransitions();
+        saveAll();
+      });
+    });
+
+    // Re-render roles/transitions when student names change
+    var studentsEl = document.getElementById('f-students');
+    if (studentsEl) {
+      studentsEl.addEventListener('input', function() {
+        renderRoles();
+        renderTransitions();
+      });
+    }
+
+    // Save on any input
+    document.addEventListener('input', saveAll);
+  </script>
 
 </body>
 </html>
