@@ -138,7 +138,7 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
   keys.forEach((k, i) => {
     document.querySelectorAll(`[data-ph-img="${i}"][data-layout="${layoutKey}"]`).forEach(frame => {
       if (slotImages[k]) {
-        frame.innerHTML = `<img src="${slotImages[k]}" alt="תמונה ${i + 1}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:${objectFit};display:block;">`;
+        frame.innerHTML = `<img src="${slotImages[k]}" alt="תמונה ${i + 1}" crossorigin="anonymous" style="max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:block;margin:auto;">`;
       } else {
         frame.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;color:#c8a8c0;font-size:10px;width:100%;height:100%;">תמונה ${i + 1}</div>`;
       }
