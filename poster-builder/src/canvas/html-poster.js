@@ -1,5 +1,5 @@
 const POSTER_HEIGHT_PX = 1123;
-const IMG_HEIGHTS     = { app: 250, physical: 205, website: 145, digital: 145 };
+const IMG_HEIGHTS     = { app: 250, physical: 205, website: 170, digital: 170 };
 const IMG_MIN_HEIGHTS = { app: 95,  physical: 90,  website: 75,  digital: 75  };
 
 export function renderHTMLPoster(contentValues, productType, titleFont, titleColor, textColor, background, slotImages) {
