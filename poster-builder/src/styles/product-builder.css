@@ -2103,13 +2103,13 @@ canvas {
 
 /* ===== כרטיסיות פוסטר HTML (step 4) ===== */
 .ph-card {
-  background: rgba(255,255,255,.95);
+  background: rgba(255, 255, 255, .96);
   border: 1px solid rgba(94,39,80,.14);
   border-radius: 10px;
   padding: 10px 12px;
 }
 .ph-card-accent {
-  background: linear-gradient(135deg, rgba(255,255,255,.97), rgba(248,238,255,.95));
+  background: linear-gradient(135deg, rgba(255, 255, 255, .97), rgba(248, 238, 255, .96));
   border: 1.5px solid rgba(94,39,80,.28);
   border-right: 3.5px solid var(--ph-title-color, #5E2750);
 }
@@ -2156,6 +2156,7 @@ canvas {
 /* ── Poster safe-fit guards: keep preview and PDF within fixed A4 page ── */
 #poster-html {
   overflow: visible;
+  max-height: 1123px;
 }
 
 #ph-main {
@@ -2186,6 +2187,7 @@ canvas {
 #poster-html.ph-imgfit-1 { --ph-physical-img-w: calc(228px * var(--ph-extra-image-scale)); --ph-app-img-w: calc(118px * var(--ph-extra-image-scale)); --ph-web-img-w: calc(194px * var(--ph-extra-image-scale)); }
 #poster-html.ph-imgfit-2 { --ph-physical-img-w: calc(208px * var(--ph-extra-image-scale)); --ph-app-img-w: calc(108px * var(--ph-extra-image-scale)); --ph-web-img-w: calc(180px * var(--ph-extra-image-scale)); }
 #poster-html.ph-imgfit-3 { --ph-physical-img-w: calc(188px * var(--ph-extra-image-scale)); --ph-app-img-w: calc(98px * var(--ph-extra-image-scale)); --ph-web-img-w: calc(164px * var(--ph-extra-image-scale)); }
+#poster-html.ph-imgfit-4 { --ph-physical-img-w: calc(170px * var(--ph-extra-image-scale)); --ph-app-img-w: calc(88px * var(--ph-extra-image-scale)); --ph-web-img-w: calc(150px * var(--ph-extra-image-scale)); }
 #poster-html.ph-imgfit-2 #ph-images-label { margin-bottom: 5px !important; }
 #poster-html.ph-imgfit-2 #ph-images-2,
 #poster-html.ph-imgfit-2 #ph-images-app,
@@ -2194,6 +2196,10 @@ canvas {
 #poster-html.ph-imgfit-3 #ph-images-2,
 #poster-html.ph-imgfit-3 #ph-images-app,
 #poster-html.ph-imgfit-3 #ph-images-web { gap: 6px !important; }
+#poster-html.ph-imgfit-4 #ph-images-label { margin-bottom: 3px !important; }
+#poster-html.ph-imgfit-4 #ph-images-2,
+#poster-html.ph-imgfit-4 #ph-images-app,
+#poster-html.ph-imgfit-4 #ph-images-web { gap: 5px !important; }
 
 #poster-html.ph-pad-tight .ph-card { padding: 8px 10px; }
 #poster-html.ph-pad-tight .ph-cap { margin-bottom: 5px; }
