@@ -111,7 +111,7 @@
       background: rgba(255,255,255,.86);
       border: 1px solid rgba(94,39,80,.14);
       border-radius: 10px;
-      padding: 9px 12px;
+      padding: 10px 12px;
     }
     .ph-card-accent {
       background: linear-gradient(135deg, rgba(255,255,255,.92), rgba(248,238,255,.86));
@@ -120,11 +120,11 @@
     }
     .ph-card-accent .ph-body {
       color: var(--ph-title-color, #5E2750);
-      font-weight: 700;
+      font-weight: 400;
       font-size: 12.5px;
     }
     .ph-cap {
-      font-size: 9px; font-weight: 900; color: var(--ph-title-color, #5E2750);
+      font-size: 10.5px; font-weight: 900; color: var(--ph-title-color, #5E2750);
       text-transform: uppercase; letter-spacing: 1px;
       margin-bottom: 6px; display: flex; align-items: center; gap: 5px;
     }
@@ -132,11 +132,11 @@
       content: ''; display: inline-block;
       width: 14px; height: 2.5px; background: var(--ph-title-color, #5E2750); border-radius: 1px;
     }
-    .ph-body { font-size: 12px; color: var(--ph-text-color, #1f1030); line-height: 1.65; word-break: break-word; overflow-wrap: anywhere; }
-    .ph-sub  { font-size: 10.5px; color: #8a7aa0; margin-top: 4px; line-height: 1.5; }
+    .ph-body { font-size: 12px; font-weight: 400; color: var(--ph-text-color, #1f1030); line-height: 1.72; word-break: break-word; overflow-wrap: anywhere; }
+    .ph-sub  { font-size: 10.5px; font-weight: 400; color: #8a7aa0; margin-top: 4px; line-height: 1.58; }
     .ph-bullets { list-style: none; margin-top: 3px; padding: 0; }
     .ph-bullets li {
-      font-size: 12px; color: var(--ph-text-color, #1f1030); line-height: 1.55;
+      font-size: 12px; font-weight: 400; color: var(--ph-text-color, #1f1030); line-height: 1.65;
       padding-right: 14px; position: relative; margin-bottom: 3px;
     }
     .ph-bullets li::before {
@@ -189,22 +189,23 @@
 
         <!-- כותרת -->
         <div style="padding:20px 32px 14px;text-align:center;position:relative;flex-shrink:0">
-          <div style="position:absolute;top:14px;left:22px">
+          <div style="position:absolute;top:12px;left:22px">
             <img src="/poster-builder/assets/logoposter.png" alt="פורצות דרך" crossorigin="anonymous"
-              style="height:52px;width:auto;object-fit:contain;filter:drop-shadow(0 0 4px #fff) drop-shadow(0 0 12px rgba(255,255,255,1)) drop-shadow(0 0 24px rgba(255,255,255,.95)) drop-shadow(0 0 40px rgba(255,255,255,.75)) drop-shadow(0 0 60px rgba(255,255,255,.45))" />
-          </div>
-          <div id="ph-team" style="position:absolute;top:18px;right:22px;background:rgba(255,255,255,.88);border:1px solid rgba(94,39,80,.2);border-radius:10px;padding:7px 11px;max-width:165px">
-            <div style="font-size:7.5px;font-weight:700;color:#5E2750;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">הצוות שלנו</div>
-            <div id="ph-names" style="font-size:9.5px;color:#2a1a3a;line-height:1.7"></div>
-            <div id="ph-school" style="font-size:8.5px;color:#8a7aa0;margin-top:3px"></div>
+              style="height:60px;width:auto;object-fit:contain;filter:drop-shadow(0 0 4px #fff) drop-shadow(0 0 12px rgba(255,255,255,1)) drop-shadow(0 0 24px rgba(255,255,255,.95)) drop-shadow(0 0 40px rgba(255,255,255,.75)) drop-shadow(0 0 60px rgba(255,255,255,.45))" />
           </div>
           <div id="ph-name" style="font-weight:900;line-height:1.1;margin-bottom:8px;word-break:break-word;overflow-wrap:anywhere"></div>
           <div id="ph-title-line" style="height:3px;background:linear-gradient(90deg,#5E2750,#d61f8c);border-radius:2px;margin:0 auto 10px;transition:width .2s ease"></div>
           <div id="ph-desc" style="font-size:13.5px;color:#5a3a5a;max-width:480px;margin:0 auto;line-height:1.65"></div>
+          <div id="ph-team" style="background:rgba(255,255,255,.88);border:1px solid rgba(94,39,80,.2);border-radius:10px;padding:7px 14px;width:fit-content;max-width:390px;margin:10px auto 0">
+            <div style="font-size:8px;font-weight:700;color:#5E2750;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">הצוות שלנו</div>
+            <div id="ph-names" style="font-size:10px;font-weight:400;color:#2a1a3a;line-height:1.65"></div>
+            <div id="ph-school" style="font-size:9px;font-weight:400;color:#8a7aa0;line-height:1.45;margin-top:3px"></div>
+          </div>
         </div>
 
+        <div id="ph-main" style="flex:1 1 auto;display:flex;flex-direction:column;justify-content:space-between;gap:13px;padding:0 24px 12px">
         <!-- שורה: בעיה + שאלת חקר -->
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:0 24px;margin-bottom:9px;flex-shrink:0">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;flex-shrink:0">
           <div class="ph-card">
             <div class="ph-cap">הבעיה שזיהינו</div>
             <div id="ph-problem" class="ph-body"></div>
@@ -217,7 +218,7 @@
         </div>
 
         <!-- תמונות -->
-        <div style="padding:0 24px;margin-bottom:9px;flex-shrink:0">
+        <div style="flex-shrink:0">
           <div id="ph-images-label" style="font-size:7.5px;font-weight:700;color:#5E2750;text-transform:uppercase;letter-spacing:1.5px;text-align:center;margin-bottom:7px"></div>
 
           <!-- פיזי: 2 תמונות -->
@@ -242,7 +243,7 @@
         </div>
 
         <!-- שורה: חקר + תובנות + דרישות -->
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding:0 24px;margin-bottom:8px;flex-shrink:0">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;flex-shrink:0">
           <div class="ph-card">
             <div class="ph-cap">החקר שביצענו</div>
             <ul id="ph-research" class="ph-bullets"></ul>
@@ -258,7 +259,7 @@
         </div>
 
         <!-- שורה: פתרון + שימוש -->
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:0 24px;margin-bottom:8px;flex-shrink:0">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;flex-shrink:0">
           <div class="ph-card">
             <div id="ph-solution-cap" class="ph-cap"></div>
             <div id="ph-solution" class="ph-body"></div>
@@ -270,7 +271,7 @@
         </div>
 
         <!-- שורה: משוב + שיפורים + ערך -->
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding:0 24px;margin-bottom:8px;flex-shrink:0">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;flex-shrink:0">
           <div class="ph-card ph-card-accent">
             <div class="ph-cap">המשוב שקיבלנו</div>
             <div id="ph-feedback" class="ph-body"></div>
@@ -285,8 +286,10 @@
           </div>
         </div>
 
+        </div>
+
         <!-- פוטר -->
-        <div id="ph-footer" style="margin-top:auto;background:linear-gradient(135deg,#4a1f40,#5E2750,#9b40c0);padding:10px 30px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
+        <div id="ph-footer" style="background:linear-gradient(135deg,#4a1f40,#5E2750,#9b40c0);padding:10px 30px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
           <div id="ph-slogan" style="font-style:italic;font-size:13px;color:rgba(255,255,255,.95)"></div>
           <div style="font-size:9.5px;color:rgba(255,255,255,.6);font-weight:700;letter-spacing:1.2px">פורצות דרך ✦ 2026</div>
         </div>

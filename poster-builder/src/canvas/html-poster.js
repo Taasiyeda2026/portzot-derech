@@ -1,4 +1,11 @@
 export function renderHTMLPoster(contentValues, productType, titleFont, titleColor, textColor, background, slotImages) {
+  // Support legacy calls that pass (background, slotImages) after titleColor.
+  if (slotImages === undefined && background && typeof background === 'object') {
+    slotImages = background;
+    background = textColor;
+    textColor = null;
+  }
+
   // ── Background ──────────────────────────────────────────────────────────────
   const bgEl = document.getElementById('poster-bg');
   if (bgEl) {
@@ -37,7 +44,7 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
     n.style.fontSize = l <= 6 ? '52px' : l <= 10 ? '44px' : l <= 15 ? '36px' : l <= 18 ? '30px' : '24px';
   }
 
-  // ── Title underline — match title width ─────────────────────────────────────
+  // ── Title underline — shorter than the title width ─────────────────────────
   const line = document.getElementById('ph-title-line');
   if (line) {
     line.style.background = `linear-gradient(90deg, ${resolvedTitle}, #d61f8c)`;
@@ -45,8 +52,8 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
     requestAnimationFrame(() => {
       const titleEl = document.getElementById('ph-name');
       if (titleEl && line) {
-        const w = titleEl.scrollWidth;
-        line.style.width = `${Math.min(w, 700)}px`;
+        const w = titleEl.scrollWidth * 0.76;
+        line.style.width = `${Math.min(w, 540)}px`;
       }
     });
   }
@@ -85,15 +92,20 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
   document.querySelectorAll('.ph-body, .ph-sub').forEach(el => {
     if (el.closest('.ph-card-accent')) return; // accent cards handled below
     el.style.color = resolvedText;
+    el.style.fontWeight = '400';
   });
   document.querySelectorAll('.ph-bullets li').forEach(el => {
     el.style.color = resolvedText;
+    el.style.fontWeight = '400';
+  });
+  document.querySelectorAll('#ph-names, #ph-school').forEach(el => {
+    el.style.fontWeight = '400';
   });
 
-  // ── Accent card bodies → title color + bold ───────────────────────────────────
+  // ── Accent card bodies → title color with regular answer weight ──────────────
   document.querySelectorAll('.ph-card-accent .ph-body').forEach(el => {
     el.style.color      = resolvedTitle;
-    el.style.fontWeight = '700';
+    el.style.fontWeight = '400';
     el.style.fontSize   = '12.5px';
   });
 
