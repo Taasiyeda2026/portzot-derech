@@ -230,20 +230,24 @@ function fitPosterToPage(posterRoot, titleColor) {
 function isPosterOverflowing(posterRoot) {
   const footer = posterRoot.querySelector('#ph-footer');
   const rootRect = posterRoot.getBoundingClientRect();
-  const pageBottom = rootRect.top + POSTER_HEIGHT_PX;
-  const measuredEls = [...posterRoot.querySelectorAll('#ph-main, #poster-inner, .ph-card, .ph-img-frame, #ph-footer')];
-  const contentBottom = Math.max(
-    posterRoot.scrollHeight,
-    footer ? footer.offsetTop + footer.offsetHeight : 0,
-    ...measuredEls.map(el => el.offsetTop + el.offsetHeight)
-  );
-  const visualBottom = Math.max(
-    ...measuredEls.map(el => el.getBoundingClientRect().bottom)
-  );
-  const main = posterRoot.querySelector('#ph-main');
-  const mainOverFooter = Boolean(main && footer && main.getBoundingClientRect().bottom > footer.getBoundingClientRect().top - 0.5);
+  const a4Bottom = rootRect.top + POSTER_HEIGHT_PX;
 
-  return contentBottom > POSTER_HEIGHT_PX || visualBottom > pageBottom + 0.5 || mainOverFooter;
+  // True overflow: poster scroll height exceeds A4
+  if (posterRoot.scrollHeight > POSTER_HEIGHT_PX + 1) return true;
+
+  const contentEls = [...posterRoot.querySelectorAll('.ph-card, .ph-img-frame')];
+
+  // Any content element visually below A4 bottom
+  if (contentEls.some(el => el.getBoundingClientRect().bottom > a4Bottom + 1)) return true;
+
+  // Any content element intruding into footer space
+  // (ph-main touching footer is intentional and not overflow)
+  if (footer) {
+    const footerTop = footer.getBoundingClientRect().top;
+    if (contentEls.some(el => el.getBoundingClientRect().bottom > footerTop + 1)) return true;
+  }
+
+  return false;
 }
 
 // ── Colour helpers ────────────────────────────────────────────────────────────
