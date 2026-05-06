@@ -48,18 +48,11 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
     n.style.fontSize = l <= 6 ? '52px' : l <= 10 ? '44px' : l <= 15 ? '36px' : l <= 18 ? '30px' : '24px';
   }
 
-  // ── Title underline — shorter than the title width ─────────────────────────
+  // ── Title underline — short fixed decorative bar ────────────────────────────
   const line = document.getElementById('ph-title-line');
   if (line) {
     line.style.background = `linear-gradient(90deg, ${resolvedTitle}, #d61f8c)`;
-    // Set width after layout settles
-    requestAnimationFrame(() => {
-      const titleEl = document.getElementById('ph-name');
-      if (titleEl && line) {
-        const w = titleEl.scrollWidth * 0.76;
-        line.style.width = `${Math.min(w, 540)}px`;
-      }
-    });
+    line.style.width = '88px';
   }
 
   // ── Text fields ─────────────────────────────────────────────────────────────
