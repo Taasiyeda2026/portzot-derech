@@ -2152,3 +2152,62 @@ canvas {
   width: 26px; height: 4px; background: #d0b0c8;
   border-radius: 2px; z-index: 2;
 }
+
+/* ── Poster safe-fit guards: keep preview and PDF within fixed A4 page ── */
+#poster-html {
+  overflow: visible;
+}
+
+#ph-main {
+  flex: 0 0 auto !important;
+  justify-content: flex-start !important;
+}
+
+#ph-images-2,
+#ph-images-app,
+#ph-images-web {
+  justify-content: center;
+  align-items: start;
+}
+
+#ph-images-2 { grid-template-columns: repeat(2, minmax(0, 245px)) !important; }
+#ph-images-app { grid-template-columns: repeat(3, minmax(0, 128px)) !important; }
+#ph-images-web { grid-template-columns: repeat(3, minmax(0, 205px)) !important; }
+
+#poster-html.ph-fit-1 #ph-main { gap: 8px !important; padding-bottom: 7px !important; }
+#poster-html.ph-fit-1 .ph-card { padding: 8px 10px; }
+#poster-html.ph-fit-1 .ph-cap { font-size: 10px; margin-bottom: 5px; }
+#poster-html.ph-fit-1 .ph-body { font-size: 11.5px; line-height: 1.56; }
+#poster-html.ph-fit-1 .ph-sub { font-size: 10px; line-height: 1.45; margin-top: 3px; }
+#poster-html.ph-fit-1 .ph-card-accent .ph-body { font-size: 11.7px; }
+#poster-html.ph-fit-1 .ph-bullets li { font-size: 11.5px; line-height: 1.5; margin-bottom: 2px; }
+#poster-html.ph-fit-1 #ph-images-2 { grid-template-columns: repeat(2, minmax(0, 232px)) !important; }
+#poster-html.ph-fit-1 #ph-images-app { grid-template-columns: repeat(3, minmax(0, 120px)) !important; }
+#poster-html.ph-fit-1 #ph-images-web { grid-template-columns: repeat(3, minmax(0, 196px)) !important; }
+
+#poster-html.ph-fit-2 #ph-main { gap: 6px !important; padding-bottom: 6px !important; }
+#poster-html.ph-fit-2 .ph-card { padding: 7px 9px; }
+#poster-html.ph-fit-2 .ph-cap { font-size: 9.5px; margin-bottom: 4px; letter-spacing: .75px; }
+#poster-html.ph-fit-2 .ph-body { font-size: 11px; line-height: 1.43; }
+#poster-html.ph-fit-2 .ph-sub { font-size: 9.6px; line-height: 1.35; margin-top: 2px; }
+#poster-html.ph-fit-2 .ph-card-accent .ph-body { font-size: 11.1px; }
+#poster-html.ph-fit-2 .ph-bullets li { font-size: 11px; line-height: 1.38; margin-bottom: 1px; padding-right: 12px; }
+#poster-html.ph-fit-2 #ph-images-label { margin-bottom: 4px !important; }
+#poster-html.ph-fit-2 #ph-images-2 { grid-template-columns: repeat(2, minmax(0, 218px)) !important; gap: 8px !important; }
+#poster-html.ph-fit-2 #ph-images-app { grid-template-columns: repeat(3, minmax(0, 112px)) !important; gap: 7px !important; }
+#poster-html.ph-fit-2 #ph-images-web { grid-template-columns: repeat(3, minmax(0, 186px)) !important; gap: 7px !important; }
+
+#poster-html.ph-fit-3 #ph-main { gap: 5px !important; padding-bottom: 5px !important; }
+#poster-html.ph-fit-3 .ph-card { padding: 6px 8px; border-radius: 9px; }
+#poster-html.ph-fit-3 .ph-cap { font-size: 9px; margin-bottom: 3px; letter-spacing: .55px; }
+#poster-html.ph-fit-3 .ph-cap::before { width: 10px; height: 2px; }
+#poster-html.ph-fit-3 .ph-body { font-size: 10.5px; line-height: 1.32; }
+#poster-html.ph-fit-3 .ph-sub { font-size: 9.2px; line-height: 1.25; margin-top: 2px; }
+#poster-html.ph-fit-3 .ph-card-accent .ph-body { font-size: 10.6px; }
+#poster-html.ph-fit-3 .ph-bullets { margin-top: 1px; }
+#poster-html.ph-fit-3 .ph-bullets li { font-size: 10.5px; line-height: 1.28; margin-bottom: 0; padding-right: 11px; }
+#poster-html.ph-fit-3 #ph-images-label { margin-bottom: 3px !important; }
+#poster-html.ph-fit-3 #ph-images-2 { grid-template-columns: repeat(2, minmax(0, 202px)) !important; gap: 7px !important; }
+#poster-html.ph-fit-3 #ph-images-app { grid-template-columns: repeat(3, minmax(0, 104px)) !important; gap: 6px !important; }
+#poster-html.ph-fit-3 #ph-images-web { grid-template-columns: repeat(3, minmax(0, 174px)) !important; gap: 6px !important; }
+#poster-html.ph-fit-3 #ph-footer { padding-top: 6px !important; padding-bottom: 6px !important; }

@@ -1,3 +1,6 @@
+const POSTER_HEIGHT_PX = 1123;
+const FIT_CLASSES = ['ph-fit-1', 'ph-fit-2', 'ph-fit-3'];
+
 export function renderHTMLPoster(contentValues, productType, titleFont, titleColor, textColor, background, slotImages) {
   // Support legacy calls that pass (background, slotImages) after titleColor.
   if (slotImages === undefined && background && typeof background === 'object') {
@@ -28,6 +31,7 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
 
   const posterRoot = document.getElementById('poster-html');
   if (posterRoot) {
+    posterRoot.classList.remove(...FIT_CLASSES);
     posterRoot.style.setProperty('--ph-title-color', resolvedTitle);
     posterRoot.style.setProperty('--ph-text-color',  resolvedText);
     posterRoot.style.fontFamily = `'${resolvedFont}', 'IBM Plex Sans Hebrew', sans-serif`;
@@ -131,7 +135,7 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
 
   const frameRatio  = { app: '9 / 16', physical: '4 / 3', website: '16 / 9', digital: '16 / 9' }[productType] || '16 / 9';
   const layoutKey   = productType === 'digital' ? 'website' : productType;
-  const objectFit   = productType === 'physical' ? 'cover' : 'contain';
+  const objectFit   = 'contain';
   const keys        = productType === 'physical' ? ['visual_1', 'visual_2'] : ['visual_1', 'visual_2', 'visual_3'];
 
   document.querySelectorAll(`[data-ph-img][data-layout="${layoutKey}"]`).forEach(frame => {
@@ -148,6 +152,44 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
       }
     });
   });
+
+  schedulePosterFit(posterRoot);
+}
+
+function schedulePosterFit(posterRoot) {
+  if (!posterRoot) return;
+  requestAnimationFrame(() => {
+    fitPosterToPage(posterRoot);
+    requestAnimationFrame(() => fitPosterToPage(posterRoot));
+  });
+}
+
+function fitPosterToPage(posterRoot) {
+  posterRoot.classList.remove(...FIT_CLASSES);
+
+  for (const fitClass of ['', ...FIT_CLASSES]) {
+    posterRoot.classList.remove(...FIT_CLASSES);
+    if (fitClass) posterRoot.classList.add(fitClass);
+    if (!isPosterOverflowing(posterRoot)) return fitClass;
+  }
+
+  return FIT_CLASSES[FIT_CLASSES.length - 1];
+}
+
+function isPosterOverflowing(posterRoot) {
+  const footer = posterRoot.querySelector('#ph-footer');
+  const pageBottom = posterRoot.getBoundingClientRect().top + POSTER_HEIGHT_PX;
+  const contentBottom = Math.max(
+    posterRoot.scrollHeight,
+    footer ? footer.offsetTop + footer.offsetHeight : 0,
+    ...[...posterRoot.querySelectorAll('.ph-card, .ph-img-frame')].map(el => el.offsetTop + el.offsetHeight)
+  );
+  const visualBottom = Math.max(
+    footer ? footer.getBoundingClientRect().bottom : 0,
+    ...[...posterRoot.querySelectorAll('.ph-card, .ph-img-frame')].map(el => el.getBoundingClientRect().bottom)
+  );
+
+  return contentBottom > POSTER_HEIGHT_PX || visualBottom > pageBottom + 0.5;
 }
 
 // ── Colour helpers ────────────────────────────────────────────────────────────
@@ -210,12 +252,13 @@ export async function exportHTMLPosterToPDF(contentValues) {
     height:    '1123px',
     minHeight: '1123px',
     maxHeight: '1123px',
-    overflow:  'hidden',
+    overflow:  'visible',
     boxShadow: 'none',
     transform: 'none',
     zIndex:    '-1',
   });
   document.body.appendChild(clone);
+  fitPosterToPage(clone);
 
   // 3. Wait for all <img> to load in clone
   await Promise.all(
@@ -225,9 +268,11 @@ export async function exportHTMLPosterToPDF(contentValues) {
     )
   );
 
-  // Layout settle
+  // Layout settle and apply the same safe-fit classes used by the preview
   await new Promise(r => requestAnimationFrame(r));
+  fitPosterToPage(clone);
   await new Promise(r => requestAnimationFrame(r));
+  fitPosterToPage(clone);
 
   try {
     const canvas = await html2canvas(clone, {
