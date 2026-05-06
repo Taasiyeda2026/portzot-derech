@@ -1,5 +1,5 @@
 const POSTER_HEIGHT_PX = 1123;
-const FIT_CLASSES = ['ph-space-tight', 'ph-imgfit-1', 'ph-imgfit-2', 'ph-imgfit-3', 'ph-pad-tight', 'ph-line-tight', 'ph-text-tight', 'ph-cap-tight'];
+const FIT_CLASSES = ['ph-space-tight', 'ph-imgfit-1', 'ph-imgfit-2', 'ph-imgfit-3', 'ph-pad-tight', 'ph-line-tight', 'ph-text-tight', 'ph-imgfit-4', 'ph-cap-tight'];
 
 export function renderHTMLPoster(contentValues, productType, titleFont, titleColor, textColor, background, slotImages) {
   // Support legacy calls that pass (background, slotImages) after titleColor.
@@ -47,6 +47,9 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
     const l = name.length;
     n.style.fontSize = l <= 6 ? '52px' : l <= 10 ? '44px' : l <= 15 ? '36px' : l <= 18 ? '30px' : '24px';
   }
+
+  // ── Poster card opacity — inline editor CSS used by preview/PDF can override the shared stylesheet.
+  applyPosterCardStyles(posterRoot);
 
   // ── Title underline — measured from the rendered title width ───────────────
   updateTitleUnderline(posterRoot, resolvedTitle);
@@ -164,21 +167,41 @@ function schedulePosterFit(posterRoot, titleColor) {
   }
 }
 
+function applyPosterCardStyles(posterRoot) {
+  const root = posterRoot || document;
+  root.querySelectorAll?.('.ph-card').forEach((card) => {
+    card.style.background = 'rgba(255, 255, 255, 0.96)';
+  });
+  root.querySelectorAll?.('.ph-card-accent').forEach((card) => {
+    card.style.background = 'linear-gradient(135deg, rgba(255, 255, 255, 0.97), rgba(248, 238, 255, 0.96))';
+  });
+  const team = root.querySelector?.('#ph-team') || document.getElementById('ph-team');
+  if (team) team.style.background = 'rgba(255, 255, 255, 0.96)';
+}
+
 function updateTitleUnderline(posterRoot, titleColor) {
   const root = posterRoot || document;
   const titleEl = root.querySelector?.('#ph-name') || document.getElementById('ph-name');
   const line = root.querySelector?.('#ph-title-line') || document.getElementById('ph-title-line');
   if (!titleEl || !line) return;
 
-  if (titleColor) line.style.background = `linear-gradient(90deg, ${titleColor}, #d61f8c)`;
-  const header = titleEl.parentElement;
-  const headerWidth = header ? header.getBoundingClientRect().width : 620;
-  const maxWidth = Math.max(120, Math.min(620, headerWidth - 64));
-  const titleWidth = titleEl.getBoundingClientRect().width;
-  line.style.width = `${Math.min(titleWidth, maxWidth)}px`;
+  const measure = () => {
+    if (titleColor) line.style.background = `linear-gradient(90deg, ${titleColor}, #d61f8c)`;
+    const width = titleEl.getBoundingClientRect().width;
+    line.style.width = `${Math.min(width, 620)}px`;
+    line.style.marginInline = 'auto';
+  };
+
+  if (typeof requestAnimationFrame === 'function') requestAnimationFrame(measure);
+  measure();
+
+  if (document.fonts?.ready) {
+    document.fonts.ready.then(measure).catch(() => {});
+  }
 }
 
 function fitPosterToPage(posterRoot, titleColor) {
+  applyPosterCardStyles(posterRoot);
   posterRoot.classList.remove(...FIT_CLASSES);
   posterRoot.style.removeProperty('--ph-extra-image-scale');
   updateTitleUnderline(posterRoot, titleColor);
@@ -202,18 +225,21 @@ function fitPosterToPage(posterRoot, titleColor) {
 
 function isPosterOverflowing(posterRoot) {
   const footer = posterRoot.querySelector('#ph-footer');
-  const pageBottom = posterRoot.getBoundingClientRect().top + POSTER_HEIGHT_PX;
+  const rootRect = posterRoot.getBoundingClientRect();
+  const pageBottom = rootRect.top + POSTER_HEIGHT_PX;
+  const measuredEls = [...posterRoot.querySelectorAll('#ph-main, #poster-inner, .ph-card, .ph-img-frame, #ph-footer')];
   const contentBottom = Math.max(
     posterRoot.scrollHeight,
     footer ? footer.offsetTop + footer.offsetHeight : 0,
-    ...[...posterRoot.querySelectorAll('.ph-card, .ph-img-frame')].map(el => el.offsetTop + el.offsetHeight)
+    ...measuredEls.map(el => el.offsetTop + el.offsetHeight)
   );
   const visualBottom = Math.max(
-    footer ? footer.getBoundingClientRect().bottom : 0,
-    ...[...posterRoot.querySelectorAll('.ph-card, .ph-img-frame')].map(el => el.getBoundingClientRect().bottom)
+    ...measuredEls.map(el => el.getBoundingClientRect().bottom)
   );
+  const main = posterRoot.querySelector('#ph-main');
+  const mainOverFooter = Boolean(main && footer && main.getBoundingClientRect().bottom > footer.getBoundingClientRect().top - 0.5);
 
-  return contentBottom > POSTER_HEIGHT_PX || visualBottom > pageBottom + 0.5;
+  return contentBottom > POSTER_HEIGHT_PX || visualBottom > pageBottom + 0.5 || mainOverFooter;
 }
 
 // ── Colour helpers ────────────────────────────────────────────────────────────
@@ -282,6 +308,7 @@ export async function exportHTMLPosterToPDF(contentValues) {
     zIndex:    '-1',
   });
   document.body.appendChild(clone);
+  applyPosterCardStyles(clone);
   updateTitleUnderline(clone);
   fitPosterToPage(clone);
 

@@ -1,4 +1,4 @@
-const CACHE_NAME = "portzot-derech-v25";
+const CACHE_NAME = "portzot-derech-v26";
 
 const CORE_ASSETS = [
   "./",
