@@ -324,7 +324,7 @@ export async function exportHTMLPosterToPDF(contentValues) {
     )
   );
 
-  // Layout settle and apply the same safe-fit classes used by the preview
+  // Layout settle and apply the same image-only fit used by the preview
   await new Promise(r => requestAnimationFrame(r));
   updateTitleUnderline(clone);
   fitPosterToPage(clone);
