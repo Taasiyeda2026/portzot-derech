@@ -173,7 +173,8 @@ const state = {
     shape: 20
   },
   slotImages: { visual_1: null, visual_2: null, visual_3: null },
-  slotUploadStatus: { visual_1: 'empty', visual_2: 'empty', visual_3: 'empty' }
+  slotUploadStatus: { visual_1: 'empty', visual_2: 'empty', visual_3: 'empty' },
+  pendingWarningStep: null
 };
 
 function migrateSharedVisualPrompt(splitFlowState = {}) {
@@ -567,6 +568,30 @@ function validateStep(step) {
   return {};
 }
 
+function getWarningErrorsForStep(step) {
+  const errors = validateStep(step);
+  if (step === 2 && productType === 'physical') Object.assign(errors, validateImagesStep());
+  if (errors.slotUploads && errors.slotUploads.includes('עדיין עולה')) return { blocking: errors, warning: {} };
+  return { blocking: {}, warning: errors };
+}
+
+function moveToNextStep() {
+  state.errors = {};
+  state.visibleErrors = [];
+  state.navErrorMessage = '';
+  state.pendingWarningStep = null;
+  try {
+    persistSplitFlowState();
+  } catch (err) {
+    state.navErrorMessage = 'לא הצלחנו לשמור את ההתקדמות. נסי שוב.';
+    render();
+    return;
+  }
+  state.step = Math.min(MAX_STEP, state.step + 1);
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
 const VALIDATION_ORDER = {
   1: RESEARCH_FIELDS.map(([key]) => key),
   2: productType === 'physical'
@@ -599,6 +624,40 @@ function slots() {
   return getVisualSlots(posterSize, productType);
 }
 
+
+function promptLine(label, value, suffix = '.') {
+  const text = typeof value === 'string' ? value.trim() : '';
+  return text ? `${label}: ${text}${suffix}` : '';
+}
+
+function promptListLine(label, values) {
+  const items = values.map((value) => (value || '').trim()).filter(Boolean);
+  return items.length ? `${label}: ${items.join('; ')}.` : '';
+}
+
+function joinPromptLines(lines) {
+  return lines.filter((line) => line !== '').join('\n');
+}
+
+function visualSettingLine(label, value) {
+  const text = typeof value === 'string' ? value.trim() : '';
+  return text ? `${label}: ${text}` : '';
+}
+
+function cleanPromptText(text) {
+  return text
+    .split('\n')
+    .filter((line) => {
+      const trimmed = line.trim();
+      if (!trimmed) return true;
+      if (/^[^:]+:\s*\.?$/.test(trimmed)) return false;
+      if (/^[^:]+:\s*(;\s*)+\.?$/.test(trimmed)) return false;
+      return true;
+    })
+    .join('\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
 function basePromptContext(slot, imageRole) {
   return `Create a clear, high-quality poster-ready image based on the following project context and image-specific details.
 Project: ${state.research.projectName}
@@ -623,8 +682,8 @@ function sharedVisualPromptText() {
   return `Shared visual settings for all images:
 Visual style: ${styleText}
 Realism level: ${realismText}
-Preferred colors: ${shared.colors || 'match the project visual language'}
-Avoid: ${avoidText || 'none specified'}`;
+${visualSettingLine('Preferred colors', shared.colors)}
+${visualSettingLine('Avoid', avoidText)}`;
 }
 
 
@@ -669,7 +728,7 @@ function buildPhysicalPrompt(kind) {
     const styleText = resolveOtherList(shared.style, shared.styleOther).join(', ');
     const realismText = resolveOtherValue(shared.realism, shared.realismOther);
     const avoidText = resolveOtherList(shared.avoid, shared.avoidOther).join(', ');
-    return `Create a clear, high-quality, poster-ready image based on the following project context.
+    return cleanPromptText(`Create a clear, high-quality, poster-ready image based on the following project context.
 
 Project name: ${state.research.projectName}
 Product type: Physical product
@@ -695,18 +754,18 @@ Avoid clutter, unnecessary props, distorted shapes, distorted proportions, fake 
 Shared visual settings for all images:
 Visual style: ${styleText}
 Realism level: ${realismText}
-Preferred colors: ${shared.colors || 'match the project visual language'}
-Avoid: ${avoidText || 'none specified'}
+${visualSettingLine('Preferred colors', shared.colors)}
+${visualSettingLine('Avoid', avoidText)}
 
 Image-specific details:
 The product appears as: ${appearanceText}.
-Main visual message: At first glance, the viewer should immediately understand that ${data.mainMessage}.
+${data.mainMessage.trim() ? `Main visual message: At first glance, the viewer should immediately understand that ${data.mainMessage.trim()}.` : ''}
 What should stand out most: ${highlightText}.
 Material / texture: ${materialText}.
 Preferred view angle: ${angleText}.
 Background: ${backgroundText}.
-The image must clearly show: ${data.description}.
-Functional clarity: The product should look realistic, usable, and clearly designed for its purpose.`;
+${promptLine('The image must clearly show', data.description)}
+Functional clarity: The product should look realistic, usable, and clearly designed for its purpose.`);
   }
 
   const props = resolveOtherList(data.props, data.propsOther).join(', ');
@@ -719,7 +778,7 @@ Functional clarity: The product should look realistic, usable, and clearly desig
   const styleText = resolveOtherList(shared.style, shared.styleOther).join(', ');
   const realismText = resolveOtherValue(shared.realism, shared.realismOther);
   const avoidText = resolveOtherList(shared.avoid, shared.avoidOther).join(', ');
-  return `Create a clear, high-quality, poster-ready image based on the following project context.
+  return cleanPromptText(`Create a clear, high-quality, poster-ready image based on the following project context.
 
 Project name: ${state.research.projectName}
 Product type: Physical product
@@ -746,29 +805,38 @@ Avoid clutter, unnecessary objects, distorted hands, distorted faces, fake brand
 Shared visual settings for all images:
 Visual style: ${styleText}
 Realism level: ${realismText}
-Preferred colors: ${shared.colors || 'match the project visual language'}
-Avoid: ${avoidText || 'none specified'}
+${visualSettingLine('Preferred colors', shared.colors)}
+${visualSettingLine('Avoid', avoidText)}
 
 Image-specific details:
 Who is using the product: ${userText}.
 Number of people: ${countText}.
 Location: ${locationText}.
 Action shown: ${data.action}.
-Additional objects: ${props || 'none'}.
+${promptLine('Additional objects', props)}
 Main visual message: At first glance, the viewer should immediately understand how the user interacts with the product and why it is useful.
 What should stand out most: ${highlightText}.
 What the viewer should understand: ${data.takeaway}.
 Desired feeling: ${feelingText}.
-Functional clarity: The action must look natural, realistic, and easy to understand.`;
+Functional clarity: The action must look natural, realistic, and easy to understand.`);
 }
 
 function buildDigitalPrompt(index) {
   const slot = slots()[index] || slots()[0];
   const mappedScreenRef = index + 1;
   const screen = state.prototypeScreens[mappedScreenRef - 1];
-  const flowLine = productType === 'website'
-    ? `זרימת השימוש מתחילה ב-${state.prototypeFlow.start} ומסתיימת ב-${state.prototypeFlow.end}. סיכום זרימה: ${state.prototypeFlow.summary}. ${state.prototypeFlow.hasBranch === 'כן' ? `הסתעפות: ${state.prototypeFlow.branch}.` : 'אין הסתעפות.'}`
-    : '';
+  const flowParts = [];
+  if (productType === 'website') {
+    if (state.prototypeFlow.start && state.prototypeFlow.end) {
+      flowParts.push(`Starts with ${state.prototypeFlow.start} and ends with ${state.prototypeFlow.end}.`);
+    }
+    if (state.prototypeFlow.summary.trim()) flowParts.push(`Flow summary: ${state.prototypeFlow.summary.trim()}.`);
+    if (state.prototypeFlow.hasBranch === 'כן' && state.prototypeFlow.branch.trim()) {
+      flowParts.push(`Branching path: ${state.prototypeFlow.branch.trim()}.`);
+    }
+    if (state.prototypeFlow.hasBranch === 'לא') flowParts.push('No branching path.');
+  }
+  const flowLine = flowParts.join(' ');
   const emphasisText = resolveOtherList(screen?.emphasis || [], screen?.emphasisOther || '').join(', ');
   const screenType = resolveOtherValue(screen?.type || '', screen?.shortName || '');
   const screenComponents = resolveOtherList(screen?.components || [], screen?.componentsOther || '').join(', ');
@@ -778,7 +846,7 @@ function buildDigitalPrompt(index) {
   const avoidText = resolveOtherList(shared.avoid, shared.avoidOther).join(', ');
 
   if (productType === 'app') {
-    return `${screenOnlyRequirements}
+    return cleanPromptText(`${screenOnlyRequirements}
 
 Create a clear, high-quality, poster-ready image based on the following project context.
 
@@ -806,23 +874,23 @@ The screen should feel realistic, functional, and easy to understand.
 Shared visual settings for all images:
 Visual style: ${styleText}
 Realism level: Clean realistic mobile UI inside a smartphone frame
-Preferred colors: ${shared.colors || 'match the project visual language'}
-Avoid: ${avoidText || 'none specified'}
+${visualSettingLine('Preferred colors', shared.colors)}
+${visualSettingLine('Avoid', avoidText)}
 
 Screen-specific details:
-Screen represented: ${screenType || 'not defined'}.
+${promptLine('Screen represented', screenType)}
 What the user sees: ${screen?.view || ''}.
 What the user does: ${screen?.action || ''}.
 Important components: ${screenComponents}.
 What should stand out: ${emphasisText}.
 What the viewer should immediately understand: ${screen?.viewerUnderstand || ''}.
 Primary focal point: ${screen?.primaryFocus || ''}.
-Secondary elements: ${screen?.secondaryElements || 'none'}.
+${promptLine('Secondary elements', screen?.secondaryElements || '')}
 UI hierarchy: Make the primary action visually dominant and supporting information secondary.
-Functional clarity: The interface must look realistic, well-organized, and clearly usable.`;
+Functional clarity: The interface must look realistic, well-organized, and clearly usable.`);
   }
 
-  return `${screenOnlyRequirements}
+  return cleanPromptText(`${screenOnlyRequirements}
 
 Create a clear, high-quality, poster-ready image based on the following project context.
 
@@ -850,21 +918,21 @@ The page should feel realistic, functional, and easy to understand.
 Shared visual settings for all images:
 Visual style: ${styleText}
 Realism level: Clean realistic website UI
-Preferred colors: ${shared.colors || 'match the project visual language'}
-Avoid: ${avoidText || 'none specified'}
+${visualSettingLine('Preferred colors', shared.colors)}
+${visualSettingLine('Avoid', avoidText)}
 
 Screen-specific details:
-Screen represented: ${screenType || 'not defined'}.
+${promptLine('Screen represented', screenType)}
 What the user sees: ${screen?.view || ''}.
 What the user does: ${screen?.action || ''}.
 Important components: ${screenComponents}.
 What should stand out: ${emphasisText}.
 What the viewer should immediately understand: ${screen?.viewerUnderstand || ''}.
-User flow: Starts with ${state.prototypeFlow.start || ''} and ends with ${state.prototypeFlow.end || ''}.
+${promptLine('User flow', flowLine)}
 Primary focal point: ${screen?.primaryFocus || ''}.
-Secondary elements: ${screen?.secondaryElements || 'none'}.
+${promptLine('Secondary elements', screen?.secondaryElements || '')}
 UI hierarchy: Make the primary action or key content area visually dominant and supporting information secondary.
-Functional clarity: The interface must look realistic, well-organized, and clearly usable.`;
+Functional clarity: The interface must look realistic, well-organized, and clearly usable.`);
 }
 
 function normalizeAppImageMapping() {
@@ -1211,6 +1279,21 @@ function renderStepper() {
   }).join('')}</div>`;
 }
 
+
+function renderMissingDataWarningModal() {
+  return `<div class="split-warning-overlay" role="dialog" aria-modal="true" aria-labelledby="split-warning-title">
+    <div class="split-warning-modal">
+      <h2 id="split-warning-title">חסרים נתונים להמשך</h2>
+      <p>לא כל הפרטים מולאו. אפשר להמשיך, אבל חשוב לדעת שהפרומפט או הפוסטר שייבנו עלולים להיות פחות מדויקים.</p>
+      <p>מומלץ להשלים את הפרטים לפני ההמשך.</p>
+      <div class="split-warning-actions">
+        <button type="button" class="split-btn ghost" data-warning-action="back">לחזור ולהשלים</button>
+        <button type="button" class="split-btn primary" data-warning-action="continue">להמשיך בכל זאת</button>
+      </div>
+    </div>
+  </div>`;
+}
+
 function render() {
   normalizeAppImageMapping();
   sanitizeOtherFields();
@@ -1295,6 +1378,11 @@ function render() {
     .split-btn:disabled{opacity:.5;cursor:not-allowed}
     .split-nav .split-btn{width:auto}
     .split-alert{background:linear-gradient(135deg,#fee2e2,#fef3c7);color:#991b1b;border:1px solid #fecaca;border-radius:12px;padding:10px 14px;box-shadow:0 2px 8px rgba(220,38,38,.1)}
+    .split-warning-overlay{position:fixed;inset:0;z-index:1000;background:rgba(28,18,42,.48);display:flex;align-items:center;justify-content:center;padding:20px}
+    .split-warning-modal{width:min(460px,100%);background:#fff;border-radius:22px;padding:26px;box-shadow:0 24px 80px rgba(35,20,55,.32);border:1px solid rgba(94,39,80,.12);text-align:right;direction:rtl}
+    .split-warning-modal h2{margin:0 0 12px;color:#5E2750;font-size:24px;font-weight:900}
+    .split-warning-modal p{margin:0 0 10px;color:#374151;line-height:1.7;font-size:15px}
+    .split-warning-actions{display:flex;gap:12px;justify-content:flex-start;flex-wrap:wrap;margin-top:22px}
     .split-prompt{white-space:pre-wrap;direction:ltr;text-align:left;background:linear-gradient(155deg,#f8fafc,#f0eeff);border:1.5px dashed #b9a5f8;border-radius:14px;padding:14px;line-height:1.62;box-shadow:inset 0 2px 6px rgba(94,39,80,.06),0 2px 8px rgba(94,39,80,.05);font-size:13.5px}
     .split-link{display:inline-block;background:linear-gradient(135deg,#5E2750,#7c3aed);color:#fff;text-decoration:none;border-radius:12px;padding:11px 16px;box-shadow:0 8px 18px rgba(94,39,80,.28)}
     .split-picks{display:flex;gap:8px;flex-wrap:wrap}
@@ -1336,7 +1424,8 @@ function render() {
       <button type="button" class="split-btn ghost" data-nav="back" ${state.step === 1 ? 'disabled' : ''}>חזרה</button>
       <button type="button" class="split-btn primary" data-nav="next">${state.step === MAX_STEP ? 'סיום' : 'המשיכי לשלב הבא'}</button>
     </nav>
-  </main>`;
+  </main>
+  ${state.pendingWarningStep ? renderMissingDataWarningModal() : ''}`;
   wireEvents();
 }
 
@@ -1540,6 +1629,7 @@ function wireEvents() {
       state.slotImages[button.dataset.slotClear] = null;
       state.slotUploadStatus[button.dataset.slotClear] = 'empty';
       state.navErrorMessage = '';
+      state.pendingWarningStep = null;
       persistSplitFlowState();
       render();
     });
@@ -1553,65 +1643,56 @@ function wireEvents() {
       state.errors = {};
       state.visibleErrors = [];
       state.navErrorMessage = '';
+      state.pendingWarningStep = null;
       persistSplitFlowState();
       render();
     }
   });
 
   root.querySelector('[data-nav="next"]').addEventListener('click', () => {
-    if (state.step < MAX_STEP) {
-      if (state.step === 3 && productType !== 'physical') {
-        const requiredSlots = getRequiredImageSlotKeys();
-        const hasUploading = requiredSlots.some((slotKey) => state.slotUploadStatus[slotKey] === 'uploading');
-        if (hasUploading) {
-          state.errors.slotUploads = 'יש תמונה שעדיין עולה. חכי רגע ונסי שוב.';
-          state.visibleErrors = ['slotUploads'];
-          state.navErrorMessage = state.errors.slotUploads;
-          render();
-          const uploadsCard = root.querySelector('.split-upload-error');
-          uploadsCard?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          return;
-        }
-        const hasAllRequiredSlots = requiredSlots.every((slotKey) => Boolean(state.slotImages[slotKey]));
-        if (!hasAllRequiredSlots) {
-          state.errors.slotUploads = 'כדי להמשיך, צריך להעלות תמונה לכל אחד משלושת המסכים.';
-          state.visibleErrors = ['slotUploads'];
-          state.navErrorMessage = state.errors.slotUploads;
-          render();
-          const uploadsCard = root.querySelector('.split-upload-error');
-          uploadsCard?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          return;
-        }
-      }
+    if (state.step >= MAX_STEP) return;
 
+    if (state.step === 1) {
       const errors = validateStep(state.step);
       if (Object.keys(errors).length) {
-        if (errors.slotUploads) {
-          state.visibleErrors = ['slotUploads'];
-          state.navErrorMessage = errors.slotUploads;
-          render();
-          const uploadsCard = root.querySelector('.split-upload-error');
-          uploadsCard?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          return;
-        }
         state.navErrorMessage = '';
+        state.pendingWarningStep = null;
         focusFirstInvalidField(state.step, errors);
         return;
       }
-      state.errors = {};
+      moveToNextStep();
+      return;
+    }
+
+    const { blocking, warning } = getWarningErrorsForStep(state.step);
+    if (Object.keys(blocking).length) {
+      state.visibleErrors = Object.keys(blocking);
+      state.navErrorMessage = blocking.slotUploads || '';
+      state.pendingWarningStep = null;
+      render();
+      const uploadsCard = root.querySelector('.split-upload-error');
+      uploadsCard?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    if (Object.keys(warning).length) {
       state.visibleErrors = [];
       state.navErrorMessage = '';
-      try {
-        persistSplitFlowState();
-      } catch (err) {
-        state.navErrorMessage = 'לא הצלחנו לשמור את ההתקדמות. נסי שוב.';
-        render();
+      state.pendingWarningStep = state.step;
+      render();
+      return;
+    }
+    moveToNextStep();
+  });
+
+  root.querySelectorAll('[data-warning-action]').forEach((button) => {
+    button.addEventListener('click', () => {
+      if (button.dataset.warningAction === 'continue') {
+        moveToNextStep();
         return;
       }
-      state.step = Math.min(MAX_STEP, state.step + 1);
+      state.pendingWarningStep = null;
       render();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    });
   });
 }
 
