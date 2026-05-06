@@ -1,5 +1,6 @@
 const POSTER_HEIGHT_PX = 1123;
-const FIT_CLASSES = ['ph-space-tight', 'ph-imgfit-1', 'ph-imgfit-2', 'ph-imgfit-3', 'ph-pad-tight', 'ph-line-tight', 'ph-text-tight', 'ph-imgfit-4', 'ph-cap-tight'];
+const IMG_HEIGHTS     = { app: 250, physical: 205, website: 145, digital: 145 };
+const IMG_MIN_HEIGHTS = { app: 95,  physical: 90,  website: 75,  digital: 75  };
 
 export function renderHTMLPoster(contentValues, productType, titleFont, titleColor, textColor, background, slotImages) {
   // Support legacy calls that pass (background, slotImages) after titleColor.
@@ -31,7 +32,6 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
 
   const posterRoot = document.getElementById('poster-html');
   if (posterRoot) {
-    posterRoot.classList.remove(...FIT_CLASSES);
     posterRoot.style.setProperty('--ph-title-color', resolvedTitle);
     posterRoot.style.setProperty('--ph-text-color',  resolvedText);
     posterRoot.style.fontFamily = `'${resolvedFont}', 'IBM Plex Sans Hebrew', sans-serif`;
@@ -129,9 +129,10 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
   const objectFit   = 'contain';
   const keys        = productType === 'physical' ? ['visual_1', 'visual_2'] : ['visual_1', 'visual_2', 'visual_3'];
 
+  const fixedImgHeight = IMG_HEIGHTS[productType] || 145;
   document.querySelectorAll(`[data-ph-img][data-layout="${layoutKey}"]`).forEach(frame => {
-    frame.style.aspectRatio = frameRatio;
-    frame.style.height = 'auto';
+    frame.style.height = `${fixedImgHeight}px`;
+    frame.style.removeProperty('aspect-ratio');
   });
 
   keys.forEach((k, i) => {
@@ -202,25 +203,28 @@ function updateTitleUnderline(posterRoot, titleColor) {
 
 function fitPosterToPage(posterRoot, titleColor) {
   applyPosterCardStyles(posterRoot);
-  posterRoot.classList.remove(...FIT_CLASSES);
-  posterRoot.style.removeProperty('--ph-extra-image-scale');
   updateTitleUnderline(posterRoot, titleColor);
 
-  for (let i = 0; i <= FIT_CLASSES.length; i += 1) {
-    posterRoot.classList.remove(...FIT_CLASSES);
-    posterRoot.classList.add(...FIT_CLASSES.slice(0, i));
-    updateTitleUnderline(posterRoot, titleColor);
-    if (!isPosterOverflowing(posterRoot)) return FIT_CLASSES[i - 1] || '';
-  }
+  if (!isPosterOverflowing(posterRoot)) return;
 
-  // Final safety pass: keep shrinking image width before any more text reduction.
-  for (let scale = 0.94; scale >= 0.62; scale -= 0.04) {
-    posterRoot.style.setProperty('--ph-extra-image-scale', scale.toFixed(2));
-    updateTitleUnderline(posterRoot, titleColor);
-    if (!isPosterOverflowing(posterRoot)) return 'ph-cap-tight';
-  }
+  const appGrid  = posterRoot.querySelector('#ph-images-app');
+  const physGrid = posterRoot.querySelector('#ph-images-2');
+  const isApp      = appGrid  && appGrid.style.display  !== 'none';
+  const isPhysical = physGrid && physGrid.style.display !== 'none';
+  const productKey = isApp ? 'app' : isPhysical ? 'physical' : 'website';
+  const minHeight  = IMG_MIN_HEIGHTS[productKey];
 
-  return FIT_CLASSES[FIT_CLASSES.length - 1];
+  const frames = [...posterRoot.querySelectorAll('.ph-img-frame[data-ph-img]')]
+    .filter(f => f.offsetParent !== null);
+  if (!frames.length) return;
+
+  let currentHeight = frames[0].getBoundingClientRect().height || IMG_HEIGHTS[productKey];
+
+  while (isPosterOverflowing(posterRoot) && currentHeight - 12 >= minHeight) {
+    currentHeight -= 12;
+    frames.forEach(frame => { frame.style.height = `${currentHeight}px`; });
+    updateTitleUnderline(posterRoot, titleColor);
+  }
 }
 
 function isPosterOverflowing(posterRoot) {
