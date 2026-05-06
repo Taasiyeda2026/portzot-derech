@@ -1,5 +1,5 @@
 const POSTER_HEIGHT_PX = 1123;
-const FIT_CLASSES = ['ph-fit-1', 'ph-fit-2', 'ph-fit-3'];
+const FIT_CLASSES = ['ph-space-tight', 'ph-imgfit-1', 'ph-imgfit-2', 'ph-imgfit-3', 'ph-pad-tight', 'ph-line-tight', 'ph-text-tight', 'ph-cap-tight'];
 
 export function renderHTMLPoster(contentValues, productType, titleFont, titleColor, textColor, background, slotImages) {
   // Support legacy calls that pass (background, slotImages) after titleColor.
@@ -48,12 +48,8 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
     n.style.fontSize = l <= 6 ? '52px' : l <= 10 ? '44px' : l <= 15 ? '36px' : l <= 18 ? '30px' : '24px';
   }
 
-  // ── Title underline — short fixed decorative bar ────────────────────────────
-  const line = document.getElementById('ph-title-line');
-  if (line) {
-    line.style.background = `linear-gradient(90deg, ${resolvedTitle}, #d61f8c)`;
-    line.style.width = '88px';
-  }
+  // ── Title underline — measured from the rendered title width ───────────────
+  updateTitleUnderline(posterRoot, resolvedTitle);
 
   // ── Text fields ─────────────────────────────────────────────────────────────
   setText('ph-desc',     contentValues.description);
@@ -103,7 +99,6 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
   document.querySelectorAll('.ph-card-accent .ph-body').forEach(el => {
     el.style.color      = resolvedTitle;
     el.style.fontWeight = '400';
-    el.style.fontSize   = '12.5px';
   });
 
   // ── Apply titleColor to .ph-cap and ::before accent line ─────────────────────
@@ -146,24 +141,60 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
     });
   });
 
-  schedulePosterFit(posterRoot);
+  schedulePosterFit(posterRoot, resolvedTitle);
 }
 
-function schedulePosterFit(posterRoot) {
+function schedulePosterFit(posterRoot, titleColor) {
   if (!posterRoot) return;
+  const fit = () => {
+    updateTitleUnderline(posterRoot, titleColor);
+    fitPosterToPage(posterRoot, titleColor);
+  };
+
   requestAnimationFrame(() => {
-    fitPosterToPage(posterRoot);
-    requestAnimationFrame(() => fitPosterToPage(posterRoot));
+    fit();
+    requestAnimationFrame(fit);
   });
+
+  if (document.fonts?.ready) {
+    document.fonts.ready.then(() => {
+      updateTitleUnderline(posterRoot, titleColor);
+      fitPosterToPage(posterRoot, titleColor);
+    });
+  }
 }
 
-function fitPosterToPage(posterRoot) {
-  posterRoot.classList.remove(...FIT_CLASSES);
+function updateTitleUnderline(posterRoot, titleColor) {
+  const root = posterRoot || document;
+  const titleEl = root.querySelector?.('#ph-name') || document.getElementById('ph-name');
+  const line = root.querySelector?.('#ph-title-line') || document.getElementById('ph-title-line');
+  if (!titleEl || !line) return;
 
-  for (const fitClass of ['', ...FIT_CLASSES]) {
+  if (titleColor) line.style.background = `linear-gradient(90deg, ${titleColor}, #d61f8c)`;
+  const header = titleEl.parentElement;
+  const headerWidth = header ? header.getBoundingClientRect().width : 620;
+  const maxWidth = Math.max(120, Math.min(620, headerWidth - 64));
+  const titleWidth = titleEl.getBoundingClientRect().width;
+  line.style.width = `${Math.min(titleWidth, maxWidth)}px`;
+}
+
+function fitPosterToPage(posterRoot, titleColor) {
+  posterRoot.classList.remove(...FIT_CLASSES);
+  posterRoot.style.removeProperty('--ph-extra-image-scale');
+  updateTitleUnderline(posterRoot, titleColor);
+
+  for (let i = 0; i <= FIT_CLASSES.length; i += 1) {
     posterRoot.classList.remove(...FIT_CLASSES);
-    if (fitClass) posterRoot.classList.add(fitClass);
-    if (!isPosterOverflowing(posterRoot)) return fitClass;
+    posterRoot.classList.add(...FIT_CLASSES.slice(0, i));
+    updateTitleUnderline(posterRoot, titleColor);
+    if (!isPosterOverflowing(posterRoot)) return FIT_CLASSES[i - 1] || '';
+  }
+
+  // Final safety pass: keep shrinking image width before any more text reduction.
+  for (let scale = 0.94; scale >= 0.62; scale -= 0.04) {
+    posterRoot.style.setProperty('--ph-extra-image-scale', scale.toFixed(2));
+    updateTitleUnderline(posterRoot, titleColor);
+    if (!isPosterOverflowing(posterRoot)) return 'ph-cap-tight';
   }
 
   return FIT_CLASSES[FIT_CLASSES.length - 1];
@@ -251,6 +282,7 @@ export async function exportHTMLPosterToPDF(contentValues) {
     zIndex:    '-1',
   });
   document.body.appendChild(clone);
+  updateTitleUnderline(clone);
   fitPosterToPage(clone);
 
   // 3. Wait for all <img> to load in clone
@@ -263,8 +295,10 @@ export async function exportHTMLPosterToPDF(contentValues) {
 
   // Layout settle and apply the same safe-fit classes used by the preview
   await new Promise(r => requestAnimationFrame(r));
+  updateTitleUnderline(clone);
   fitPosterToPage(clone);
   await new Promise(r => requestAnimationFrame(r));
+  updateTitleUnderline(clone);
   fitPosterToPage(clone);
 
   try {
