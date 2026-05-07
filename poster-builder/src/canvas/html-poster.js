@@ -182,13 +182,13 @@ function schedulePosterFit(posterRoot, titleColor) {
 function applyPosterCardStyles(posterRoot) {
   const root = posterRoot || document;
   root.querySelectorAll?.('.ph-card').forEach((card) => {
-    card.style.background = 'rgba(255, 255, 255, 0.96)';
+    card.style.background = 'rgba(255, 255, 255, 0.98)';
   });
   root.querySelectorAll?.('.ph-card-accent').forEach((card) => {
-    card.style.background = 'linear-gradient(135deg, rgba(255, 255, 255, 0.97), rgba(248, 238, 255, 0.96))';
+    card.style.background = 'linear-gradient(135deg, rgba(255, 255, 255, 0.99), rgba(250, 244, 255, 0.98))';
   });
   const team = root.querySelector?.('#ph-team') || document.getElementById('ph-team');
-  if (team) team.style.background = 'rgba(255, 255, 255, 0.96)';
+  if (team) team.style.background = 'rgba(255, 255, 255, 0.98)';
 }
 
 function updateTitleUnderline(posterRoot, titleColor) {
