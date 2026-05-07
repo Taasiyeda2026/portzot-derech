@@ -79,6 +79,8 @@
     .bar-btn.back:hover { background: rgba(255,255,255,.25); }
     .bar-btn.export { background: linear-gradient(135deg, #d61f8c, #9b40c0); color: #fff; box-shadow: 0 4px 14px rgba(214,31,140,.4); }
     .bar-btn.export:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(214,31,140,.5); }
+    .bar-btn.finish { background: linear-gradient(135deg, #1a5c3a, #27ae60); color: #fff; box-shadow: 0 4px 14px rgba(26,92,58,.35); white-space: nowrap; }
+    .bar-btn.finish:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(26,92,58,.45); }
     .bar-btn:disabled { opacity: .5; cursor: not-allowed; transform: none !important; }
 
     /* ===== עטיפת הפוסטר ===== */
@@ -216,6 +218,7 @@
   <div class="poster-bar-actions">
     <button class="bar-btn back" id="btn-back">‹ חזרה</button>
     <button class="bar-btn export" id="btn-export">ייצוא PDF</button>
+    <button class="bar-btn finish" id="btn-finish">סיום ›</button>
   </div>
 </div>
 
@@ -377,6 +380,10 @@
   document.getElementById('btn-back').addEventListener('click', () => {
     const map = { physical: './physical.html', website: './website.html', app: './app.html', digital: './digital.html' };
     window.location.href = map[productType] || './website.html';
+  });
+
+  document.getElementById('btn-finish').addEventListener('click', () => {
+    window.location.href = '../index.html';
   });
 
   document.getElementById('btn-export').addEventListener('click', async () => {
