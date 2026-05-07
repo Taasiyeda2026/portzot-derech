@@ -18,7 +18,8 @@ const SHAPES = [
 ];
 
 const STEP_LABELS = ['סוג מוצר', 'עיצוב', 'תוכן', 'יצירה', 'סיום'];
-const PRESET_COLORS = ['#5E2750','#1a3a6b','#1a5c3a','#7a1a1a','#b5520a','#1a4a5c','#2d2d2d'];
+const PRESET_COLORS      = ['#5E2750','#1a3a6b','#1a5c3a','#7a1a1a','#b5520a','#1a4a5c','#2d2d2d'];
+const TEXT_PRESET_COLORS = ['#1f1030','#000000','#1a1a2e','#1a3a1a','#2e1a00','#2a2a2a','#3a1a3a'];
 
 export function StepIndicator({ current }) {
   return h('div', { className: 'wz-indicator' },
@@ -134,12 +135,13 @@ export function WizardStep1({
 }
 
 export function WizardStep2({
-  currentBackground, currentShape, titleFont, titleColor,
-  onBackground, onShape, onTitleFont, onTitleColor, onNext, onBack
+  currentBackground, currentShape, titleFont, titleColor, textColor,
+  onBackground, onShape, onTitleFont, onTitleColor, onTextColor, onNext, onBack
 }) {
   const { useState: useLocalState } = React;
-  const bgImages      = BACKGROUNDS.filter(bg => bg.path);
-  const isCustomColor = !PRESET_COLORS.includes(titleColor);
+  const bgImages          = BACKGROUNDS.filter(bg => bg.path);
+  const isCustomColor     = !PRESET_COLORS.includes(titleColor);
+  const isCustomTextColor = textColor && !TEXT_PRESET_COLORS.includes(textColor);
   const [showBgModal, setShowBgModal] = useLocalState(false);
   const [previewIdx,  setPreviewIdx]  = useLocalState(0);
 
@@ -249,6 +251,35 @@ export function WizardStep2({
                 className: 'wz-color-input-hidden',
                 value: titleColor,
                 onChange: e => onTitleColor(e.target.value)
+              })
+            )
+          )
+        )
+      ),
+
+      h('div', { className: 'wz-section' },
+        h('h3', { className: 'wz-section-title' }, 'צבע טקסט'),
+        h('div', { className: 'wz-colors-grid' },
+          h('div', { className: 'wz-colors-row' },
+            TEXT_PRESET_COLORS.map(color =>
+              h('button', {
+                key: color,
+                className: `wz-color-swatch ${textColor === color ? 'active' : ''}`,
+                style: { background: color },
+                title: color,
+                onClick: () => onTextColor(color)
+              })
+            ),
+            h('label', { className: 'wz-color-custom-wrap', title: 'צבע מותאם אישית' },
+              h('div', {
+                className: `wz-color-swatch wz-color-swatch-custom ${isCustomTextColor ? 'active' : ''}`,
+                style: { background: isCustomTextColor ? textColor : 'conic-gradient(red,yellow,lime,aqua,blue,magenta,red)' }
+              }),
+              h('input', {
+                type: 'color',
+                className: 'wz-color-input-hidden',
+                value: textColor || '#1f1030',
+                onChange: e => onTextColor(e.target.value)
               })
             )
           )
