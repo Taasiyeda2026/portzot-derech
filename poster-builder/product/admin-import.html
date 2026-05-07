@@ -458,7 +458,7 @@ function parseJSON(text) {
 // ── Project builder ───────────────────────────────────────────────────────────
 function buildProject(raw, lineNum) {
   const content = {};
-  let productType = DEFAULT_PRODUCT;
+  let productType = null;
   let projectId = null;
 
   for (const [col, val] of Object.entries(raw)) {
@@ -466,7 +466,6 @@ function buildProject(raw, lineNum) {
     if (!mapped || !val) continue;
 
     if (mapped === '_students') {
-      // split by · or , into student1/2/3
       const parts = val.split(/[·,،]/).map(s => s.trim()).filter(Boolean);
       ['student1', 'student2', 'student3'].forEach((k, i) => {
         if (parts[i]) content[k] = parts[i];
@@ -486,6 +485,7 @@ function buildProject(raw, lineNum) {
   }
 
   const missingRequired = REQUIRED_FIELDS.filter(k => !content[k]);
+  if (!productType) missingRequired.push('סוג מוצר');
   const filledCount = Object.values(content).filter(v => v).length;
 
   return {
@@ -494,7 +494,7 @@ function buildProject(raw, lineNum) {
     _missing: missingRequired,
     _filled:  filledCount,
     _id:      projectId || ('import-' + Date.now() + '-' + lineNum),
-    productType,
+    productType: productType || DEFAULT_PRODUCT,
     contentValues: content,
   };
 }
