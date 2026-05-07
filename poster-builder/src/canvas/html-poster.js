@@ -326,7 +326,15 @@ export async function exportHTMLPosterToPDF() {
     throw new Error('window.print is not available');
   }
 
+  const originalTitle = document.title;
+  const projectName   = document.getElementById('ph-name')?.textContent?.trim() || 'פוסטר';
+  const safeTitle     = projectName.replace(/[\\/:*?"<>|]/g, '').replace(/\s+/g, '-');
+  document.title = safeTitle;
+
   window.print();
 
-  setTimeout(() => document.body.classList.remove('printing-poster'), 1000);
+  setTimeout(() => {
+    document.title = originalTitle;
+    document.body.classList.remove('printing-poster');
+  }, 1000);
 }
