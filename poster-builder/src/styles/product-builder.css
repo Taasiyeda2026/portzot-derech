@@ -2103,20 +2103,20 @@ canvas {
 
 /* ===== כרטיסיות פוסטר HTML (step 4) ===== */
 .ph-card {
-  background: rgba(255, 255, 255, .96);
+  background: rgba(255, 255, 255, .98);
   border: 1px solid rgba(94,39,80,.14);
   border-radius: 10px;
   padding: 10px 12px;
 }
 .ph-card-accent {
-  background: linear-gradient(135deg, rgba(255, 255, 255, .97), rgba(248, 238, 255, .96));
+  background: linear-gradient(135deg, rgba(255, 255, 255, .99), rgba(250, 244, 255, .98));
   border: 1.5px solid rgba(94,39,80,.28);
   border-right: 3.5px solid var(--ph-title-color, #5E2750);
 }
 .ph-cap {
-  font-size: 10.5px; font-weight: 900; color: var(--ph-title-color, #5E2750);
+  font-size: 12.5px; font-weight: 900; color: var(--ph-title-color, #5E2750);
   text-transform: uppercase; letter-spacing: 1px;
-  margin-bottom: 6px; display: flex; align-items: center; gap: 5px;
+  margin-bottom: 8px; display: flex; align-items: center; gap: 5px;
 }
 .ph-cap::before {
   content: ''; display: inline-block;
