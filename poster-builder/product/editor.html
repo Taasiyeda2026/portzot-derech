@@ -172,6 +172,38 @@
     @media (max-width: 860px) {
       .poster-page { padding: 16px 0 40px; overflow-x: auto; }
     }
+
+    /* ===== הדפסה ===== */
+    @page { size: A4 portrait; margin: 0; }
+    @media print {
+      html, body {
+        width: 210mm; height: 297mm;
+        margin: 0; padding: 0;
+        background: white !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      body * { visibility: hidden !important; }
+      #poster-html, #poster-html * { visibility: visible !important; }
+      #poster-html {
+        position: fixed !important;
+        inset: 0 !important;
+        width: 210mm !important;
+        height: 297mm !important;
+        min-height: 297mm !important;
+        max-height: 297mm !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+        transform: none !important;
+        overflow: visible !important;
+      }
+      .poster-scale-wrapper, .poster-scale-inner {
+        width: 210mm !important;
+        height: 297mm !important;
+        transform: none !important;
+      }
+      .poster-bar { display: none !important; }
+    }
   </style>
 </head>
 <body>
@@ -205,11 +237,10 @@
           </div>
           <div id="ph-name" style="font-weight:900;line-height:1.1;margin-bottom:8px;word-break:break-word;overflow-wrap:anywhere"></div>
           <div id="ph-title-line" style="height:3px;background:linear-gradient(90deg,#5E2750,#d61f8c);border-radius:2px;margin:0 auto 10px;transition:width .2s ease"></div>
-          <div id="ph-desc" style="font-size:13.5px;color:#5a3a5a;max-width:480px;margin:0 auto;line-height:1.65"></div>
+          <div id="ph-desc" style="font-size:15.5px;font-weight:700;max-width:480px;margin:0 auto;line-height:1.65"></div>
           <div id="ph-team" style="background:rgba(255,255,255,.96);border:1px solid rgba(94,39,80,.2);border-radius:10px;padding:7px 14px;width:fit-content;max-width:390px;margin:10px auto 0">
-            <div style="font-size:8px;font-weight:700;color:#5E2750;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">הצוות שלנו</div>
-            <div id="ph-names" style="font-size:10px;font-weight:400;color:#2a1a3a;line-height:1.65"></div>
-            <div id="ph-school" style="font-size:9px;font-weight:400;color:#8a7aa0;line-height:1.45;margin-top:3px"></div>
+            <div id="ph-names" style="font-size:10px;font-weight:400;line-height:1.65"></div>
+            <div id="ph-school" style="font-size:9px;font-weight:400;line-height:1.45;margin-top:2px"></div>
           </div>
         </div>
 
@@ -341,7 +372,7 @@
     btn.disabled = true;
     btn.textContent = 'מייצא...';
     try {
-      await exportHTMLPosterToPDF(contentValues);
+      await exportHTMLPosterToPDF();
     } catch (err) {
       console.error('PDF export failed:', err);
       alert('שגיאה בייצוא — נסי שנית');

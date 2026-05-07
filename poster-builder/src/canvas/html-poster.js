@@ -95,8 +95,17 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
     el.style.fontWeight = '400';
   });
   document.querySelectorAll('#ph-names, #ph-school').forEach(el => {
+    el.style.color = resolvedText;
     el.style.fontWeight = '400';
   });
+
+  // ── ph-desc: larger, bold, themed ───────────────────────────────────────────
+  const descEl = document.getElementById('ph-desc');
+  if (descEl) {
+    descEl.style.color      = resolvedText;
+    descEl.style.fontWeight = '700';
+    descEl.style.fontSize   = '15px';
+  }
 
   // ── Accent card bodies → title color with regular answer weight ──────────────
   document.querySelectorAll('.ph-card-accent .ph-body').forEach(el => {
@@ -104,10 +113,12 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
     el.style.fontWeight = '400';
   });
 
-  // ── Apply titleColor to .ph-cap and ::before accent line ─────────────────────
+  // ── Apply titleColor to .ph-cap, ph-images-label ────────────────────────────
   document.querySelectorAll('.ph-cap').forEach(el => {
     el.style.color = resolvedTitle;
   });
+  const imagesLabel = document.getElementById('ph-images-label');
+  if (imagesLabel) imagesLabel.style.color = resolvedTitle;
 
   // ── Footer background based on titleColor ────────────────────────────────────
   const footer = document.getElementById('ph-footer');
@@ -279,82 +290,25 @@ function _shiftHue(hex, deg) {
   } catch { return hex; }
 }
 
-export async function exportHTMLPosterToPDF(contentValues) {
-  const original = document.getElementById('poster-html');
-  if (!original) return;
+export async function exportHTMLPosterToPDF() {
+  const poster = document.getElementById('poster-html');
+  if (!poster) return;
 
-  // 1. Wait for all fonts declared in @font-face to finish loading
-  await document.fonts.ready;
+  if (document.fonts?.ready) await document.fonts.ready;
 
-  // 2. Force-load the selected font at the weights used in the poster
-  //    (needed because @font-face with font-display:block may not have been
-  //    triggered yet if the font wasn't rendered on-screen at those weights)
-  const selectedFont = original.style.fontFamily || "'IBM Plex Sans Hebrew'";
-  const fontLoadPromises = [];
-  for (const weight of ['400', '700', '900']) {
-    fontLoadPromises.push(
-      document.fonts.load(`${weight} 16px ${selectedFont}`).catch(() => {})
-    );
-  }
-  await Promise.all(fontLoadPromises);
-  // One more check after explicit loads
-  await document.fonts.ready;
-
-  // 3. Offscreen clone — exact 794×1123, no scale transform, no shadow
-  const clone = original.cloneNode(true);
-  Object.assign(clone.style, {
-    position:  'fixed',
-    left:      '-9999px',
-    top:       '0',
-    width:     '794px',
-    height:    '1123px',
-    minHeight: '1123px',
-    maxHeight: '1123px',
-    overflow:  'visible',
-    boxShadow: 'none',
-    transform: 'none',
-    zIndex:    '-1',
-  });
-  document.body.appendChild(clone);
-  applyPosterCardStyles(clone);
-  updateTitleUnderline(clone);
-  fitPosterToPage(clone);
-
-  // 3. Wait for all <img> to load in clone
   await Promise.all(
-    [...clone.querySelectorAll('img')].map(img =>
+    [...poster.querySelectorAll('img')].map(img =>
       img.complete ? Promise.resolve()
-        : new Promise(res => { img.onload = res; img.onerror = res; })
+        : new Promise(resolve => { img.onload = resolve; img.onerror = resolve; })
     )
   );
 
-  // Layout settle and apply the same image-only fit used by the preview
-  await new Promise(r => requestAnimationFrame(r));
-  updateTitleUnderline(clone);
-  fitPosterToPage(clone);
-  await new Promise(r => requestAnimationFrame(r));
-  updateTitleUnderline(clone);
-  fitPosterToPage(clone);
+  updateTitleUnderline(poster);
+  fitPosterToPage(poster);
+  await new Promise(resolve => requestAnimationFrame(resolve));
 
-  try {
-    const canvas = await html2canvas(clone, {
-      scale:           2,
-      useCORS:         true,
-      allowTaint:      false,
-      backgroundColor: '#ffffff',
-      logging:         false,
-      width:           794,
-      height:          1123,
-      windowWidth:     794,
-      windowHeight:    1123,
-    });
+  document.body.classList.add('printing-poster');
+  window.print();
 
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-    pdf.addImage(canvas.toDataURL('image/jpeg', 0.96), 'JPEG', 0, 0, 210, 297);
-    const filename = (contentValues.projectName || 'פוסטר').trim().replace(/\s+/g, '-');
-    pdf.save(`${filename}.pdf`);
-  } finally {
-    document.body.removeChild(clone);
-  }
+  setTimeout(() => document.body.classList.remove('printing-poster'), 500);
 }

@@ -2224,3 +2224,35 @@ canvas {
 #poster-html.ph-cap-tight .ph-card-accent .ph-body { font-size: 10.6px; }
 #poster-html.ph-cap-tight .ph-bullets li { font-size: 10.5px; line-height: 1.24; }
 #poster-html.ph-cap-tight #ph-footer { padding-top: 6px !important; padding-bottom: 6px !important; }
+
+/* ─── הדפסה — window.print() → PDF ──────────────────────── */
+@page { size: A4 portrait; margin: 0; }
+@media print {
+  html, body {
+    width: 210mm; height: 297mm;
+    margin: 0; padding: 0;
+    background: white !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  body * { visibility: hidden !important; }
+  #poster-html, #poster-html * { visibility: visible !important; }
+  #poster-html {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    min-height: 297mm !important;
+    max-height: 297mm !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    transform: none !important;
+    overflow: visible !important;
+  }
+  .poster-scale-wrapper, .poster-scale-inner {
+    width: 210mm !important;
+    height: 297mm !important;
+    transform: none !important;
+  }
+  .step4-bar, .wz-overlay, .html-poster-area > *:not(#poster-html) { display: none !important; }
+}
