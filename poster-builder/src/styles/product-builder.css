@@ -2114,7 +2114,7 @@ canvas {
   border-right: 3.5px solid var(--ph-title-color, #5E2750);
 }
 .ph-cap {
-  font-size: 12.5px; font-weight: 900; color: var(--ph-title-color, #5E2750);
+  font-size: 13.5px; font-weight: 900; color: var(--ph-title-color, #5E2750);
   text-transform: uppercase; letter-spacing: 1px;
   margin-bottom: 8px; display: flex; align-items: center; gap: 5px;
 }

@@ -70,7 +70,7 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
     ['student1', 'student2', 'student3']
       .map(k => (contentValues[k] || '').trim()).filter(Boolean).join(' · ') || '—');
   setText('ph-school',
-    [contentValues.schoolName, contentValues.className].filter(Boolean).join(' | '));
+    [contentValues.className, contentValues.schoolName].filter(Boolean).join(' | '));
 
   setList('ph-research', [contentValues.research_1, contentValues.research_2, contentValues.research_3]);
   setList('ph-reqs',     [contentValues.requirements_1, contentValues.requirements_2, contentValues.requirements_3]);
@@ -84,38 +84,50 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
   setText('ph-images-label',
     { physical: 'המוצר שלנו', app: 'מסכי האפליקציה', website: 'מסכי האתר', digital: 'מוצר דיגיטלי' }[productType] || '');
 
-  // ── Apply textColor to regular body / bullet elements ────────────────────────
+  const resolvedFontStack = `'${resolvedFont}', 'IBM Plex Sans Hebrew', sans-serif`;
+
+  // ── Apply textColor + font to regular body / bullet elements ─────────────────
   document.querySelectorAll('.ph-body, .ph-sub').forEach(el => {
     if (el.closest('.ph-card-accent')) return; // accent cards handled below
-    el.style.color = resolvedText;
+    el.style.color      = resolvedText;
     el.style.fontWeight = '400';
+    el.style.fontFamily = resolvedFontStack;
   });
   document.querySelectorAll('.ph-bullets li').forEach(el => {
-    el.style.color = resolvedText;
+    el.style.color      = resolvedText;
     el.style.fontWeight = '400';
+    el.style.fontFamily = resolvedFontStack;
   });
   document.querySelectorAll('#ph-names, #ph-school').forEach(el => {
-    el.style.color = resolvedText;
+    el.style.color      = resolvedText;
     el.style.fontWeight = '400';
+    el.style.fontFamily = resolvedFontStack;
   });
 
-  // ── ph-desc: larger, bold, themed ───────────────────────────────────────────
+  // ── ph-desc: larger, bold, themed, subtle background ────────────────────────
   const descEl = document.getElementById('ph-desc');
   if (descEl) {
-    descEl.style.color      = resolvedText;
-    descEl.style.fontWeight = '700';
-    descEl.style.fontSize   = '15px';
+    descEl.style.color        = resolvedText;
+    descEl.style.fontWeight   = '700';
+    descEl.style.fontSize     = '15px';
+    descEl.style.fontFamily   = resolvedFontStack;
+    descEl.style.background   = 'rgba(255,255,255,0.72)';
+    descEl.style.padding      = '6px 12px';
+    descEl.style.borderRadius = '10px';
+    descEl.style.display      = 'inline-block';
   }
 
   // ── Accent card bodies → title color with regular answer weight ──────────────
   document.querySelectorAll('.ph-card-accent .ph-body').forEach(el => {
     el.style.color      = resolvedTitle;
     el.style.fontWeight = '400';
+    el.style.fontFamily = resolvedFontStack;
   });
 
-  // ── Apply titleColor to .ph-cap, ph-images-label ────────────────────────────
+  // ── Apply titleColor + font to .ph-cap, ph-images-label ─────────────────────
   document.querySelectorAll('.ph-cap').forEach(el => {
-    el.style.color = resolvedTitle;
+    el.style.color      = resolvedTitle;
+    el.style.fontFamily = resolvedFontStack;
   });
   const imagesLabel = document.getElementById('ph-images-label');
   if (imagesLabel) imagesLabel.style.color = resolvedTitle;
