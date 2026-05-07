@@ -615,11 +615,11 @@ function loadProject(id) {
     'slogan'
   ];
   const emptyContent = Object.fromEntries(allKeys.map(k => [k, '']));
-  const mergedContent = { ...emptyContent, ...(existing.contentValues || {}), ...p.contentValues };
+  // Replace all content fields with imported data — do NOT merge with old poster
+  const mergedContent = { ...emptyContent, ...p.contentValues };
 
   const projectData = {
-    ...(existing || {}),
-    productType: p.productType || existing.productType || DEFAULT_PRODUCT,
+    productType: p.productType || DEFAULT_PRODUCT,
     contentValues: mergedContent,
     updatedAt: Date.now(),
   };
