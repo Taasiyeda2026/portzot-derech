@@ -602,25 +602,52 @@ function loadProject(id) {
   const p = projects.find(pr => pr._id === id);
   if (!p) return;
 
-  const existing = {};
-  try { Object.assign(existing, JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}')); } catch {}
+  const cv = p.contentValues || {};
+  const resolvedType = p.productType || DEFAULT_PRODUCT;
+  const posterStep = resolvedType === 'physical' ? 3 : 4;
 
-  const allKeys = [
-    'projectName','description','problem','audience','researchQuestion',
-    'research_1','research_2','research_3','findings',
-    'requirements_1','requirements_2','requirements_3',
-    'solution','howItWorks_1','howItWorks_2','howItWorks_3',
-    'value','feedbackReceived','improvementsAfterFeedback',
-    'student1','student2','student3','className','schoolName',
-    'slogan'
-  ];
-  const emptyContent = Object.fromEntries(allKeys.map(k => [k, '']));
-  // Replace all content fields with imported data — do NOT merge with old poster
-  const mergedContent = { ...emptyContent, ...p.contentValues };
+  // Build the research object that split-flow/main.js reads from splitFlowState.research
+  const studentNames = [cv.student1, cv.student2, cv.student3].filter(Boolean).join(', ');
+  const research = {
+    projectName: cv.projectName || '',
+    description: cv.description || '',
+    problem: cv.problem || '',
+    audience: cv.audience || '',
+    researchQuestion: cv.researchQuestion || '',
+    research_1: cv.research_1 || '',
+    research_2: cv.research_2 || '',
+    research_3: cv.research_3 || '',
+    findings: cv.findings || '',
+    requirements_1: cv.requirements_1 || '',
+    requirements_2: cv.requirements_2 || '',
+    requirements_3: cv.requirements_3 || '',
+    solution: cv.solution || '',
+    howItWorks_1: cv.howItWorks_1 || '',
+    howItWorks_2: cv.howItWorks_2 || '',
+    howItWorks_3: cv.howItWorks_3 || '',
+    value: cv.value || '',
+    feedbackReceived: cv.feedbackReceived || '',
+    improvementsAfterFeedback: cv.improvementsAfterFeedback || '',
+    slogan: cv.slogan || '',
+    studentNames,
+    className: cv.className || '',
+    schoolName: cv.schoolName || '',
+  };
 
   const projectData = {
-    productType: p.productType || DEFAULT_PRODUCT,
-    contentValues: mergedContent,
+    productType: resolvedType,
+    contentValues: { ...research, student1: cv.student1 || '', student2: cv.student2 || '', student3: cv.student3 || '' },
+    splitFlowState: {
+      productType: resolvedType,
+      step: posterStep,
+      research,
+      design: {},
+      sharedVisualPrompt: { main: { style: '', colors: '', avoid: [], avoidOther: '' } },
+      physicalPrompt: { main: {}, usage: {} },
+      prototypeScreens: [],
+      prototypeFlow: {},
+      images: [],
+    },
     updatedAt: Date.now(),
   };
 
