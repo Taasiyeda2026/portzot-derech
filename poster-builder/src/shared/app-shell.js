@@ -78,7 +78,18 @@ function App() {
   const onContentFieldChange = (key, rawValue) => setContentValues({ ...contentValuesRef.current, [key]: rawValue });
   const onSlotUpload = (slotKey, file) => { if (!file) return; const r = new FileReader(); r.onload = (e)=>{ const dataUrl=e.target.result; const nextSlots={...slotImagesRef.current,[slotKey]:dataUrl}; slotImagesRef.current=nextSlots; setSlotImages(nextSlots); saveProject({ ...loadProject(), slotImages: nextSlots }); if (wizardStep===4) renderHTMLPoster(contentValuesRef.current, productTypeRef.current, titleFont, titleColor, textColorRef.current, currentBackgroundRef.current, nextSlots); }; r.readAsDataURL(file); };
   const onSlotClear = (slotKey) => { const nextSlots={...slotImagesRef.current,[slotKey]:null}; slotImagesRef.current=nextSlots; setSlotImages(nextSlots); saveProject({ ...loadProject(), slotImages: nextSlots }); if (wizardStep===4) renderHTMLPoster(contentValuesRef.current, productTypeRef.current, titleFont, titleColor, textColorRef.current, currentBackgroundRef.current, nextSlots); };
-  const handleExportPdf = () => exportHTMLPosterToPDF();
+  const handleExportPdf = () => {
+    saveProject({
+      posterSize,
+      productType: productTypeRef.current,
+      background: currentBackgroundRef.current,
+      contentValues: contentValuesRef.current,
+      fieldSettings: fieldSettingsRef.current,
+      titleStyle: { fontFamily: titleFont, color: titleColor, textColor: textColorRef.current },
+      slotImages: slotImagesRef.current
+    });
+    window.open(`/poster-builder/product/editor.html?type=${productTypeRef.current}&print=1`, '_blank', 'noopener,noreferrer');
+  };
 
   const goToStep = (step) => {
     const nextStep = PRESELECTED_PRODUCT_TYPE === 'physical' && step === 1 ? 2 : step;

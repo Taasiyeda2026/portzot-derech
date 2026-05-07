@@ -308,7 +308,13 @@ export async function exportHTMLPosterToPDF() {
   await new Promise(resolve => requestAnimationFrame(resolve));
 
   document.body.classList.add('printing-poster');
+
+  if (typeof window.print !== 'function') {
+    document.body.classList.remove('printing-poster');
+    throw new Error('window.print is not available');
+  }
+
   window.print();
 
-  setTimeout(() => document.body.classList.remove('printing-poster'), 500);
+  setTimeout(() => document.body.classList.remove('printing-poster'), 1000);
 }
