@@ -124,7 +124,7 @@
       font-size: 12.5px;
     }
     .ph-cap {
-      font-size: 12.5px; font-weight: 900; color: var(--ph-title-color, #5E2750);
+      font-size: 13.5px; font-weight: 900; color: var(--ph-title-color, #5E2750);
       text-transform: uppercase; letter-spacing: 1px;
       margin-bottom: 8px; display: flex; align-items: center; gap: 5px;
     }
@@ -233,11 +233,11 @@
         <div style="padding:20px 32px 14px;text-align:center;position:relative;flex-shrink:0">
           <div style="position:absolute;top:12px;left:22px">
             <img src="/poster-builder/assets/logoposter.svg" alt="פורצות דרך" crossorigin="anonymous"
-              style="height:78px;width:auto;object-fit:contain;filter:drop-shadow(0 0 4px rgba(255,255,255,0.95)) drop-shadow(0 0 10px rgba(255,255,255,0.75))" />
+              style="height:84px;width:auto;object-fit:contain;filter:drop-shadow(0 0 4px rgba(255,255,255,0.95)) drop-shadow(0 0 10px rgba(255,255,255,0.75))" />
           </div>
           <div id="ph-name" style="font-weight:900;line-height:1.1;margin-bottom:8px;word-break:break-word;overflow-wrap:anywhere"></div>
           <div id="ph-title-line" style="height:3px;background:linear-gradient(90deg,#5E2750,#d61f8c);border-radius:2px;margin:0 auto 10px;transition:width .2s ease"></div>
-          <div id="ph-desc" style="font-size:15.5px;font-weight:700;max-width:480px;margin:0 auto;line-height:1.65"></div>
+          <div id="ph-desc" style="font-size:15.5px;font-weight:700;max-width:480px;margin:0 auto;line-height:1.65;display:inline-block;background:rgba(255,255,255,0.72);padding:6px 12px;border-radius:10px"></div>
           <div id="ph-team" style="background:rgba(255,255,255,.96);border:1px solid rgba(94,39,80,.2);border-radius:10px;padding:7px 14px;width:fit-content;max-width:390px;margin:10px auto 0">
             <div id="ph-names" style="font-size:10px;font-weight:400;line-height:1.65"></div>
             <div id="ph-school" style="font-size:9px;font-weight:400;line-height:1.45;margin-top:2px"></div>
@@ -362,7 +362,8 @@
 
   renderHTMLPoster(contentValues, productType, titleFont, titleColor, textColor, background, slotImages);
 
-  if (params.get('print') === '1') {
+  if (params.get('print') === '1' && !window.__posterAutoPrintTriggered) {
+    window.__posterAutoPrintTriggered = true;
     setTimeout(async () => {
       try {
         await exportHTMLPosterToPDF();
