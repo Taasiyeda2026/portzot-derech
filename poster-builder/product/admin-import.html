@@ -1,0 +1,673 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ייבוא תשובות פוסטר | אדמין</title>
+  <link rel="icon" type="image/png" href="../../icon/favicon.png" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      background: #f3f0fa; color: #1f1030;
+      direction: rtl; min-height: 100vh;
+    }
+
+    /* ── Top bar ── */
+    .admin-bar {
+      background: linear-gradient(135deg, #4a1f40, #5E2750);
+      padding: 12px 28px; display: flex; align-items: center; gap: 14px;
+      box-shadow: 0 4px 16px rgba(94,39,80,.35);
+    }
+    .admin-bar h1 { color: #fff; font-size: 17px; font-weight: 700; }
+    .admin-bar .tag {
+      background: rgba(255,255,255,.18); color: rgba(255,255,255,.9);
+      border: 1px solid rgba(255,255,255,.3); border-radius: 6px;
+      font-size: 11px; padding: 3px 10px; font-weight: 600;
+    }
+
+    /* ── Gate ── */
+    #gate {
+      display: flex; align-items: center; justify-content: center;
+      min-height: calc(100vh - 56px);
+    }
+    .gate-box {
+      background: #fff; border-radius: 16px; padding: 40px 44px;
+      box-shadow: 0 8px 32px rgba(94,39,80,.14); text-align: center; width: 340px;
+    }
+    .gate-box h2 { color: #5E2750; font-size: 20px; margin-bottom: 8px; }
+    .gate-box p  { color: #8a7aa0; font-size: 13px; margin-bottom: 24px; }
+    .gate-input {
+      width: 100%; padding: 10px 14px; border: 1.5px solid #d0b0c8;
+      border-radius: 10px; font-size: 15px; text-align: center;
+      outline: none; margin-bottom: 14px; direction: ltr;
+    }
+    .gate-input:focus { border-color: #5E2750; }
+    .gate-btn {
+      width: 100%; padding: 11px; background: linear-gradient(135deg,#5E2750,#9b40c0);
+      color: #fff; border: none; border-radius: 10px; font-size: 15px;
+      font-weight: 700; cursor: pointer;
+    }
+    .gate-btn:hover { opacity: .9; }
+    .gate-error { color: #c0392b; font-size: 13px; margin-top: 10px; }
+
+    /* ── Admin panel ── */
+    #admin-panel { display: none; max-width: 1100px; margin: 32px auto; padding: 0 20px 60px; }
+
+    .section {
+      background: #fff; border-radius: 14px; padding: 28px 32px; margin-bottom: 24px;
+      box-shadow: 0 4px 18px rgba(94,39,80,.08);
+    }
+    .section h2 { color: #5E2750; font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+    .section p  { color: #8a7aa0; font-size: 13px; margin-bottom: 20px; }
+
+    /* ── Upload area ── */
+    .upload-area {
+      border: 2.5px dashed #d0b0c8; border-radius: 12px; padding: 36px;
+      text-align: center; cursor: pointer; transition: .18s;
+    }
+    .upload-area:hover, .upload-area.drag-over { border-color: #5E2750; background: #fdf8ff; }
+    .upload-area svg { width: 40px; height: 40px; color: #c8a8d8; margin-bottom: 10px; }
+    .upload-area p { color: #8a7aa0; font-size: 14px; }
+    .upload-area strong { color: #5E2750; }
+    #file-input { display: none; }
+
+    .format-btns { display: flex; gap: 10px; margin-bottom: 18px; }
+    .format-btn {
+      padding: 7px 18px; border-radius: 8px; border: 1.5px solid #d0b0c8;
+      background: #fff; color: #5E2750; font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: .15s;
+    }
+    .format-btn.active { background: #5E2750; color: #fff; border-color: #5E2750; }
+
+    /* ── Template download ── */
+    .template-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      color: #9b40c0; font-size: 13px; font-weight: 600; cursor: pointer;
+      text-decoration: underline; margin-top: 12px;
+    }
+
+    /* ── Stats bar ── */
+    .stats { display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+    .stat-chip {
+      background: #f3f0fa; border-radius: 8px; padding: 8px 16px;
+      font-size: 13px; font-weight: 600; color: #5E2750;
+    }
+    .stat-chip.warn { background: #fff3cd; color: #8a6d00; }
+    .stat-chip.ok   { background: #d4edda; color: #155724; }
+
+    /* ── Preview table ── */
+    .table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid #e8dff0; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    thead th {
+      background: #5E2750; color: #fff; padding: 9px 10px;
+      text-align: right; font-weight: 700; white-space: nowrap;
+    }
+    tbody tr:nth-child(even) { background: #fdf8ff; }
+    tbody tr:hover { background: #f3e8fc; }
+    tbody td {
+      padding: 7px 10px; border-bottom: 1px solid #f0e8f4;
+      max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+      vertical-align: top;
+    }
+    .row-num { color: #b0a0c0; font-size: 11px; }
+    .row-invalid { background: #fff5f5 !important; }
+    .row-invalid td { color: #c0392b; }
+    .missing { color: #e67e22; font-size: 11px; }
+
+    /* ── Action row ── */
+    .action-row { display: flex; gap: 12px; align-items: center; margin-top: 24px; flex-wrap: wrap; }
+    .btn-primary {
+      padding: 11px 26px; background: linear-gradient(135deg,#5E2750,#9b40c0);
+      color: #fff; border: none; border-radius: 10px; font-size: 15px;
+      font-weight: 700; cursor: pointer; transition: .15s;
+    }
+    .btn-primary:hover { opacity: .88; }
+    .btn-primary:disabled { opacity: .45; cursor: not-allowed; }
+    .btn-ghost {
+      padding: 10px 22px; background: #fff; color: #5E2750;
+      border: 1.5px solid #d0b0c8; border-radius: 10px; font-size: 14px;
+      font-weight: 600; cursor: pointer;
+    }
+    .btn-ghost:hover { background: #fdf8ff; }
+    .notice { font-size: 13px; color: #8a7aa0; }
+
+    /* ── Project list (saved imports) ── */
+    .project-list { display: flex; flex-direction: column; gap: 10px; }
+    .project-row {
+      display: flex; align-items: center; gap: 12px; padding: 12px 16px;
+      border: 1px solid #e8dff0; border-radius: 10px; background: #fdf8ff;
+    }
+    .project-row .name { flex: 1; font-weight: 600; font-size: 14px; color: #3a1a3a; }
+    .project-row .meta { font-size: 12px; color: #8a7aa0; }
+    .btn-load {
+      padding: 7px 18px; background: #1a5c3a; color: #fff;
+      border: none; border-radius: 8px; font-size: 13px; font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-load:hover { background: #145030; }
+    .btn-del {
+      padding: 6px 12px; background: #fff; color: #c0392b;
+      border: 1.5px solid #e8b0b0; border-radius: 8px; font-size: 12px; cursor: pointer;
+    }
+    .empty-state { color: #b0a0c0; font-size: 14px; text-align: center; padding: 24px 0; }
+
+    /* ── Toast ── */
+    #toast {
+      position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px);
+      background: #1a5c3a; color: #fff; padding: 12px 28px; border-radius: 12px;
+      font-size: 14px; font-weight: 600; opacity: 0; transition: .3s; z-index: 999;
+    }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  </style>
+</head>
+<body>
+
+<div class="admin-bar">
+  <h1>ייבוא תשובות פוסטר</h1>
+  <span class="tag">אדמין בלבד</span>
+</div>
+
+<!-- ── Password gate ── -->
+<div id="gate">
+  <div class="gate-box">
+    <h2>🔐 כניסת אדמין</h2>
+    <p>הזיני את סיסמת האדמין כדי להמשיך</p>
+    <input id="pwd-input" class="gate-input" type="password" placeholder="סיסמה" />
+    <button class="gate-btn" onclick="checkPassword()">כניסה</button>
+    <p id="gate-error" class="gate-error" style="display:none">סיסמה שגויה. נסי שנית.</p>
+  </div>
+</div>
+
+<!-- ── Admin panel ── -->
+<div id="admin-panel">
+
+  <!-- ── Upload section ── -->
+  <div class="section" id="upload-section">
+    <h2>1. העלאת קובץ</h2>
+    <p>העלי קובץ CSV או JSON עם תשובות הפוסטר. כל שורה = פרויקט אחד.</p>
+
+    <div class="format-btns">
+      <button class="format-btn active" id="btn-csv" onclick="setFormat('csv')">CSV</button>
+      <button class="format-btn" id="btn-json" onclick="setFormat('json')">JSON</button>
+    </div>
+
+    <div class="upload-area" id="upload-area"
+         onclick="document.getElementById('file-input').click()"
+         ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+      </svg>
+      <p><strong>לחצי כאן</strong> או גרור קובץ לכאן</p>
+      <p id="accepted-types" style="font-size:12px;margin-top:4px">מקבל: .csv</p>
+    </div>
+    <input type="file" id="file-input" accept=".csv,.json" onchange="onFileChange(event)" />
+
+    <span class="template-link" onclick="downloadTemplate()">⬇ הורדת תבנית CSV</span>
+  </div>
+
+  <!-- ── Preview section ── -->
+  <div class="section" id="preview-section" style="display:none">
+    <h2>2. תצוגה מקדימה</h2>
+    <p>בדקי את הנתונים לפני השמירה. שורות בצבע אדום = שורות לא תקינות שיידלגו.</p>
+
+    <div class="stats" id="stats-bar"></div>
+    <div class="table-wrap">
+      <table id="preview-table">
+        <thead id="preview-thead"></thead>
+        <tbody id="preview-tbody"></tbody>
+      </table>
+    </div>
+
+    <div class="action-row">
+      <button class="btn-primary" id="btn-save-all" onclick="saveImport()">שמירת כל הפרויקטים התקינים</button>
+      <button class="btn-ghost" onclick="resetUpload()">ביטול וטעינה מחדש</button>
+      <span class="notice" id="save-notice"></span>
+    </div>
+  </div>
+
+  <!-- ── Saved projects ── -->
+  <div class="section">
+    <h2>3. פרויקטים מיובאים</h2>
+    <p>בחרי פרויקט לטעינה לתוך הפוסטר. הטעינה תכתוב על הפרויקט הנוכחי.</p>
+    <div class="project-list" id="project-list"></div>
+  </div>
+
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ── Config ──────────────────────────────────────────────────────────────────
+const ADMIN_PASSWORD     = 'portzot2026';
+const STORAGE_KEY        = 'poster-builder-autosave-v1';
+const IMPORTS_KEY        = 'admin-imported-projects-v1';
+const DEFAULT_PRODUCT    = 'app';
+
+// ── Field mapping: Hebrew column name → contentValues key ───────────────────
+const FIELD_MAP = {
+  // Hebrew names
+  'שם המיזם':                   'projectName',
+  'שם פרויקט':                  'projectName',
+  'תיאור קצר':                  'description',
+  'תיאור':                      'description',
+  'משפט פתיחה':                 'description',
+  'הבעיה שזיהינו':              'problem',
+  'הבעיה':                      'problem',
+  'קהל היעד':                   'audience',
+  'קהל יעד':                    'audience',
+  'שאלת החקר':                  'researchQuestion',
+  'שאלה':                       'researchQuestion',
+  'החקר שביצענו 1':             'research_1',
+  'חקר 1':                      'research_1',
+  'החקר שביצענו 2':             'research_2',
+  'חקר 2':                      'research_2',
+  'החקר שביצענו 3':             'research_3',
+  'חקר 3':                      'research_3',
+  'מה גילינו':                  'findings',
+  'תובנות':                     'findings',
+  'דרישות הפתרון 1':            'requirements_1',
+  'דרישות 1':                   'requirements_1',
+  'דרישות הפתרון 2':            'requirements_2',
+  'דרישות 2':                   'requirements_2',
+  'דרישות הפתרון 3':            'requirements_3',
+  'דרישות 3':                   'requirements_3',
+  'המוצר שפיתחנו':              'solution',
+  'הפתרון':                     'solution',
+  'האפליקציה':                  'solution',
+  'איך משתמשים 1':              'howItWorks_1',
+  'שימוש 1':                    'howItWorks_1',
+  'איך משתמשים 2':              'howItWorks_2',
+  'שימוש 2':                    'howItWorks_2',
+  'איך משתמשים 3':              'howItWorks_3',
+  'שימוש 3':                    'howItWorks_3',
+  'הערך המרכזי':                'value',
+  'ערך':                        'value',
+  'המשוב שקיבלנו':              'feedbackReceived',
+  'משוב':                       'feedbackReceived',
+  'מה שיפרנו':                  'improvementsAfterFeedback',
+  'שיפורים':                    'improvementsAfterFeedback',
+  'שמות התלמידות':              '_students',  // special: split to student1/2/3
+  'שמות':                       '_students',
+  'שם תלמידה 1':                'student1',
+  'שם תלמידה 2':                'student2',
+  'שם תלמידה 3':                'student3',
+  'כיתה':                       'className',
+  'כיתה / בית ספר':             '_classSchool', // special
+  'בית ספר':                    'schoolName',
+  'סוג מוצר':                   '_productType',
+  'project_id':                 '_projectId',
+  // English names
+  'projectName':                'projectName',
+  'description':                'description',
+  'problem':                    'problem',
+  'audience':                   'audience',
+  'researchQuestion':           'researchQuestion',
+  'research_1':                 'research_1',
+  'research_2':                 'research_2',
+  'research_3':                 'research_3',
+  'findings':                   'findings',
+  'requirements_1':             'requirements_1',
+  'requirements_2':             'requirements_2',
+  'requirements_3':             'requirements_3',
+  'solution':                   'solution',
+  'howItWorks_1':               'howItWorks_1',
+  'howItWorks_2':               'howItWorks_2',
+  'howItWorks_3':               'howItWorks_3',
+  'value':                      'value',
+  'feedbackReceived':           'feedbackReceived',
+  'improvementsAfterFeedback':  'improvementsAfterFeedback',
+  'student1':                   'student1',
+  'student2':                   'student2',
+  'student3':                   'student3',
+  'className':                  'className',
+  'schoolName':                 'schoolName',
+};
+
+const REQUIRED_FIELDS = ['projectName'];
+const DISPLAY_COLS = [
+  { key: 'projectName',    label: 'שם המיזם' },
+  { key: 'description',    label: 'תיאור' },
+  { key: 'problem',        label: 'בעיה' },
+  { key: 'researchQuestion', label: 'שאלת חקר' },
+  { key: 'solution',       label: 'פתרון' },
+  { key: 'student1',       label: 'תלמידה 1' },
+  { key: 'className',      label: 'כיתה' },
+  { key: 'schoolName',     label: 'בית ספר' },
+];
+
+const CSV_TEMPLATE_HEADERS = [
+  'שם המיזם','תיאור קצר','הבעיה שזיהינו','קהל היעד','שאלת החקר',
+  'החקר שביצענו 1','החקר שביצענו 2','החקר שביצענו 3','מה גילינו',
+  'דרישות הפתרון 1','דרישות הפתרון 2','דרישות הפתרון 3',
+  'המוצר שפיתחנו','איך משתמשים 1','איך משתמשים 2','איך משתמשים 3',
+  'הערך המרכזי','המשוב שקיבלנו','מה שיפרנו',
+  'שם תלמידה 1','שם תלמידה 2','שם תלמידה 3','כיתה','בית ספר','סוג מוצר','project_id'
+];
+
+// ── State ────────────────────────────────────────────────────────────────────
+let currentFormat = 'csv';
+let parsedProjects = [];
+
+// ── Auth ─────────────────────────────────────────────────────────────────────
+function checkPassword() {
+  const val = document.getElementById('pwd-input').value.trim();
+  if (val === ADMIN_PASSWORD) {
+    document.getElementById('gate').style.display = 'none';
+    document.getElementById('admin-panel').style.display = 'block';
+    renderProjectList();
+  } else {
+    document.getElementById('gate-error').style.display = 'block';
+    document.getElementById('pwd-input').value = '';
+    document.getElementById('pwd-input').focus();
+  }
+}
+document.getElementById('pwd-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') checkPassword();
+});
+
+// ── Format toggle ─────────────────────────────────────────────────────────────
+function setFormat(fmt) {
+  currentFormat = fmt;
+  document.getElementById('btn-csv').classList.toggle('active', fmt === 'csv');
+  document.getElementById('btn-json').classList.toggle('active', fmt === 'json');
+  document.getElementById('accepted-types').textContent = fmt === 'csv' ? 'מקבל: .csv' : 'מקבל: .json';
+  document.getElementById('file-input').accept = fmt === 'csv' ? '.csv' : '.json';
+}
+
+// ── Drag & drop ───────────────────────────────────────────────────────────────
+function onDragOver(e) {
+  e.preventDefault();
+  document.getElementById('upload-area').classList.add('drag-over');
+}
+function onDragLeave() {
+  document.getElementById('upload-area').classList.remove('drag-over');
+}
+function onDrop(e) {
+  e.preventDefault();
+  document.getElementById('upload-area').classList.remove('drag-over');
+  const file = e.dataTransfer?.files?.[0];
+  if (file) processFile(file);
+}
+function onFileChange(e) {
+  const file = e.target.files?.[0];
+  if (file) processFile(file);
+}
+
+// ── File processing ───────────────────────────────────────────────────────────
+function processFile(file) {
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const text = ev.target.result;
+    try {
+      if (file.name.endsWith('.json') || currentFormat === 'json') {
+        parsedProjects = parseJSON(text);
+      } else {
+        parsedProjects = parseCSV(text);
+      }
+      renderPreview(parsedProjects);
+    } catch (err) {
+      alert('שגיאה בקריאת הקובץ: ' + err.message);
+    }
+  };
+  reader.readAsText(file, 'utf-8');
+}
+
+// ── CSV parser ────────────────────────────────────────────────────────────────
+function parseCSV(text) {
+  const lines = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+  const nonEmpty = lines.filter(l => l.trim());
+  if (nonEmpty.length < 2) throw new Error('הקובץ ריק או חסרה שורת כותרות');
+
+  const rawHeaders = parseCSVRow(nonEmpty[0]).map(h => h.trim());
+  const rows = nonEmpty.slice(1);
+
+  return rows.map((line, idx) => {
+    const cells = parseCSVRow(line);
+    const raw = {};
+    rawHeaders.forEach((h, i) => { raw[h] = (cells[i] || '').trim(); });
+    return buildProject(raw, idx + 2);
+  }).filter(p => p !== null);
+}
+
+function parseCSVRow(line) {
+  const cells = [];
+  let cur = '', inQ = false;
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (c === '"') {
+      if (inQ && line[i + 1] === '"') { cur += '"'; i++; }
+      else inQ = !inQ;
+    } else if (c === ',' && !inQ) {
+      cells.push(cur); cur = '';
+    } else {
+      cur += c;
+    }
+  }
+  cells.push(cur);
+  return cells;
+}
+
+// ── JSON parser ───────────────────────────────────────────────────────────────
+function parseJSON(text) {
+  const data = JSON.parse(text);
+  const arr = Array.isArray(data) ? data : [data];
+  return arr.map((obj, idx) => buildProject(obj, idx + 1)).filter(p => p !== null);
+}
+
+// ── Project builder ───────────────────────────────────────────────────────────
+function buildProject(raw, lineNum) {
+  const content = {};
+  let productType = DEFAULT_PRODUCT;
+  let projectId = null;
+
+  for (const [col, val] of Object.entries(raw)) {
+    const mapped = FIELD_MAP[col] || FIELD_MAP[col.trim()];
+    if (!mapped || !val) continue;
+
+    if (mapped === '_students') {
+      // split by · or , into student1/2/3
+      const parts = val.split(/[·,،]/).map(s => s.trim()).filter(Boolean);
+      ['student1', 'student2', 'student3'].forEach((k, i) => {
+        if (parts[i]) content[k] = parts[i];
+      });
+    } else if (mapped === '_classSchool') {
+      const parts = val.split(/[|\/]/).map(s => s.trim());
+      if (parts[0]) content.className = parts[0];
+      if (parts[1]) content.schoolName = parts[1];
+    } else if (mapped === '_productType') {
+      const pt = val.toLowerCase().trim();
+      if (['app','physical','website','digital'].includes(pt)) productType = pt;
+    } else if (mapped === '_projectId') {
+      projectId = val;
+    } else {
+      content[mapped] = val;
+    }
+  }
+
+  const missingRequired = REQUIRED_FIELDS.filter(k => !content[k]);
+  const filledCount = Object.values(content).filter(v => v).length;
+
+  return {
+    _lineNum: lineNum,
+    _valid:   missingRequired.length === 0,
+    _missing: missingRequired,
+    _filled:  filledCount,
+    _id:      projectId || ('import-' + Date.now() + '-' + lineNum),
+    productType,
+    contentValues: content,
+  };
+}
+
+// ── Preview renderer ──────────────────────────────────────────────────────────
+function renderPreview(projects) {
+  document.getElementById('upload-section').style.display = 'none';
+  document.getElementById('preview-section').style.display = 'block';
+
+  const valid   = projects.filter(p => p._valid);
+  const invalid = projects.filter(p => !p._valid);
+
+  // Stats
+  const statsEl = document.getElementById('stats-bar');
+  statsEl.innerHTML = `
+    <span class="stat-chip ok">✓ ${valid.length} פרויקטים תקינים</span>
+    ${invalid.length ? `<span class="stat-chip warn">⚠ ${invalid.length} שורות לא תקינות</span>` : ''}
+    <span class="stat-chip">${projects.length} שורות סה״כ</span>
+  `;
+
+  // Table head
+  document.getElementById('preview-thead').innerHTML = `<tr>
+    <th>#</th>
+    ${DISPLAY_COLS.map(c => `<th>${c.label}</th>`).join('')}
+    <th>שדות מולאו</th>
+    <th>חסר</th>
+  </tr>`;
+
+  // Table body
+  document.getElementById('preview-tbody').innerHTML = projects.map(p => `
+    <tr class="${p._valid ? '' : 'row-invalid'}">
+      <td class="row-num">${p._lineNum}</td>
+      ${DISPLAY_COLS.map(c => `<td title="${p.contentValues[c.key] || ''}">${p.contentValues[c.key] || '—'}</td>`).join('')}
+      <td>${p._filled}</td>
+      <td class="missing">${p._missing.join(', ') || '—'}</td>
+    </tr>
+  `).join('');
+
+  document.getElementById('btn-save-all').disabled = valid.length === 0;
+  document.getElementById('save-notice').textContent =
+    valid.length === 0 ? 'אין שורות תקינות לשמירה.' : '';
+}
+
+function resetUpload() {
+  parsedProjects = [];
+  document.getElementById('file-input').value = '';
+  document.getElementById('preview-section').style.display = 'none';
+  document.getElementById('upload-section').style.display = 'block';
+}
+
+// ── Save import ───────────────────────────────────────────────────────────────
+function saveImport() {
+  const valid = parsedProjects.filter(p => p._valid);
+  if (!valid.length) return;
+
+  const existing = loadImports();
+  const existingIds = new Set(existing.map(p => p._id));
+
+  let updated = 0, created = 0;
+  const merged = [...existing];
+
+  valid.forEach(p => {
+    const idx = merged.findIndex(e => e._id === p._id);
+    if (idx >= 0) { merged[idx] = { ...p, importedAt: Date.now() }; updated++; }
+    else          { merged.push({ ...p, importedAt: Date.now() }); created++; }
+  });
+
+  localStorage.setItem(IMPORTS_KEY, JSON.stringify(merged));
+  showToast(`✓ נשמרו ${created} פרויקטים חדשים${updated ? `, עודכנו ${updated}` : ''}`);
+  renderProjectList();
+  resetUpload();
+}
+
+// ── Project list ──────────────────────────────────────────────────────────────
+function loadImports() {
+  try { return JSON.parse(localStorage.getItem(IMPORTS_KEY) || '[]'); }
+  catch { return []; }
+}
+
+function renderProjectList() {
+  const projects = loadImports();
+  const el = document.getElementById('project-list');
+  if (!projects.length) {
+    el.innerHTML = '<p class="empty-state">אין פרויקטים מיובאים עדיין</p>';
+    return;
+  }
+  el.innerHTML = projects.slice().reverse().map(p => `
+    <div class="project-row">
+      <div>
+        <div class="name">${p.contentValues.projectName || '(ללא שם)'}</div>
+        <div class="meta">
+          ${p.productType} &nbsp;·&nbsp;
+          ${p._filled} שדות &nbsp;·&nbsp;
+          ${new Date(p.importedAt).toLocaleDateString('he-IL')}
+        </div>
+      </div>
+      <button class="btn-load" onclick="loadProject('${p._id}')">טעינה לפוסטר</button>
+      <button class="btn-del"  onclick="deleteProject('${p._id}')">מחיקה</button>
+    </div>
+  `).join('');
+}
+
+function loadProject(id) {
+  const projects = loadImports();
+  const p = projects.find(pr => pr._id === id);
+  if (!p) return;
+
+  const existing = {};
+  try { Object.assign(existing, JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}')); } catch {}
+
+  const allKeys = [
+    'projectName','description','problem','audience','researchQuestion',
+    'research_1','research_2','research_3','findings',
+    'requirements_1','requirements_2','requirements_3',
+    'solution','howItWorks_1','howItWorks_2','howItWorks_3',
+    'value','feedbackReceived','improvementsAfterFeedback',
+    'student1','student2','student3','className','schoolName',
+    'slogan'
+  ];
+  const emptyContent = Object.fromEntries(allKeys.map(k => [k, '']));
+  const mergedContent = { ...emptyContent, ...(existing.contentValues || {}), ...p.contentValues };
+
+  const projectData = {
+    ...(existing || {}),
+    productType: p.productType || existing.productType || DEFAULT_PRODUCT,
+    contentValues: mergedContent,
+    updatedAt: Date.now(),
+  };
+
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(projectData));
+
+  const typeMap = { physical: 'physical.html', website: 'website.html', app: 'app.html', digital: 'digital.html' };
+  const dest = typeMap[p.productType] || 'app.html';
+  showToast(`✓ הפרויקט "${p.contentValues.projectName || id}" נטען בהצלחה!`);
+  setTimeout(() => { window.location.href = dest; }, 1200);
+}
+
+function deleteProject(id) {
+  if (!confirm('למחוק את הפרויקט מהרשימה?')) return;
+  const projects = loadImports().filter(p => p._id !== id);
+  localStorage.setItem(IMPORTS_KEY, JSON.stringify(projects));
+  renderProjectList();
+}
+
+// ── Template download ─────────────────────────────────────────────────────────
+function downloadTemplate() {
+  const headerRow = CSV_TEMPLATE_HEADERS.join(',');
+  const exampleRow = [
+    'שקל חכם','אפליקציה לחיסכון חכם','ילדים לא מנהלים כסף','ילדים בגילאי 10-14',
+    'איך נלמד ילדים לנהל כסף?','ראיונות עם 20 ילדים','סקר לגבי הוצאות',
+    'בדיקת אפליקציות קיימות','רוב הילדים לא עוקבים אחר הוצאות',
+    'ממשק פשוט','התראות','גמיפיקציה',
+    'אפליקציה עם ארנק וירטואלי ומשימות','הורדה מחנות האפליקציות',
+    'הגדרת יעדים','מעקב יומי',
+    'חינוך פיננסי לילדים בצורה כיפית',
+    'הממשק מורכב מדי','פישטנו את התפריט הראשי',
+    'דנה כהן','מיה לוי','רות נוי','ח׳','בית ספר אהבה','app',''
+  ].join(',');
+  const csv = '﻿' + headerRow + '\n' + exampleRow;
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'template-poster-import.csv';
+  a.click();
+}
+
+// ── Toast ─────────────────────────────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+</script>
+</body>
+</html>
