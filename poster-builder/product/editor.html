@@ -362,6 +362,17 @@
 
   renderHTMLPoster(contentValues, productType, titleFont, titleColor, textColor, background, slotImages);
 
+  if (params.get('print') === '1') {
+    setTimeout(async () => {
+      try {
+        await exportHTMLPosterToPDF();
+      } catch (err) {
+        console.error('Print failed:', err);
+        alert('לא ניתן לפתוח הדפסה אוטומטית. יש ללחוץ Ctrl+P או להשתמש בתפריט הדפדפן > Print.');
+      }
+    }, 500);
+  }
+
   document.getElementById('btn-back').addEventListener('click', () => {
     const map = { physical: './physical.html', website: './website.html', app: './app.html', digital: './digital.html' };
     window.location.href = map[productType] || './website.html';
