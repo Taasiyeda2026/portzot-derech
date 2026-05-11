@@ -210,6 +210,12 @@
       /* Checkbox / radio labels — tighter */
       label { padding: 3px 6px !important; }
 
+      /* Fix responsive grids that require md: breakpoint */
+      .grid { display: grid !important; }
+      [class*="md:grid-cols-6"] { grid-template-columns: repeat(6, 1fr) !important; }
+      [class*="md:grid-cols-3"] { grid-template-columns: repeat(3, 1fr) !important; }
+      [class*="md:grid-cols-2"] { grid-template-columns: repeat(2, 1fr) !important; }
+
       /* Canvas area — keep small or hide */
       canvas { max-height: 180px !important; }
       .tab-btn-app, [class*="tab-btn"] { display: none !important; }
