@@ -216,6 +216,19 @@
       [class*="md:grid-cols-3"] { grid-template-columns: repeat(3, 1fr) !important; }
       [class*="md:grid-cols-2"] { grid-template-columns: repeat(2, 1fr) !important; }
 
+      /* Checkbox/label lists — convert to 3-column grid instead of long column */
+      .space-y-2:has(> label),
+      .space-y-3:has(> label) {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 3px 6px !important;
+      }
+      .space-y-2:has(> label) > label,
+      .space-y-3:has(> label) > label {
+        margin-top: 0 !important;
+        padding: 2px 5px !important;
+      }
+
       /* Canvas area — keep small or hide */
       canvas { max-height: 180px !important; }
       .tab-btn-app, [class*="tab-btn"] { display: none !important; }
