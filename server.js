@@ -22,11 +22,10 @@ const mimeTypes = {
   '.otf': 'font/otf'
 };
 
-const server = http.createServer((req, res) => {
-  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-  res.setHeader('Pragma', 'no-cache');
-  res.setHeader('Expires', '0');
+// Static image and font assets: cache for 1 day in dev, no-cache for HTML/CSS/JS
+const CACHEABLE_EXTS = new Set(['.png','.jpg','.jpeg','.gif','.svg','.ico','.webp','.woff','.woff2','.ttf','.otf']);
 
+const server = http.createServer((req, res) => {
   let filePath = '.' + req.url.split('?')[0];
   
   // Handle directory root
@@ -40,6 +39,16 @@ const server = http.createServer((req, res) => {
 
   const extname = path.extname(filePath).toLowerCase();
   const contentType = mimeTypes[extname] || 'application/octet-stream';
+
+  // Images and fonts: allow browser caching for 1 day (prevents reload on scroll)
+  // HTML / CSS / JS: always revalidate so code changes are picked up immediately
+  if (CACHEABLE_EXTS.has(extname)) {
+    res.setHeader('Cache-Control', 'public, max-age=86400');
+  } else {
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+  }
 
   fs.readFile(filePath, (err, content) => {
     if (err) {

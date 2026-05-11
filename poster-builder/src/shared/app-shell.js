@@ -46,6 +46,7 @@ function App() {
   const slotImagesRef = useRef(slotImages);
   const textColorRef    = useRef(textColor);
   const isExportingRef  = useRef(false);
+  const renderTimerRef  = useRef(null);
   useEffect(()=>{productTypeRef.current=productType;},[productType]);
   useEffect(()=>{currentBackgroundRef.current=currentBackground;},[currentBackground]);
   useEffect(()=>{contentValuesRef.current=contentValues;},[contentValues]);
@@ -68,7 +69,13 @@ function App() {
 
   useEffect(() => {
     saveProject({ posterSize, productType, background: currentBackground, contentValues, fieldSettings, titleStyle: { fontFamily: titleFont, color: titleColor, textColor }, slotImages });
-    if (wizardStep === 4) renderHTMLPoster(contentValues, productType, titleFont, titleColor, textColor, currentBackground, slotImages);
+    if (wizardStep === 4) {
+      // Debounce poster re-render so rapid keystrokes don't thrash the DOM
+      clearTimeout(renderTimerRef.current);
+      renderTimerRef.current = setTimeout(() => {
+        renderHTMLPoster(contentValuesRef.current, productTypeRef.current, titleFont, titleColor, textColorRef.current, currentBackgroundRef.current, slotImagesRef.current);
+      }, 120);
+    }
   }, [posterSize, productType, currentBackground, contentValues, fieldSettings, titleFont, titleColor, textColor, slotImages, wizardStep]);
 
   const handleProductTypeChange = (type) => { if (!PRESELECTED_PRODUCT_TYPE) setProductType(type); };

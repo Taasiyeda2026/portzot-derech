@@ -10,12 +10,22 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
     textColor = null;
   }
 
-  // ── Background ──────────────────────────────────────────────────────────────
+  // ── Background — reuse existing <img> to avoid forced reload ────────────────
   const bgEl = document.getElementById('poster-bg');
   if (bgEl) {
-    bgEl.innerHTML = background
-      ? `<img src="${background}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;">`
-      : '';
+    if (background) {
+      let bgImg = bgEl.querySelector('img');
+      if (!bgImg) {
+        bgEl.innerHTML = '';
+        bgImg = document.createElement('img');
+        bgImg.crossOrigin = 'anonymous';
+        bgImg.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;';
+        bgEl.appendChild(bgImg);
+      }
+      if (bgImg.getAttribute('src') !== background) bgImg.src = background;
+    } else {
+      bgEl.innerHTML = '';
+    }
   }
 
   const setText = (id, t) => { const e = document.getElementById(id); if (e) e.textContent = (t || '').trim(); };
@@ -161,9 +171,24 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
   keys.forEach((k, i) => {
     document.querySelectorAll(`[data-ph-img="${i}"][data-layout="${layoutKey}"]`).forEach(frame => {
       if (slotImages[k]) {
-        frame.innerHTML = `<img src="${slotImages[k]}" alt="תמונה ${i + 1}" crossorigin="anonymous" style="max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:block;margin:auto;">`;
+        // Reuse existing <img> — only update src when content actually changed
+        let img = frame.querySelector('img');
+        if (!img) {
+          frame.innerHTML = '';
+          img = document.createElement('img');
+          img.alt = `תמונה ${i + 1}`;
+          img.crossOrigin = 'anonymous';
+          img.style.cssText = 'max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:block;margin:auto;';
+          frame.appendChild(img);
+        }
+        if (img.getAttribute('src') !== slotImages[k]) img.src = slotImages[k];
       } else {
-        frame.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;color:#c8a8c0;font-size:10px;width:100%;height:100%;">תמונה ${i + 1}</div>`;
+        // Only replace DOM if there was an image before (avoids churn on placeholder)
+        if (frame.querySelector('img')) {
+          frame.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;color:#c8a8c0;font-size:10px;width:100%;height:100%;">תמונה ${i + 1}</div>`;
+        } else if (!frame.hasChildNodes()) {
+          frame.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;color:#c8a8c0;font-size:10px;width:100%;height:100%;">תמונה ${i + 1}</div>`;
+        }
       }
     });
   });

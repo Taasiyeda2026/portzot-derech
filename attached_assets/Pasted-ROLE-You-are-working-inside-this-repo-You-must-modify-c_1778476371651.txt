@@ -1,0 +1,37 @@
+ROLE: You are working inside this repo. You must modify code, not only explain.
+
+GOAL: Fix the issue where images reload repeatedly and scrolling up/down triggers reloading + slowness. After the fix, images should load once and remain cached/reused, and scrolling must be smooth.
+
+HARD RULES:
+- Do not give generic advice.
+- Do not stop at investigation. You must implement fixes in code.
+- Provide: (1) root causes found, (2) exact files changed, (3) code diffs/snippets, (4) verification steps + expected network behavior.
+
+STEP A — Confirm the problem with evidence (Required)
+1) Identify repeated requests for the same image URLs during scroll.
+2) Identify whether reloads are caused by: unmount/remount, unstable list keys, scroll state updates, refetch on scroll, IntersectionObserver loops, missing cache headers, unstable/signed URLs.
+
+STEP B — Implement fixes (Required)
+Implement all relevant fixes based on findings, as applicable:
+- Stable keys (not index/random).
+- Remove or throttle scroll-driven state updates.
+- Prevent remount loops; memoize components (React.memo/useMemo/useCallback).
+- Fix lazy loading/IntersectionObserver so images are not unmounted and reloaded.
+- Add explicit width/height to images (prevent CLS).
+- Ensure image URLs are stable (don’t regenerate signed URLs each render).
+- Add client-side caching for fetched data; prevent refetch on scroll.
+- Add virtualization only if needed, but do not cause unload/reload loops.
+
+STEP C — Enforce caching behavior (Required)
+- Ensure caching works (Cache-Control/ETag/max-age or CDN/public cache strategy).
+- Avoid cache-busting URLs unless needed.
+- If Supabase/storage: ensure URLs/headers don’t force revalidation each time.
+
+STEP D — Deliverables (Mandatory)
+Output:
+1) Root causes (short)
+2) Files changed (list)
+3) Key code changes (snippets)
+4) How to verify: after first load, scrolling shows NO repeated GETs for same images; smooth scroll; no CLS.
+
+DO NOT FINISH until you implemented code changes and provided deliverables.
