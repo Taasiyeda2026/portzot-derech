@@ -459,14 +459,6 @@
         const db = getFirestore(app);
         db._settings.experimentalForceLongPolling = true;
         console.log("✅ Firestore connection: OK");
-        
-        // תיקון לשגיאת offline
-        try {
-            db._settings.experimentalForceLongPolling = true;
-            console.log('✅ Firestore connection: OK');
-        } catch (error) {
-            console.error('❌ Firestore error:', error);
-        }
 
         let currentSessionId = null;
         let refreshInterval = null;

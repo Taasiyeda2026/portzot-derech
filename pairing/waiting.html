@@ -382,8 +382,18 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getFirestore, doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 const cfg={apiKey:"AIzaSyCFSq5b-HgkTxFNhBJIBdOe2ian5TZvMPE",authDomain:"portzot-derech.firebaseapp.com",projectId:"portzot-derech",storageBucket:"portzot-derech.firebasestorage.app",messagingSenderId:"236417614890",appId:"1:236417614890:web:587b0eb3c5eedfa352af53"};
-const db=getFirestore(initializeApp(cfg)); const sessionId=new URLSearchParams(location.search).get('session');
-const myName=localStorage.getItem('displayName'); const myId=localStorage.getItem('responseId');
+const db=getFirestore(initializeApp(cfg));
+const sessionId=new URLSearchParams(location.search).get('session');
+if(!sessionId){location.href='pairing.html';}
+const myName=localStorage.getItem('displayName');
+const myId=localStorage.getItem('responseId');
+
+onSnapshot(doc(db,'sessions',sessionId),(snap)=>{
+  if(!snap.exists()) return;
+  const count=snap.data().completedCount||0;
+  document.getElementById('completedCount').textContent=count;
+});
+
 onSnapshot(doc(db,'pairings',sessionId),(snap)=>{if(!snap.exists()) return;const data=snap.data();const groups=data.groups||data.pairs||[];const group=groups.find(g=> (myId && g.members?.includes(myId)) || (myName && g.memberNames?.includes(myName)));if(!group) return;
 document.getElementById('waitingScreen').classList.add('hide');document.getElementById('resultScreen').classList.add('show');
 document.getElementById('resultTitle').textContent='מצאנו לך קבוצה';document.getElementById('partnerLabel').textContent='את בקבוצה עם:';
