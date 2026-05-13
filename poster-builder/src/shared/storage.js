@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'poster-builder-autosave-v1';
+export const STORAGE_KEY = 'poster-builder-autosave-v1';
 const REQUIRED_CONTENT_KEYS = ['student1', 'student2', 'student3', 'className', 'schoolName', 'feedbackReceived', 'improvementsAfterFeedback'];
 const REQUIRED_SPLIT_RESEARCH_KEYS = ['studentNames', 'className', 'schoolName', 'feedbackAndImprovements'];
 

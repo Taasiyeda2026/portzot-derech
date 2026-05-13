@@ -54,5 +54,23 @@
 
       <footer class="poster-footer">© 2026 פורצות דרך</footer>
     </div>
-  </body>
+    <script>
+    (function () {
+      var title = document.getElementById('poster-title');
+      if (!title) return;
+      var clicks = 0;
+      var timer = null;
+      title.style.cursor = 'default';
+      title.addEventListener('click', function () {
+        clicks += 1;
+        window.clearTimeout(timer);
+        if (clicks >= 3) {
+          window.location.href = './admin.html';
+          return;
+        }
+        timer = window.setTimeout(function () { clicks = 0; }, 900);
+      });
+    })();
+  </script>
+</body>
 </html>
