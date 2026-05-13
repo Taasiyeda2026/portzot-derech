@@ -1,5 +1,6 @@
 import { getVisualSlots, getPosterFields, FIELD_DEFINITIONS, BACKGROUNDS, AVAILABLE_FONTS } from '../physical/config.js';
 import { saveProject, loadProject } from '../../shared/storage.js';
+import { createPosterSubmission } from '../../shared/poster-submissions.js';
 
 const PRODUCT_TYPES = ['app', 'physical', 'website', 'digital'];
 
@@ -174,7 +175,9 @@ const state = {
   },
   slotImages: { visual_1: null, visual_2: null, visual_3: null },
   slotUploadStatus: { visual_1: 'empty', visual_2: 'empty', visual_3: 'empty' },
-  pendingWarningStep: null
+  pendingWarningStep: null,
+  submitStatus: 'idle',
+  submitMessage: ''
 };
 
 function migrateSharedVisualPrompt(splitFlowState = {}) {
@@ -942,10 +945,10 @@ function normalizeAppImageMapping() {
   });
 }
 
-function seedPosterBuilderState() {
+function buildCurrentPosterProject() {
   const contentValues = buildPosterContentValues();
-
   const stored = loadProject() || {};
+  const selectedBackground = BACKGROUNDS.find((bg) => bg.path === state.design.background);
   const nextFieldSettings = Object.fromEntries(
     FIELD_DEFINITIONS.map((field) => [
       field.id,
@@ -957,20 +960,25 @@ function seedPosterBuilderState() {
       }
     ])
   );
-  saveProject({
+
+  return {
     ...stored,
     posterSize: stored.posterSize || posterSize,
     productType,
     background: state.design.background || null,
+    backgroundId: selectedBackground?.id || stored.backgroundId || null,
+    backgroundPath: state.design.background || stored.backgroundPath || null,
     slotImages: { ...state.slotImages },
     fieldSettings: nextFieldSettings,
     titleStyle: {
       fontFamily: state.design.titleFont,
-      color: state.design.titleColor
+      color: state.design.titleColor,
+      textColor: state.design.textColor
     },
     contentValues,
     splitFlowState: {
       productType,
+      step: state.step,
       research: { ...state.research },
       sharedVisualPrompt: JSON.parse(JSON.stringify(state.sharedVisualPrompt)),
       physicalPrompt: JSON.parse(JSON.stringify(state.physicalPrompt)),
@@ -979,7 +987,31 @@ function seedPosterBuilderState() {
       images: JSON.parse(JSON.stringify(state.images)),
       design: { ...state.design }
     }
-  });
+  };
+}
+
+function seedPosterBuilderState() {
+  const project = buildCurrentPosterProject();
+  saveProject(project);
+}
+
+async function submitPoster() {
+  if (state.submitStatus === 'sending') return;
+  state.submitStatus = 'sending';
+  state.submitMessage = '';
+  render();
+
+  try {
+    const project = buildCurrentPosterProject();
+    saveProject(project);
+    await createPosterSubmission(project);
+    state.submitStatus = 'success';
+    state.submitMessage = 'הפוסטר נשלח בהצלחה.';
+  } catch (err) {
+    state.submitStatus = 'error';
+    state.submitMessage = 'לא הצלחנו לשלוח את הפוסטר. נסו שוב.';
+  }
+  render();
 }
 
 function renderError(key) {
@@ -1260,7 +1292,11 @@ function renderStep4() {
         </div>
       </div>
     </div>
-    <a class="split-btn primary" href="./editor.html?type=${requestedProductType}">יצירת הפוסטר</a>
+    <div class="split-final-actions">
+      <a class="split-btn primary" href="./editor.html?type=${requestedProductType}">יצירת הפוסטר</a>
+      <button type="button" class="split-btn submit" data-submit-poster ${state.submitStatus === 'sending' ? 'disabled' : ''}>${state.submitStatus === 'sending' ? 'שולחות...' : 'שליחת פוסטר'}</button>
+    </div>
+    ${state.submitMessage ? `<p class="split-submit-message ${state.submitStatus}">${escapeHtml(state.submitMessage)}</p>` : ''}
   </article>`;
 }
 
@@ -1375,6 +1411,11 @@ function render() {
     .split-btn.primary{background:linear-gradient(135deg,#5E2750,#7c3aed);color:#fff;box-shadow:0 6px 18px rgba(94,39,80,.3)}
     .split-btn.primary:hover{box-shadow:0 10px 26px rgba(94,39,80,.4)}
     .split-btn.ghost{background:linear-gradient(135deg,#ede9fe,#f3e8ff);color:#5E2750;border:1.5px solid #d5c5f0}
+    .split-btn.submit{background:linear-gradient(135deg,#1a5c3a,#22c55e);color:#fff;box-shadow:0 6px 18px rgba(26,92,58,.26)}
+    .split-final-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .split-submit-message{margin:0;padding:10px 12px;border-radius:10px;font-size:14px;font-weight:700;width:fit-content}
+    .split-submit-message.success{background:#ecfdf5;color:#166534;border:1px solid #bbf7d0}
+    .split-submit-message.error{background:#fff1f2;color:#b91c1c;border:1px solid #fecdd3}
     .split-btn:disabled{opacity:.5;cursor:not-allowed}
     .split-nav .split-btn{width:auto}
     .split-alert{background:linear-gradient(135deg,#fee2e2,#fef3c7);color:#991b1b;border:1px solid #fecaca;border-radius:12px;padding:10px 14px;box-shadow:0 2px 8px rgba(220,38,38,.1)}
@@ -1634,6 +1675,13 @@ function wireEvents() {
       render();
     });
   });
+
+  const submitButton = root.querySelector('[data-submit-poster]');
+  if (submitButton) {
+    submitButton.addEventListener('click', () => {
+      submitPoster();
+    });
+  }
 
   initializeCounters();
 
