@@ -4,6 +4,38 @@ const path = require('path');
 
 const PORT = 5000;
 const HOST = '0.0.0.0';
+const PUBLIC_ENV_KEYS = ['VITE_SUPABASE_URL', 'VITE_SUPABASE_ANON_KEY', 'VITE_POSTER_ADMIN_CODE'];
+
+function loadDotEnvFile(fileName) {
+  const envPath = path.join(__dirname, fileName);
+  if (!fs.existsSync(envPath)) return;
+
+  const lines = fs.readFileSync(envPath, 'utf8').split(/\r?\n/);
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) continue;
+
+    const separatorIndex = trimmed.indexOf('=');
+    if (separatorIndex === -1) continue;
+
+    const key = trimmed.slice(0, separatorIndex).trim();
+    if (process.env[key] !== undefined) continue;
+
+    let value = trimmed.slice(separatorIndex + 1).trim();
+    if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+      value = value.slice(1, -1);
+    }
+    process.env[key] = value;
+  }
+}
+
+function getPublicEnvScript() {
+  const publicEnv = Object.fromEntries(PUBLIC_ENV_KEYS.map((key) => [key, process.env[key] || '']));
+  return `window.__POSTER_ENV__ = ${JSON.stringify(publicEnv)};`;
+}
+
+loadDotEnvFile('.env');
+loadDotEnvFile('.env.example');
 
 const mimeTypes = {
   '.html': 'text/html',
@@ -26,7 +58,20 @@ const mimeTypes = {
 const CACHEABLE_EXTS = new Set(['.png','.jpg','.jpeg','.gif','.svg','.ico','.webp','.woff','.woff2','.ttf','.otf']);
 
 const server = http.createServer((req, res) => {
-  let filePath = '.' + req.url.split('?')[0];
+  const requestPath = req.url.split('?')[0];
+
+  if (requestPath === '/env.js' || requestPath === '/poster-builder/env.js') {
+    res.writeHead(200, {
+      'Content-Type': 'application/javascript',
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0'
+    });
+    res.end(getPublicEnvScript());
+    return;
+  }
+
+  let filePath = '.' + requestPath;
   
   // Handle directory root
   if (filePath.endsWith('/')) {
