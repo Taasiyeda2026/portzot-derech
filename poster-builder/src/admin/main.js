@@ -1,7 +1,7 @@
 import { POSTER_ADMIN_CODE } from '../shared/supabase-config.js';
-import { STORAGE_KEY } from '../shared/storage.js';
+import { saveProject } from '../shared/storage.js';
 import { BACKGROUNDS, DEFAULT_FIELD_COLOR, DEFAULT_FIELD_FONT, FIELD_DEFINITIONS, POSTER_SIZES } from '../products/physical/config.js';
-import { createPosterSubmissions, deletePosterSubmission, fetchPosterSubmission, listPosterSubmissions, normalizePosterData } from '../shared/poster-submissions.js';
+import { createPosterSubmissions, deletePosterSubmission, fetchPosterSubmission, listPosterSubmissions, normalizePosterData, updatePosterSubmission } from '../shared/poster-submissions.js';
 
 const root = document.getElementById('admin-root');
 const SESSION_KEY = 'poster-builder-admin-ok';
@@ -70,7 +70,8 @@ const state = {
   rows: [],
   loading: false,
   message: '',
-  messageType: 'error'
+  messageType: 'error',
+  logoEditor: null
 };
 
 function escapeHtml(value) {
@@ -79,6 +80,39 @@ function escapeHtml(value) {
     .replaceAll('<', '&lt;')
     .replaceAll('>', '&gt;')
     .replaceAll('"', '&quot;');
+}
+
+function readImageFileAsDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(new Error('קובץ התמונה לא נקרא בהצלחה.'));
+    reader.readAsDataURL(file);
+  });
+}
+
+async function compressSchoolLogoFile(file, maxWidth = 420, maxHeight = 240, quality = 0.82) {
+  const sourceDataUrl = await readImageFileAsDataUrl(file);
+  const image = await new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error('התמונה לא נתמכת או פגומה.'));
+    img.src = sourceDataUrl;
+  });
+
+  const scale = Math.min(1, maxWidth / image.width, maxHeight / image.height);
+  const targetWidth = Math.max(1, Math.round(image.width * scale));
+  const targetHeight = Math.max(1, Math.round(image.height * scale));
+  const canvas = document.createElement('canvas');
+  canvas.width = targetWidth;
+  canvas.height = targetHeight;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error('לא ניתן לעבד את התמונה כרגע.');
+  ctx.drawImage(image, 0, 0, targetWidth, targetHeight);
+
+  const webp = canvas.toDataURL('image/webp', quality);
+  if (webp && webp.startsWith('data:image/webp')) return webp;
+  return canvas.toDataURL('image/jpeg', quality);
 }
 
 function formatDate(value) {
@@ -253,9 +287,9 @@ function showMessage(text, type = 'error') {
   render();
 }
 
-async function loadRows() {
+async function loadRows(options = {}) {
   state.loading = true;
-  state.message = '';
+  if (!options.keepMessage) state.message = '';
   render();
   try {
     state.rows = await listPosterSubmissions();
@@ -301,6 +335,116 @@ function renderLogin() {
   input.focus();
 }
 
+async function openLogoEditor(id) {
+  state.message = '';
+  state.logoEditor = { id, loading: true, saving: false, project: null };
+  render();
+  try {
+    const row = await fetchPosterSubmission(id);
+    const project = normalizePosterData(row.poster_data || {});
+    state.logoEditor = {
+      id,
+      loading: false,
+      saving: false,
+      project: {
+        ...project,
+        productType: project.productType || row.product_type || 'physical'
+      }
+    };
+    render();
+  } catch (err) {
+    state.logoEditor = null;
+    showMessage('לא הצלחנו לפתוח את ניהול הלוגו כרגע.');
+  }
+}
+
+function closeLogoEditor() {
+  state.logoEditor = null;
+  render();
+}
+
+function persistAdminProject(id, project) {
+  const nextProject = {
+    ...project,
+    submissionId: id,
+    updatedAt: Date.now()
+  };
+  saveProject(nextProject);
+  return nextProject;
+}
+
+async function saveSchoolLogo(id, nextLogoImage) {
+  const editor = state.logoEditor;
+  if (!editor?.project || editor.id !== id) return;
+  const nextProject = {
+    ...editor.project,
+    schoolLogoImage: nextLogoImage || null
+  };
+
+  state.logoEditor = { ...editor, saving: true, project: nextProject };
+  render();
+  try {
+    await updatePosterSubmission(id, nextProject);
+    const persistedProject = persistAdminProject(id, nextProject);
+    state.logoEditor = { id, loading: false, saving: false, project: persistedProject };
+    state.message = nextLogoImage ? 'לוגו בית הספר נשמר בהצלחה.' : 'לוגו בית הספר הוסר בהצלחה.';
+    state.messageType = 'ok';
+    await loadRows({ keepMessage: true });
+  } catch (err) {
+    state.logoEditor = { ...editor, saving: false };
+    showMessage('לא הצלחנו לשמור את לוגו בית הספר כרגע.');
+  }
+}
+
+async function handleSchoolLogoUpload(id, file) {
+  if (!file) return;
+  if (!file.type.startsWith('image/')) {
+    showMessage('אפשר להעלות רק קבצי תמונה.');
+    return;
+  }
+  try {
+    const compressedLogo = await compressSchoolLogoFile(file);
+    await saveSchoolLogo(id, compressedLogo);
+  } catch (err) {
+    showMessage('לא הצלחנו לעבד את התמונה. נסו קובץ תמונה אחר.');
+  }
+}
+
+function renderLogoEditor() {
+  const editor = state.logoEditor;
+  if (!editor) return '';
+  if (editor.loading) {
+    return `<section class="admin-card admin-logo-panel"><p class="admin-empty">טוען ניהול לוגו...</p></section>`;
+  }
+
+  const project = editor.project || {};
+  const contentValues = project.contentValues || {};
+  const hasLogo = Boolean(project.schoolLogoImage);
+  return `<section class="admin-card admin-logo-panel" aria-live="polite">
+    <header class="admin-logo-header">
+      <div>
+        <h2 class="admin-logo-title">לוגו בית ספר</h2>
+        <p class="admin-subtitle">ניהול לוגו אופציונלי לפוסטר: ${escapeHtml(contentValues.projectName || 'ללא שם')}</p>
+      </div>
+      <button class="admin-btn ghost compact" type="button" data-logo-close>סגירה</button>
+    </header>
+    <div class="admin-logo-body">
+      <div class="admin-logo-preview ${hasLogo ? '' : 'empty'}">
+        ${hasLogo ? `<img src="${project.schoolLogoImage}" alt="לוגו בית הספר הנוכחי" />` : 'לא הועלה לוגו בית ספר'}
+      </div>
+      <div class="admin-logo-controls">
+        <p>הלוגו נשמר בשדה <code>schoolLogoImage</code>, בנוסף ללוגו הקיים של “פורצות דרך”.</p>
+        <input class="admin-file-input" type="file" accept="image/*" data-school-logo-file />
+        <div class="admin-actions">
+          <button class="admin-btn primary" type="button" data-school-logo-upload ${editor.saving ? 'disabled' : ''}>${hasLogo ? 'החלפת לוגו' : 'העלאת לוגו'}</button>
+          <button class="admin-btn danger" type="button" data-school-logo-remove ${(!hasLogo || editor.saving) ? 'disabled' : ''}>הסרת לוגו</button>
+        </div>
+        ${editor.saving ? '<p class="admin-message ok">שומר...</p>' : ''}
+      </div>
+    </div>
+  </section>`;
+}
+
 function renderTable() {
   const body = state.rows.length
     ? state.rows.map((row) => `<tr>
@@ -312,6 +456,7 @@ function renderTable() {
         <td>${escapeHtml(formatDate(row.created_at))}</td>
         <td><div class="admin-row-actions">
           <button class="admin-btn primary" type="button" data-open="${escapeHtml(row.id)}">פתיחה</button>
+          <button class="admin-btn ghost" type="button" data-logo="${escapeHtml(row.id)}">לוגו בית ספר</button>
           <button class="admin-btn danger" type="button" data-delete="${escapeHtml(row.id)}">מחק</button>
         </div></td>
       </tr>`).join('')
@@ -333,6 +478,7 @@ function renderTable() {
         </div>
       </header>
       ${state.message ? `<p class="admin-message ${state.messageType}">${escapeHtml(state.message)}</p>` : ''}
+      ${renderLogoEditor()}
       <div class="admin-table-wrap">
         <table>
           <thead><tr><th>שם מיזם</th><th>תלמידות</th><th>כיתה</th><th>בית ספר</th><th>סוג תוצר</th><th>תאריך שליחה</th><th>פעולות</th></tr></thead>
@@ -353,6 +499,19 @@ function renderTable() {
   root.querySelectorAll('[data-open]').forEach((button) => {
     button.addEventListener('click', () => openSubmission(button.dataset.open));
   });
+  root.querySelectorAll('[data-logo]').forEach((button) => {
+    button.addEventListener('click', () => openLogoEditor(button.dataset.logo));
+  });
+  root.querySelector('[data-logo-close]')?.addEventListener('click', closeLogoEditor);
+  const logoInput = root.querySelector('[data-school-logo-file]');
+  root.querySelector('[data-school-logo-upload]')?.addEventListener('click', () => logoInput?.click());
+  logoInput?.addEventListener('change', () => {
+    handleSchoolLogoUpload(state.logoEditor?.id, logoInput.files?.[0]);
+    logoInput.value = '';
+  });
+  root.querySelector('[data-school-logo-remove]')?.addEventListener('click', () => {
+    if (window.confirm('האם להסיר את לוגו בית הספר מהפוסטר?')) saveSchoolLogo(state.logoEditor?.id, null);
+  });
   root.querySelectorAll('[data-delete]').forEach((button) => {
     button.addEventListener('click', () => removeSubmission(button.dataset.delete));
   });
@@ -372,12 +531,12 @@ async function openSubmission(id) {
         textColor: posterData.titleStyle?.textColor || '#1f1030',
         shape: 20
       });
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+    saveProject({
       ...posterData,
       productType,
       splitFlowState,
-      updatedAt: Date.now()
-    }));
+      submissionId: id
+    });
     window.location.href = PRODUCT_PATHS[productType] || PRODUCT_PATHS.physical;
   } catch (err) {
     showMessage('לא הצלחנו לפתוח את הפוסטר כרגע.');
