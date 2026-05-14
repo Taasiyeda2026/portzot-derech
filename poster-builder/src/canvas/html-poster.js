@@ -54,9 +54,13 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
     if (schoolLogoImage) {
       schoolLogoImg.src = schoolLogoImage;
       schoolLogoWrap.style.display = 'block';
+      schoolLogoWrap.style.visibility = 'visible';
+      schoolLogoWrap.style.opacity = '1';
     } else {
       schoolLogoImg.removeAttribute('src');
       schoolLogoWrap.style.display = 'none';
+      schoolLogoWrap.style.visibility = '';
+      schoolLogoWrap.style.opacity = '';
     }
   }
 

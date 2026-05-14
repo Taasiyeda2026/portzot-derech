@@ -1,0 +1,119 @@
+תיקון באג: לוגו בית הספר עולה ונשמר באדמין, אבל לא מופיע על הפוסטר עצמו.
+
+המצב הנוכחי:
+- באדמין העלאת הלוגו כבר עובדת.
+- אין יותר שגיאת הרשאות.
+- הלוגו מופיע/נשמר באדמין.
+- אבל כאשר פותחים את הפוסטר עצמו, לוגו בית הספר לא נראה על גבי הפוסטר.
+
+יש לבדוק ולתקן את שרשרת ההעברה של schoolLogoImage מהאדמין אל הפוסטר:
+
+1. poster-builder/src/admin/main.js
+
+ב־openSubmission:
+- לאחר fetchPosterSubmission(id)
+- ולאחר normalizePosterData(row.poster_data || {})
+- יש לוודא ש־posterData.schoolLogoImage באמת קיים.
+- כאשר שומרים ל־localStorage דרך saveProject, חובה לשמור את schoolLogoImage ברמה העליונה של הפרויקט.
+
+כלומר לוודא שהאובייקט שנשמר כולל בפועל:
+
+schoolLogoImage: posterData.schoolLogoImage || null
+
+ולא רק בתוך poster_data או במקום אחר.
+
+יש להוסיף console.debug זמני לבדיקה:
+console.debug('schoolLogoImage before saveProject:', posterData.schoolLogoImage);
+
+2. poster-builder/product/editor.html
+
+בפתיחת הפוסטר יש לוודא שהקריאה:
+
+const schoolLogoImage = project.schoolLogoImage || null;
+
+באמת מקבלת ערך.
+
+להוסיף console.debug זמני:
+console.debug('schoolLogoImage in editor:', schoolLogoImage);
+
+אם הערך ריק כאן — הבעיה היא בשמירה ל־localStorage מהאדמין.
+אם הערך קיים כאן ועדיין לא מוצג — הבעיה היא ברינדור / CSS / מיקום.
+
+3. poster-builder/src/canvas/html-poster.js
+
+ב־renderHTMLPoster:
+- לוודא שהפרמטר schoolLogoImage מתקבל.
+- אם הוא קיים, להציג את ph-school-logo-wrap.
+- להציב את schoolLogoImg.src.
+- מומלץ להשתמש ב־display:flex או display:block בצורה מפורשת.
+
+לדוגמה:
+
+if (schoolLogoImage) {
+  schoolLogoImg.src = schoolLogoImage;
+  schoolLogoWrap.style.display = 'block';
+  schoolLogoWrap.style.visibility = 'visible';
+  schoolLogoWrap.style.opacity = '1';
+} else {
+  schoolLogoImg.removeAttribute('src');
+  schoolLogoWrap.style.display = 'none';
+}
+
+להוסיף console.debug זמני:
+console.debug('render schoolLogoImage:', Boolean(schoolLogoImage));
+
+4. לבדוק CSS ומיקום
+
+האלמנט ph-school-logo-wrap קיים כרגע באזור העליון של הפוסטר, אבל צריך לוודא שהוא לא מוסתר מאחורי אלמנט אחר.
+
+יש לוודא:
+- position:absolute
+- z-index גבוה יותר מהכותרת ומהרקע
+- top/right תקינים
+- max-width/max-height תקינים
+- לא קיים overflow שמסתיר אותו
+- לא מוצג בצבע לבן/שקוף על רקע בהיר
+
+מומלץ זמנית לבדיקה לתת לו רקע לבן עדין ומסגרת דקה:
+
+background: rgba(255,255,255,0.92);
+border-radius: 8px;
+padding: 4px;
+z-index: 20;
+
+לאחר שמוודאים שהוא מופיע, אפשר להשאיר עיצוב עדין או להסיר מסגרת לפי הצורך.
+
+5. לבדוק שהנתון לא נמחק בזרימת הפוסטר
+
+ב־poster-builder/src/products/split-flow/main.js
+ב־buildCurrentPosterProject כבר צריך לשמר:
+
+schoolLogoImage: stored.schoolLogoImage || null
+
+יש לוודא שזה באמת נשמר ולא נדרס כאשר חוזרים לשלב “מיפוי ועיצוב לפוסטר” או לוחצים “יצירת הפוסטר”.
+
+6. בדיקת DevTools חובה
+
+לאחר העלאת לוגו באדמין ופתיחת הפוסטר:
+לבדוק ב־Console:
+
+JSON.parse(localStorage.getItem('poster-builder-autosave-v1')).schoolLogoImage
+
+אם התוצאה null או undefined:
+הבעיה היא ב־admin/openSubmission או בשמירת הנתון ל־localStorage.
+
+אם יש שם data:image...
+אבל הלוגו לא מוצג:
+הבעיה היא ב־renderHTMLPoster או ב־CSS של ph-school-logo-wrap.
+
+7. בדיקות סופיות
+
+- להעלות לוגו דרך האדמין.
+- לראות תצוגה מקדימה באדמין.
+- ללחוץ פתיחה לפוסטר.
+- לוודא שב־localStorage קיים schoolLogoImage.
+- לוודא שהלוגו מופיע בפוסטר.
+- לרענן את דף הפוסטר ולוודא שהלוגו עדיין מופיע.
+- לייצא / להדפיס PDF ולוודא שהלוגו מופיע.
+- לוודא שהתלמידות עדיין לא רואות אפשרות להעלות לוגו.
+- לוודא שלוגו “פורצות דרך” לא זז ולא הוחלף.

@@ -626,7 +626,8 @@ async function openSubmission(id) {
       ...posterData,
       productType,
       splitFlowState,
-      submissionId: id
+      submissionId: id,
+      schoolLogoImage: posterData.schoolLogoImage || null
     });
     window.location.href = PRODUCT_PATHS[productType] || PRODUCT_PATHS.physical;
   } catch (err) {
