@@ -1,7 +1,7 @@
 import { POSTER_ADMIN_CODE } from '../shared/supabase-config.js';
 import { saveProject } from '../shared/storage.js';
 import { BACKGROUNDS, DEFAULT_FIELD_COLOR, DEFAULT_FIELD_FONT, FIELD_DEFINITIONS, POSTER_SIZES } from '../products/physical/config.js';
-import { createPosterSubmissions, deletePosterSubmission, fetchPosterSubmission, listPosterSubmissions, normalizePosterData, updatePosterSubmission } from '../shared/poster-submissions.js';
+import { createPosterSubmissions, deletePosterSubmission, fetchPosterSubmission, listPosterSubmissions, normalizePosterData, updatePosterSubmissionLogo } from '../shared/poster-submissions.js';
 
 const root = document.getElementById('admin-root');
 const SESSION_KEY = 'poster-builder-admin-ok';
@@ -53,6 +53,11 @@ const FONT_OPTIONS = ['IBM Plex Sans Hebrew', 'Gveret Levin', 'Alef', 'Alice', '
 const TITLE_COLOR_OPTIONS = ['#5E2750', '#1a3a6b', '#1a5c3a', '#7a1a1a', '#b5520a', '#1a4a5c', '#2d2d2d'];
 const TEXT_COLOR_OPTIONS = ['#1f1030', '#000000', '#1a1a2e', '#1a3a1a', '#2e1a00', '#2a2a2a', '#3a1a3a'];
 const DEFAULT_SLOT_IMAGES = { visual: null, visual_1: null, visual_2: null, visual_3: null };
+const SCHOOL_LOGO_ACCEPT = 'image/png,image/jpeg,image/webp,image/svg+xml';
+const SCHOOL_LOGO_RASTER_TYPES = new Set(['image/png', 'image/jpeg', 'image/webp']);
+const SCHOOL_LOGO_SVG_TYPES = new Set(['image/svg+xml']);
+const SCHOOL_LOGO_MAX_SOURCE_BYTES = 5 * 1024 * 1024;
+const SCHOOL_LOGO_MAX_STORED_BYTES = 850 * 1024;
 const DEFAULT_FIELD_SETTINGS = Object.fromEntries(
   FIELD_DEFINITIONS.map((field) => [field.id, { fontFamily: DEFAULT_FIELD_FONT, color: DEFAULT_FIELD_COLOR, borderRadius: 20 }])
 );
@@ -91,7 +96,55 @@ function readImageFileAsDataUrl(file) {
   });
 }
 
-async function compressSchoolLogoFile(file, maxWidth = 420, maxHeight = 240, quality = 0.82) {
+function readFileAsText(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result || ''));
+    reader.onerror = () => reject(new Error('קובץ ה-SVG לא נקרא בהצלחה.'));
+    reader.readAsText(file);
+  });
+}
+
+function getSchoolLogoFileType(file) {
+  const type = (file?.type || '').toLowerCase();
+  if (type) return type;
+  const name = (file?.name || '').toLowerCase();
+  if (name.endsWith('.svg')) return 'image/svg+xml';
+  if (name.endsWith('.png')) return 'image/png';
+  if (name.endsWith('.jpg') || name.endsWith('.jpeg')) return 'image/jpeg';
+  if (name.endsWith('.webp')) return 'image/webp';
+  return '';
+}
+
+function estimateDataUrlBytes(dataUrl) {
+  const base64 = String(dataUrl || '').split(',')[1] || '';
+  return Math.ceil((base64.length * 3) / 4);
+}
+
+function validateStoredLogoSize(dataUrl, explicitBytes = null) {
+  const byteCount = explicitBytes ?? estimateDataUrlBytes(dataUrl);
+  if (byteCount > SCHOOL_LOGO_MAX_STORED_BYTES) {
+    throw new Error('הלוגו גדול מדי לשמירה אחרי עיבוד. נסו קובץ קטן יותר.');
+  }
+  return dataUrl;
+}
+
+async function prepareSvgSchoolLogoFile(file) {
+  const svgText = (await readFileAsText(file)).trim();
+  if (!/^<svg[\s>]/i.test(svgText) && !/<svg[\s>]/i.test(svgText.slice(0, 300))) {
+    throw new Error('קובץ SVG לא נקרא בפורמט תקין.');
+  }
+  const dataUrl = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgText)}`;
+  return validateStoredLogoSize(dataUrl, new Blob([svgText], { type: 'image/svg+xml' }).size);
+}
+
+async function compressSchoolLogoFile(file, maxWidth = 520, maxHeight = 520, quality = 0.82) {
+  const type = getSchoolLogoFileType(file);
+  if (SCHOOL_LOGO_SVG_TYPES.has(type)) return prepareSvgSchoolLogoFile(file);
+  if (!SCHOOL_LOGO_RASTER_TYPES.has(type)) {
+    throw new Error('סוג הקובץ לא נתמך. אפשר להעלות PNG, JPG, JPEG, WEBP או SVG בלבד.');
+  }
+
   const sourceDataUrl = await readImageFileAsDataUrl(file);
   const image = await new Promise((resolve, reject) => {
     const img = new Image();
@@ -111,8 +164,17 @@ async function compressSchoolLogoFile(file, maxWidth = 420, maxHeight = 240, qua
   ctx.drawImage(image, 0, 0, targetWidth, targetHeight);
 
   const webp = canvas.toDataURL('image/webp', quality);
-  if (webp && webp.startsWith('data:image/webp')) return webp;
-  return canvas.toDataURL('image/jpeg', quality);
+  if (webp && webp.startsWith('data:image/webp')) return validateStoredLogoSize(webp);
+  return validateStoredLogoSize(canvas.toDataURL('image/jpeg', quality));
+}
+
+function formatSchoolLogoError(err) {
+  const details = err?.message || String(err || '');
+  const isPolicyError = /rls|policy|permission|not authorized|unauthorized|forbidden|42501/i.test(details);
+  if (isPolicyError) {
+    return `לא הצלחנו לשמור את לוגו בית הספר בגלל הרשאות Supabase/RLS: ${details}. יש לאפשר מדיניות update בטבלת poster_submissions עבור האדמין, אחרת ההעלאה לא תישמר.`;
+  }
+  return details || 'אירעה שגיאה לא ידועה.';
 }
 
 function formatDate(value) {
@@ -384,29 +446,49 @@ async function saveSchoolLogo(id, nextLogoImage) {
   state.logoEditor = { ...editor, saving: true, project: nextProject };
   render();
   try {
-    await updatePosterSubmission(id, nextProject);
-    const persistedProject = persistAdminProject(id, nextProject);
+    const updatedPosterData = await updatePosterSubmissionLogo(id, nextLogoImage);
+    const persistedProject = persistAdminProject(id, { ...nextProject, ...updatedPosterData });
     state.logoEditor = { id, loading: false, saving: false, project: persistedProject };
-    state.message = nextLogoImage ? 'לוגו בית הספר נשמר בהצלחה.' : 'לוגו בית הספר הוסר בהצלחה.';
+    state.message = nextLogoImage ? 'הלוגו נשמר בהצלחה' : 'לוגו בית הספר הוסר בהצלחה.';
     state.messageType = 'ok';
     await loadRows({ keepMessage: true });
   } catch (err) {
+    console.error('School logo save failed:', err);
     state.logoEditor = { ...editor, saving: false };
-    showMessage('לא הצלחנו לשמור את לוגו בית הספר כרגע.');
+    showMessage(`לא הצלחנו לשמור את לוגו בית הספר. ${formatSchoolLogoError(err)}`);
   }
 }
 
 async function handleSchoolLogoUpload(id, file) {
   if (!file) return;
-  if (!file.type.startsWith('image/')) {
-    showMessage('אפשר להעלות רק קבצי תמונה.');
+  if (!id) {
+    showMessage('לא נמצא מזהה פוסטר לשמירת הלוגו.');
     return;
   }
+
+  const type = getSchoolLogoFileType(file);
+  if (!SCHOOL_LOGO_RASTER_TYPES.has(type) && !SCHOOL_LOGO_SVG_TYPES.has(type)) {
+    showMessage('סוג הקובץ לא נתמך. אפשר להעלות PNG, JPG, JPEG, WEBP או SVG בלבד.');
+    return;
+  }
+
+  if (file.size > SCHOOL_LOGO_MAX_SOURCE_BYTES) {
+    showMessage('הקובץ גדול מדי. אפשר להעלות לוגו עד 5MB.');
+    return;
+  }
+
+  state.message = 'מעלה לוגו...';
+  state.messageType = 'ok';
+  state.logoEditor = state.logoEditor ? { ...state.logoEditor, saving: true } : state.logoEditor;
+  render();
+
   try {
     const compressedLogo = await compressSchoolLogoFile(file);
     await saveSchoolLogo(id, compressedLogo);
   } catch (err) {
-    showMessage('לא הצלחנו לעבד את התמונה. נסו קובץ תמונה אחר.');
+    console.error('School logo upload failed:', err);
+    if (state.logoEditor) state.logoEditor = { ...state.logoEditor, saving: false };
+    showMessage(`לא הצלחנו להעלות את לוגו בית הספר. ${formatSchoolLogoError(err)}`);
   }
 }
 
@@ -430,16 +512,16 @@ function renderLogoEditor() {
     </header>
     <div class="admin-logo-body">
       <div class="admin-logo-preview ${hasLogo ? '' : 'empty'}">
-        ${hasLogo ? `<img src="${project.schoolLogoImage}" alt="לוגו בית הספר הנוכחי" />` : 'לא הועלה לוגו בית ספר'}
+        ${hasLogo ? `<img src="${escapeHtml(project.schoolLogoImage)}" alt="לוגו בית הספר הנוכחי" />` : 'לא הועלה לוגו בית ספר'}
       </div>
       <div class="admin-logo-controls">
         <p>הלוגו נשמר בשדה <code>schoolLogoImage</code>, בנוסף ללוגו הקיים של “פורצות דרך”.</p>
-        <input class="admin-file-input" type="file" accept="image/*" data-school-logo-file />
+        <input class="admin-file-input" type="file" accept="${SCHOOL_LOGO_ACCEPT}" data-school-logo-file />
         <div class="admin-actions">
-          <button class="admin-btn primary" type="button" data-school-logo-upload ${editor.saving ? 'disabled' : ''}>${hasLogo ? 'החלפת לוגו' : 'העלאת לוגו'}</button>
-          <button class="admin-btn danger" type="button" data-school-logo-remove ${(!hasLogo || editor.saving) ? 'disabled' : ''}>הסרת לוגו</button>
+          <button class="admin-btn primary" type="button" data-school-logo-upload ${editor.saving ? 'disabled' : ''}>${hasLogo ? 'החלפת לוגו בית ספר' : 'העלאת לוגו בית ספר'}</button>
+          <button class="admin-btn danger" type="button" data-school-logo-remove ${(!hasLogo || editor.saving) ? 'disabled' : ''}>הסרת לוגו בית ספר</button>
         </div>
-        ${editor.saving ? '<p class="admin-message ok">שומר...</p>' : ''}
+        ${editor.saving ? `<p class="admin-message ok">${escapeHtml(state.message || 'מעלה לוגו...')}</p>` : ''}
       </div>
     </div>
   </section>`;
