@@ -35,6 +35,7 @@ export function normalizePosterData(project = {}) {
     contentValues: project.contentValues || {},
     fieldSettings: project.fieldSettings || {},
     titleStyle: project.titleStyle || {},
+    schoolLogoImage: project.schoolLogoImage || null,
     slotImages: project.slotImages || {},
     splitFlowState: project.splitFlowState || null
   };
@@ -97,6 +98,18 @@ export async function fetchPosterSubmission(id) {
     .single();
   if (error) throw error;
   return data;
+}
+
+export async function updatePosterSubmission(id, project) {
+  const client = getPosterSubmissionsClient();
+  if (!client) throw new Error('Poster submissions are not configured.');
+
+  const { error } = await client
+    .from(POSTER_SUBMISSIONS_TABLE)
+    .update(buildSubmissionRow(project))
+    .eq('id', id);
+
+  if (error) throw error;
 }
 
 export async function deletePosterSubmission(id) {

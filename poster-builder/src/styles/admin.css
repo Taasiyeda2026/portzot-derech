@@ -43,8 +43,22 @@ th, td { padding: 12px 10px; text-align: right; border-bottom: 1px solid #f0e7fb
 th { background: #faf5ff; color: #4c1d95; font-weight: 900; white-space: nowrap; }
 tr:last-child td { border-bottom: 0; }
 .admin-empty { text-align: center; color: #64748b; padding: 28px; }
-.admin-row-actions { display: flex; gap: 8px; }
+.admin-row-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.admin-logo-panel { margin: 16px 0; }
+.admin-logo-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; margin-bottom: 16px; }
+.admin-logo-title { margin: 0; color: #5E2750; font-size: 22px; font-weight: 900; }
+.admin-logo-body { display: grid; grid-template-columns: minmax(180px, 260px) 1fr; gap: 18px; align-items: center; }
+.admin-logo-preview { min-height: 128px; border: 1.5px dashed #d8c7ef; border-radius: 16px; background: #fbf7ff; display: flex; align-items: center; justify-content: center; padding: 16px; color: #7c6a90; font-weight: 800; text-align: center; }
+.admin-logo-preview img { max-width: 220px; max-height: 110px; width: auto; height: auto; object-fit: contain; display: block; }
+.admin-logo-preview.empty { background: #fafafa; color: #64748b; }
+.admin-logo-controls { display: grid; gap: 12px; }
+.admin-logo-controls p { margin: 0; color: #475569; line-height: 1.6; }
+.admin-logo-controls code { direction: ltr; unicode-bidi: embed; background: #f3e8ff; color: #5E2750; border-radius: 6px; padding: 2px 6px; font-weight: 800; }
+
 @media (max-width: 760px) {
   .admin-header { align-items: flex-start; flex-direction: column; }
   .admin-title { font-size: 24px; }
+  .admin-logo-header { flex-direction: column; }
+  .admin-logo-body { grid-template-columns: 1fr; }
 }
+

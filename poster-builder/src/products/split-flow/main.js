@@ -968,6 +968,7 @@ function buildCurrentPosterProject() {
     background: state.design.background || null,
     backgroundId: selectedBackground?.id || stored.backgroundId || null,
     backgroundPath: state.design.background || stored.backgroundPath || null,
+    schoolLogoImage: stored.schoolLogoImage || null,
     slotImages: { ...state.slotImages },
     fieldSettings: nextFieldSettings,
     titleStyle: {
