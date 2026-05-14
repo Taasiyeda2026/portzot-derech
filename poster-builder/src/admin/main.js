@@ -58,6 +58,8 @@ const SCHOOL_LOGO_RASTER_TYPES = new Set(['image/png', 'image/jpeg', 'image/webp
 const SCHOOL_LOGO_SVG_TYPES = new Set(['image/svg+xml']);
 const SCHOOL_LOGO_MAX_SOURCE_BYTES = 5 * 1024 * 1024;
 const SCHOOL_LOGO_MAX_STORED_BYTES = 850 * 1024;
+
+const SCHOOL_LOGO_RLS_MESSAGE = 'לא הצלחנו לשמור את הלוגו בגלל הרשאות Supabase. יש לאפשר update בטבלת poster_submissions עבור האדמין.';
 const DEFAULT_FIELD_SETTINGS = Object.fromEntries(
   FIELD_DEFINITIONS.map((field) => [field.id, { fontFamily: DEFAULT_FIELD_FONT, color: DEFAULT_FIELD_COLOR, borderRadius: 20 }])
 );
@@ -168,11 +170,15 @@ async function compressSchoolLogoFile(file, maxWidth = 520, maxHeight = 520, qua
   return validateStoredLogoSize(canvas.toDataURL('image/jpeg', quality));
 }
 
+function isSchoolLogoPolicyError(err) {
+  const details = err?.message || String(err || '');
+  return /rls|policy|permission|not authorized|unauthorized|forbidden|42501/i.test(details);
+}
+
 function formatSchoolLogoError(err) {
   const details = err?.message || String(err || '');
-  const isPolicyError = /rls|policy|permission|not authorized|unauthorized|forbidden|42501/i.test(details);
-  if (isPolicyError) {
-    return `לא הצלחנו לשמור את לוגו בית הספר בגלל הרשאות Supabase/RLS: ${details}. יש לאפשר מדיניות update בטבלת poster_submissions עבור האדמין, אחרת ההעלאה לא תישמר.`;
+  if (isSchoolLogoPolicyError(err)) {
+    return `${SCHOOL_LOGO_RLS_MESSAGE} (${details})`;
   }
   return details || 'אירעה שגיאה לא ידועה.';
 }
@@ -443,7 +449,7 @@ async function saveSchoolLogo(id, nextLogoImage) {
     schoolLogoImage: nextLogoImage || null
   };
 
-  state.logoEditor = { ...editor, saving: true, project: nextProject };
+  state.logoEditor = { ...editor, saving: true };
   render();
   try {
     const updatedPosterData = await updatePosterSubmissionLogo(id, nextLogoImage);
@@ -455,7 +461,10 @@ async function saveSchoolLogo(id, nextLogoImage) {
   } catch (err) {
     console.error('School logo save failed:', err);
     state.logoEditor = { ...editor, saving: false };
-    showMessage(`לא הצלחנו לשמור את לוגו בית הספר. ${formatSchoolLogoError(err)}`);
+    const errorMessage = isSchoolLogoPolicyError(err)
+      ? formatSchoolLogoError(err)
+      : `לא הצלחנו לשמור את לוגו בית הספר. ${formatSchoolLogoError(err)}`;
+    showMessage(errorMessage);
   }
 }
 
