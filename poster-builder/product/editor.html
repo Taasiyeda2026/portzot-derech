@@ -238,6 +238,10 @@
             <img src="/poster-builder/assets/logoposter.svg" alt="פורצות דרך" crossorigin="anonymous"
               style="height:100px;width:auto;object-fit:contain;display:block;filter:drop-shadow(0 0 4px rgba(255,255,255,0.95)) drop-shadow(0 0 10px rgba(255,255,255,0.75));" />
           </div>
+          <div id="ph-school-logo-wrap" style="display:none;position:absolute;top:14px;right:24px;z-index:20;max-width:140px;max-height:70px">
+            <img id="ph-school-logo-img" alt="לוגו בית הספר" crossorigin="anonymous"
+              style="display:block;max-width:140px;max-height:70px;width:auto;height:auto;object-fit:contain;filter:drop-shadow(0 0 4px rgba(255,255,255,0.9));" />
+          </div>
 
           <div id="ph-name" style="font-weight:900;line-height:1.1;margin-bottom:8px;word-break:break-word;overflow-wrap:anywhere"></div>
           <div id="ph-title-line" style="height:3px;background:linear-gradient(90deg,#5E2750,#d61f8c);border-radius:2px;margin:0 auto 10px;transition:width .2s ease"></div>
@@ -363,7 +367,8 @@
   const textColor    = project.cardStyle?.color       || '#1f1030';
   const background   = project.background             || null;
   const slotImages   = project.slotImages             || {};
-  renderHTMLPoster(contentValues, productType, titleFont, titleColor, textColor, background, slotImages);
+  const schoolLogoImage = project.schoolLogoImage || null;
+  renderHTMLPoster(contentValues, productType, titleFont, titleColor, textColor, background, slotImages, schoolLogoImage);
 
   if (params.get('print') === '1' && !window.__posterAutoPrintTriggered) {
     window.__posterAutoPrintTriggered = true;

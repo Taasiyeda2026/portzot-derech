@@ -35,6 +35,7 @@ export function normalizePosterData(project = {}) {
     contentValues: project.contentValues || {},
     fieldSettings: project.fieldSettings || {},
     titleStyle: project.titleStyle || {},
+    schoolLogoImage: project.schoolLogoImage || null,
     slotImages: project.slotImages || {},
     splitFlowState: project.splitFlowState || null
   };

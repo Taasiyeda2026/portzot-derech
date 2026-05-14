@@ -2,7 +2,7 @@ const POSTER_HEIGHT_PX = 1123;
 const IMG_HEIGHTS     = { app: 270, physical: 220, website: 185, digital: 185 };
 const IMG_MIN_HEIGHTS = { app: 95,  physical: 90,  website: 75,  digital: 75  };
 
-export function renderHTMLPoster(contentValues, productType, titleFont, titleColor, textColor, background, slotImages) {
+export function renderHTMLPoster(contentValues, productType, titleFont, titleColor, textColor, background, slotImages, schoolLogoImage) {
   // Support legacy calls that pass (background, slotImages) after titleColor.
   if (slotImages === undefined && background && typeof background === 'object') {
     slotImages = background;
@@ -25,6 +25,19 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
       if (bgImg.getAttribute('src') !== background) bgImg.src = background;
     } else {
       bgEl.innerHTML = '';
+    }
+  }
+
+  // ── School logo (set by admin only, never by students) ───────────────────────
+  const logoWrap = document.getElementById('ph-school-logo-wrap');
+  const logoImg  = document.getElementById('ph-school-logo-img');
+  if (logoWrap && logoImg) {
+    if (schoolLogoImage) {
+      if (logoImg.getAttribute('src') !== schoolLogoImage) logoImg.src = schoolLogoImage;
+      logoWrap.style.display = '';
+    } else {
+      logoWrap.style.display = 'none';
+      logoImg.removeAttribute('src');
     }
   }
 
