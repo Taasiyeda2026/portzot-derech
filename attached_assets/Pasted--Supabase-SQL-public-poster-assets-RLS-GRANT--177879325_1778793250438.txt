@@ -1,0 +1,134 @@
+הרצתי ב־Supabase את ה־SQL ליצירת הטבלה public.poster_assets כולל RLS ו־GRANT.
+
+עכשיו צריך לחבר את הקוד במערכת poster-builder כך שהטבלה תעבוד בפועל.
+
+מטרה:
+באדמין תהיה ספריית אלמנטים / לוגואים.
+האדמין יוכל להעלות לוגו בית ספר לספרייה.
+כאשר פותחים פוסטר מהאדמין, המערכת תזהה אוטומטית את שם בית הספר בפוסטר ותטען את הלוגו המתאים מתוך poster_assets.
+
+חשוב:
+- לתלמידות אין אפשרות להעלות או לנהל לוגואים.
+- ניהול הספרייה באדמין בלבד.
+- לוגו "פורצות דרך" הקיים נשאר כמו שהוא.
+- לוגו בית הספר הוא תוספת אופציונלית בלבד.
+
+יש לבצע:
+
+1. ליצור קובץ שירות חדש:
+poster-builder/src/shared/poster-assets.js
+
+הקובץ יכלול פונקציות:
+- listPosterAssets()
+- createPosterAsset(asset)
+- updatePosterAsset(id, patch)
+- softDeletePosterAsset(id)
+- findSchoolLogoBySchoolName(schoolName)
+
+הפונקציה findSchoolLogoBySchoolName צריכה לחפש:
+asset_type = 'school_logo'
+school_name = שם בית הספר
+is_active = true
+
+יש לבצע התאמה סלחנית בסיסית:
+trim
+הסרת רווחים כפולים
+השוואה גם לפי שם מדויק וגם לפי normalize פשוט.
+
+2. לעדכן את poster-builder/src/admin/main.js
+
+להוסיף באדמין אזור חדש:
+"ספריית אלמנטים לפוסטרים"
+
+באזור זה האדמין יוכל:
+- לראות רשימת אלמנטים קיימים.
+- להעלות אלמנט חדש.
+- להזין שם אלמנט.
+- לבחור סוג:
+  school_logo
+  icon
+  decoration
+  other
+- אם נבחר school_logo — להציג שדה חובה:
+  school_name
+- לראות תצוגה מקדימה של התמונה.
+- למחוק אלמנט באמצעות is_active=false.
+- להחליף תמונה לאלמנט קיים אם זה פשוט לביצוע.
+
+העלאת תמונה:
+- להשתמש ב־input type="file"
+- accept="image/png,image/jpeg,image/webp,image/svg+xml"
+- להשתמש באותו מנגנון דחיסה שכבר קיים ללוגו בית ספר או להוציא אותו לפונקציה משותפת.
+- לשמור את התמונה בשדה image_data.
+
+3. טעינה אוטומטית של לוגו בית ספר
+
+ב־openSubmission בתוך poster-builder/src/admin/main.js:
+
+לאחר:
+fetchPosterSubmission(id)
+normalizePosterData(row.poster_data || {})
+
+יש לקחת את שם בית הספר מתוך:
+posterData.contentValues.schoolName
+
+ואז לחפש ב־poster_assets לוגו מתאים:
+findSchoolLogoBySchoolName(schoolName)
+
+אם נמצא לוגו אחד:
+- להציב:
+posterData.schoolLogoImage = matchedAsset.image_data
+posterData.schoolLogoAssetId = matchedAsset.id
+- לשמור את זה ל־localStorage יחד עם שאר נתוני הפוסטר.
+- רצוי גם לעדכן את poster_data ב־poster_submissions כדי שהשיוך יישמר.
+
+אם נמצאו כמה לוגואים תואמים:
+- להציג לאדמין בחירה ולא לבחור אוטומטית בצורה שגויה.
+
+אם לא נמצא לוגו:
+- לא להציג שגיאה.
+- הפוסטר ייפתח רגיל בלי לוגו בית ספר.
+
+4. לוודא שהפוסטר מציג את הלוגו
+
+ב־poster-builder/product/editor.html כבר צריך להיות אזור:
+ph-school-logo-wrap
+ph-school-logo-img
+
+אם הוא לא קיים — להוסיף אותו.
+
+ב־poster-builder/src/canvas/html-poster.js:
+לוודא ש־renderHTMLPoster מקבלת schoolLogoImage ומציגה אותו בפועל:
+
+אם schoolLogoImage קיים:
+- ph-school-logo-img.src = schoolLogoImage
+- ph-school-logo-wrap.style.display = 'block'
+- visibility = visible
+- opacity = 1
+
+אם לא קיים:
+- להסיר src
+- display:none
+
+5. לשמר נתונים
+
+ב־poster-builder/src/products/split-flow/main.js:
+לוודא ש־buildCurrentPosterProject לא מוחק:
+- schoolLogoImage
+- schoolLogoAssetId
+- posterAssets אם יתווסף בעתיד
+
+כלומר לשמר אותם מתוך stored.
+
+6. בדיקות חובה
+
+- להעלות לוגו בית ספר לספריית האלמנטים באדמין.
+- להגדיר school_name בדיוק כמו שם בית הספר שמופיע בפוסטר.
+- לפתוח פוסטר מהאדמין.
+- לוודא שהמערכת מזהה אוטומטית את הלוגו.
+- לוודא ש־localStorage כולל schoolLogoImage.
+- לוודא שהלוגו מופיע בפוסטר.
+- לרענן את הפוסטר ולוודא שהלוגו נשאר.
+- לייצא / להדפיס PDF ולוודא שהלוגו מופיע.
+- לוודא שתלמידות לא רואות שום אפשרות להעלות לוגו.
+- לוודא שלוגו "פורצות דרך" לא זז ולא הוחלף.
