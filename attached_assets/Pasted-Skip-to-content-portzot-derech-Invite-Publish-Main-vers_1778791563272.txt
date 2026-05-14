@@ -1,0 +1,438 @@
+Skip to content
+
+
+portzot-derech
+
+
+Invite
+
+Publish
+
+
+
+Main version
+Working...
+
+New task
+
+Filters
+ME
+
+
+Open task board
+Library
+
+File tree
+Search
+
+New
+Other
+Start application
+Website
+
+
+Agent
+4
+
+main
+
+
+Remote Updates
+origin/main•upstream
+last fetched 9 min ago
+
+
+Sync Changes
+
+Pull
+
+Push
+Commit
+Message
+Ctrl
+↵
+
+Summary
+Review Changes
+7 changes
+
+
+7 changed files
+
+Discard All
+
+Stage All
+editor.html
+
+
+M
+…/admin/main.js
+
+
+M
+html-poster.js
+
+
+M
+…/split-flow/main.js
+
+
+M
+app-shell.js
+
+
+M
+poster-submissions.js
+
+
+M
+Pasted--poster-builder--1778791504239_1778791504241.txt
+
+
+A
+Committing will automatically stage your changes.
+
+Stage and commit all changes
+Update service worker cache version
+
+
+
+Show previous messages
+
+8 messages & 20 actions
+
+Checkpoint made
+28 minutes ago
+
+Worked for 6 minutes
+תעדכן גם SW
+
+27 minutes ago
+
+1 message & 7 actions
+
+Checkpoint made
+26 minutes ago
+
+Worked for 41 seconds
+תדחוף את הכל גם העבודה הקודמת אל הריפו אל MAIN
+
+26 minutes ago
+
+4 messages & 27 actions
+
+Worked for 4 minutes
+אפשרות א
+
+12 minutes ago
+
+1 message & 6 actions
+
+Worked for 25 seconds
+
+1 message & 4 actions
+
+Worked for 27 seconds
+לא רואים את הלוגו של בית הספר ואני מבקש להסיר את האפשרות הזאת
+
+6 minutes ago
+
+Removing school logo functionality
+נחפש את כל המקומות שבהם מופיע לוגו בית הספר:
+
+
+9 actions
+עכשיו אני קורא את הקטעים הרלוונטיים בכל הקבצים:
+
+
+4 actions
+עכשיו אני קורא את הקטעים הנותרים לפני העריכה:
+
+
+3 actions
+עכשיו יש לי תמונה מלאה. אני עורך את כל הקבצים:
+
+
+4 actions
+עורך את כל הקבצים במקביל:
+
+
+5 actions
+עכשיו מסיר את שאר הקוד:
+
+
+4 actions
+ממשיך עם app-shell.js ו-admin/main.js:
+
+
+14 actions
+עכשיו מטפל ב-admin/main.js — מסיר את כל פונקציות ה-logo:
+
+
+3 actions
+עכשיו אני קורא את הקטעים הרלוונטיים ב-admin/main.js לפני העריכה:
+
+
+2 actions
+מסיר את כל קוד הלוגו מ-admin/main.js בבלוקים גדולים:
+
+
+3 actions
+עכשיו מסיר את הפונקציות:
+
+
+2 actions
+ממשיך להסיר את שאר הפונקציות מ-admin/main.js:
+
+
+11 actions
+נשתמש ב-sed כדי למחוק את שורות הפונקציות ישירות:
+
+
+6 actions
+עורך את שאר החלקים ב-admin/main.js בבת אחת:
+
+
+10 actions
+readImageFileAsDataUrl ו-readFileAsText שימשו רק ללוגו — נסיר אותם. נבדוק גם אם יש שאר ריפרנסים:
+
+
+3 actions
+עוד שני דברים — מסיר את הפונקציות העזר שכבר לא נצרכות, ואת ה-ph-school-logo-wrap מה-JSX:
+
+
+Planning code removal and modification..
+
+Scroll to latest
+
+Make, test, iterate…
+
+Pasted--poster-builder--1778791504239_1778791504241.txt
+
+
+
+Economy
+
+
+
+
+Pasted--poster-builder--1778791504239_1778791504241.txt
+עדכון דרישה למערכת poster-builder:
+
+במקום העלאה ידנית של לוגו בית ספר לכל פוסטר בנפרד, יש ליצור באדמין ספריית אלמנטים / לוגואים שניתן לנהל מראש, ומתוכה יהיה אפשר להוסיף אלמנטים לפוסטר רגע לפני הסיום.
+
+המטרה:
+לאפשר לאדמין להעלות מראש לוגואים ואלמנטים גרפיים, ובשלב הסופי של הפוסטר לבחור או לשייך אותם לפוסטר.
+לוגו בית הספר צריך להיטען אוטומטית לפי שם בית הספר, אם קיים לוגו תואם בספרייה.
+
+חשוב:
+- לתלמידות לא תהיה אפשרות להעלות אלמנטים או לוגואים.
+- ניהול האלמנטים יהיה באדמין בלבד.
+- הלוגו הקיים של "פורצות דרך" נשאר כפי שהוא, לא נמחק, לא מוחלף ולא זז.
+- לוגו בית הספר הוא תוספת אופציונלית בלבד.
+- אם לא נמצא לוגו מתאים לבית הספר — הפוסטר יישאר בלי לוגו בית ספר, בלי לשבור את התצוגה.
+
+מבנה נדרש:
+
+1. ספריית אלמנטים באדמין
+
+באדמין יש להוסיף אזור חדש:
+"ספריית אלמנטים לפוסטרים"
+
+באזור זה האדמין יוכל:
+- להעלות אלמנט חדש.
+- להעלות לוגו בית ספר.
+- לתת שם לאלמנט.
+- לבחור סוג אלמנט:
+  - לוגו בית ספר
+  - סמל / אייקון
+  - אלמנט עיצובי
+  - אחר
+- אם סוג האלמנט הוא "לוגו בית ספר", יהיה שדה:
+  schoolName
+  שבו האדמין מזין את שם בית הספר שאליו הלוגו שייך.
+- לראות תצוגה מקדימה של האלמנט.
+- למחוק אלמנט.
+- להחליף קובץ של אלמנט קיים.
+
+2. שמירת האלמנטים
+
+יש לשמור את האלמנטים בצורה מסודרת.
+
+אפשרות מומלצת:
+טבלה חדשה ב־Supabase:
+
+poster_assets
+
+שדות מומלצים:
+- id
+- created_at
+- name
+- asset_type
+- school_name
+- image_data
+- is_active
+
+כאשר:
+- asset_type יכול להיות:
+  school_logo
+  icon
+  decoration
+  other
+
+- school_name יהיה מלא רק כאשר מדובר בלוגו בית ספר.
+- image_data יכיל את התמונה כ־Data URL או לחלופין URL אם משתמשים ב־Supabase Storage.
+- is_active יאפשר להסתיר אלמנט בלי למחוק אותו.
+
+אם מעדיפים Supabase Storage:
+- לשמור את הקבצים ב־bucket ייעודי, למשל:
+  poster-assets
+- ובטבלה לשמור רק את ה־public URL / signed URL לפי הצורך.
+
+3. טעינת לוגו בית ספר אוטומטית
+
+כאשר פותחים פוסטר מהאדמין, או כאשר מגיעים לשלב הסופי:
+- המערכת תקרא את schoolName מתוך נתוני הפוסטר.
+- תחפש ב־poster_assets אלמנט מסוג:
+  asset_type = 'school_logo'
+  וגם:
+  school_name תואם לשם בית הספר.
+
+אם נמצא לוגו תואם:
+- הלוגו ייטען אוטומטית לפוסטר.
+- אין צורך שהאדמין יעלה אותו מחדש.
+- יש לשמור אותו בפרויקט תחת:
+  schoolLogoImage
+  או:
+  schoolLogoAssetId
+  ובזמן הרינדור להשתמש בתמונה המתאימה.
+
+אם יש יותר מלוגו אחד תואם:
+- להציג לאדמין בחירה קצרה.
+- לא לבחור אוטומטית בצורה שגויה.
+
+אם אין לוגו תואם:
+- להציג באדמין הודעה עדינה:
+  "לא נמצא לוגו לבית הספר הזה בספריית האלמנטים."
+- לא להציג שגיאה לתלמידות.
+- הפוסטר ימשיך לעבוד רגיל.
+
+4. בחירת אלמנטים רגע לפני הסיום
+
+בשלב האחרון של הפוסטר, באזור "מיפוי ועיצוב לפוסטר", יש להוסיף אזור לאדמין בלבד:
+
+"אלמנטים לפוסטר"
+
+באזור זה האדמין יוכל:
+- לראות את הלוגו שזוהה אוטומטית לבית הספר.
+- לבחור אם להציג אותו או לא.
+- לבחור אלמנטים נוספים מתוך הספרייה.
+- להסיר אלמנט שנבחר.
+- לראות תצוגה מקדימה קטנה.
+
+חשוב:
+השלב הזה צריך להיות זמין רק בכניסה/מצב אדמין.
+אם תלמידה בונה פוסטר רגיל — היא לא תראה את אזור האלמנטים.
+
+5. הצגת הלוגו בפוסטר
+
+ב־poster-builder/product/editor.html:
+- להשאיר את הלוגו הקיים של "פורצות דרך" כפי שהוא.
+- להוסיף אזור תצוגה ללוגו בית הספר:
+  ph-school-logo-wrap
+  ph-school-logo-img
+
+מיקום מומלץ:
+- בחלק העליון של הפוסטר, בצד השני מהלוגו הקיים.
+- עדין, נקי, לא מתנגש בכותרת.
+
+עיצוב:
+- max-height: 55–70px
+- max-width: 110–140px
+- object-fit: contain
+- background לבן עדין או שקיפות קלה אם צריך קריאות
+- ללא מתיחה
+- ללא חיתוך
+- אם אין לוגו — display:none
+
+6. תמיכה באלמנטים נוספים
+
+בעתיד, לא רק לוגו:
+יש לאפשר שמירת מערך אלמנטים בפוסטר, למשל:
+
+posterAssets: [
+  {
+    assetId,
+    image,
+    type,
+    position,
+    size,
+    visible
+  }
+]
+
+בשלב ראשון מספיק לתמוך בלוגו בית ספר.
+אבל יש לבנות את זה כך שבעתיד יהיה אפשר להוסיף עוד אלמנטים בלי לשכתב את כל המנגנון.
+
+7. עדכונים בקבצים
+
+יש לבדוק ולעדכן את הקבצים הבאים:
+
+poster-builder/src/admin/main.js
+- להוסיף ניהול ספריית אלמנטים.
+- להוסיף העלאה / החלפה / מחיקה של אלמנטים.
+- להוסיף חיפוש לוגו לפי schoolName.
+- להוסיף בחירה/שיוך של לוגו לפוסטר.
+
+poster-builder/src/shared/poster-submissions.js
+- לוודא ש־schoolLogoImage או schoolLogoAssetId נשמרים בתוך poster_data.
+- לוודא שפתיחה חוזרת מהאדמין לא מוחקת את השדה.
+- אם מוסיפים posterAssets, לשמור גם אותו בתוך poster_data.
+
+poster-builder/product/editor.html
+- להוסיף אזור תצוגה ללוגו בית הספר בלבד.
+- לא להוסיף כפתור העלאה לתלמידות.
+
+poster-builder/src/canvas/html-poster.js
+- להציג את schoolLogoImage אם קיים.
+- בהמשך לתמוך גם ב־posterAssets אם מוסיפים אלמנטים נוספים.
+
+poster-builder/src/products/split-flow/main.js
+- לא להוסיף לתלמידות אפשרות העלאת אלמנטים.
+- לשמר את schoolLogoImage / schoolLogoAssetId / posterAssets אם קיימים.
+- לא למחוק אותם בזמן בניית הפרויקט מחדש.
+
+8. הרשאות Supabase
+
+אם מוסיפים טבלה חדשה poster_assets:
+יש להגדיר RLS בצורה מסודרת.
+
+לבדיקה זמנית בלבד אפשר לאפשר select ל־anon כדי שהמערכת תוכל לקרוא אלמנטים:
+
+grant usage on schema public to anon;
+grant select on table public.poster_assets to anon;
+
+וליצור policy לקריאה:
+
+create policy "Allow read poster assets"
+on public.poster_assets
+for select
+to anon
+using (is_active = true);
+
+לניהול העלאה / מחיקה / עדכון של אלמנטים:
+לא לפתוח insert/update/delete חופשי ל־anon בפרודקשן.
+הפתרון הנכון הוא דרך Edge Function / server endpoint עם קוד אדמין בצד שרת או service_role בצד שרת בלבד.
+
+9. בדיקות חובה
+
+- אדמין יכול להעלות לוגו בית ספר לספריית האלמנטים.
+- הלוגו נשמר ומופיע בתצוגה מקדימה באדמין.
+- פוסטר עם schoolName תואם מזהה את הלוגו אוטומטית.
+- הפוסטר מציג גם את לוגו "פורצות דרך" וגם את לוגו בית הספר.
+- תלמידות לא רואות אפשרות להעלות או לנהל אלמנטים.
+- אם אין לוגו תואם, הפוסטר נשאר תקין.
+- רענון הדף לא מוחק את הלוגו.
+- פתיחה חוזרת מהאדמין שומרת את הלוגו.
+- ייצוא / הדפסה ל־PDF כולל את הלוגו.
+- הלוגו לא נמתח, לא נחתך ולא פוגע בכותרת.
