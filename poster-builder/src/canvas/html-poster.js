@@ -28,18 +28,13 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
     }
   }
 
-  // ── School logo (set by admin only, never by students) ───────────────────────
+  // Keep the legacy parameter for backwards-compatible callers, but do not render
+  // a separate school logo on the poster. Hide/remove any old DOM if present.
   const logoWrap = document.getElementById('ph-school-logo-wrap');
   const logoImg  = document.getElementById('ph-school-logo-img');
-  if (logoWrap && logoImg) {
-    if (schoolLogoImage) {
-      if (logoImg.getAttribute('src') !== schoolLogoImage) logoImg.src = schoolLogoImage;
-      logoWrap.style.display = '';
-    } else {
-      logoWrap.style.display = 'none';
-      logoImg.removeAttribute('src');
-    }
-  }
+  if (logoWrap) logoWrap.style.display = 'none';
+  if (logoImg) logoImg.removeAttribute('src');
+  void schoolLogoImage;
 
   const setText = (id, t) => { const e = document.getElementById(id); if (e) e.textContent = (t || '').trim(); };
   const setList = (id, items) => {
