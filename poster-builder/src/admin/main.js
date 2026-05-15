@@ -539,8 +539,9 @@ function renderAssetsView() {
 }
 
 function navigateWithProject(posterData, productType, splitFlowState, submissionId) {
-  const { schoolLogoImage, ...projectData } = posterData || {};
-  void schoolLogoImage;
+  const projectData = { ...(posterData || {}) };
+  delete projectData.schoolLogoImage;
+  delete projectData.schoolLogoAssetId;
   saveProject({
     ...projectData,
     productType,
