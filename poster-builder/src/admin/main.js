@@ -2,7 +2,7 @@ import { POSTER_ADMIN_CODE } from '../shared/supabase-config.js';
 import { saveProject } from '../shared/storage.js';
 import { BACKGROUNDS, DEFAULT_FIELD_COLOR, DEFAULT_FIELD_FONT, FIELD_DEFINITIONS, POSTER_SIZES } from '../products/physical/config.js';
 import { createPosterSubmissions, deletePosterSubmission, fetchPosterSubmission, listPosterSubmissions, normalizePosterData } from '../shared/poster-submissions.js';
-import { listPosterAssets, createPosterAsset, updatePosterAssetImage, deactivatePosterAsset, findSchoolLogoAssets } from '../shared/poster-assets.js';
+import { listPosterAssets, createPosterAsset, updatePosterAssetImage, deactivatePosterAsset } from '../shared/poster-assets.js';
 
 const root = document.getElementById('admin-root');
 const SESSION_KEY = 'poster-builder-admin-ok';
@@ -75,8 +75,7 @@ const state = {
   view: 'posters',
   assets: [],
   assetsLoading: false,
-  assetForm: null,
-  logoMatchModal: null
+  assetForm: null
 };
 
 function escapeHtml(value) {
@@ -539,69 +538,16 @@ function renderAssetsView() {
   bindAssetsViewEvents();
 }
 
-// ── Logo Match Modal ──────────────────────────────────────────────────────────
-
-function renderLogoMatchModal() {
-  const m = state.logoMatchModal;
-  if (!m) return '';
-  return `<div class="admin-logo-match-modal">
-    <div class="admin-logo-match-panel">
-      <h2 class="admin-logo-match-title">בחירת לוגו בית ספר</h2>
-      <p style="color:#64748b;margin:0;font-size:14px;line-height:1.6">נמצאו מספר לוגואים לבית הספר <strong>"${escapeHtml(m.schoolName)}"</strong>. בחרו את הלוגו המתאים לפוסטר זה:</p>
-      <div class="admin-logo-match-options">
-        ${m.matches.map((match) => `
-        <label class="admin-logo-match-option${m.selected === match.id ? ' selected' : ''}" data-match-label="${escapeHtml(match.id)}">
-          <input type="radio" name="logo-match" value="${escapeHtml(match.id)}" data-match-radio="${escapeHtml(match.id)}"${m.selected === match.id ? ' checked' : ''} style="display:none" />
-          <img src="${escapeHtml(match.image_data)}" alt="${escapeHtml(match.name)}" />
-          <span>${escapeHtml(match.name)}</span>
-        </label>`).join('')}
-      </div>
-      <div class="admin-actions">
-        <button class="admin-btn primary" type="button" data-logo-confirm>פתיחה עם לוגו זה</button>
-        <button class="admin-btn ghost" type="button" data-logo-skip>פתיחה ללא לוגו</button>
-      </div>
-    </div>
-  </div>`;
-}
-
-function navigateWithProject(posterData, productType, splitFlowState, submissionId, schoolLogoImage) {
+function navigateWithProject(posterData, productType, splitFlowState, submissionId) {
+  const { schoolLogoImage, ...projectData } = posterData || {};
+  void schoolLogoImage;
   saveProject({
-    ...posterData,
+    ...projectData,
     productType,
     splitFlowState,
-    submissionId,
-    schoolLogoImage: schoolLogoImage || null
+    submissionId
   });
   window.location.href = PRODUCT_PATHS[productType] || PRODUCT_PATHS.physical;
-}
-
-function bindLogoMatchEvents() {
-  const modal = root.querySelector('.admin-logo-match-modal');
-  if (!modal) return;
-
-  modal.querySelectorAll('[data-match-label]').forEach((label) => {
-    label.addEventListener('click', () => {
-      const id = label.dataset.matchLabel;
-      state.logoMatchModal = { ...state.logoMatchModal, selected: id };
-      modal.querySelectorAll('.admin-logo-match-option').forEach((l) => l.classList.remove('selected'));
-      label.classList.add('selected');
-    });
-  });
-
-  modal.querySelector('[data-logo-confirm]').addEventListener('click', () => {
-    const m = state.logoMatchModal;
-    if (!m) return;
-    const selected = m.matches.find((match) => match.id === m.selected);
-    state.logoMatchModal = null;
-    navigateWithProject(m.posterData, m.productType, m.splitFlowState, m.submissionId, selected?.image_data || null);
-  });
-
-  modal.querySelector('[data-logo-skip]').addEventListener('click', () => {
-    const m = state.logoMatchModal;
-    if (!m) return;
-    state.logoMatchModal = null;
-    navigateWithProject(m.posterData, m.productType, m.splitFlowState, m.submissionId, null);
-  });
 }
 
 // ── Submissions Table ─────────────────────────────────────────────────────────
@@ -647,7 +593,7 @@ function renderTable() {
       </div>
     </section>
   </main>
-  ${renderLogoMatchModal()}`;
+  `;
 
   root.querySelector('[data-refresh]').addEventListener('click', loadRows);
   const fileInput = root.querySelector('[data-import-file]');
@@ -669,7 +615,6 @@ function renderTable() {
     if (!state.assets.length && !state.assetsLoading) loadAssets();
     else render();
   });
-  if (state.logoMatchModal) bindLogoMatchEvents();
 }
 
 async function openSubmission(id) {
@@ -687,28 +632,7 @@ async function openSubmission(id) {
           shape: 20
         });
 
-    const schoolName = (posterData.contentValues || {}).schoolName || '';
-    let matches = [];
-    if (schoolName) {
-      try { matches = await findSchoolLogoAssets(schoolName); } catch {}
-    }
-
-    if (matches.length === 1) {
-      navigateWithProject(posterData, productType, splitFlowState, id, matches[0].image_data);
-    } else if (matches.length > 1) {
-      state.logoMatchModal = {
-        submissionId: id,
-        schoolName,
-        posterData,
-        productType,
-        splitFlowState,
-        matches,
-        selected: matches[0].id
-      };
-      render();
-    } else {
-      navigateWithProject(posterData, productType, splitFlowState, id, null);
-    }
+    navigateWithProject(posterData, productType, splitFlowState, id);
   } catch (err) {
     showMessage('לא הצלחנו לפתוח את הפוסטר כרגע.');
   }
