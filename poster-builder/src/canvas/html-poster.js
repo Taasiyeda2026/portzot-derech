@@ -2,7 +2,7 @@ const POSTER_HEIGHT_PX = 1123;
 const IMG_HEIGHTS     = { app: 270, physical: 220, website: 185, digital: 185 };
 const IMG_MIN_HEIGHTS = { app: 95,  physical: 90,  website: 75,  digital: 75  };
 
-export function renderHTMLPoster(contentValues, productType, titleFont, titleColor, textColor, background, slotImages, schoolLogoImage) {
+export function renderHTMLPoster(contentValues, productType, titleFont, titleColor, textColor, background, slotImages, _schoolLogoImage) {
   // Support legacy calls that pass (background, slotImages) after titleColor.
   if (slotImages === undefined && background && typeof background === 'object') {
     slotImages = background;
@@ -29,12 +29,8 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
   }
 
   // Keep the legacy parameter for backwards-compatible callers, but do not render
-  // a separate school logo on the poster. Hide/remove any old DOM if present.
-  const logoWrap = document.getElementById('ph-school-logo-wrap');
-  const logoImg  = document.getElementById('ph-school-logo-img');
-  if (logoWrap) logoWrap.style.display = 'none';
-  if (logoImg) logoImg.removeAttribute('src');
-  void schoolLogoImage;
+  // a separate school logo on the poster.
+  void _schoolLogoImage;
 
   const setText = (id, t) => { const e = document.getElementById(id); if (e) e.textContent = (t || '').trim(); };
   const setList = (id, items) => {

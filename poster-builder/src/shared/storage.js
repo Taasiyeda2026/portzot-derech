@@ -31,7 +31,10 @@ function migrateProjectShape(project) {
 }
 
 export function saveProject(payload) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...payload, updatedAt: Date.now() }));
+  const project = { ...(payload || {}) };
+  delete project.schoolLogoImage;
+  delete project.schoolLogoAssetId;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...project, updatedAt: Date.now() }));
 }
 
 export function loadProject() {
