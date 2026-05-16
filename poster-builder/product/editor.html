@@ -84,11 +84,17 @@
     .bar-btn:disabled { opacity: .5; cursor: not-allowed; transform: none !important; }
 
     /* ===== עטיפת הפוסטר ===== */
-    .poster-page { display: flex; justify-content: center; padding: 32px 20px 60px; }
+    .poster-page {
+      display: flex; justify-content: center;
+      width: 100%; box-sizing: border-box;
+      padding: 32px 20px 60px;
+      direction: ltr;
+    }
     .poster-scale-wrapper {
       --poster-scale: 1;
       width: calc(794px * var(--poster-scale));
       height: calc(1123px * var(--poster-scale));
+      margin-inline: auto;
       flex: 0 0 auto;
     }
     .poster-scale-inner {
@@ -157,16 +163,24 @@
     }
     .ph-cap[data-icon-ok="true"]::before {
       width: 33px; height: 33px; border-radius: 0;
-      background-color: var(--ph-title-color, #5E2750);
-      -webkit-mask: var(--ph-icon-url) center / contain no-repeat;
-      mask: var(--ph-icon-url) center / contain no-repeat;
+      background-color: transparent;
+      background-image: var(--ph-icon-url);
+      background-position: center;
+      background-size: contain;
+      background-repeat: no-repeat;
+      -webkit-mask: none;
+      mask: none;
     }
     #ph-audience[data-icon-ok="true"]::before {
       content: ''; display: inline-block;
       width: 15px; height: 15px; border-radius: 0;
-      background-color: var(--ph-title-color, #5E2750);
-      -webkit-mask: var(--ph-icon-url) center / contain no-repeat;
-      mask: var(--ph-icon-url) center / contain no-repeat;
+      background-color: transparent;
+      background-image: var(--ph-icon-url);
+      background-position: center;
+      background-size: contain;
+      background-repeat: no-repeat;
+      -webkit-mask: none;
+      mask: none;
       flex-shrink: 0;
     }
     .ph-body { font-size: 12px; font-weight: 400; color: var(--ph-text-color, #1f1030); line-height: 1.72; word-break: break-word; overflow-wrap: anywhere; }
