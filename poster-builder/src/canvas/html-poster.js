@@ -1,7 +1,6 @@
 const POSTER_WIDTH_PX = 794;
 const POSTER_HEIGHT_PX = 1123;
 const IMG_HEIGHTS     = { app: 270, physical: 220, website: 185, digital: 185 };
-const IMG_MIN_HEIGHTS = { app: 95,  physical: 90,  website: 75,  digital: 75  };
 const POSTER_ICON_BASE = '/poster-builder/assets/pi/';
 const posterIconCache = new Map();
 
@@ -83,8 +82,7 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
   setText('ph-feedback', contentValues.feedbackReceived);
   setText('ph-improved', contentValues.improvementsAfterFeedback);
   setText('ph-slogan',   contentValues.slogan || '');
-  setText('ph-audience', (contentValues.audience || '').trim()
-    ? `👥 ${(contentValues.audience || '').trim()}` : '');
+  setText('ph-audience', (contentValues.audience || '').trim());
   setText('ph-names',
     ['student1', 'student2', 'student3']
       .map(k => (contentValues[k] || '').trim()).filter(Boolean).join(' · ') || '—');
@@ -299,23 +297,32 @@ function fitPosterToPage(posterRoot, titleColor) {
 
   if (!isPosterOverflowing(posterRoot)) return;
 
-  const appGrid  = posterRoot.querySelector('#ph-images-app');
-  const physGrid = posterRoot.querySelector('#ph-images-2');
-  const isApp      = appGrid  && appGrid.style.display  !== 'none';
-  const isPhysical = physGrid && physGrid.style.display !== 'none';
-  const productKey = isApp ? 'app' : isPhysical ? 'physical' : 'website';
-  const minHeight  = IMG_MIN_HEIGHTS[productKey];
+  applyCompactPosterSpacing(posterRoot);
+  updateTitleUnderline(posterRoot, titleColor);
+}
 
-  const frames = [...posterRoot.querySelectorAll('.ph-img-frame[data-ph-img]')]
-    .filter(f => f.offsetParent !== null);
-  if (!frames.length) return;
+function applyCompactPosterSpacing(posterRoot) {
+  if (!posterRoot) return;
 
-  let currentHeight = frames[0].getBoundingClientRect().height || IMG_HEIGHTS[productKey];
+  const main = posterRoot.querySelector('#ph-main');
+  if (main) main.style.setProperty('gap', '6px', 'important');
 
-  while (isPosterOverflowing(posterRoot) && currentHeight - 12 >= minHeight) {
-    currentHeight -= 12;
-    frames.forEach(frame => { frame.style.height = `${currentHeight}px`; });
-    updateTitleUnderline(posterRoot, titleColor);
+  const audienceCard = posterRoot.querySelector('.ph-audience-card');
+  if (audienceCard) audienceCard.style.marginBottom = '8px';
+
+  const imagesWrap = posterRoot.querySelector('.ph-images-wrap');
+  if (imagesWrap) imagesWrap.style.marginBlock = '0 10px';
+
+  const researchGrid = posterRoot.querySelector('.ph-grid-research');
+  if (researchGrid) researchGrid.style.setProperty('gap', '9px', 'important');
+
+  const solutionGrid = posterRoot.querySelector('.ph-grid-solution');
+  if (solutionGrid) solutionGrid.style.marginTop = '8px';
+
+  const processGrid = posterRoot.querySelector('.ph-grid-process');
+  if (processGrid) {
+    processGrid.style.marginTop = '9px';
+    processGrid.style.setProperty('gap', '7px', 'important');
   }
 }
 
