@@ -333,13 +333,13 @@ function _shiftHue(hex, deg) {
   } catch { return hex; }
 }
 
-const PDF_SCRIPT_URLS = {
-  html2canvas: 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js',
-  jspdf: 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'
+// Raster capture is intentionally kept for PNG diagnostics only.
+// The final print-shop PDF export must use the browser print pipeline so text/SVG stay vector-sharp.
+const RASTER_DEBUG_SCRIPT_URLS = {
+  html2canvas: 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'
 };
-const PDF_A4_MM = { width: 210, height: 297 };
-// Scale only increases bitmap quality; capture dimensions stay exactly as rendered.
-const PDF_EXPORT_SCALE = Math.max(3, Math.min(window.devicePixelRatio || 1, 4));
+// Scale only increases debug bitmap quality; capture dimensions stay exactly as rendered.
+const PNG_DEBUG_EXPORT_SCALE = Math.max(3, Math.min(window.devicePixelRatio || 1, 4));
 const PDF_DEBUG_PNG_PARAM = 'debugPdfPng';
 const PDF_DEBUG_PNG_FLAG = '__POSTER_PDF_DEBUG_DOWNLOAD_PNG';
 const POSTER_RTL_SELECTOR = [
@@ -399,11 +399,10 @@ function loadPdfScript(globalCheck, src) {
   });
 }
 
-async function ensurePdfDependencies() {
-  await loadPdfScript(() => typeof window.html2canvas === 'function', PDF_SCRIPT_URLS.html2canvas);
-  await loadPdfScript(() => Boolean(window.jspdf?.jsPDF), PDF_SCRIPT_URLS.jspdf);
-  if (typeof window.html2canvas !== 'function' || !window.jspdf?.jsPDF) {
-    throw new Error('PDF dependencies are not available');
+async function ensureRasterDebugDependencies() {
+  await loadPdfScript(() => typeof window.html2canvas === 'function', RASTER_DEBUG_SCRIPT_URLS.html2canvas);
+  if (typeof window.html2canvas !== 'function') {
+    throw new Error('PNG debug dependency is not available');
   }
 }
 
@@ -640,20 +639,20 @@ function isCanvasEmptyOrWhite(canvas) {
 
 function assertCanvasHasDimensions(canvas) {
   if (!canvas || canvas.width <= 0 || canvas.height <= 0) {
-    throw new Error('ייצוא PDF נכשל: html2canvas החזיר canvas ריק או במידות 0.');
+    throw new Error('ייצוא PNG debug נכשל: html2canvas החזיר canvas ריק או במידות 0.');
   }
 }
 
 function assertCanvasReadyForExport(canvas) {
   assertCanvasHasDimensions(canvas);
   if (isCanvasEmptyOrWhite(canvas)) {
-    throw new Error('ייצוא PDF הופסק: התמונה שנוצרה ריקה/לבנה. נשמר מנגנון PNG debug כדי לבדוק אם התקלה בשלב הצילום.');
+    throw new Error('ייצוא PNG debug הופסק: התמונה שנוצרה ריקה/לבנה.');
   }
 }
 
 function showPosterExportError(error) {
-  const message = error instanceof Error ? error.message : String(error || 'שגיאה לא ידועה בייצוא PDF.');
-  console.error('Poster PDF export failed', error);
+  const message = error instanceof Error ? error.message : String(error || 'שגיאה לא ידועה בייצוא.');
+  console.error('Poster export failed', error);
   if (typeof window.alert === 'function') window.alert(message);
 }
 
@@ -682,7 +681,7 @@ async function capturePosterToCanvas(clonedPoster) {
   await waitForPosterAssets(clonedPoster);
 
   const canvas = await window.html2canvas(clonedPoster, {
-    scale: PDF_EXPORT_SCALE,
+    scale: PNG_DEBUG_EXPORT_SCALE,
     useCORS: true,
     allowTaint: false,
     backgroundColor: '#ffffff',
@@ -710,10 +709,6 @@ function buildSafePosterFilename(extension) {
   return `${safeTitle || 'פוסטר'}.${extension}`;
 }
 
-function buildPosterPdfFilename() {
-  return buildSafePosterFilename('pdf');
-}
-
 function buildPosterPngFilename() {
   return buildSafePosterFilename('png');
 }
@@ -735,16 +730,16 @@ export async function printPoster() {
   }
 }
 
-export async function exportHTMLPosterToPDF() {
+export async function exportHTMLPosterDebugPng() {
   const poster = document.getElementById('poster-html');
   if (!poster) {
-    showPosterExportError(new Error('ייצוא PDF נכשל: לא נמצא #poster-html במסך.'));
+    showPosterExportError(new Error('ייצוא PNG debug נכשל: לא נמצא #poster-html במסך.'));
     return;
   }
 
   let exportContainer = null;
   try {
-    await ensurePdfDependencies();
+    await ensureRasterDebugDependencies();
     assertOriginalPosterReadyForExport(poster);
     await waitForPosterAssets(poster);
     updateTitleUnderline(poster);
@@ -755,23 +750,23 @@ export async function exportHTMLPosterToPDF() {
     await waitForPosterAssets(clonedPoster);
 
     const canvas = await capturePosterToCanvas(clonedPoster);
-    if (shouldDownloadDebugPng()) {
-      downloadCanvasPng(canvas, buildPosterPngFilename());
-    }
     assertCanvasReadyForExport(canvas);
-
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4', compress: false });
-    const imageData = canvas.toDataURL('image/jpeg', 0.98);
-    pdf.addImage(imageData, 'JPEG', 0, 0, PDF_A4_MM.width, PDF_A4_MM.height);
-
-    const pageCount = typeof pdf.getNumberOfPages === 'function' ? pdf.getNumberOfPages() : 1;
-    for (let page = pageCount; page > 1; page -= 1) pdf.deletePage(page);
-
-    pdf.save(buildPosterPdfFilename());
+    downloadCanvasPng(canvas, buildPosterPngFilename());
   } catch (error) {
     showPosterExportError(error);
   } finally {
     exportContainer?.remove();
+  }
+}
+
+export async function exportHTMLPosterToPDF() {
+  try {
+    await printPoster();
+
+    if (shouldDownloadDebugPng()) {
+      await exportHTMLPosterDebugPng();
+    }
+  } catch (error) {
+    showPosterExportError(error);
   }
 }
