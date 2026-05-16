@@ -185,6 +185,134 @@
     }
     #ph-images-2, #ph-images-app, #ph-images-web { justify-content: center; align-items: start; }
 
+
+    /* ===== שדרוג פריסת הפוסטר המיוצא ===== */
+    #ph-top-accent {
+      width: 360px;
+      max-width: 46%;
+      height: 5px;
+      margin: 0 auto;
+      background: linear-gradient(90deg,#5E2750,#d61f8c,#9b40c0,#5E2750);
+      border-radius: 0 0 999px 999px;
+      flex-shrink: 0;
+    }
+    #ph-header {
+      padding: 42px 32px 8px;
+      text-align: center;
+      position: relative;
+      flex-shrink: 0;
+    }
+    #ph-logo-wrap {
+      position: absolute;
+      top: 8px;
+      left: 22px;
+      z-index: 5;
+    }
+    #ph-logo-wrap img {
+      height: 120px;
+      width: auto;
+      object-fit: contain;
+      display: block;
+    }
+    #ph-title-line {
+      max-width: 360px;
+    }
+    #ph-main {
+      gap: 3px !important;
+      padding: 0 24px 5px !important;
+    }
+    .ph-grid-problem,
+    .ph-grid-solution {
+      gap: 5px !important;
+    }
+    .ph-grid-research {
+      grid-template-columns: 1.1fr .8fr 1.1fr !important;
+      gap: 4px !important;
+    }
+    .ph-grid-solution {
+      grid-template-columns: .92fr 1.08fr !important;
+    }
+    .ph-grid-process {
+      grid-template-columns: minmax(0, 1fr) 26px minmax(0, 1fr) 26px minmax(0, 1fr) !important;
+      gap: 3px !important;
+      align-items: stretch;
+    }
+    .ph-grid-process .ph-card {
+      min-width: 0;
+    }
+    .ph-process-arrow {
+      position: relative;
+      align-self: center;
+      height: 18px;
+      color: var(--ph-title-color, #5E2750);
+      filter: drop-shadow(0 0 3px rgba(255,255,255,.95)) drop-shadow(0 1px 2px rgba(255,255,255,.85));
+    }
+    .ph-process-arrow::before {
+      content: '';
+      position: absolute;
+      left: 5px;
+      right: 2px;
+      top: 50%;
+      height: 3px;
+      transform: translateY(-50%);
+      background: currentColor;
+      border-radius: 999px;
+      opacity: .82;
+    }
+    .ph-process-arrow::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-top: 6px solid transparent;
+      border-bottom: 6px solid transparent;
+      border-right: 9px solid currentColor;
+      opacity: .82;
+    }
+    .ph-audience-card {
+      padding: 5px 14px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .ph-audience-card #ph-audience {
+      color: var(--ph-title-color, #5E2750) !important;
+      font-weight: 700 !important;
+      margin-top: 0;
+      text-align: center;
+      line-height: 1.45;
+    }
+    .ph-card-compact {
+      padding-top: 8px;
+      padding-bottom: 8px;
+    }
+    .ph-images-wrap {
+      flex-shrink: 0;
+      margin-block: 1px;
+    }
+    #ph-images-2 {
+      gap: 14px !important;
+    }
+    #ph-images-app,
+    #ph-images-web {
+      gap: 11px !important;
+    }
+    #ph-images-2 .ph-img-frame { max-height: 204px; }
+    #ph-images-app .ph-img-frame { max-height: 248px; }
+    #ph-images-web .ph-img-frame { max-height: 172px; }
+    .ph-solution-card {
+      text-align: center;
+    }
+    .ph-solution-card #ph-solution {
+      text-align: center;
+      color: var(--ph-title-color, #5E2750) !important;
+      font-size: 13px !important;
+      font-weight: 700 !important;
+      line-height: 1.72;
+    }
+
     /* ===== רספונסיבי ===== */
     @media (max-width: 860px) {
       .poster-page { padding: 16px 0 40px; overflow-x: auto; }
@@ -248,13 +376,12 @@
       <div id="poster-inner" style="position:relative;z-index:1;display:flex;flex-direction:column;height:1123px">
 
         <!-- פס צבע עליון -->
-        <div style="height:5px;background:linear-gradient(90deg,#5E2750,#d61f8c,#9b40c0,#5E2750);flex-shrink:0"></div>
+        <div id="ph-top-accent"></div>
 
         <!-- כותרת -->
-        <div style="padding:32px 32px 10px;text-align:center;position:relative;flex-shrink:0">
-          <div style="position:absolute;top:24px;left:22px;z-index:5">
-            <img src="/poster-builder/assets/logoposter.svg" alt="פורצות דרך" crossorigin="anonymous"
-              style="height:120px;width:auto;object-fit:contain;display:block;" />
+        <div id="ph-header">
+          <div id="ph-logo-wrap">
+            <img src="/poster-builder/assets/logoposter.svg" alt="פורצות דרך" crossorigin="anonymous" />
           </div>
 
           <div id="ph-name" style="font-weight:900;line-height:1.1;margin-bottom:8px;word-break:break-word;overflow-wrap:anywhere"></div>
@@ -268,20 +395,24 @@
 
         <div id="ph-main" style="display:flex;flex-direction:column;gap:4px;padding:0 24px 6px;flex:1 1 auto;justify-content:space-between">
         <!-- שורה: בעיה + שאלת חקר -->
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;flex-shrink:0">
-          <div class="ph-card">
+        <div class="ph-grid-problem" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;flex-shrink:0">
+          <div class="ph-card ph-card-compact">
             <div class="ph-cap">הבעיה שזיהינו</div>
             <div id="ph-problem" class="ph-body"></div>
-            <div id="ph-audience" class="ph-sub"></div>
           </div>
-          <div class="ph-card">
+          <div class="ph-card ph-card-compact">
             <div class="ph-cap">שאלת החקר</div>
             <div id="ph-rq" class="ph-body"></div>
           </div>
         </div>
 
+        <!-- קהל יעד -->
+        <div class="ph-card ph-audience-card">
+          <div id="ph-audience" class="ph-sub"></div>
+        </div>
+
         <!-- תמונות -->
-        <div style="flex-shrink:0">
+        <div class="ph-images-wrap">
           <div id="ph-images-label" style="font-size:7.5px;font-weight:700;color:#5E2750;text-transform:uppercase;letter-spacing:1.5px;text-align:center;margin-bottom:4px"></div>
 
           <!-- פיזי: 2 תמונות -->
@@ -306,7 +437,7 @@
         </div>
 
         <!-- שורה: חקר + תובנות + דרישות -->
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;flex-shrink:0">
+        <div class="ph-grid-research" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;flex-shrink:0">
           <div class="ph-card">
             <div class="ph-cap">החקר שביצענו</div>
             <ul id="ph-research" class="ph-bullets"></ul>
@@ -322,8 +453,8 @@
         </div>
 
         <!-- שורה: פתרון + שימוש -->
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;flex-shrink:0">
-          <div class="ph-card">
+        <div class="ph-grid-solution" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;flex-shrink:0">
+          <div class="ph-card ph-solution-card">
             <div id="ph-solution-cap" class="ph-cap"></div>
             <div id="ph-solution" class="ph-body"></div>
           </div>
@@ -334,15 +465,17 @@
         </div>
 
         <!-- שורה: משוב + שיפורים + ערך -->
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;flex-shrink:0">
+        <div class="ph-grid-process" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;flex-shrink:0">
           <div class="ph-card ph-card-accent">
             <div class="ph-cap">המשוב שקיבלנו</div>
             <div id="ph-feedback" class="ph-body"></div>
           </div>
+          <div class="ph-process-arrow" aria-hidden="true"></div>
           <div class="ph-card ph-card-accent">
             <div class="ph-cap">מה שיפרנו</div>
             <div id="ph-improved" class="ph-body"></div>
           </div>
+          <div class="ph-process-arrow" aria-hidden="true"></div>
           <div class="ph-card ph-card-accent">
             <div class="ph-cap">הערך המרכזי</div>
             <div id="ph-value" class="ph-body"></div>
