@@ -47,7 +47,7 @@ const TEMPLATE_HEADERS = [
   'slogan'
 ];
 const CONTENT_HEADERS = TEMPLATE_HEADERS.slice(6);
-const PRODUCT_TYPE_OPTIONS = ['physical', 'website', 'app'];
+const PRODUCT_TYPE_OPTIONS = ['physical', 'website', 'app', 'digital'];
 const BACKGROUND_ID_OPTIONS = BACKGROUNDS.map((background) => background.id);
 const FONT_OPTIONS = ['IBM Plex Sans Hebrew', 'Gveret Levin', 'Alef', 'Alice', 'Choco', 'Yehuda'];
 const TITLE_COLOR_OPTIONS = ['#5E2750', '#1a3a6b', '#1a5c3a', '#7a1a1a', '#b5520a', '#1a4a5c', '#2d2d2d'];
@@ -312,6 +312,16 @@ function getAdminStartStep(productType) {
   return productType === 'physical' ? 2 : 3;
 }
 
+function buildPosterOpenUrl(productType) {
+  const url = PRODUCT_PATHS[productType] || PRODUCT_PATHS.physical;
+  try {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('debugPdfPng') === '1' ? `${url}?debugPdfPng=1` : url;
+  } catch {
+    return url;
+  }
+}
+
 function navigateWithProject(posterData, productType, splitFlowState, submissionId) {
   const projectData = { ...(posterData || {}) };
   delete projectData.schoolLogoImage;
@@ -322,7 +332,7 @@ function navigateWithProject(posterData, productType, splitFlowState, submission
     splitFlowState,
     submissionId
   });
-  const url = PRODUCT_PATHS[productType] || PRODUCT_PATHS.physical;
+  const url = buildPosterOpenUrl(productType);
   const opened = window.open(url, '_blank', 'noopener');
   if (!opened) {
     state.message = 'הפוסטר נשמר, אבל הדפדפן חסם פתיחה בטאב חדש. אפשר לפתוח אותו ידנית מהקישור הבא.';
