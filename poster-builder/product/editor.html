@@ -145,9 +145,18 @@
       text-transform: uppercase; letter-spacing: 1px;
       margin-bottom: 8px; display: flex; align-items: center; gap: 5px;
     }
-    .ph-cap::before {
+    .ph-cap::before,
+    #ph-images-label::before {
       content: ''; display: inline-block;
-      width: 14px; height: 2.5px; background: var(--ph-title-color, #5E2750); border-radius: 1px;
+      width: 5px; height: 5px; background: var(--ph-title-color, #5E2750); border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .ph-cap[data-icon-ok="true"]::before,
+    #ph-images-label[data-icon-ok="true"]::before {
+      width: 11px; height: 11px; border-radius: 0;
+      background-color: var(--ph-title-color, #5E2750);
+      -webkit-mask: var(--ph-icon-url) center / contain no-repeat;
+      mask: var(--ph-icon-url) center / contain no-repeat;
     }
     .ph-body { font-size: 12px; font-weight: 400; color: var(--ph-text-color, #1f1030); line-height: 1.72; word-break: break-word; overflow-wrap: anywhere; }
     .ph-sub  { font-size: 10.5px; font-weight: 400; color: #8a7aa0; margin-top: 4px; line-height: 1.58; }
@@ -188,7 +197,7 @@
 
     /* ===== שדרוג פריסת הפוסטר המיוצא ===== */
     #ph-header {
-      padding: 54px 32px 18px;
+      padding: 66px 32px 18px;
       text-align: center;
       position: relative;
       flex-shrink: 0;
@@ -209,28 +218,28 @@
       max-width: 360px;
     }
     #ph-main {
-      gap: 6px !important;
+      gap: 7px !important;
       padding: 0 24px 14px !important;
       justify-content: flex-start !important;
     }
     .ph-grid-problem,
     .ph-grid-solution {
-      gap: 5px !important;
+      gap: 13px !important;
     }
     .ph-grid-problem {
       margin-bottom: 2px;
     }
     .ph-grid-research {
       grid-template-columns: 1.1fr .8fr 1.1fr !important;
-      gap: 4px !important;
+      gap: 10px !important;
       margin-top: 1px;
     }
     .ph-grid-solution {
       grid-template-columns: .92fr 1.08fr !important;
     }
     .ph-grid-process {
-      grid-template-columns: minmax(0, 1fr) 22px minmax(0, 1fr) 22px minmax(0, 1fr) !important;
-      gap: 4px !important;
+      grid-template-columns: minmax(0, 1fr) 24px minmax(0, 1fr) 24px minmax(0, 1fr) !important;
+      gap: 8px !important;
       align-items: stretch;
       margin-top: 1px;
     }
@@ -274,7 +283,7 @@
       text-align: center;
       flex-shrink: 0;
       margin-top: 0;
-      margin-bottom: 0;
+      margin-bottom: 18px;
     }
     .ph-audience-card #ph-audience {
       color: var(--ph-title-color, #5E2750) !important;
@@ -290,7 +299,13 @@
     }
     .ph-images-wrap {
       flex-shrink: 0;
-      margin-block: 0 1px;
+      margin-block: 0 18px;
+    }
+    #ph-images-label {
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
     }
     #ph-images-2 {
       gap: 14px !important;
@@ -394,11 +409,11 @@
         <!-- שורה: בעיה + שאלת חקר -->
         <div class="ph-grid-problem" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;flex-shrink:0">
           <div class="ph-card ph-card-compact">
-            <div class="ph-cap">הבעיה שזיהינו</div>
+            <div class="ph-cap" data-icon="prob">הבעיה שזיהינו</div>
             <div id="ph-problem" class="ph-body"></div>
           </div>
           <div class="ph-card ph-card-compact">
-            <div class="ph-cap">שאלת החקר</div>
+            <div class="ph-cap" data-icon="rq">שאלת החקר</div>
             <div id="ph-rq" class="ph-body"></div>
           </div>
         </div>
@@ -410,7 +425,7 @@
 
         <!-- תמונות -->
         <div class="ph-images-wrap">
-          <div id="ph-images-label" style="font-size:7.5px;font-weight:700;color:#5E2750;text-transform:uppercase;letter-spacing:1.5px;text-align:center;margin-bottom:4px"></div>
+          <div id="ph-images-label" data-icon="prod" style="font-size:7.5px;font-weight:700;color:#5E2750;text-transform:uppercase;letter-spacing:1.5px;text-align:center;margin-bottom:4px"></div>
 
           <!-- פיזי: 2 תמונות -->
           <div id="ph-images-2" style="display:none;grid-template-columns:1fr 1fr;gap:10px">
@@ -436,15 +451,15 @@
         <!-- שורה: חקר + תובנות + דרישות -->
         <div class="ph-grid-research" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;flex-shrink:0">
           <div class="ph-card">
-            <div class="ph-cap">החקר שביצענו</div>
+            <div class="ph-cap" data-icon="res">החקר שביצענו</div>
             <ul id="ph-research" class="ph-bullets"></ul>
           </div>
           <div class="ph-card">
-            <div class="ph-cap">תובנות מהחקר</div>
+            <div class="ph-cap" data-icon="ins">תובנות מהחקר</div>
             <div id="ph-findings" class="ph-body"></div>
           </div>
           <div class="ph-card">
-            <div class="ph-cap">דרישות הפתרון</div>
+            <div class="ph-cap" data-icon="req">דרישות הפתרון</div>
             <ul id="ph-reqs" class="ph-bullets"></ul>
           </div>
         </div>
@@ -452,11 +467,11 @@
         <!-- שורה: פתרון + שימוש -->
         <div class="ph-grid-solution" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;flex-shrink:0">
           <div class="ph-card ph-solution-card">
-            <div id="ph-solution-cap" class="ph-cap"></div>
+            <div id="ph-solution-cap" class="ph-cap" data-icon="sol"></div>
             <div id="ph-solution" class="ph-body"></div>
           </div>
           <div class="ph-card">
-            <div id="ph-usage-cap" class="ph-cap"></div>
+            <div id="ph-usage-cap" class="ph-cap" data-icon="use"></div>
             <ul id="ph-usage" class="ph-bullets"></ul>
           </div>
         </div>
@@ -464,17 +479,17 @@
         <!-- שורה: משוב + שיפורים + ערך -->
         <div class="ph-grid-process" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;flex-shrink:0">
           <div class="ph-card ph-card-accent">
-            <div class="ph-cap">המשוב שקיבלנו</div>
+            <div class="ph-cap" data-icon="fb">המשוב שקיבלנו</div>
             <div id="ph-feedback" class="ph-body"></div>
           </div>
           <div class="ph-process-arrow" aria-hidden="true"></div>
           <div class="ph-card ph-card-accent">
-            <div class="ph-cap">מה שיפרנו</div>
+            <div class="ph-cap" data-icon="imp">מה שיפרנו</div>
             <div id="ph-improved" class="ph-body"></div>
           </div>
           <div class="ph-process-arrow" aria-hidden="true"></div>
           <div class="ph-card ph-card-accent">
-            <div class="ph-cap">הערך המרכזי</div>
+            <div class="ph-cap" data-icon="val">הערך המרכזי</div>
             <div id="ph-value" class="ph-body"></div>
           </div>
         </div>

@@ -2,6 +2,8 @@ const POSTER_WIDTH_PX = 794;
 const POSTER_HEIGHT_PX = 1123;
 const IMG_HEIGHTS     = { app: 270, physical: 220, website: 185, digital: 185 };
 const IMG_MIN_HEIGHTS = { app: 95,  physical: 90,  website: 75,  digital: 75  };
+const POSTER_ICON_BASE = '/poster-builder/assets/pi/';
+const posterIconCache = new Map();
 
 export function renderHTMLPoster(contentValues, productType, titleFont, titleColor, textColor, background, slotImages, _schoolLogoImage) {
   // Support legacy calls that pass (background, slotImages) after titleColor.
@@ -51,6 +53,7 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
     posterRoot.style.setProperty('--ph-text-color',  resolvedText);
     posterRoot.style.fontFamily = `'${resolvedFont}', 'IBM Plex Sans Hebrew', sans-serif`;
     applyExplicitPosterTextStyles(posterRoot);
+    applyPosterIcons(posterRoot);
   }
 
   // ── Title font, size, colour ────────────────────────────────────────────────
@@ -220,6 +223,39 @@ function schedulePosterFit(posterRoot, titleColor) {
       fitPosterToPage(posterRoot, titleColor);
     });
   }
+}
+
+function applyPosterIcons(posterRoot) {
+  const root = posterRoot || document;
+  root.querySelectorAll?.('[data-icon]').forEach((el) => {
+    const iconName = (el.getAttribute('data-icon') || '').trim();
+    if (!iconName) return;
+
+    const iconUrl = `${POSTER_ICON_BASE}${iconName}.svg`;
+    el.style.setProperty('--ph-icon-url', `url("${iconUrl}")`);
+
+    if (posterIconCache.get(iconUrl) === true) {
+      el.setAttribute('data-icon-ok', 'true');
+      return;
+    }
+    if (posterIconCache.get(iconUrl) === false) {
+      el.removeAttribute('data-icon-ok');
+      return;
+    }
+
+    const img = new Image();
+    img.onload = () => {
+      posterIconCache.set(iconUrl, true);
+      root.querySelectorAll?.(`[data-icon="${iconName}"]`).forEach((iconEl) => {
+        iconEl.setAttribute('data-icon-ok', 'true');
+      });
+    };
+    img.onerror = () => {
+      posterIconCache.set(iconUrl, false);
+      el.removeAttribute('data-icon-ok');
+    };
+    img.src = iconUrl;
+  });
 }
 
 function applyPosterCardStyles(posterRoot) {
