@@ -145,19 +145,27 @@
       text-transform: uppercase; letter-spacing: 1px;
       margin-bottom: 8px; display: flex; align-items: center; gap: 5px;
     }
+    .ph-cap,
+    #ph-images-label {
+      text-shadow: none;
+      filter: none;
+    }
     .ph-cap::before,
-    #ph-images-label::before {
+    #ph-images-label::before,
+    #ph-audience::before {
       content: ''; display: inline-block;
       width: 5px; height: 5px; background: var(--ph-title-color, #5E2750); border-radius: 50%;
       flex-shrink: 0;
     }
     .ph-cap[data-icon-ok="true"]::before,
-    #ph-images-label[data-icon-ok="true"]::before {
+    #ph-images-label[data-icon-ok="true"]::before,
+    #ph-audience[data-icon-ok="true"]::before {
       width: 11px; height: 11px; border-radius: 0;
       background-color: var(--ph-title-color, #5E2750);
       -webkit-mask: var(--ph-icon-url) center / contain no-repeat;
       mask: var(--ph-icon-url) center / contain no-repeat;
     }
+    #ph-audience:empty::before { content: none; }
     .ph-body { font-size: 12px; font-weight: 400; color: var(--ph-text-color, #1f1030); line-height: 1.72; word-break: break-word; overflow-wrap: anywhere; }
     .ph-sub  { font-size: 10.5px; font-weight: 400; color: #8a7aa0; margin-top: 4px; line-height: 1.58; }
     .ph-bullets { list-style: none; margin-top: 3px; padding: 0; }
@@ -166,7 +174,8 @@
       padding-right: 14px; position: relative; margin-bottom: 3px;
     }
     .ph-bullets li::before {
-      content: '◆'; position: absolute; right: 0; top: 2px;
+      content: '◆'; position: absolute; right: 0; top: .82em;
+      transform: translateY(-50%);
       font-size: 6px; color: var(--ph-title-color, #5E2750);
     }
     .ph-img-frame {
@@ -197,22 +206,26 @@
 
     /* ===== שדרוג פריסת הפוסטר המיוצא ===== */
     #ph-header {
-      padding: 66px 32px 18px;
+      padding: 66px 32px 30px;
       text-align: center;
       position: relative;
       flex-shrink: 0;
     }
     #ph-logo-wrap {
       position: absolute;
-      top: 12px;
-      left: 22px;
+      top: 8px;
+      left: 16px;
       z-index: 5;
     }
     #ph-logo-wrap img {
-      height: 120px;
+      height: 110px;
       width: auto;
       object-fit: contain;
       display: block;
+      filter: none;
+      box-shadow: none;
+      text-shadow: none;
+      opacity: 1;
     }
     #ph-title-line {
       max-width: 360px;
@@ -236,12 +249,13 @@
     }
     .ph-grid-solution {
       grid-template-columns: .92fr 1.08fr !important;
+      margin-top: 9px;
     }
     .ph-grid-process {
       grid-template-columns: minmax(0, 1fr) 24px minmax(0, 1fr) 24px minmax(0, 1fr) !important;
       gap: 8px !important;
       align-items: stretch;
-      margin-top: 1px;
+      margin-top: 11px;
     }
     .ph-grid-process .ph-card {
       min-width: 0;
@@ -251,7 +265,7 @@
       align-self: center;
       height: 16px;
       color: var(--ph-title-color, #5E2750);
-      filter: drop-shadow(0 0 3px rgba(255,255,255,.95)) drop-shadow(0 1px 2px rgba(255,255,255,.85));
+      filter: none;
     }
     .ph-process-arrow::before {
       content: '';
@@ -263,7 +277,7 @@
       transform: translateY(-50%);
       background: currentColor;
       border-radius: 999px;
-      opacity: .82;
+      opacity: 1;
     }
     .ph-process-arrow::after {
       content: '';
@@ -276,7 +290,7 @@
       border-top: 5px solid transparent;
       border-bottom: 5px solid transparent;
       border-right: 8px solid currentColor;
-      opacity: .82;
+      opacity: 1;
     }
     .ph-audience-card {
       padding: 4px 14px;
@@ -292,6 +306,10 @@
       margin-top: 0;
       text-align: center;
       line-height: 1.45;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
     }
     .ph-card-compact {
       padding-top: 8px;
@@ -420,7 +438,7 @@
 
         <!-- קהל יעד -->
         <div class="ph-card ph-audience-card">
-          <div id="ph-audience" class="ph-sub"></div>
+          <div id="ph-audience" class="ph-sub" data-icon="aud"></div>
         </div>
 
         <!-- תמונות -->
