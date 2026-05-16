@@ -1,3 +1,4 @@
+const POSTER_WIDTH_PX = 794;
 const POSTER_HEIGHT_PX = 1123;
 const IMG_HEIGHTS     = { app: 270, physical: 220, website: 185, digital: 185 };
 const IMG_MIN_HEIGHTS = { app: 95,  physical: 90,  website: 75,  digital: 75  };
@@ -331,39 +332,144 @@ function _shiftHue(hex, deg) {
   } catch { return hex; }
 }
 
+const PDF_SCRIPT_URLS = {
+  html2canvas: 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js',
+  jspdf: 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'
+};
+const PDF_A4_MM = { width: 210, height: 297 };
+const PDF_EXPORT_SCALE = Math.max(3, Math.min(window.devicePixelRatio || 1, 4));
+
+function loadPdfScript(globalCheck, src) {
+  if (globalCheck()) return Promise.resolve();
+  const existing = [...document.scripts].find((script) => script.src === src);
+  if (existing) {
+    return new Promise((resolve, reject) => {
+      existing.addEventListener('load', resolve, { once: true });
+      existing.addEventListener('error', reject, { once: true });
+    });
+  }
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = src;
+    script.async = true;
+    script.onload = resolve;
+    script.onerror = () => reject(new Error(`Failed to load PDF dependency: ${src}`));
+    document.head.appendChild(script);
+  });
+}
+
+async function ensurePdfDependencies() {
+  await loadPdfScript(() => typeof window.html2canvas === 'function', PDF_SCRIPT_URLS.html2canvas);
+  await loadPdfScript(() => Boolean(window.jspdf?.jsPDF), PDF_SCRIPT_URLS.jspdf);
+  if (typeof window.html2canvas !== 'function' || !window.jspdf?.jsPDF) {
+    throw new Error('PDF dependencies are not available');
+  }
+}
+
+function waitForAnimationFrame() {
+  return new Promise((resolve) => requestAnimationFrame(resolve));
+}
+
+async function waitForPosterImage(img) {
+  if (!img) return;
+  if (typeof img.decode === 'function') {
+    try {
+      await img.decode();
+      return;
+    } catch {
+      // Fall back to load/error handlers below. Some browsers reject decode() for SVG/data images.
+    }
+  }
+  if (img.complete && img.naturalWidth !== 0) return;
+  await new Promise((resolve) => {
+    img.addEventListener('load', resolve, { once: true });
+    img.addEventListener('error', resolve, { once: true });
+  });
+}
+
+async function waitForPosterAssets(poster) {
+  if (document.fonts?.ready) await document.fonts.ready;
+  await Promise.all([...poster.querySelectorAll('img')].map(waitForPosterImage));
+  await waitForAnimationFrame();
+  await waitForAnimationFrame();
+}
+
+function buildPosterPdfFilename() {
+  const projectName = document.getElementById('ph-name')?.textContent?.trim() || 'פוסטר';
+  const safeTitle = projectName
+    .replace(/[\\/:*?"<>|]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/^-+|-+$/g, '');
+  return `${safeTitle || 'פוסטר'}.pdf`;
+}
+
+export async function printPoster() {
+  const poster = document.getElementById('poster-html');
+  if (!poster) return;
+  await waitForPosterAssets(poster);
+  updateTitleUnderline(poster);
+  fitPosterToPage(poster);
+  await waitForAnimationFrame();
+
+  document.body.classList.add('printing-poster');
+  try {
+    if (typeof window.print !== 'function') throw new Error('window.print is not available');
+    window.print();
+  } finally {
+    setTimeout(() => document.body.classList.remove('printing-poster'), 1000);
+  }
+}
+
 export async function exportHTMLPosterToPDF() {
   const poster = document.getElementById('poster-html');
   if (!poster) return;
 
-  if (document.fonts?.ready) await document.fonts.ready;
-
-  await Promise.all(
-    [...poster.querySelectorAll('img')].map(img =>
-      img.complete ? Promise.resolve()
-        : new Promise(resolve => { img.onload = resolve; img.onerror = resolve; })
-    )
-  );
-
+  await ensurePdfDependencies();
+  await waitForPosterAssets(poster);
   updateTitleUnderline(poster);
   fitPosterToPage(poster);
-  await new Promise(resolve => requestAnimationFrame(resolve));
+  await waitForPosterAssets(poster);
 
-  document.body.classList.add('printing-poster');
+  const canvas = await window.html2canvas(poster, {
+    scale: PDF_EXPORT_SCALE,
+    useCORS: true,
+    allowTaint: false,
+    backgroundColor: '#ffffff',
+    logging: false,
+    width: POSTER_WIDTH_PX,
+    height: POSTER_HEIGHT_PX,
+    windowWidth: POSTER_WIDTH_PX,
+    windowHeight: POSTER_HEIGHT_PX,
+    scrollX: 0,
+    scrollY: 0,
+    onclone: (clonedDocument) => {
+      const clonedPoster = clonedDocument.getElementById('poster-html');
+      const clonedInner = clonedDocument.getElementById('poster-inner');
+      if (clonedPoster) {
+        clonedPoster.style.width = `${POSTER_WIDTH_PX}px`;
+        clonedPoster.style.height = `${POSTER_HEIGHT_PX}px`;
+        clonedPoster.style.minHeight = `${POSTER_HEIGHT_PX}px`;
+        clonedPoster.style.maxHeight = `${POSTER_HEIGHT_PX}px`;
+        clonedPoster.style.overflow = 'hidden';
+        clonedPoster.style.boxShadow = 'none';
+        clonedPoster.style.transform = 'none';
+      }
+      if (clonedInner) {
+        clonedInner.style.height = `${POSTER_HEIGHT_PX}px`;
+        clonedInner.style.minHeight = `${POSTER_HEIGHT_PX}px`;
+        clonedInner.style.maxHeight = `${POSTER_HEIGHT_PX}px`;
+        clonedInner.style.overflow = 'hidden';
+      }
+    }
+  });
 
-  if (typeof window.print !== 'function') {
-    document.body.classList.remove('printing-poster');
-    throw new Error('window.print is not available');
-  }
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4', compress: false });
+  const imageData = canvas.toDataURL('image/png');
+  pdf.addImage(imageData, 'PNG', 0, 0, PDF_A4_MM.width, PDF_A4_MM.height);
 
-  const originalTitle = document.title;
-  const projectName   = document.getElementById('ph-name')?.textContent?.trim() || 'פוסטר';
-  const safeTitle     = projectName.replace(/[\\/:*?"<>|]/g, '').replace(/\s+/g, '-');
-  document.title = safeTitle;
+  const pageCount = typeof pdf.getNumberOfPages === 'function' ? pdf.getNumberOfPages() : 1;
+  for (let page = pageCount; page > 1; page -= 1) pdf.deletePage(page);
 
-  window.print();
-
-  setTimeout(() => {
-    document.title = originalTitle;
-    document.body.classList.remove('printing-poster');
-  }, 1000);
+  pdf.save(buildPosterPdfFilename());
 }

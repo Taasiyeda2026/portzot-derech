@@ -175,7 +175,7 @@
       .poster-page { padding: 16px 0 40px; overflow-x: auto; }
     }
 
-    /* ===== הדפסה ===== */
+    /* ===== הדפסה ידנית בלבד — הורדת PDF משתמשת ב-jsPDF/html2canvas ===== */
     @page { size: A4 portrait; margin: 0; }
     @media print {
       html, body {
@@ -197,7 +197,10 @@
         margin: 0 !important;
         box-shadow: none !important;
         transform: none !important;
-        overflow: visible !important;
+        overflow: hidden !important;
+        break-before: avoid !important;
+        break-after: avoid !important;
+        break-inside: avoid !important;
       }
       .poster-scale-wrapper, .poster-scale-inner {
         width: 210mm !important;
@@ -371,8 +374,8 @@
       try {
         await exportHTMLPosterToPDF();
       } catch (err) {
-        console.error('Print failed:', err);
-        alert('לא ניתן לפתוח הדפסה אוטומטית. יש ללחוץ Ctrl+P או להשתמש בתפריט הדפדפן > Print.');
+        console.error('PDF export failed:', err);
+        alert('לא ניתן לייצא PDF אוטומטית. ניתן ללחוץ על כפתור ייצוא PDF ולנסות שוב.');
       }
     }, 500);
   }
