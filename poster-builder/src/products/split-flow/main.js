@@ -1288,7 +1288,6 @@ function renderStep4() {
               <div class="split-preview-body" style="color:${textColor};font-family:'${titleFont}',sans-serif;">ממצאי המחקר שלנו</div>
             </div>
           </div>
-          <div class="split-preview-footer" style="background:${titleColor};">פורצות דרך ✦ 2026</div>
         </div>
       </div>
     </div>
