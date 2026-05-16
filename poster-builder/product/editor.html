@@ -169,12 +169,13 @@
     .ph-bullets { list-style: none; margin-top: 3px; padding: 0; }
     .ph-bullets li {
       font-size: 12px; font-weight: 400; color: var(--ph-text-color, #1f1030); line-height: 1.65;
-      padding-right: 14px; position: relative; margin-bottom: 3px;
+      display: flex; align-items: flex-start; gap: 8px;
+      padding-right: 0; position: relative; margin-bottom: 3px;
     }
     .ph-bullets li::before {
-      content: '◆'; position: absolute; right: 0; top: .82em;
-      transform: translateY(-50%);
-      font-size: 6px; color: var(--ph-title-color, #5E2750);
+      content: '◆'; position: static; flex: 0 0 auto;
+      font-size: 6px; line-height: 1; margin-top: .57em;
+      color: var(--ph-title-color, #5E2750);
     }
     .ph-img-frame {
       border-radius: 12px; overflow: visible;
@@ -214,6 +215,11 @@
       top: 8px;
       left: 16px;
       z-index: 5;
+      filter: none;
+      box-shadow: none;
+      text-shadow: none;
+      opacity: 1;
+      mix-blend-mode: normal;
     }
     #ph-logo-wrap img {
       height: 110px;
@@ -224,6 +230,7 @@
       box-shadow: none;
       text-shadow: none;
       opacity: 1;
+      mix-blend-mode: normal;
     }
     #ph-title-line {
       max-width: 360px;
@@ -347,6 +354,7 @@
       text-shadow: none !important;
       box-shadow: none !important;
       opacity: 1;
+      mix-blend-mode: normal !important;
     }
 
     /* ===== רספונסיבי ===== */
@@ -526,9 +534,9 @@
         </div>
 
         <!-- פוטר -->
-        <div id="ph-footer" style="background:linear-gradient(135deg,#4a1f40,#5E2750,#9b40c0);padding:10px 30px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
-          <div id="ph-slogan" style="font-style:italic;font-size:13px;color:rgba(255,255,255,.95)"></div>
-          <div style="font-size:9.5px;color:rgba(255,255,255,.6);font-weight:700;letter-spacing:1.2px">פורצות דרך ✦ 2026</div>
+        <div id="ph-footer" style="background:var(--ph-title-color,#5E2750);padding:10px 30px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
+          <div id="ph-slogan" style="font-style:italic;font-size:13px;color:#ffffff"></div>
+          <div style="font-size:9.5px;color:#ffffff;font-weight:700;letter-spacing:1.2px">פורצות דרך ✦ 2026</div>
         </div>
 
       </div>
