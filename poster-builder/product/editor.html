@@ -187,24 +187,15 @@
 
 
     /* ===== שדרוג פריסת הפוסטר המיוצא ===== */
-    #ph-top-accent {
-      width: 360px;
-      max-width: 46%;
-      height: 5px;
-      margin: 0 auto;
-      background: linear-gradient(90deg,#5E2750,#d61f8c,#9b40c0,#5E2750);
-      border-radius: 0 0 999px 999px;
-      flex-shrink: 0;
-    }
     #ph-header {
-      padding: 42px 32px 8px;
+      padding: 54px 32px 18px;
       text-align: center;
       position: relative;
       flex-shrink: 0;
     }
     #ph-logo-wrap {
       position: absolute;
-      top: 8px;
+      top: 12px;
       left: 22px;
       z-index: 5;
     }
@@ -218,24 +209,30 @@
       max-width: 360px;
     }
     #ph-main {
-      gap: 3px !important;
-      padding: 0 24px 5px !important;
+      gap: 6px !important;
+      padding: 0 24px 14px !important;
+      justify-content: flex-start !important;
     }
     .ph-grid-problem,
     .ph-grid-solution {
       gap: 5px !important;
     }
+    .ph-grid-problem {
+      margin-bottom: 2px;
+    }
     .ph-grid-research {
       grid-template-columns: 1.1fr .8fr 1.1fr !important;
       gap: 4px !important;
+      margin-top: 1px;
     }
     .ph-grid-solution {
       grid-template-columns: .92fr 1.08fr !important;
     }
     .ph-grid-process {
-      grid-template-columns: minmax(0, 1fr) 26px minmax(0, 1fr) 26px minmax(0, 1fr) !important;
-      gap: 3px !important;
+      grid-template-columns: minmax(0, 1fr) 22px minmax(0, 1fr) 22px minmax(0, 1fr) !important;
+      gap: 4px !important;
       align-items: stretch;
+      margin-top: 1px;
     }
     .ph-grid-process .ph-card {
       min-width: 0;
@@ -243,7 +240,7 @@
     .ph-process-arrow {
       position: relative;
       align-self: center;
-      height: 18px;
+      height: 16px;
       color: var(--ph-title-color, #5E2750);
       filter: drop-shadow(0 0 3px rgba(255,255,255,.95)) drop-shadow(0 1px 2px rgba(255,255,255,.85));
     }
@@ -251,9 +248,9 @@
       content: '';
       position: absolute;
       left: 5px;
-      right: 2px;
+      right: 3px;
       top: 50%;
-      height: 3px;
+      height: 2.5px;
       transform: translateY(-50%);
       background: currentColor;
       border-radius: 999px;
@@ -267,19 +264,22 @@
       transform: translateY(-50%);
       width: 0;
       height: 0;
-      border-top: 6px solid transparent;
-      border-bottom: 6px solid transparent;
-      border-right: 9px solid currentColor;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-right: 8px solid currentColor;
       opacity: .82;
     }
     .ph-audience-card {
-      padding: 5px 14px;
+      padding: 4px 14px;
       text-align: center;
       flex-shrink: 0;
+      margin-top: 0;
+      margin-bottom: 0;
     }
     .ph-audience-card #ph-audience {
       color: var(--ph-title-color, #5E2750) !important;
       font-weight: 700 !important;
+      font-size: 11.5px !important;
       margin-top: 0;
       text-align: center;
       line-height: 1.45;
@@ -290,7 +290,7 @@
     }
     .ph-images-wrap {
       flex-shrink: 0;
-      margin-block: 1px;
+      margin-block: 0 1px;
     }
     #ph-images-2 {
       gap: 14px !important;
@@ -308,7 +308,7 @@
     .ph-solution-card #ph-solution {
       text-align: center;
       color: var(--ph-title-color, #5E2750) !important;
-      font-size: 13px !important;
+      font-size: 13.8px !important;
       font-weight: 700 !important;
       line-height: 1.72;
     }
@@ -318,7 +318,7 @@
       .poster-page { padding: 16px 0 40px; overflow-x: auto; }
     }
 
-    /* ===== הדפסה ידנית בלבד — הורדת PDF משתמשת ב-jsPDF/html2canvas ===== */
+    /* ===== ייצוא PDF מקצועי דרך הדפסת דפדפן אמיתית ===== */
     @page { size: A4 portrait; margin: 0; }
     @media print {
       html, body {
@@ -375,9 +375,6 @@
       <div id="poster-bg"></div>
       <div id="poster-inner" style="position:relative;z-index:1;display:flex;flex-direction:column;height:1123px">
 
-        <!-- פס צבע עליון -->
-        <div id="ph-top-accent"></div>
-
         <!-- כותרת -->
         <div id="ph-header">
           <div id="ph-logo-wrap">
@@ -393,7 +390,7 @@
           </div>
         </div>
 
-        <div id="ph-main" style="display:flex;flex-direction:column;gap:4px;padding:0 24px 6px;flex:1 1 auto;justify-content:space-between">
+        <div id="ph-main" style="display:flex;flex-direction:column;gap:4px;padding:0 24px 6px;flex:1 1 auto;justify-content:flex-start">
         <!-- שורה: בעיה + שאלת חקר -->
         <div class="ph-grid-problem" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;flex-shrink:0">
           <div class="ph-card ph-card-compact">
@@ -496,8 +493,6 @@
   </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script type="module">
   import { loadProject } from '../src/shared/storage.js';
   import { renderHTMLPoster, exportHTMLPosterToPDF } from '../src/canvas/html-poster.js';
