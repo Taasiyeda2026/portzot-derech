@@ -194,12 +194,13 @@
     }
     .ph-bullets li {
       display: list-item;
-      list-style-type: "◆";
+      list-style-type: none;
       font-size: 12px; font-weight: 400; color: var(--ph-text-color, #1f1030); line-height: 1.65;
       margin-bottom: 3px;
       padding-right: 0;
     }
     .ph-bullets li::marker {
+      content: "◆\00a0\00a0";
       color: var(--ph-title-color, #5E2750);
       font-size: 6px;
     }
