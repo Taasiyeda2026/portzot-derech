@@ -340,6 +340,8 @@ const PDF_SCRIPT_URLS = {
 const PDF_A4_MM = { width: 210, height: 297 };
 // Scale only increases bitmap quality; capture dimensions stay exactly as rendered.
 const PDF_EXPORT_SCALE = Math.max(3, Math.min(window.devicePixelRatio || 1, 4));
+const PDF_DEBUG_PNG_PARAM = 'debugPdfPng';
+const PDF_DEBUG_PNG_FLAG = '__POSTER_PDF_DEBUG_DOWNLOAD_PNG';
 const POSTER_RTL_SELECTOR = [
   '#poster-html',
   '#poster-inner',
@@ -492,13 +494,62 @@ function preserveRenderedPosterInClone(originalPoster, clonedDocument) {
   });
 }
 
+
+function shouldDownloadDebugPng() {
+  if (window[PDF_DEBUG_PNG_FLAG]) return true;
+  try {
+    return new URLSearchParams(window.location.search).get(PDF_DEBUG_PNG_PARAM) === '1';
+  } catch {
+    return false;
+  }
+}
+
+function downloadCanvasPng(canvas, filename) {
+  if (!canvas) return;
+  const link = document.createElement('a');
+  link.href = canvas.toDataURL('image/png');
+  link.download = filename;
+  link.rel = 'noopener';
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+}
+
+async function capturePosterToCanvas(poster) {
+  const posterWidth = poster.offsetWidth || POSTER_WIDTH_PX;
+  const posterHeight = poster.offsetHeight || POSTER_HEIGHT_PX;
+  return window.html2canvas(poster, {
+    scale: PDF_EXPORT_SCALE,
+    useCORS: true,
+    allowTaint: false,
+    backgroundColor: '#ffffff',
+    logging: false,
+    width: posterWidth,
+    height: posterHeight,
+    scrollX: window.scrollX,
+    scrollY: window.scrollY,
+    foreignObjectRendering: true,
+    imageTimeout: 15000,
+    onclone: (clonedDocument) => preserveRenderedPosterInClone(poster, clonedDocument)
+  });
+}
+
+function buildSafePosterFilename(extension) {
 function buildPosterPdfFilename() {
   const projectName = document.getElementById('ph-name')?.textContent?.trim() || 'פוסטר';
   const safeTitle = projectName
     .replace(/[\\/:*?"<>|]/g, '')
     .replace(/\s+/g, '-')
     .replace(/^-+|-+$/g, '');
-  return `${safeTitle || 'פוסטר'}.pdf`;
+  return `${safeTitle || 'פוסטר'}.${extension}`;
+}
+
+function buildPosterPdfFilename() {
+  return buildSafePosterFilename('pdf');
+}
+
+function buildPosterPngFilename() {
+  return buildSafePosterFilename('png');
 }
 
 export async function printPoster() {
@@ -528,6 +579,10 @@ export async function exportHTMLPosterToPDF() {
   applyExplicitPosterTextStyles(poster);
   await waitForPosterAssets(poster);
 
+  const canvas = await capturePosterToCanvas(poster);
+  if (shouldDownloadDebugPng()) {
+    downloadCanvasPng(canvas, buildPosterPngFilename());
+  }
   const posterWidth = poster.offsetWidth || POSTER_WIDTH_PX;
   const posterHeight = poster.offsetHeight || POSTER_HEIGHT_PX;
   const canvas = await window.html2canvas(poster, {
