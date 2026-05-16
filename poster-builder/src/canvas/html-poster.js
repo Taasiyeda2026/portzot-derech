@@ -535,6 +535,7 @@ async function capturePosterToCanvas(poster) {
 }
 
 function buildSafePosterFilename(extension) {
+function buildPosterPdfFilename() {
   const projectName = document.getElementById('ph-name')?.textContent?.trim() || 'פוסטר';
   const safeTitle = projectName
     .replace(/[\\/:*?"<>|]/g, '')
@@ -582,6 +583,22 @@ export async function exportHTMLPosterToPDF() {
   if (shouldDownloadDebugPng()) {
     downloadCanvasPng(canvas, buildPosterPngFilename());
   }
+  const posterWidth = poster.offsetWidth || POSTER_WIDTH_PX;
+  const posterHeight = poster.offsetHeight || POSTER_HEIGHT_PX;
+  const canvas = await window.html2canvas(poster, {
+    scale: PDF_EXPORT_SCALE,
+    useCORS: true,
+    allowTaint: false,
+    backgroundColor: '#ffffff',
+    logging: false,
+    width: posterWidth,
+    height: posterHeight,
+    scrollX: window.scrollX,
+    scrollY: window.scrollY,
+    foreignObjectRendering: true,
+    imageTimeout: 15000,
+    onclone: (clonedDocument) => preserveRenderedPosterInClone(poster, clonedDocument)
+  });
 
   const { jsPDF } = window.jspdf;
   const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4', compress: false });
