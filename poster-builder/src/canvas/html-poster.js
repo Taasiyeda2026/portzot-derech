@@ -150,6 +150,8 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
   });
   const imagesLabel = document.getElementById('ph-images-label');
   if (imagesLabel) imagesLabel.style.color = resolvedTitle;
+  const audienceEl = document.getElementById('ph-audience');
+  if (audienceEl) audienceEl.style.color = resolvedTitle;
 
   // ── Footer background based on titleColor ────────────────────────────────────
   const footer = document.getElementById('ph-footer');
@@ -736,13 +738,18 @@ async function capturePosterToCanvas(clonedPoster) {
   return canvas;
 }
 
-function buildSafePosterFilename(extension) {
-  const projectName = document.getElementById('ph-name')?.textContent?.trim() || 'פוסטר';
-  const safeTitle = projectName
+function getSafePosterTitle() {
+  const renderedName = document.getElementById('ph-name')?.textContent?.trim() || '';
+  const projectName = renderedName && renderedName !== 'שם המיזם' ? renderedName : 'פוסטר';
+  return projectName
     .replace(/[\\/:*?"<>|]/g, '')
     .replace(/\s+/g, '-')
-    .replace(/^-+|-+$/g, '');
-  return `${safeTitle || 'פוסטר'}.${extension}`;
+    .replace(/^-+|-+$/g, '') || 'פוסטר';
+}
+
+function buildSafePosterFilename(extension) {
+  const safeTitle = getSafePosterTitle();
+  return extension ? `${safeTitle}.${extension}` : safeTitle;
 }
 
 function buildPosterPngFilename() {
@@ -758,11 +765,16 @@ export async function printPoster() {
   await waitForAnimationFrame();
 
   document.body.classList.add('printing-poster');
+  const previousTitle = document.title;
+  document.title = buildSafePosterFilename('');
   try {
     if (typeof window.print !== 'function') throw new Error('window.print is not available');
     window.print();
   } finally {
-    setTimeout(() => document.body.classList.remove('printing-poster'), 1000);
+    setTimeout(() => {
+      document.body.classList.remove('printing-poster');
+      document.title = previousTitle;
+    }, 1000);
   }
 }
 
