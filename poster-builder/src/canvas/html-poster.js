@@ -154,8 +154,7 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
   // ── Footer background based on titleColor ────────────────────────────────────
   const footer = document.getElementById('ph-footer');
   if (footer) {
-    // darken the chosen color slightly for the gradient
-    footer.style.background = `linear-gradient(135deg, ${_darken(resolvedTitle, 25)}, ${resolvedTitle}, ${_shiftHue(resolvedTitle, 40)})`;
+    footer.style.background = `linear-gradient(135deg, ${_darken(resolvedTitle, 18)}, ${resolvedTitle})`;
   }
 
   // ── Image grids ──────────────────────────────────────────────────────────────
