@@ -474,21 +474,24 @@ function getPosterVisibilityIssue(poster) {
   return '';
 }
 
-function assertPosterReadyForCapture(poster) {
+function assertOriginalPosterReadyForExport(poster) {
   const currentPoster = document.getElementById('poster-html');
   if (!currentPoster) throw new Error('ייצוא PDF נכשל: לא נמצא #poster-html במסך.');
-  if (poster !== currentPoster) throw new Error('ייצוא PDF נכשל: הפוסטר שנשלח לצילום אינו #poster-html הפעיל במסך.');
+  if (poster !== currentPoster) throw new Error('ייצוא PDF נכשל: הפוסטר שנשלח לייצוא אינו #poster-html הפעיל במסך.');
 
   const visibilityIssue = getPosterVisibilityIssue(poster);
   if (visibilityIssue) throw new Error(`ייצוא PDF נכשל: ${visibilityIssue}`);
 }
 
-function getPosterCaptureSize(poster) {
-  const rect = poster.getBoundingClientRect();
-  return {
-    width: Math.round(rect.width || poster.offsetWidth || 0),
-    height: Math.round(rect.height || poster.offsetHeight || 0)
-  };
+function assertClonedPosterReadyForCapture(clonedPoster) {
+  if (!clonedPoster) throw new Error('ייצוא PDF נכשל: לא נוצר clone ל-#poster-html.');
+  if (clonedPoster.id !== 'poster-html') throw new Error('ייצוא PDF נכשל: ה-clone שנשלח לצילום אינו #poster-html.');
+  if (clonedPoster.dataset.posterExportClone !== '1') {
+    throw new Error('ייצוא PDF נכשל: ניסיון לצלם פוסטר שאינו עותק הייצוא הנקי.');
+  }
+
+  const visibilityIssue = getPosterVisibilityIssue(clonedPoster);
+  if (visibilityIssue) throw new Error(`ייצוא PDF נכשל: clone לא תקין - ${visibilityIssue}`);
 }
 
 function copyComputedStyles(source, target) {
@@ -507,54 +510,100 @@ function copyComputedStyles(source, target) {
   });
 }
 
-function preserveRenderedPosterInClone(originalPoster, clonedDocument) {
-  const clonedPoster = clonedDocument.getElementById('poster-html');
-  if (!originalPoster || !clonedPoster) {
-    throw new Error('ייצוא PDF נכשל: html2canvas יצר clone בלי #poster-html.');
-  }
+function applyFixedExportBoxStyles(element) {
+  if (!element) return;
+  element.style.width = `${POSTER_WIDTH_PX}px`;
+  element.style.height = `${POSTER_HEIGHT_PX}px`;
+  element.style.minHeight = `${POSTER_HEIGHT_PX}px`;
+  element.style.maxHeight = `${POSTER_HEIGHT_PX}px`;
+  element.style.transform = 'none';
+  element.style.overflow = 'hidden';
+  element.style.background = '#ffffff';
+  element.style.boxShadow = 'none';
+  element.style.direction = 'rtl';
+  element.style.unicodeBidi = 'isolate';
+}
 
-  if (!clonedPoster.childElementCount && originalPoster.childElementCount) {
-    clonedPoster.innerHTML = originalPoster.innerHTML;
-  }
+function applyComputedTextStylesToClone(originalPoster, clonedPoster) {
+  if (!originalPoster || !clonedPoster) return;
 
+  const originalTextElements = [originalPoster, ...originalPoster.querySelectorAll('*')];
+  const clonedTextElements = [clonedPoster, ...clonedPoster.querySelectorAll('*')];
+
+  originalTextElements.forEach((sourceEl, index) => {
+    const targetEl = clonedTextElements[index];
+    if (!targetEl) return;
+
+    const hasText = [...sourceEl.childNodes].some((node) => node.nodeType === Node.TEXT_NODE && node.textContent.trim());
+    const isKnownTextElement = sourceEl.matches?.(POSTER_RTL_SELECTOR);
+    if (!hasText && !isKnownTextElement) return;
+
+    const computed = window.getComputedStyle(sourceEl);
+    targetEl.style.direction = 'rtl';
+    targetEl.style.unicodeBidi = targetEl === clonedPoster ? 'isolate' : 'plaintext';
+    for (const property of POSTER_TEXT_STYLE_PROPERTIES) {
+      targetEl.style.setProperty(property, computed.getPropertyValue(property));
+    }
+  });
+}
+
+function lockCloneForA4Export(originalPoster, clonedPoster) {
   copyComputedStyles(originalPoster, clonedPoster);
-  const clonedInner = clonedDocument.getElementById('poster-inner');
-  if (clonedInner) copyComputedStyles(originalPoster.querySelector('#poster-inner'), clonedInner);
-
-  const { width, height } = getPosterCaptureSize(originalPoster);
-  clonedPoster.style.direction = 'rtl';
-  clonedPoster.style.unicodeBidi = 'isolate';
+  applyFixedExportBoxStyles(clonedPoster);
+  clonedPoster.dataset.posterExportClone = '1';
+  clonedPoster.style.position = 'fixed';
+  clonedPoster.style.left = '-10000px';
+  clonedPoster.style.top = '0';
+  clonedPoster.style.margin = '0';
   clonedPoster.style.display = 'block';
   clonedPoster.style.visibility = 'visible';
   clonedPoster.style.opacity = '1';
-  clonedPoster.style.overflow = 'hidden';
-  clonedPoster.style.width = `${width || POSTER_WIDTH_PX}px`;
-  clonedPoster.style.height = `${height || POSTER_HEIGHT_PX}px`;
-  clonedPoster.style.minHeight = `${height || POSTER_HEIGHT_PX}px`;
-  clonedPoster.style.maxHeight = `${height || POSTER_HEIGHT_PX}px`;
 
-  const clonedBody = clonedDocument.body;
-  if (clonedBody) {
-    clonedBody.querySelectorAll('.overlay, .wz-overlay, .bgm-overlay, .loading-overlay').forEach((overlay) => {
-      if (!overlay.contains(clonedPoster) && !clonedPoster.contains(overlay)) {
-        overlay.style.display = 'none';
-        overlay.style.visibility = 'hidden';
-        overlay.style.opacity = '0';
-      }
-    });
-  }
+  const clonedInner = clonedPoster.querySelector('#poster-inner');
+  const originalInner = originalPoster.querySelector('#poster-inner');
+  if (clonedInner && originalInner) copyComputedStyles(originalInner, clonedInner);
 
-  clonedPoster.querySelectorAll(POSTER_RTL_SELECTOR).forEach((el) => {
-    const computed = clonedDocument.defaultView.getComputedStyle(el);
+  clonedPoster.querySelectorAll('#poster-html, #poster-inner').forEach((el) => {
+    el.style.transform = 'none';
+    el.style.boxShadow = 'none';
     el.style.direction = 'rtl';
-    el.style.unicodeBidi = el === clonedPoster ? 'isolate' : 'plaintext';
-    for (const property of POSTER_TEXT_STYLE_PROPERTIES) {
-      el.style.setProperty(property, computed.getPropertyValue(property));
-    }
+    el.style.unicodeBidi = 'isolate';
   });
 
-  const cloneIssue = getPosterVisibilityIssue(clonedPoster);
-  if (cloneIssue) throw new Error(`ייצוא PDF נכשל: clone לא תקין - ${cloneIssue}`);
+  applyComputedTextStylesToClone(originalPoster, clonedPoster);
+}
+
+function createPosterExportClone(originalPoster) {
+  assertOriginalPosterReadyForExport(originalPoster);
+
+  const container = document.createElement('div');
+  container.dataset.posterExportContainer = '1';
+  container.setAttribute('aria-hidden', 'true');
+  container.style.position = 'fixed';
+  container.style.left = '-10000px';
+  container.style.top = '0';
+  container.style.width = `${POSTER_WIDTH_PX}px`;
+  container.style.height = `${POSTER_HEIGHT_PX}px`;
+  container.style.minHeight = `${POSTER_HEIGHT_PX}px`;
+  container.style.maxHeight = `${POSTER_HEIGHT_PX}px`;
+  container.style.transform = 'none';
+  container.style.overflow = 'hidden';
+  container.style.background = '#ffffff';
+  container.style.boxShadow = 'none';
+  container.style.direction = 'rtl';
+  container.style.unicodeBidi = 'isolate';
+  container.style.pointerEvents = 'none';
+  container.style.zIndex = '0';
+
+  const clonedPoster = originalPoster.cloneNode(true);
+  container.appendChild(clonedPoster);
+  document.body.appendChild(container);
+
+  lockCloneForA4Export(originalPoster, clonedPoster);
+  applyPosterCardStyles(clonedPoster);
+  updateTitleUnderline(clonedPoster);
+
+  return { container, clonedPoster };
 }
 
 function isCanvasEmptyOrWhite(canvas) {
@@ -628,28 +677,24 @@ function downloadCanvasPng(canvas, filename) {
   link.remove();
 }
 
-async function capturePosterToCanvas(poster) {
-  assertPosterReadyForCapture(poster);
-  const { width, height } = getPosterCaptureSize(poster);
-  if (width <= 0 || height <= 0) {
-    throw new Error('ייצוא PDF נכשל: #poster-html במידות 0 לפני צילום.');
-  }
+async function capturePosterToCanvas(clonedPoster) {
+  assertClonedPosterReadyForCapture(clonedPoster);
+  await waitForPosterAssets(clonedPoster);
 
-  const canvas = await window.html2canvas(poster, {
+  const canvas = await window.html2canvas(clonedPoster, {
     scale: PDF_EXPORT_SCALE,
     useCORS: true,
     allowTaint: false,
     backgroundColor: '#ffffff',
     logging: false,
-    width,
-    height,
-    windowWidth: Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0, width),
-    windowHeight: Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0, height),
-    scrollX: window.scrollX,
-    scrollY: window.scrollY,
+    width: POSTER_WIDTH_PX,
+    height: POSTER_HEIGHT_PX,
+    windowWidth: POSTER_WIDTH_PX,
+    windowHeight: POSTER_HEIGHT_PX,
+    scrollX: 0,
+    scrollY: 0,
     foreignObjectRendering: false,
-    imageTimeout: 15000,
-    onclone: (clonedDocument) => preserveRenderedPosterInClone(poster, clonedDocument)
+    imageTimeout: 15000
   });
 
   assertCanvasHasDimensions(canvas);
@@ -697,15 +742,19 @@ export async function exportHTMLPosterToPDF() {
     return;
   }
 
+  let exportContainer = null;
   try {
     await ensurePdfDependencies();
-    assertPosterReadyForCapture(poster);
+    assertOriginalPosterReadyForExport(poster);
     await waitForPosterAssets(poster);
     updateTitleUnderline(poster);
     applyExplicitPosterTextStyles(poster);
-    await waitForPosterAssets(poster);
 
-    const canvas = await capturePosterToCanvas(poster);
+    const { container, clonedPoster } = createPosterExportClone(poster);
+    exportContainer = container;
+    await waitForPosterAssets(clonedPoster);
+
+    const canvas = await capturePosterToCanvas(clonedPoster);
     if (shouldDownloadDebugPng()) {
       downloadCanvasPng(canvas, buildPosterPngFilename());
     }
@@ -713,8 +762,8 @@ export async function exportHTMLPosterToPDF() {
 
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4', compress: false });
-    const imageData = canvas.toDataURL('image/png');
-    pdf.addImage(imageData, 'PNG', 0, 0, PDF_A4_MM.width, PDF_A4_MM.height);
+    const imageData = canvas.toDataURL('image/jpeg', 0.98);
+    pdf.addImage(imageData, 'JPEG', 0, 0, PDF_A4_MM.width, PDF_A4_MM.height);
 
     const pageCount = typeof pdf.getNumberOfPages === 'function' ? pdf.getNumberOfPages() : 1;
     for (let page = pageCount; page > 1; page -= 1) pdf.deletePage(page);
@@ -722,5 +771,7 @@ export async function exportHTMLPosterToPDF() {
     pdf.save(buildPosterPdfFilename());
   } catch (error) {
     showPosterExportError(error);
+  } finally {
+    exportContainer?.remove();
   }
 }
