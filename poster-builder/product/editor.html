@@ -149,7 +149,7 @@
     .ph-cap {
       font-size: 13.5px; font-weight: 900; color: var(--ph-title-color, #5E2750);
       text-transform: uppercase; letter-spacing: 1px;
-      margin-bottom: 8px; display: flex; align-items: center; gap: 5px;
+      margin-bottom: 6px; display: flex; align-items: center; gap: 5px;
     }
     .ph-cap,
     #ph-images-label {
@@ -173,7 +173,7 @@
     }
     #ph-audience[data-icon-ok="true"]::before {
       content: ''; display: inline-block;
-      width: 15px; height: 15px; border-radius: 0;
+      width: 18px; height: 18px; border-radius: 0;
       background-color: transparent;
       background-image: var(--ph-icon-url);
       background-position: center;
@@ -185,16 +185,23 @@
     }
     .ph-body { font-size: 12px; font-weight: 400; color: var(--ph-text-color, #1f1030); line-height: 1.72; word-break: break-word; overflow-wrap: anywhere; }
     .ph-sub  { font-size: 10.5px; font-weight: 400; color: #8a7aa0; margin-top: 4px; line-height: 1.58; }
-    .ph-bullets { list-style: none; margin-top: 3px; padding: 0; }
-    .ph-bullets li {
-      font-size: 12px; font-weight: 400; color: var(--ph-text-color, #1f1030); line-height: 1.65;
-      display: flex; align-items: flex-start; gap: 8px;
-      padding-right: 0; position: relative; margin-bottom: 3px;
+    .ph-bullets {
+      list-style-position: outside;
+      margin-top: 3px;
+      padding: 0;
+      padding-inline-start: 0;
+      padding-inline-end: 14px;
     }
-    .ph-bullets li::before {
-      content: '◆'; position: static; flex: 0 0 auto;
-      font-size: 6px; line-height: 1; margin-top: .57em;
+    .ph-bullets li {
+      display: list-item;
+      list-style-type: "◆";
+      font-size: 12px; font-weight: 400; color: var(--ph-text-color, #1f1030); line-height: 1.65;
+      margin-bottom: 3px;
+      padding-right: 0;
+    }
+    .ph-bullets li::marker {
       color: var(--ph-title-color, #5E2750);
+      font-size: 6px;
     }
     .ph-img-frame {
       border-radius: 12px; overflow: visible;
@@ -272,7 +279,8 @@
       margin-top: 1px;
     }
     .ph-grid-solution {
-      grid-template-columns: .92fr 1.08fr !important;
+      grid-template-columns: 1fr 1fr !important;
+      gap: 18px !important;
       margin-top: 9px;
     }
     .ph-grid-process {
@@ -452,7 +460,7 @@
             <img src="/poster-builder/assets/logoposter.svg" alt="פורצות דרך" crossorigin="anonymous" />
           </div>
 
-          <div id="ph-name" style="font-weight:900;line-height:1.1;margin-bottom:8px;word-break:break-word;overflow-wrap:anywhere"></div>
+          <div id="ph-name" style="font-weight:900;line-height:1.1;margin-bottom:14px;word-break:break-word;overflow-wrap:anywhere"></div>
           <div id="ph-title-line" style="height:3px;background:linear-gradient(90deg,#5E2750,#d61f8c);border-radius:2px;margin:0 auto 10px;transition:width .2s ease"></div>
           <div id="ph-desc" style="font-size:15.5px;font-weight:700;max-width:480px;margin:0 auto;line-height:1.65;display:inline-block;background:rgba(255,255,255,0.72);padding:6px 12px;border-radius:10px"></div>
           <div id="ph-team" style="background:rgba(255,255,255,.96);border:1px solid rgba(94,39,80,.2);border-radius:10px;padding:7px 14px;width:fit-content;max-width:390px;margin:8px auto 0">
