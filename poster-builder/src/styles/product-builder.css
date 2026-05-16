@@ -2225,7 +2225,7 @@ canvas {
 #poster-html.ph-cap-tight .ph-bullets li { font-size: 10.5px; line-height: 1.24; }
 #poster-html.ph-cap-tight #ph-footer { padding-top: 6px !important; padding-bottom: 6px !important; }
 
-/* ─── הדפסה — window.print() → PDF ──────────────────────── */
+/* ─── הדפסה ידנית בלבד — הורדת PDF משתמשת ב-jsPDF/html2canvas ───────── */
 @page { size: A4 portrait; margin: 0; }
 @media print {
   html, body {
@@ -2247,7 +2247,10 @@ canvas {
     margin: 0 !important;
     box-shadow: none !important;
     transform: none !important;
-    overflow: visible !important;
+    overflow: hidden !important;
+    break-before: avoid !important;
+    break-after: avoid !important;
+    break-inside: avoid !important;
   }
   .poster-scale-wrapper, .poster-scale-inner {
     width: 210mm !important;

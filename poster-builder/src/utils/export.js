@@ -11,7 +11,8 @@ export function exportPNG(canvas, sizeKey) {
   if (active) canvas.discardActiveObject();
   canvas.renderAll();
   const zoom = canvas.getZoom() || 1;
-  const dataUrl = canvas.toDataURL({ format: 'png', quality: 1, multiplier: 1 / zoom });
+  const multiplier = Math.max(3, 1 / zoom);
+  const dataUrl = canvas.toDataURL({ format: 'png', quality: 1, multiplier });
   const link = document.createElement('a');
   link.href = dataUrl;
   link.download = `poster-${sizeKey.toLowerCase()}.png`;
@@ -23,8 +24,9 @@ export function exportPDF(canvas, sizeKey, contentValues) {
   const active = canvas.getActiveObject();
   if (active) canvas.discardActiveObject();
   canvas.renderAll();
-  const zoom    = canvas.getZoom() || 1;
-  const dataUrl = canvas.toDataURL({ format: 'png', quality: 1, multiplier: 1 / zoom });
+  const zoom       = canvas.getZoom() || 1;
+  const multiplier = Math.max(3, 1 / zoom);
+  const dataUrl    = canvas.toDataURL({ format: 'png', quality: 1, multiplier });
   const size    = POSTER_SIZES[sizeKey];
   const pdf = new jsPDF({
     orientation: size.width >= size.height ? 'landscape' : 'portrait',
