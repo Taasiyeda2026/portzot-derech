@@ -50,6 +50,7 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
     posterRoot.style.setProperty('--ph-title-color', resolvedTitle);
     posterRoot.style.setProperty('--ph-text-color',  resolvedText);
     posterRoot.style.fontFamily = `'${resolvedFont}', 'IBM Plex Sans Hebrew', sans-serif`;
+    applyExplicitPosterTextStyles(posterRoot);
   }
 
   // ── Title font, size, colour ────────────────────────────────────────────────
@@ -337,7 +338,47 @@ const PDF_SCRIPT_URLS = {
   jspdf: 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'
 };
 const PDF_A4_MM = { width: 210, height: 297 };
+// Scale only increases bitmap quality; capture dimensions stay exactly as rendered.
 const PDF_EXPORT_SCALE = Math.max(3, Math.min(window.devicePixelRatio || 1, 4));
+const PDF_DEBUG_PNG_PARAM = 'debugPdfPng';
+const PDF_DEBUG_PNG_FLAG = '__POSTER_PDF_DEBUG_DOWNLOAD_PNG';
+const POSTER_RTL_SELECTOR = [
+  '#poster-html',
+  '#poster-inner',
+  '.ph-card',
+  '.ph-cap',
+  '.ph-body',
+  '.ph-sub',
+  '.ph-bullets',
+  '.ph-bullets li',
+  '#ph-name',
+  '#ph-desc',
+  '#ph-names',
+  '#ph-school',
+  '#ph-slogan'
+].join(',');
+const POSTER_TEXT_STYLE_PROPERTIES = [
+  'direction',
+  'unicode-bidi',
+  'font-family',
+  'font-size',
+  'font-style',
+  'font-weight',
+  'font-kerning',
+  'font-feature-settings',
+  'font-variant-ligatures',
+  'letter-spacing',
+  'line-height',
+  'overflow-wrap',
+  'text-align',
+  'text-align-last',
+  'text-decoration',
+  'text-transform',
+  'white-space',
+  'word-break',
+  'word-spacing',
+  'writing-mode'
+];
 
 function loadPdfScript(globalCheck, src) {
   if (globalCheck()) return Promise.resolve();
@@ -394,13 +435,120 @@ async function waitForPosterAssets(poster) {
   await waitForAnimationFrame();
 }
 
-function buildPosterPdfFilename() {
+
+function applyExplicitPosterTextStyles(poster) {
+  if (!poster) return;
+
+  poster.style.direction = 'rtl';
+  poster.style.unicodeBidi = 'isolate';
+
+  poster.querySelectorAll(POSTER_RTL_SELECTOR).forEach((el) => {
+    const computed = window.getComputedStyle(el);
+    el.style.direction = 'rtl';
+    el.style.unicodeBidi = el === poster ? 'isolate' : 'plaintext';
+    el.style.fontFamily = computed.fontFamily;
+    el.style.textAlign = computed.textAlign;
+    el.style.whiteSpace = computed.whiteSpace;
+    el.style.lineHeight = computed.lineHeight;
+  });
+}
+
+function copyComputedStyles(source, target) {
+  if (!source || !target) return;
+
+  const computed = window.getComputedStyle(source);
+  for (let index = 0; index < computed.length; index += 1) {
+    const property = computed[index];
+    target.style.setProperty(property, computed.getPropertyValue(property));
+  }
+
+  const sourceChildren = [...source.children];
+  const targetChildren = [...target.children];
+  sourceChildren.forEach((sourceChild, index) => {
+    copyComputedStyles(sourceChild, targetChildren[index]);
+  });
+}
+
+function preserveRenderedPosterInClone(originalPoster, clonedDocument) {
+  const clonedPoster = clonedDocument.getElementById('poster-html');
+  if (!originalPoster || !clonedPoster) return;
+
+  copyComputedStyles(originalPoster, clonedPoster);
+  const clonedInner = clonedDocument.getElementById('poster-inner');
+  if (clonedInner) copyComputedStyles(originalPoster.querySelector('#poster-inner'), clonedInner);
+
+  clonedPoster.style.direction = 'rtl';
+  clonedPoster.style.unicodeBidi = 'isolate';
+  clonedPoster.style.width = `${originalPoster.offsetWidth || POSTER_WIDTH_PX}px`;
+  clonedPoster.style.height = `${originalPoster.offsetHeight || POSTER_HEIGHT_PX}px`;
+  clonedPoster.style.minHeight = `${originalPoster.offsetHeight || POSTER_HEIGHT_PX}px`;
+  clonedPoster.style.maxHeight = `${originalPoster.offsetHeight || POSTER_HEIGHT_PX}px`;
+
+  clonedPoster.querySelectorAll(POSTER_RTL_SELECTOR).forEach((el) => {
+    const computed = clonedDocument.defaultView.getComputedStyle(el);
+    el.style.direction = 'rtl';
+    el.style.unicodeBidi = el === clonedPoster ? 'isolate' : 'plaintext';
+    for (const property of POSTER_TEXT_STYLE_PROPERTIES) {
+      el.style.setProperty(property, computed.getPropertyValue(property));
+    }
+  });
+}
+
+
+function shouldDownloadDebugPng() {
+  if (window[PDF_DEBUG_PNG_FLAG]) return true;
+  try {
+    return new URLSearchParams(window.location.search).get(PDF_DEBUG_PNG_PARAM) === '1';
+  } catch {
+    return false;
+  }
+}
+
+function downloadCanvasPng(canvas, filename) {
+  if (!canvas) return;
+  const link = document.createElement('a');
+  link.href = canvas.toDataURL('image/png');
+  link.download = filename;
+  link.rel = 'noopener';
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+}
+
+async function capturePosterToCanvas(poster) {
+  const posterWidth = poster.offsetWidth || POSTER_WIDTH_PX;
+  const posterHeight = poster.offsetHeight || POSTER_HEIGHT_PX;
+  return window.html2canvas(poster, {
+    scale: PDF_EXPORT_SCALE,
+    useCORS: true,
+    allowTaint: false,
+    backgroundColor: '#ffffff',
+    logging: false,
+    width: posterWidth,
+    height: posterHeight,
+    scrollX: window.scrollX,
+    scrollY: window.scrollY,
+    foreignObjectRendering: true,
+    imageTimeout: 15000,
+    onclone: (clonedDocument) => preserveRenderedPosterInClone(poster, clonedDocument)
+  });
+}
+
+function buildSafePosterFilename(extension) {
   const projectName = document.getElementById('ph-name')?.textContent?.trim() || 'פוסטר';
   const safeTitle = projectName
     .replace(/[\\/:*?"<>|]/g, '')
     .replace(/\s+/g, '-')
     .replace(/^-+|-+$/g, '');
-  return `${safeTitle || 'פוסטר'}.pdf`;
+  return `${safeTitle || 'פוסטר'}.${extension}`;
+}
+
+function buildPosterPdfFilename() {
+  return buildSafePosterFilename('pdf');
+}
+
+function buildPosterPngFilename() {
+  return buildSafePosterFilename('png');
 }
 
 export async function printPoster() {
@@ -427,41 +575,13 @@ export async function exportHTMLPosterToPDF() {
   await ensurePdfDependencies();
   await waitForPosterAssets(poster);
   updateTitleUnderline(poster);
-  fitPosterToPage(poster);
+  applyExplicitPosterTextStyles(poster);
   await waitForPosterAssets(poster);
 
-  const canvas = await window.html2canvas(poster, {
-    scale: PDF_EXPORT_SCALE,
-    useCORS: true,
-    allowTaint: false,
-    backgroundColor: '#ffffff',
-    logging: false,
-    width: POSTER_WIDTH_PX,
-    height: POSTER_HEIGHT_PX,
-    windowWidth: POSTER_WIDTH_PX,
-    windowHeight: POSTER_HEIGHT_PX,
-    scrollX: 0,
-    scrollY: 0,
-    onclone: (clonedDocument) => {
-      const clonedPoster = clonedDocument.getElementById('poster-html');
-      const clonedInner = clonedDocument.getElementById('poster-inner');
-      if (clonedPoster) {
-        clonedPoster.style.width = `${POSTER_WIDTH_PX}px`;
-        clonedPoster.style.height = `${POSTER_HEIGHT_PX}px`;
-        clonedPoster.style.minHeight = `${POSTER_HEIGHT_PX}px`;
-        clonedPoster.style.maxHeight = `${POSTER_HEIGHT_PX}px`;
-        clonedPoster.style.overflow = 'hidden';
-        clonedPoster.style.boxShadow = 'none';
-        clonedPoster.style.transform = 'none';
-      }
-      if (clonedInner) {
-        clonedInner.style.height = `${POSTER_HEIGHT_PX}px`;
-        clonedInner.style.minHeight = `${POSTER_HEIGHT_PX}px`;
-        clonedInner.style.maxHeight = `${POSTER_HEIGHT_PX}px`;
-        clonedInner.style.overflow = 'hidden';
-      }
-    }
-  });
+  const canvas = await capturePosterToCanvas(poster);
+  if (shouldDownloadDebugPng()) {
+    downloadCanvasPng(canvas, buildPosterPngFilename());
+  }
 
   const { jsPDF } = window.jspdf;
   const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4', compress: false });

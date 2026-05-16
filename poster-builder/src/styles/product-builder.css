@@ -2157,6 +2157,24 @@ canvas {
 #poster-html {
   overflow: visible;
   max-height: 1123px;
+  direction: rtl;
+  unicode-bidi: isolate;
+}
+
+#poster-inner,
+#poster-html .ph-card,
+#poster-html .ph-cap,
+#poster-html .ph-body,
+#poster-html .ph-sub,
+#poster-html .ph-bullets,
+#poster-html .ph-bullets li,
+#poster-html #ph-name,
+#poster-html #ph-desc,
+#poster-html #ph-names,
+#poster-html #ph-school,
+#poster-html #ph-slogan {
+  direction: rtl;
+  unicode-bidi: plaintext;
 }
 
 #ph-main {

@@ -102,9 +102,24 @@
     #poster-html {
       width: 794px; height: 1123px; min-height: 1123px; max-height: 1123px;
       position: relative; overflow: visible;
-      direction: rtl; background: #fff;
+      direction: rtl; unicode-bidi: isolate; background: #fff;
       display: flex; flex-direction: column;
       box-shadow: 0 16px 56px rgba(94,39,80,.22), 0 4px 16px rgba(0,0,0,.1);
+    }
+    #poster-inner,
+    #poster-html .ph-card,
+    #poster-html .ph-cap,
+    #poster-html .ph-body,
+    #poster-html .ph-sub,
+    #poster-html .ph-bullets,
+    #poster-html .ph-bullets li,
+    #poster-html #ph-name,
+    #poster-html #ph-desc,
+    #poster-html #ph-names,
+    #poster-html #ph-school,
+    #poster-html #ph-slogan {
+      direction: rtl;
+      unicode-bidi: plaintext;
     }
     #poster-bg { position: absolute; inset: 0; z-index: 0; }
 
