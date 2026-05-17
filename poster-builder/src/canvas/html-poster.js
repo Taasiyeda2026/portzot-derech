@@ -1,11 +1,12 @@
 const POSTER_WIDTH_PX = 794;
 const POSTER_HEIGHT_PX = 1123;
 const IMG_HEIGHTS     = { app: 270, physical: 220, website: 185, digital: 185 };
+const PHYSICAL_FRAME_SIZE = 240;
 const APP_SCREEN_RATIO = 9 / 16;
 const WEB_SCREEN_RATIO = 16 / 9;
 const WEB_FRAME_WIDTH  = 205;
 const IMAGE_LAYOUT_FALLBACKS = {
-  physical: { fit: 'cover', height: IMG_HEIGHTS.physical, background: '#f5eef2' },
+  physical: { fit: 'cover', height: PHYSICAL_FRAME_SIZE, width: PHYSICAL_FRAME_SIZE, background: '#f5eef2' },
   app: { fit: 'contain', height: IMG_HEIGHTS.app, width: Math.round(IMG_HEIGHTS.app * APP_SCREEN_RATIO), background: 'linear-gradient(180deg, #fbf8fc 0%, #f0e7f5 100%)' },
   website: { fit: 'contain', height: Math.round(WEB_FRAME_WIDTH / WEB_SCREEN_RATIO), width: WEB_FRAME_WIDTH, background: 'linear-gradient(180deg, #fbf8ff 0%, #f2edf8 100%)' },
 };
@@ -270,6 +271,7 @@ function applyImageFrameSize(frame, layoutKey, height, width) {
 
   if (layoutKey === 'app') frame.style.aspectRatio = '9 / 16';
   else if (layoutKey === 'website') frame.style.aspectRatio = '16 / 9';
+  else if (layoutKey === 'physical') frame.style.aspectRatio = '1 / 1';
   else frame.style.removeProperty('aspect-ratio');
 }
 
@@ -435,6 +437,7 @@ function shrinkActiveImageFramesToFit(posterRoot, titleColor) {
     let nextWidth = null;
     if (layoutKey === 'app') nextWidth = Math.round(nextHeight * APP_SCREEN_RATIO);
     if (layoutKey === 'website') nextWidth = Math.round(nextHeight * WEB_SCREEN_RATIO);
+    if (layoutKey === 'physical') nextWidth = nextHeight;
 
     if (nextWidth) {
       activeGrid.style.gridTemplateColumns = `repeat(${frames.length}, ${nextWidth}px)`;
