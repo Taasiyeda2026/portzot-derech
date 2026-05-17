@@ -848,9 +848,96 @@ export async function printPoster() {
 }
 
 export async function exportHTMLPosterToPDF() {
+  const poster = document.getElementById('poster-html');
+  if (!poster) return;
+
   try {
-    await printPoster();
+    await waitForPosterAssets(poster);
+    updateTitleUnderline(poster);
+    fitPosterToPage(poster);
+    await waitForAnimationFrame();
+    await waitForAnimationFrame();
+    await waitForAnimationFrame();
+
+    poster.style.setProperty('overflow', 'hidden', 'important');
+
+    const baseUrl = `${location.protocol}//${location.host}`;
+    const fontFaceCSS = `
+      @font-face { font-family: 'Gveret Levin'; src: url('${baseUrl}/poster-builder/assets/fonts/GveretLevin-Regular.ttf') format('truetype'); font-weight: 400 700 900; font-style: normal; }
+      @font-face { font-family: 'Alef'; src: url('${baseUrl}/poster-builder/assets/fonts/Alef-regular.ttf') format('truetype'); font-weight: 400; font-style: normal; }
+      @font-face { font-family: 'Alef'; src: url('${baseUrl}/poster-builder/assets/fonts/Alef-bold.ttf') format('truetype'); font-weight: 700 900; font-style: normal; }
+      @font-face { font-family: 'Alice'; src: url('${baseUrl}/poster-builder/assets/fonts/Alice-Regular.ttf') format('truetype'); font-weight: 400 700 900; font-style: normal; }
+      @font-face { font-family: 'Choco'; src: url('${baseUrl}/poster-builder/assets/fonts/Choco.otf') format('opentype'); font-weight: 400 700 900; font-style: normal; }
+      @font-face { font-family: 'Yehuda'; src: url('${baseUrl}/poster-builder/assets/fonts/yehudaclm-bold-webfont.woff') format('woff'), url('${baseUrl}/poster-builder/assets/fonts/yehudaclm-bold-webfont.ttf') format('truetype'); font-weight: 400 700 900; font-style: normal; }
+    `;
+
+    const html = `<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Hebrew:wght@400;700;900&family=Rubik:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="${baseUrl}/poster-builder/src/styles/product-builder.css">
+  <style>
+    ${fontFaceCSS}
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { width: 210mm; height: 297mm; margin: 0; padding: 0; background: white; overflow: hidden; }
+    @page { size: 210mm 297mm; margin: 0; }
+    #poster-html {
+      position: relative !important;
+      width: 210mm !important;
+      height: 297mm !important;
+      min-height: 297mm !important;
+      max-height: 297mm !important;
+      overflow: hidden !important;
+      box-sizing: border-box !important;
+      box-shadow: none !important;
+      transform: none !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    #poster-inner {
+      width: 210mm !important;
+      height: 297mm !important;
+      overflow: hidden !important;
+      box-sizing: border-box !important;
+    }
+    .ph-card, .ph-grid-problem, .ph-grid-research, .ph-grid-solution, .ph-grid-process {
+      break-inside: avoid !important;
+      page-break-inside: avoid !important;
+    }
+  </style>
+</head>
+<body>${poster.outerHTML}</body>
+</html>`;
+
+    poster.style.removeProperty('overflow');
+
+    const filename = buildSafePosterFilename('pdf');
+    const response = await fetch('/api/export-pdf', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ html, filename })
+    });
+
+    if (!response.ok) {
+      const msg = await response.text();
+      throw new Error(msg || `Server error ${response.status}`);
+    }
+
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
   } catch (error) {
+    poster.style.removeProperty('overflow');
     showPosterExportError(error);
   }
 }

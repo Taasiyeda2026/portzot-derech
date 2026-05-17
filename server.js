@@ -54,12 +54,102 @@ const mimeTypes = {
   '.otf': 'font/otf'
 };
 
-// Static image and font assets: cache for 1 day in dev, no-cache for HTML/CSS/JS
 const CACHEABLE_EXTS = new Set(['.png','.jpg','.jpeg','.gif','.svg','.ico','.webp','.woff','.woff2','.ttf','.otf']);
 
+// ── PDF export via Puppeteer ─────────────────────────────────────────────────
+async function readRequestBody(req) {
+  return new Promise((resolve, reject) => {
+    const chunks = [];
+    req.on('data', chunk => chunks.push(chunk));
+    req.on('end', () => {
+      try { resolve(JSON.parse(Buffer.concat(chunks).toString('utf8'))); }
+      catch (e) { reject(new Error('Invalid JSON body')); }
+    });
+    req.on('error', reject);
+  });
+}
+
+async function handlePdfExport(req, res) {
+  const { html, filename } = await readRequestBody(req);
+
+  if (!html) {
+    res.writeHead(400, { 'Content-Type': 'text/plain' });
+    res.end('Missing html field in request body');
+    return;
+  }
+
+  let puppeteer;
+  try {
+    puppeteer = require('puppeteer');
+  } catch {
+    res.writeHead(503, { 'Content-Type': 'text/plain' });
+    res.end('Puppeteer is not installed. Run: npm install');
+    return;
+  }
+
+  const browser = await puppeteer.launch({
+    headless: 'new',
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--disable-dev-shm-usage',
+      '--disable-gpu',
+      '--font-render-hinting=none'
+    ]
+  });
+
+  try {
+    const page = await browser.newPage();
+    await page.emulateMediaType('print');
+
+    await page.setContent(html, {
+      waitUntil: ['domcontentloaded', 'networkidle2'],
+      timeout: 30000
+    });
+
+    // Extra settle time for fonts and layout
+    await new Promise(r => setTimeout(r, 800));
+
+    const pdfBuffer = await page.pdf({
+      width: '210mm',
+      height: '297mm',
+      printBackground: true,
+      preferCSSPageSize: true,
+      margin: { top: '0', right: '0', bottom: '0', left: '0' }
+    });
+
+    const safeName = (filename || 'poster.pdf')
+      .replace(/[<>:"/\\|?*\x00-\x1f]/g, '_');
+
+    res.writeHead(200, {
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': `attachment; filename*=UTF-8''${encodeURIComponent(safeName)}`,
+      'Content-Length': Buffer.byteLength(pdfBuffer),
+      'Cache-Control': 'no-store'
+    });
+    res.end(pdfBuffer);
+  } finally {
+    await browser.close();
+  }
+}
+
+// ── HTTP server ──────────────────────────────────────────────────────────────
 const server = http.createServer((req, res) => {
   const requestPath = req.url.split('?')[0];
 
+  // PDF export endpoint
+  if (requestPath === '/api/export-pdf' && req.method === 'POST') {
+    handlePdfExport(req, res).catch(err => {
+      console.error('[PDF] Export failed:', err);
+      if (!res.headersSent) {
+        res.writeHead(500, { 'Content-Type': 'text/plain' });
+        res.end('PDF export error: ' + err.message);
+      }
+    });
+    return;
+  }
+
+  // Env injection
   if (requestPath === '/env.js' || requestPath === '/poster-builder/env.js') {
     res.writeHead(200, {
       'Content-Type': 'application/javascript',
@@ -71,9 +161,9 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  // Static file serving
   let filePath = '.' + requestPath;
-  
-  // Handle directory root
+
   if (filePath.endsWith('/')) {
     filePath += 'index.html';
   } else if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
@@ -85,8 +175,6 @@ const server = http.createServer((req, res) => {
   const extname = path.extname(filePath).toLowerCase();
   const contentType = mimeTypes[extname] || 'application/octet-stream';
 
-  // Images and fonts: allow browser caching for 1 day (prevents reload on scroll)
-  // HTML / CSS / JS: always revalidate so code changes are picked up immediately
   if (CACHEABLE_EXTS.has(extname)) {
     res.setHeader('Cache-Control', 'public, max-age=86400');
   } else {
