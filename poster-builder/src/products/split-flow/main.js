@@ -308,7 +308,7 @@ function persistSplitFlowState() {
 }
 
 
-async function compressImageFile(file, maxWidth = 900, maxHeight = 1200, quality = 0.8) {
+async function compressImageFile(file, maxWidth = 2000, maxHeight = 2600, quality = 0.94) {
   const sourceDataUrl = await new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => resolve(reader.result);
@@ -322,6 +322,10 @@ async function compressImageFile(file, maxWidth = 900, maxHeight = 1200, quality
     img.onerror = () => reject(new Error('התמונה לא נתמכת או פגומה.'));
     img.src = sourceDataUrl;
   });
+
+  const fileSizeMb = file.size / (1024 * 1024);
+  const shouldCompress = image.width > maxWidth || image.height > maxHeight || fileSizeMb > 8;
+  if (!shouldCompress) return sourceDataUrl;
 
   const widthScale = maxWidth / image.width;
   const heightScale = maxHeight / image.height;

@@ -165,14 +165,13 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
   if (imgGridApp) imgGridApp.style.display = productType === 'app'      ? 'grid' : 'none';
   if (imgGridWeb) imgGridWeb.style.display = (productType === 'website' || productType === 'digital') ? 'grid' : 'none';
 
-  const frameRatio  = { app: '9 / 16', physical: '4 / 3', website: '16 / 9', digital: '16 / 9' }[productType] || '16 / 9';
   const layoutKey   = productType === 'digital' ? 'website' : productType;
-  const objectFit   = 'contain';
   const keys        = productType === 'physical' ? ['visual_1', 'visual_2'] : ['visual_1', 'visual_2', 'visual_3'];
 
   const fixedImgHeight = IMG_HEIGHTS[productType] || 145;
   document.querySelectorAll(`[data-ph-img][data-layout="${layoutKey}"]`).forEach(frame => {
     frame.style.height = `${fixedImgHeight}px`;
+    frame.style.overflow = 'hidden';
     frame.style.removeProperty('aspect-ratio');
   });
 
@@ -186,9 +185,9 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
           img = document.createElement('img');
           img.alt = `תמונה ${i + 1}`;
           img.crossOrigin = 'anonymous';
-          img.style.cssText = 'max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:block;margin:auto;';
           frame.appendChild(img);
         }
+        img.style.cssText = 'width:100% !important;height:100% !important;object-fit:cover !important;object-position:center !important;display:block !important;margin:0 !important;max-width:none !important;max-height:none !important;';
         if (img.getAttribute('src') !== slotImages[k]) img.src = slotImages[k];
       } else {
         // Only replace DOM if there was an image before (avoids churn on placeholder)
@@ -377,15 +376,6 @@ function _shiftHue(hex, deg) {
   } catch { return hex; }
 }
 
-// Raster capture is intentionally kept for PNG diagnostics only.
-// The final print-shop PDF export must use the browser print pipeline so text/SVG stay vector-sharp.
-const RASTER_DEBUG_SCRIPT_URLS = {
-  html2canvas: 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'
-};
-// Scale only increases debug bitmap quality; capture dimensions stay exactly as rendered.
-const PNG_DEBUG_EXPORT_SCALE = Math.max(3, Math.min(window.devicePixelRatio || 1, 4));
-const PDF_DEBUG_PNG_PARAM = 'debugPdfPng';
-const PDF_DEBUG_PNG_FLAG = '__POSTER_PDF_DEBUG_DOWNLOAD_PNG';
 const POSTER_RTL_SELECTOR = [
   '#poster-html',
   '#poster-inner',
@@ -401,54 +391,6 @@ const POSTER_RTL_SELECTOR = [
   '#ph-school',
   '#ph-slogan'
 ].join(',');
-const POSTER_TEXT_STYLE_PROPERTIES = [
-  'direction',
-  'unicode-bidi',
-  'font-family',
-  'font-size',
-  'font-style',
-  'font-weight',
-  'font-kerning',
-  'font-feature-settings',
-  'font-variant-ligatures',
-  'letter-spacing',
-  'line-height',
-  'overflow-wrap',
-  'text-align',
-  'text-align-last',
-  'text-decoration',
-  'text-transform',
-  'white-space',
-  'word-break',
-  'word-spacing',
-  'writing-mode'
-];
-
-function loadPdfScript(globalCheck, src) {
-  if (globalCheck()) return Promise.resolve();
-  const existing = [...document.scripts].find((script) => script.src === src);
-  if (existing) {
-    return new Promise((resolve, reject) => {
-      existing.addEventListener('load', resolve, { once: true });
-      existing.addEventListener('error', reject, { once: true });
-    });
-  }
-  return new Promise((resolve, reject) => {
-    const script = document.createElement('script');
-    script.src = src;
-    script.async = true;
-    script.onload = resolve;
-    script.onerror = () => reject(new Error(`Failed to load PDF dependency: ${src}`));
-    document.head.appendChild(script);
-  });
-}
-
-async function ensureRasterDebugDependencies() {
-  await loadPdfScript(() => typeof window.html2canvas === 'function', RASTER_DEBUG_SCRIPT_URLS.html2canvas);
-  if (typeof window.html2canvas !== 'function') {
-    throw new Error('PNG debug dependency is not available');
-  }
-}
 
 function waitForAnimationFrame() {
   return new Promise((resolve) => requestAnimationFrame(resolve));
@@ -496,252 +438,10 @@ function applyExplicitPosterTextStyles(poster) {
   });
 }
 
-function getPosterVisibilityIssue(poster) {
-  if (!poster) return 'לא נמצא האלמנט #poster-html.';
-  if (poster.id !== 'poster-html') return 'האלמנט שנשלח לייצוא אינו #poster-html.';
-  if (!poster.isConnected) return '#poster-html אינו מחובר למסמך.';
-
-  const rect = poster.getBoundingClientRect();
-  const width = rect.width || poster.offsetWidth;
-  const height = rect.height || poster.offsetHeight;
-  if (width <= 0 || height <= 0) return '#poster-html במידות 0 ולכן לא ניתן לצלם אותו.';
-
-  const ownerWindow = poster.ownerDocument?.defaultView || window;
-  for (let el = poster; el && el.nodeType === 1; el = el.parentElement) {
-    const computed = ownerWindow.getComputedStyle(el);
-    if (computed.display === 'none') return `#poster-html או אחד ההורים שלו מוסתר עם display:none (${el.id || el.className || el.tagName}).`;
-    if (computed.visibility === 'hidden' || computed.visibility === 'collapse') return `#poster-html או אחד ההורים שלו מוסתר עם visibility:hidden (${el.id || el.className || el.tagName}).`;
-    if (Number(computed.opacity) === 0) return `#poster-html או אחד ההורים שלו מוסתר עם opacity:0 (${el.id || el.className || el.tagName}).`;
-  }
-
-  return '';
-}
-
-function assertOriginalPosterReadyForExport(poster) {
-  const currentPoster = document.getElementById('poster-html');
-  if (!currentPoster) throw new Error('ייצוא PDF נכשל: לא נמצא #poster-html במסך.');
-  if (poster !== currentPoster) throw new Error('ייצוא PDF נכשל: הפוסטר שנשלח לייצוא אינו #poster-html הפעיל במסך.');
-
-  const visibilityIssue = getPosterVisibilityIssue(poster);
-  if (visibilityIssue) throw new Error(`ייצוא PDF נכשל: ${visibilityIssue}`);
-}
-
-function assertClonedPosterReadyForCapture(clonedPoster) {
-  if (!clonedPoster) throw new Error('ייצוא PDF נכשל: לא נוצר clone ל-#poster-html.');
-  if (clonedPoster.id !== 'poster-html') throw new Error('ייצוא PDF נכשל: ה-clone שנשלח לצילום אינו #poster-html.');
-  if (clonedPoster.dataset.posterExportClone !== '1') {
-    throw new Error('ייצוא PDF נכשל: ניסיון לצלם פוסטר שאינו עותק הייצוא הנקי.');
-  }
-
-  const visibilityIssue = getPosterVisibilityIssue(clonedPoster);
-  if (visibilityIssue) throw new Error(`ייצוא PDF נכשל: clone לא תקין - ${visibilityIssue}`);
-}
-
-function copyComputedStyles(source, target) {
-  if (!source || !target) return;
-
-  const computed = window.getComputedStyle(source);
-  for (let index = 0; index < computed.length; index += 1) {
-    const property = computed[index];
-    target.style.setProperty(property, computed.getPropertyValue(property));
-  }
-
-  const sourceChildren = [...source.children];
-  const targetChildren = [...target.children];
-  sourceChildren.forEach((sourceChild, index) => {
-    copyComputedStyles(sourceChild, targetChildren[index]);
-  });
-}
-
-function applyFixedExportBoxStyles(element) {
-  if (!element) return;
-  element.style.width = `${POSTER_WIDTH_PX}px`;
-  element.style.height = `${POSTER_HEIGHT_PX}px`;
-  element.style.minHeight = `${POSTER_HEIGHT_PX}px`;
-  element.style.maxHeight = `${POSTER_HEIGHT_PX}px`;
-  element.style.transform = 'none';
-  element.style.overflow = 'hidden';
-  element.style.background = '#ffffff';
-  element.style.boxShadow = 'none';
-  element.style.direction = 'rtl';
-  element.style.unicodeBidi = 'isolate';
-}
-
-function applyComputedTextStylesToClone(originalPoster, clonedPoster) {
-  if (!originalPoster || !clonedPoster) return;
-
-  const originalTextElements = [originalPoster, ...originalPoster.querySelectorAll('*')];
-  const clonedTextElements = [clonedPoster, ...clonedPoster.querySelectorAll('*')];
-
-  originalTextElements.forEach((sourceEl, index) => {
-    const targetEl = clonedTextElements[index];
-    if (!targetEl) return;
-
-    const hasText = [...sourceEl.childNodes].some((node) => node.nodeType === Node.TEXT_NODE && node.textContent.trim());
-    const isKnownTextElement = sourceEl.matches?.(POSTER_RTL_SELECTOR);
-    if (!hasText && !isKnownTextElement) return;
-
-    const computed = window.getComputedStyle(sourceEl);
-    targetEl.style.direction = 'rtl';
-    targetEl.style.unicodeBidi = targetEl === clonedPoster ? 'isolate' : 'plaintext';
-    for (const property of POSTER_TEXT_STYLE_PROPERTIES) {
-      targetEl.style.setProperty(property, computed.getPropertyValue(property));
-    }
-  });
-}
-
-function lockCloneForA4Export(originalPoster, clonedPoster) {
-  copyComputedStyles(originalPoster, clonedPoster);
-  applyFixedExportBoxStyles(clonedPoster);
-  clonedPoster.dataset.posterExportClone = '1';
-  clonedPoster.style.position = 'fixed';
-  clonedPoster.style.left = '-10000px';
-  clonedPoster.style.top = '0';
-  clonedPoster.style.margin = '0';
-  clonedPoster.style.display = 'block';
-  clonedPoster.style.visibility = 'visible';
-  clonedPoster.style.opacity = '1';
-
-  const clonedInner = clonedPoster.querySelector('#poster-inner');
-  const originalInner = originalPoster.querySelector('#poster-inner');
-  if (clonedInner && originalInner) copyComputedStyles(originalInner, clonedInner);
-
-  clonedPoster.querySelectorAll('#poster-html, #poster-inner').forEach((el) => {
-    el.style.transform = 'none';
-    el.style.boxShadow = 'none';
-    el.style.direction = 'rtl';
-    el.style.unicodeBidi = 'isolate';
-  });
-
-  applyComputedTextStylesToClone(originalPoster, clonedPoster);
-}
-
-function createPosterExportClone(originalPoster) {
-  assertOriginalPosterReadyForExport(originalPoster);
-
-  const container = document.createElement('div');
-  container.dataset.posterExportContainer = '1';
-  container.setAttribute('aria-hidden', 'true');
-  container.style.position = 'fixed';
-  container.style.left = '-10000px';
-  container.style.top = '0';
-  container.style.width = `${POSTER_WIDTH_PX}px`;
-  container.style.height = `${POSTER_HEIGHT_PX}px`;
-  container.style.minHeight = `${POSTER_HEIGHT_PX}px`;
-  container.style.maxHeight = `${POSTER_HEIGHT_PX}px`;
-  container.style.transform = 'none';
-  container.style.overflow = 'hidden';
-  container.style.background = '#ffffff';
-  container.style.boxShadow = 'none';
-  container.style.direction = 'rtl';
-  container.style.unicodeBidi = 'isolate';
-  container.style.pointerEvents = 'none';
-  container.style.zIndex = '0';
-
-  const clonedPoster = originalPoster.cloneNode(true);
-  container.appendChild(clonedPoster);
-  document.body.appendChild(container);
-
-  lockCloneForA4Export(originalPoster, clonedPoster);
-  applyPosterCardStyles(clonedPoster);
-  updateTitleUnderline(clonedPoster);
-
-  return { container, clonedPoster };
-}
-
-function isCanvasEmptyOrWhite(canvas) {
-  if (!canvas || canvas.width <= 0 || canvas.height <= 0) return true;
-
-  const context = canvas.getContext('2d', { willReadFrequently: true });
-  if (!context) return true;
-
-  const sampleColumns = Math.min(80, canvas.width);
-  const sampleRows = Math.min(80, canvas.height);
-  const stepX = Math.max(1, Math.floor(canvas.width / sampleColumns));
-  const stepY = Math.max(1, Math.floor(canvas.height / sampleRows));
-  let coloredPixels = 0;
-  let sampledPixels = 0;
-
-  try {
-    for (let y = 0; y < canvas.height; y += stepY) {
-      for (let x = 0; x < canvas.width; x += stepX) {
-        const [red, green, blue, alpha] = context.getImageData(x, y, 1, 1).data;
-        sampledPixels += 1;
-        const transparent = alpha === 0;
-        const white = alpha > 0 && red >= 248 && green >= 248 && blue >= 248;
-        if (!transparent && !white) coloredPixels += 1;
-        if (coloredPixels >= 8) return false;
-      }
-    }
-  } catch (error) {
-    console.warn('Could not inspect poster canvas pixels before PDF export', error);
-    return false;
-  }
-
-  return sampledPixels > 0 && coloredPixels === 0;
-}
-
-function assertCanvasHasDimensions(canvas) {
-  if (!canvas || canvas.width <= 0 || canvas.height <= 0) {
-    throw new Error('ייצוא PNG debug נכשל: html2canvas החזיר canvas ריק או במידות 0.');
-  }
-}
-
-function assertCanvasReadyForExport(canvas) {
-  assertCanvasHasDimensions(canvas);
-  if (isCanvasEmptyOrWhite(canvas)) {
-    throw new Error('ייצוא PNG debug הופסק: התמונה שנוצרה ריקה/לבנה.');
-  }
-}
-
 function showPosterExportError(error) {
   const message = error instanceof Error ? error.message : String(error || 'שגיאה לא ידועה בייצוא.');
   console.error('Poster export failed', error);
   if (typeof window.alert === 'function') window.alert(message);
-}
-
-function shouldDownloadDebugPng() {
-  if (window[PDF_DEBUG_PNG_FLAG]) return true;
-  try {
-    return new URLSearchParams(window.location.search).get(PDF_DEBUG_PNG_PARAM) === '1';
-  } catch {
-    return false;
-  }
-}
-
-function downloadCanvasPng(canvas, filename) {
-  if (!canvas) return;
-  const link = document.createElement('a');
-  link.href = canvas.toDataURL('image/png');
-  link.download = filename;
-  link.rel = 'noopener';
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-}
-
-async function capturePosterToCanvas(clonedPoster) {
-  assertClonedPosterReadyForCapture(clonedPoster);
-  await waitForPosterAssets(clonedPoster);
-
-  const canvas = await window.html2canvas(clonedPoster, {
-    scale: PNG_DEBUG_EXPORT_SCALE,
-    useCORS: true,
-    allowTaint: false,
-    backgroundColor: '#ffffff',
-    logging: false,
-    width: POSTER_WIDTH_PX,
-    height: POSTER_HEIGHT_PX,
-    windowWidth: POSTER_WIDTH_PX,
-    windowHeight: POSTER_HEIGHT_PX,
-    scrollX: 0,
-    scrollY: 0,
-    foreignObjectRendering: false,
-    imageTimeout: 15000
-  });
-
-  assertCanvasHasDimensions(canvas);
-  return canvas;
 }
 
 function getSafePosterTitle() {
@@ -756,10 +456,6 @@ function getSafePosterTitle() {
 function buildSafePosterFilename(extension) {
   const safeTitle = getSafePosterTitle();
   return extension ? `${safeTitle}.${extension}` : safeTitle;
-}
-
-function buildPosterPngFilename() {
-  return buildSafePosterFilename('png');
 }
 
 export async function printPoster() {
@@ -784,42 +480,9 @@ export async function printPoster() {
   }
 }
 
-export async function exportHTMLPosterDebugPng() {
-  const poster = document.getElementById('poster-html');
-  if (!poster) {
-    showPosterExportError(new Error('ייצוא PNG debug נכשל: לא נמצא #poster-html במסך.'));
-    return;
-  }
-
-  let exportContainer = null;
-  try {
-    await ensureRasterDebugDependencies();
-    assertOriginalPosterReadyForExport(poster);
-    await waitForPosterAssets(poster);
-    updateTitleUnderline(poster);
-    applyExplicitPosterTextStyles(poster);
-
-    const { container, clonedPoster } = createPosterExportClone(poster);
-    exportContainer = container;
-    await waitForPosterAssets(clonedPoster);
-
-    const canvas = await capturePosterToCanvas(clonedPoster);
-    assertCanvasReadyForExport(canvas);
-    downloadCanvasPng(canvas, buildPosterPngFilename());
-  } catch (error) {
-    showPosterExportError(error);
-  } finally {
-    exportContainer?.remove();
-  }
-}
-
 export async function exportHTMLPosterToPDF() {
   try {
     await printPoster();
-
-    if (shouldDownloadDebugPng()) {
-      await exportHTMLPosterDebugPng();
-    }
   } catch (error) {
     showPosterExportError(error);
   }
