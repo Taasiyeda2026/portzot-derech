@@ -2190,7 +2190,7 @@ canvas {
 
 #ph-main {
   flex: 1 1 auto !important;
-  justify-content: flex-start !important;
+  justify-content: space-between !important;
 }
 
 #poster-bg {
