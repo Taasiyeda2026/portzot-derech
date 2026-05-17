@@ -1,6 +1,6 @@
 import { getVisualSlots, getPosterFields, FIELD_DEFINITIONS, BACKGROUNDS, AVAILABLE_FONTS } from '../physical/config.js';
 import { saveProject, loadProject } from '../../shared/storage.js';
-import { createPosterSubmission } from '../../shared/poster-submissions.js';
+import { createPosterSubmission, updatePosterSubmission } from '../../shared/poster-submissions.js';
 
 const PRODUCT_TYPES = ['app', 'physical', 'website', 'digital'];
 
@@ -1020,6 +1020,8 @@ function seedPosterBuilderState() {
   saveProject(project);
 }
 
+const SUBMISSION_ID_KEY = 'poster_submission_id';
+
 async function submitPoster() {
   if (state.submitStatus === 'sending') return;
   state.submitStatus = 'sending';
@@ -1029,7 +1031,15 @@ async function submitPoster() {
   try {
     const project = buildCurrentPosterProject();
     saveProject(project);
-    await createPosterSubmission(project);
+
+    const existingId = localStorage.getItem(SUBMISSION_ID_KEY);
+    if (existingId) {
+      await updatePosterSubmission(existingId, project);
+    } else {
+      const newId = await createPosterSubmission(project);
+      if (newId) localStorage.setItem(SUBMISSION_ID_KEY, newId);
+    }
+
     state.submitStatus = 'success';
     state.submitMessage = 'הפוסטר נשלח בהצלחה.';
   } catch (err) {

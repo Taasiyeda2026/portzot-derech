@@ -57,11 +57,14 @@ export async function createPosterSubmission(project) {
   const client = getPosterSubmissionsClient();
   if (!client) throw new Error('Poster submissions are not configured.');
 
-  const { error } = await client
+  const { data, error } = await client
     .from(POSTER_SUBMISSIONS_TABLE)
-    .insert(buildSubmissionRow(project));
+    .insert(buildSubmissionRow(project))
+    .select('id')
+    .single();
 
   if (error) throw error;
+  return data?.id || null;
 }
 
 export async function createPosterSubmissions(projects) {
