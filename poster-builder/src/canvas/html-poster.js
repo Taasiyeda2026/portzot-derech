@@ -1,13 +1,24 @@
 const POSTER_WIDTH_PX = 794;
 const POSTER_HEIGHT_PX = 1123;
+const PHYSICAL_FRAME_MAX_WIDTH = 330;
+const PHYSICAL_FRAME_MAX_HEIGHT = 205;
+const PHYSICAL_FRAME_DEFAULT_WIDTH = 320;
+const PHYSICAL_FRAME_DEFAULT_HEIGHT = 200;
+const PHYSICAL_FRAME_MIN_WIDTH = 290;
+const PHYSICAL_FRAME_MIN_HEIGHT = 185;
 const PHYSICAL_FRAME_STEPS = [
+  { width: PHYSICAL_FRAME_DEFAULT_WIDTH, height: PHYSICAL_FRAME_DEFAULT_HEIGHT },
+  { width: 310, height: 195 },
   { width: 300, height: 190 },
-  { width: 290, height: 185 },
-  { width: 280, height: 180 },
-  { width: 270, height: 175 },
+  { width: PHYSICAL_FRAME_MIN_WIDTH, height: PHYSICAL_FRAME_MIN_HEIGHT },
 ];
-const PHYSICAL_FRAME_WIDTH = PHYSICAL_FRAME_STEPS[0].width;
-const PHYSICAL_FRAME_HEIGHT = PHYSICAL_FRAME_STEPS[0].height;
+const PHYSICAL_FRAME_EXPAND_STEPS = [
+  { width: PHYSICAL_FRAME_DEFAULT_WIDTH, height: PHYSICAL_FRAME_DEFAULT_HEIGHT },
+  { width: PHYSICAL_FRAME_MAX_WIDTH, height: PHYSICAL_FRAME_MAX_HEIGHT },
+];
+const PHYSICAL_FRAME_WIDTH = PHYSICAL_FRAME_DEFAULT_WIDTH;
+const PHYSICAL_FRAME_HEIGHT = PHYSICAL_FRAME_DEFAULT_HEIGHT;
+const PHYSICAL_UNDERFLOW_GAP_PX = 44;
 const APP_FRAME_HEIGHT_STEPS = [270, 255, 240, 225, 216];
 const APP_SCREEN_RATIO = 9 / 16;
 const WEB_SCREEN_RATIO = 16 / 9;
@@ -324,7 +335,7 @@ function resetPosterFitState(posterRoot) {
   });
 
   const resetStyleProps = {
-    '#ph-main': ['gap', 'padding-bottom'],
+    '#ph-main': ['gap', 'padding-bottom', 'justify-content'],
     '.ph-images-wrap': ['margin-block'],
     '#ph-images-label': ['margin-bottom'],
     '#ph-images-2, #ph-images-app, #ph-images-web': ['gap'],
@@ -435,18 +446,30 @@ function fitPosterToPage(posterRoot, titleColor) {
   applyPosterCardStyles(posterRoot);
   updateTitleUnderline(posterRoot, titleColor);
 
-  if (!isPosterOverflowing(posterRoot)) return;
+  if (!isPosterOverflowing(posterRoot)) {
+    balancePhysicalPosterUnderflow(posterRoot, titleColor);
+    return;
+  }
 
   applyCompactPosterSpacing(posterRoot);
   updateTitleUnderline(posterRoot, titleColor);
-  if (!isPosterOverflowing(posterRoot)) return;
+  if (!isPosterOverflowing(posterRoot)) {
+    balancePhysicalPosterUnderflow(posterRoot, titleColor);
+    return;
+  }
 
   shrinkActiveImageFramesToFit(posterRoot, titleColor);
-  if (!isPosterOverflowing(posterRoot)) return;
+  if (!isPosterOverflowing(posterRoot)) {
+    balancePhysicalPosterUnderflow(posterRoot, titleColor);
+    return;
+  }
 
   applySecondaryTextCompression(posterRoot);
   updateTitleUnderline(posterRoot, titleColor);
-  if (!isPosterOverflowing(posterRoot)) return;
+  if (!isPosterOverflowing(posterRoot)) {
+    balancePhysicalPosterUnderflow(posterRoot, titleColor);
+    return;
+  }
 
   // Final guard: tighten only secondary text/cards after exhausting the allowed
   // image-size floors. Do not resize #poster-html; it must remain a fixed A4 box.
@@ -570,6 +593,69 @@ function setImageFrameDimensions(grid, frames, layoutKey, width, height) {
   grid.style.setProperty('grid-template-columns', `repeat(${frames.length}, ${width}px)`, 'important');
   grid.style.setProperty('justify-content', 'center', 'important');
   frames.forEach((frame) => applyImageFrameSize(frame, layoutKey, height, width));
+}
+
+function getContentFooterGap(posterRoot) {
+  if (!posterRoot) return 0;
+  const footer = posterRoot.querySelector('#ph-footer');
+  if (!footer) return 0;
+
+  const contentEls = [...posterRoot.querySelectorAll('#ph-main > *')]
+    .filter((el) => window.getComputedStyle(el).display !== 'none');
+  if (!contentEls.length) return 0;
+
+  const lastContentBottom = Math.max(...contentEls.map((el) => el.getBoundingClientRect().bottom));
+  return footer.getBoundingClientRect().top - lastContentBottom;
+}
+
+function balancePhysicalPosterUnderflow(posterRoot, titleColor) {
+  if (!posterRoot || posterRoot.dataset.productType !== 'physical') return;
+  if (isPosterOverflowing(posterRoot)) return;
+
+  const activeGrid = getActiveImageGrid(posterRoot);
+  if (!activeGrid || activeGrid.id !== 'ph-images-2') return;
+
+  const frames = [...activeGrid.querySelectorAll('[data-layout="physical"]')];
+  if (!frames.length) return;
+
+  let currentGap = getContentFooterGap(posterRoot);
+  if (currentGap <= PHYSICAL_UNDERFLOW_GAP_PX) return;
+
+  const currentWidth = parseFloat(frames[0].style.width) || frames[0].getBoundingClientRect().width;
+  const currentHeight = parseFloat(frames[0].style.height) || frames[0].getBoundingClientRect().height;
+  let lastSafeStep = { width: currentWidth, height: currentHeight };
+
+  for (const step of PHYSICAL_FRAME_EXPAND_STEPS) {
+    if (step.width <= currentWidth + 1 && step.height <= currentHeight + 1) continue;
+
+    setImageFrameDimensions(activeGrid, frames, 'physical', step.width, step.height);
+    updateTitleUnderline(posterRoot, titleColor);
+
+    if (isPosterOverflowing(posterRoot) || isFooterOutsidePosterBottom(posterRoot)) {
+      setImageFrameDimensions(activeGrid, frames, 'physical', lastSafeStep.width, lastSafeStep.height);
+      updateTitleUnderline(posterRoot, titleColor);
+      break;
+    }
+
+    lastSafeStep = step;
+    currentGap = getContentFooterGap(posterRoot);
+    if (currentGap <= PHYSICAL_UNDERFLOW_GAP_PX) return;
+  }
+
+  if (getContentFooterGap(posterRoot) > PHYSICAL_UNDERFLOW_GAP_PX && !isPosterOverflowing(posterRoot)) {
+    const main = posterRoot.querySelector('#ph-main');
+    if (!main) return;
+
+    const previousJustify = main.style.justifyContent;
+    main.style.setProperty('justify-content', 'space-between', 'important');
+    updateTitleUnderline(posterRoot, titleColor);
+
+    if (isPosterOverflowing(posterRoot) || isFooterOutsidePosterBottom(posterRoot)) {
+      if (previousJustify) main.style.setProperty('justify-content', previousJustify, 'important');
+      else main.style.removeProperty('justify-content');
+      updateTitleUnderline(posterRoot, titleColor);
+    }
+  }
 }
 
 function shrinkActiveImageFramesToFit(posterRoot, titleColor) {
