@@ -249,11 +249,13 @@ function renderPosterFrameImage(frame, src, index, productType) {
     frame.style.removeProperty('background-repeat');
   }
 
+  // Physical product images fill the frame (cover); screenshots must show in full (contain)
+  const imgFit = layoutKey === 'physical' ? 'cover' : 'contain';
   const img = document.createElement('img');
   img.alt = `תמונה ${index + 1}`;
   img.crossOrigin = 'anonymous';
   img.src = src;
-  img.style.cssText = 'position:relative;z-index:1;width:100% !important;height:100% !important;object-fit:contain !important;object-position:center !important;display:block !important;margin:0 !important;max-width:none !important;max-height:none !important;';
+  img.style.cssText = `position:relative;z-index:1;width:100% !important;height:100% !important;object-fit:${imgFit} !important;object-position:center !important;display:block !important;margin:0 !important;max-width:none !important;max-height:none !important;`;
   frame.appendChild(img);
 }
 

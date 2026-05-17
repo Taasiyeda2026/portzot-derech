@@ -239,6 +239,11 @@
       object-position: center;
       display: block;
     }
+    /* Physical product images fill the frame; screenshots/logos stay unclipped */
+    .ph-img-frame[data-layout="physical"] img {
+      object-fit: cover;
+      object-position: center;
+    }
     .ph-img-frame[data-layout="physical"] {
       background-size: cover;
       background-position: center;

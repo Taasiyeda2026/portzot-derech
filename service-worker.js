@@ -1,4 +1,4 @@
-const CACHE_NAME = "portzot-derech-v56";
+const CACHE_NAME = "portzot-derech-v57";
 
 // ── נכסי ליבה — נטענים מיידית בהתקנה ─────────────────────────────────────
 const CORE_ASSETS = [

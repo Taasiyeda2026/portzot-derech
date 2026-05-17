@@ -2156,6 +2156,10 @@ canvas {
   max-width: none !important;
   max-height: none !important;
 }
+/* Physical product images fill the frame; screenshots/logos stay unclipped */
+.ph-img-frame[data-layout="physical"] img {
+  object-fit: cover !important;
+}
 .ph-notch { position: relative; border-radius: 16px; }
 .ph-notch::before {
   content: ''; position: absolute; top: 8px; left: 50%;
