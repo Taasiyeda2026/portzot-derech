@@ -2219,7 +2219,7 @@ canvas {
 
 #poster-html {
   --ph-extra-image-scale: 1;
-  --ph-physical-img-w: calc(245px * var(--ph-extra-image-scale));
+  --ph-physical-img-w: calc(220px * var(--ph-extra-image-scale));
   --ph-app-img-w: calc(128px * var(--ph-extra-image-scale));
   --ph-web-img-w: calc(205px * var(--ph-extra-image-scale));
 }
@@ -2230,10 +2230,10 @@ canvas {
 
 #poster-html.ph-space-tight #ph-main { gap: 8px !important; padding-bottom: 7px !important; }
 
-#poster-html.ph-imgfit-1 { --ph-physical-img-w: calc(228px * var(--ph-extra-image-scale)); --ph-app-img-w: calc(118px * var(--ph-extra-image-scale)); --ph-web-img-w: calc(194px * var(--ph-extra-image-scale)); }
-#poster-html.ph-imgfit-2 { --ph-physical-img-w: calc(208px * var(--ph-extra-image-scale)); --ph-app-img-w: calc(108px * var(--ph-extra-image-scale)); --ph-web-img-w: calc(180px * var(--ph-extra-image-scale)); }
-#poster-html.ph-imgfit-3 { --ph-physical-img-w: calc(188px * var(--ph-extra-image-scale)); --ph-app-img-w: calc(98px * var(--ph-extra-image-scale)); --ph-web-img-w: calc(164px * var(--ph-extra-image-scale)); }
-#poster-html.ph-imgfit-4 { --ph-physical-img-w: calc(170px * var(--ph-extra-image-scale)); --ph-app-img-w: calc(88px * var(--ph-extra-image-scale)); --ph-web-img-w: calc(150px * var(--ph-extra-image-scale)); }
+#poster-html.ph-imgfit-1 { --ph-physical-img-w: calc(210px * var(--ph-extra-image-scale)); --ph-app-img-w: calc(118px * var(--ph-extra-image-scale)); --ph-web-img-w: calc(194px * var(--ph-extra-image-scale)); }
+#poster-html.ph-imgfit-2 { --ph-physical-img-w: calc(200px * var(--ph-extra-image-scale)); --ph-app-img-w: calc(108px * var(--ph-extra-image-scale)); --ph-web-img-w: calc(180px * var(--ph-extra-image-scale)); }
+#poster-html.ph-imgfit-3 { --ph-physical-img-w: calc(190px * var(--ph-extra-image-scale)); --ph-app-img-w: calc(98px * var(--ph-extra-image-scale)); --ph-web-img-w: calc(164px * var(--ph-extra-image-scale)); }
+#poster-html.ph-imgfit-4 { --ph-physical-img-w: calc(180px * var(--ph-extra-image-scale)); --ph-app-img-w: calc(88px * var(--ph-extra-image-scale)); --ph-web-img-w: calc(150px * var(--ph-extra-image-scale)); }
 #poster-html.ph-imgfit-2 #ph-images-label { margin-bottom: 5px !important; }
 #poster-html.ph-imgfit-2 #ph-images-2,
 #poster-html.ph-imgfit-2 #ph-images-app,
