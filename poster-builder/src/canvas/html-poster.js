@@ -485,7 +485,7 @@ function applyCompactPosterSpacing(posterRoot) {
   const main = posterRoot.querySelector('#ph-main');
   if (main) {
     main.style.setProperty('gap', '3px', 'important');
-    main.style.setProperty('padding-bottom', '4px', 'important');
+    main.style.setProperty('padding-bottom', '12px', 'important');
   }
 
   const imagesWrap = posterRoot.querySelector('.ph-images-wrap');

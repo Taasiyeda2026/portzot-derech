@@ -2115,24 +2115,24 @@ canvas {
   border-right: 3.5px solid var(--ph-title-color, #5E2750);
 }
 .ph-cap {
-  font-size: 13.5px; font-weight: 900; color: var(--ph-title-color, #5E2750);
-  letter-spacing: 0;
+  font-size: 14px; font-weight: 900; color: var(--ph-title-color, #5E2750);
+  letter-spacing: 0; line-height: 1.25;
   margin-bottom: 7px; display: flex; align-items: center; gap: 5px;
 }
 .ph-cap::before {
   content: ''; display: inline-block;
   width: 12px; height: 2.5px; background: var(--ph-title-color, #5E2750); border-radius: 1px;
 }
-.ph-body { font-size: 13px; font-weight: 400; color: var(--ph-text-color, #1f1030); line-height: 1.68; word-break: break-word; overflow-wrap: anywhere; }
-.ph-sub  { font-size: 11.5px; font-weight: 400; color: #8a7aa0; margin-top: 4px; line-height: 1.55; }
+.ph-body { font-size: 13.5px; font-weight: 400; color: var(--ph-text-color, #1f1030); line-height: 1.43; word-break: break-word; overflow-wrap: anywhere; }
+.ph-sub  { font-size: 12px; font-weight: 400; color: #8a7aa0; margin-top: 4px; line-height: 1.35; }
 .ph-card-accent .ph-body {
   color: var(--ph-title-color, #5E2750);
   font-weight: 400;
-  font-size: 13.5px;
+  font-size: 14px;
 }
 .ph-bullets { list-style: none; margin-top: 3px; padding: 0; }
 .ph-bullets li {
-  font-size: 13px; font-weight: 400; color: var(--ph-text-color, #1f1030); line-height: 1.62;
+  font-size: 13.5px; font-weight: 400; color: var(--ph-text-color, #1f1030); line-height: 1.4;
   padding-right: 14px; position: relative; margin-bottom: 3px;
 }
 .ph-bullets li::before {
@@ -2196,6 +2196,7 @@ canvas {
 #ph-main {
   flex: 1 1 auto !important;
   justify-content: space-between !important;
+  padding-bottom: 20px !important;
 }
 
 #poster-bg {
@@ -2237,7 +2238,7 @@ canvas {
 #ph-images-app { grid-template-columns: repeat(3, minmax(0, var(--ph-app-img-w))) !important; }
 #ph-images-web { grid-template-columns: repeat(3, minmax(0, var(--ph-web-img-w))) !important; }
 
-#poster-html.ph-space-tight #ph-main { gap: 8px !important; padding-bottom: 7px !important; }
+#poster-html.ph-space-tight #ph-main { gap: 8px !important; padding-bottom: 14px !important; }
 
 #poster-html.ph-imgfit-1 { --ph-physical-img-w: calc(345px * var(--ph-extra-image-scale)); --ph-app-img-w: calc(136px * var(--ph-extra-image-scale)); --ph-web-img-w: calc(223px * var(--ph-extra-image-scale)); }
 #poster-html.ph-imgfit-2 { --ph-physical-img-w: calc(322px * var(--ph-extra-image-scale)); --ph-app-img-w: calc(155px * var(--ph-extra-image-scale)); --ph-web-img-w: calc(213px * var(--ph-extra-image-scale)); }
