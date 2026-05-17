@@ -1,4 +1,4 @@
-const CACHE_NAME = "portzot-derech-v51";
+const CACHE_NAME = "portzot-derech-v52";
 
 // ── נכסי ליבה — נטענים מיידית בהתקנה ─────────────────────────────────────
 const CORE_ASSETS = [
@@ -134,9 +134,13 @@ self.addEventListener("activate", function (event) {
 
 // ── Fetch — אסטרטגיית Cache חכמה ────────────────────────────────────────
 self.addEventListener("fetch", function (event) {
+  // POST ובקשות שאינן GET עוברות ישירות לשרת — לא נשמרות ב-cache
   if (event.request.method !== "GET") return;
 
   const url = new URL(event.request.url);
+
+  // /api/export-pdf חייב תמיד לרוץ מול השרת — לא לשמור ב-cache
+  if (url.pathname.includes("/api/export-pdf")) return;
 
   // בקשות חיצוניות (CDN, Firebase, Supabase וכד') — לא מטפלים
   if (url.origin !== self.location.origin) return;
