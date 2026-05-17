@@ -2227,9 +2227,9 @@ canvas {
 
 #poster-html {
   --ph-extra-image-scale: 1;
-  --ph-physical-img-w: calc(300px * var(--ph-extra-image-scale));
-  --ph-app-img-w: calc(128px * var(--ph-extra-image-scale));
-  --ph-web-img-w: calc(205px * var(--ph-extra-image-scale));
+  --ph-physical-img-w: calc(345px * var(--ph-extra-image-scale));
+  --ph-app-img-w: calc(147px * var(--ph-extra-image-scale));
+  --ph-web-img-w: calc(235px * var(--ph-extra-image-scale));
 }
 
 #ph-images-2 { grid-template-columns: repeat(2, minmax(0, var(--ph-physical-img-w))) !important; }
@@ -2238,10 +2238,10 @@ canvas {
 
 #poster-html.ph-space-tight #ph-main { gap: 8px !important; padding-bottom: 7px !important; }
 
-#poster-html.ph-imgfit-1 { --ph-physical-img-w: calc(300px * var(--ph-extra-image-scale)); --ph-app-img-w: calc(118px * var(--ph-extra-image-scale)); --ph-web-img-w: calc(194px * var(--ph-extra-image-scale)); }
-#poster-html.ph-imgfit-2 { --ph-physical-img-w: calc(280px * var(--ph-extra-image-scale)); --ph-app-img-w: calc(135px * var(--ph-extra-image-scale)); --ph-web-img-w: calc(185px * var(--ph-extra-image-scale)); }
-#poster-html.ph-imgfit-3 { --ph-physical-img-w: calc(270px * var(--ph-extra-image-scale)); --ph-app-img-w: calc(127px * var(--ph-extra-image-scale)); --ph-web-img-w: calc(175px * var(--ph-extra-image-scale)); }
-#poster-html.ph-imgfit-4 { --ph-physical-img-w: calc(270px * var(--ph-extra-image-scale)); --ph-app-img-w: calc(122px * var(--ph-extra-image-scale)); --ph-web-img-w: calc(175px * var(--ph-extra-image-scale)); }
+#poster-html.ph-imgfit-1 { --ph-physical-img-w: calc(345px * var(--ph-extra-image-scale)); --ph-app-img-w: calc(136px * var(--ph-extra-image-scale)); --ph-web-img-w: calc(223px * var(--ph-extra-image-scale)); }
+#poster-html.ph-imgfit-2 { --ph-physical-img-w: calc(322px * var(--ph-extra-image-scale)); --ph-app-img-w: calc(155px * var(--ph-extra-image-scale)); --ph-web-img-w: calc(213px * var(--ph-extra-image-scale)); }
+#poster-html.ph-imgfit-3 { --ph-physical-img-w: calc(310px * var(--ph-extra-image-scale)); --ph-app-img-w: calc(146px * var(--ph-extra-image-scale)); --ph-web-img-w: calc(201px * var(--ph-extra-image-scale)); }
+#poster-html.ph-imgfit-4 { --ph-physical-img-w: calc(310px * var(--ph-extra-image-scale)); --ph-app-img-w: calc(140px * var(--ph-extra-image-scale)); --ph-web-img-w: calc(201px * var(--ph-extra-image-scale)); }
 #poster-html.ph-imgfit-2 #ph-images-label { margin-bottom: 5px !important; }
 #poster-html.ph-imgfit-2 #ph-images-2,
 #poster-html.ph-imgfit-2 #ph-images-app,
