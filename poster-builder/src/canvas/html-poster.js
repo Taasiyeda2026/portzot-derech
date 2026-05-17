@@ -18,7 +18,7 @@ const PHYSICAL_FRAME_EXPAND_STEPS = [
 ];
 const PHYSICAL_FRAME_WIDTH = PHYSICAL_FRAME_DEFAULT_WIDTH;
 const PHYSICAL_FRAME_HEIGHT = PHYSICAL_FRAME_DEFAULT_HEIGHT;
-const PHYSICAL_UNDERFLOW_GAP_PX = 44;
+const PHYSICAL_UNDERFLOW_GAP_PX = 20;
 const APP_FRAME_HEIGHT_STEPS = [270, 255, 240, 225, 216];
 const APP_SCREEN_RATIO = 9 / 16;
 const WEB_SCREEN_RATIO = 16 / 9;
@@ -618,42 +618,43 @@ function balancePhysicalPosterUnderflow(posterRoot, titleColor) {
   const frames = [...activeGrid.querySelectorAll('[data-layout="physical"]')];
   if (!frames.length) return;
 
-  let currentGap = getContentFooterGap(posterRoot);
-  if (currentGap <= PHYSICAL_UNDERFLOW_GAP_PX) return;
-
   const currentWidth = parseFloat(frames[0].style.width) || frames[0].getBoundingClientRect().width;
   const currentHeight = parseFloat(frames[0].style.height) || frames[0].getBoundingClientRect().height;
-  let lastSafeStep = { width: currentWidth, height: currentHeight };
 
-  for (const step of PHYSICAL_FRAME_EXPAND_STEPS) {
-    if (step.width <= currentWidth + 1 && step.height <= currentHeight + 1) continue;
+  // Always try to expand physical frames to their maximum safe size.
+  // Images may have been shrunk to resolve overflow; recover as much space as possible.
+  if (currentWidth < PHYSICAL_FRAME_MAX_WIDTH - 1 || currentHeight < PHYSICAL_FRAME_MAX_HEIGHT - 1) {
+    let lastSafeStep = { width: currentWidth, height: currentHeight };
 
-    setImageFrameDimensions(activeGrid, frames, 'physical', step.width, step.height);
-    updateTitleUnderline(posterRoot, titleColor);
+    for (const step of PHYSICAL_FRAME_EXPAND_STEPS) {
+      if (step.width <= currentWidth + 1 && step.height <= currentHeight + 1) continue;
 
-    if (isPosterOverflowing(posterRoot) || isFooterOutsidePosterBottom(posterRoot)) {
-      setImageFrameDimensions(activeGrid, frames, 'physical', lastSafeStep.width, lastSafeStep.height);
+      setImageFrameDimensions(activeGrid, frames, 'physical', step.width, step.height);
       updateTitleUnderline(posterRoot, titleColor);
-      break;
-    }
 
-    lastSafeStep = step;
-    currentGap = getContentFooterGap(posterRoot);
-    if (currentGap <= PHYSICAL_UNDERFLOW_GAP_PX) return;
+      if (isPosterOverflowing(posterRoot) || isFooterOutsidePosterBottom(posterRoot)) {
+        setImageFrameDimensions(activeGrid, frames, 'physical', lastSafeStep.width, lastSafeStep.height);
+        updateTitleUnderline(posterRoot, titleColor);
+        break;
+      }
+
+      lastSafeStep = step;
+    }
   }
 
-  if (getContentFooterGap(posterRoot) > PHYSICAL_UNDERFLOW_GAP_PX && !isPosterOverflowing(posterRoot)) {
+  // After expanding images as much as safely possible, if significant whitespace
+  // still remains inside #ph-main, distribute its children evenly.
+  const remainingGap = getContentFooterGap(posterRoot);
+  if (remainingGap > PHYSICAL_UNDERFLOW_GAP_PX && !isPosterOverflowing(posterRoot)) {
     const main = posterRoot.querySelector('#ph-main');
-    if (!main) return;
-
-    const previousJustify = main.style.justifyContent;
-    main.style.setProperty('justify-content', 'space-between', 'important');
-    updateTitleUnderline(posterRoot, titleColor);
-
-    if (isPosterOverflowing(posterRoot) || isFooterOutsidePosterBottom(posterRoot)) {
-      if (previousJustify) main.style.setProperty('justify-content', previousJustify, 'important');
-      else main.style.removeProperty('justify-content');
+    if (main) {
+      main.style.setProperty('justify-content', 'space-between', 'important');
       updateTitleUnderline(posterRoot, titleColor);
+
+      if (isPosterOverflowing(posterRoot) || isFooterOutsidePosterBottom(posterRoot)) {
+        main.style.removeProperty('justify-content');
+        updateTitleUnderline(posterRoot, titleColor);
+      }
     }
   }
 }

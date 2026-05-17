@@ -2189,7 +2189,7 @@ canvas {
 }
 
 #ph-main {
-  flex: 0 0 auto !important;
+  flex: 1 1 auto !important;
   justify-content: flex-start !important;
 }
 
