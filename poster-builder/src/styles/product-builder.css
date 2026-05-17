@@ -76,6 +76,7 @@ body {
   background: #f7f0fb;
   color: #223;
   overflow: hidden;
+  zoom: 0.7;
 }
 
 .app,
