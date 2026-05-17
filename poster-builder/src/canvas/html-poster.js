@@ -23,13 +23,14 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
   // ── Background — reuse existing <img> to avoid forced reload ────────────────
   const bgEl = document.getElementById('poster-bg');
   if (bgEl) {
+    applyPosterBackgroundBleedStyles(bgEl);
     if (background) {
       let bgImg = bgEl.querySelector('img');
       if (!bgImg) {
         bgEl.innerHTML = '';
         bgImg = document.createElement('img');
         bgImg.crossOrigin = 'anonymous';
-        bgImg.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;';
+        bgImg.style.cssText = 'width:100%;height:100%;object-fit:cover;object-position:center;display:block;';
         bgEl.appendChild(bgImg);
       }
       if (bgImg.getAttribute('src') !== background) bgImg.src = background;
@@ -37,6 +38,7 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
       bgEl.innerHTML = '';
     }
   }
+
 
   // Keep the legacy parameter for backwards-compatible callers, but do not render
   // a separate school logo on the poster.
@@ -207,6 +209,25 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
   });
 
   schedulePosterFit(posterRoot, resolvedTitle);
+}
+
+
+function applyPosterBackgroundBleedStyles(bgEl) {
+  if (!bgEl) return;
+  bgEl.style.position = 'absolute';
+  bgEl.style.inset = '-6px';
+  bgEl.style.zIndex = '0';
+  bgEl.style.overflow = 'hidden';
+  bgEl.style.backgroundColor = '#f5eef8';
+
+  const bgImg = bgEl.querySelector('img');
+  if (bgImg) {
+    bgImg.style.width = '100%';
+    bgImg.style.height = '100%';
+    bgImg.style.objectFit = 'cover';
+    bgImg.style.objectPosition = 'center';
+    bgImg.style.display = 'block';
+  }
 }
 
 function getImageLayoutConfig(productType) {

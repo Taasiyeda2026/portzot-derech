@@ -633,13 +633,21 @@ body {
 /* רקע */
 .poster-bg {
   position: absolute;
-  inset: 0;
+  inset: -6px;
   z-index: 0;
+  overflow: hidden;
+  background-color: #f5eef8;
 }
 .poster-bg img {
   width: 100%; height: 100%;
   object-fit: cover;
+  object-position: center;
   display: block;
+}
+@media print {
+  #poster-bg {
+    inset: -2mm !important;
+  }
 }
 
 /* תוכן הפוסטר מעל הרקע */
