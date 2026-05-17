@@ -663,10 +663,11 @@
 
   function updatePosterScale() {
     const wrapper = document.querySelector('.poster-scale-wrapper');
-    const viewportWidth  = window.innerWidth - 20;
-    const viewportHeight = window.innerHeight - 130;
-    const scale = Math.min(1, viewportWidth / 794, viewportHeight / 1123);
-    wrapper?.style.setProperty('--poster-scale', `${Math.max(0.35, scale)}`);
+    // Scale only by available width — poster scrolls vertically like a real document.
+    // Never constrain by height: that squashes the poster on typical laptop screens.
+    const availableWidth = window.innerWidth - 40; // 20px padding each side
+    const scale = Math.min(1, availableWidth / 794);
+    wrapper?.style.setProperty('--poster-scale', `${Math.max(0.45, scale)}`);
   }
   updatePosterScale();
   window.addEventListener('resize', updatePosterScale);
