@@ -519,20 +519,20 @@ function applySecondaryTextCompression(posterRoot) {
   if (!posterRoot) return;
   posterRoot.querySelectorAll('.ph-body').forEach((el) => {
     if (el.id === 'ph-solution') return;
-    el.style.setProperty('font-size', '11px', 'important');
-    el.style.setProperty('line-height', '1.38', 'important');
+    el.style.setProperty('font-size', '11.5px', 'important');
+    el.style.setProperty('line-height', '1.4', 'important');
   });
   posterRoot.querySelectorAll('.ph-sub').forEach((el) => {
-    el.style.setProperty('font-size', '9.7px', 'important');
-    el.style.setProperty('line-height', '1.32', 'important');
+    el.style.setProperty('font-size', '10px', 'important');
+    el.style.setProperty('line-height', '1.35', 'important');
     el.style.setProperty('margin-top', '2px', 'important');
   });
   posterRoot.querySelectorAll('.ph-bullets').forEach((el) => {
     el.style.setProperty('margin-top', '1px', 'important');
   });
   posterRoot.querySelectorAll('.ph-bullets li').forEach((el) => {
-    el.style.setProperty('font-size', '11px', 'important');
-    el.style.setProperty('line-height', '1.34', 'important');
+    el.style.setProperty('font-size', '11.5px', 'important');
+    el.style.setProperty('line-height', '1.36', 'important');
     el.style.setProperty('margin-bottom', '0', 'important');
   });
 }
@@ -540,23 +540,23 @@ function applySecondaryTextCompression(posterRoot) {
 function applyFinalTextCompression(posterRoot) {
   if (!posterRoot) return;
   posterRoot.querySelectorAll('.ph-card').forEach((card) => {
-    card.style.setProperty('padding', '6px 8px', 'important');
+    card.style.setProperty('padding', '7px 9px', 'important');
     card.style.setProperty('border-radius', '9px', 'important');
   });
   posterRoot.querySelectorAll('.ph-cap').forEach((el) => {
-    el.style.setProperty('font-size', '9px', 'important');
-    el.style.setProperty('line-height', '1.2', 'important');
+    el.style.setProperty('font-size', '11px', 'important');
+    el.style.setProperty('line-height', '1.25', 'important');
     el.style.setProperty('margin-bottom', '3px', 'important');
-    el.style.setProperty('letter-spacing', '.55px', 'important');
+    el.style.setProperty('letter-spacing', '0', 'important');
   });
   posterRoot.querySelectorAll('.ph-body').forEach((el) => {
     if (el.id === 'ph-solution') return;
-    el.style.setProperty('font-size', '10.5px', 'important');
-    el.style.setProperty('line-height', '1.28', 'important');
+    el.style.setProperty('font-size', '11px', 'important');
+    el.style.setProperty('line-height', '1.32', 'important');
   });
   posterRoot.querySelectorAll('.ph-bullets li').forEach((el) => {
-    el.style.setProperty('font-size', '10.5px', 'important');
-    el.style.setProperty('line-height', '1.24', 'important');
+    el.style.setProperty('font-size', '11px', 'important');
+    el.style.setProperty('line-height', '1.28', 'important');
   });
   const footer = posterRoot.querySelector('#ph-footer');
   if (footer) {
