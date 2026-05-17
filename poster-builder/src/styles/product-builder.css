@@ -2139,11 +2139,22 @@ canvas {
   font-size: 6px; color: var(--ph-title-color, #5E2750);
 }
 .ph-img-frame {
-  border-radius: 12px; overflow: visible;
+  border-radius: 12px;
+  overflow: hidden !important;
   border: 2px solid rgba(94,39,80,.18);
   background: #f5eef2;
   box-shadow: 0 4px 16px rgba(94,39,80,.12);
   display: flex; align-items: center; justify-content: center;
+}
+.ph-img-frame img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  display: block !important;
+  margin: 0 !important;
+  max-width: none !important;
+  max-height: none !important;
 }
 .ph-notch { position: relative; border-radius: 16px; }
 .ph-notch::before {
@@ -2243,7 +2254,7 @@ canvas {
 #poster-html.ph-cap-tight .ph-bullets li { font-size: 10.5px; line-height: 1.24; }
 #poster-html.ph-cap-tight #ph-footer { padding-top: 6px !important; padding-bottom: 6px !important; }
 
-/* ─── הדפסה ידנית בלבד — הורדת PDF משתמשת ב-jsPDF/html2canvas ───────── */
+/* ─── ייצוא PDF אמיתי דרך הדפסת DOM של הדפדפן ───────── */
 @page { size: A4 portrait; margin: 0; }
 @media print {
   html, body {
@@ -2266,6 +2277,8 @@ canvas {
     box-shadow: none !important;
     transform: none !important;
     overflow: hidden !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
     break-before: avoid !important;
     break-after: avoid !important;
     break-inside: avoid !important;
@@ -2275,5 +2288,16 @@ canvas {
     height: 297mm !important;
     transform: none !important;
   }
-  .step4-bar, .wz-overlay, .html-poster-area > *:not(#poster-html) { display: none !important; }
+  #poster-inner {
+    width: 210mm !important;
+    height: 297mm !important;
+    transform: none !important;
+    overflow: hidden !important;
+  }
+  .poster-bar,
+  button,
+  .bar-btn,
+  .step4-bar,
+  .wz-overlay,
+  .html-poster-area > *:not(#poster-html) { display: none !important; }
 }

@@ -1,4 +1,4 @@
-const CACHE_NAME = "portzot-derech-v48";
+const CACHE_NAME = "portzot-derech-v49";
 
 const CORE_ASSETS = [
   "./",
@@ -7,7 +7,11 @@ const CORE_ASSETS = [
   "./manifest.json",
   "./icon/favicon.png",
   "./icon/generated-icon.png",
-  "./icon/logo.png"
+  "./icon/logo.png",
+  "./poster-builder/product/editor.html",
+  "./poster-builder/src/canvas/html-poster.js",
+  "./poster-builder/src/products/split-flow/main.js",
+  "./poster-builder/src/styles/product-builder.css"
 ];
 
 self.addEventListener("install", function (event) {
