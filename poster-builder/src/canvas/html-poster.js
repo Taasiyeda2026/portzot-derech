@@ -1,16 +1,21 @@
 const POSTER_WIDTH_PX = 794;
 const POSTER_HEIGHT_PX = 1123;
-const IMG_HEIGHTS     = { app: 270, physical: 220, website: 185, digital: 185 };
-const PHYSICAL_FRAME_SIZE = 210;
-const PHYSICAL_FRAME_MIN_SIZE = 190;
-const PHYSICAL_FRAME_FIT_STEPS = [PHYSICAL_FRAME_SIZE, 200, PHYSICAL_FRAME_MIN_SIZE];
+const PHYSICAL_FRAME_STEPS = [
+  { width: 300, height: 190 },
+  { width: 290, height: 185 },
+  { width: 280, height: 180 },
+  { width: 270, height: 175 },
+];
+const PHYSICAL_FRAME_WIDTH = PHYSICAL_FRAME_STEPS[0].width;
+const PHYSICAL_FRAME_HEIGHT = PHYSICAL_FRAME_STEPS[0].height;
+const APP_FRAME_HEIGHT_STEPS = [270, 255, 240, 225, 216];
 const APP_SCREEN_RATIO = 9 / 16;
 const WEB_SCREEN_RATIO = 16 / 9;
-const WEB_FRAME_WIDTH  = 205;
+const WEB_FRAME_WIDTH_STEPS = [205, 195, 185, 175];
 const IMAGE_LAYOUT_FALLBACKS = {
-  physical: { fit: 'cover', height: PHYSICAL_FRAME_SIZE, width: PHYSICAL_FRAME_SIZE, background: '#f5eef2' },
-  app: { fit: 'contain', height: IMG_HEIGHTS.app, width: Math.round(IMG_HEIGHTS.app * APP_SCREEN_RATIO), background: 'linear-gradient(180deg, #fbf8fc 0%, #f0e7f5 100%)' },
-  website: { fit: 'contain', height: Math.round(WEB_FRAME_WIDTH / WEB_SCREEN_RATIO), width: WEB_FRAME_WIDTH, background: 'linear-gradient(180deg, #fbf8ff 0%, #f2edf8 100%)' },
+  physical: { fit: 'contain', height: PHYSICAL_FRAME_HEIGHT, width: PHYSICAL_FRAME_WIDTH, background: '#f5eef2', aspectRatio: '30 / 19' },
+  app: { fit: 'contain', height: APP_FRAME_HEIGHT_STEPS[0], width: Math.round(APP_FRAME_HEIGHT_STEPS[0] * APP_SCREEN_RATIO), background: 'linear-gradient(180deg, #fbf8fc 0%, #f0e7f5 100%)', aspectRatio: '9 / 16' },
+  website: { fit: 'contain', height: Math.round(WEB_FRAME_WIDTH_STEPS[0] / WEB_SCREEN_RATIO), width: WEB_FRAME_WIDTH_STEPS[0], background: 'linear-gradient(180deg, #fbf8ff 0%, #f2edf8 100%)', aspectRatio: '16 / 9' },
 };
 const POSTER_ICON_BASE = '/poster-builder/assets/pi/';
 const posterIconCache = new Map();
@@ -188,19 +193,12 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
   keys.forEach((k, i) => {
     document.querySelectorAll(`[data-ph-img="${i}"][data-layout="${layoutKey}"]`).forEach(frame => {
       if (slotImages[k]) {
-        // Reuse existing <img> — only update src when content actually changed
-        let img = frame.querySelector('img');
-        if (!img) {
-          frame.innerHTML = '';
-          img = document.createElement('img');
-          img.alt = `תמונה ${i + 1}`;
-          img.crossOrigin = 'anonymous';
-          frame.appendChild(img);
-        }
-        const imageFit = getImageLayoutConfig(productType).fit;
-        img.style.cssText = `width:100% !important;height:100% !important;object-fit:${imageFit} !important;object-position:center !important;display:block !important;margin:0 !important;max-width:none !important;max-height:none !important;`;
-        if (img.getAttribute('src') !== slotImages[k]) img.src = slotImages[k];
+        renderPosterFrameImage(frame, slotImages[k], i, productType);
       } else {
+        frame.style.removeProperty('background-image');
+        frame.style.removeProperty('background-size');
+        frame.style.removeProperty('background-position');
+        frame.style.removeProperty('background-repeat');
         // Only replace DOM if there was an image before (avoids churn on placeholder)
         if (frame.querySelector('img')) {
           frame.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;color:#c8a8c0;font-size:10px;width:100%;height:100%;">תמונה ${i + 1}</div>`;
@@ -214,6 +212,39 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
   schedulePosterFit(posterRoot, resolvedTitle);
 }
 
+
+
+function renderPosterFrameImage(frame, src, index, productType) {
+  if (!frame || !src) return;
+  const layoutKey = productType === 'digital' ? 'website' : productType;
+  frame.innerHTML = '';
+  frame.style.position = 'relative';
+  frame.style.overflow = 'hidden';
+
+  if (layoutKey === 'physical') {
+    frame.style.backgroundImage = `linear-gradient(rgba(245,238,242,.36), rgba(245,238,242,.36)), url("${src}")`;
+    frame.style.backgroundSize = 'cover';
+    frame.style.backgroundPosition = 'center';
+    frame.style.backgroundRepeat = 'no-repeat';
+
+    const fill = document.createElement('div');
+    fill.setAttribute('aria-hidden', 'true');
+    fill.style.cssText = 'position:absolute;inset:-8px;background:inherit;filter:blur(7px);opacity:.42;transform:scale(1.05);z-index:0;';
+    frame.appendChild(fill);
+  } else {
+    frame.style.removeProperty('background-image');
+    frame.style.removeProperty('background-size');
+    frame.style.removeProperty('background-position');
+    frame.style.removeProperty('background-repeat');
+  }
+
+  const img = document.createElement('img');
+  img.alt = `תמונה ${index + 1}`;
+  img.crossOrigin = 'anonymous';
+  img.src = src;
+  img.style.cssText = 'position:relative;z-index:1;width:100% !important;height:100% !important;object-fit:contain !important;object-position:center !important;display:block !important;margin:0 !important;max-width:none !important;max-height:none !important;';
+  frame.appendChild(img);
+}
 
 function applyPosterBackgroundBleedStyles(bgEl) {
   if (!bgEl) return;
@@ -248,6 +279,7 @@ function configureImageGrid(productType, layoutKey) {
 
   if (grid && config.width) {
     grid.style.setProperty('grid-template-columns', `repeat(${frameCount}, ${config.width}px)`, 'important');
+    grid.style.setProperty('gap', layoutKey === 'physical' ? '14px' : '11px', 'important');
     grid.style.justifyContent = 'center';
   }
 
@@ -273,7 +305,7 @@ function applyImageFrameSize(frame, layoutKey, height, width) {
 
   if (layoutKey === 'app') frame.style.aspectRatio = '9 / 16';
   else if (layoutKey === 'website') frame.style.aspectRatio = '16 / 9';
-  else if (layoutKey === 'physical') frame.style.aspectRatio = '1 / 1';
+  else if (layoutKey === 'physical') frame.style.aspectRatio = `${width || PHYSICAL_FRAME_WIDTH} / ${height}`;
   else frame.style.removeProperty('aspect-ratio');
 }
 
@@ -285,6 +317,31 @@ function resetPosterFitState(posterRoot) {
     frame.style.removeProperty('flex');
     frame.style.removeProperty('height');
     frame.style.removeProperty('aspect-ratio');
+    frame.style.removeProperty('background-image');
+    frame.style.removeProperty('background-size');
+    frame.style.removeProperty('background-position');
+    frame.style.removeProperty('background-repeat');
+  });
+
+  const resetStyleProps = {
+    '#ph-main': ['gap', 'padding-bottom'],
+    '.ph-images-wrap': ['margin-block'],
+    '#ph-images-label': ['margin-bottom'],
+    '#ph-images-2, #ph-images-app, #ph-images-web': ['gap'],
+    '.ph-card': ['padding', 'border-radius'],
+    '.ph-grid-problem, .ph-grid-research, .ph-grid-solution, .ph-grid-process': ['gap', 'margin-top'],
+    '.ph-cap': ['font-size', 'line-height', 'margin-bottom', 'letter-spacing'],
+    '.ph-body': ['font-size', 'line-height'],
+    '.ph-sub': ['font-size', 'line-height', 'margin-top'],
+    '.ph-bullets': ['margin-top'],
+    '.ph-bullets li': ['font-size', 'line-height', 'margin-bottom'],
+    '#ph-footer': ['padding-top', 'padding-bottom'],
+  };
+
+  Object.entries(resetStyleProps).forEach(([selector, props]) => {
+    posterRoot.querySelectorAll(selector).forEach((el) => {
+      props.forEach((prop) => el.style.removeProperty(prop));
+    });
   });
 }
 
@@ -382,43 +439,104 @@ function fitPosterToPage(posterRoot, titleColor) {
 
   applyCompactPosterSpacing(posterRoot);
   updateTitleUnderline(posterRoot, titleColor);
-
-  const isPhysicalPoster = posterRoot?.dataset?.productType === 'physical';
-  const fitClasses = isPhysicalPoster
-    ? ['ph-space-tight', 'ph-pad-tight', 'ph-line-tight', 'ph-text-tight', 'ph-cap-tight']
-    : ['ph-space-tight', 'ph-pad-tight', 'ph-line-tight', 'ph-imgfit-1', 'ph-imgfit-2', 'ph-text-tight', 'ph-imgfit-3', 'ph-cap-tight', 'ph-imgfit-4'];
-
-  for (const className of fitClasses) {
-    if (!isPosterOverflowing(posterRoot)) return;
-    posterRoot.classList.add(className);
-    updateTitleUnderline(posterRoot, titleColor);
-  }
+  if (!isPosterOverflowing(posterRoot)) return;
 
   shrinkActiveImageFramesToFit(posterRoot, titleColor);
+  if (!isPosterOverflowing(posterRoot)) return;
+
+  applySecondaryTextCompression(posterRoot);
+  updateTitleUnderline(posterRoot, titleColor);
+  if (!isPosterOverflowing(posterRoot)) return;
+
+  // Final guard: tighten only secondary text/cards after exhausting the allowed
+  // image-size floors. Do not resize #poster-html; it must remain a fixed A4 box.
+  applyFinalTextCompression(posterRoot);
+  updateTitleUnderline(posterRoot, titleColor);
 }
 
 function applyCompactPosterSpacing(posterRoot) {
   if (!posterRoot) return;
 
   const main = posterRoot.querySelector('#ph-main');
-  if (main) main.style.setProperty('gap', '6px', 'important');
-
-  const audienceCard = posterRoot.querySelector('.ph-audience-card');
-  if (audienceCard) audienceCard.style.marginBottom = '8px';
+  if (main) {
+    main.style.setProperty('gap', '3px', 'important');
+    main.style.setProperty('padding-bottom', '4px', 'important');
+  }
 
   const imagesWrap = posterRoot.querySelector('.ph-images-wrap');
-  if (imagesWrap) imagesWrap.style.marginBlock = '0 10px';
+  if (imagesWrap) imagesWrap.style.setProperty('margin-block', '0 6px', 'important');
 
-  const researchGrid = posterRoot.querySelector('.ph-grid-research');
-  if (researchGrid) researchGrid.style.setProperty('gap', '9px', 'important');
+  const imageLabel = posterRoot.querySelector('#ph-images-label');
+  if (imageLabel) imageLabel.style.setProperty('margin-bottom', '3px', 'important');
 
-  const solutionGrid = posterRoot.querySelector('.ph-grid-solution');
-  if (solutionGrid) solutionGrid.style.marginTop = '8px';
+  ['#ph-images-2', '#ph-images-app', '#ph-images-web'].forEach((selector) => {
+    const grid = posterRoot.querySelector(selector);
+    if (!grid) return;
+    const gap = selector === '#ph-images-2' ? '14px' : '8px';
+    grid.style.setProperty('gap', gap, 'important');
+    grid.style.setProperty('justify-content', 'center', 'important');
+  });
 
-  const processGrid = posterRoot.querySelector('.ph-grid-process');
-  if (processGrid) {
-    processGrid.style.marginTop = '9px';
-    processGrid.style.setProperty('gap', '7px', 'important');
+  posterRoot.querySelectorAll('.ph-card').forEach((card) => {
+    card.style.setProperty('padding', '8px 10px', 'important');
+  });
+
+  posterRoot.querySelectorAll('.ph-grid-problem, .ph-grid-research, .ph-grid-solution, .ph-grid-process').forEach((grid) => {
+    grid.style.setProperty('gap', '5px', 'important');
+    grid.style.setProperty('margin-top', '0', 'important');
+  });
+
+  const audienceCard = posterRoot.querySelector('.ph-audience-card');
+  if (audienceCard) audienceCard.style.setProperty('padding', '5px 10px', 'important');
+}
+
+function applySecondaryTextCompression(posterRoot) {
+  if (!posterRoot) return;
+  posterRoot.querySelectorAll('.ph-body').forEach((el) => {
+    if (el.id === 'ph-solution') return;
+    el.style.setProperty('font-size', '11px', 'important');
+    el.style.setProperty('line-height', '1.38', 'important');
+  });
+  posterRoot.querySelectorAll('.ph-sub').forEach((el) => {
+    el.style.setProperty('font-size', '9.7px', 'important');
+    el.style.setProperty('line-height', '1.32', 'important');
+    el.style.setProperty('margin-top', '2px', 'important');
+  });
+  posterRoot.querySelectorAll('.ph-bullets').forEach((el) => {
+    el.style.setProperty('margin-top', '1px', 'important');
+  });
+  posterRoot.querySelectorAll('.ph-bullets li').forEach((el) => {
+    el.style.setProperty('font-size', '11px', 'important');
+    el.style.setProperty('line-height', '1.34', 'important');
+    el.style.setProperty('margin-bottom', '0', 'important');
+  });
+}
+
+function applyFinalTextCompression(posterRoot) {
+  if (!posterRoot) return;
+  posterRoot.querySelectorAll('.ph-card').forEach((card) => {
+    card.style.setProperty('padding', '6px 8px', 'important');
+    card.style.setProperty('border-radius', '9px', 'important');
+  });
+  posterRoot.querySelectorAll('.ph-cap').forEach((el) => {
+    el.style.setProperty('font-size', '9px', 'important');
+    el.style.setProperty('line-height', '1.2', 'important');
+    el.style.setProperty('margin-bottom', '3px', 'important');
+    el.style.setProperty('letter-spacing', '.55px', 'important');
+  });
+  posterRoot.querySelectorAll('.ph-body').forEach((el) => {
+    if (el.id === 'ph-solution') return;
+    el.style.setProperty('font-size', '10.5px', 'important');
+    el.style.setProperty('line-height', '1.28', 'important');
+  });
+  posterRoot.querySelectorAll('.ph-bullets li').forEach((el) => {
+    el.style.setProperty('font-size', '10.5px', 'important');
+    el.style.setProperty('line-height', '1.24', 'important');
+  });
+  const footer = posterRoot.querySelector('#ph-footer');
+  if (footer) {
+    footer.style.setProperty('padding-top', '6px', 'important');
+    footer.style.setProperty('padding-bottom', '6px', 'important');
   }
 }
 
@@ -441,58 +559,35 @@ function isFooterOutsidePosterBottom(posterRoot) {
   return footer.getBoundingClientRect().bottom > getPosterA4Bottom(posterRoot) + 1;
 }
 
-function setPhysicalFrameSize(grid, frames, size) {
-  if (!grid || !frames?.length) return;
-  grid.style.setProperty('grid-template-columns', `repeat(${frames.length}, ${size}px)`, 'important');
-  grid.style.justifyContent = 'center';
-  frames.forEach(frame => applyImageFrameSize(frame, 'physical', size, size));
+function getImageFitSteps(layoutKey) {
+  if (layoutKey === 'physical') return PHYSICAL_FRAME_STEPS;
+  if (layoutKey === 'app') return APP_FRAME_HEIGHT_STEPS.map(height => ({ height, width: Math.round(height * APP_SCREEN_RATIO) }));
+  return WEB_FRAME_WIDTH_STEPS.map(width => ({ width, height: Math.round(width / WEB_SCREEN_RATIO) }));
 }
 
-function shrinkPhysicalImageFramesForFooter(posterRoot, titleColor) {
-  const activeGrid = getActiveImageGrid(posterRoot);
-  if (!activeGrid) return;
-
-  const frames = [...activeGrid.querySelectorAll('[data-ph-img][data-layout="physical"]')];
-  if (!frames.length || !isFooterOutsidePosterBottom(posterRoot)) return;
-
-  const currentHeight = parseFloat(frames[0].style.height) || frames[0].getBoundingClientRect().height || PHYSICAL_FRAME_SIZE;
-  const fittingSteps = PHYSICAL_FRAME_FIT_STEPS.filter(size => size <= currentHeight && size >= PHYSICAL_FRAME_MIN_SIZE);
-
-  for (const size of fittingSteps) {
-    setPhysicalFrameSize(activeGrid, frames, size);
-    updateTitleUnderline(posterRoot, titleColor);
-    if (!isFooterOutsidePosterBottom(posterRoot)) return;
-  }
+function setImageFrameDimensions(grid, frames, layoutKey, width, height) {
+  if (!grid || !frames?.length || !width || !height) return;
+  grid.style.setProperty('grid-template-columns', `repeat(${frames.length}, ${width}px)`, 'important');
+  grid.style.setProperty('justify-content', 'center', 'important');
+  frames.forEach((frame) => applyImageFrameSize(frame, layoutKey, height, width));
 }
 
 function shrinkActiveImageFramesToFit(posterRoot, titleColor) {
   const activeGrid = getActiveImageGrid(posterRoot);
-  if (!activeGrid) return;
+  if (!activeGrid || !isPosterOverflowing(posterRoot)) return;
 
   const frames = [...activeGrid.querySelectorAll('[data-ph-img]')];
   if (!frames.length) return;
 
   const layoutKey = frames[0].dataset.layout;
-  const minHeights = { app: 216, website: 96, physical: PHYSICAL_FRAME_MIN_SIZE };
-  const minHeight = minHeights[layoutKey] || 96;
+  const steps = getImageFitSteps(layoutKey);
+  const currentWidth = parseFloat(frames[0].style.width) || frames[0].getBoundingClientRect().width;
+  const currentHeight = parseFloat(frames[0].style.height) || frames[0].getBoundingClientRect().height;
 
-  for (let attempt = 0; attempt < 24 && isPosterOverflowing(posterRoot); attempt += 1) {
-    const currentHeight = parseFloat(frames[0].style.height) || frames[0].getBoundingClientRect().height;
-    const step = layoutKey === 'physical' ? 4 : 8;
-    const nextHeight = Math.max(minHeight, Math.round(currentHeight - step));
-    if (nextHeight >= currentHeight) break;
-
-    let nextWidth = null;
-    if (layoutKey === 'app') nextWidth = Math.round(nextHeight * APP_SCREEN_RATIO);
-    if (layoutKey === 'website') nextWidth = Math.round(nextHeight * WEB_SCREEN_RATIO);
-    if (layoutKey === 'physical') nextWidth = nextHeight;
-
-    if (nextWidth) {
-      activeGrid.style.setProperty('grid-template-columns', `repeat(${frames.length}, ${nextWidth}px)`, 'important');
-      activeGrid.style.justifyContent = 'center';
-    }
-
-    frames.forEach(frame => applyImageFrameSize(frame, layoutKey, nextHeight, nextWidth));
+  for (const step of steps) {
+    if (!isPosterOverflowing(posterRoot)) return;
+    if (step.width > currentWidth + 1 || step.height > currentHeight + 1) continue;
+    setImageFrameDimensions(activeGrid, frames, layoutKey, step.width, step.height);
     updateTitleUnderline(posterRoot, titleColor);
   }
 }
