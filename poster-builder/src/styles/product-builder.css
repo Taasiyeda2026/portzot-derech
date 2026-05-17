@@ -2276,7 +2276,7 @@ canvas {
 #poster-html.ph-cap-tight #ph-footer { padding-top: 6px !important; padding-bottom: 6px !important; }
 
 /* ─── ייצוא PDF אמיתי דרך הדפסת DOM של הדפדפן ───────── */
-@page { size: A4 portrait; margin: 0; }
+@page { size: 210mm 297mm; margin: 0; }
 @media print {
   html, body {
     width: 210mm; height: 297mm;
@@ -2287,8 +2287,9 @@ canvas {
   }
   body * { visibility: hidden !important; }
   #poster-html, #poster-html * { visibility: visible !important; }
+
   #poster-bg {
-    inset: -2mm !important;
+    inset: 0 !important;
   }
 
   #poster-html {
@@ -2299,12 +2300,14 @@ canvas {
     min-height: 297mm !important;
     max-height: 297mm !important;
     margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
     box-shadow: none !important;
     transform: none !important;
     overflow: hidden !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
-    break-before: avoid !important;
+    break-before: page !important;
     break-after: avoid !important;
     break-inside: avoid !important;
   }
@@ -2318,7 +2321,18 @@ canvas {
     height: 297mm !important;
     transform: none !important;
     overflow: hidden !important;
+    box-sizing: border-box !important;
   }
+
+  .ph-card,
+  .ph-grid-problem,
+  .ph-grid-research,
+  .ph-grid-solution,
+  .ph-grid-process {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
   .poster-bar,
   button,
   .bar-btn,

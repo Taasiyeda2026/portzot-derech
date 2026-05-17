@@ -827,6 +827,10 @@ export async function printPoster() {
   updateTitleUnderline(poster);
   fitPosterToPage(poster);
   await waitForAnimationFrame();
+  await waitForAnimationFrame();
+  await waitForAnimationFrame();
+
+  poster.style.setProperty('overflow', 'hidden', 'important');
 
   document.body.classList.add('printing-poster');
   const previousTitle = document.title;
@@ -838,6 +842,7 @@ export async function printPoster() {
     setTimeout(() => {
       document.body.classList.remove('printing-poster');
       document.title = previousTitle;
+      poster.style.removeProperty('overflow');
     }, 1000);
   }
 }
