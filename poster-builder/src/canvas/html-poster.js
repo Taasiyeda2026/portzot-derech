@@ -1,9 +1,9 @@
 const POSTER_WIDTH_PX = 794;
 const POSTER_HEIGHT_PX = 1123;
 const IMG_HEIGHTS     = { app: 270, physical: 220, website: 185, digital: 185 };
-const PHYSICAL_FRAME_SIZE = 220;
-const PHYSICAL_FRAME_MIN_SIZE = 180;
-const PHYSICAL_FRAME_FIT_STEPS = [PHYSICAL_FRAME_SIZE, 210, 200, 190, PHYSICAL_FRAME_MIN_SIZE];
+const PHYSICAL_FRAME_SIZE = 210;
+const PHYSICAL_FRAME_MIN_SIZE = 190;
+const PHYSICAL_FRAME_FIT_STEPS = [PHYSICAL_FRAME_SIZE, 200, PHYSICAL_FRAME_MIN_SIZE];
 const APP_SCREEN_RATIO = 9 / 16;
 const WEB_SCREEN_RATIO = 16 / 9;
 const WEB_FRAME_WIDTH  = 205;
@@ -378,13 +378,16 @@ function fitPosterToPage(posterRoot, titleColor) {
   applyPosterCardStyles(posterRoot);
   updateTitleUnderline(posterRoot, titleColor);
 
-  shrinkPhysicalImageFramesForFooter(posterRoot, titleColor);
   if (!isPosterOverflowing(posterRoot)) return;
 
   applyCompactPosterSpacing(posterRoot);
   updateTitleUnderline(posterRoot, titleColor);
 
-  const fitClasses = ['ph-space-tight', 'ph-pad-tight', 'ph-line-tight', 'ph-imgfit-1', 'ph-imgfit-2', 'ph-text-tight', 'ph-imgfit-3', 'ph-cap-tight', 'ph-imgfit-4'];
+  const isPhysicalPoster = posterRoot?.dataset?.productType === 'physical';
+  const fitClasses = isPhysicalPoster
+    ? ['ph-space-tight', 'ph-pad-tight', 'ph-line-tight', 'ph-text-tight', 'ph-cap-tight']
+    : ['ph-space-tight', 'ph-pad-tight', 'ph-line-tight', 'ph-imgfit-1', 'ph-imgfit-2', 'ph-text-tight', 'ph-imgfit-3', 'ph-cap-tight', 'ph-imgfit-4'];
+
   for (const className of fitClasses) {
     if (!isPosterOverflowing(posterRoot)) return;
     posterRoot.classList.add(className);
@@ -475,7 +478,8 @@ function shrinkActiveImageFramesToFit(posterRoot, titleColor) {
 
   for (let attempt = 0; attempt < 24 && isPosterOverflowing(posterRoot); attempt += 1) {
     const currentHeight = parseFloat(frames[0].style.height) || frames[0].getBoundingClientRect().height;
-    const nextHeight = Math.max(minHeight, Math.round(currentHeight - 8));
+    const step = layoutKey === 'physical' ? 4 : 8;
+    const nextHeight = Math.max(minHeight, Math.round(currentHeight - step));
     if (nextHeight >= currentHeight) break;
 
     let nextWidth = null;
