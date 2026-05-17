@@ -1,6 +1,7 @@
 import { getVisualSlots, getPosterFields, FIELD_DEFINITIONS, BACKGROUNDS, AVAILABLE_FONTS } from '../physical/config.js';
 import { saveProject, loadProject } from '../../shared/storage.js';
 import { createPosterSubmission, updatePosterSubmission } from '../../shared/poster-submissions.js';
+import { getSchoolConfig, KNOWN_SCHOOL_SLUGS } from '../../shared/schools-config.js';
 
 const PRODUCT_TYPES = ['app', 'physical', 'website', 'digital'];
 
@@ -19,6 +20,11 @@ function resolveRequestedProductType() {
 const requestedProductType = resolveRequestedProductType();
 const productType = requestedProductType;
 const root = document.getElementById('root');
+
+// ── School configuration ──────────────────────────────────────────────────────
+const schoolSlug = new URLSearchParams(window.location.search).get('school') || 'default';
+const schoolKnown = KNOWN_SCHOOL_SLUGS.has(schoolSlug);
+const schoolConfig = getSchoolConfig(schoolKnown ? schoolSlug : 'default');
 const STEP_LABELS = productType === 'physical'
   ? ['שאלות חקר', 'פרומפט ותמונות', 'פוסטר']
   : ['שאלות חקר', 'פרומפט', 'תמונות', 'פוסטר'];
@@ -94,6 +100,9 @@ const RESEARCH_FIELDS = [
   ['slogan', 'סלוגן לתחתית הפוסטר', 60]
 ];
 
+const activeQuestions = schoolConfig.questions || RESEARCH_FIELDS;
+const activeBackgrounds = schoolConfig.backgrounds || BACKGROUNDS;
+
 const SCREEN_TYPE_OPTIONS = ['מסך פתיחה', 'מסך בית', 'חיפוש', 'פעולה מרכזית', 'תוצאות', 'אזור אישי', 'פרופיל', 'הרשמה', 'התחברות', 'מעקב', 'אחר'];
 const COMPONENT_OPTIONS = ['כותרת', 'תפריט', 'ניווט תחתון', 'כפתור פעולה ראשי', 'כרטיסיות', 'גרף', 'רשימה', 'טופס', 'פרופיל', 'מפה', 'התראות', 'אזור מידע', 'תמונת פתיחה', 'אחר'];
 const EMPHASIS_OPTIONS = ['הפעולה המרכזית', 'הכפתור הראשי', 'הניווט', 'המידע המרכזי', 'התוצאה', 'הפשטות', 'העיצוב', 'אחר'];
@@ -129,7 +138,7 @@ const PHYSICAL_USAGE_OPTIONS = {
 
 const state = {
   step: 1,
-  research: Object.fromEntries(RESEARCH_FIELDS.map(([key]) => [key, ''])),
+  research: Object.fromEntries(activeQuestions.map(([key]) => [key, ''])),
   errors: {},
   visibleErrors: [],
   navErrorMessage: '',
@@ -440,7 +449,7 @@ function initializeCounters() {
 
 function validateResearch() {
   const stepErrors = {};
-  RESEARCH_FIELDS.forEach(([key, label, max]) => {
+  activeQuestions.forEach(([key, label, max]) => {
     const value = (state.research[key] || '').trim();
     if (!value) stepErrors[key] = `השדה "${label}" הוא שדה חובה.`;
     if ((state.research[key] || '').length > max) stepErrors[key] = `אפשר להזין עד ${max} תווים.`;
@@ -621,7 +630,7 @@ function moveToNextStep() {
 }
 
 const VALIDATION_ORDER = {
-  1: RESEARCH_FIELDS.map(([key]) => key),
+  1: activeQuestions.map(([key]) => key),
   2: productType === 'physical'
     ? ['mainAppearance', 'mainAppearanceOther', 'mainHighlight', 'mainHighlightOther', 'mainMaterial', 'mainMaterialOther', 'mainBackground', 'mainBackgroundOther', 'mainMessage', 'mainAngle', 'mainAngleOther', 'mainDescription', 'usageUser', 'usageUserOther', 'usageCount', 'usageCountOther', 'usageLocation', 'usageLocationOther', 'usageAction', 'usagePropsOther', 'usageHighlight', 'usageHighlightOther', 'usageTakeaway', 'usageFeeling', 'usageFeelingOther', 'sharedStyle', 'sharedStyleOther', 'sharedRealism', 'sharedRealismOther', 'sharedAvoidOther']
     : [
@@ -973,7 +982,7 @@ function normalizeAppImageMapping() {
 function buildCurrentPosterProject() {
   const contentValues = buildPosterContentValues();
   const stored = loadProject() || {};
-  const selectedBackground = BACKGROUNDS.find((bg) => bg.path === state.design.background);
+  const selectedBackground = activeBackgrounds.find((bg) => bg.path === state.design.background);
   const nextFieldSettings = Object.fromEntries(
     FIELD_DEFINITIONS.map((field) => [
       field.id,
@@ -990,6 +999,7 @@ function buildCurrentPosterProject() {
     ...stored,
     posterSize: stored.posterSize || posterSize,
     productType,
+    school_slug: schoolSlug,
     background: state.design.background || null,
     backgroundId: selectedBackground?.id || stored.backgroundId || null,
     backgroundPath: state.design.background || stored.backgroundPath || null,
@@ -1082,8 +1092,8 @@ function renderResearchField([key, label, max]) {
 }
 
 function renderStep1() {
-  const mainFields = RESEARCH_FIELDS.filter(([key]) => !STEP1_BOTTOM_KEYS.includes(key));
-  const bottomFields = RESEARCH_FIELDS.filter(([key]) => STEP1_BOTTOM_KEYS.includes(key));
+  const mainFields = activeQuestions.filter(([key]) => !STEP1_BOTTOM_KEYS.includes(key));
+  const bottomFields = activeQuestions.filter(([key]) => STEP1_BOTTOM_KEYS.includes(key));
   return `
     <article class="split-card">${mainFields.map(renderResearchField).join('')}</article>
     <article class="split-card">
@@ -1287,7 +1297,7 @@ function renderStep4() {
     <button type="button" class="split-bg-tile ${!state.design.background ? 'active' : ''}" data-design="background" data-value="">
       <span class="split-bg-none">ללא רקע</span>
     </button>
-    ${BACKGROUNDS.map((bg) => `
+    ${activeBackgrounds.map((bg) => `
       <button type="button" class="split-bg-tile ${state.design.background === bg.path ? 'active' : ''}" data-design="background" data-value="${escapeHtml(bg.path)}" title="${escapeHtml(bg.name)}">
         <img src="${escapeHtml(bg.path)}" alt="${escapeHtml(bg.name)}" />
         <span>${escapeHtml(bg.name)}</span>
@@ -1491,6 +1501,7 @@ function render() {
       <h1 class="split-title">בונות פוסטר חקר — ${PRODUCT_TITLE[requestedProductType] || PRODUCT_TITLE.website}</h1>
       <p class="split-sub">כל הזרימה מותאמת לשלב החקר, הפרומפט והתמונות, עם מיפוי לפוסטר הקיים.</p>
     </header>
+    ${!schoolKnown ? `<div class="split-alert">קוד בית הספר "<strong>${escapeHtml(schoolSlug)}</strong>" לא נמצא. נטענת תצורת ברירת המחדל.</div>` : ''}
     ${renderStepper()}
     ${state.visibleErrors.length ? '<div class="split-alert">יש להשלים את השדות החסרים לפני מעבר לשלב הבא.</div>' : ''}
     <section class="split-body">${renderBody()}</section>

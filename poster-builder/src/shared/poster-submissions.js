@@ -29,6 +29,7 @@ export function normalizePosterData(project = {}) {
   return {
     posterSize: project.posterSize || 'A4',
     productType: project.productType || 'physical',
+    school_slug: project.school_slug || 'default',
     background,
     backgroundPath: project.backgroundPath || background,
     backgroundId: project.backgroundId || null,

@@ -312,17 +312,21 @@ function getAdminStartStep(productType) {
   return productType === 'physical' ? 2 : 3;
 }
 
-function buildPosterOpenUrl(productType) {
+function buildPosterOpenUrl(productType, schoolSlug) {
   const url = PRODUCT_PATHS[productType] || PRODUCT_PATHS.physical;
   try {
-    const params = new URLSearchParams(window.location.search);
-    return params.get('debugPdfPng') === '1' ? `${url}?debugPdfPng=1` : url;
+    const adminParams = new URLSearchParams(window.location.search);
+    const queryParams = new URLSearchParams();
+    if (schoolSlug && schoolSlug !== 'default') queryParams.set('school', schoolSlug);
+    if (adminParams.get('debugPdfPng') === '1') queryParams.set('debugPdfPng', '1');
+    const query = queryParams.toString();
+    return query ? `${url}?${query}` : url;
   } catch {
     return url;
   }
 }
 
-function navigateWithProject(posterData, productType, splitFlowState, submissionId) {
+function navigateWithProject(posterData, productType, splitFlowState, submissionId, schoolSlug) {
   const projectData = { ...(posterData || {}) };
   delete projectData.schoolLogoImage;
   delete projectData.schoolLogoAssetId;
@@ -330,9 +334,10 @@ function navigateWithProject(posterData, productType, splitFlowState, submission
     ...projectData,
     productType,
     splitFlowState,
-    submissionId
+    submissionId,
+    school_slug: schoolSlug || 'default'
   });
-  const url = buildPosterOpenUrl(productType);
+  const url = buildPosterOpenUrl(productType, schoolSlug);
   const opened = window.open(url, '_blank', 'noopener');
   if (!opened) {
     state.message = 'הפוסטר נשמר, אבל הדפדפן חסם פתיחה בטאב חדש. אפשר לפתוח אותו ידנית מהקישור הבא.';
@@ -419,7 +424,8 @@ async function openSubmission(id) {
           shape: 20
         }, getAdminStartStep(productType));
 
-    navigateWithProject(posterData, productType, splitFlowState, id);
+    const schoolSlug = posterData.school_slug || 'default';
+    navigateWithProject(posterData, productType, splitFlowState, id, schoolSlug);
   } catch (err) {
     showMessage('לא הצלחנו לפתוח את הפוסטר כרגע.');
   }
