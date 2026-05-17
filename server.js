@@ -140,6 +140,13 @@ async function handlePdfExport(req, res) {
 const server = http.createServer((req, res) => {
   const requestPath = req.url.split('?')[0];
 
+  // Health-check — confirms the Node server is alive at this origin
+  if (requestPath === '/api/health' && req.method === 'GET') {
+    res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
+    res.end(JSON.stringify({ ok: true, server: 'node', version: process.version }));
+    return;
+  }
+
   // PDF export endpoint
   if (requestPath === '/api/export-pdf' && req.method === 'POST') {
     handlePdfExport(req, res).catch(err => {
