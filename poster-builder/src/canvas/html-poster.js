@@ -1,6 +1,14 @@
 const POSTER_WIDTH_PX = 794;
 const POSTER_HEIGHT_PX = 1123;
 const IMG_HEIGHTS     = { app: 270, physical: 220, website: 185, digital: 185 };
+const APP_SCREEN_RATIO = 9 / 16;
+const WEB_SCREEN_RATIO = 16 / 9;
+const WEB_FRAME_WIDTH  = 205;
+const IMAGE_LAYOUT_FALLBACKS = {
+  physical: { fit: 'cover', height: IMG_HEIGHTS.physical, background: '#f5eef2' },
+  app: { fit: 'contain', height: IMG_HEIGHTS.app, width: Math.round(IMG_HEIGHTS.app * APP_SCREEN_RATIO), background: 'linear-gradient(180deg, #fbf8fc 0%, #f0e7f5 100%)' },
+  website: { fit: 'contain', height: Math.round(WEB_FRAME_WIDTH / WEB_SCREEN_RATIO), width: WEB_FRAME_WIDTH, background: 'linear-gradient(180deg, #fbf8ff 0%, #f2edf8 100%)' },
+};
 const POSTER_ICON_BASE = '/poster-builder/assets/pi/';
 const posterIconCache = new Map();
 
@@ -51,6 +59,8 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
     posterRoot.style.setProperty('--ph-title-color', resolvedTitle);
     posterRoot.style.setProperty('--ph-text-color',  resolvedText);
     posterRoot.style.fontFamily = `'${resolvedFont}', 'IBM Plex Sans Hebrew', sans-serif`;
+    posterRoot.dataset.productType = productType || '';
+    resetPosterFitState(posterRoot);
     applyExplicitPosterTextStyles(posterRoot);
     applyPosterIcons(posterRoot);
   }
@@ -168,12 +178,7 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
   const layoutKey   = productType === 'digital' ? 'website' : productType;
   const keys        = productType === 'physical' ? ['visual_1', 'visual_2'] : ['visual_1', 'visual_2', 'visual_3'];
 
-  const fixedImgHeight = IMG_HEIGHTS[productType] || 145;
-  document.querySelectorAll(`[data-ph-img][data-layout="${layoutKey}"]`).forEach(frame => {
-    frame.style.height = `${fixedImgHeight}px`;
-    frame.style.overflow = 'hidden';
-    frame.style.removeProperty('aspect-ratio');
-  });
+  configureImageGrid(productType, layoutKey);
 
   keys.forEach((k, i) => {
     document.querySelectorAll(`[data-ph-img="${i}"][data-layout="${layoutKey}"]`).forEach(frame => {
@@ -187,7 +192,8 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
           img.crossOrigin = 'anonymous';
           frame.appendChild(img);
         }
-        img.style.cssText = 'width:100% !important;height:100% !important;object-fit:cover !important;object-position:center !important;display:block !important;margin:0 !important;max-width:none !important;max-height:none !important;';
+        const imageFit = getImageLayoutConfig(productType).fit;
+        img.style.cssText = `width:100% !important;height:100% !important;object-fit:${imageFit} !important;object-position:center !important;display:block !important;margin:0 !important;max-width:none !important;max-height:none !important;`;
         if (img.getAttribute('src') !== slotImages[k]) img.src = slotImages[k];
       } else {
         // Only replace DOM if there was an image before (avoids churn on placeholder)
@@ -201,6 +207,60 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
   });
 
   schedulePosterFit(posterRoot, resolvedTitle);
+}
+
+function getImageLayoutConfig(productType) {
+  const normalizedType = productType === 'digital' ? 'website' : productType;
+  return IMAGE_LAYOUT_FALLBACKS[normalizedType] || IMAGE_LAYOUT_FALLBACKS.website;
+}
+
+function configureImageGrid(productType, layoutKey) {
+  const config = getImageLayoutConfig(productType);
+  const grid = document.getElementById(
+    layoutKey === 'physical' ? 'ph-images-2' : layoutKey === 'app' ? 'ph-images-app' : 'ph-images-web'
+  );
+  const frames = [...document.querySelectorAll(`[data-ph-img][data-layout="${layoutKey}"]`)];
+  const frameCount = frames.length || (layoutKey === 'physical' ? 2 : 3);
+
+  if (grid && config.width) {
+    grid.style.gridTemplateColumns = `repeat(${frameCount}, ${config.width}px)`;
+    grid.style.justifyContent = 'center';
+  }
+
+  frames.forEach(frame => {
+    applyImageFrameSize(frame, layoutKey, config.height, config.width);
+    frame.style.overflow = 'hidden';
+    frame.style.background = config.background;
+  });
+}
+
+function applyImageFrameSize(frame, layoutKey, height, width) {
+  if (!frame || !height) return;
+  frame.style.height = `${height}px`;
+  frame.style.overflow = 'hidden';
+
+  if (width) {
+    frame.style.width = `${width}px`;
+    frame.style.flex = `0 0 ${width}px`;
+  } else {
+    frame.style.removeProperty('width');
+    frame.style.removeProperty('flex');
+  }
+
+  if (layoutKey === 'app') frame.style.aspectRatio = '9 / 16';
+  else if (layoutKey === 'website') frame.style.aspectRatio = '16 / 9';
+  else frame.style.removeProperty('aspect-ratio');
+}
+
+function resetPosterFitState(posterRoot) {
+  if (!posterRoot) return;
+  posterRoot.classList.remove('ph-space-tight', 'ph-imgfit-1', 'ph-imgfit-2', 'ph-imgfit-3', 'ph-imgfit-4', 'ph-pad-tight', 'ph-line-tight', 'ph-text-tight', 'ph-cap-tight');
+  posterRoot.querySelectorAll('[data-ph-img]').forEach((frame) => {
+    frame.style.removeProperty('width');
+    frame.style.removeProperty('flex');
+    frame.style.removeProperty('height');
+    frame.style.removeProperty('aspect-ratio');
+  });
 }
 
 function schedulePosterFit(posterRoot, titleColor) {
@@ -297,6 +357,15 @@ function fitPosterToPage(posterRoot, titleColor) {
 
   applyCompactPosterSpacing(posterRoot);
   updateTitleUnderline(posterRoot, titleColor);
+
+  const fitClasses = ['ph-space-tight', 'ph-pad-tight', 'ph-line-tight', 'ph-imgfit-1', 'ph-imgfit-2', 'ph-text-tight', 'ph-imgfit-3', 'ph-cap-tight', 'ph-imgfit-4'];
+  for (const className of fitClasses) {
+    if (!isPosterOverflowing(posterRoot)) return;
+    posterRoot.classList.add(className);
+    updateTitleUnderline(posterRoot, titleColor);
+  }
+
+  shrinkActiveImageFramesToFit(posterRoot, titleColor);
 }
 
 function applyCompactPosterSpacing(posterRoot) {
@@ -324,21 +393,60 @@ function applyCompactPosterSpacing(posterRoot) {
   }
 }
 
+function shrinkActiveImageFramesToFit(posterRoot, titleColor) {
+  const activeGrid = ['#ph-images-app', '#ph-images-web', '#ph-images-2']
+    .map(selector => posterRoot.querySelector(selector))
+    .find(grid => grid && window.getComputedStyle(grid).display !== 'none');
+  if (!activeGrid) return;
+
+  const frames = [...activeGrid.querySelectorAll('[data-ph-img]')];
+  if (!frames.length) return;
+
+  const layoutKey = frames[0].dataset.layout;
+  const minHeights = { app: 216, website: 96, physical: 165 };
+  const minHeight = minHeights[layoutKey] || 96;
+
+  for (let attempt = 0; attempt < 24 && isPosterOverflowing(posterRoot); attempt += 1) {
+    const currentHeight = parseFloat(frames[0].style.height) || frames[0].getBoundingClientRect().height;
+    const nextHeight = Math.max(minHeight, Math.round(currentHeight - 8));
+    if (nextHeight >= currentHeight) break;
+
+    let nextWidth = null;
+    if (layoutKey === 'app') nextWidth = Math.round(nextHeight * APP_SCREEN_RATIO);
+    if (layoutKey === 'website') nextWidth = Math.round(nextHeight * WEB_SCREEN_RATIO);
+
+    if (nextWidth) {
+      activeGrid.style.gridTemplateColumns = `repeat(${frames.length}, ${nextWidth}px)`;
+      activeGrid.style.justifyContent = 'center';
+    }
+
+    frames.forEach(frame => applyImageFrameSize(frame, layoutKey, nextHeight, nextWidth));
+    updateTitleUnderline(posterRoot, titleColor);
+  }
+}
+
 function isPosterOverflowing(posterRoot) {
+  if (!posterRoot) return false;
+
   const footer = posterRoot.querySelector('#ph-footer');
   const rootRect = posterRoot.getBoundingClientRect();
   const a4Bottom = rootRect.top + POSTER_HEIGHT_PX;
 
-  // True overflow: poster scroll height exceeds A4
+  // True overflow: poster scroll height exceeds A4, which can create a second PDF page.
   if (posterRoot.scrollHeight > POSTER_HEIGHT_PX + 1) return true;
+
+  if (footer) {
+    const footerRect = footer.getBoundingClientRect();
+    if (footerRect.bottom > a4Bottom + 1) return true;
+    if (footerRect.top < rootRect.top - 1) return true;
+  }
 
   const contentEls = [...posterRoot.querySelectorAll('.ph-card, .ph-img-frame')];
 
-  // Any content element visually below A4 bottom
+  // Any content element visually below A4 bottom.
   if (contentEls.some(el => el.getBoundingClientRect().bottom > a4Bottom + 1)) return true;
 
-  // Any content element intruding into footer space
-  // (ph-main touching footer is intentional and not overflow)
+  // Any content element intruding into footer space means the footer can be cut or covered.
   if (footer) {
     const footerTop = footer.getBoundingClientRect().top;
     if (contentEls.some(el => el.getBoundingClientRect().bottom > footerTop + 1)) return true;
