@@ -2,7 +2,7 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const PORT = 5000;
+const PORT = parseInt(process.env.PORT || '5000', 10);
 const HOST = '0.0.0.0';
 const PUBLIC_ENV_KEYS = ['VITE_SUPABASE_URL', 'VITE_SUPABASE_ANON_KEY', 'VITE_POSTER_ADMIN_CODE'];
 

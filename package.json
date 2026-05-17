@@ -1,0 +1,13 @@
+{
+  "name": "portzot-derech",
+  "version": "1.0.0",
+  "description": "Interactive course website for the Portzot Derech 2026 entrepreneurship programme",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
