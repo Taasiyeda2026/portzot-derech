@@ -2193,6 +2193,23 @@ canvas {
   justify-content: flex-start !important;
 }
 
+#poster-bg {
+  position: absolute;
+  inset: -6px;
+  z-index: 0;
+  overflow: hidden;
+  background-color: #f5eef8;
+}
+
+#poster-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+
 #ph-images-2,
 #ph-images-app,
 #ph-images-web {
@@ -2266,6 +2283,10 @@ canvas {
   }
   body * { visibility: hidden !important; }
   #poster-html, #poster-html * { visibility: visible !important; }
+  #poster-bg {
+    inset: -2mm !important;
+  }
+
   #poster-html {
     position: fixed !important;
     inset: 0 !important;
