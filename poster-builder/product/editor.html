@@ -81,6 +81,8 @@
     .bar-btn.export:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(214,31,140,.5); }
     .bar-btn.finish { background: linear-gradient(135deg, #1a5c3a, #27ae60); color: #fff; box-shadow: 0 4px 14px rgba(26,92,58,.35); white-space: nowrap; }
     .bar-btn.finish:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(26,92,58,.45); }
+    .bar-btn.print-local { background: linear-gradient(135deg, #1a4a7a, #2980b9); color: #fff; box-shadow: 0 4px 14px rgba(26,74,122,.35); white-space: nowrap; }
+    .bar-btn.print-local:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(26,74,122,.45); }
     .bar-btn:disabled { opacity: .5; cursor: not-allowed; transform: none !important; }
 
     /* ===== עטיפת הפוסטר ===== */
@@ -483,6 +485,7 @@
   </div>
   <div class="poster-bar-actions">
     <button class="bar-btn back" id="btn-back">‹ חזרה</button>
+    <button class="bar-btn print-local" id="btn-print-local">שמירה כ־PDF</button>
     <button class="bar-btn export" id="btn-export">ייצוא PDF</button>
     <button class="bar-btn finish" id="btn-finish">סיום ›</button>
   </div>
@@ -614,7 +617,7 @@
 
 <script type="module">
   import { loadProject } from '../src/shared/storage.js';
-  import { renderHTMLPoster, exportHTMLPosterToPDF } from '../src/canvas/html-poster.js';
+  import { renderHTMLPoster, exportHTMLPosterToPDF, printPoster } from '../src/canvas/html-poster.js';
 
   const params = new URLSearchParams(window.location.search);
   const validTypes = new Set(['app', 'physical', 'website', 'digital']);
@@ -649,6 +652,22 @@
 
   document.getElementById('btn-finish').addEventListener('click', () => {
     window.location.href = '../index.html';
+  });
+
+  document.getElementById('btn-print-local').addEventListener('click', async () => {
+    const btn = document.getElementById('btn-print-local');
+    btn.disabled = true;
+    btn.textContent = 'מכין...';
+    try {
+      alert('בחלון ההדפסה יש לבחור:\n• יעד: "שמור כ-PDF"\n• גודל: A4\n• שוליים: ללא (None)\n• גרפיקת רקע: מופעלת ✓');
+      await printPoster();
+    } catch (err) {
+      console.error('Print failed:', err);
+      alert('שגיאה בהדפסה — נסי שנית');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'שמירה כ־PDF';
+    }
   });
 
   document.getElementById('btn-export').addEventListener('click', async () => {
