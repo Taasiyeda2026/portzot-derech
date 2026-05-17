@@ -94,7 +94,7 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
     n.style.fontFamily = `'${resolvedFont}', 'IBM Plex Sans Hebrew', sans-serif`;
     n.style.color      = resolvedTitle;
     const l = name.length;
-    n.style.fontSize = l <= 6 ? '56px' : l <= 10 ? '48px' : l <= 15 ? '39px' : l <= 18 ? '32px' : '26px';
+    n.style.fontSize = l <= 6 ? '62px' : l <= 10 ? '54px' : l <= 15 ? '44px' : l <= 18 ? '36px' : '30px';
   }
 
   // ── Poster card opacity — inline editor CSS used by preview/PDF can override the shared stylesheet.

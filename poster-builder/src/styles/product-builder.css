@@ -2114,7 +2114,7 @@ canvas {
   border-right: 3.5px solid var(--ph-title-color, #5E2750);
 }
 .ph-cap {
-  font-size: 15.5px; font-weight: 900; color: var(--ph-title-color, #5E2750);
+  font-size: 17.5px; font-weight: 900; color: var(--ph-title-color, #5E2750);
   text-transform: uppercase; letter-spacing: 1px;
   margin-bottom: 8px; display: flex; align-items: center; gap: 5px;
 }
@@ -2271,7 +2271,7 @@ canvas {
 #poster-html.ph-text-tight .ph-bullets li { font-size: 13px; line-height: 1.34; margin-bottom: 0; padding-right: 12px; }
 
 #poster-html.ph-cap-tight .ph-card { padding: 6px 8px; border-radius: 9px; }
-#poster-html.ph-cap-tight .ph-cap { font-size: 10.5px; margin-bottom: 3px; letter-spacing: .55px; }
+#poster-html.ph-cap-tight .ph-cap { font-size: 12.5px; margin-bottom: 3px; letter-spacing: .55px; }
 #poster-html.ph-cap-tight .ph-cap::before { width: 10px; height: 2px; }
 #poster-html.ph-cap-tight .ph-body { font-size: 12.5px; line-height: 1.28; }
 #poster-html.ph-cap-tight .ph-sub { font-size: 11px; line-height: 1.22; margin-top: 2px; }
