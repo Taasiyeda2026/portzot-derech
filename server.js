@@ -100,6 +100,9 @@ async function handlePdfExport(req, res) {
 
   try {
     const page = await browser.newPage();
+
+    // A4 at 96 dpi: 210mm = 793.7px ≈ 794px, 297mm = 1122.5px ≈ 1123px
+    await page.setViewport({ width: 794, height: 1123, deviceScaleFactor: 1 });
     await page.emulateMediaType('print');
 
     await page.setContent(html, {

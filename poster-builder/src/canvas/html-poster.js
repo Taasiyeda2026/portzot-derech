@@ -801,7 +801,10 @@ function applyExplicitPosterTextStyles(poster) {
 }
 
 function showPosterExportError(error) {
-  const message = error instanceof Error ? error.message : String(error || 'שגיאה לא ידועה בייצוא.');
+  const raw = error instanceof Error ? error.message : String(error || 'שגיאה לא ידועה בייצוא.');
+  // Strip HTML tags in case a proxy returned a raw error page
+  const clean = raw.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+  const message = clean || 'שגיאה בלתי צפויה בייצוא. אנא נסה שנית.';
   console.error('Poster export failed', error);
   if (typeof window.alert === 'function') window.alert(message);
 }
@@ -886,10 +889,11 @@ export async function exportHTMLPosterToPDF() {
     @page { size: 210mm 297mm; margin: 0; }
     #poster-html {
       position: relative !important;
-      width: 210mm !important;
-      height: 297mm !important;
-      min-height: 297mm !important;
-      max-height: 297mm !important;
+      /* 794px = 210mm at 96 dpi — keeps pixel-based child layout intact */
+      width: 794px !important;
+      height: 1123px !important;
+      min-height: 1123px !important;
+      max-height: 1123px !important;
       overflow: hidden !important;
       box-sizing: border-box !important;
       box-shadow: none !important;
@@ -898,8 +902,8 @@ export async function exportHTMLPosterToPDF() {
       padding: 0 !important;
     }
     #poster-inner {
-      width: 210mm !important;
-      height: 297mm !important;
+      width: 794px !important;
+      height: 1123px !important;
       overflow: hidden !important;
       box-sizing: border-box !important;
     }
@@ -922,8 +926,18 @@ export async function exportHTMLPosterToPDF() {
     });
 
     if (!response.ok) {
-      const msg = await response.text();
-      throw new Error(msg || `Server error ${response.status}`);
+      const text = await response.text();
+      const status = response.status;
+      const isHtml = text.trim().startsWith('<');
+      let msg;
+      if (status === 405 || (isHtml && text.includes('405'))) {
+        msg = `ייצוא PDF נכשל (שגיאה 405). ה-endpoint ‎/api/export-pdf אינו זמין בכתובת זו. יש לוודא שהאתר רץ דרך שרת Node.js ולא אחסון סטטי בלבד.`;
+      } else if (isHtml) {
+        msg = `ייצוא PDF נכשל. השרת החזיר שגיאה ${status}. אנא נסה שנית או פנה לתמיכה.`;
+      } else {
+        msg = text || `שגיאת שרת ${status}`;
+      }
+      throw new Error(msg);
     }
 
     const blob = await response.blob();

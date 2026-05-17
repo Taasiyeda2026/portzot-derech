@@ -1,0 +1,65 @@
+יש כרגע שתי בעיות שצריך לתקן:
+
+1. שגיאת ייצוא PDF:
+בלחיצה על ייצוא PDF מתקבלת שגיאה:
+405 Not Allowed
+
+הדפדפן מציג HTML כזה:
+<title>405 Not Allowed</title>
+<h1>405 Not Allowed</h1>
+
+המשמעות היא שהקריאה ל־POST /api/export-pdf לא מגיעה ל־Express endpoint הנכון, או שהשרת בפרודקשן לא מאפשר POST לנתיב הזה.
+
+נא לבדוק ולתקן:
+
+א. לוודא שב־server.js קיים באמת:
+app.post('/api/export-pdf', ...)
+
+ב. לוודא שהאתר שרץ בדומיין:
+portzot-derech.org
+מוגש דרך אותו שרת Node/Express שמכיל את endpoint ה־PDF, ולא רק כאתר סטטי.
+
+ג. לוודא שה־start script ב־package.json מפעיל את server.js ולא שרת סטטי בלבד.
+
+ד. לוודא שה־fetch בצד לקוח קורא לנתיב הנכון:
+fetch('/api/export-pdf', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(...)
+})
+
+ה. אם הדומיין/פרוקסי מפנה רק לקבצים סטטיים, צריך להגדיר proxy / rewrite כך שכל קריאה ל־/api/export-pdf תגיע ל־Node server.
+
+ו. לוודא שה־Service Worker לא מתערב בבקשות POST ולא שומר את /api/export-pdf ב־cache.
+
+ז. להוסיף טיפול שגיאות תקין בצד לקוח:
+אם response.ok הוא false, לא להציג למשתמש HTML גולמי בתוך alert.
+במקום זה להציג הודעה ברורה:
+"יצוא PDF נכשל. השרת החזיר שגיאה 405. יש לבדוק שה־endpoint /api/export-pdf פעיל בפרודקשן."
+
+2. בעיית הפוסטר:
+גם אחרי תיקוני ההדפסה, הפוסטר בתצוגה עדיין לא נראה טוב.
+נא לבדוק את ה־layout של הפוסטר בעמוד:
+poster-builder/product/editor.html?type=physical
+
+מה לבדוק:
+- שהפוסטר נשאר ביחס A4 תקין.
+- שהוא לא נדחס או מוקטן יותר מדי.
+- שהתיבות לא חופפות, לא נחתכות ולא זזות.
+- שה־preview במסך וה־PDF משתמשים באותו מבנה בסיסי.
+- ש־fitPosterToPage לא מכווץ את התוכן בצורה מוגזמת.
+- שה־scale של התצוגה משפיע רק על preview במסך ולא משנה את ה־HTML שנשלח ל־PDF.
+- שהפוסטר שנשלח ל־Puppeteer הוא בגודל 210mm × 297mm ולא גרסה מוקטנת של ה־preview.
+
+חשוב:
+לא לחזור ל־html2canvas.
+לא ליצור PDF כתמונה.
+לא להשתמש ב־jsPDF.addImage.
+ה־PDF צריך להישאר PDF אמיתי דרך Puppeteer.
+
+בסיום לבדוק:
+- לחיצה על ייצוא PDF לא מחזירה 405.
+- נוצר קובץ PDF אמיתי.
+- אין alert עם HTML גולמי.
+- הפוסטר יוצא A4 בעמוד אחד.
+- הפוסטר נראה תקין גם במסך וגם בקובץ PDF.
