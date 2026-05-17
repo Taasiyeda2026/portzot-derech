@@ -1,7 +1,9 @@
 const POSTER_WIDTH_PX = 794;
 const POSTER_HEIGHT_PX = 1123;
 const IMG_HEIGHTS     = { app: 270, physical: 220, website: 185, digital: 185 };
-const PHYSICAL_FRAME_SIZE = 240;
+const PHYSICAL_FRAME_SIZE = 220;
+const PHYSICAL_FRAME_MIN_SIZE = 180;
+const PHYSICAL_FRAME_FIT_STEPS = [PHYSICAL_FRAME_SIZE, 210, 200, 190, PHYSICAL_FRAME_MIN_SIZE];
 const APP_SCREEN_RATIO = 9 / 16;
 const WEB_SCREEN_RATIO = 16 / 9;
 const WEB_FRAME_WIDTH  = 205;
@@ -245,7 +247,7 @@ function configureImageGrid(productType, layoutKey) {
   const frameCount = frames.length || (layoutKey === 'physical' ? 2 : 3);
 
   if (grid && config.width) {
-    grid.style.gridTemplateColumns = `repeat(${frameCount}, ${config.width}px)`;
+    grid.style.setProperty('grid-template-columns', `repeat(${frameCount}, ${config.width}px)`, 'important');
     grid.style.justifyContent = 'center';
   }
 
@@ -376,6 +378,7 @@ function fitPosterToPage(posterRoot, titleColor) {
   applyPosterCardStyles(posterRoot);
   updateTitleUnderline(posterRoot, titleColor);
 
+  shrinkPhysicalImageFramesForFooter(posterRoot, titleColor);
   if (!isPosterOverflowing(posterRoot)) return;
 
   applyCompactPosterSpacing(posterRoot);
@@ -416,17 +419,58 @@ function applyCompactPosterSpacing(posterRoot) {
   }
 }
 
-function shrinkActiveImageFramesToFit(posterRoot, titleColor) {
-  const activeGrid = ['#ph-images-app', '#ph-images-web', '#ph-images-2']
+function getActiveImageGrid(posterRoot) {
+  if (!posterRoot) return null;
+  return ['#ph-images-app', '#ph-images-web', '#ph-images-2']
     .map(selector => posterRoot.querySelector(selector))
-    .find(grid => grid && window.getComputedStyle(grid).display !== 'none');
+    .find(grid => grid && window.getComputedStyle(grid).display !== 'none') || null;
+}
+
+function getPosterA4Bottom(posterRoot) {
+  if (!posterRoot) return 0;
+  return posterRoot.getBoundingClientRect().top + POSTER_HEIGHT_PX;
+}
+
+function isFooterOutsidePosterBottom(posterRoot) {
+  if (!posterRoot) return false;
+  const footer = posterRoot.querySelector('#ph-footer');
+  if (!footer) return false;
+  return footer.getBoundingClientRect().bottom > getPosterA4Bottom(posterRoot) + 1;
+}
+
+function setPhysicalFrameSize(grid, frames, size) {
+  if (!grid || !frames?.length) return;
+  grid.style.setProperty('grid-template-columns', `repeat(${frames.length}, ${size}px)`, 'important');
+  grid.style.justifyContent = 'center';
+  frames.forEach(frame => applyImageFrameSize(frame, 'physical', size, size));
+}
+
+function shrinkPhysicalImageFramesForFooter(posterRoot, titleColor) {
+  const activeGrid = getActiveImageGrid(posterRoot);
+  if (!activeGrid) return;
+
+  const frames = [...activeGrid.querySelectorAll('[data-ph-img][data-layout="physical"]')];
+  if (!frames.length || !isFooterOutsidePosterBottom(posterRoot)) return;
+
+  const currentHeight = parseFloat(frames[0].style.height) || frames[0].getBoundingClientRect().height || PHYSICAL_FRAME_SIZE;
+  const fittingSteps = PHYSICAL_FRAME_FIT_STEPS.filter(size => size <= currentHeight && size >= PHYSICAL_FRAME_MIN_SIZE);
+
+  for (const size of fittingSteps) {
+    setPhysicalFrameSize(activeGrid, frames, size);
+    updateTitleUnderline(posterRoot, titleColor);
+    if (!isFooterOutsidePosterBottom(posterRoot)) return;
+  }
+}
+
+function shrinkActiveImageFramesToFit(posterRoot, titleColor) {
+  const activeGrid = getActiveImageGrid(posterRoot);
   if (!activeGrid) return;
 
   const frames = [...activeGrid.querySelectorAll('[data-ph-img]')];
   if (!frames.length) return;
 
   const layoutKey = frames[0].dataset.layout;
-  const minHeights = { app: 216, website: 96, physical: 165 };
+  const minHeights = { app: 216, website: 96, physical: PHYSICAL_FRAME_MIN_SIZE };
   const minHeight = minHeights[layoutKey] || 96;
 
   for (let attempt = 0; attempt < 24 && isPosterOverflowing(posterRoot); attempt += 1) {
@@ -440,7 +484,7 @@ function shrinkActiveImageFramesToFit(posterRoot, titleColor) {
     if (layoutKey === 'physical') nextWidth = nextHeight;
 
     if (nextWidth) {
-      activeGrid.style.gridTemplateColumns = `repeat(${frames.length}, ${nextWidth}px)`;
+      activeGrid.style.setProperty('grid-template-columns', `repeat(${frames.length}, ${nextWidth}px)`, 'important');
       activeGrid.style.justifyContent = 'center';
     }
 
