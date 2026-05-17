@@ -413,37 +413,27 @@ function setList(id, items) {
 
 ## פונקציית ייצוא PDF — `exportHTMLPosterToPDF()`
 
-מחליפה את `exportPDF()` הקיים.
+מחליפה את מנגנון ה-PDF הישן ומבצעת ייצוא דרך מנגנון ההדפסה של הדפדפן בלבד.
 
 ```javascript
-async function exportHTMLPosterToPDF(contentValues) {
+async function exportHTMLPosterToPDF() {
   const poster = document.getElementById('poster-html');
   if (!poster) return;
 
-  const canvas = await html2canvas(poster, {
-    scale: 2,
-    useCORS: true,
-    backgroundColor: '#ffffff',
-    logging: false,
-    width: 794,
-    height: poster.scrollHeight,
-    windowWidth: 794,
-  });
+  if (document.fonts?.ready) await document.fonts.ready;
+  await Promise.all([...poster.querySelectorAll('img')].map(waitForPosterImage));
+  fitPosterToPage(poster);
 
-  const { jsPDF } = window.jspdf;
-  const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-  const imgData = canvas.toDataURL('image/jpeg', 0.96);
-  pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297);
-
-  const name = (contentValues.projectName || 'פוסטר').trim().replace(/\s+/g, '-');
-  pdf.save(`${name}.pdf`);
+  document.body.classList.add('printing-poster');
+  try {
+    window.print();
+  } finally {
+    setTimeout(() => document.body.classList.remove('printing-poster'), 1000);
+  }
 }
 ```
 
-**שים לב:** html2canvas כבר מוטען ב-index.html. אם לא — להוסיף:
-```html
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-```
+**שים לב:** אין ליצור PDF מתמונת מסך או מתמונת פוסטר שטוחה. מסלול הייצוא חייב להישאר DOM מודפס: טעינת פונטים ותמונות → התאמת layout → `window.print()`.
 
 ---
 
@@ -479,7 +469,7 @@ async function exportHTMLPosterToPDF(contentValues) {
 
 ### ב-`index.html`:
 - **להסיר** את שורת טעינת `fabric.min.js`
-- **לוודא** שקיים: `html2canvas`, `jspdf`, `react`, `react-dom`
+- **לוודא** שקיים: `react`, `react-dom` בלבד; אין להוסיף ספריות צילום/יצירת PDF מבוססות תמונה.
 
 ### ב-CSS:
 - **להוסיף** את כל `.ph-*` classes המפורטות למעלה

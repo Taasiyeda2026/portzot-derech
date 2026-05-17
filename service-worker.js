@@ -1,4 +1,4 @@
-const CACHE_NAME = "portzot-derech-v49";
+const CACHE_NAME = "portzot-derech-v50";
 
 const CORE_ASSETS = [
   "./",
@@ -9,6 +9,7 @@ const CORE_ASSETS = [
   "./icon/generated-icon.png",
   "./icon/logo.png",
   "./poster-builder/product/editor.html",
+  "./poster-builder/poster-builder-v2.html",
   "./poster-builder/src/canvas/html-poster.js",
   "./poster-builder/src/products/split-flow/main.js",
   "./poster-builder/src/styles/product-builder.css"

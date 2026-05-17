@@ -340,9 +340,30 @@ async function compressImageFile(file, maxWidth = 2000, maxHeight = 2600, qualit
   if (!ctx) throw new Error('לא ניתן לעבד את התמונה כרגע.');
   ctx.drawImage(image, 0, 0, targetWidth, targetHeight);
 
-  const webp = canvas.toDataURL('image/webp', quality);
+  const webp = await canvasToDataUrlViaBlob(canvas, 'image/webp', quality);
   if (webp && webp.startsWith('data:image/webp')) return webp;
-  return canvas.toDataURL('image/jpeg', quality);
+  const jpeg = await canvasToDataUrlViaBlob(canvas, 'image/jpeg', quality);
+  if (!jpeg) throw new Error('לא ניתן לדחוס את התמונה כרגע.');
+  return jpeg;
+}
+
+function canvasToDataUrlViaBlob(canvas, type, quality) {
+  return new Promise((resolve) => {
+    if (typeof canvas.toBlob !== 'function') {
+      resolve(null);
+      return;
+    }
+    canvas.toBlob((blob) => {
+      if (!blob) {
+        resolve(null);
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = () => resolve(null);
+      reader.readAsDataURL(blob);
+    }, type, quality);
+  });
 }
 
 function getSlotUploadStatus(slotKey) {

@@ -1334,7 +1334,7 @@ body {
         <!-- כפתורים -->
         <div class="ps-section" style="margin-top:auto;gap:10px">
           <button class="btn-primary" onclick="buildPoster()" style="width:100%">🌸 צרו את הפוסטר</button>
-          <button class="btn-pdf" onclick="downloadPDF()" id="btn-pdf" style="width:100%;display:none">⬇️ הורדת PDF</button>
+          <button class="btn-pdf" onclick="downloadPDF()" id="btn-pdf" style="width:100%;display:none">⎙ ייצוא PDF</button>
           <button class="btn-ghost" onclick="goTo(2)" style="width:100%">← חזרה לשאלות</button>
         </div>
       </aside>
@@ -1737,38 +1737,55 @@ function buildPoster() {
 }
 
 /* ============================================================
-   הורדת PDF
+   ייצוא PDF דרך הדפסת דפדפן
    ============================================================ */
 async function downloadPDF() {
   document.getElementById('loading').classList.add('visible');
   try {
-    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
-    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
-
     const poster = document.getElementById('poster');
-    const canvas = await html2canvas(poster, {
-      scale: 2,
-      useCORS: true,
-      backgroundColor: '#ffffff',
-      logging: false,
-      width: 794,
-      height: poster.scrollHeight,
-      windowWidth: 794,
-    });
+    if (!poster) throw new Error('לא נמצא פוסטר להדפסה.');
 
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF({ orientation:'portrait', unit:'mm', format:'a4' });
-    const imgData = canvas.toDataURL('image/jpeg', 0.96);
-    pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297);
+    if (document.fonts?.ready) await document.fonts.ready;
+    await Promise.all([...poster.querySelectorAll('img')].map(waitForPosterImage));
+    await waitForAnimationFrame();
+    await waitForAnimationFrame();
 
-    const name = val('f-name') || 'פוסטר';
-    pdf.save(`פוסטר-${name}.pdf`);
+    const previousTitle = document.title;
+    const name = (val('f-name') || 'פוסטר').replace(/[\/:*?"<>|]/g, '').replace(/\s+/g, '-');
+    document.title = `פוסטר-${name || 'פוסטר'}`;
+    try {
+      if (typeof window.print !== 'function') throw new Error('window.print is not available');
+      window.print();
+    } finally {
+      setTimeout(() => { document.title = previousTitle; }, 1000);
+    }
   } catch(e) {
     console.error(e);
-    alert('שגיאה ביצירת ה-PDF. נסי שוב.');
+    alert('שגיאה בפתיחת חלון ההדפסה. נסי שוב.');
   } finally {
     document.getElementById('loading').classList.remove('visible');
   }
+}
+
+function waitForAnimationFrame() {
+  return new Promise((resolve) => requestAnimationFrame(resolve));
+}
+
+async function waitForPosterImage(img) {
+  if (!img) return;
+  if (typeof img.decode === 'function') {
+    try {
+      await img.decode();
+      return;
+    } catch(e) {
+      // Continue with load/error handlers for browsers that reject decode().
+    }
+  }
+  if (img.complete && img.naturalWidth !== 0) return;
+  await new Promise((resolve) => {
+    img.addEventListener('load', resolve, { once: true });
+    img.addEventListener('error', resolve, { once: true });
+  });
 }
 
 /* ============================================================
@@ -1786,14 +1803,6 @@ function setList(id, items) {
   if (!el) return;
   el.innerHTML = items.filter(Boolean)
     .map(t => `<li>${t}</li>`).join('');
-}
-function loadScript(src) {
-  return new Promise((res, rej) => {
-    if (document.querySelector(`script[src="${src}"]`)) { res(); return; }
-    const s = document.createElement('script');
-    s.src = src; s.onload = res; s.onerror = rej;
-    document.head.appendChild(s);
-  });
 }
 </script>
 </body>
