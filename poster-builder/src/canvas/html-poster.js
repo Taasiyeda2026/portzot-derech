@@ -143,20 +143,28 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
   const resolvedFontStack = `'${resolvedFont}', 'IBM Plex Sans Hebrew', sans-serif`;
 
   // ── Apply textColor + font to regular body / bullet elements ─────────────────
-  document.querySelectorAll('.ph-body, .ph-sub').forEach(el => {
+  document.querySelectorAll('.ph-body').forEach(el => {
     if (el.closest('.ph-card-accent')) return; // accent cards handled below
     el.style.color      = resolvedText;
     el.style.fontWeight = '400';
     el.style.fontFamily = resolvedFontStack;
-    el.style.fontSize   = '16.5px';
-    el.style.lineHeight = '2.05';
+    el.style.fontSize   = '14.5px';
+    el.style.lineHeight = '1.5';
+  });
+  document.querySelectorAll('.ph-sub').forEach(el => {
+    if (el.closest('.ph-card-accent')) return;
+    el.style.color      = resolvedText;
+    el.style.fontWeight = '400';
+    el.style.fontFamily = resolvedFontStack;
+    el.style.fontSize   = '14px';
+    el.style.lineHeight = '1.45';
   });
   document.querySelectorAll('.ph-bullets li').forEach(el => {
     el.style.color      = resolvedText;
     el.style.fontWeight = '400';
     el.style.fontFamily = resolvedFontStack;
-    el.style.fontSize   = '16.5px';
-    el.style.lineHeight = '1.98';
+    el.style.fontSize   = '14px';
+    el.style.lineHeight = '1.45';
   });
   document.querySelectorAll('#ph-names, #ph-school').forEach(el => {
     el.style.color      = resolvedText;
@@ -169,8 +177,8 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
   if (descEl) {
     descEl.style.color        = resolvedText;
     descEl.style.fontWeight   = '700';
-    descEl.style.fontSize     = '16.5px';
-    descEl.style.lineHeight   = '1.98';
+    descEl.style.fontSize     = '13.5px';
+    descEl.style.lineHeight   = '1.4';
     descEl.style.fontFamily   = resolvedFontStack;
     descEl.style.background   = 'rgba(255,255,255,0.72)';
     descEl.style.padding      = '6px 12px';
@@ -183,8 +191,8 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
     el.style.color      = resolvedTitle;
     el.style.fontWeight = '400';
     el.style.fontFamily = resolvedFontStack;
-    el.style.fontSize   = '16.5px';
-    el.style.lineHeight = '2.05';
+    el.style.fontSize   = '14.5px';
+    el.style.lineHeight = '1.45';
   });
 
   const solutionEl = document.getElementById('ph-solution');
@@ -201,8 +209,8 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
   document.querySelectorAll('.ph-cap').forEach(el => {
     el.style.color      = resolvedTitle;
     el.style.fontFamily = resolvedFontStack;
-    el.style.fontSize   = '18px';
-    el.style.lineHeight = '1.35';
+    el.style.fontSize   = '16.5px';
+    el.style.lineHeight = '1.25';
   });
   const imagesLabel = document.getElementById('ph-images-label');
   if (imagesLabel) imagesLabel.style.color = resolvedTitle;
