@@ -351,6 +351,7 @@ function resetPosterFitState(posterRoot) {
     '#ph-images-label': ['margin-bottom'],
     '#ph-images-2, #ph-images-app, #ph-images-web': ['gap'],
     '.ph-card': ['padding', 'border-radius'],
+    '.ph-audience-card': ['padding', 'margin-top', 'margin-bottom'],
     '.ph-grid-problem, .ph-grid-research, .ph-grid-solution, .ph-grid-process': ['gap', 'margin-top'],
     '.ph-cap': ['font-size', 'line-height', 'margin-bottom', 'letter-spacing'],
     '.ph-body': ['font-size', 'line-height'],
@@ -498,7 +499,7 @@ function applyCompactPosterSpacing(posterRoot) {
   }
 
   const imagesWrap = posterRoot.querySelector('.ph-images-wrap');
-  if (imagesWrap) imagesWrap.style.setProperty('margin-block', '0 6px', 'important');
+  if (imagesWrap) imagesWrap.style.setProperty('margin-block', '1px 4px', 'important');
 
   const imageLabel = posterRoot.querySelector('#ph-images-label');
   if (imageLabel) imageLabel.style.setProperty('margin-bottom', '3px', 'important');
@@ -521,7 +522,11 @@ function applyCompactPosterSpacing(posterRoot) {
   });
 
   const audienceCard = posterRoot.querySelector('.ph-audience-card');
-  if (audienceCard) audienceCard.style.setProperty('padding', '5px 10px', 'important');
+  if (audienceCard) {
+    audienceCard.style.setProperty('padding', '5px 10px', 'important');
+    audienceCard.style.setProperty('margin-top', '-4px', 'important');
+    audienceCard.style.setProperty('margin-bottom', '4px', 'important');
+  }
 }
 
 function applySecondaryTextCompression(posterRoot) {
