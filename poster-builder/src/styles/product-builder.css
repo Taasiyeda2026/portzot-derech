@@ -2115,24 +2115,25 @@ canvas {
   border-right: 3.5px solid var(--ph-title-color, #5E2750);
 }
 .ph-cap {
-  font-size: 14px; font-weight: 900; color: var(--ph-title-color, #5E2750);
-  letter-spacing: 0; line-height: 1.25;
+  font-size: 16px; font-weight: 900; color: var(--ph-title-color, #5E2750);
+  letter-spacing: 0; line-height: 1.35;
   margin-bottom: 7px; display: flex; align-items: center; gap: 5px;
 }
 .ph-cap::before {
   content: ''; display: inline-block;
   width: 12px; height: 2.5px; background: var(--ph-title-color, #5E2750); border-radius: 1px;
 }
-.ph-body { font-size: 13.5px; font-weight: 400; color: var(--ph-text-color, #1f1030); line-height: 1.43; word-break: break-word; overflow-wrap: anywhere; }
-.ph-sub  { font-size: 12px; font-weight: 400; color: #8a7aa0; margin-top: 4px; line-height: 1.35; }
+.ph-body { font-size: 15px; font-weight: 400; color: var(--ph-text-color, #1f1030); line-height: 1.75; word-break: break-word; overflow-wrap: anywhere; }
+.ph-sub  { font-size: 15px; font-weight: 400; color: #8a7aa0; margin-top: 4px; line-height: 1.75; }
 .ph-card-accent .ph-body {
   color: var(--ph-title-color, #5E2750);
   font-weight: 400;
-  font-size: 14px;
+  font-size: 15px;
+  line-height: 1.75;
 }
 .ph-bullets { list-style: none; margin-top: 3px; padding: 0; }
 .ph-bullets li {
-  font-size: 13.5px; font-weight: 400; color: var(--ph-text-color, #1f1030); line-height: 1.4;
+  font-size: 15px; font-weight: 400; color: var(--ph-text-color, #1f1030); line-height: 1.7;
   padding-right: 14px; position: relative; margin-bottom: 3px;
 }
 .ph-bullets li::before {
@@ -2261,24 +2262,24 @@ canvas {
 #poster-html.ph-pad-tight .ph-cap { margin-bottom: 5px; }
 #poster-html.ph-pad-tight .ph-bullets li { margin-bottom: 2px; }
 
-#poster-html.ph-line-tight .ph-body { line-height: 1.5; }
-#poster-html.ph-line-tight .ph-sub { line-height: 1.4; margin-top: 3px; }
-#poster-html.ph-line-tight .ph-card-accent .ph-body { line-height: 1.44; }
-#poster-html.ph-line-tight .ph-bullets li { line-height: 1.42; margin-bottom: 1px; }
+#poster-html.ph-line-tight .ph-body { line-height: 1.55; }
+#poster-html.ph-line-tight .ph-sub { line-height: 1.5; margin-top: 3px; }
+#poster-html.ph-line-tight .ph-card-accent .ph-body { line-height: 1.55; }
+#poster-html.ph-line-tight .ph-bullets li { line-height: 1.5; margin-bottom: 1px; }
 
-#poster-html.ph-text-tight .ph-body { font-size: 12px; line-height: 1.38; }
-#poster-html.ph-text-tight .ph-sub { font-size: 11px; line-height: 1.32; margin-top: 2px; }
-#poster-html.ph-text-tight .ph-card-accent .ph-body { font-size: 12px; }
+#poster-html.ph-text-tight .ph-body { font-size: 12.5px; line-height: 1.42; }
+#poster-html.ph-text-tight .ph-sub { font-size: 12.5px; line-height: 1.4; margin-top: 2px; }
+#poster-html.ph-text-tight .ph-card-accent .ph-body { font-size: 12.5px; }
 #poster-html.ph-text-tight .ph-bullets { margin-top: 1px; }
-#poster-html.ph-text-tight .ph-bullets li { font-size: 12px; line-height: 1.34; margin-bottom: 0; padding-right: 12px; }
+#poster-html.ph-text-tight .ph-bullets li { font-size: 12.5px; line-height: 1.4; margin-bottom: 0; padding-right: 12px; }
 
 #poster-html.ph-cap-tight .ph-card { padding: 7px 9px; border-radius: 9px; }
-#poster-html.ph-cap-tight .ph-cap { font-size: 12px; margin-bottom: 3px; letter-spacing: 0; }
+#poster-html.ph-cap-tight .ph-cap { font-size: 12.5px; line-height: 1.35; margin-bottom: 3px; letter-spacing: 0; }
 #poster-html.ph-cap-tight .ph-cap::before { width: 10px; height: 2px; }
-#poster-html.ph-cap-tight .ph-body { font-size: 11.5px; line-height: 1.32; }
-#poster-html.ph-cap-tight .ph-sub { font-size: 10.5px; line-height: 1.26; margin-top: 2px; }
-#poster-html.ph-cap-tight .ph-card-accent .ph-body { font-size: 11.5px; }
-#poster-html.ph-cap-tight .ph-bullets li { font-size: 11.5px; line-height: 1.28; }
+#poster-html.ph-cap-tight .ph-body { font-size: 12.5px; line-height: 1.38; }
+#poster-html.ph-cap-tight .ph-sub { font-size: 12.5px; line-height: 1.35; margin-top: 2px; }
+#poster-html.ph-cap-tight .ph-card-accent .ph-body { font-size: 12.5px; }
+#poster-html.ph-cap-tight .ph-bullets li { font-size: 12.5px; line-height: 1.35; }
 #poster-html.ph-cap-tight #ph-footer { padding-top: 6px !important; padding-bottom: 6px !important; }
 
 /* ─── ייצוא PDF אמיתי דרך הדפסת DOM של הדפדפן ───────── */

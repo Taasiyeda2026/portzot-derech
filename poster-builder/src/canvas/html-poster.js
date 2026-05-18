@@ -140,11 +140,15 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
     el.style.color      = resolvedText;
     el.style.fontWeight = '400';
     el.style.fontFamily = resolvedFontStack;
+    el.style.fontSize   = '15px';
+    el.style.lineHeight = '1.75';
   });
   document.querySelectorAll('.ph-bullets li').forEach(el => {
     el.style.color      = resolvedText;
     el.style.fontWeight = '400';
     el.style.fontFamily = resolvedFontStack;
+    el.style.fontSize   = '15px';
+    el.style.lineHeight = '1.7';
   });
   document.querySelectorAll('#ph-names, #ph-school').forEach(el => {
     el.style.color      = resolvedText;
@@ -158,6 +162,7 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
     descEl.style.color        = resolvedText;
     descEl.style.fontWeight   = '700';
     descEl.style.fontSize     = '15px';
+    descEl.style.lineHeight   = '1.75';
     descEl.style.fontFamily   = resolvedFontStack;
     descEl.style.background   = 'rgba(255,255,255,0.72)';
     descEl.style.padding      = '6px 12px';
@@ -170,12 +175,16 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
     el.style.color      = resolvedTitle;
     el.style.fontWeight = '400';
     el.style.fontFamily = resolvedFontStack;
+    el.style.fontSize   = '15px';
+    el.style.lineHeight = '1.75';
   });
 
   // ── Apply titleColor + font to .ph-cap, ph-images-label ─────────────────────
   document.querySelectorAll('.ph-cap').forEach(el => {
     el.style.color      = resolvedTitle;
     el.style.fontFamily = resolvedFontStack;
+    el.style.fontSize   = '16px';
+    el.style.lineHeight = '1.35';
   });
   const imagesLabel = document.getElementById('ph-images-label');
   if (imagesLabel) imagesLabel.style.color = resolvedTitle;
@@ -519,20 +528,20 @@ function applySecondaryTextCompression(posterRoot) {
   if (!posterRoot) return;
   posterRoot.querySelectorAll('.ph-body').forEach((el) => {
     if (el.id === 'ph-solution') return;
-    el.style.setProperty('font-size', '11.5px', 'important');
-    el.style.setProperty('line-height', '1.4', 'important');
+    el.style.setProperty('font-size', '12.5px', 'important');
+    el.style.setProperty('line-height', '1.42', 'important');
   });
   posterRoot.querySelectorAll('.ph-sub').forEach((el) => {
-    el.style.setProperty('font-size', '10px', 'important');
-    el.style.setProperty('line-height', '1.35', 'important');
+    el.style.setProperty('font-size', '12.5px', 'important');
+    el.style.setProperty('line-height', '1.4', 'important');
     el.style.setProperty('margin-top', '2px', 'important');
   });
   posterRoot.querySelectorAll('.ph-bullets').forEach((el) => {
     el.style.setProperty('margin-top', '1px', 'important');
   });
   posterRoot.querySelectorAll('.ph-bullets li').forEach((el) => {
-    el.style.setProperty('font-size', '11.5px', 'important');
-    el.style.setProperty('line-height', '1.36', 'important');
+    el.style.setProperty('font-size', '12.5px', 'important');
+    el.style.setProperty('line-height', '1.4', 'important');
     el.style.setProperty('margin-bottom', '0', 'important');
   });
 }
@@ -544,19 +553,19 @@ function applyFinalTextCompression(posterRoot) {
     card.style.setProperty('border-radius', '9px', 'important');
   });
   posterRoot.querySelectorAll('.ph-cap').forEach((el) => {
-    el.style.setProperty('font-size', '11px', 'important');
-    el.style.setProperty('line-height', '1.25', 'important');
+    el.style.setProperty('font-size', '12.5px', 'important');
+    el.style.setProperty('line-height', '1.35', 'important');
     el.style.setProperty('margin-bottom', '3px', 'important');
     el.style.setProperty('letter-spacing', '0', 'important');
   });
   posterRoot.querySelectorAll('.ph-body').forEach((el) => {
     if (el.id === 'ph-solution') return;
-    el.style.setProperty('font-size', '11px', 'important');
-    el.style.setProperty('line-height', '1.32', 'important');
+    el.style.setProperty('font-size', '12.5px', 'important');
+    el.style.setProperty('line-height', '1.38', 'important');
   });
   posterRoot.querySelectorAll('.ph-bullets li').forEach((el) => {
-    el.style.setProperty('font-size', '11px', 'important');
-    el.style.setProperty('line-height', '1.28', 'important');
+    el.style.setProperty('font-size', '12.5px', 'important');
+    el.style.setProperty('line-height', '1.35', 'important');
   });
   const footer = posterRoot.querySelector('#ph-footer');
   if (footer) {
