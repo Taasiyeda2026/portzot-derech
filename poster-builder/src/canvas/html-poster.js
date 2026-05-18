@@ -140,15 +140,15 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
     el.style.color      = resolvedText;
     el.style.fontWeight = '400';
     el.style.fontFamily = resolvedFontStack;
-    el.style.fontSize   = '15px';
-    el.style.lineHeight = '1.75';
+    el.style.fontSize   = '16.5px';
+    el.style.lineHeight = '1.9';
   });
   document.querySelectorAll('.ph-bullets li').forEach(el => {
     el.style.color      = resolvedText;
     el.style.fontWeight = '400';
     el.style.fontFamily = resolvedFontStack;
-    el.style.fontSize   = '15px';
-    el.style.lineHeight = '1.7';
+    el.style.fontSize   = '16.5px';
+    el.style.lineHeight = '1.85';
   });
   document.querySelectorAll('#ph-names, #ph-school').forEach(el => {
     el.style.color      = resolvedText;
@@ -161,8 +161,8 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
   if (descEl) {
     descEl.style.color        = resolvedText;
     descEl.style.fontWeight   = '700';
-    descEl.style.fontSize     = '15px';
-    descEl.style.lineHeight   = '1.75';
+    descEl.style.fontSize     = '16.5px';
+    descEl.style.lineHeight   = '1.9';
     descEl.style.fontFamily   = resolvedFontStack;
     descEl.style.background   = 'rgba(255,255,255,0.72)';
     descEl.style.padding      = '6px 12px';
@@ -175,15 +175,15 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
     el.style.color      = resolvedTitle;
     el.style.fontWeight = '400';
     el.style.fontFamily = resolvedFontStack;
-    el.style.fontSize   = '15px';
-    el.style.lineHeight = '1.75';
+    el.style.fontSize   = '16.5px';
+    el.style.lineHeight = '1.9';
   });
 
   // ── Apply titleColor + font to .ph-cap, ph-images-label ─────────────────────
   document.querySelectorAll('.ph-cap').forEach(el => {
     el.style.color      = resolvedTitle;
     el.style.fontFamily = resolvedFontStack;
-    el.style.fontSize   = '16px';
+    el.style.fontSize   = '18px';
     el.style.lineHeight = '1.35';
   });
   const imagesLabel = document.getElementById('ph-images-label');

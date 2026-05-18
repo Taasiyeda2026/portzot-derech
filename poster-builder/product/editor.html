@@ -163,9 +163,9 @@
       line-height: 1.75;
     }
     .ph-cap {
-      font-size: 16px; font-weight: 900; color: var(--ph-title-color, #5E2750);
+      font-size: 18px; font-weight: 900; color: var(--ph-title-color, #5E2750);
       line-height: 1.35;
-      text-transform: uppercase; letter-spacing: 1px;
+      text-transform: uppercase; letter-spacing: 0.5px;
       margin-bottom: 6px; display: flex; align-items: center; gap: 5px;
     }
     .ph-cap,
@@ -200,8 +200,8 @@
       mask: none;
       flex-shrink: 0;
     }
-    .ph-body { font-size: 15px; font-weight: 400; color: var(--ph-text-color, #1f1030); line-height: 1.75; word-break: break-word; overflow-wrap: anywhere; }
-    .ph-sub  { font-size: 15px; font-weight: 400; color: #8a7aa0; margin-top: 4px; line-height: 1.75; }
+    .ph-body { font-size: 16.5px; font-weight: 400; color: var(--ph-text-color, #1f1030); line-height: 1.9; word-break: break-word; overflow-wrap: anywhere; }
+    .ph-sub  { font-size: 16.5px; font-weight: 400; color: #8a7aa0; margin-top: 4px; line-height: 1.9; }
     .ph-bullets {
       list-style: none;
       margin-top: 3px;
@@ -211,10 +211,10 @@
       display: flex;
       align-items: baseline;
       gap: 6px;
-      font-size: 15px;
+      font-size: 16.5px;
       font-weight: 400;
       color: var(--ph-text-color, #1f1030);
-      line-height: 1.7;
+      line-height: 1.85;
       margin-bottom: 3px;
       padding: 0;
     }
@@ -488,7 +488,6 @@
   <div class="poster-bar-actions">
     <button class="bar-btn back" id="btn-back">‹ חזרה</button>
     <button class="bar-btn print-local" id="btn-print-local">שמירה כ־PDF</button>
-    <button class="bar-btn export" id="btn-export">ייצוא PDF</button>
     <button class="bar-btn finish" id="btn-finish">סיום ›</button>
   </div>
 </div>
@@ -672,20 +671,6 @@
     }
   });
 
-  document.getElementById('btn-export').addEventListener('click', async () => {
-    const btn = document.getElementById('btn-export');
-    btn.disabled = true;
-    btn.textContent = 'מייצא...';
-    try {
-      await exportHTMLPosterToPDF();
-    } catch (err) {
-      console.error('PDF export failed:', err);
-      alert('שגיאה בייצוא — נסי שנית');
-    } finally {
-      btn.disabled = false;
-      btn.textContent = 'ייצוא PDF';
-    }
-  });
 
   function updatePosterScale() {
     const wrapper = document.querySelector('.poster-scale-wrapper');
