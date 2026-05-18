@@ -1,7 +1,7 @@
 import { getVisualSlots, getPosterFields, FIELD_DEFINITIONS, BACKGROUNDS, AVAILABLE_FONTS } from '../physical/config.js';
 import { saveProject, loadProject } from '../../shared/storage.js';
 import { createPosterSubmission, updatePosterSubmission } from '../../shared/poster-submissions.js';
-import { getSchoolConfig, KNOWN_SCHOOL_SLUGS } from '../../shared/schools-config.js';
+import { resolveSchoolConfig } from '../../shared/poster-schools.js';
 
 const PRODUCT_TYPES = ['app', 'physical', 'website', 'digital'];
 
@@ -22,9 +22,10 @@ const productType = requestedProductType;
 const root = document.getElementById('root');
 
 // ── School configuration ──────────────────────────────────────────────────────
-const schoolSlug = new URLSearchParams(window.location.search).get('school') || 'default';
-const schoolKnown = KNOWN_SCHOOL_SLUGS.has(schoolSlug);
-const schoolConfig = getSchoolConfig(schoolKnown ? schoolSlug : 'default');
+const requestedSchoolSlug = new URLSearchParams(window.location.search).get('school') || 'default';
+const schoolConfig = await resolveSchoolConfig(requestedSchoolSlug);
+const schoolSlug = schoolConfig.slug || 'default';
+const schoolKnown = schoolConfig.known !== false;
 const STEP_LABELS = productType === 'physical'
   ? ['שאלות חקר', 'פרומפט ותמונות', 'פוסטר']
   : ['שאלות חקר', 'פרומפט', 'תמונות', 'פוסטר'];
@@ -45,7 +46,7 @@ const SHAPE_OPTIONS = [
   { value: 20, label: 'עגול' }
 ];
 
-const posterSize = loadProject()?.posterSize || 'A4';
+const posterSize = loadProject(schoolSlug)?.posterSize || 'A4';
 const valueFieldDef = FIELD_DEFINITIONS.find((field) => field.id === 'value');
 const valueRect = getPosterFields(posterSize, productType).find((field) => field.id === 'value');
 
@@ -176,7 +177,7 @@ const state = {
     takeaway: ''
   })),
   design: {
-    background: loadProject()?.background || null,
+    background: loadProject(schoolSlug)?.background || null,
     titleFont: AVAILABLE_FONTS[0]?.value || 'IBM Plex Sans Hebrew',
     titleColor: '#5E2750',
     textColor: '#1f2937',
@@ -216,7 +217,7 @@ function migrateSharedVisualPrompt(splitFlowState = {}) {
 }
 
 function hydrateStateFromStorage() {
-  const project = loadProject();
+  const project = loadProject(schoolSlug);
   const stored = project?.splitFlowState;
   if (!stored || stored.productType !== productType) return;
 
@@ -292,10 +293,11 @@ function buildPosterContentValues() {
 }
 
 function persistSplitFlowState() {
-  const stored = loadProject() || {};
+  const stored = loadProject(schoolSlug) || {};
   saveProject({
     ...stored,
     productType,
+    school_slug: schoolSlug,
     slotImages: { ...state.slotImages },
     contentValues: {
       ...(stored.contentValues || {}),
@@ -981,7 +983,7 @@ function normalizeAppImageMapping() {
 
 function buildCurrentPosterProject() {
   const contentValues = buildPosterContentValues();
-  const stored = loadProject() || {};
+  const stored = loadProject(schoolSlug) || {};
   const selectedBackground = activeBackgrounds.find((bg) => bg.path === state.design.background);
   const nextFieldSettings = Object.fromEntries(
     FIELD_DEFINITIONS.map((field) => [
@@ -1030,7 +1032,7 @@ function seedPosterBuilderState() {
   saveProject(project);
 }
 
-const SUBMISSION_ID_KEY = 'poster_submission_id';
+const SUBMISSION_ID_KEY = `poster_submission_id:${schoolSlug}:${productType}`;
 
 async function submitPoster() {
   if (state.submitStatus === 'sending') return;
@@ -1337,7 +1339,7 @@ function renderStep4() {
       </div>
     </div>
     <div class="split-final-actions">
-      <a class="split-btn primary" href="./editor.html?type=${requestedProductType}">יצירת הפוסטר</a>
+      <a class="split-btn primary" href="./editor.html?type=${requestedProductType}${schoolSlug !== 'default' ? `&school=${encodeURIComponent(schoolSlug)}` : ''}">יצירת הפוסטר</a>
       <button type="button" class="split-btn submit" data-submit-poster ${state.submitStatus === 'sending' ? 'disabled' : ''}>${state.submitStatus === 'sending' ? 'שולחות...' : 'שליחת פוסטר'}</button>
     </div>
     ${state.submitMessage ? `<p class="split-submit-message ${state.submitStatus}">${escapeHtml(state.submitMessage)}</p>` : ''}
@@ -1382,6 +1384,10 @@ function render() {
     html,body,#root{height:auto;min-height:100%}
     body{overflow-y:auto;overflow-x:hidden;background:radial-gradient(circle at top,#f8f3ff 0%,#f6f8fc 45%,#f2f5fb 100%)}
     .split-shell{max-width:980px;margin:0 auto;padding:30px 18px 42px;font-family:'IBM Plex Sans Hebrew','Rubik',sans-serif;color:#1f2937;direction:rtl}
+    .split-school-intro{display:flex;align-items:center;justify-content:center;gap:12px;margin:0 auto 12px;padding:12px 16px;width:fit-content;max-width:100%;border-radius:16px;background:#fff;border:1px solid #e2d4fb;box-shadow:0 4px 18px rgba(94,39,80,.09)}
+    .split-school-intro img{width:54px;height:54px;object-fit:contain;border-radius:10px;background:#fff}
+    .split-school-intro span{display:block;font-size:12px;color:#7c3aed;font-weight:700}
+    .split-school-intro strong{display:block;font-size:18px;color:#4c1d95}
     .split-header{margin-bottom:14px;text-align:center;padding:18px 22px;border-radius:20px;background:linear-gradient(155deg,#fff 0%,#f6f0ff 100%);border:1px solid rgba(196,181,253,.5);box-shadow:0 8px 32px rgba(94,39,80,.12),0 2px 6px rgba(94,39,80,.06)}
     .split-title{margin:0;font-size:1.7rem;color:#5E2750}
     .split-sub{margin:8px 0 0;color:#59657a}
@@ -1501,7 +1507,8 @@ function render() {
       <h1 class="split-title">בונות פוסטר חקר — ${PRODUCT_TITLE[requestedProductType] || PRODUCT_TITLE.website}</h1>
       <p class="split-sub">כל הזרימה מותאמת לשלב החקר, הפרומפט והתמונות, עם מיפוי לפוסטר הקיים.</p>
     </header>
-    ${!schoolKnown ? `<div class="split-alert">קוד בית הספר "<strong>${escapeHtml(schoolSlug)}</strong>" לא נמצא. נטענת תצורת ברירת המחדל.</div>` : ''}
+    ${!schoolKnown ? `<div class="split-alert">קוד בית הספר "<strong>${escapeHtml(requestedSchoolSlug)}</strong>" לא נמצא. נטענת תצורת ברירת המחדל.</div>` : ''}
+    ${renderSchoolIntro()}
     ${renderStepper()}
     ${state.visibleErrors.length ? '<div class="split-alert">יש להשלים את השדות החסרים לפני מעבר לשלב הבא.</div>' : ''}
     <section class="split-body">${renderBody()}</section>
@@ -1513,6 +1520,18 @@ function render() {
   </main>
   ${state.pendingWarningStep ? renderMissingDataWarningModal() : ''}`;
   wireEvents();
+}
+
+
+function renderSchoolIntro() {
+  if (!schoolConfig.name && !schoolConfig.logo) return '';
+  return `<section class="split-school-intro">
+    ${schoolConfig.logo ? `<img src="${escapeHtml(schoolConfig.logo)}" alt="${escapeHtml(schoolConfig.name || 'לוגו בית הספר')}" />` : ''}
+    <div>
+      <span>בית ספר</span>
+      <strong>${escapeHtml(schoolConfig.name || 'פורצות דרך')}</strong>
+    </div>
+  </section>`;
 }
 
 function toggleArray(target, value, max) {

@@ -50,6 +50,7 @@ function buildSubmissionRow(project) {
     class_name: contentValues.className || null,
     school_name: contentValues.schoolName || null,
     product_type: posterData.productType,
+    school_slug: posterData.school_slug || 'default',
     poster_data: posterData
   };
 }
@@ -85,7 +86,7 @@ export async function listPosterSubmissions() {
   if (!client) throw new Error('Poster submissions are not configured.');
   const { data, error } = await client
     .from(POSTER_SUBMISSIONS_TABLE)
-    .select('id, created_at, project_name, student_names, class_name, school_name, product_type')
+    .select('id, created_at, project_name, student_names, class_name, school_name, product_type, school_slug')
     .order('created_at', { ascending: false });
   if (error) throw error;
   return data || [];

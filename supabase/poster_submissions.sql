@@ -6,5 +6,10 @@ create table if not exists public.poster_submissions (
   class_name text,
   school_name text,
   product_type text,
+  school_slug text not null default 'default',
   poster_data jsonb not null
 );
+
+
+alter table public.poster_submissions
+  add column if not exists school_slug text not null default 'default';

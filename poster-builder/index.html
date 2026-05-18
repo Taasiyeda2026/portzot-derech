@@ -11,6 +11,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="./src/styles/gateway.css" />
+  <style>
+      .school-entry{margin:0 auto 18px;display:flex;align-items:center;justify-content:center;gap:14px;width:fit-content;max-width:100%;padding:14px 18px;border:1px solid rgba(124,58,237,.18);border-radius:18px;background:rgba(255,255,255,.88);box-shadow:0 8px 28px rgba(94,39,80,.12)}
+      .school-entry img{width:66px;height:66px;object-fit:contain;border-radius:12px;background:#fff}
+      .school-entry span{display:block;color:#7c3aed;font-weight:700;font-size:13px}
+      .school-entry strong{display:block;color:#4c1d95;font-size:22px}
+      .poster-option-text{min-height:96px;display:flex;align-items:center;justify-content:center;padding:18px 24px;border-radius:22px;background:linear-gradient(135deg,#5E2750,#7c3aed);color:#fff;text-decoration:none;font-weight:900;font-size:22px;box-shadow:0 14px 32px rgba(94,39,80,.22)}
+    </style>
   </head>
 
   <body>
@@ -25,6 +32,7 @@
 
       <main class="poster-page-wrapper">
         <section class="poster-hero" aria-labelledby="poster-title">
+          <div class="school-entry" data-school-entry hidden></div>
           <h1 id="poster-title">ממתגות <strong>ומבססות</strong></h1>
 
           <p class="poster-lead">
@@ -37,24 +45,56 @@
           </div>
 
           <nav class="poster-options" aria-label="בחירת סוג מוצר">
-            <a class="poster-option-btn" href="product/physical.html" aria-label="מוצר פיזי">
+            <a class="poster-option-btn" href="product/physical.html" aria-label="מוצר פיזי" data-product-link="physical">
               <img src="btn-prd-poster/phy-btn.png" alt="מוצר פיזי" />
             </a>
 
-            <a class="poster-option-btn" href="product/website.html" aria-label="אתר">
+            <a class="poster-option-btn" href="product/website.html" aria-label="אתר" data-product-link="website">
               <img src="btn-prd-poster/dig-btn.png" alt="אתר" />
             </a>
 
-            <a class="poster-option-btn" href="product/app.html" aria-label="אפליקציה">
+            <a class="poster-option-btn" href="product/app.html" aria-label="אפליקציה" data-product-link="app">
               <img src="btn-prd-poster/app-btn.png" alt="אפליקציה" />
             </a>
+            <a class="poster-option-btn poster-option-text" href="product/digital.html" aria-label="מוצר דיגיטלי" data-product-link="digital">מוצר דיגיטלי</a>
           </nav>
         </section>
       </main>
 
       <footer class="poster-footer">© 2026 פורצות דרך</footer>
     </div>
-    <script>
+    <script type="module">
+    import { resolveSchoolConfig } from './src/shared/poster-schools.js';
+    (async function () {
+      const params = new URLSearchParams(window.location.search);
+      const requestedSchool = params.get('school') || 'default';
+      const config = await resolveSchoolConfig(requestedSchool);
+      const activeSlug = config.slug || 'default';
+      if (activeSlug !== 'default') {
+        document.querySelectorAll('[data-product-link]').forEach((link) => {
+          const url = new URL(link.getAttribute('href'), window.location.href);
+          url.searchParams.set('school', activeSlug);
+          link.href = url.pathname.split('/poster-builder/')[1] + url.search;
+        });
+      }
+      const entry = document.querySelector('[data-school-entry]');
+      if (entry && (config.name || config.logo)) {
+        entry.hidden = false;
+        const logo = config.logo ? document.createElement('img') : null;
+        if (logo) {
+          logo.src = config.logo;
+          logo.alt = config.name || 'לוגו בית הספר';
+          entry.appendChild(logo);
+        }
+        const text = document.createElement('div');
+        const label = document.createElement('span');
+        label.textContent = 'כניסה לבית הספר';
+        const name = document.createElement('strong');
+        name.textContent = config.name || 'פורצות דרך';
+        text.append(label, name);
+        entry.appendChild(text);
+      }
+    })();
     (function () {
       var title = document.getElementById('poster-title');
       if (!title) return;
