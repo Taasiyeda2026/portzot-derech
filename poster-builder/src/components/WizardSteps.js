@@ -20,6 +20,12 @@ const SHAPES = [
 const STEP_LABELS = ['סוג מוצר', 'עיצוב', 'תוכן', 'יצירה', 'סיום'];
 const PRESET_COLORS      = ['#5E2750','#1a3a6b','#1a5c3a','#7a1a1a','#b5520a','#1a4a5c','#2d2d2d'];
 const TEXT_PRESET_COLORS = ['#1f1030','#000000','#1a1a2e','#1a3a1a','#2e1a00','#2a2a2a','#3a1a3a'];
+const TITLE_READABILITY_EFFECTS = [
+  { value: 'none', label: 'ללא אפקט' },
+  { value: 'halo', label: 'הילה' },
+  { value: 'outline', label: 'מתאר' },
+  { value: 'halo-outline', label: 'הילה + מתאר' }
+];
 
 export function StepIndicator({ current }) {
   return h('div', { className: 'wz-indicator' },
@@ -135,8 +141,8 @@ export function WizardStep1({
 }
 
 export function WizardStep2({
-  currentBackground, currentShape, titleFont, titleColor, textColor,
-  onBackground, onShape, onTitleFont, onTitleColor, onTextColor, onNext, onBack
+  currentBackground, currentShape, titleFont, titleColor, textColor, titleReadabilityEffect = 'none',
+  onBackground, onShape, onTitleFont, onTitleColor, onTitleReadabilityEffect, onTextColor, onNext, onBack
 }) {
   const { useState: useLocalState } = React;
   const bgImages          = BACKGROUNDS.filter(bg => bg.path);
@@ -253,6 +259,21 @@ export function WizardStep2({
                 onChange: e => onTitleColor(e.target.value)
               })
             )
+          )
+        )
+      ),
+
+
+      h('div', { className: 'wz-section' },
+        h('h3', { className: 'wz-section-title' }, 'אפקט קריאות לכותרת'),
+        h('div', { className: 'wz-title-effects' },
+          TITLE_READABILITY_EFFECTS.map(effect =>
+            h('button', {
+              key: effect.value,
+              type: 'button',
+              className: `wz-title-effect-btn ${titleReadabilityEffect === effect.value ? 'active' : ''}`,
+              onClick: () => onTitleReadabilityEffect?.(effect.value)
+            }, effect.label)
           )
         )
       ),

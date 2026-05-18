@@ -45,6 +45,12 @@ const SHAPE_OPTIONS = [
   { value: 10, label: 'מעוגל' },
   { value: 20, label: 'עגול' }
 ];
+const TITLE_READABILITY_EFFECT_OPTIONS = [
+  { value: 'none', label: 'ללא אפקט' },
+  { value: 'halo', label: 'הילה' },
+  { value: 'outline', label: 'מתאר' },
+  { value: 'halo-outline', label: 'הילה + מתאר' }
+];
 
 const posterSize = loadProject(schoolSlug)?.posterSize || 'A4';
 const valueFieldDef = FIELD_DEFINITIONS.find((field) => field.id === 'value');
@@ -181,6 +187,7 @@ const state = {
     titleFont: AVAILABLE_FONTS[0]?.value || 'IBM Plex Sans Hebrew',
     titleColor: '#5E2750',
     textColor: '#1f2937',
+    titleReadabilityEffect: 'none',
     shape: 20
   },
   slotImages: { visual_1: null, visual_2: null, visual_3: null },
@@ -1010,7 +1017,8 @@ function buildCurrentPosterProject() {
     titleStyle: {
       fontFamily: state.design.titleFont,
       color: state.design.titleColor,
-      textColor: state.design.textColor
+      textColor: state.design.textColor,
+      titleReadabilityEffect: state.design.titleReadabilityEffect || 'none'
     },
     contentValues,
     splitFlowState: {
@@ -1306,10 +1314,14 @@ function renderStep4() {
       </button>
     `).join('')}`;
 
-  const { titleFont, titleColor, textColor, background, shape } = state.design;
+  const { titleFont, titleColor, textColor, background, shape, titleReadabilityEffect = 'none' } = state.design;
   const previewName = escapeHtml((state.research.projectName || 'שם המיזם').trim());
   const previewBg   = background ? `background-image:url('${background}');background-size:cover;background-position:center;` : 'background:linear-gradient(135deg,#f5f3ff,#ede9fe);';
   const previewBr   = shape === 0 ? '3px' : shape === 10 ? '7px' : '13px';
+  const previewEffectClass = `title-effect-${titleReadabilityEffect}`;
+  const titleEffectButtons = TITLE_READABILITY_EFFECT_OPTIONS.map((effect) => `
+    <button type="button" class="split-tag split-title-effect-tag ${titleReadabilityEffect === effect.value ? 'active' : ''}" data-design="titleReadabilityEffect" data-value="${effect.value}">${effect.label}</button>
+  `).join('');
 
   return `<article class="split-card">
     <h3>מיפוי ועיצוב לפוסטר</h3>
@@ -1318,12 +1330,13 @@ function renderStep4() {
         <div class="split-field"><span>רקע לפוסטר</span><div class="split-bg-grid">${bgTiles}</div></div>
         <div class="split-field"><span>פונט</span><div class="split-font-grid">${fontTiles}</div></div>
         <div class="split-field"><span>צבע כותרות</span><div class="split-tags">${titleColorButtons}${titleColorPicker}</div></div>
+        <div class="split-field"><span>אפקט קריאות לכותרת</span><div class="split-tags">${titleEffectButtons}</div></div>
         <div class="split-field"><span>צבע טקסט</span><div class="split-tags">${textColorButtons}${textColorPicker}</div></div>
         <div class="split-field"><span>עיצוב תיבות</span><div class="split-tags">${SHAPE_OPTIONS.map((s) => `<button type="button" class="split-tag ${state.design.shape === s.value ? 'active' : ''}" data-design="shape" data-value="${s.value}">${s.label}</button>`).join('')}</div></div>
       </div>
       <div class="split-design-preview" style="${previewBg}">
         <div class="split-preview-inner">
-          <div class="split-preview-title" style="font-family:'${titleFont}',sans-serif;color:${titleColor};">${previewName}</div>
+          <div class="split-preview-title ${previewEffectClass}" style="font-family:'${titleFont}',sans-serif;color:${titleColor};">${previewName}</div>
           <div class="split-preview-line" style="background:linear-gradient(90deg,${titleColor},#d61f8c);"></div>
           <div class="split-preview-cards">
             <div class="split-preview-card" style="border-radius:${previewBr};border-color:${titleColor}33;">
@@ -1441,6 +1454,8 @@ function render() {
     .split-color-picker-wrap:hover{border-color:#8b5cf6;box-shadow:0 0 0 3px rgba(139,92,246,.18)}
     .split-color-picker-dot{display:block;width:100%;height:100%;border-radius:50%;background:conic-gradient(red,#ff0,lime,cyan,blue,magenta,red);pointer-events:none}
     .split-color-picker-wrap input[type=color]{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;border:none;padding:0}
+    .split-title-effect-tag{font-size:12px;padding:8px 12px;min-height:32px}
+    .split-title-effect-tag.active{box-shadow:0 0 0 2px rgba(94,39,80,.2)}
     @media(max-width:600px){.split-bg-grid{grid-template-columns:repeat(3,auto)}.split-font-grid{grid-template-columns:repeat(2,auto)}}
     .split-design-wrap{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:start}
     @media(max-width:700px){.split-design-wrap{grid-template-columns:1fr}}
@@ -1449,6 +1464,8 @@ function render() {
     @media(max-width:700px){.split-design-preview{width:100%;position:static}}
     .split-preview-inner{padding:12px 10px 0;background:rgba(255,255,255,.12);backdrop-filter:blur(4px);display:flex;flex-direction:column;gap:8px}
     .split-preview-title{font-size:14px;font-weight:900;text-align:center;line-height:1.2;padding:0 4px;word-break:break-word}
+    .split-preview-title.title-effect-halo,.split-preview-title.title-effect-halo-outline{text-shadow:0 0 4px rgba(255,255,255,.96),0 0 10px rgba(255,255,255,.88),0 0 18px rgba(255,248,232,.72)}
+    .split-preview-title.title-effect-outline,.split-preview-title.title-effect-halo-outline{-webkit-text-stroke:.55px rgba(255,255,255,.92);paint-order:stroke fill}
     .split-preview-line{height:2px;border-radius:2px;margin:0 auto;width:60px}
     .split-preview-cards{display:grid;grid-template-columns:1fr 1fr;gap:5px}
     .split-preview-card{background:rgba(255,255,255,.82);border:1px solid #ddd0f5;padding:6px 7px;display:flex;flex-direction:column;gap:3px}

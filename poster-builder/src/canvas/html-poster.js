@@ -30,13 +30,19 @@ const IMAGE_LAYOUT_FALLBACKS = {
 };
 const POSTER_ICON_BASE = '/poster-builder/assets/pi/';
 const posterIconCache = new Map();
+const TITLE_READABILITY_EFFECTS = new Set(['none', 'halo', 'outline', 'halo-outline']);
 
-export function renderHTMLPoster(contentValues, productType, titleFont, titleColor, textColor, background, slotImages, _schoolLogoImage) {
+export function renderHTMLPoster(contentValues, productType, titleFont, titleColor, textColor, background, slotImages, titleReadabilityEffect = 'none', _schoolLogoImage) {
   // Support legacy calls that pass (background, slotImages) after titleColor.
   if (slotImages === undefined && background && typeof background === 'object') {
     slotImages = background;
     background = textColor;
     textColor = null;
+  }
+
+  if (TITLE_READABILITY_EFFECTS.has(_schoolLogoImage) && !TITLE_READABILITY_EFFECTS.has(titleReadabilityEffect)) {
+    titleReadabilityEffect = _schoolLogoImage;
+    _schoolLogoImage = undefined;
   }
 
   // ── Background — reuse existing <img> to avoid forced reload ────────────────
@@ -74,6 +80,7 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
   const resolvedTitle  = titleColor || '#5E2750';
   const resolvedText   = textColor  || '#1f1030';
   const resolvedFont   = titleFont  || 'IBM Plex Sans Hebrew';
+  const resolvedTitleEffect = TITLE_READABILITY_EFFECTS.has(titleReadabilityEffect) ? titleReadabilityEffect : 'none';
 
   const posterRoot = document.getElementById('poster-html');
   if (posterRoot) {
@@ -81,6 +88,7 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
     posterRoot.style.setProperty('--ph-text-color',  resolvedText);
     posterRoot.style.fontFamily = `'${resolvedFont}', 'IBM Plex Sans Hebrew', sans-serif`;
     posterRoot.dataset.productType = productType || '';
+    posterRoot.dataset.titleEffect = resolvedTitleEffect;
     resetPosterFitState(posterRoot);
     applyExplicitPosterTextStyles(posterRoot);
     applyPosterIcons(posterRoot);
@@ -141,14 +149,14 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
     el.style.fontWeight = '400';
     el.style.fontFamily = resolvedFontStack;
     el.style.fontSize   = '16.5px';
-    el.style.lineHeight = '1.9';
+    el.style.lineHeight = '2.05';
   });
   document.querySelectorAll('.ph-bullets li').forEach(el => {
     el.style.color      = resolvedText;
     el.style.fontWeight = '400';
     el.style.fontFamily = resolvedFontStack;
     el.style.fontSize   = '16.5px';
-    el.style.lineHeight = '1.85';
+    el.style.lineHeight = '1.98';
   });
   document.querySelectorAll('#ph-names, #ph-school').forEach(el => {
     el.style.color      = resolvedText;
@@ -162,7 +170,7 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
     descEl.style.color        = resolvedText;
     descEl.style.fontWeight   = '700';
     descEl.style.fontSize     = '16.5px';
-    descEl.style.lineHeight   = '1.9';
+    descEl.style.lineHeight   = '1.98';
     descEl.style.fontFamily   = resolvedFontStack;
     descEl.style.background   = 'rgba(255,255,255,0.72)';
     descEl.style.padding      = '6px 12px';
@@ -176,8 +184,18 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
     el.style.fontWeight = '400';
     el.style.fontFamily = resolvedFontStack;
     el.style.fontSize   = '16.5px';
-    el.style.lineHeight = '1.9';
+    el.style.lineHeight = '2.05';
   });
+
+  const solutionEl = document.getElementById('ph-solution');
+  if (solutionEl) {
+    solutionEl.style.lineHeight = '1.58';
+    solutionEl.style.textAlign = 'center';
+    solutionEl.style.display = 'flex';
+    solutionEl.style.alignItems = 'center';
+    solutionEl.style.justifyContent = 'center';
+    solutionEl.style.flex = '1 1 auto';
+  }
 
   // ── Apply titleColor + font to .ph-cap, ph-images-label ─────────────────────
   document.querySelectorAll('.ph-cap').forEach(el => {
@@ -495,7 +513,7 @@ function applyCompactPosterSpacing(posterRoot) {
   const main = posterRoot.querySelector('#ph-main');
   if (main) {
     main.style.setProperty('gap', '3px', 'important');
-    main.style.setProperty('padding-bottom', '12px', 'important');
+    main.style.setProperty('padding-bottom', '14px', 'important');
   }
 
   const imagesWrap = posterRoot.querySelector('.ph-images-wrap');
@@ -524,8 +542,8 @@ function applyCompactPosterSpacing(posterRoot) {
   const audienceCard = posterRoot.querySelector('.ph-audience-card');
   if (audienceCard) {
     audienceCard.style.setProperty('padding', '5px 10px', 'important');
-    audienceCard.style.setProperty('margin-top', '-4px', 'important');
-    audienceCard.style.setProperty('margin-bottom', '4px', 'important');
+    audienceCard.style.setProperty('margin-top', '-8px', 'important');
+    audienceCard.style.setProperty('margin-bottom', '2px', 'important');
   }
 }
 
