@@ -148,7 +148,7 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
     el.style.color      = resolvedText;
     el.style.fontWeight = '400';
     el.style.fontFamily = resolvedFontStack;
-    el.style.fontSize   = '13.5px';
+    el.style.fontSize   = '12.5px';
     el.style.lineHeight = '1.5';
   });
   document.querySelectorAll('.ph-sub').forEach(el => {
@@ -156,14 +156,14 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
     el.style.color      = resolvedText;
     el.style.fontWeight = '400';
     el.style.fontFamily = resolvedFontStack;
-    el.style.fontSize   = '13px';
+    el.style.fontSize   = '12px';
     el.style.lineHeight = '1.45';
   });
   document.querySelectorAll('.ph-bullets li').forEach(el => {
     el.style.color      = resolvedText;
     el.style.fontWeight = '400';
     el.style.fontFamily = resolvedFontStack;
-    el.style.fontSize   = '13px';
+    el.style.fontSize   = '12px';
     el.style.lineHeight = '1.45';
   });
   document.querySelectorAll('#ph-names, #ph-school').forEach(el => {
@@ -177,7 +177,7 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
   if (descEl) {
     descEl.style.color        = resolvedText;
     descEl.style.fontWeight   = '700';
-    descEl.style.fontSize     = '13.5px';
+    descEl.style.fontSize     = '12.5px';
     descEl.style.lineHeight   = '1.4';
     descEl.style.fontFamily   = resolvedFontStack;
     descEl.style.background   = 'rgba(255,255,255,0.72)';
@@ -191,7 +191,7 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
     el.style.color      = resolvedTitle;
     el.style.fontWeight = '400';
     el.style.fontFamily = resolvedFontStack;
-    el.style.fontSize   = '13.5px';
+    el.style.fontSize   = '12.5px';
     el.style.lineHeight = '1.45';
   });
 
