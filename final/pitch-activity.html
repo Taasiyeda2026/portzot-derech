@@ -387,131 +387,154 @@
     }
 
     @media print {
-      @page { size: A4; margin: 1.6cm 1.4cm; }
+      @page { size: A4; margin: 1.8cm 1.6cm; }
+
+      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 
       body {
+        zoom: 1 !important;
         color: #111827;
         background: #fff !important;
-        font-size: 10.5pt;
+        font-size: 11pt;
+        font-family: "Rubik", Arial, sans-serif;
+        line-height: 1.7;
       }
 
-      .site-header, .page-actions, .actions, .timer,
-      .no-print, .eyebrow, .auto-badge { display: none !important; }
+      /* ── הסתר הכל ──────────────────────────────────────── */
+      .site-header,
+      .hero,
+      .section,
+      .page-actions,
+      .no-print { display: none !important; }
 
+      /* ── הצג רק תוצר ────────────────────────────────────── */
       .print-only { display: block !important; }
 
-      .print-header {
-        display: flex !important;
+      .page { width: 100%; padding: 0; margin: 0; }
+
+      /* ── כותרת ראשית ────────────────────────────────────── */
+      .pd-header {
+        display: flex;
         align-items: center;
         gap: 0.75rem;
-        padding-bottom: 0.6rem;
-        margin-bottom: 0.75rem;
-        border-bottom: 2px solid #7c3aed;
+        padding-bottom: 0.65rem;
+        margin-bottom: 1rem;
+        border-bottom: 2.5px solid #7c3aed;
       }
 
-      .print-header img {
-        width: 2.2rem;
-        height: 2.2rem;
+      .pd-header img {
+        width: 2.4rem;
+        height: 2.4rem;
         border-radius: 50%;
       }
 
-      .print-header-text { flex: 1; }
-
-      .print-header-brand {
-        font-size: 0.78rem;
+      .pd-header-brand {
+        font-size: 0.72rem;
         color: #7c3aed;
         font-weight: 900;
-        letter-spacing: 0.04em;
+        letter-spacing: 0.06em;
         text-transform: uppercase;
       }
 
-      .print-header-project {
-        font-size: 1.15rem;
+      .pd-project-name {
+        font-size: 1.45rem;
         font-weight: 900;
         color: #111827;
         margin-top: 0.1rem;
+        line-height: 1.2;
       }
 
-      .print-header-meta {
-        font-size: 0.82rem;
+      .pd-meta {
+        font-size: 0.85rem;
         color: #4b5563;
-        margin-top: 0.15rem;
+        margin-top: 0.2rem;
       }
 
-      .page { width: 100%; padding: 0; }
-
-      .hero {
-        padding: 0.4rem 0;
-        margin-bottom: 0.5rem;
-        border: 0;
-        border-radius: 0;
-        box-shadow: none;
-        background: #fff;
-        text-align: right;
+      .pd-presenters {
+        margin-top: 0.3rem;
+        font-size: 0.85rem;
+        color: #374151;
+        font-weight: 600;
       }
 
-      .section {
-        margin: 0 0 0.75rem;
-        padding: 0;
-        border: 0;
-        border-radius: 0;
-        box-shadow: none;
-        background: #fff;
+      /* ── בלוק פיץ׳ ─────────────────────────────────────── */
+      .pd-section {
+        margin-bottom: 1rem;
         break-inside: avoid;
       }
 
-      h1 {
-        font-size: 1.4rem;
-        color: #111827;
-        background: none;
-        -webkit-text-fill-color: initial;
+      .pd-section-title {
+        font-size: 0.72rem;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #7c3aed;
+        margin-bottom: 0.45rem;
+        padding-bottom: 0.2rem;
+        border-bottom: 1px solid #e5e7eb;
       }
 
-      h2 { font-size: 1.05rem; }
-
-      .section-title { margin-bottom: 0.3rem; }
-
-      .step-number {
+      .pd-pitch-text {
+        font-size: 11pt;
         color: #111827;
-        background: #f3f4f6;
-        box-shadow: none;
-        font-size: 0.8rem;
+        line-height: 1.8;
+        white-space: pre-wrap;
+        word-break: break-word;
       }
 
-      input[type="text"], textarea, select {
-        border: 1px solid #d1d5db;
-        box-shadow: none;
-        background: #fff !important;
-        padding: 0.25rem 0.45rem;
+      /* ── חלוקת תפקידים ──────────────────────────────────── */
+      .pd-roles {
+        margin-top: 0.25rem;
+      }
+
+      .pd-role-item {
+        margin-bottom: 0.6rem;
+        break-inside: avoid;
+        padding: 0.4rem 0.6rem;
+        border-right: 3px solid #7c3aed;
+        background: #f9f7ff;
+      }
+
+      .pd-role-name {
+        font-weight: 900;
+        font-size: 10pt;
+        color: #4c1d95;
+        margin-bottom: 0.2rem;
+      }
+
+      .pd-role-excerpt {
         font-size: 9.5pt;
+        color: #374151;
+        line-height: 1.65;
+        white-space: pre-wrap;
+        word-break: break-word;
       }
 
-      textarea {
-        min-height: 0;
-        height: auto;
-        overflow: visible;
-      }
-
-      .auto-filled { background: #fff !important; border-color: #d1d5db !important; }
-
-      .grid, .role-list, .checklist, .presenter-names-grid {
-        display: block;
-      }
-
-      .field, .role-card, .checklist li, .presenter-row {
-        margin-bottom: 0.5rem;
+      /* ── נאום מעלית ─────────────────────────────────────── */
+      .pd-elevator {
+        margin-top: 0.5rem;
+        padding: 0.5rem 0.75rem;
+        background: #f0fdf4;
+        border: 1px solid #d1fae5;
+        border-radius: 6px;
         break-inside: avoid;
       }
 
-      .intro { display: none; }
-      .section-title p { display: none; }
-      .note { display: none; }
+      .pd-elevator-label {
+        font-size: 0.72rem;
+        font-weight: 900;
+        letter-spacing: 0.06em;
+        color: #065f46;
+        text-transform: uppercase;
+        margin-bottom: 0.3rem;
+      }
 
-      .role-card {
-        border: 1px solid #e5e7eb;
-        border-radius: 0;
-        padding: 0.35rem 0;
-        background: #fff;
+      .pd-elevator-text {
+        font-size: 10.5pt;
+        color: #111827;
+        line-height: 1.75;
+        white-space: pre-wrap;
+        word-break: break-word;
       }
     }
   </style>
@@ -527,15 +550,8 @@
 
   <main class="page">
 
-    <!-- ── כותרת הדפסה (נראית רק ב-PDF) ──────────────────────── -->
-    <div class="print-header print-only" id="printHeader" aria-hidden="true">
-      <img src="../icon/favicon.png" alt="פורצות דרך" />
-      <div class="print-header-text">
-        <div class="print-header-brand">פורצות דרך — פיץ׳ סופי</div>
-        <div class="print-header-project" id="printProjectName"></div>
-        <div class="print-header-meta" id="printMeta"></div>
-      </div>
-    </div>
+    <!-- ── מסמך PDF — נראה רק בהדפסה ─────────────────────────── -->
+    <div class="print-only" id="printDocument" aria-hidden="true"></div>
 
     <section class="hero">
       <span class="eyebrow">פיץ׳ סופי</span>
@@ -1039,22 +1055,93 @@
         });
       }
 
-      /* ── print header ────────────────────────────────────── */
+      /* ── print document builder ──────────────────────────── */
+
+      function buildPrintDocument() {
+        var doc = document.getElementById("printDocument");
+        if (!doc) { return; }
+
+        var count = getPresenterCount();
+        var projectName = getElementValue("project_name") || "פיץ׳ סופי";
+        var school = getElementValue("school_name");
+        var cls = getElementValue("class_name");
+        var students = getElementValue("student_names");
+        var pitchText = (document.getElementById("fullPitch") || {}).value || "";
+        var elevatorText = (document.getElementById("elevatorPitch") || {}).value || "";
+
+        var presenterNames = [];
+        for (var pi = 1; pi <= count; pi++) {
+          var nm = getElementValue("speaker_" + pi);
+          if (nm) { presenterNames.push(nm); }
+        }
+
+        var metaParts = [];
+        if (school) { metaParts.push(school); }
+        if (cls) { metaParts.push("כיתה " + cls); }
+
+        var html = "";
+
+        html += '<div class="pd-header">';
+        html += '<img src="../icon/favicon.png" alt="פורצות דרך" />';
+        html += '<div>';
+        html += '<div class="pd-header-brand">פורצות דרך — פיץ׳ סופי</div>';
+        html += '<div class="pd-project-name">' + esc(projectName) + '</div>';
+        if (metaParts.length) {
+          html += '<div class="pd-meta">' + esc(metaParts.join(" | ")) + '</div>';
+        }
+        if (students) {
+          html += '<div class="pd-meta">קבוצה: ' + esc(students) + '</div>';
+        }
+        if (presenterNames.length) {
+          html += '<div class="pd-presenters">מציגות: ' + esc(presenterNames.join(", ")) + '</div>';
+        }
+        html += '</div></div>';
+
+        if (pitchText) {
+          if (count > 1) {
+            html += '<div class="pd-section">';
+            html += '<div class="pd-section-title">הפיץ׳ הסופי — חלוקת תפקידים</div>';
+            html += '<div class="pd-roles">';
+            var segments = buildSegments(false);
+            var ranges = speakerRanges[count] || speakerRanges[2];
+            ranges.forEach(function (range, idx) {
+              var name = getSpeakerName(idx);
+              var part = segments.slice(range[0], range[1] + 1).join("\n\n");
+              html += '<div class="pd-role-item">';
+              html += '<div class="pd-role-name">' + esc(name) + '</div>';
+              html += '<div class="pd-role-excerpt">' + esc(part) + '</div>';
+              html += '</div>';
+            });
+            html += '</div>';
+            html += '</div>';
+          } else {
+            html += '<div class="pd-section">';
+            html += '<div class="pd-section-title">הפיץ׳ הסופי</div>';
+            html += '<div class="pd-pitch-text">' + esc(pitchText) + '</div>';
+            html += '</div>';
+          }
+        }
+
+        if (elevatorText) {
+          html += '<div class="pd-elevator">';
+          html += '<div class="pd-elevator-label">נספח — נאום מעלית (20–30 שניות)</div>';
+          html += '<div class="pd-elevator-text">' + esc(elevatorText) + '</div>';
+          html += '</div>';
+        }
+
+        doc.innerHTML = html;
+      }
+
+      function esc(str) {
+        return String(str)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
 
       function updatePrintHeader() {
-        var projEl = document.getElementById("printProjectName");
-        var metaEl = document.getElementById("printMeta");
-        if (projEl) projEl.textContent = getElementValue("project_name") || "פיץ׳ סופי";
-        if (metaEl) {
-          var parts = [];
-          var school = getElementValue("school_name");
-          var cls = getElementValue("class_name");
-          var students = getElementValue("student_names");
-          if (school) parts.push(school);
-          if (cls) parts.push("כיתה " + cls);
-          if (students) parts.push(students);
-          metaEl.textContent = parts.join(" | ");
-        }
+        buildPrintDocument();
       }
 
       /* ── save / load ─────────────────────────────────────── */
@@ -1120,22 +1207,15 @@
         updateTimerDisplay();
       }
 
-      /* ── print expand/restore ────────────────────────────── */
+      /* ── print prepare/restore ───────────────────────────── */
 
-      function expandTextareasForPrint() {
-        document.querySelectorAll("textarea").forEach(function (ta) {
-          ta.dataset.originalHeight = ta.style.height;
-          ta.style.height = "auto";
-          ta.style.height = ta.scrollHeight + "px";
-        });
-        updatePrintHeader();
+      function prepareForPrint() {
+        buildPrintDocument();
       }
 
-      function restoreTextareasAfterPrint() {
-        document.querySelectorAll("textarea").forEach(function (ta) {
-          ta.style.height = ta.dataset.originalHeight || "";
-          delete ta.dataset.originalHeight;
-        });
+      function restoreAfterPrint() {
+        var doc = document.getElementById("printDocument");
+        if (doc) { doc.innerHTML = ""; }
       }
 
       /* ── init ────────────────────────────────────────────── */
@@ -1162,12 +1242,12 @@
       });
 
       document.getElementById("printPage").addEventListener("click", function () {
-        updatePrintHeader();
+        buildPrintDocument();
         window.print();
       });
 
-      window.addEventListener("beforeprint", expandTextareasForPrint);
-      window.addEventListener("afterprint", restoreTextareasAfterPrint);
+      window.addEventListener("beforeprint", prepareForPrint);
+      window.addEventListener("afterprint", restoreAfterPrint);
 
       document.getElementById("startTimer").addEventListener("click", startTimer);
       document.getElementById("resetTimer").addEventListener("click", resetTimer);
