@@ -160,7 +160,7 @@
       color: var(--ph-title-color, #5E2750);
       font-weight: 400;
       font-size: 15px;
-      line-height: 1.75;
+      line-height: 2.05;
     }
     .ph-cap {
       font-size: 18px; font-weight: 900; color: var(--ph-title-color, #5E2750);
@@ -190,7 +190,7 @@
     }
     #ph-audience[data-icon-ok="true"]::before {
       content: ''; display: inline-block;
-      width: 32px; height: 32px; border-radius: 0;
+      width: 40px; height: 40px; border-radius: 0;
       background-color: transparent;
       background-image: var(--ph-icon-url);
       background-position: center;
@@ -200,8 +200,8 @@
       mask: none;
       flex-shrink: 0;
     }
-    .ph-body { font-size: 16.5px; font-weight: 400; color: var(--ph-text-color, #1f1030); line-height: 1.9; word-break: break-word; overflow-wrap: anywhere; }
-    .ph-sub  { font-size: 16.5px; font-weight: 400; color: #8a7aa0; margin-top: 4px; line-height: 1.9; }
+    .ph-body { font-size: 16.5px; font-weight: 400; color: var(--ph-text-color, #1f1030); line-height: 2.05; word-break: break-word; overflow-wrap: anywhere; }
+    .ph-sub  { font-size: 16.5px; font-weight: 400; color: #8a7aa0; margin-top: 4px; line-height: 2.05; }
     .ph-bullets {
       list-style: none;
       margin-top: 3px;
@@ -214,7 +214,7 @@
       font-size: 16.5px;
       font-weight: 400;
       color: var(--ph-text-color, #1f1030);
-      line-height: 1.85;
+      line-height: 1.98;
       margin-bottom: 3px;
       padding: 0;
     }
@@ -298,12 +298,31 @@
     #ph-title-line {
       max-width: 360px;
     }
+
+    #poster-html[data-title-effect="none"] #ph-name {
+      text-shadow: none;
+      -webkit-text-stroke: 0 transparent;
+      paint-order: normal;
+    }
+    #poster-html[data-title-effect="halo"] #ph-name,
+    #poster-html[data-title-effect="halo-outline"] #ph-name {
+      text-shadow: 0 0 4px rgba(255,255,255,.96), 0 0 12px rgba(255,255,255,.92), 0 0 26px rgba(255,248,232,.82), 0 2px 14px rgba(255,255,255,.68);
+    }
+    #poster-html[data-title-effect="outline"] #ph-name,
+    #poster-html[data-title-effect="halo-outline"] #ph-name {
+      -webkit-text-stroke: 1.25px rgba(255,255,255,.92);
+      paint-order: stroke fill;
+    }
+    #poster-html[data-title-effect="outline"] #ph-name {
+      text-shadow: 1px 0 0 rgba(255,255,255,.92), -1px 0 0 rgba(255,255,255,.92), 0 1px 0 rgba(255,255,255,.92), 0 -1px 0 rgba(255,255,255,.92);
+    }
+
     #ph-main {
       flex: 1 1 auto !important;
       display: flex !important;
       flex-direction: column !important;
       gap: 8px !important;
-      padding: 0 24px 14px !important;
+      padding: 0 24px 22px !important;
       justify-content: space-between !important;
     }
     .ph-grid-problem,
@@ -368,8 +387,8 @@
       padding: 4px 14px;
       text-align: center;
       flex-shrink: 0;
-      margin-top: -4px;
-      margin-bottom: 6px;
+      margin-top: -9px;
+      margin-bottom: 3px;
     }
     .ph-audience-card #ph-audience {
       color: var(--ph-title-color, #5E2750) !important;
@@ -377,7 +396,7 @@
       font-size: 15px !important;
       margin-top: 0;
       text-align: center;
-      line-height: 1.75;
+      line-height: 1.85;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -406,13 +425,22 @@
     }
     .ph-solution-card {
       text-align: center;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
     }
+    .ph-solution-card .ph-cap { justify-content: center; }
     .ph-solution-card #ph-solution {
       text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1 1 auto;
+      margin: 0;
       color: var(--ph-title-color, #5E2750) !important;
       font-size: 13.8px !important;
       font-weight: 700 !important;
-      line-height: 1.72;
+      line-height: 1.58;
     }
 
     #ph-footer,
@@ -629,10 +657,11 @@
   const contentValues = project.contentValues || {};
   const titleFont    = project.titleStyle?.fontFamily || 'IBM Plex Sans Hebrew';
   const titleColor   = project.titleStyle?.color      || '#5E2750';
-  const textColor    = project.cardStyle?.color       || '#1f1030';
+  const textColor    = project.titleStyle?.textColor  || project.cardStyle?.color || '#1f1030';
+  const titleReadabilityEffect = project.titleStyle?.titleReadabilityEffect || 'none';
   const background   = project.background             || null;
   const slotImages   = project.slotImages             || {};
-  renderHTMLPoster(contentValues, productType, titleFont, titleColor, textColor, background, slotImages);
+  renderHTMLPoster(contentValues, productType, titleFont, titleColor, textColor, background, slotImages, titleReadabilityEffect);
 
   if (params.get('print') === '1' && !window.__posterAutoPrintTriggered) {
     window.__posterAutoPrintTriggered = true;
