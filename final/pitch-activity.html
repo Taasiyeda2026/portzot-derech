@@ -53,7 +53,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 1rem;
-      padding: 0.85rem clamp(1rem, 4vw, 2.25rem);
+      padding: 0.75rem clamp(1rem, 4vw, 2.25rem);
       background: rgba(255, 255, 255, 0.88);
       border-bottom: 1px solid rgba(236, 72, 153, 0.14);
       backdrop-filter: blur(16px);
@@ -69,8 +69,8 @@
     }
 
     .brand img {
-      width: 2.25rem;
-      height: 2.25rem;
+      width: 2.1rem;
+      height: 2.1rem;
       border-radius: 50%;
     }
 
@@ -79,8 +79,8 @@
       align-items: center;
       justify-content: center;
       gap: 0.45rem;
-      min-height: 2.75rem;
-      padding: 0.7rem 1.15rem;
+      min-height: 2.5rem;
+      padding: 0.6rem 1.1rem;
       border: 0;
       border-radius: 999px;
       color: #fff;
@@ -88,13 +88,13 @@
       text-decoration: none;
       cursor: pointer;
       background: linear-gradient(135deg, var(--pink), var(--purple));
-      box-shadow: 0 12px 24px rgba(139, 92, 246, 0.20);
+      box-shadow: 0 10px 22px rgba(139, 92, 246, 0.20);
       transition: transform 0.18s ease, box-shadow 0.18s ease;
     }
 
     .back-link:hover, .btn:hover {
       transform: translateY(-1px);
-      box-shadow: 0 16px 28px rgba(139, 92, 246, 0.26);
+      box-shadow: 0 14px 26px rgba(139, 92, 246, 0.26);
     }
 
     .btn.secondary {
@@ -107,12 +107,12 @@
     .page {
       width: min(100%, 980px);
       margin: 0 auto;
-      padding: clamp(1.25rem, 4vw, 3rem) 1rem 4rem;
+      padding: clamp(1rem, 4vw, 2.5rem) 1rem 4rem;
     }
 
     .hero {
-      margin-bottom: 1.25rem;
-      padding: clamp(1.5rem, 5vw, 3rem);
+      margin-bottom: 1rem;
+      padding: clamp(1.2rem, 4vw, 2.2rem);
       border: 1px solid rgba(236, 72, 153, 0.12);
       border-radius: 32px;
       background: rgba(255, 255, 255, 0.72);
@@ -122,19 +122,19 @@
 
     .eyebrow {
       display: inline-flex;
-      margin-bottom: 0.75rem;
-      padding: 0.35rem 0.9rem;
+      margin-bottom: 0.6rem;
+      padding: 0.28rem 0.8rem;
       border-radius: 999px;
       color: var(--pink);
       background: var(--pink-soft);
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       font-weight: 900;
     }
 
     h1, h2, h3 { margin: 0; color: var(--ink); line-height: 1.25; }
 
     h1 {
-      font-size: clamp(2rem, 6vw, 4rem);
+      font-size: clamp(1.8rem, 5vw, 3.2rem);
       font-weight: 900;
       background: linear-gradient(135deg, #be185d, #7c3aed);
       background-clip: text;
@@ -144,134 +144,170 @@
 
     .intro {
       max-width: 680px;
-      margin: 1rem auto 0;
-      font-size: clamp(1rem, 2.6vw, 1.15rem);
+      margin: 0.75rem auto 0;
+      font-size: clamp(0.95rem, 2.4vw, 1.08rem);
       color: var(--muted);
     }
 
     .section {
-      margin-top: 1rem;
-      padding: clamp(1.1rem, 3vw, 1.7rem);
+      margin-top: 0.85rem;
+      padding: clamp(1rem, 2.5vw, 1.5rem);
       border: 1px solid rgba(139, 92, 246, 0.13);
       border-radius: var(--radius);
       background: var(--card);
-      box-shadow: 0 12px 30px rgba(88, 28, 135, 0.07);
+      box-shadow: 0 10px 28px rgba(88, 28, 135, 0.07);
     }
 
     .section-title {
       display: grid;
       grid-template-columns: auto 1fr;
-      gap: 0.8rem;
+      gap: 0.75rem;
       align-items: start;
-      margin-bottom: 1rem;
+      margin-bottom: 0.9rem;
     }
 
     .step-number {
       display: inline-grid;
       place-items: center;
-      width: 2.25rem;
-      height: 2.25rem;
-      border-radius: 0.9rem;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 0.8rem;
       color: #fff;
       font-weight: 900;
+      font-size: 0.9rem;
       background: linear-gradient(135deg, var(--pink), var(--purple));
-      box-shadow: 0 10px 20px rgba(139, 92, 246, 0.20);
+      box-shadow: 0 8px 18px rgba(139, 92, 246, 0.20);
     }
 
     .section-title p {
-      margin: 0.25rem 0 0;
+      margin: 0.2rem 0 0;
       color: var(--muted);
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
 
     .grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 1rem;
+      gap: 0.75rem;
     }
 
     .field.full, .actions, .output-block { grid-column: 1 / -1; }
 
     label {
       display: block;
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.3rem;
       color: var(--ink);
       font-weight: 800;
+      font-size: 0.95rem;
     }
 
     input[type="text"], textarea, select {
       width: 100%;
       border: 1.5px solid var(--line);
-      border-radius: 16px;
-      padding: 0.85rem 1rem;
+      border-radius: 14px;
+      padding: 0.55rem 0.85rem;
       color: var(--text);
       background: #fff;
       outline: none;
       transition: border-color 0.18s ease, box-shadow 0.18s ease;
+      font-size: 0.95rem;
     }
 
     input[type="text"]:focus, textarea:focus, select:focus {
       border-color: rgba(236, 72, 153, 0.55);
-      box-shadow: 0 0 0 4px rgba(236, 72, 153, 0.11);
+      box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.10);
     }
 
     textarea {
-      min-height: 7.5rem;
+      min-height: 4.2rem;
       resize: vertical;
     }
 
-    .large-textarea { min-height: 18rem; }
-    .medium-textarea { min-height: 9rem; }
+    .large-textarea { min-height: 10rem; }
+    .medium-textarea { min-height: 5rem; }
 
     .actions {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.75rem;
+      gap: 0.65rem;
       align-items: center;
-      margin-top: 0.35rem;
+      margin-top: 0.3rem;
     }
 
     .note {
       margin: 0;
       color: var(--muted);
-      font-size: 0.92rem;
+      font-size: 0.88rem;
     }
 
-    .roles-toolbar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem 1rem;
+    /* ── אוטומטי ──────────────────────────────────────────── */
+    .auto-filled {
+      background: linear-gradient(135deg, #f0f4ff 0%, #f5f3ff 100%) !important;
+      border-color: rgba(139, 92, 246, 0.28) !important;
+    }
+
+    .auto-badge {
+      display: inline-flex;
       align-items: center;
-      margin-bottom: 1rem;
+      gap: 0.28rem;
+      margin-bottom: 0.3rem;
+      padding: 0.15rem 0.55rem;
+      border-radius: 999px;
+      background: rgba(139, 92, 246, 0.10);
+      color: var(--purple);
+      font-size: 0.71rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
     }
 
-    .roles-toolbar label { margin: 0; }
-    .roles-toolbar select { width: auto; min-width: 6rem; }
-
-
-    .role-list {
+    /* ── מציגות ────────────────────────────────────────────── */
+    .presenter-names-grid {
       display: grid;
-      gap: 0.75rem;
+      gap: 0.55rem;
+      margin-top: 0.8rem;
     }
+
+    .presenter-row {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .presenter-row .presenter-label {
+      min-width: 5.5rem;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--purple);
+      margin: 0;
+      white-space: nowrap;
+    }
+
+    .presenter-row input {
+      flex: 1;
+    }
+
+    /* ── חלוקת תפקידים ─────────────────────────────────────── */
+    .role-list { display: grid; gap: 0.65rem; }
 
     .role-card {
-      padding: 1rem;
+      padding: 0.75rem 1rem;
       border: 1px solid rgba(236, 72, 153, 0.14);
-      border-radius: 18px;
+      border-radius: 16px;
       background: linear-gradient(135deg, #fff, #fdf4ff);
     }
 
     .role-card h3 {
-      margin-bottom: 0.35rem;
+      margin-bottom: 0.25rem;
       color: #7c3aed;
-      font-size: 1rem;
+      font-size: 0.97rem;
     }
 
-    .role-card p { margin: 0; }
+    .role-card p { margin: 0; font-size: 0.92rem; line-height: 1.6; }
 
+    /* ── רשימת מוכנות ──────────────────────────────────────── */
     .checklist {
       display: grid;
-      gap: 0.65rem;
+      gap: 0.5rem;
       padding: 0;
       margin: 0;
       list-style: none;
@@ -279,87 +315,139 @@
 
     .checklist label {
       display: flex;
-      gap: 0.65rem;
+      gap: 0.6rem;
       align-items: flex-start;
       margin: 0;
-      padding: 0.8rem 0.9rem;
+      padding: 0.65rem 0.85rem;
       border: 1px solid rgba(139, 92, 246, 0.12);
-      border-radius: 16px;
+      border-radius: 14px;
       background: #fff;
       font-weight: 600;
       cursor: pointer;
+      font-size: 0.92rem;
     }
 
     .checklist input {
-      width: 1.1rem;
-      height: 1.1rem;
-      margin-top: 0.23rem;
+      width: 1.05rem;
+      height: 1.05rem;
+      margin-top: 0.22rem;
       accent-color: var(--pink);
       flex: 0 0 auto;
     }
 
+    /* ── טיימר ─────────────────────────────────────────────── */
     .timer {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.75rem;
+      gap: 0.65rem;
       align-items: center;
-      margin-top: 1rem;
-      padding: 1rem;
-      border-radius: 18px;
+      margin-top: 0.85rem;
+      padding: 0.85rem 1rem;
+      border-radius: 16px;
       background: var(--purple-soft);
     }
 
     .timer-time {
       color: var(--ink);
-      font-size: 1.8rem;
+      font-size: 1.7rem;
       font-weight: 900;
       letter-spacing: 0.04em;
     }
 
     .timer .btn {
-      min-height: 2.35rem;
-      padding: 0.52rem 0.95rem;
-      font-size: 0.92rem;
+      min-height: 2.1rem;
+      padding: 0.44rem 0.88rem;
+      font-size: 0.88rem;
     }
 
     .page-actions {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.85rem;
+      gap: 0.75rem;
       justify-content: center;
-      margin-top: 1.3rem;
+      margin-top: 1.15rem;
     }
+
+    /* ── הדפסה / PDF ────────────────────────────────────────── */
+    .print-only { display: none; }
 
     @media (max-width: 720px) {
       .site-header { align-items: flex-start; }
       .brand span { display: none; }
       .grid { grid-template-columns: 1fr; }
-      .hero, .section { border-radius: 22px; }
+      .hero, .section { border-radius: 20px; }
       .back-link, .btn { width: 100%; }
       .site-header .back-link { width: auto; }
-      .roles-toolbar { align-items: stretch; }
-      .roles-toolbar select { width: 100%; }
+      .presenter-row { flex-direction: column; align-items: stretch; }
+      .presenter-row .presenter-label { min-width: unset; }
     }
 
     @media print {
-      @page { margin: 1.4cm; }
+      @page { size: A4; margin: 1.6cm 1.4cm; }
 
       body {
         color: #111827;
+        background: #fff !important;
+        font-size: 10.5pt;
+      }
+
+      .site-header, .page-actions, .actions, .timer,
+      .no-print, .eyebrow, .auto-badge { display: none !important; }
+
+      .print-only { display: block !important; }
+
+      .print-header {
+        display: flex !important;
+        align-items: center;
+        gap: 0.75rem;
+        padding-bottom: 0.6rem;
+        margin-bottom: 0.75rem;
+        border-bottom: 2px solid #7c3aed;
+      }
+
+      .print-header img {
+        width: 2.2rem;
+        height: 2.2rem;
+        border-radius: 50%;
+      }
+
+      .print-header-text { flex: 1; }
+
+      .print-header-brand {
+        font-size: 0.78rem;
+        color: #7c3aed;
+        font-weight: 900;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .print-header-project {
+        font-size: 1.15rem;
+        font-weight: 900;
+        color: #111827;
+        margin-top: 0.1rem;
+      }
+
+      .print-header-meta {
+        font-size: 0.82rem;
+        color: #4b5563;
+        margin-top: 0.15rem;
+      }
+
+      .page { width: 100%; padding: 0; }
+
+      .hero {
+        padding: 0.4rem 0;
+        margin-bottom: 0.5rem;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
         background: #fff;
+        text-align: right;
       }
 
-      .site-header, .page-actions, .actions, .timer, .no-print, .eyebrow {
-        display: none !important;
-      }
-
-      .page {
-        width: 100%;
-        padding: 0;
-      }
-
-      .hero, .section {
-        margin: 0 0 1rem;
+      .section {
+        margin: 0 0 0.75rem;
         padding: 0;
         border: 0;
         border-radius: 0;
@@ -369,25 +457,29 @@
       }
 
       h1 {
+        font-size: 1.4rem;
         color: #111827;
         background: none;
         -webkit-text-fill-color: initial;
       }
 
-      .section-title {
-        margin-bottom: 0.45rem;
-      }
+      h2 { font-size: 1.05rem; }
+
+      .section-title { margin-bottom: 0.3rem; }
 
       .step-number {
         color: #111827;
         background: #f3f4f6;
         box-shadow: none;
+        font-size: 0.8rem;
       }
 
       input[type="text"], textarea, select {
         border: 1px solid #d1d5db;
         box-shadow: none;
-        background: #fff;
+        background: #fff !important;
+        padding: 0.25rem 0.45rem;
+        font-size: 9.5pt;
       }
 
       textarea {
@@ -396,13 +488,26 @@
         overflow: visible;
       }
 
-      .grid, .role-list, .checklist {
+      .auto-filled { background: #fff !important; border-color: #d1d5db !important; }
+
+      .grid, .role-list, .checklist, .presenter-names-grid {
         display: block;
       }
 
-      .field, .role-card, .checklist li {
-        margin-bottom: 0.75rem;
+      .field, .role-card, .checklist li, .presenter-row {
+        margin-bottom: 0.5rem;
         break-inside: avoid;
+      }
+
+      .intro { display: none; }
+      .section-title p { display: none; }
+      .note { display: none; }
+
+      .role-card {
+        border: 1px solid #e5e7eb;
+        border-radius: 0;
+        padding: 0.35rem 0;
+        background: #fff;
       }
     }
   </style>
@@ -417,48 +522,63 @@
   </header>
 
   <main class="page">
+
+    <!-- ── כותרת הדפסה (נראית רק ב-PDF) ──────────────────────── -->
+    <div class="print-header print-only" id="printHeader" aria-hidden="true">
+      <img src="../icon/favicon.png" alt="פורצות דרך" />
+      <div class="print-header-text">
+        <div class="print-header-brand">פורצות דרך — פיץ׳ סופי</div>
+        <div class="print-header-project" id="printProjectName"></div>
+        <div class="print-header-meta" id="printMeta"></div>
+      </div>
+    </div>
+
     <section class="hero">
       <span class="eyebrow">פיץ׳ סופי</span>
       <h1>בונות את הפיץ׳ שלנו</h1>
       <p class="intro">בדף הזה נרכז את הנתונים של המיזם, נבנה מהם פיץ׳ ברור, נחלק תפקידים בין הדוברות ונתרגל לקראת ההצגה.</p>
     </section>
 
+    <!-- ── שלב 1: פרטי הקבוצה ──────────────────────────────────── -->
     <section class="section" aria-labelledby="group-details-title">
       <div class="section-title">
         <span class="step-number">1</span>
         <div>
-          <h2 id="group-details-title">פרטי הפיץ׳</h2>
-          <p>בחרו כמה מציגות יש, וכתבו את הפרטים שיופיעו בפתיחה.</p>
+          <h2 id="group-details-title">פרטי הקבוצה</h2>
+          <p>הפרטים האלה יופיעו בפתיחה ובייצוא ה-PDF.</p>
         </div>
       </div>
       <div class="grid">
-        <div class="field">
-          <label for="presenterCount">כמה מציגות יציגו את הפיץ׳?</label>
-          <select id="presenterCount" data-save>
-            <option value="1">1</option>
-            <option value="2" selected>2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-          </select>
+        <div class="field full">
+          <label for="project_name">שם המיזם</label>
+          <input id="project_name" type="text" autocomplete="off" data-save placeholder="לדוגמה: SafeWalk" />
         </div>
         <div class="field">
-          <label for="speaker_or_team_name">איך קוראים לך או לצוות שלכן?</label>
-          <input id="speaker_or_team_name" type="text" autocomplete="off" data-save />
+          <label for="school_name">בית הספר</label>
+          <input id="school_name" type="text" autocomplete="off" data-save placeholder="שם בית הספר" />
+        </div>
+        <div class="field">
+          <label for="class_name">כיתה</label>
+          <input id="class_name" type="text" autocomplete="off" data-save placeholder="לדוגמה: י׳3" />
         </div>
         <div class="field full">
-          <label for="project_name">איך קוראים למיזם שלכן?</label>
-          <input id="project_name" type="text" autocomplete="off" data-save />
+          <label for="student_names">שמות התלמידות בקבוצה</label>
+          <input id="student_names" type="text" autocomplete="off" data-save placeholder="הפרידי בפסיקים — לדוגמה: נועה, מאיה, יובל" />
+        </div>
+        <div class="field full">
+          <label for="speaker_or_team_name">שם הצוות או שם ייצוגי לפתיחת הפיץ׳</label>
+          <input id="speaker_or_team_name" type="text" autocomplete="off" data-save placeholder="לדוגמה: צוות SafeWalk" />
         </div>
       </div>
     </section>
 
+    <!-- ── שלב 2: נתוני הפיץ׳ ──────────────────────────────────── -->
     <section class="section" aria-labelledby="pitch-data-title">
       <div class="section-title">
         <span class="step-number">2</span>
         <div>
           <h2 id="pitch-data-title">שאלות קצרות לבניית הפיץ׳</h2>
-          <p>ענו במשפט קצר. התצוגה המקדימה מתעדכנת אוטומטית לפי התשובות ולפי מספר המציגות.</p>
+          <p>ענו במשפט קצר. הפיץ׳ יבנה מהתשובות האלה אוטומטית.</p>
         </div>
       </div>
       <div class="grid">
@@ -527,7 +647,7 @@
           <textarea id="improvement" data-save></textarea>
         </div>
         <div class="field">
-          <label for="step_1">מה המשתמשת או המשתמש עושים קודם?</label>
+          <label for="step_1">מה המשתמשת עושה קודם?</label>
           <textarea id="step_1" data-save></textarea>
         </div>
         <div class="field">
@@ -543,7 +663,7 @@
           <textarea id="tech_part" data-save></textarea>
         </div>
         <div class="field">
-          <label for="tech_value">מה הטכנולוגיה מאפשרת למשתמשות ולמשתמשים לקבל או לעשות?</label>
+          <label for="tech_value">מה הטכנולוגיה מאפשרת למשתמשות לקבל או לעשות?</label>
           <textarea id="tech_value" data-save></textarea>
         </div>
         <div class="field full">
@@ -553,29 +673,57 @@
       </div>
     </section>
 
-    <section class="section" aria-labelledby="create-pitch-title">
+    <!-- ── שלב 3: בחירת מציגות ─────────────────────────────────── -->
+    <section class="section" aria-labelledby="presenters-title">
       <div class="section-title">
         <span class="step-number">3</span>
         <div>
-          <h2 id="create-pitch-title">תצוגה מקדימה של הפיץ׳</h2>
-          <p>הפיץ׳ נבנה אוטומטית מכל התשובות. אם נבחרה מציגה אחת הוא יוצג ברצף; אם נבחרו 2–5 מציגות הוא יחולק לחלקים רציפים.</p>
+          <h2 id="presenters-title">כמה מציגות — ומי הן?</h2>
+          <p>בחרו כמה מציגות יציגו, ואז מלאו את שמותיהן. השמות יופיעו בפיץ׳ ובחלוקת התפקידים.</p>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="field">
+          <label for="presenterCount">מספר המציגות</label>
+          <select id="presenterCount" data-save>
+            <option value="1">1 מציגה</option>
+            <option value="2" selected>2 מציגות</option>
+            <option value="3">3 מציגות</option>
+            <option value="4">4 מציגות</option>
+            <option value="5">5 מציגות</option>
+          </select>
+        </div>
+      </div>
+      <div class="presenter-names-grid" id="presenterNamesContainer" aria-live="polite"></div>
+      <datalist id="studentNamesList"></datalist>
+    </section>
+
+    <!-- ── שלב 4: הפיץ׳ המסכם ─────────────────────────────────── -->
+    <section class="section" aria-labelledby="create-pitch-title">
+      <div class="section-title">
+        <span class="step-number">4</span>
+        <div>
+          <h2 id="create-pitch-title">הפיץ׳ המסכם</h2>
+          <p>הפיץ׳ נבנה מכל התשובות. לחצי על "רענון" לאחר שינוי. אפשר לערוך ידנית.</p>
         </div>
       </div>
       <div class="grid">
         <div class="actions">
           <button class="btn" type="button" id="generatePitch">רענון הפיץ׳</button>
-          <p class="note">שדות ריקים יופיעו כקו מילוי ברור, כדי שלא ייווצר משפט שבור.</p>
+          <p class="note">שדות ריקים יופיעו כקו מילוי כדי שלא ייווצר משפט שבור.</p>
         </div>
         <div class="field output-block">
+          <span class="auto-badge" aria-label="תוכן שנוצר אוטומטית">✦ נוצר אוטומטית — אפשר לערוך</span>
           <label for="fullPitch">הפיץ׳ המלא</label>
-          <textarea id="fullPitch" class="large-textarea" data-save readonly></textarea>
+          <textarea id="fullPitch" class="large-textarea auto-filled" data-save></textarea>
         </div>
       </div>
     </section>
 
+    <!-- ── שלב 5: נאום מעלית ───────────────────────────────────── -->
     <section class="section" aria-labelledby="elevator-title">
       <div class="section-title">
-        <span class="step-number">4</span>
+        <span class="step-number">5</span>
         <div>
           <h2 id="elevator-title">נאום מעלית</h2>
           <p>גרסה קצרה של 20–30 שניות למקרה שצריך להסביר את המיזם במהירות.</p>
@@ -586,27 +734,29 @@
           <button class="btn secondary" type="button" id="generateElevator">יצירת נאום מעלית</button>
         </div>
         <div class="field output-block">
+          <span class="auto-badge" aria-label="תוכן שנוצר אוטומטית">✦ נוצר אוטומטית — אפשר לערוך</span>
           <label for="elevatorPitch">נאום המעלית</label>
-          <textarea id="elevatorPitch" class="medium-textarea" data-save></textarea>
+          <textarea id="elevatorPitch" class="medium-textarea auto-filled" data-save></textarea>
         </div>
       </div>
     </section>
 
+    <!-- ── שלב 6: חלוקת תפקידים ───────────────────────────────── -->
     <section class="section" aria-labelledby="roles-title">
       <div class="section-title">
-        <span class="step-number">5</span>
+        <span class="step-number">6</span>
         <div>
           <h2 id="roles-title">חלוקת תפקידים</h2>
-          <p>מספר המציגות נבחר בתחילת הדף, והפיץ׳ יחולק כאן לחלקים ברורים.</p>
+          <p>הפיץ׳ מחולק כאן לחלקים ברורים לפי מספר המציגות ושמותיהן.</p>
         </div>
       </div>
-      <p class="note">החלוקה נקבעת לפי מספר המציגות שבחרתן בתחילת הדף, בלי לשבור משפטים באמצע.</p>
       <div id="roleList" class="role-list" aria-live="polite"></div>
     </section>
 
+    <!-- ── שלב 7: תרגול ובדיקת מוכנות ─────────────────────────── -->
     <section class="section" aria-labelledby="practice-title">
       <div class="section-title">
-        <span class="step-number">6</span>
+        <span class="step-number">7</span>
         <div>
           <h2 id="practice-title">תרגול ובדיקת מוכנות</h2>
           <p>סמנו יחד מה כבר מוכן לפני ההצגה.</p>
@@ -633,6 +783,7 @@
       <button class="btn" type="button" id="printPage">שמירה כ־PDF / הדפסה</button>
       <a class="btn secondary" href="FinalPitch.html">חזרה לעמוד הפיץ׳</a>
     </div>
+
   </main>
 
   <script>
@@ -640,7 +791,6 @@
       "use strict";
 
       var STORAGE_KEY = "portzot-derech-final-pitch-activity-v2";
-      var saveFields = Array.prototype.slice.call(document.querySelectorAll("[data-save]"));
       var timerSeconds = 180;
       var timerId = null;
       var BLANK = "________";
@@ -679,9 +829,11 @@
         5: [[0, 1], [2, 3], [4, 5], [6, 7], [8, 9]]
       };
 
+      /* ── helpers ─────────────────────────────────────────── */
+
       function getElementValue(id) {
-        var element = document.getElementById(id);
-        return element ? element.value.trim() : "";
+        var el = document.getElementById(id);
+        return el ? el.value.trim() : "";
       }
 
       function getPresenterCount() {
@@ -696,6 +848,86 @@
         return text.replace(/\s+/g, " ").trim();
       }
 
+      function getSpeakerName(index) {
+        var name = getElementValue("speaker_" + (index + 1));
+        return name || ("מציגה " + (index + 1));
+      }
+
+      function parseStudentNames() {
+        var raw = getElementValue("student_names");
+        if (!raw) return [];
+        return raw.split(/[,،\n]/).map(function (n) { return n.trim(); }).filter(Boolean);
+      }
+
+      /* ── datalist ────────────────────────────────────────── */
+
+      function updateStudentNamesList() {
+        var dl = document.getElementById("studentNamesList");
+        if (!dl) return;
+        var names = parseStudentNames();
+        dl.replaceChildren();
+        names.forEach(function (name) {
+          var opt = document.createElement("option");
+          opt.value = name;
+          dl.appendChild(opt);
+        });
+      }
+
+      /* ── presenter name inputs ───────────────────────────── */
+
+      function renderPresenterInputs() {
+        var container = document.getElementById("presenterNamesContainer");
+        if (!container) return;
+
+        var count = getPresenterCount();
+
+        var saved = {};
+        for (var k = 1; k <= 5; k++) {
+          var el = document.getElementById("speaker_" + k);
+          saved[k] = el ? el.value : "";
+        }
+
+        container.replaceChildren();
+        updateStudentNamesList();
+
+        for (var i = 1; i <= count; i++) {
+          (function (num) {
+            var row = document.createElement("div");
+            row.className = "presenter-row";
+
+            var lbl = document.createElement("label");
+            lbl.className = "presenter-label";
+            lbl.setAttribute("for", "speaker_" + num);
+            lbl.textContent = "מציגה " + num + ":";
+
+            var inp = document.createElement("input");
+            inp.type = "text";
+            inp.id = "speaker_" + num;
+            inp.setAttribute("list", "studentNamesList");
+            inp.setAttribute("autocomplete", "off");
+            inp.setAttribute("data-save", "");
+            inp.setAttribute("placeholder", "שם המציגה ה-" + num);
+            inp.value = saved[num] || "";
+
+            inp.addEventListener("input", function () {
+              saveAll();
+              renderRoles();
+              updatePrintHeader();
+            });
+            inp.addEventListener("change", function () {
+              saveAll();
+              renderRoles();
+              updatePrintHeader();
+            });
+
+            row.append(lbl, inp);
+            container.appendChild(row);
+          }(i));
+        }
+      }
+
+      /* ── pitch segments ──────────────────────────────────── */
+
       function buildSegments(isSingle) {
         if (isSingle) {
           return [
@@ -708,7 +940,7 @@
             "כך הגעתי לרעיון שלי: " + fill("idea") + ". המוצר שפיתחתי אמור " + fill("product_action") + ".",
             "כדי להפוך את הרעיון למשהו שאפשר לראות ולהבין, יצרתי אב־טיפוס ראשוני. האב־טיפוס ממחיש " + fill("prototype_description") + ". באפיון שמתי דגש על " + fill("focus_1") + ", על " + fill("focus_2") + " ועל " + fill("focus_3") + ", כדי שהרעיון יהיה ברור גם למי שפוגש אותו בפעם הראשונה.",
             "לאחר מכן הצגתי את האב־טיפוס וקיבלתי עליו משוב. מהמשוב הבנתי ש־" + fill("feedback") + ". בעקבות זה שיפרתי את " + fill("improvement") + ", כדי שהתוצר יהיה ברור יותר, נוח יותר ומתאים יותר לקהל היעד.",
-            "היום המוצר עובד כך: קודם " + fill("step_1") + ", אחר כך " + fill("step_2") + ", ובסוף " + fill("step_3") + ". בשלב הזה אפשר לראות שהרעיון שלי הפך למוצר שמשלב טכנולוגיה בצורה פשוטה ושימושית. הטכנולוגיה משתלבת ב־" + fill("tech_part") + ", והיא מאפשרת למשתמשים " + fill("tech_value") + ". הערך המרכזי של המוצר הוא " + fill("main_value") + ". לסיכום, עברתי תהליך של זיהוי בעיה, הבנת קהל יעד, אפיון רעיון, אב־טיפוס, משוב ושיפור. מתוך התהליך הזה הגעתי לפתרון שמשתמש בטכנולוגיה ככלי מעשי לצורך אמיתי. תודה רבה."
+            "היום המוצר עובד כך: קודם " + fill("step_1") + ", אחר כך " + fill("step_2") + ", ובסוף " + fill("step_3") + ". הטכנולוגיה משתלבת ב־" + fill("tech_part") + " ומאפשרת למשתמשים " + fill("tech_value") + ". הערך המרכזי של המוצר הוא " + fill("main_value") + ". לסיכום, עברתי תהליך של זיהוי בעיה, הבנת קהל יעד, אפיון, אב־טיפוס, משוב ושיפור — ומתוכו הגעתי לפתרון שמשתמש בטכנולוגיה ככלי מעשי לצורך אמיתי. תודה רבה."
           ].map(sentence);
         }
 
@@ -722,7 +954,7 @@
           "כך הגענו לרעיון שלנו: " + fill("idea") + ". המוצר שפיתחנו אמור " + fill("product_action") + ".",
           "כדי להפוך את הרעיון למשהו שאפשר לראות ולהבין, יצרנו אב־טיפוס ראשוני. האב־טיפוס ממחיש " + fill("prototype_description") + ". באפיון שמנו דגש על " + fill("focus_1") + ", על " + fill("focus_2") + " ועל " + fill("focus_3") + ", כדי שהרעיון יהיה ברור גם למי שפוגש אותו בפעם הראשונה.",
           "לאחר מכן הצגנו את האב־טיפוס וקיבלנו עליו משוב. מהמשוב הבנו ש־" + fill("feedback") + ". בעקבות זה שיפרנו את " + fill("improvement") + ", כדי שהתוצר יהיה ברור יותר, נוח יותר ומתאים יותר לקהל היעד.",
-          "היום המוצר עובד כך: קודם " + fill("step_1") + ", אחר כך " + fill("step_2") + ", ובסוף " + fill("step_3") + ". בשלב הזה אפשר לראות שהרעיון שלנו הפך למוצר שמשלב טכנולוגיה בצורה פשוטה ושימושית. הטכנולוגיה משתלבת ב־" + fill("tech_part") + ", והיא מאפשרת למשתמשים " + fill("tech_value") + ". הערך המרכזי של המוצר הוא " + fill("main_value") + ". לסיכום, עברנו תהליך של זיהוי בעיה, הבנת קהל יעד, אפיון רעיון, אב־טיפוס, משוב ושיפור. מתוך התהליך הזה הגענו לפתרון שמשתמש בטכנולוגיה ככלי מעשי לצורך אמיתי. תודה רבה."
+          "היום המוצר עובד כך: קודם " + fill("step_1") + ", אחר כך " + fill("step_2") + ", ובסוף " + fill("step_3") + ". הטכנולוגיה משתלבת ב־" + fill("tech_part") + " ומאפשרת למשתמשים " + fill("tech_value") + ". הערך המרכזי של המוצר הוא " + fill("main_value") + ". לסיכום, עברנו תהליך של זיהוי בעיה, הבנת קהל יעד, אפיון, אב־טיפוס, משוב ושיפור — ומתוכו הגענו לפתרון שמשתמש בטכנולוגיה ככלי מעשי לצורך אמיתי. תודה רבה."
         ].map(sentence);
       }
 
@@ -735,8 +967,9 @@
         }
 
         return speakerRanges[count].map(function (range, index) {
-          return "מציגה " + (index + 1) + "\n" + segments.slice(range[0], range[1] + 1).join("\n\n");
-        }).join("\n\n");
+          var name = getSpeakerName(index);
+          return name + ":\n" + segments.slice(range[0], range[1] + 1).join("\n\n");
+        }).join("\n\n─────\n\n");
       }
 
       function updatePitchPreview() {
@@ -747,6 +980,8 @@
         renderRoles();
       }
 
+      /* ── elevator pitch ──────────────────────────────────── */
+
       function buildElevatorPitch() {
         var count = getPresenterCount();
         var project = fill("project_name");
@@ -754,38 +989,16 @@
         var audience = fill("audience");
         var idea = fill("idea");
         var value = fill("main_value");
+        var name1 = getSpeakerName(0);
 
         if (count === 1) {
-          return "היי, אני מציגה את " + project + ". זיהיתי ש" + problem + ", בעיקר אצל " + audience + ". לכן פיתחתי רעיון שעוזר דרך " + idea + ", והערך המרכזי שלו הוא " + value + ".";
+          return "היי, אני " + name1 + " ואני מציגה את " + project + ". זיהיתי ש" + problem + ", בעיקר אצל " + audience + ". לכן פיתחתי " + idea + ", והערך המרכזי שלו הוא " + value + ".";
         }
 
-        return "היי, אנחנו מציגות את " + project + ". זיהינו ש" + problem + ", בעיקר אצל " + audience + ". לכן פיתחנו רעיון שעוזר דרך " + idea + ", והערך המרכזי שלו הוא " + value + ".";
+        return "היי, אנחנו מציגות את " + project + ". זיהינו ש" + problem + ", בעיקר אצל " + audience + ". לכן פיתחנו " + idea + ", והערך המרכזי שלו הוא " + value + ".";
       }
 
-      function saveAll() {
-        var data = {};
-        saveFields.forEach(function (field) {
-          data[field.id] = field.type === "checkbox" ? field.checked : field.value;
-        });
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-      }
-
-      function loadAll() {
-        try {
-          var data = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
-          saveFields.forEach(function (field) {
-            if (Object.prototype.hasOwnProperty.call(data, field.id)) {
-              if (field.type === "checkbox") {
-                field.checked = Boolean(data[field.id]);
-              } else {
-                field.value = data[field.id];
-              }
-            }
-          });
-        } catch (error) {
-          localStorage.removeItem(STORAGE_KEY);
-        }
-      }
+      /* ── roles ───────────────────────────────────────────── */
 
       function renderRoles() {
         var roleList = document.getElementById("roleList");
@@ -798,10 +1011,12 @@
 
         if (count === 1) {
           var singleCard = document.createElement("article");
+          var singleTitle = document.createElement("h3");
           var singleText = document.createElement("p");
           singleCard.className = "role-card";
-          singleText.textContent = "מציגה אחת מציגה את הפיץ׳ ברצף, בלי חלוקה לכותרות.";
-          singleCard.appendChild(singleText);
+          singleTitle.textContent = getSpeakerName(0);
+          singleText.textContent = "מציגה את הפיץ׳ ברצף, בלי חלוקה לכותרות.";
+          singleCard.append(singleTitle, singleText);
           roleList.appendChild(singleCard);
           return;
         }
@@ -812,18 +1027,72 @@
           var text = document.createElement("p");
 
           card.className = "role-card";
-          title.textContent = "מציגה " + (index + 1);
-          text.textContent = segments.slice(range[0], range[1] + 1).join(" ");
+          title.textContent = getSpeakerName(index);
+          text.textContent = segments.slice(range[0], range[1] + 1).join(" ").substring(0, 280) + (segments.slice(range[0], range[1] + 1).join(" ").length > 280 ? "…" : "");
 
           card.append(title, text);
           roleList.appendChild(card);
         });
       }
 
+      /* ── print header ────────────────────────────────────── */
+
+      function updatePrintHeader() {
+        var projEl = document.getElementById("printProjectName");
+        var metaEl = document.getElementById("printMeta");
+        if (projEl) projEl.textContent = getElementValue("project_name") || "פיץ׳ סופי";
+        if (metaEl) {
+          var parts = [];
+          var school = getElementValue("school_name");
+          var cls = getElementValue("class_name");
+          var students = getElementValue("student_names");
+          if (school) parts.push(school);
+          if (cls) parts.push("כיתה " + cls);
+          if (students) parts.push(students);
+          metaEl.textContent = parts.join(" | ");
+        }
+      }
+
+      /* ── save / load ─────────────────────────────────────── */
+
+      function getSaveFields() {
+        return Array.prototype.slice.call(document.querySelectorAll("[data-save]"));
+      }
+
+      function saveAll() {
+        var data = {};
+        getSaveFields().forEach(function (field) {
+          if (field.id) {
+            data[field.id] = field.type === "checkbox" ? field.checked : field.value;
+          }
+        });
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      }
+
+      function loadAll() {
+        try {
+          var data = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+          getSaveFields().forEach(function (field) {
+            if (field.id && Object.prototype.hasOwnProperty.call(data, field.id)) {
+              if (field.type === "checkbox") {
+                field.checked = Boolean(data[field.id]);
+              } else {
+                field.value = data[field.id];
+              }
+            }
+          });
+        } catch (error) {
+          localStorage.removeItem(STORAGE_KEY);
+        }
+      }
+
+      /* ── timer ───────────────────────────────────────────── */
+
       function updateTimerDisplay() {
         var minutes = String(Math.floor(timerSeconds / 60)).padStart(2, "0");
         var seconds = String(timerSeconds % 60).padStart(2, "0");
-        document.getElementById("timerDisplay").textContent = minutes + ":" + seconds;
+        var el = document.getElementById("timerDisplay");
+        if (el) el.textContent = minutes + ":" + seconds;
       }
 
       function startTimer() {
@@ -847,24 +1116,35 @@
         updateTimerDisplay();
       }
 
+      /* ── print expand/restore ────────────────────────────── */
+
       function expandTextareasForPrint() {
-        document.querySelectorAll("textarea").forEach(function (textarea) {
-          textarea.dataset.originalHeight = textarea.style.height;
-          textarea.style.height = "auto";
-          textarea.style.height = textarea.scrollHeight + "px";
+        document.querySelectorAll("textarea").forEach(function (ta) {
+          ta.dataset.originalHeight = ta.style.height;
+          ta.style.height = "auto";
+          ta.style.height = ta.scrollHeight + "px";
         });
+        updatePrintHeader();
       }
 
       function restoreTextareasAfterPrint() {
-        document.querySelectorAll("textarea").forEach(function (textarea) {
-          textarea.style.height = textarea.dataset.originalHeight || "";
-          delete textarea.dataset.originalHeight;
+        document.querySelectorAll("textarea").forEach(function (ta) {
+          ta.style.height = ta.dataset.originalHeight || "";
+          delete ta.dataset.originalHeight;
         });
       }
 
+      /* ── init ────────────────────────────────────────────── */
+
+      renderPresenterInputs();
       loadAll();
+      renderPresenterInputs();
+      updateStudentNamesList();
       updatePitchPreview();
       updateTimerDisplay();
+      updatePrintHeader();
+
+      /* ── event wiring ────────────────────────────────────── */
 
       document.getElementById("generatePitch").addEventListener("click", function () {
         updatePitchPreview();
@@ -872,30 +1152,54 @@
       });
 
       document.getElementById("generateElevator").addEventListener("click", function () {
-        document.getElementById("elevatorPitch").value = buildElevatorPitch();
+        var el = document.getElementById("elevatorPitch");
+        if (el) el.value = buildElevatorPitch();
         saveAll();
       });
 
-      document.getElementById("printPage").addEventListener("click", function () { window.print(); });
+      document.getElementById("printPage").addEventListener("click", function () {
+        updatePrintHeader();
+        window.print();
+      });
+
       window.addEventListener("beforeprint", expandTextareasForPrint);
       window.addEventListener("afterprint", restoreTextareasAfterPrint);
+
       document.getElementById("startTimer").addEventListener("click", startTimer);
       document.getElementById("resetTimer").addEventListener("click", resetTimer);
 
-      saveFields.forEach(function (field) {
+      getSaveFields().forEach(function (field) {
+        if (!field.id || field.id.startsWith("speaker_")) return;
+
         field.addEventListener("input", function () {
           saveAll();
-          if (field.id === "presenterCount" || pitchFieldIds.indexOf(field.id) !== -1) {
+          if (field.id === "student_names") {
+            updateStudentNamesList();
+          }
+          if (field.id === "presenterCount") {
+            renderPresenterInputs();
             updatePitchPreview();
           }
+          if (["project_name", "school_name", "class_name", "student_names"].indexOf(field.id) !== -1) {
+            updatePrintHeader();
+          }
         });
+
         field.addEventListener("change", function () {
           saveAll();
-          if (field.id === "presenterCount" || pitchFieldIds.indexOf(field.id) !== -1) {
+          if (field.id === "student_names") {
+            updateStudentNamesList();
+          }
+          if (field.id === "presenterCount") {
+            renderPresenterInputs();
             updatePitchPreview();
+          }
+          if (["project_name", "school_name", "class_name", "student_names"].indexOf(field.id) !== -1) {
+            updatePrintHeader();
           }
         });
       });
+
     }());
   </script>
 </body>
