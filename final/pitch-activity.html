@@ -248,6 +248,7 @@
     .roles-toolbar label { margin: 0; }
     .roles-toolbar select { width: auto; min-width: 6rem; }
 
+
     .role-list {
       display: grid;
       gap: 0.75rem;
@@ -426,26 +427,28 @@
       <div class="section-title">
         <span class="step-number">1</span>
         <div>
-          <h2 id="group-details-title">פרטי הקבוצה</h2>
-          <p>נתונים בסיסיים שיופיעו בפתיחת הפיץ׳.</p>
+          <h2 id="group-details-title">פרטי הפיץ׳</h2>
+          <p>בחרו כמה מציגות יש, וכתבו את הפרטים שיופיעו בפתיחה.</p>
         </div>
       </div>
       <div class="grid">
         <div class="field">
-          <label for="ventureName">שם המיזם</label>
-          <input id="ventureName" type="text" autocomplete="off" placeholder="לדוגמה: SafeStep" data-save />
+          <label for="presenterCount">כמה מציגות יציגו את הפיץ׳?</label>
+          <select id="presenterCount" data-save>
+            <option value="1">1</option>
+            <option value="2" selected>2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
         </div>
         <div class="field">
-          <label for="schoolName">שם בית הספר</label>
-          <input id="schoolName" type="text" autocomplete="organization" data-save />
+          <label for="speaker_or_team_name">איך קוראים לך או לצוות שלכן?</label>
+          <input id="speaker_or_team_name" type="text" autocomplete="off" data-save />
         </div>
         <div class="field full">
-          <label for="studentNames">שמות התלמידות</label>
-          <input id="studentNames" type="text" autocomplete="off" placeholder="הפרידו שמות בפסיקים, למשל: נועה, מאיה, תמר" data-save />
-        </div>
-        <div class="field">
-          <label for="className">כיתה</label>
-          <input id="className" type="text" autocomplete="off" placeholder="לדוגמה: ח׳2" data-save />
+          <label for="project_name">איך קוראים למיזם שלכן?</label>
+          <input id="project_name" type="text" autocomplete="off" data-save />
         </div>
       </div>
     </section>
@@ -454,38 +457,98 @@
       <div class="section-title">
         <span class="step-number">2</span>
         <div>
-          <h2 id="pitch-data-title">נתוני הפיץ׳</h2>
-          <p>כתבו קצר וברור. מהנתונים האלה ייווצר נוסח הפיץ׳.</p>
+          <h2 id="pitch-data-title">שאלות קצרות לבניית הפיץ׳</h2>
+          <p>ענו במשפט קצר. התצוגה המקדימה מתעדכנת אוטומטית לפי התשובות ולפי מספר המציגות.</p>
         </div>
       </div>
       <div class="grid">
         <div class="field full">
-          <label for="problem">הבעיה שזיהינו</label>
+          <label for="problem">איזו בעיה זיהיתן?</label>
           <textarea id="problem" data-save></textarea>
         </div>
         <div class="field">
-          <label for="audience">קהל היעד</label>
+          <label for="audience">אצל מי הבעיה הזאת מופיעה בעיקר?</label>
           <textarea id="audience" data-save></textarea>
         </div>
         <div class="field">
-          <label for="solution">הפתרון שפיתחנו</label>
-          <textarea id="solution" data-save></textarea>
+          <label for="situation">באיזה מצב או סיטואציה הבעיה מופיעה?</label>
+          <textarea id="situation" data-save></textarea>
         </div>
         <div class="field">
-          <label for="help">איך הפתרון עוזר</label>
-          <textarea id="help" data-save></textarea>
+          <label for="difficulty">מה קשה לקהל היעד במצב הזה?</label>
+          <textarea id="difficulty" data-save></textarea>
         </div>
         <div class="field">
-          <label for="howItWorks">איך משתמשים במוצר / איך זה עובד</label>
-          <textarea id="howItWorks" data-save></textarea>
+          <label for="main_need">מה קהל היעד צריך מהפתרון?</label>
+          <textarea id="main_need" data-save></textarea>
         </div>
         <div class="field">
-          <label for="value">הערך המרכזי</label>
-          <textarea id="value" data-save></textarea>
+          <label for="quality_1">איזו תכונה חשוב שתהיה בפתרון?</label>
+          <input id="quality_1" type="text" autocomplete="off" data-save />
         </div>
         <div class="field">
-          <label for="importance">למה המיזם חשוב</label>
-          <textarea id="importance" data-save></textarea>
+          <label for="quality_2">איזו תכונה נוספת חשובה בפתרון?</label>
+          <input id="quality_2" type="text" autocomplete="off" data-save />
+        </div>
+        <div class="field">
+          <label for="quality_3">איזו תכונה שלישית חשובה בפתרון?</label>
+          <input id="quality_3" type="text" autocomplete="off" data-save />
+        </div>
+        <div class="field full">
+          <label for="idea">מה הרעיון שפיתחתן?</label>
+          <textarea id="idea" data-save></textarea>
+        </div>
+        <div class="field full">
+          <label for="product_action">מה המוצר אמור לעשות עבור המשתמשות והמשתמשים?</label>
+          <textarea id="product_action" data-save></textarea>
+        </div>
+        <div class="field full">
+          <label for="prototype_description">איך האב־טיפוס ממחיש את המוצר?</label>
+          <textarea id="prototype_description" data-save></textarea>
+        </div>
+        <div class="field">
+          <label for="focus_1">על מה שמתן דגש באפיון המוצר?</label>
+          <input id="focus_1" type="text" autocomplete="off" data-save />
+        </div>
+        <div class="field">
+          <label for="focus_2">על מה נוסף שמתן דגש באפיון?</label>
+          <input id="focus_2" type="text" autocomplete="off" data-save />
+        </div>
+        <div class="field">
+          <label for="focus_3">מה היה הדגש השלישי באפיון?</label>
+          <input id="focus_3" type="text" autocomplete="off" data-save />
+        </div>
+        <div class="field full">
+          <label for="feedback">איזה משוב קיבלתן על האב־טיפוס?</label>
+          <textarea id="feedback" data-save></textarea>
+        </div>
+        <div class="field full">
+          <label for="improvement">מה שיפרתן בעקבות המשוב?</label>
+          <textarea id="improvement" data-save></textarea>
+        </div>
+        <div class="field">
+          <label for="step_1">מה המשתמשת או המשתמש עושים קודם?</label>
+          <textarea id="step_1" data-save></textarea>
+        </div>
+        <div class="field">
+          <label for="step_2">מה קורה אחר כך?</label>
+          <textarea id="step_2" data-save></textarea>
+        </div>
+        <div class="field">
+          <label for="step_3">מה קורה בסוף?</label>
+          <textarea id="step_3" data-save></textarea>
+        </div>
+        <div class="field">
+          <label for="tech_part">איפה הטכנולוגיה משתלבת במוצר?</label>
+          <textarea id="tech_part" data-save></textarea>
+        </div>
+        <div class="field">
+          <label for="tech_value">מה הטכנולוגיה מאפשרת למשתמשות ולמשתמשים לקבל או לעשות?</label>
+          <textarea id="tech_value" data-save></textarea>
+        </div>
+        <div class="field full">
+          <label for="main_value">מה הערך המרכזי של המוצר?</label>
+          <textarea id="main_value" data-save></textarea>
         </div>
       </div>
     </section>
@@ -494,18 +557,18 @@
       <div class="section-title">
         <span class="step-number">3</span>
         <div>
-          <h2 id="create-pitch-title">יצירת הפיץ׳</h2>
-          <p>אפשר ליצור נוסח ראשוני ואז לערוך אותו ידנית עד שהוא נשמע כמו הקבוצה שלכן.</p>
+          <h2 id="create-pitch-title">תצוגה מקדימה של הפיץ׳</h2>
+          <p>הפיץ׳ נבנה אוטומטית מכל התשובות. אם נבחרה מציגה אחת הוא יוצג ברצף; אם נבחרו 2–5 מציגות הוא יחולק לחלקים רציפים.</p>
         </div>
       </div>
       <div class="grid">
         <div class="actions">
-          <button class="btn" type="button" id="generatePitch">יצירת פיץ׳ מהנתונים</button>
-          <p class="note">הטקסט שנוצר נשמר בדפדפן וניתן לעריכה.</p>
+          <button class="btn" type="button" id="generatePitch">רענון הפיץ׳</button>
+          <p class="note">שדות ריקים יופיעו כקו מילוי ברור, כדי שלא ייווצר משפט שבור.</p>
         </div>
         <div class="field output-block">
           <label for="fullPitch">הפיץ׳ המלא</label>
-          <textarea id="fullPitch" class="large-textarea" data-save></textarea>
+          <textarea id="fullPitch" class="large-textarea" data-save readonly></textarea>
         </div>
       </div>
     </section>
@@ -534,19 +597,10 @@
         <span class="step-number">5</span>
         <div>
           <h2 id="roles-title">חלוקת תפקידים</h2>
-          <p>בחרו כמה דוברות מציגות, והפיץ׳ יחולק לחלקים ברורים.</p>
+          <p>מספר המציגות נבחר בתחילת הדף, והפיץ׳ יחולק כאן לחלקים ברורים.</p>
         </div>
       </div>
-      <div class="roles-toolbar">
-        <label for="speakerCount">מספר דוברות:</label>
-        <select id="speakerCount" data-save>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5" selected>5</option>
-        </select>
-      </div>
+      <p class="note">החלוקה נקבעת לפי מספר המציגות שבחרתן בתחילת הדף, בלי לשבור משפטים באמצע.</p>
       <div id="roleList" class="role-list" aria-live="polite"></div>
     </section>
 
@@ -585,71 +639,127 @@
     (function () {
       "use strict";
 
-      var STORAGE_KEY = "portzot-derech-final-pitch-activity-v1";
+      var STORAGE_KEY = "portzot-derech-final-pitch-activity-v2";
       var saveFields = Array.prototype.slice.call(document.querySelectorAll("[data-save]"));
       var timerSeconds = 180;
       var timerId = null;
+      var BLANK = "________";
+
+      var pitchFieldIds = [
+        "speaker_or_team_name",
+        "project_name",
+        "problem",
+        "audience",
+        "situation",
+        "difficulty",
+        "main_need",
+        "quality_1",
+        "quality_2",
+        "quality_3",
+        "idea",
+        "product_action",
+        "prototype_description",
+        "focus_1",
+        "focus_2",
+        "focus_3",
+        "feedback",
+        "improvement",
+        "step_1",
+        "step_2",
+        "step_3",
+        "tech_part",
+        "tech_value",
+        "main_value"
+      ];
+
+      var speakerRanges = {
+        2: [[0, 4], [5, 9]],
+        3: [[0, 2], [3, 5], [6, 9]],
+        4: [[0, 1], [2, 4], [5, 7], [8, 9]],
+        5: [[0, 1], [2, 3], [4, 5], [6, 7], [8, 9]]
+      };
 
       function getElementValue(id) {
         var element = document.getElementById(id);
         return element ? element.value.trim() : "";
       }
 
-      function fallback(value, text) {
-        return value || text;
+      function getPresenterCount() {
+        return Number(getElementValue("presenterCount")) || 1;
       }
 
-      function splitNames() {
-        return getElementValue("studentNames")
-          .split(/[,.،\n]/)
-          .map(function (name) { return name.trim(); })
-          .filter(Boolean);
+      function fill(id) {
+        return getElementValue(id) || BLANK;
       }
 
-      function getGroupLine() {
-        var venture = getElementValue("ventureName");
-        var school = getElementValue("schoolName");
-        var className = getElementValue("className");
-        var names = splitNames().join(", ");
-        var parts = [];
-
-        if (venture) { parts.push("אנחנו מציגות את " + venture); }
-        if (names) { parts.push("של " + names); }
-        if (className || school) { parts.push("מ" + [className, school].filter(Boolean).join(", ")); }
-
-        return parts.length ? parts.join(" ") + "." : "שלום, אנחנו מציגות היום את המיזם שלנו.";
+      function sentence(text) {
+        return text.replace(/\s+/g, " ").trim();
       }
 
-      function buildFullPitch() {
-        var venture = fallback(getElementValue("ventureName"), "המיזם שלנו");
-        var problem = fallback(getElementValue("problem"), "בעיה שחשוב לנו לפתור");
-        var audience = fallback(getElementValue("audience"), "קהל היעד שלנו");
-        var solution = fallback(getElementValue("solution"), "פתרון פשוט וברור");
-        var help = fallback(getElementValue("help"), "להתמודד עם הבעיה בצורה טובה יותר");
-        var howItWorks = fallback(getElementValue("howItWorks"), "משתמשות ומשתמשים מפעילים את המוצר לפי הצורך ומקבלים מענה ברור");
-        var value = fallback(getElementValue("value"), "ערך משמעותי למשתמשות ולמשתמשים");
-        var importance = fallback(getElementValue("importance"), "הוא נותן מענה לצורך אמיתי ויכול ליצור שינוי חיובי");
+      function buildSegments(isSingle) {
+        if (isSingle) {
+          return [
+            "שלום, אני " + fill("speaker_or_team_name") + ", והיום אציג את המיזם שלי: " + fill("project_name") + ".",
+            "התהליך שלי התחיל מבעיה שזיהיתי:\n" + fill("problem") + ".",
+            "שמתי לב שהיא מופיעה בעיקר אצל " + fill("audience") + ", במיוחד במצבים שבהם " + fill("situation") + ".",
+            "בשלב הראשון ניסיתי להבין את הנושא בצורה מדויקת יותר: מי פוגש אותו, מה קשה לו, מתי זה קורה, ומה יכול להפוך את ההתמודדות לפשוטה, ברורה או נוחה יותר. מתוך זה הבנתי שקהל היעד שלי מתמודד עם " + fill("difficulty") + ".",
+            "הצורך המרכזי שעלה הוא פתרון שנותן מענה ל־" + fill("main_need") + ". לכן היה לי חשוב לפתח פתרון שיהיה " + fill("quality_1") + ", " + fill("quality_2") + " ו־" + fill("quality_3") + ".",
+            "אחרי שהבנתי למי אני מפתחת את המוצר ומה הצורך המרכזי, התחלתי לאפיין את הרעיון. חשבתי מה המוצר צריך לעשות, איך ישתמשו בו, ומה המשתמשים יקבלו ממנו בסוף.",
+            "כך הגעתי לרעיון שלי: " + fill("idea") + ". המוצר שפיתחתי אמור " + fill("product_action") + ".",
+            "כדי להפוך את הרעיון למשהו שאפשר לראות ולהבין, יצרתי אב־טיפוס ראשוני. האב־טיפוס ממחיש " + fill("prototype_description") + ". באפיון שמתי דגש על " + fill("focus_1") + ", על " + fill("focus_2") + " ועל " + fill("focus_3") + ", כדי שהרעיון יהיה ברור גם למי שפוגש אותו בפעם הראשונה.",
+            "לאחר מכן הצגתי את האב־טיפוס וקיבלתי עליו משוב. מהמשוב הבנתי ש־" + fill("feedback") + ". בעקבות זה שיפרתי את " + fill("improvement") + ", כדי שהתוצר יהיה ברור יותר, נוח יותר ומתאים יותר לקהל היעד.",
+            "היום המוצר עובד כך: קודם " + fill("step_1") + ", אחר כך " + fill("step_2") + ", ובסוף " + fill("step_3") + ". בשלב הזה אפשר לראות שהרעיון שלי הפך למוצר שמשלב טכנולוגיה בצורה פשוטה ושימושית. הטכנולוגיה משתלבת ב־" + fill("tech_part") + ", והיא מאפשרת למשתמשים " + fill("tech_value") + ". הערך המרכזי של המוצר הוא " + fill("main_value") + ". לסיכום, עברתי תהליך של זיהוי בעיה, הבנת קהל יעד, אפיון רעיון, אב־טיפוס, משוב ושיפור. מתוך התהליך הזה הגעתי לפתרון שמשתמש בטכנולוגיה ככלי מעשי לצורך אמיתי. תודה רבה."
+          ].map(sentence);
+        }
 
         return [
-          getGroupLine(),
-          "בחרנו לעבוד על " + venture + " כי זיהינו את הבעיה הבאה: " + problem + ".",
-          "קהל היעד שלנו הוא " + audience + ", ולכן היה לנו חשוב לבנות פתרון שמתאים לצרכים שלו.",
-          "הפתרון שפיתחנו הוא " + solution + ". הוא עוזר בכך שהוא " + help + ".",
-          "כך זה עובד: " + howItWorks + ".",
-          "הערך המרכזי של המיזם הוא " + value + ".",
-          "אנחנו מאמינות שהמיזם חשוב כי " + importance + ".",
-          "לסיכום, " + venture + " הוא מיזם שנבנה מתוך צורך אמיתי, עם פתרון ברור ועם רצון להשפיע לטובה. תודה רבה."
-        ].join("\n\n");
+          "שלום, אנחנו " + fill("speaker_or_team_name") + ", והיום נציג את המיזם שלנו: " + fill("project_name") + ".",
+          "התהליך שלנו התחיל מבעיה שזיהינו:\n" + fill("problem") + ".",
+          "שמנו לב שהיא מופיעה בעיקר אצל " + fill("audience") + ", במיוחד במצבים שבהם " + fill("situation") + ".",
+          "בשלב הראשון ניסינו להבין את הנושא בצורה מדויקת יותר: מי פוגש אותו, מה קשה לו, מתי זה קורה, ומה יכול להפוך את ההתמודדות לפשוטה, ברורה או נוחה יותר. מתוך זה הבנו שקהל היעד שלנו מתמודד עם " + fill("difficulty") + ".",
+          "הצורך המרכזי שעלה הוא פתרון שנותן מענה ל־" + fill("main_need") + ". לכן היה לנו חשוב לפתח פתרון שיהיה " + fill("quality_1") + ", " + fill("quality_2") + " ו־" + fill("quality_3") + ".",
+          "אחרי שהבנו למי אנחנו מפתחות את המוצר ומה הצורך המרכזי, התחלנו לאפיין את הרעיון. חשבנו מה המוצר צריך לעשות, איך ישתמשו בו, ומה המשתמשים יקבלו ממנו בסוף.",
+          "כך הגענו לרעיון שלנו: " + fill("idea") + ". המוצר שפיתחנו אמור " + fill("product_action") + ".",
+          "כדי להפוך את הרעיון למשהו שאפשר לראות ולהבין, יצרנו אב־טיפוס ראשוני. האב־טיפוס ממחיש " + fill("prototype_description") + ". באפיון שמנו דגש על " + fill("focus_1") + ", על " + fill("focus_2") + " ועל " + fill("focus_3") + ", כדי שהרעיון יהיה ברור גם למי שפוגש אותו בפעם הראשונה.",
+          "לאחר מכן הצגנו את האב־טיפוס וקיבלנו עליו משוב. מהמשוב הבנו ש־" + fill("feedback") + ". בעקבות זה שיפרנו את " + fill("improvement") + ", כדי שהתוצר יהיה ברור יותר, נוח יותר ומתאים יותר לקהל היעד.",
+          "היום המוצר עובד כך: קודם " + fill("step_1") + ", אחר כך " + fill("step_2") + ", ובסוף " + fill("step_3") + ". בשלב הזה אפשר לראות שהרעיון שלנו הפך למוצר שמשלב טכנולוגיה בצורה פשוטה ושימושית. הטכנולוגיה משתלבת ב־" + fill("tech_part") + ", והיא מאפשרת למשתמשים " + fill("tech_value") + ". הערך המרכזי של המוצר הוא " + fill("main_value") + ". לסיכום, עברנו תהליך של זיהוי בעיה, הבנת קהל יעד, אפיון רעיון, אב־טיפוס, משוב ושיפור. מתוך התהליך הזה הגענו לפתרון שמשתמש בטכנולוגיה ככלי מעשי לצורך אמיתי. תודה רבה."
+        ].map(sentence);
+      }
+
+      function buildPitchText() {
+        var count = getPresenterCount();
+        var segments = buildSegments(count === 1);
+
+        if (count === 1) {
+          return segments.join("\n\n");
+        }
+
+        return speakerRanges[count].map(function (range, index) {
+          return "מציגה " + (index + 1) + "\n" + segments.slice(range[0], range[1] + 1).join("\n\n");
+        }).join("\n\n");
+      }
+
+      function updatePitchPreview() {
+        var output = document.getElementById("fullPitch");
+        if (output) {
+          output.value = buildPitchText();
+        }
+        renderRoles();
       }
 
       function buildElevatorPitch() {
-        var venture = fallback(getElementValue("ventureName"), "המיזם שלנו");
-        var problem = fallback(getElementValue("problem"), "בעיה יומיומית שחשוב לפתור");
-        var audience = fallback(getElementValue("audience"), "קהל היעד");
-        var solution = fallback(getElementValue("solution"), "פתרון פשוט ונגיש");
-        var value = fallback(getElementValue("value"), "ערך משמעותי");
+        var count = getPresenterCount();
+        var project = fill("project_name");
+        var problem = fill("problem");
+        var audience = fill("audience");
+        var idea = fill("idea");
+        var value = fill("main_value");
 
-        return "היי, אנחנו מציגות את " + venture + ". זיהינו ש" + problem + ", במיוחד עבור " + audience + ". לכן פיתחנו " + solution + ", שמעניק " + value + ". המטרה שלנו היא להפוך את ההתמודדות עם הבעיה לפשוטה, ברורה וטובה יותר.";
+        if (count === 1) {
+          return "היי, אני מציגה את " + project + ". זיהיתי ש" + problem + ", בעיקר אצל " + audience + ". לכן פיתחתי רעיון שעוזר דרך " + idea + ", והערך המרכזי שלו הוא " + value + ".";
+        }
+
+        return "היי, אנחנו מציגות את " + project + ". זיהינו ש" + problem + ", בעיקר אצל " + audience + ". לכן פיתחנו רעיון שעוזר דרך " + idea + ", והערך המרכזי שלו הוא " + value + ".";
       }
 
       function saveAll() {
@@ -677,37 +787,33 @@
         }
       }
 
-      function groupRoleParts(parts, count) {
-        var groups = Array.from({ length: count }, function () { return []; });
-        parts.forEach(function (part, index) {
-          groups[Math.floor(index * count / parts.length)].push(part);
-        });
-        return groups;
-      }
-
       function renderRoles() {
-        var count = Number(getElementValue("speakerCount")) || 1;
-        var names = splitNames();
-        var parts = [
-          "פתיחה",
-          "בעיה וקהל יעד",
-          "פתרון",
-          "דרך פעולה",
-          "ערך וסיכום"
-        ];
-        var groups = groupRoleParts(parts, count);
         var roleList = document.getElementById("roleList");
+        if (!roleList) { return; }
+
+        var count = getPresenterCount();
+        var segments = buildSegments(count === 1);
 
         roleList.replaceChildren();
-        groups.forEach(function (group, index) {
-          var speakerName = names[index] || "דוברת " + (index + 1);
+
+        if (count === 1) {
+          var singleCard = document.createElement("article");
+          var singleText = document.createElement("p");
+          singleCard.className = "role-card";
+          singleText.textContent = "מציגה אחת מציגה את הפיץ׳ ברצף, בלי חלוקה לכותרות.";
+          singleCard.appendChild(singleText);
+          roleList.appendChild(singleCard);
+          return;
+        }
+
+        speakerRanges[count].forEach(function (range, index) {
           var card = document.createElement("article");
           var title = document.createElement("h3");
           var text = document.createElement("p");
 
           card.className = "role-card";
-          title.textContent = speakerName;
-          text.textContent = group.join(" + ");
+          title.textContent = "מציגה " + (index + 1);
+          text.textContent = segments.slice(range[0], range[1] + 1).join(" ");
 
           card.append(title, text);
           roleList.appendChild(card);
@@ -757,11 +863,11 @@
       }
 
       loadAll();
-      renderRoles();
+      updatePitchPreview();
       updateTimerDisplay();
 
       document.getElementById("generatePitch").addEventListener("click", function () {
-        document.getElementById("fullPitch").value = buildFullPitch();
+        updatePitchPreview();
         saveAll();
       });
 
@@ -770,12 +876,6 @@
         saveAll();
       });
 
-      document.getElementById("speakerCount").addEventListener("change", function () {
-        renderRoles();
-        saveAll();
-      });
-
-      document.getElementById("studentNames").addEventListener("input", renderRoles);
       document.getElementById("printPage").addEventListener("click", function () { window.print(); });
       window.addEventListener("beforeprint", expandTextareasForPrint);
       window.addEventListener("afterprint", restoreTextareasAfterPrint);
@@ -783,8 +883,18 @@
       document.getElementById("resetTimer").addEventListener("click", resetTimer);
 
       saveFields.forEach(function (field) {
-        field.addEventListener("input", saveAll);
-        field.addEventListener("change", saveAll);
+        field.addEventListener("input", function () {
+          saveAll();
+          if (field.id === "presenterCount" || pitchFieldIds.indexOf(field.id) !== -1) {
+            updatePitchPreview();
+          }
+        });
+        field.addEventListener("change", function () {
+          saveAll();
+          if (field.id === "presenterCount" || pitchFieldIds.indexOf(field.id) !== -1) {
+            updatePitchPreview();
+          }
+        });
       });
     }());
   </script>
