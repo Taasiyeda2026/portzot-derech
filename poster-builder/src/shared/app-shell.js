@@ -17,6 +17,7 @@ const { useEffect, useRef, useState } = React;
 const h = React.createElement;
 const PRESELECTED_PRODUCT_TYPE = window.__POSTER_BUILDER_PRODUCT_TYPE || null;
 const PRESELECTED_START_STEP = Number(window.__POSTER_BUILDER_START_STEP || 0) || null;
+const CURRENT_SCHOOL_SLUG = new URLSearchParams(window.location.search).get('school') || 'default';
 
 const ALL_CONTENT_KEYS = getAllContentKeys();
 const EMPTY_PROMPT_ANSWERS = { main_whatToSee:'',main_appearance:'',main_highlight:'',main_material:'',main_background:'',main_style:'',main_realism:'',main_colors:'',main_exclude:'',usage_who:'',usage_howMany:'',usage_action:'',usage_where:'',usage_understand:'',usage_highlight:'',usage_style:'',usage_realism:'',usage_colors:'',usage_exclude:'' };
@@ -55,7 +56,7 @@ function App() {
   useEffect(()=>{textColorRef.current=textColor;},[textColor]);
 
   useEffect(()=>{
-    const saved = loadProject();
+    const saved = loadProject(CURRENT_SCHOOL_SLUG);
     if (!saved) return;
     setProductType(PRESELECTED_PRODUCT_TYPE || saved.productType || 'physical');
     setCurrentBackground(saved.background || BACKGROUNDS[0].path);
@@ -68,7 +69,7 @@ function App() {
   },[]);
 
   useEffect(() => {
-    saveProject({ ...loadProject(), posterSize, productType, background: currentBackground, contentValues, fieldSettings, titleStyle: { fontFamily: titleFont, color: titleColor, textColor }, slotImages });
+    saveProject({ ...loadProject(CURRENT_SCHOOL_SLUG), school_slug: CURRENT_SCHOOL_SLUG, posterSize, productType, background: currentBackground, contentValues, fieldSettings, titleStyle: { fontFamily: titleFont, color: titleColor, textColor }, slotImages });
     if (wizardStep === 4) {
       // Debounce poster re-render so rapid keystrokes don't thrash the DOM
       clearTimeout(renderTimerRef.current);
@@ -79,19 +80,20 @@ function App() {
   }, [posterSize, productType, currentBackground, contentValues, fieldSettings, titleFont, titleColor, textColor, slotImages, wizardStep]);
 
   const handleProductTypeChange = (type) => { if (!PRESELECTED_PRODUCT_TYPE) setProductType(type); };
-  const handleBackground = (path) => { currentBackgroundRef.current = path; setCurrentBackground(path); saveProject({ ...loadProject(), background: path }); if (wizardStep===4) renderHTMLPoster(contentValuesRef.current, productTypeRef.current, titleFont, titleColor, textColorRef.current, path, slotImagesRef.current); };
+  const handleBackground = (path) => { currentBackgroundRef.current = path; setCurrentBackground(path); saveProject({ ...loadProject(CURRENT_SCHOOL_SLUG), school_slug: CURRENT_SCHOOL_SLUG, background: path }); if (wizardStep===4) renderHTMLPoster(contentValuesRef.current, productTypeRef.current, titleFont, titleColor, textColorRef.current, path, slotImagesRef.current); };
   const handleShape = (borderRadius) => { setCurrentShape(borderRadius); setFieldSettings(Object.fromEntries(FIELD_DEFINITIONS.map((f)=>[f.id,{...(fieldSettingsRef.current[f.id]||{}),borderRadius}]))); };
   const handleTitleFont = (font) => setTitleFont(font);
   const handleTitleColor = (color) => setTitleColor(color);
   const onContentFieldChange = (key, rawValue) => setContentValues({ ...contentValuesRef.current, [key]: rawValue });
-  const onSlotUpload = (slotKey, file) => { if (!file) return; const r = new FileReader(); r.onload = (e)=>{ const dataUrl=e.target.result; const nextSlots={...slotImagesRef.current,[slotKey]:dataUrl}; slotImagesRef.current=nextSlots; setSlotImages(nextSlots); saveProject({ ...loadProject(), slotImages: nextSlots }); if (wizardStep===4) renderHTMLPoster(contentValuesRef.current, productTypeRef.current, titleFont, titleColor, textColorRef.current, currentBackgroundRef.current, nextSlots); }; r.readAsDataURL(file); };
-  const onSlotClear = (slotKey) => { const nextSlots={...slotImagesRef.current,[slotKey]:null}; slotImagesRef.current=nextSlots; setSlotImages(nextSlots); saveProject({ ...loadProject(), slotImages: nextSlots }); if (wizardStep===4) renderHTMLPoster(contentValuesRef.current, productTypeRef.current, titleFont, titleColor, textColorRef.current, currentBackgroundRef.current, nextSlots); };
+  const onSlotUpload = (slotKey, file) => { if (!file) return; const r = new FileReader(); r.onload = (e)=>{ const dataUrl=e.target.result; const nextSlots={...slotImagesRef.current,[slotKey]:dataUrl}; slotImagesRef.current=nextSlots; setSlotImages(nextSlots); saveProject({ ...loadProject(CURRENT_SCHOOL_SLUG), school_slug: CURRENT_SCHOOL_SLUG, slotImages: nextSlots }); if (wizardStep===4) renderHTMLPoster(contentValuesRef.current, productTypeRef.current, titleFont, titleColor, textColorRef.current, currentBackgroundRef.current, nextSlots); }; r.readAsDataURL(file); };
+  const onSlotClear = (slotKey) => { const nextSlots={...slotImagesRef.current,[slotKey]:null}; slotImagesRef.current=nextSlots; setSlotImages(nextSlots); saveProject({ ...loadProject(CURRENT_SCHOOL_SLUG), school_slug: CURRENT_SCHOOL_SLUG, slotImages: nextSlots }); if (wizardStep===4) renderHTMLPoster(contentValuesRef.current, productTypeRef.current, titleFont, titleColor, textColorRef.current, currentBackgroundRef.current, nextSlots); };
   const handleExportPdf = () => {
     if (isExportingRef.current) return;
     isExportingRef.current = true;
     setTimeout(() => { isExportingRef.current = false; }, 3000);
     saveProject({
       posterSize,
+      school_slug: CURRENT_SCHOOL_SLUG,
       productType: productTypeRef.current,
       background: currentBackgroundRef.current,
       contentValues: contentValuesRef.current,
@@ -99,7 +101,7 @@ function App() {
       titleStyle: { fontFamily: titleFont, color: titleColor, textColor: textColorRef.current },
       slotImages: slotImagesRef.current
     });
-    window.open(`/poster-builder/product/editor.html?type=${productTypeRef.current}&print=1`, '_blank', 'noopener,noreferrer');
+    window.open(`/poster-builder/product/editor.html?type=${productTypeRef.current}&print=1${CURRENT_SCHOOL_SLUG !== 'default' ? `&school=${encodeURIComponent(CURRENT_SCHOOL_SLUG)}` : ''}`, '_blank', 'noopener,noreferrer');
   };
 
   const goToStep = (step) => {

@@ -2,6 +2,19 @@ export const STORAGE_KEY = 'poster-builder-autosave-v1';
 const REQUIRED_CONTENT_KEYS = ['student1', 'student2', 'student3', 'className', 'schoolName', 'feedbackReceived', 'improvementsAfterFeedback'];
 const REQUIRED_SPLIT_RESEARCH_KEYS = ['studentNames', 'className', 'schoolName', 'feedbackAndImprovements'];
 
+function getUrlSchoolSlug() {
+  try {
+    return new URLSearchParams(window.location.search).get('school') || 'default';
+  } catch {
+    return 'default';
+  }
+}
+
+export function getSchoolScopedStorageKey(schoolSlug = getUrlSchoolSlug()) {
+  const slug = (schoolSlug || 'default').toString().trim() || 'default';
+  return `${STORAGE_KEY}:${slug}`;
+}
+
 function migrateProjectShape(project) {
   if (!project || typeof project !== 'object') return project;
   const next = { ...project };
@@ -34,19 +47,31 @@ export function saveProject(payload) {
   const project = { ...(payload || {}) };
   delete project.schoolLogoImage;
   delete project.schoolLogoAssetId;
-  localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...project, updatedAt: Date.now() }));
+  const schoolSlug = project.school_slug || getUrlSchoolSlug();
+  project.school_slug = schoolSlug || 'default';
+  localStorage.setItem(getSchoolScopedStorageKey(project.school_slug), JSON.stringify({ ...project, updatedAt: Date.now() }));
 }
 
-export function loadProject() {
-  const raw = localStorage.getItem(STORAGE_KEY);
+export function loadProject(schoolSlug = getUrlSchoolSlug()) {
+  const scopedKey = getSchoolScopedStorageKey(schoolSlug);
+  let raw = localStorage.getItem(scopedKey);
+
+  if (!raw && (schoolSlug || 'default') === 'default') {
+    raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) localStorage.setItem(scopedKey, raw);
+  }
+
   if (!raw) return null;
   try {
-    return migrateProjectShape(JSON.parse(raw));
+    const project = migrateProjectShape(JSON.parse(raw));
+    if (project && typeof project === 'object' && !project.school_slug) project.school_slug = schoolSlug || 'default';
+    return project;
   } catch {
     return null;
   }
 }
 
-export function clearProject() {
-  localStorage.removeItem(STORAGE_KEY);
+export function clearProject(schoolSlug = getUrlSchoolSlug()) {
+  localStorage.removeItem(getSchoolScopedStorageKey(schoolSlug));
+  if ((schoolSlug || 'default') === 'default') localStorage.removeItem(STORAGE_KEY);
 }

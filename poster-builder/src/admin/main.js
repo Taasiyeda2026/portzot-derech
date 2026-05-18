@@ -2,6 +2,7 @@ import { POSTER_ADMIN_CODE } from '../shared/supabase-config.js';
 import { saveProject } from '../shared/storage.js';
 import { BACKGROUNDS, DEFAULT_FIELD_COLOR, DEFAULT_FIELD_FONT, FIELD_DEFINITIONS, POSTER_SIZES } from '../products/physical/config.js';
 import { createPosterSubmissions, deletePosterSubmission, fetchPosterSubmission, listPosterSubmissions, normalizePosterData } from '../shared/poster-submissions.js';
+import { buildUniqueSchoolSlug, createPosterSchool, deletePosterSchool, DEFAULT_SCHOOL_QUESTIONS, getStudentLink, listPosterSchools, updatePosterSchool } from '../shared/poster-schools.js';
 
 const root = document.getElementById('admin-root');
 const SESSION_KEY = 'poster-builder-admin-ok';
@@ -68,7 +69,12 @@ const DROPDOWN_COLUMNS = {
 const state = {
   authed: sessionStorage.getItem(SESSION_KEY) === '1',
   rows: [],
+  schools: [],
+  activeTab: 'posters',
+  editingSchoolId: null,
+  schoolForm: null,
   loading: false,
+  schoolsLoading: false,
   message: '',
   messageType: 'error',
   manualOpenUrl: '',
@@ -351,6 +357,25 @@ function navigateWithProject(posterData, productType, splitFlowState, submission
 
 // ── Submissions Table ─────────────────────────────────────────────────────────
 
+function renderTabs() {
+  return `<nav class="admin-tabs" aria-label="אזורי ניהול">
+    <button class="admin-tab ${state.activeTab === 'posters' ? 'active' : ''}" type="button" data-tab="posters">ניהול פוסטרים</button>
+    <button class="admin-tab ${state.activeTab === 'schools' ? 'active' : ''}" type="button" data-tab="schools">ניהול בתי ספר</button>
+  </nav>`;
+}
+
+function wireTabs() {
+  root.querySelectorAll('[data-tab]').forEach((button) => {
+    button.addEventListener('click', () => {
+      state.activeTab = button.dataset.tab;
+      state.message = '';
+      state.manualOpenUrl = '';
+      if (state.activeTab === 'schools' && !state.schools.length) loadSchools();
+      else render();
+    });
+  });
+}
+
 function renderTable() {
   const body = state.rows.length
     ? state.rows.map((row) => `<tr>
@@ -368,6 +393,7 @@ function renderTable() {
     : `<tr><td colspan="7" class="admin-empty">אין פוסטרים להצגה.</td></tr>`;
 
   root.innerHTML = `<main class="admin-shell">
+    ${renderTabs()}
     <section class="admin-card">
       <header class="admin-header">
         <div>
@@ -393,6 +419,7 @@ function renderTable() {
   </main>
   `;
 
+  wireTabs();
   root.querySelector('[data-refresh]').addEventListener('click', loadRows);
   const fileInput = root.querySelector('[data-import-file]');
   root.querySelector('[data-download-template]').addEventListener('click', downloadTemplate);
@@ -441,8 +468,305 @@ async function removeSubmission(id) {
   }
 }
 
+
+// ── Schools Management ───────────────────────────────────────────────────────
+
+function defaultSchoolForm() {
+  return {
+    school_name: '',
+    logo_data: '',
+    background_ids: [],
+    use_default_questions: true,
+    questions_config: DEFAULT_SCHOOL_QUESTIONS.map(([id, label, maxChars]) => ({ id, label, maxChars })),
+    is_active: true
+  };
+}
+
+function schoolQuestionsModeLabel(school) {
+  return Array.isArray(school.questions_config) && school.questions_config.length ? 'מותאמות' : 'ברירת מחדל';
+}
+
+async function loadSchools(options = {}) {
+  state.schoolsLoading = true;
+  if (!options.keepMessage) state.message = '';
+  render();
+  try {
+    state.schools = await listPosterSchools();
+  } catch (err) {
+    state.message = 'לא הצלחנו לטעון את בתי הספר כרגע. ודאו שטבלת poster_schools קיימת ב-Supabase.';
+    state.messageType = 'error';
+  }
+  state.schoolsLoading = false;
+  render();
+}
+
+function readFileAsDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(new Error('file-read-failed'));
+    reader.readAsDataURL(file);
+  });
+}
+
+function startAddSchool() {
+  state.editingSchoolId = null;
+  state.schoolForm = defaultSchoolForm();
+  state.message = '';
+  render();
+}
+
+function startEditSchool(id) {
+  const school = state.schools.find((item) => item.id === id);
+  if (!school) return;
+  state.editingSchoolId = id;
+  state.schoolForm = {
+    school_name: school.school_name || '',
+    logo_data: school.logo_data || school.logo_url || '',
+    background_ids: Array.isArray(school.background_ids) ? [...school.background_ids] : [],
+    use_default_questions: !(Array.isArray(school.questions_config) && school.questions_config.length),
+    questions_config: (Array.isArray(school.questions_config) && school.questions_config.length
+      ? school.questions_config
+      : DEFAULT_SCHOOL_QUESTIONS.map(([qid, label, maxChars]) => ({ id: qid, label, maxChars })))
+      .map((question) => ({ id: question.id, label: question.label, maxChars: question.maxChars })),
+    is_active: school.is_active !== false
+  };
+  state.message = '';
+  render();
+}
+
+function cancelSchoolForm() {
+  state.editingSchoolId = null;
+  state.schoolForm = null;
+  render();
+}
+
+function buildSchoolPayload(slug) {
+  const form = state.schoolForm || defaultSchoolForm();
+  const questions = form.use_default_questions ? null : form.questions_config.map((question) => ({
+    id: question.id,
+    label: String(question.label || '').trim(),
+    maxChars: Number(question.maxChars) || 1
+  }));
+  return {
+    school_name: form.school_name.trim(),
+    school_slug: slug,
+    logo_data: form.logo_data || null,
+    background_ids: form.background_ids || [],
+    questions_config: questions,
+    is_active: form.is_active !== false
+  };
+}
+
+async function saveSchoolForm() {
+  const form = state.schoolForm;
+  if (!form?.school_name?.trim()) {
+    showMessage('יש להזין שם בית ספר.');
+    state.activeTab = 'schools';
+    return;
+  }
+  try {
+    const existing = state.editingSchoolId ? state.schools.find((item) => item.id === state.editingSchoolId) : null;
+    const slug = existing && existing.school_name === form.school_name.trim()
+      ? existing.school_slug
+      : await buildUniqueSchoolSlug(form.school_name, state.editingSchoolId);
+    const payload = buildSchoolPayload(slug);
+    if (state.editingSchoolId) await updatePosterSchool(state.editingSchoolId, payload);
+    else await createPosterSchool(payload);
+    state.editingSchoolId = null;
+    state.schoolForm = null;
+    await loadSchools({ keepMessage: true });
+    state.message = 'בית הספר נשמר בהצלחה.';
+    state.messageType = 'ok';
+    render();
+  } catch (err) {
+    showMessage('לא הצלחנו לשמור את בית הספר. בדקו חיבור ושהשם לא כבר קיים.');
+    state.activeTab = 'schools';
+  }
+}
+
+async function removeSchool(id) {
+  if (!window.confirm('האם למחוק את בית הספר? הקישור של התלמידות לא יטען התאמות לאחר המחיקה.')) return;
+  try {
+    await deletePosterSchool(id);
+    await loadSchools();
+  } catch (err) {
+    showMessage('לא הצלחנו למחוק את בית הספר כרגע.');
+    state.activeTab = 'schools';
+  }
+}
+
+async function copyStudentLink(slug) {
+  const link = getStudentLink(slug);
+  try {
+    await navigator.clipboard.writeText(link);
+    state.message = 'הקישור לתלמידות הועתק.';
+    state.messageType = 'ok';
+  } catch {
+    state.message = `הקישור לתלמידות: ${link}`;
+    state.messageType = 'ok';
+  }
+  render();
+}
+
+function renderBackgroundPicker(form) {
+  return `<div class="school-bg-picker">
+    ${BACKGROUNDS.map((bg) => {
+      const checked = form.background_ids.includes(bg.id) ? 'checked' : '';
+      return `<label class="school-bg-option">
+        <input type="checkbox" data-school-bg="${escapeHtml(bg.id)}" ${checked} />
+        <img src="${escapeHtml(bg.path)}" alt="${escapeHtml(bg.name)}" />
+        <span>${escapeHtml(bg.name)}</span>
+      </label>`;
+    }).join('')}
+  </div>`;
+}
+
+function renderQuestionEditor(form) {
+  if (form.use_default_questions) return '<p class="admin-help">ייבחרו שאלות ברירת המחדל הקיימות במערכת.</p>';
+  return `<div class="school-question-list">
+    ${form.questions_config.map((question, index) => `<div class="school-question-row">
+      <strong>שאלה ${index + 1}</strong>
+      <input class="admin-input" type="text" data-question-label="${index}" value="${escapeHtml(question.label)}" aria-label="טקסט שאלה" />
+      <input class="admin-input small" type="number" min="1" max="500" data-question-max="${index}" value="${escapeHtml(question.maxChars)}" aria-label="מגבלת תווים" />
+    </div>`).join('')}
+  </div>`;
+}
+
+function renderSchoolForm() {
+  const form = state.schoolForm;
+  if (!form) return '';
+  return `<section class="admin-card school-form-card">
+    <header class="admin-header compact-header">
+      <div>
+        <h2 class="admin-title small-title">${state.editingSchoolId ? 'עריכת בית ספר' : 'הוספת בית ספר'}</h2>
+        <p class="admin-subtitle">המערכת תיצור את המזהה והקישור אוטומטית לפי שם בית הספר.</p>
+      </div>
+    </header>
+    <div class="school-form-grid">
+      <label>שם בית הספר
+        <input class="admin-input" type="text" data-school-name value="${escapeHtml(form.school_name)}" />
+      </label>
+      <label>סטטוס
+        <select class="admin-input" data-school-active>
+          <option value="1" ${form.is_active ? 'selected' : ''}>פעיל</option>
+          <option value="0" ${!form.is_active ? 'selected' : ''}>לא פעיל</option>
+        </select>
+      </label>
+      <label>העלאת לוגו
+        <input class="admin-input" type="file" accept="image/*" data-school-logo />
+      </label>
+      <div class="school-logo-preview">${form.logo_data ? `<img src="${escapeHtml(form.logo_data)}" alt="תצוגת לוגו" /><button class="admin-btn danger compact" type="button" data-remove-logo>הסר לוגו</button>` : '<span>לא נבחר לוגו.</span>'}</div>
+    </div>
+    <div class="school-section">
+      <h3>רקעים שיוצגו לתלמידות</h3>
+      <p class="admin-help">אם לא מסמנים רקעים — יוצגו כל הרקעים הרגילים.</p>
+      ${renderBackgroundPicker(form)}
+    </div>
+    <div class="school-section">
+      <h3>שאלות</h3>
+      <label class="school-toggle"><input type="checkbox" data-default-questions ${form.use_default_questions ? 'checked' : ''} /> להשתמש בשאלות ברירת מחדל</label>
+      ${renderQuestionEditor(form)}
+    </div>
+    <div class="admin-actions">
+      <button class="admin-btn primary" type="button" data-save-school>שמירה</button>
+      <button class="admin-btn ghost" type="button" data-cancel-school>ביטול</button>
+    </div>
+  </section>`;
+}
+
+function renderSchools() {
+  const body = state.schools.length
+    ? state.schools.map((school) => {
+      const link = getStudentLink(school.school_slug);
+      return `<tr>
+        <td>${escapeHtml(school.school_name)}</td>
+        <td>${school.logo_data || school.logo_url ? `<img class="school-logo-thumb" src="${escapeHtml(school.logo_data || school.logo_url)}" alt="${escapeHtml(school.school_name)}" />` : '—'}</td>
+        <td>${school.background_ids.length || 'כל הרקעים'}</td>
+        <td>${schoolQuestionsModeLabel(school)}</td>
+        <td><a href="${escapeHtml(link)}" target="_blank" rel="noopener">${escapeHtml(link)}</a></td>
+        <td><span class="status-pill ${school.is_active ? 'active' : ''}">${school.is_active ? 'פעיל' : 'לא פעיל'}</span></td>
+        <td><div class="admin-row-actions">
+          <button class="admin-btn primary" type="button" data-edit-school="${escapeHtml(school.id)}">עריכה</button>
+          <button class="admin-btn ghost" type="button" data-copy-school="${escapeHtml(school.school_slug)}">העתק קישור</button>
+          <button class="admin-btn danger" type="button" data-delete-school="${escapeHtml(school.id)}">מחיקה</button>
+        </div></td>
+      </tr>`;
+    }).join('')
+    : `<tr><td colspan="7" class="admin-empty">אין בתי ספר להצגה.</td></tr>`;
+
+  root.innerHTML = `<main class="admin-shell">
+    ${renderTabs()}
+    <section class="admin-card">
+      <header class="admin-header">
+        <div>
+          <h1 class="admin-title">ניהול בתי ספר</h1>
+          <p class="admin-subtitle">הגדירו לוגו, רקעים ושאלות לכל קישור בית ספר — בלי עריכת קוד.</p>
+        </div>
+        <div class="admin-actions admin-actions-top">
+          <button class="admin-btn primary compact" type="button" data-add-school>+ הוסף בית ספר</button>
+          <button class="admin-btn ghost compact" type="button" data-refresh-schools ${state.schoolsLoading ? 'disabled' : ''}>רענון</button>
+          <a class="admin-back" href="./index.html">חזרה</a>
+        </div>
+      </header>
+      ${state.message ? `<p class="admin-message ${state.messageType}">${escapeHtml(state.message)}</p>` : ''}
+      <div class="admin-table-wrap">
+        <table>
+          <thead><tr><th>שם בית הספר</th><th>לוגו</th><th>מספר רקעים שנבחרו</th><th>מצב שאלות</th><th>קישור לתלמידות</th><th>סטטוס</th><th>פעולות</th></tr></thead>
+          <tbody>${state.schoolsLoading ? `<tr><td colspan="7" class="admin-empty">טוען...</td></tr>` : body}</tbody>
+        </table>
+      </div>
+    </section>
+    ${renderSchoolForm()}
+  </main>`;
+
+  wireTabs();
+  root.querySelector('[data-add-school]')?.addEventListener('click', startAddSchool);
+  root.querySelector('[data-refresh-schools]')?.addEventListener('click', loadSchools);
+  root.querySelectorAll('[data-edit-school]').forEach((button) => button.addEventListener('click', () => startEditSchool(button.dataset.editSchool)));
+  root.querySelectorAll('[data-delete-school]').forEach((button) => button.addEventListener('click', () => removeSchool(button.dataset.deleteSchool)));
+  root.querySelectorAll('[data-copy-school]').forEach((button) => button.addEventListener('click', () => copyStudentLink(button.dataset.copySchool)));
+  wireSchoolForm();
+}
+
+function wireSchoolForm() {
+  const form = state.schoolForm;
+  if (!form) return;
+  root.querySelector('[data-school-name]')?.addEventListener('input', (event) => { form.school_name = event.target.value; });
+  root.querySelector('[data-school-active]')?.addEventListener('change', (event) => { form.is_active = event.target.value === '1'; });
+  root.querySelector('[data-school-logo]')?.addEventListener('change', async (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    try {
+      form.logo_data = await readFileAsDataUrl(file);
+      render();
+    } catch {
+      showMessage('לא הצלחנו לקרוא את קובץ הלוגו.');
+      state.activeTab = 'schools';
+    }
+  });
+  root.querySelector('[data-remove-logo]')?.addEventListener('click', () => { form.logo_data = ''; render(); });
+  root.querySelectorAll('[data-school-bg]').forEach((input) => {
+    input.addEventListener('change', () => {
+      const id = input.dataset.schoolBg;
+      if (input.checked && !form.background_ids.includes(id)) form.background_ids.push(id);
+      if (!input.checked) form.background_ids = form.background_ids.filter((item) => item !== id);
+    });
+  });
+  root.querySelector('[data-default-questions]')?.addEventListener('change', (event) => { form.use_default_questions = event.target.checked; render(); });
+  root.querySelectorAll('[data-question-label]').forEach((input) => {
+    input.addEventListener('input', () => { form.questions_config[Number(input.dataset.questionLabel)].label = input.value; });
+  });
+  root.querySelectorAll('[data-question-max]').forEach((input) => {
+    input.addEventListener('input', () => { form.questions_config[Number(input.dataset.questionMax)].maxChars = Number(input.value) || 1; });
+  });
+  root.querySelector('[data-save-school]')?.addEventListener('click', saveSchoolForm);
+  root.querySelector('[data-cancel-school]')?.addEventListener('click', cancelSchoolForm);
+}
+
 function render() {
   if (!state.authed) { renderLogin(); return; }
+  if (state.activeTab === 'schools') { renderSchools(); return; }
   renderTable();
 }
 

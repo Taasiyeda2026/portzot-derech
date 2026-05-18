@@ -1,4 +1,4 @@
-const CACHE_NAME = "portzot-derech-v61";
+const CACHE_NAME = "portzot-derech-v62";
 
 // ── נכסי ליבה — נטענים מיידית בהתקנה ─────────────────────────────────────
 const CORE_ASSETS = [
@@ -144,6 +144,7 @@ const CORE_ASSETS = [
   "./poster-builder/src/shared/validation.js",
   "./poster-builder/src/shared/poster-assets.js",
   "./poster-builder/src/shared/poster-submissions.js",
+  "./poster-builder/src/shared/poster-schools.js",
   "./poster-builder/src/shared/prompt-builder.js",
   "./poster-builder/src/admin/main.js",
   "./poster-builder/src/main.js",
