@@ -343,6 +343,7 @@
 
     .checklist {
       display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 0.5rem;
       padding: 0;
       margin: 0;
@@ -416,6 +417,7 @@
       .presenter-names-grid { grid-template-columns: 1fr; }
       .presenter-row { flex-direction: column; align-items: stretch; }
       .presenter-row .presenter-label { min-width: unset; }
+      .checklist { grid-template-columns: 1fr; }
     }
 
     @media print {
@@ -601,6 +603,35 @@
         word-break: break-word;
       }
 
+      .pd-roles {
+        display: grid;
+        gap: 3.5mm;
+      }
+
+      .pd-role-item {
+        padding: 4mm 5mm;
+        border-radius: 4mm;
+        background: rgba(255, 255, 255, 0.90);
+        border: 1px solid rgba(139, 92, 246, 0.18);
+        border-right: 4px solid #8b5cf6;
+        break-inside: avoid;
+      }
+
+      .pd-role-name {
+        margin-bottom: 2mm;
+        color: #6d28d9;
+        font-size: 10pt;
+        font-weight: 900;
+      }
+
+      .pd-role-excerpt {
+        color: #111827;
+        font-size: 10.2pt;
+        line-height: 1.72;
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+
       .pd-elevator {
         margin-top: 5mm;
         padding: 4mm 5mm;
@@ -672,19 +703,11 @@
           <label for="project_name">שם המיזם</label>
           <input id="project_name" type="text" autocomplete="off" data-save placeholder="לדוגמה: SafeWalk" />
         </div>
-        <div class="field">
-          <label for="school_name">בית הספר</label>
-          <input id="school_name" type="text" autocomplete="off" data-save placeholder="שם בית הספר" />
-        </div>
-        <div class="field">
-          <label for="class_name">כיתה</label>
-          <input id="class_name" type="text" autocomplete="off" data-save placeholder="לדוגמה: י׳3" />
-        </div>
         <div class="field presenter-count-field">
           <label for="presenterCount">משתתפות</label>
           <select id="presenterCount" data-save aria-label="מספר המשתתפות">
-            <option value="1">1</option>
-            <option value="2" selected>2</option>
+            <option value="1" selected>1</option>
+            <option value="2">2</option>
             <option value="3">3</option>
             <option value="4">4</option>
             <option value="5">5</option>
@@ -814,29 +837,9 @@
       </div>
     </section>
 
-    <section class="section" aria-labelledby="elevator-title">
-      <div class="section-title">
-        <span class="step-number">4</span>
-        <div>
-          <h2 id="elevator-title">נאום מעלית</h2>
-          <p>גרסה קצרה של 20–30 שניות למקרה שצריך להסביר את המיזם במהירות.</p>
-        </div>
-      </div>
-      <div class="grid">
-        <div class="actions">
-          <button class="btn secondary" type="button" id="generateElevator">יצירת נאום מעלית</button>
-        </div>
-        <div class="field output-block">
-          <span class="auto-badge" aria-label="תוכן שנוצר אוטומטית">✦ נוצר אוטומטית — אפשר לערוך</span>
-          <label for="elevatorPitch">נאום המעלית</label>
-          <textarea id="elevatorPitch" class="medium-textarea auto-filled" data-save></textarea>
-        </div>
-      </div>
-    </section>
-
     <section class="section" aria-labelledby="roles-title">
       <div class="section-title">
-        <span class="step-number">5</span>
+        <span class="step-number">4</span>
         <div>
           <h2 id="roles-title">חלוקת תפקידים</h2>
           <p>הפיץ׳ מחולק כאן לחלקים ברורים לפי מספר המשתתפות ושמותיהן.</p>
@@ -847,9 +850,9 @@
 
     <section class="section" aria-labelledby="practice-title">
       <div class="section-title">
-        <span class="step-number">6</span>
+        <span class="step-number">5</span>
         <div>
-          <h2 id="practice-title">תרגול ובדיקת מוכנות</h2>
+          <h2 id="practice-title">תרגול, נאום מעלית ובדיקת מוכנות</h2>
           <p>סמנו יחד מה כבר מוכן לפני ההצגה.</p>
         </div>
       </div>
@@ -859,9 +862,18 @@
         <li><label><input type="checkbox" id="checkSolution" data-save />הפתרון ברור</label></li>
         <li><label><input type="checkbox" id="checkValue" data-save />הערך המרכזי ברור</label></li>
         <li><label><input type="checkbox" id="checkRoles" data-save />כל דוברת יודעת מה היא אומרת</label></li>
-        <li><label><input type="checkbox" id="checkPractice" data-save />תרגלנו בקול</label></li>
-        <li><label><input type="checkbox" id="checkTime" data-save />עמדנו בזמן</label></li>
+        <li><label><input type="checkbox" id="checkPractice" data-save />תרגלנו בקול ועמדנו בזמן</label></li>
       </ul>
+      <div class="grid">
+        <div class="actions">
+          <button class="btn secondary" type="button" id="generateElevator">יצירת נאום מעלית</button>
+        </div>
+        <div class="field output-block">
+          <span class="auto-badge" aria-label="תוכן שנוצר אוטומטית">✦ נוצר אוטומטית — אפשר לערוך</span>
+          <label for="elevatorPitch">נאום המעלית</label>
+          <textarea id="elevatorPitch" class="medium-textarea auto-filled" data-save></textarea>
+        </div>
+      </div>
       <div class="timer no-print" aria-label="טיימר תרגול של שלוש דקות">
         <strong>טיימר תרגול:</strong>
         <span id="timerDisplay" class="timer-time">03:00</span>
@@ -880,7 +892,7 @@
     (function () {
       "use strict";
 
-      var STORAGE_KEY = "portzot-derech-final-pitch-activity-v3";
+      var STORAGE_KEY = "portzot-derech-final-pitch-activity-v4";
       var LEGACY_STORAGE_KEY = "portzot-derech-final-pitch-activity-v2";
       var timerSeconds = 180;
       var timerId = null;
@@ -951,6 +963,10 @@
           } catch (legacyError) {
             data = {};
           }
+        }
+
+        if (Object.prototype.hasOwnProperty.call(data, "presenterCount")) {
+          delete data.presenterCount;
         }
 
         if (data.student_names && !data.speaker_1) {
@@ -1151,19 +1167,12 @@
         var doc = document.getElementById("printDocument");
         if (!doc) return;
 
+        var count = getPresenterCount();
         var projectName = getElementValue("project_name") || "פיץ׳ סופי";
-        var school = getElementValue("school_name");
-        var cls = getElementValue("class_name");
         var presenters = getPresenterNames().filter(function (name) { return name && !/^משתתפת \d+$/.test(name); });
-        var fullPitchField = document.getElementById("fullPitch");
         var elevatorField = document.getElementById("elevatorPitch");
-        var pitchText = cleanText(fullPitchField && fullPitchField.value ? fullPitchField.value : buildPitchText());
         var elevatorText = cleanText(elevatorField && elevatorField.value ? elevatorField.value : "");
-
-        var metaItems = [];
-        if (school) metaItems.push("בית ספר: " + school);
-        if (cls) metaItems.push("כיתה: " + cls);
-        if (presenters.length) metaItems.push("משתתפות: " + presenters.join(", "));
+        var segments = buildSegments(count === 1);
 
         var html = "";
         html += '<section class="print-sheet">';
@@ -1173,27 +1182,38 @@
         html += '<div>';
         html += '<div class="pd-header-brand">פורצות דרך — פיץ׳ סופי</div>';
         html += '<div class="pd-project-name">' + esc(projectName) + '</div>';
-        if (metaItems.length) {
-          html += '<div class="pd-meta-row">';
-          metaItems.forEach(function (item) {
-            html += '<span class="pd-chip">' + esc(item) + '</span>';
-          });
-          html += '</div>';
+        if (presenters.length) {
+          html += '<div class="pd-meta-row"><span class="pd-chip">משתתפות: ' + esc(presenters.join(", ")) + '</span></div>';
         }
         html += '</div>';
         html += '</header>';
 
-        html += '<section class="pd-section pd-pitch-card">';
-        html += '<div class="pd-section-title">הפיץ׳ הסופי</div>';
-        html += '<div class="pd-pitch-text">' + esc(pitchText) + '</div>';
-        html += '</section>';
-
         if (elevatorText) {
           html += '<section class="pd-elevator">';
-          html += '<div class="pd-elevator-label">נספח — נאום מעלית</div>';
+          html += '<div class="pd-elevator-label">נאום מעלית</div>';
           html += '<div class="pd-elevator-text">' + esc(elevatorText) + '</div>';
           html += '</section>';
         }
+
+        html += '<section class="pd-section">';
+        html += '<div class="pd-section-title">הפיץ׳ הסופי — חלוקה לפי מציגות</div>';
+        html += '<div class="pd-roles">';
+        if (count === 1) {
+          html += '<article class="pd-role-item">';
+          html += '<div class="pd-role-name">' + esc(getSpeakerName(0)) + '</div>';
+          html += '<div class="pd-role-excerpt">' + esc(segments.join("\\n\\n")) + '</div>';
+          html += '</article>';
+        } else {
+          speakerRanges[count].forEach(function (range, index) {
+            var roleText = segments.slice(range[0], range[1] + 1).join("\\n\\n");
+            html += '<article class="pd-role-item">';
+            html += '<div class="pd-role-name">' + esc(getSpeakerName(index)) + '</div>';
+            html += '<div class="pd-role-excerpt">' + esc(roleText) + '</div>';
+            html += '</article>';
+          });
+        }
+        html += '</div>';
+        html += '</section>';
 
         html += '</div>';
         html += '<footer class="pd-footer"><span>פורצות דרך</span><span>פיץ׳ סופי להדפסה</span></footer>';
