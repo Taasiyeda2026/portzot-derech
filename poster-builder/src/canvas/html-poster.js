@@ -494,16 +494,17 @@ function fitPosterToPage(posterRoot, titleColor) {
     return;
   }
 
-  applySecondaryTextCompression(posterRoot);
+  applyFinalLayoutCompression(posterRoot);
   updateTitleUnderline(posterRoot, titleColor);
   if (!isPosterOverflowing(posterRoot)) {
     balancePhysicalPosterUnderflow(posterRoot, titleColor);
     return;
   }
 
-  // Final guard: tighten only secondary text/cards after exhausting the allowed
-  // image-size floors. Do not resize #poster-html; it must remain a fixed A4 box.
-  applyFinalTextCompression(posterRoot);
+  // Final guard: tighten only external layout spacing after exhausting the
+  // allowed image-size floors. Do not resize #poster-html and do not compress
+  // the text inside content boxes; the poster remains a fixed A4 box.
+  applyMinimumLayoutSpacing(posterRoot);
   updateTitleUnderline(posterRoot, titleColor);
 }
 
@@ -547,53 +548,89 @@ function applyCompactPosterSpacing(posterRoot) {
   }
 }
 
-function applySecondaryTextCompression(posterRoot) {
+function applyFinalLayoutCompression(posterRoot) {
   if (!posterRoot) return;
-  posterRoot.querySelectorAll('.ph-body').forEach((el) => {
-    if (el.id === 'ph-solution') return;
-    el.style.setProperty('font-size', '12.5px', 'important');
-    el.style.setProperty('line-height', '1.42', 'important');
-  });
-  posterRoot.querySelectorAll('.ph-sub').forEach((el) => {
-    el.style.setProperty('font-size', '12.5px', 'important');
-    el.style.setProperty('line-height', '1.4', 'important');
-    el.style.setProperty('margin-top', '2px', 'important');
-  });
-  posterRoot.querySelectorAll('.ph-bullets').forEach((el) => {
-    el.style.setProperty('margin-top', '1px', 'important');
-  });
-  posterRoot.querySelectorAll('.ph-bullets li').forEach((el) => {
-    el.style.setProperty('font-size', '12.5px', 'important');
-    el.style.setProperty('line-height', '1.4', 'important');
-    el.style.setProperty('margin-bottom', '0', 'important');
-  });
-}
 
-function applyFinalTextCompression(posterRoot) {
-  if (!posterRoot) return;
-  posterRoot.querySelectorAll('.ph-card').forEach((card) => {
-    card.style.setProperty('padding', '7px 9px', 'important');
-    card.style.setProperty('border-radius', '9px', 'important');
+  const main = posterRoot.querySelector('#ph-main');
+  if (main) {
+    main.style.setProperty('gap', '1px', 'important');
+    main.style.setProperty('padding-bottom', '10px', 'important');
+  }
+
+  const imagesWrap = posterRoot.querySelector('.ph-images-wrap');
+  if (imagesWrap) imagesWrap.style.setProperty('margin-block', '0 2px', 'important');
+
+  const imageLabel = posterRoot.querySelector('#ph-images-label');
+  if (imageLabel) imageLabel.style.setProperty('margin-bottom', '1px', 'important');
+
+  posterRoot.querySelectorAll('.ph-grid-problem, .ph-grid-research, .ph-grid-solution, .ph-grid-process').forEach((grid) => {
+    grid.style.setProperty('gap', '3px', 'important');
+    grid.style.setProperty('margin-top', '0', 'important');
   });
-  posterRoot.querySelectorAll('.ph-cap').forEach((el) => {
-    el.style.setProperty('font-size', '12.5px', 'important');
-    el.style.setProperty('line-height', '1.35', 'important');
-    el.style.setProperty('margin-bottom', '3px', 'important');
-    el.style.setProperty('letter-spacing', '0', 'important');
+
+  ['#ph-images-2', '#ph-images-app', '#ph-images-web'].forEach((selector) => {
+    const grid = posterRoot.querySelector(selector);
+    if (!grid) return;
+    const gap = selector === '#ph-images-2' ? '10px' : '6px';
+    grid.style.setProperty('gap', gap, 'important');
   });
-  posterRoot.querySelectorAll('.ph-body').forEach((el) => {
-    if (el.id === 'ph-solution') return;
-    el.style.setProperty('font-size', '12.5px', 'important');
-    el.style.setProperty('line-height', '1.38', 'important');
-  });
-  posterRoot.querySelectorAll('.ph-bullets li').forEach((el) => {
-    el.style.setProperty('font-size', '12.5px', 'important');
-    el.style.setProperty('line-height', '1.35', 'important');
-  });
+
+  const audienceCard = posterRoot.querySelector('.ph-audience-card');
+  if (audienceCard) {
+    audienceCard.style.setProperty('padding', '4px 10px', 'important');
+    audienceCard.style.setProperty('margin-top', '-10px', 'important');
+    audienceCard.style.setProperty('margin-bottom', '1px', 'important');
+  }
+
   const footer = posterRoot.querySelector('#ph-footer');
   if (footer) {
     footer.style.setProperty('padding-top', '6px', 'important');
     footer.style.setProperty('padding-bottom', '6px', 'important');
+  }
+}
+
+function applyMinimumLayoutSpacing(posterRoot) {
+  if (!posterRoot) return;
+
+  const main = posterRoot.querySelector('#ph-main');
+  if (main) {
+    main.style.setProperty('gap', '0', 'important');
+    main.style.setProperty('padding-bottom', '8px', 'important');
+  }
+
+  const imagesWrap = posterRoot.querySelector('.ph-images-wrap');
+  if (imagesWrap) imagesWrap.style.setProperty('margin-block', '0 1px', 'important');
+
+  const imageLabel = posterRoot.querySelector('#ph-images-label');
+  if (imageLabel) imageLabel.style.setProperty('margin-bottom', '0', 'important');
+
+  posterRoot.querySelectorAll('.ph-grid-problem, .ph-grid-research, .ph-grid-solution, .ph-grid-process').forEach((grid) => {
+    grid.style.setProperty('gap', '2px', 'important');
+    grid.style.setProperty('margin-top', '0', 'important');
+  });
+
+  ['#ph-images-2', '#ph-images-app', '#ph-images-web'].forEach((selector) => {
+    const grid = posterRoot.querySelector(selector);
+    if (!grid) return;
+    const gap = selector === '#ph-images-2' ? '8px' : '4px';
+    grid.style.setProperty('gap', gap, 'important');
+  });
+
+  posterRoot.querySelectorAll('.ph-card').forEach((card) => {
+    card.style.setProperty('padding', '7px 9px', 'important');
+  });
+
+  const audienceCard = posterRoot.querySelector('.ph-audience-card');
+  if (audienceCard) {
+    audienceCard.style.setProperty('padding', '3px 9px', 'important');
+    audienceCard.style.setProperty('margin-top', '-11px', 'important');
+    audienceCard.style.setProperty('margin-bottom', '0', 'important');
+  }
+
+  const footer = posterRoot.querySelector('#ph-footer');
+  if (footer) {
+    footer.style.setProperty('padding-top', '5px', 'important');
+    footer.style.setProperty('padding-bottom', '5px', 'important');
   }
 }
 
