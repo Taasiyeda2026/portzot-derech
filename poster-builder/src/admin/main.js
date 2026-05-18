@@ -16,7 +16,6 @@ const PRODUCT_PATHS = {
 const TEMPLATE_FILE_NAME = 'poster-import-template.xlsx';
 const TEMPLATE_HEADERS = [
   'productType',
-  'posterSize',
   'backgroundId',
   'titleFont',
   'titleColor',
@@ -47,7 +46,7 @@ const TEMPLATE_HEADERS = [
   'improvementsAfterFeedback',
   'slogan'
 ];
-const CONTENT_HEADERS = TEMPLATE_HEADERS.slice(6);
+const CONTENT_HEADERS = TEMPLATE_HEADERS.slice(5);
 const PRODUCT_TYPE_OPTIONS = ['physical', 'website', 'app', 'digital'];
 const BACKGROUND_ID_OPTIONS = BACKGROUNDS.map((background) => background.id);
 const FONT_OPTIONS = ['IBM Plex Sans Hebrew', 'Gveret Levin', 'Alef', 'Alice', 'Choco', 'Yehuda'];
@@ -59,7 +58,6 @@ const DEFAULT_FIELD_SETTINGS = Object.fromEntries(
 );
 const DROPDOWN_COLUMNS = {
   productType: PRODUCT_TYPE_OPTIONS,
-  posterSize: Object.keys(POSTER_SIZES),
   backgroundId: BACKGROUND_ID_OPTIONS,
   titleFont: FONT_OPTIONS,
   titleColor: TITLE_COLOR_OPTIONS,
@@ -134,24 +132,24 @@ function buildSplitFlowState(productType, contentValues, design, step = null) {
   };
 }
 
-function buildImportProject(row) {
+function buildImportProject(row, schoolSlug) {
   if (isBlankImportRow(row)) return null;
 
   const productType = getValidOption(row, 'productType', PRODUCT_TYPE_OPTIONS, 'physical');
-  const posterSize = getValidOption(row, 'posterSize', Object.keys(POSTER_SIZES), 'A4');
   const backgroundId = getValidOption(row, 'backgroundId', BACKGROUND_ID_OPTIONS, 'bg-tech1');
   const titleFont = getValidOption(row, 'titleFont', FONT_OPTIONS, 'IBM Plex Sans Hebrew');
   const titleColor = getValidOption(row, 'titleColor', TITLE_COLOR_OPTIONS, '#5E2750');
   const textColor = getValidOption(row, 'textColor', TEXT_COLOR_OPTIONS, '#1f1030');
-  if (!productType || !posterSize || !backgroundId || !titleFont || !titleColor || !textColor) return null;
+  if (!productType || !backgroundId || !titleFont || !titleColor || !textColor) return null;
 
   const background = BACKGROUNDS.find((item) => item.id === backgroundId) || BACKGROUNDS[0];
   const contentValues = Object.fromEntries(CONTENT_HEADERS.map((header) => [header, getCellValue(row, header)]));
   const design = { background: background.path, titleFont, titleColor, textColor, shape: 20 };
 
   return {
-    posterSize,
+    posterSize: 'A4',
     productType,
+    school_slug: schoolSlug || 'default',
     background: background.path,
     backgroundId: background.id,
     backgroundPath: background.path,
@@ -218,7 +216,82 @@ async function downloadTemplate() {
   URL.revokeObjectURL(link.href);
 }
 
-async function importExcelFile(file) {
+async function downloadSchoolTemplate(school) {
+  if (!window.ExcelJS) {
+    showMessage('לא הצלחנו להכין את התבנית כרגע. נסו שוב.');
+    return;
+  }
+
+  const rawQuestions = (Array.isArray(school.questions_config) && school.questions_config.length)
+    ? school.questions_config
+    : DEFAULT_SCHOOL_QUESTIONS.map(([id, label, maxChars]) => ({ id, label, maxChars }));
+
+  const designHeaders = ['productType', 'backgroundId', 'titleFont', 'titleColor', 'textColor'];
+  const designLabels  = ['סוג מוצר', 'רקע', 'פונט כותרת', 'צבע כותרת', 'צבע טקסט'];
+  const contentFieldIds = rawQuestions.map((q) => q.id || q[0]);
+  const contentLabels   = rawQuestions.map((q) => q.label || q[1]);
+
+  const allHeaders = [...designHeaders, ...contentFieldIds];
+  const allLabels  = [...designLabels,  ...contentLabels];
+
+  const allowedBgIds = (school.background_ids && school.background_ids.length)
+    ? school.background_ids
+    : BACKGROUND_ID_OPTIONS;
+
+  const schoolDropdowns = {
+    productType:  PRODUCT_TYPE_OPTIONS,
+    backgroundId: allowedBgIds,
+    titleFont:    FONT_OPTIONS,
+    titleColor:   TITLE_COLOR_OPTIONS,
+    textColor:    TEXT_COLOR_OPTIONS
+  };
+
+  const workbook = new window.ExcelJS.Workbook();
+  workbook.creator = 'פורצות דרך';
+  const worksheet = workbook.addWorksheet('posters');
+  worksheet.addRow(allHeaders);
+  worksheet.views = [{ state: 'frozen', ySplit: 1 }];
+  worksheet.getRow(1).font = { bold: true };
+  worksheet.columns = allHeaders.map((header, i) => ({
+    key: header,
+    width: Math.max(14, Math.min(40, (allLabels[i] || header).length + 4))
+  }));
+
+  allHeaders.forEach((header, index) => {
+    const cell = worksheet.getCell(1, index + 1);
+    const hebrewLabel = allLabels[index] || header;
+    const isDropdown = header in schoolDropdowns;
+    cell.note = `${hebrewLabel}\n${isDropdown ? 'יש לבחור ערך מהרשימה.' : 'מלאו טקסט חופשי לפי הצורך.'}`;
+    const options = schoolDropdowns[header];
+    if (!options) return;
+    for (let rowNumber = 2; rowNumber <= 250; rowNumber += 1) {
+      worksheet.getCell(rowNumber, index + 1).dataValidation = {
+        type: 'list', allowBlank: true, formulae: [`"${options.join(',')}"`]
+      };
+    }
+  });
+
+  const instructions = workbook.addWorksheet('הנחיות');
+  instructions.addRows([
+    [`תבנית Excel לבית הספר: ${school.school_name || ''}`],
+    ['כל שורה מייצגת פוסטר אחד.'],
+    ['אפשר להשאיר עמודות עיצוב ריקות ולקבל ברירות מחדל.'],
+    ['אם עדכנת שאלות לבית הספר, יש להוריד תבנית Excel חדשה לפני מילוי נתונים.']
+  ]);
+  instructions.getColumn(1).width = 72;
+
+  const buffer = await workbook.xlsx.writeBuffer();
+  const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = `poster-template-${school.school_slug || 'school'}.xlsx`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(link.href);
+}
+
+async function importExcelFile(file, schoolSlug) {
   if (!file) return;
   if (!window.XLSX) {
     showMessage('לא הצלחנו לקרוא את הקובץ כרגע. נסו שוב.');
@@ -238,7 +311,7 @@ async function importExcelFile(file) {
     const projects = [];
 
     rows.forEach((row) => {
-      const project = buildImportProject(row);
+      const project = buildImportProject(row, schoolSlug || 'default');
       if (project) projects.push(project);
       else if (!isBlankImportRow(row)) skipped += 1;
     });
@@ -668,6 +741,7 @@ function renderSchoolForm() {
       <label class="school-toggle"><input type="checkbox" data-default-questions ${form.use_default_questions ? 'checked' : ''} /> להשתמש בשאלות ברירת מחדל</label>
       ${renderQuestionEditor(form)}
     </div>
+    <p class="admin-help" style="margin-top:12px;font-style:italic;">אם עדכנת שאלות לבית הספר, יש להוריד תבנית Excel חדשה לפני מילוי נתונים.</p>
     <div class="admin-actions">
       <button class="admin-btn primary" type="button" data-save-school>שמירה</button>
       <button class="admin-btn ghost" type="button" data-cancel-school>ביטול</button>
@@ -689,6 +763,8 @@ function renderSchools() {
         <td><div class="admin-row-actions">
           <button class="admin-btn primary" type="button" data-edit-school="${escapeHtml(school.id)}">עריכה</button>
           <button class="admin-btn ghost" type="button" data-copy-school="${escapeHtml(school.school_slug)}">העתק קישור</button>
+          <button class="admin-btn ghost compact" type="button" data-dl-school-excel="${escapeHtml(school.id)}">הורדת Excel</button>
+          <label class="admin-btn ghost compact" style="cursor:pointer">ייבוא Excel<input type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" data-school-file="${escapeHtml(school.id)}" data-school-slug="${escapeHtml(school.school_slug)}" style="display:none" /></label>
           <button class="admin-btn danger" type="button" data-delete-school="${escapeHtml(school.id)}">מחיקה</button>
         </div></td>
       </tr>`;
@@ -726,6 +802,19 @@ function renderSchools() {
   root.querySelectorAll('[data-edit-school]').forEach((button) => button.addEventListener('click', () => startEditSchool(button.dataset.editSchool)));
   root.querySelectorAll('[data-delete-school]').forEach((button) => button.addEventListener('click', () => removeSchool(button.dataset.deleteSchool)));
   root.querySelectorAll('[data-copy-school]').forEach((button) => button.addEventListener('click', () => copyStudentLink(button.dataset.copySchool)));
+  root.querySelectorAll('[data-dl-school-excel]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const school = state.schools.find((s) => s.id === btn.dataset.dlSchoolExcel);
+      if (school) downloadSchoolTemplate(school);
+    });
+  });
+  root.querySelectorAll('[data-school-file]').forEach((input) => {
+    input.addEventListener('change', () => {
+      const slug = input.dataset.schoolSlug;
+      importExcelFile(input.files?.[0], slug);
+      input.value = '';
+    });
+  });
   wireSchoolForm();
 }
 

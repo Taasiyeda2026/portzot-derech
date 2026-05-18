@@ -4,7 +4,7 @@ import { BACKGROUNDS as ALL_BACKGROUNDS } from '../products/physical/config.js';
 //
 // 1. הוסיפי ערך ל-SCHOOLS עם slug ייחודי (רק אותיות קטנות, מספרים ומקפים)
 // 2. שימי לוגו בתיקייה:  /poster-builder/assets/logos/<slug>.png
-// 3. בחרי עד 5 רקעים מתוך הרשימה ב-physical/config.js (bg-tech1 עד bg-tech11)
+// 3. בחרי עד 5 רקעים מתוך הרשימה ב-physical/config.js (bg-tech1 עד bg-tech15)
 // 4. הגדירי רשימת שאלות: כל שאלה היא [מזהה-שדה, תווית, מקס-תווים]
 //    מזהי שדות חייבים להיות זהים לאלה בראש הרשימה — אל תמציאי מזהים חדשים.
 //

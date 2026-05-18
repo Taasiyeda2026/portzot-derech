@@ -24,6 +24,10 @@ export const BACKGROUNDS = [
   { id: 'bg-tech9',  name: 'רקע 9',  path: '/poster-builder/assets/backgrounds/bg-tech9.svg',  orientation: 'any' },
   { id: 'bg-tech10', name: 'רקע 10', path: '/poster-builder/assets/backgrounds/bg-tech10.svg', orientation: 'any' },
   { id: 'bg-tech11', name: 'רקע 11', path: '/poster-builder/assets/backgrounds/bg-tech11.svg', orientation: 'any' },
+  { id: 'bg-tech12', name: 'רקע 12', path: '/poster-builder/assets/backgrounds/bg-tech12.svg', orientation: 'any' },
+  { id: 'bg-tech13', name: 'רקע 13', path: '/poster-builder/assets/backgrounds/bg-tech13.svg', orientation: 'any' },
+  { id: 'bg-tech14', name: 'רקע 14', path: '/poster-builder/assets/backgrounds/bg-tech14.svg', orientation: 'any' },
+  { id: 'bg-tech15', name: 'רקע 15', path: '/poster-builder/assets/backgrounds/bg-tech15.svg', orientation: 'any' },
 ];
 
 export function isBackgroundCompatibleWithSize(path, sizeKey) {
