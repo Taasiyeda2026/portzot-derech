@@ -1,6 +1,6 @@
-const CACHE_NAME = "portzot-derech-v67";
+const CACHE_NAME = "portzot-derech-v68";
 
-// ── נכסי ליבה — נטענים מיידית בהתקנה ─────────────────────────────────────
+// ── נכסים שנשמרים ב-Cache בהתקנה ─────────────────────────────────────────
 const CORE_ASSETS = [
   "./",
   "./index.html",
@@ -34,12 +34,12 @@ const CORE_ASSETS = [
   "./icon/p1.svg",
   "./icon/p2.svg",
 
-  // ── CSS ראשי ──────────────────────────────────────────────────────────────
+  // ── CSS ───────────────────────────────────────────────────────────────────
   "./css/styles.css",
   "./css/pairing.css",
   "./css/print.css",
 
-  // ── JS ראשי ───────────────────────────────────────────────────────────────
+  // ── JS ────────────────────────────────────────────────────────────────────
   "./js/config.js",
   "./js/pairing-app.js",
   "./js/pairing-algorithm.js",
@@ -47,7 +47,7 @@ const CORE_ASSETS = [
   "./js/admin-app.js",
   "./pairing-algorithm.js",
 
-  // ── פונטים גלובליים ───────────────────────────────────────────────────────
+  // ── פונטים ────────────────────────────────────────────────────────────────
   "./fonts/Alef-bold.ttf",
   "./fonts/Alef-bold.woff",
   "./fonts/Alef-regular.ttf",
@@ -239,7 +239,7 @@ const CORE_ASSETS = [
   "./poster-builder/btn-prd-poster/dig-btn.png",
   "./poster-builder/btn-prd-poster/phy-btn.png",
 
-  // ── פוסטר — אלמנטים (אייקונים 1-56) ──────────────────────────────────────
+  // ── פוסטר — אלמנטים ──────────────────────────────────────────────────────
   "./poster-builder/assets/elements/icon1.png",
   "./poster-builder/assets/elements/icon2.png",
   "./poster-builder/assets/elements/icon3.png",
@@ -298,14 +298,19 @@ const CORE_ASSETS = [
   "./poster-builder/assets/elements/icon56.png",
 ];
 
-// ── הרחבות שנשמרות ב־Cache לפי דרישה ────────────────────────────────────
-const CACHEABLE_EXTS = new Set([
-  ".js", ".css", ".html", ".json",
-  ".png", ".jpg", ".jpeg", ".gif", ".svg", ".ico", ".webp",
+// ── סיומות שנחשבות "נכס סטטי שאינו משתנה" (רק מדיה ופונטים) ─────────────
+const IMMUTABLE_EXTS = new Set([
+  ".png", ".jpg", ".jpeg", ".gif", ".webp", ".ico",
   ".woff", ".woff2", ".ttf", ".otf",
+  ".svg",                  // SVG אלמנטים ורקעים
 ]);
 
-// ── התקנה — מטעין את נכסי הליבה ─────────────────────────────────────────
+// ── סיומות שמצריכות Network-first (קוד שמשתנה) ──────────────────────────
+const LIVE_EXTS = new Set([
+  ".html", ".js", ".css", ".json",
+]);
+
+// ── התקנה: שמור נכסי ליבה, הפעל מיד ────────────────────────────────────
 self.addEventListener("install", function (event) {
   event.waitUntil(
     caches.open(CACHE_NAME)
@@ -313,18 +318,19 @@ self.addEventListener("install", function (event) {
         return Promise.allSettled(
           CORE_ASSETS.map(function (asset) {
             return cache.add(asset).catch(function (err) {
-              console.warn("[SW] Failed to cache:", asset, err);
+              console.warn("[SW v68] Failed to cache:", asset, err.message);
             });
           })
         );
       })
       .then(function () {
+        console.log("[SW v68] Installed, skipping waiting");
         return self.skipWaiting();
       })
   );
 });
 
-// ── הפעלה — מוחק Caches ישנים ───────────────────────────────────────────
+// ── הפעלה: מחק כל cache ישן, קח שליטה מיד ───────────────────────────────
 self.addEventListener("activate", function (event) {
   event.waitUntil(
     caches.keys()
@@ -332,69 +338,75 @@ self.addEventListener("activate", function (event) {
         return Promise.all(
           cacheNames
             .filter(function (name) { return name !== CACHE_NAME; })
-            .map(function (name) { return caches.delete(name); })
+            .map(function (name) {
+              console.log("[SW v68] Deleting old cache:", name);
+              return caches.delete(name);
+            })
         );
       })
       .then(function () {
+        console.log("[SW v68] Activated, claiming clients");
         return self.clients.claim();
       })
   );
 });
 
-// ── Fetch — אסטרטגיית Cache חכמה ────────────────────────────────────────
+// ── Fetch: אסטרטגיה לפי סוג קובץ ────────────────────────────────────────
 self.addEventListener("fetch", function (event) {
-  // POST ובקשות שאינן GET עוברות ישירות לשרת — לא נשמרות ב-cache
   if (event.request.method !== "GET") return;
 
-  const url = new URL(event.request.url);
+  var url;
+  try { url = new URL(event.request.url); } catch (e) { return; }
 
-  // כל נתיב /api/* חייב תמיד לרוץ מול השרת — לעולם לא לשמור ב-cache
+  // /api/* — תמיד ישירות לשרת
   if (url.pathname.startsWith("/api/")) return;
 
-  // בקשות חיצוניות (CDN, Firebase, Supabase וכד') — לא מטפלים
+  // בקשות חיצוניות (CDN, Google Fonts, Supabase) — לא מטפלים
   if (url.origin !== self.location.origin) return;
 
-  // env.js — תמיד מהרשת (מכיל משתנים דינמיים מהשרת)
+  // env.js — תמיד מהרשת
   if (url.pathname.endsWith("/env.js")) return;
 
-  const ext = url.pathname.substring(url.pathname.lastIndexOf(".")).toLowerCase();
-  const isNavigate = event.request.mode === "navigate";
-  const isStaticAsset = CACHEABLE_EXTS.has(ext) && !isNavigate;
+  var ext = url.pathname.substring(url.pathname.lastIndexOf(".")).toLowerCase();
+  var isNavigate = event.request.mode === "navigate";
 
-  if (isNavigate) {
-    // דפי HTML: Network-first, נכשל → Cache → fallback לדף הבית
+  // ── HTML / JS / CSS / JSON: Network-first → Cache fallback ───────────────
+  if (isNavigate || LIVE_EXTS.has(ext)) {
     event.respondWith(
       fetch(event.request)
         .then(function (response) {
-          if (response && response.status === 200) {
-            const clone = response.clone();
-            caches.open(CACHE_NAME).then(function (cache) { cache.put(event.request, clone); });
+          if (response && response.ok) {
+            var clone = response.clone();
+            caches.open(CACHE_NAME).then(function (cache) {
+              cache.put(event.request, clone);
+            });
           }
           return response;
         })
         .catch(function () {
-          return caches.match(event.request)
-            .then(function (cached) { return cached || caches.match("./index.html"); });
+          return caches.match(event.request).then(function (cached) {
+            return cached || caches.match("./index.html");
+          });
         })
     );
     return;
   }
 
-  if (isStaticAsset) {
-    // נכסים סטטיים: Cache-first, נכשל → Network ושמור
+  // ── מדיה / פונטים / תמונות: Cache-first → Network ────────────────────────
+  if (IMMUTABLE_EXTS.has(ext)) {
     event.respondWith(
-      caches.match(event.request)
-        .then(function (cached) {
-          if (cached) return cached;
-
-          return fetch(event.request)
-            .then(function (response) {
-              if (!response || response.status !== 200) return response;
-              const clone = response.clone();
-              caches.open(CACHE_NAME).then(function (cache) { cache.put(event.request, clone); });
-              return response;
+      caches.match(event.request).then(function (cached) {
+        if (cached) return cached;
+        return fetch(event.request).then(function (response) {
+          if (response && response.ok) {
+            var clone = response.clone();
+            caches.open(CACHE_NAME).then(function (cache) {
+              cache.put(event.request, clone);
             });
-        })
+          }
+          return response;
+        });
+      })
     );
     return;
   }
