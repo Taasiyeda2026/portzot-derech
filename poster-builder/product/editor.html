@@ -190,7 +190,7 @@
     }
     #ph-audience[data-icon-ok="true"]::before {
       content: ''; display: inline-block;
-      width: 21px; height: 21px; border-radius: 0;
+      width: 32px; height: 32px; border-radius: 0;
       background-color: transparent;
       background-image: var(--ph-icon-url);
       background-position: center;
@@ -321,7 +321,7 @@
     .ph-grid-solution {
       grid-template-columns: 1fr 1fr !important;
       gap: 18px !important;
-      margin-top: 9px;
+      margin-top: 0;
     }
     .ph-grid-process {
       grid-template-columns: minmax(0, 1fr) 24px minmax(0, 1fr) 24px minmax(0, 1fr) !important;
@@ -368,8 +368,8 @@
       padding: 4px 14px;
       text-align: center;
       flex-shrink: 0;
-      margin-top: 0;
-      margin-bottom: 10px;
+      margin-top: -4px;
+      margin-bottom: 6px;
     }
     .ph-audience-card #ph-audience {
       color: var(--ph-title-color, #5E2750) !important;
@@ -381,7 +381,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 5px;
+      gap: 8px;
     }
     .ph-card-compact {
       padding-top: 8px;
@@ -389,7 +389,7 @@
     }
     .ph-images-wrap {
       flex-shrink: 0;
-      margin-block: 0 12px;
+      margin-block: 1px 4px;
     }
     #ph-images-label {
       display: flex !important;
@@ -533,6 +533,22 @@
           <div id="ph-audience" class="ph-sub" data-icon="aud"></div>
         </div>
 
+        <!-- שורה: חקר + תובנות + דרישות -->
+        <div class="ph-grid-research" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;flex-shrink:0">
+          <div class="ph-card">
+            <div class="ph-cap" data-icon="res">החקר שביצענו</div>
+            <ul id="ph-research" class="ph-bullets"></ul>
+          </div>
+          <div class="ph-card">
+            <div class="ph-cap" data-icon="ins">תובנות מהחקר</div>
+            <div id="ph-findings" class="ph-body"></div>
+          </div>
+          <div class="ph-card">
+            <div class="ph-cap" data-icon="req">דרישות הפתרון</div>
+            <ul id="ph-reqs" class="ph-bullets"></ul>
+          </div>
+        </div>
+
         <!-- תמונות -->
         <div class="ph-images-wrap">
           <div id="ph-images-label" style="font-size:9px;font-weight:700;color:#5E2750;text-transform:uppercase;letter-spacing:1.5px;text-align:center;margin-bottom:4px"></div>
@@ -555,22 +571,6 @@
             <div class="ph-img-frame" data-ph-img="0" data-layout="website"></div>
             <div class="ph-img-frame" data-ph-img="1" data-layout="website"></div>
             <div class="ph-img-frame" data-ph-img="2" data-layout="website"></div>
-          </div>
-        </div>
-
-        <!-- שורה: חקר + תובנות + דרישות -->
-        <div class="ph-grid-research" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;flex-shrink:0">
-          <div class="ph-card">
-            <div class="ph-cap" data-icon="res">החקר שביצענו</div>
-            <ul id="ph-research" class="ph-bullets"></ul>
-          </div>
-          <div class="ph-card">
-            <div class="ph-cap" data-icon="ins">תובנות מהחקר</div>
-            <div id="ph-findings" class="ph-body"></div>
-          </div>
-          <div class="ph-card">
-            <div class="ph-cap" data-icon="req">דרישות הפתרון</div>
-            <ul id="ph-reqs" class="ph-bullets"></ul>
           </div>
         </div>
 
