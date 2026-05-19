@@ -1,11 +1,13 @@
 const POSTER_WIDTH_PX = 794;
 const POSTER_HEIGHT_PX = 1123;
 const PHYSICAL_FRAME_MAX_WIDTH = 335;
-const PHYSICAL_FRAME_MAX_HEIGHT = 335;
-const PHYSICAL_FRAME_DEFAULT_WIDTH = 335;
-const PHYSICAL_FRAME_DEFAULT_HEIGHT = 335;
-const PHYSICAL_FRAME_MIN_WIDTH = 270;
-const PHYSICAL_FRAME_MIN_HEIGHT = 270;
+const PHYSICAL_FRAME_MAX_HEIGHT = 265;
+const PHYSICAL_FRAME_DEFAULT_WIDTH = 315;
+const PHYSICAL_FRAME_DEFAULT_HEIGHT = 245;
+const PHYSICAL_FRAME_MIN_WIDTH = 210;
+const PHYSICAL_FRAME_MIN_HEIGHT = 210;
+const PHYSICAL_FRAME_MIN_RATIO = 0.72;
+const PHYSICAL_FRAME_MAX_RATIO = 1.42;
 const PHYSICAL_FRAME_STEPS = [
   { width: PHYSICAL_FRAME_DEFAULT_WIDTH, height: PHYSICAL_FRAME_DEFAULT_HEIGHT },
   { width: 315, height: 315 },
@@ -19,6 +21,7 @@ const PHYSICAL_FRAME_EXPAND_STEPS = [
 const PHYSICAL_FRAME_WIDTH = PHYSICAL_FRAME_DEFAULT_WIDTH;
 const PHYSICAL_FRAME_HEIGHT = PHYSICAL_FRAME_DEFAULT_HEIGHT;
 const PHYSICAL_UNDERFLOW_GAP_PX = 20;
+const PHYSICAL_FRAME_SCALE_STEPS = [1, 0.95, 0.9, 0.86];
 const APP_FRAME_HEIGHT_STEPS = [335, 316, 298, 280, 268];
 const APP_SCREEN_RATIO = 9 / 16;
 const WEB_SCREEN_RATIO = 16 / 9;
@@ -291,8 +294,58 @@ function renderPosterFrameImage(frame, src, index, productType) {
   img.alt = `תמונה ${index + 1}`;
   img.crossOrigin = 'anonymous';
   img.src = src;
+  if (layoutKey === 'physical') {
+    const setSmartFrameSize = () => applySmartPhysicalFrameSize(frame, img);
+    img.addEventListener('load', setSmartFrameSize, { once: true });
+    if (img.complete) setSmartFrameSize();
+  }
   img.style.cssText = `position:relative;z-index:1;width:100% !important;height:100% !important;object-fit:${imgFit} !important;object-position:center !important;display:block !important;margin:0 !important;max-width:none !important;max-height:none !important;`;
   frame.appendChild(img);
+}
+
+function applySmartPhysicalFrameSize(frame, img) {
+  if (!frame || !img) return;
+  const naturalWidth = img.naturalWidth || 0;
+  const naturalHeight = img.naturalHeight || 0;
+  if (!naturalWidth || !naturalHeight) return;
+
+  const rawRatio = naturalWidth / naturalHeight;
+  const safeRatio = Math.min(PHYSICAL_FRAME_MAX_RATIO, Math.max(PHYSICAL_FRAME_MIN_RATIO, rawRatio));
+
+  let width = PHYSICAL_FRAME_MAX_WIDTH;
+  let height = Math.round(width / safeRatio);
+  if (height > PHYSICAL_FRAME_MAX_HEIGHT) {
+    height = PHYSICAL_FRAME_MAX_HEIGHT;
+    width = Math.round(height * safeRatio);
+  }
+
+  width = Math.max(PHYSICAL_FRAME_MIN_WIDTH, Math.min(PHYSICAL_FRAME_MAX_WIDTH, width));
+  height = Math.max(PHYSICAL_FRAME_MIN_HEIGHT, Math.min(PHYSICAL_FRAME_MAX_HEIGHT, height));
+
+  frame.dataset.physicalBaseWidth = `${width}`;
+  frame.dataset.physicalBaseHeight = `${height}`;
+  frame.dataset.physicalScale = frame.dataset.physicalScale || '1';
+  applyPhysicalFrameScale(frame, parseFloat(frame.dataset.physicalScale) || 1);
+  syncPhysicalGridColumns(frame.closest('#ph-images-2'));
+}
+
+function applyPhysicalFrameScale(frame, scale) {
+  const baseWidth = parseFloat(frame?.dataset?.physicalBaseWidth);
+  const baseHeight = parseFloat(frame?.dataset?.physicalBaseHeight);
+  if (!frame || !baseWidth || !baseHeight) return;
+  const clampedScale = Math.min(1, Math.max(PHYSICAL_FRAME_SCALE_STEPS[PHYSICAL_FRAME_SCALE_STEPS.length - 1], scale));
+  frame.dataset.physicalScale = `${clampedScale}`;
+  applyImageFrameSize(frame, 'physical', Math.round(baseHeight * clampedScale), Math.round(baseWidth * clampedScale));
+}
+
+function syncPhysicalGridColumns(grid) {
+  if (!grid) return;
+  const frames = [...grid.querySelectorAll('[data-layout="physical"]')];
+  if (!frames.length) return;
+  const widths = frames.map((frame) => parseFloat(frame.style.width) || PHYSICAL_FRAME_DEFAULT_WIDTH);
+  grid.style.setProperty('grid-template-columns', widths.map((w) => `${Math.round(w)}px`).join(' '), 'important');
+  grid.style.setProperty('gap', '76px', 'important');
+  grid.style.setProperty('justify-content', 'center', 'important');
 }
 
 function applyPosterBackgroundBleedStyles(bgEl) {
@@ -337,6 +390,7 @@ function configureImageGrid(productType, layoutKey) {
     frame.style.overflow = 'hidden';
     frame.style.background = config.background;
   });
+  if (layoutKey === 'physical') syncPhysicalGridColumns(grid);
 }
 
 function applyImageFrameSize(frame, layoutKey, height, width) {
@@ -688,6 +742,7 @@ function setImageFrameDimensions(grid, frames, layoutKey, width, height) {
   grid.style.setProperty('grid-template-columns', `repeat(${frames.length}, ${width}px)`, 'important');
   grid.style.setProperty('justify-content', 'center', 'important');
   frames.forEach((frame) => applyImageFrameSize(frame, layoutKey, height, width));
+  if (layoutKey === 'physical') syncPhysicalGridColumns(grid);
 }
 
 function getContentFooterGap(posterRoot) {
@@ -713,29 +768,9 @@ function balancePhysicalPosterUnderflow(posterRoot, titleColor) {
   const frames = [...activeGrid.querySelectorAll('[data-layout="physical"]')];
   if (!frames.length) return;
 
-  const currentWidth = parseFloat(frames[0].style.width) || frames[0].getBoundingClientRect().width;
-  const currentHeight = parseFloat(frames[0].style.height) || frames[0].getBoundingClientRect().height;
-
-  // Always try to expand physical frames to their maximum safe size.
-  // Images may have been shrunk to resolve overflow; recover as much space as possible.
-  if (currentWidth < PHYSICAL_FRAME_MAX_WIDTH - 1 || currentHeight < PHYSICAL_FRAME_MAX_HEIGHT - 1) {
-    let lastSafeStep = { width: currentWidth, height: currentHeight };
-
-    for (const step of PHYSICAL_FRAME_EXPAND_STEPS) {
-      if (step.width <= currentWidth + 1 && step.height <= currentHeight + 1) continue;
-
-      setImageFrameDimensions(activeGrid, frames, 'physical', step.width, step.height);
-      updateTitleUnderline(posterRoot, titleColor);
-
-      if (isPosterOverflowing(posterRoot) || isFooterOutsidePosterBottom(posterRoot)) {
-        setImageFrameDimensions(activeGrid, frames, 'physical', lastSafeStep.width, lastSafeStep.height);
-        updateTitleUnderline(posterRoot, titleColor);
-        break;
-      }
-
-      lastSafeStep = step;
-    }
-  }
+  frames.forEach((frame) => applyPhysicalFrameScale(frame, 1));
+  syncPhysicalGridColumns(activeGrid);
+  updateTitleUnderline(posterRoot, titleColor);
 
   // After expanding images as much as safely possible, if significant whitespace
   // still remains inside #ph-main, distribute its children evenly.
@@ -762,6 +797,15 @@ function shrinkActiveImageFramesToFit(posterRoot, titleColor) {
   if (!frames.length) return;
 
   const layoutKey = frames[0].dataset.layout;
+  if (layoutKey === 'physical') {
+    for (const scale of PHYSICAL_FRAME_SCALE_STEPS) {
+      if (!isPosterOverflowing(posterRoot)) return;
+      frames.forEach((frame) => applyPhysicalFrameScale(frame, scale));
+      syncPhysicalGridColumns(activeGrid);
+      updateTitleUnderline(posterRoot, titleColor);
+    }
+    return;
+  }
   const steps = getImageFitSteps(layoutKey);
   const currentWidth = parseFloat(frames[0].style.width) || frames[0].getBoundingClientRect().width;
   const currentHeight = parseFloat(frames[0].style.height) || frames[0].getBoundingClientRect().height;
