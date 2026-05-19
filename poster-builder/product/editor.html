@@ -188,18 +188,7 @@
       -webkit-mask: none;
       mask: none;
     }
-    #ph-audience[data-icon-ok="true"]::before {
-      content: ''; display: inline-block;
-      width: 40px; height: 40px; border-radius: 0;
-      background-color: transparent;
-      background-image: var(--ph-icon-url);
-      background-position: center;
-      background-size: contain;
-      background-repeat: no-repeat;
-      -webkit-mask: none;
-      mask: none;
-      flex-shrink: 0;
-    }
+    #ph-audience::before { display: none !important; content: none !important; }
     .ph-body { font-size: 12.5px; font-weight: 400; color: var(--ph-text-color, #1f1030); line-height: 1.5; word-break: break-word; overflow-wrap: anywhere; }
     .ph-sub  { font-size: 12px; font-weight: 400; color: #8a7aa0; margin-top: 4px; line-height: 1.45; }
     .ph-bullets {
@@ -402,11 +391,8 @@
       font-size: 15px !important;
       margin-top: 0;
       text-align: center;
-      line-height: 1.85;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
+      line-height: 1.75;
+      display: block;
     }
     .ph-card-compact {
       padding-top: 8px;
@@ -563,7 +549,7 @@
 
         <!-- קהל יעד -->
         <div class="ph-card ph-audience-card">
-          <div id="ph-audience" class="ph-sub" data-icon="aud"></div>
+          <div id="ph-audience" class="ph-sub"></div>
         </div>
 
         <!-- שורה: חקר + תובנות + דרישות -->

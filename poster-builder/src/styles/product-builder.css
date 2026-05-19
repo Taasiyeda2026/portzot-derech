@@ -2243,25 +2243,10 @@ canvas {
   margin-top: 0;
   text-align: center;
   line-height: 1.75;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
+  display: block;
 }
 
-#ph-audience[data-icon-ok="true"]::before {
-  content: '';
-  display: inline-block;
-  width: 32px;
-  height: 32px;
-  border-radius: 0;
-  background-color: transparent;
-  background-image: var(--ph-icon-url);
-  background-position: center;
-  background-size: contain;
-  background-repeat: no-repeat;
-  flex-shrink: 0;
-}
+#ph-audience::before { display: none !important; content: none !important; }
 
 .ph-card-compact {
   padding-top: 8px;

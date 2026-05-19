@@ -121,7 +121,13 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
   setText('ph-feedback', contentValues.feedbackReceived);
   setText('ph-improved', contentValues.improvementsAfterFeedback);
   setText('ph-slogan',   contentValues.slogan || '');
-  setText('ph-audience', (contentValues.audience || '').trim());
+  const _audienceEl = document.getElementById('ph-audience');
+  if (_audienceEl) {
+    const _audVal = (contentValues.audience || '').trim();
+    _audienceEl.textContent = _audVal ? `קהל יעד: ${_audVal}` : '';
+    _audienceEl.removeAttribute('data-icon');
+    _audienceEl.removeAttribute('data-icon-ok');
+  }
   setText('ph-names',
     ['student1', 'student2', 'student3']
       .map(k => (contentValues[k] || '').trim()).filter(Boolean).join(' · ') || '—');
