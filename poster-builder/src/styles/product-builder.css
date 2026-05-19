@@ -2219,7 +2219,7 @@ canvas {
 
 .ph-grid-research {
   grid-template-columns: 1fr .65fr 1fr !important;
-  gap: 10px !important;
+  gap: 14px !important;
   margin-top: 1px;
 }
 
