@@ -175,7 +175,7 @@ function getValues(className, otherId) {
     return vals.length > 0 ? vals.join(', ') : 'לא צוין';
 }
 
-function generatePDF() {
+async function generatePDF() {
     const team = document.getElementById('teamNames').value.trim() || 'לא צוין';
     const name = document.getElementById('name').value.trim() || 'לא צוין';
     const age = document.getElementById('age').value.trim() || 'לא צוין';
@@ -275,11 +275,30 @@ function generatePDF() {
 </body>
 </html>`;
 
-    const win = window.open('', '_blank');
-    if (!win) { alert('אנא אפשר חלונות קופצים בדפדפן ונסי שוב.'); return; }
-    win.document.write(html);
-    win.document.close();
-    win.onload = () => { win.focus(); win.print(); };
+    const btn = document.querySelector('button[onclick="generatePDF()"]');
+    const origText = btn ? btn.textContent : '';
+    if (btn) { btn.textContent = '⏳ מכינה PDF...'; btn.disabled = true; }
+
+    try {
+        const res = await fetch('/api/export-pdf', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ html, filename: `persona_${name}.pdf` })
+        });
+        if (!res.ok) throw new Error(await res.text());
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `persona_${name}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 2000);
+    } catch (err) {
+        alert('שגיאה ביצירת PDF: ' + err.message);
+    } finally {
+        if (btn) { btn.textContent = origText; btn.disabled = false; }
+    }
 }
 </script>
 
