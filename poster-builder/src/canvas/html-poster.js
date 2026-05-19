@@ -280,22 +280,10 @@ function renderPosterFrameImage(frame, src, index, productType) {
   frame.style.position = 'relative';
   frame.style.overflow = 'hidden';
 
-  if (layoutKey === 'physical') {
-    frame.style.backgroundImage = `url("${src}")`;
-    frame.style.backgroundSize = 'cover';
-    frame.style.backgroundPosition = 'center';
-    frame.style.backgroundRepeat = 'no-repeat';
-
-    const fill = document.createElement('div');
-    fill.setAttribute('aria-hidden', 'true');
-    fill.style.cssText = 'position:absolute;inset:0;background:inherit;filter:blur(10px);opacity:.22;transform:scale(1.08);z-index:0;';
-    frame.appendChild(fill);
-  } else {
-    frame.style.removeProperty('background-image');
-    frame.style.removeProperty('background-size');
-    frame.style.removeProperty('background-position');
-    frame.style.removeProperty('background-repeat');
-  }
+  frame.style.removeProperty('background-image');
+  frame.style.removeProperty('background-size');
+  frame.style.removeProperty('background-position');
+  frame.style.removeProperty('background-repeat');
 
   // All images show in full (contain); blurred background fills empty edges for physical frames
   const imgFit = 'contain';

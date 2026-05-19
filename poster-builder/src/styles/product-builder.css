@@ -2296,7 +2296,7 @@ canvas {
 
 .ph-img-frame { position: relative; overflow: hidden; }
 .ph-img-frame img { width: 100%; height: 100%; object-fit: contain; object-position: center; display: block; }
-.ph-img-frame[data-layout="physical"] { background-size: cover; background-position: center; background-repeat: no-repeat; }
+.ph-img-frame[data-layout="physical"] { background: #f5eef2; }
 
 #poster-html {
   --ph-extra-image-scale: 1;
