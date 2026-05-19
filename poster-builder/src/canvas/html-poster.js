@@ -166,6 +166,9 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
     el.style.fontSize   = '12px';
     el.style.lineHeight = '1.45';
   });
+  document.querySelectorAll('#ph-research .ph-bullets li, #ph-reqs .ph-bullets li').forEach(el => {
+    el.style.fontSize = '11.5px';
+  });
   document.querySelectorAll('#ph-names, #ph-school').forEach(el => {
     el.style.color      = resolvedText;
     el.style.fontWeight = '400';
@@ -547,6 +550,9 @@ function applyCompactPosterSpacing(posterRoot) {
     grid.style.setProperty('gap', '5px', 'important');
     grid.style.setProperty('margin-top', '0', 'important');
   });
+  posterRoot.querySelectorAll('.ph-grid-problem, .ph-grid-solution').forEach((grid) => {
+    grid.style.setProperty('column-gap', '10px', 'important');
+  });
 
   const audienceCard = posterRoot.querySelector('.ph-audience-card');
   if (audienceCard) {
@@ -574,6 +580,9 @@ function applyFinalLayoutCompression(posterRoot) {
   posterRoot.querySelectorAll('.ph-grid-problem, .ph-grid-research, .ph-grid-solution, .ph-grid-process').forEach((grid) => {
     grid.style.setProperty('gap', '3px', 'important');
     grid.style.setProperty('margin-top', '0', 'important');
+  });
+  posterRoot.querySelectorAll('.ph-grid-problem, .ph-grid-solution').forEach((grid) => {
+    grid.style.setProperty('column-gap', '8px', 'important');
   });
 
   ['#ph-images-2', '#ph-images-app', '#ph-images-web'].forEach((selector) => {
@@ -615,6 +624,9 @@ function applyMinimumLayoutSpacing(posterRoot) {
   posterRoot.querySelectorAll('.ph-grid-problem, .ph-grid-research, .ph-grid-solution, .ph-grid-process').forEach((grid) => {
     grid.style.setProperty('gap', '2px', 'important');
     grid.style.setProperty('margin-top', '0', 'important');
+  });
+  posterRoot.querySelectorAll('.ph-grid-problem, .ph-grid-solution').forEach((grid) => {
+    grid.style.setProperty('column-gap', '6px', 'important');
   });
 
   ['#ph-images-2', '#ph-images-app', '#ph-images-web'].forEach((selector) => {

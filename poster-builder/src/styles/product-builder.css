@@ -2136,6 +2136,10 @@ canvas {
   font-size: 12px; font-weight: 400; color: var(--ph-text-color, #1f1030); line-height: 1.45;
   padding-right: 14px; position: relative; margin-bottom: 3px;
 }
+#ph-research .ph-bullets li,
+#ph-reqs .ph-bullets li {
+  font-size: 11.5px;
+}
 .ph-bullets li::before {
   content: '◆'; position: absolute; right: 0; top: 2px;
   font-size: 7px; color: var(--ph-title-color, #5E2750);
