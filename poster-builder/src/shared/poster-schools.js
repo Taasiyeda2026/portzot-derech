@@ -202,5 +202,6 @@ export async function resolveSchoolConfig(slug) {
 export function getStudentLink(slug, origin = window.location.origin) {
   const url = new URL('/poster-builder/', origin);
   if (slug && slug !== DEFAULT_SCHOOL_SLUG) url.searchParams.set('school', slug);
+  url.searchParams.set('fresh', '1');
   return url.toString();
 }

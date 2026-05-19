@@ -61,15 +61,15 @@
     (async function () {
       const params = new URLSearchParams(window.location.search);
       const requestedSchool = params.get('school') || 'default';
+      const shouldStartFresh = params.get('fresh') === '1' || params.get('start') === '1';
       const config = await resolveSchoolConfig(requestedSchool);
       const activeSlug = config.slug || 'default';
-      if (activeSlug !== 'default') {
-        document.querySelectorAll('[data-product-link]').forEach((link) => {
-          const url = new URL(link.getAttribute('href'), window.location.href);
-          url.searchParams.set('school', activeSlug);
-          link.href = url.pathname.split('/poster-builder/')[1] + url.search;
-        });
-      }
+      document.querySelectorAll('[data-product-link]').forEach((link) => {
+        const url = new URL(link.getAttribute('href'), window.location.href);
+        if (activeSlug !== 'default') url.searchParams.set('school', activeSlug);
+        if (shouldStartFresh) url.searchParams.set('fresh', '1');
+        link.href = url.pathname.split('/poster-builder/')[1] + url.search;
+      });
     })();
     (function () {
       var title = document.getElementById('poster-title');

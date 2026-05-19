@@ -22,7 +22,9 @@ const productType = requestedProductType;
 const root = document.getElementById('root');
 
 // ── School configuration ──────────────────────────────────────────────────────
-const requestedSchoolSlug = new URLSearchParams(window.location.search).get('school') || 'default';
+const pageParams = new URLSearchParams(window.location.search);
+const requestedSchoolSlug = pageParams.get('school') || 'default';
+const freshStartRequested = pageParams.get('fresh') === '1' || pageParams.get('start') === '1';
 const schoolConfig = await resolveSchoolConfig(requestedSchoolSlug);
 const schoolSlug = schoolConfig.slug || 'default';
 const schoolKnown = schoolConfig.known !== false;
@@ -224,6 +226,7 @@ function migrateSharedVisualPrompt(splitFlowState = {}) {
 }
 
 function hydrateStateFromStorage() {
+  if (freshStartRequested) return;
   const project = loadProject(schoolSlug);
   const stored = project?.splitFlowState;
   if (!stored || stored.productType !== productType) return;
@@ -1042,6 +1045,37 @@ function seedPosterBuilderState() {
 
 const SUBMISSION_ID_KEY = `poster_submission_id:${schoolSlug}:${productType}`;
 
+function removeFreshParamsFromUrl() {
+  if (!freshStartRequested) return;
+  const nextUrl = new URL(window.location.href);
+  nextUrl.searchParams.delete('fresh');
+  nextUrl.searchParams.delete('start');
+  history.replaceState({}, '', `${nextUrl.pathname}${nextUrl.search}${nextUrl.hash}`);
+}
+
+function initializeFreshStartIfRequested() {
+  if (!freshStartRequested) return;
+  const stored = loadProject(schoolSlug) || {};
+  const cleanedSplitFlowState = {
+    ...(stored.splitFlowState || {}),
+    productType,
+    step: 1
+  };
+  delete cleanedSplitFlowState.submissionId;
+
+  const nextProject = {
+    ...stored,
+    productType,
+    school_slug: schoolSlug,
+    splitFlowState: cleanedSplitFlowState
+  };
+  delete nextProject.submissionId;
+  saveProject(nextProject);
+  localStorage.removeItem(SUBMISSION_ID_KEY);
+  state.step = 1;
+  removeFreshParamsFromUrl();
+}
+
 async function submitPoster() {
   if (state.submitStatus === 'sending') return;
   state.submitStatus = 'sending';
@@ -1825,5 +1859,6 @@ function wireEvents() {
   });
 }
 
+initializeFreshStartIfRequested();
 hydrateStateFromStorage();
 render();
