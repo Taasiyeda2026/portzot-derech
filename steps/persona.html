@@ -168,6 +168,10 @@ button:hover {
 </div>
 
 <script>
+const SUPABASE_URL = window.SUPABASE_URL || 'https://YOUR-PROJECT.supabase.co';
+const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || 'YOUR_SUPABASE_ANON_KEY';
+let personaSentSuccessfully = false;
+
 function getValues(className, otherId) {
     let vals = Array.from(document.querySelectorAll('.' + className + ':checked')).map(cb => cb.value);
     let other = document.getElementById(otherId).value.trim();
@@ -300,7 +304,111 @@ async function generatePDF() {
         if (btn) { btn.textContent = origText; btn.disabled = false; }
     }
 }
+
+function collectPersonaData() {
+    const teamNames = document.getElementById('teamNames').value.trim();
+    const personaName = document.getElementById('name').value.trim();
+    const personaAge = document.getElementById('age').value.trim();
+    const routine = getValues('routine', 'routineOther');
+    const routineText = document.getElementById('routineText').value.trim();
+    const location = getValues('location', 'locationOther');
+    const moment = document.getElementById('moment').value.trim();
+    const action = document.getElementById('action').value.trim();
+    const emotion = document.getElementById('emotion').value.trim();
+    const impactType = getValues('impactType', 'impactOther');
+    const impactText = document.getElementById('impactText').value.trim();
+    const quote = document.getElementById('quote').value.trim();
+    const pAge = document.getElementById('pAge').value.trim();
+    const pWho = document.getElementById('pWho').value.trim();
+    const pDifficulty = document.getElementById('pDifficulty').value.trim();
+    const pWhen = document.getElementById('pWhen').value.trim();
+    const problemStatement = `נערות בגיל ${pAge || '___'} אשר ${pWho || '___'} מתקשות ב-${pDifficulty || '___'} כאשר ${pWhen || '___'}.`;
+
+    const allFields = {};
+    document.querySelectorAll('input, textarea, select').forEach((el) => {
+        if (!el.id && !el.name) return;
+        const key = el.id || el.name;
+        if (el.type === 'checkbox') {
+            if (!allFields[key]) allFields[key] = [];
+            if (el.checked) allFields[key].push(el.value);
+            return;
+        }
+        allFields[key] = el.value;
+    });
+
+    return {
+        activity_type: 'persona',
+        team_names: teamNames || null,
+        persona_name: personaName || null,
+        persona_age: personaAge || null,
+        background: `${routine || ''}${routineText ? ' | ' + routineText : ''}`.trim() || null,
+        situation: `${location || ''}${moment ? ' | ' + moment : ''}${action ? ' | ' + action : ''}`.trim() || null,
+        emotions: emotion || null,
+        needs: impactText || null,
+        difficulties: `${impactType || ''}${pDifficulty ? ' | ' + pDifficulty : ''}`.trim() || null,
+        problem_statement: problemStatement,
+        full_payload: {
+            teamNames,
+            personaName,
+            personaAge,
+            routine,
+            routineText,
+            location,
+            moment,
+            action,
+            emotion,
+            impactType,
+            impactText,
+            quote,
+            pAge,
+            pWho,
+            pDifficulty,
+            pWhen,
+            problemStatement,
+            allFields
+        }
+    };
+}
+
+async function submitPersonaActivity() {
+    if (personaSentSuccessfully) return;
+    const submitBtn = document.getElementById('submitActivityBtn');
+    const statusEl = document.getElementById('submitStatus');
+    if (!submitBtn || !statusEl) return;
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = '⏳ שולחות...';
+    statusEl.textContent = '';
+
+    try {
+        if (!window.supabase || !window.supabase.createClient) {
+            throw new Error('Supabase client is unavailable');
+        }
+        if (SUPABASE_URL.includes('YOUR-PROJECT') || SUPABASE_ANON_KEY.includes('YOUR_SUPABASE_ANON_KEY')) {
+            throw new Error('Supabase credentials are missing');
+        }
+
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const payload = collectPersonaData();
+        const { error } = await supabase.from('persona_submissions').insert([payload]);
+        if (error) throw error;
+
+        personaSentSuccessfully = true;
+        submitBtn.textContent = '✅ הפעילות נשלחה';
+        statusEl.textContent = 'הפעילות נשלחה בהצלחה';
+    } catch (err) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'שליחת הפעילות';
+        statusEl.textContent = 'לא הצלחנו לשלוח את הפעילות. נסו שוב.';
+    }
+}
 </script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<div id="submitArea" style="max-width:850px; margin: 10px auto 0;">
+  <button id="submitActivityBtn" onclick="submitPersonaActivity()">שליחת הפעילות</button>
+  <div id="submitStatus" style="text-align:center; margin-top:10px; font-weight:600;"></div>
+</div>
 
 </body>
 </html>
