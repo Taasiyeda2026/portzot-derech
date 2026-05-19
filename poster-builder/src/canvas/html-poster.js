@@ -142,7 +142,7 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
   setText('ph-solution-cap',
     { physical: 'המוצר שלנו', website: 'האתר שלנו', app: 'האפליקציה שלנו', digital: 'המוצר הדיגיטלי שלנו' }[productType] || 'הפתרון שלנו');
   setText('ph-usage-cap',
-    { physical: 'איך משתמשים', website: 'מה עושים באתר', app: 'איך זה עובד', digital: 'איך זה עובד' }[productType] || 'איך זה עובד');
+    { physical: 'איך משתמשים במוצר', website: 'איך משתמשים באתר', app: 'איך משתמשים באפליקציה', digital: 'איך משתמשים באתר' }[productType] || 'איך משתמשים');
   setText('ph-images-label',
     { physical: 'המוצר שלנו', app: 'מסכי האפליקציה', website: 'מסכי האתר', digital: 'מוצר דיגיטלי' }[productType] || '');
 
