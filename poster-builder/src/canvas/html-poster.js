@@ -535,7 +535,7 @@ function applyCompactPosterSpacing(posterRoot) {
   ['#ph-images-2', '#ph-images-app', '#ph-images-web'].forEach((selector) => {
     const grid = posterRoot.querySelector(selector);
     if (!grid) return;
-    const gap = selector === '#ph-images-2' ? '14px' : '8px';
+    const gap = selector === '#ph-images-2' ? '76px' : '8px';
     grid.style.setProperty('gap', gap, 'important');
     grid.style.setProperty('justify-content', 'center', 'important');
   });
@@ -586,7 +586,7 @@ function applyFinalLayoutCompression(posterRoot) {
   ['#ph-images-2', '#ph-images-app', '#ph-images-web'].forEach((selector) => {
     const grid = posterRoot.querySelector(selector);
     if (!grid) return;
-    const gap = selector === '#ph-images-2' ? '10px' : '6px';
+    const gap = selector === '#ph-images-2' ? '76px' : '6px';
     grid.style.setProperty('gap', gap, 'important');
   });
 
@@ -630,7 +630,7 @@ function applyMinimumLayoutSpacing(posterRoot) {
   ['#ph-images-2', '#ph-images-app', '#ph-images-web'].forEach((selector) => {
     const grid = posterRoot.querySelector(selector);
     if (!grid) return;
-    const gap = selector === '#ph-images-2' ? '8px' : '4px';
+    const gap = selector === '#ph-images-2' ? '76px' : '4px';
     grid.style.setProperty('gap', gap, 'important');
   });
 
