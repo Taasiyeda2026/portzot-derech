@@ -178,6 +178,9 @@
       width: 5px; height: 5px; background: var(--ph-title-color, #5E2750); border-radius: 50%;
       flex-shrink: 0;
     }
+    .ph-card-insights .ph-cap { justify-content: center; }
+    .ph-card-insights .ph-cap::before { display: none !important; content: none !important; }
+    .ph-card-insights #ph-findings { text-align: center; }
     .ph-cap[data-icon-ok="true"]::before {
       width: 33px; height: 33px; border-radius: 0;
       background-color: transparent;
@@ -558,8 +561,8 @@
             <div class="ph-cap" data-icon="res">החקר שביצענו</div>
             <ul id="ph-research" class="ph-bullets"></ul>
           </div>
-          <div class="ph-card">
-            <div class="ph-cap" data-icon="ins">תובנות מהחקר</div>
+          <div class="ph-card ph-card-insights">
+            <div class="ph-cap">תובנות מהחקר</div>
             <div id="ph-findings" class="ph-body"></div>
           </div>
           <div class="ph-card">

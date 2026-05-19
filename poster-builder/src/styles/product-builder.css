@@ -2121,6 +2121,9 @@ canvas {
 }
 .ph-solution-card .ph-cap { margin-bottom: 2px; }
 .ph-grid-process { margin-bottom: 6px; }
+.ph-card-insights .ph-cap { justify-content: center; }
+.ph-card-insights .ph-cap::before { display: none !important; content: none !important; }
+.ph-card-insights #ph-findings { text-align: center; }
 .ph-cap::before {
   content: ''; display: inline-block;
   width: 12px; height: 2.5px; background: var(--ph-title-color, #5E2750); border-radius: 1px;
