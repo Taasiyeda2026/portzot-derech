@@ -167,12 +167,6 @@ button:hover {
 <button onclick="generatePDF()">🎀 הורדת PDF</button>
 </div>
 
-<!-- Hidden canvas for PDF generation -->
-<canvas id="pdfCanvas" style="display:none;"></canvas>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
 <script>
 function getValues(className, otherId) {
     let vals = Array.from(document.querySelectorAll('.' + className + ':checked')).map(cb => cb.value);
@@ -181,7 +175,7 @@ function getValues(className, otherId) {
     return vals.length > 0 ? vals.join(', ') : 'לא צוין';
 }
 
-async function generatePDF() {
+function generatePDF() {
     const team = document.getElementById('teamNames').value.trim() || 'לא צוין';
     const name = document.getElementById('name').value.trim() || 'לא צוין';
     const age = document.getElementById('age').value.trim() || 'לא צוין';
@@ -201,134 +195,93 @@ async function generatePDF() {
     const pWhen = document.getElementById('pWhen').value.trim() || '___';
 
     const problemSentence = `נערות בגיל ${pAge} אשר ${pWho} מתקשות ב-${pDifficulty} כאשר ${pWhen}.`;
+    const origin = location.origin || window.location.origin;
 
-    // Load image as base64
-    let imgData = '';
-    try {
-        const img = new Image();
-        img.crossOrigin = 'anonymous';
-        await new Promise((resolve, reject) => {
-            img.onload = () => {
-                const canvas = document.createElement('canvas');
-                canvas.width = img.width;
-                canvas.height = img.height;
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0);
-                imgData = canvas.toDataURL('image/png');
-                resolve();
-            };
-            img.onerror = () => {
-                console.log('Could not load image');
-                resolve(); // Continue without image
-            };
-            img.src = '../icon/girl.png';
-        });
-    } catch(e) {
-        console.log('Image error:', e);
-    }
+    const html = `<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>פרסונה – ${name}</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Assistant', Arial, sans-serif; direction: rtl; color: #1f2937; font-size: 14px; line-height: 1.55; padding: 28px 32px; background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  h1 { font-size: 22px; font-weight: 800; color: #1e3a8a; margin-bottom: 4px; }
+  h2 { font-size: 16px; font-weight: 700; color: #c026d3; }
+  .header { background: linear-gradient(135deg,#fbcfe8,#f5d0fe 45%,#bae6fd); border: 1px solid #d8b4fe; border-radius: 10px; padding: 12px 14px; margin-bottom: 12px; }
+  .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .brand { font-size: 22px; font-weight: 800; color: #1e3a8a; }
+  .brand-sub { font-size: 13px; font-weight: 700; color: #c026d3; }
+  .meta { background: rgba(255,255,255,.85); border: 1px solid #f9a8d4; border-radius: 8px; padding: 8px 10px; color: #334155; font-size: 12px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .title-box { border: 1px solid #fbcfe8; border-right: 5px solid #ec4899; border-radius: 10px; padding: 12px 14px; margin-bottom: 12px; }
+  .info-box { border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+  .blue { background: #e0f2fe; border: 1px solid #cbd5e1; border-right: 4px solid #38bdf8; }
+  .pink { background: #fdf4ff; border: 1px solid #cbd5e1; border-right: 4px solid #c026d3; }
+  .gray { background: #f8fafc; border: 1.5px solid #94a3b8; min-height: 60px; }
+  .orange { background: #ffedd5; border: 1px solid #fdba74; border-right: 4px solid #fb923c; }
+  .box-title { color: #ec4899; font-weight: 700; margin-bottom: 6px; }
+  .footer { text-align: center; color: #64748b; font-size: 11px; margin-top: 16px; padding-top: 8px; border-top: 1px solid #e2e8f0; }
+  @media print { body { padding: 18px 24px; } }
+</style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-top">
+      <div><div class="brand">פורצות דרך</div><div class="brand-sub">פרסונה — דף עבודה</div></div>
+    </div>
+    <div class="meta">
+      <div><strong>משתתפות:</strong> ${team}</div>
+      <div><strong>קבוצה:</strong> ____________________</div>
+      <div><strong>תאריך:</strong> ____________________</div>
+    </div>
+  </div>
 
-    // Create PDF content div
-    const pdfDiv = document.createElement('div');
-    pdfDiv.style.width = '800px';
-    pdfDiv.style.padding = '40px';
-    pdfDiv.style.background = 'white';
-    pdfDiv.style.fontFamily = 'Arial, sans-serif';
-    pdfDiv.style.direction = 'rtl';
-    pdfDiv.style.position = 'absolute';
-    pdfDiv.style.right = '0';
-    pdfDiv.style.top = '0';
+  <div class="title-box">
+    <h1>הגדרת פרסונה</h1>
+    <h2>${name} | גיל: ${age}</h2>
+  </div>
 
-    pdfDiv.innerHTML = `
-      <div style="direction:rtl;color:#1f2937;font-family:'Assistant',Arial,sans-serif;font-size:14px;line-height:1.55;">
-        <div style="background:linear-gradient(135deg,#fbcfe8,#f5d0fe 45%,#bae6fd);border:1px solid #d8b4fe;border-radius:10px;padding:12px 14px;margin-bottom:12px;">
-          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px;">
-            <div>
-              <div style="color:#1e3a8a;font-size:24px;font-weight:800;">פורצות דרך</div>
-              <div style="color:#c026d3;font-size:14px;font-weight:700;">פרסונה — דף עבודה</div>
-            </div>
-            <img src="../icon/favicon.png" style="width:42px;height:42px;border-radius:50%;border:2px solid white;background:white;" alt="פורצות דרך" />
-          </div>
-          <div style="background:rgba(255,255,255,.8);border:1px solid #f9a8d4;border-radius:8px;padding:8px 10px;color:#334155;font-size:12px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
-            <div><strong>משתתפות:</strong> ${team}</div>
-            <div><strong>קבוצה:</strong> ____________________</div>
-            <div><strong>תאריך:</strong> ____________________</div>
-          </div>
-        </div>
+  <div class="info-box blue">
+    <strong style="color:#1e3a8a;">הסבר:</strong> מחדדות מי המשתמשת שלנו, מה הקושי שלה, ומה המשפט היזמי המדויק שמכוון לפתרון.
+  </div>
 
-        <div style="border:1px solid #fbcfe8;border-right:5px solid #ec4899;border-radius:10px;padding:12px 14px;margin-bottom:12px;">
-          <h1 style="margin:0 0 6px;color:#1e3a8a;font-size:24px;line-height:1.25;font-weight:800;">הגדרת פרסונה</h1>
-          <h2 style="margin:0;color:#c026d3;font-size:18px;font-weight:700;">${name} | גיל: ${age}</h2>
-        </div>
+  <div class="info-box pink">
+    <div class="box-title">שגרה ואתגר</div>
+    <p><strong>שגרת חיים:</strong> ${routine}</p>
+    <p style="margin-top:4px;">${routineText}</p>
+  </div>
 
-        <div style="background:#e0f2fe;border:1px solid #cbd5e1;border-right:4px solid #38bdf8;border-radius:10px;padding:12px;margin-bottom:10px;">
-          <strong style="color:#1e3a8a;">הסבר:</strong> מחדדות מי המשתמשת שלנו, מה הקושי שלה, ומה המשפט היזמי המדויק שמכוון לפתרון.
-        </div>
+  <div class="info-box pink">
+    <div class="box-title">הקשר הבעיה</div>
+    <p><strong>מיקומים:</strong> ${location}</p>
+    <p style="margin-top:4px;"><strong>מתי:</strong> ${moment}</p>
+    <p style="margin-top:4px;"><strong>מה קורה בפועל:</strong> ${action}</p>
+  </div>
 
-        <div style="background:#fdf4ff;border:1px solid #cbd5e1;border-right:4px solid #c026d3;border-radius:10px;padding:12px;margin-bottom:10px;">
-          <div style="color:#ec4899;font-weight:700;margin-bottom:6px;">שאלה / משימה: שגרה ואתגר</div>
-          <p style="margin:0 0 6px;"><strong>שגרת חיים:</strong> ${routine}</p>
-          <p style="margin:0;">${routineText}</p>
-        </div>
+  <div class="info-box gray">
+    <div class="box-title">תשובה קצרה</div>
+    <p><strong>רגש:</strong> ${emotion} | <strong>השפעה:</strong> ${impactType}</p>
+  </div>
 
-        <div style="background:#fdf4ff;border:1px solid #cbd5e1;border-right:4px solid #c026d3;border-radius:10px;padding:12px;margin-bottom:10px;">
-          <div style="color:#ec4899;font-weight:700;margin-bottom:6px;">שאלה / משימה: הקשר הבעיה</div>
-          <p style="margin:0 0 6px;"><strong>מיקומים:</strong> ${location}</p>
-          <p style="margin:0 0 6px;"><strong>מתי:</strong> ${moment}</p>
-          <p style="margin:0;"><strong>מה קורה בפועל:</strong> ${action}</p>
-        </div>
+  <div class="info-box gray">
+    <div class="box-title">תשובה ארוכה</div>
+    <p>${impactText}</p>
+    <p style="margin-top:6px;font-style:italic;">"${quote}"</p>
+  </div>
 
-        <div style="background:#f8fafc;border:1.5px solid #94a3b8;border-radius:10px;padding:12px;min-height:52px;margin-bottom:10px;">
-          <div style="color:#ec4899;font-weight:700;margin-bottom:6px;">תיבת תשובה קצרה</div>
-          <p style="margin:0;"><strong>רגש:</strong> ${emotion} | <strong>השפעה:</strong> ${impactType}</p>
-        </div>
+  <div class="info-box orange">
+    <strong style="color:#1e3a8a;">מסר חשוב:</strong> ${problemSentence}
+  </div>
 
-        <div style="background:#f8fafc;border:1.5px solid #94a3b8;border-radius:10px;padding:12px;min-height:120px;margin-bottom:10px;">
-          <div style="color:#ec4899;font-weight:700;margin-bottom:6px;">תיבת תשובה ארוכה</div>
-          <p style="margin:0 0 6px;">${impactText}</p>
-          <p style="margin:0;font-style:italic;">"${quote}"</p>
-        </div>
+  <div class="footer">© 2026 פורצות דרך</div>
+</body>
+</html>`;
 
-        <div style="background:#ffedd5;border:1px solid #fdba74;border-right:4px solid #fb923c;border-radius:10px;padding:10px 12px;margin-bottom:10px;">
-          <strong style="color:#1e3a8a;">מסר חשוב:</strong> ${problemSentence}
-        </div>
-
-        <div style="display:flex;gap:20px;align-items:flex-end;">
-          <div style="flex:1;"></div>
-          <div style="width:210px;text-align:center;">${imgData ? `<img src="${imgData}" style="max-width:100%;height:auto;max-height:260px;">` : ''}</div>
-        </div>
-
-        <div style="text-align:center;color:#64748b;font-size:11px;margin-top:12px;padding-top:8px;border-top:1px solid #e2e8f0;">© 2026 פורצות דרך</div>
-      </div>
-    `;
-
-    document.body.appendChild(pdfDiv);
-
-    try {
-        const canvas = await html2canvas(pdfDiv, {
-            scale: 2,
-            useCORS: true,
-            allowTaint: true,
-            backgroundColor: '#ffffff',
-            windowWidth: 800
-        });
-
-        const imgWidth = 210; // A4 width in mm
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
-        
-        const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF('p', 'mm', 'a4');
-        
-        const imgDataUrl = canvas.toDataURL('image/png');
-        pdf.addImage(imgDataUrl, 'PNG', 0, 0, imgWidth, imgHeight);
-        
-        pdf.save(`persona_${name}_${Date.now()}.pdf`);
-        
-        document.body.removeChild(pdfDiv);
-    } catch (err) {
-        console.error('Error generating PDF:', err);
-        alert('שגיאה ביצירת PDF: ' + err.message);
-        document.body.removeChild(pdfDiv);
-    }
+    const win = window.open('', '_blank');
+    if (!win) { alert('אנא אפשר חלונות קופצים בדפדפן ונסי שוב.'); return; }
+    win.document.write(html);
+    win.document.close();
+    win.onload = () => { win.focus(); win.print(); };
 }
 </script>
 
