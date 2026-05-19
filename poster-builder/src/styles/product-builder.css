@@ -2119,6 +2119,8 @@ canvas {
   letter-spacing: 0; line-height: 1.25;
   margin-bottom: 7px; display: flex; align-items: center; gap: 5px;
 }
+.ph-solution-card .ph-cap { margin-bottom: 2px; }
+.ph-grid-process { margin-bottom: 6px; }
 .ph-cap::before {
   content: ''; display: inline-block;
   width: 12px; height: 2.5px; background: var(--ph-title-color, #5E2750); border-radius: 1px;

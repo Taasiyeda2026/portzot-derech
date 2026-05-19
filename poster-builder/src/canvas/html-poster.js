@@ -169,6 +169,10 @@ export function renderHTMLPoster(contentValues, productType, titleFont, titleCol
   document.querySelectorAll('#ph-research .ph-bullets li, #ph-reqs .ph-bullets li').forEach(el => {
     el.style.fontSize = '11.5px';
   });
+  const solutionCapEl = document.getElementById('ph-solution-cap');
+  if (solutionCapEl) solutionCapEl.style.marginBottom = '2px';
+  const processGrid = posterRoot ? posterRoot.querySelector('.ph-grid-process') : document.querySelector('.ph-grid-process');
+  if (processGrid) processGrid.style.marginBottom = '6px';
   document.querySelectorAll('#ph-names, #ph-school').forEach(el => {
     el.style.color      = resolvedText;
     el.style.fontWeight = '400';
