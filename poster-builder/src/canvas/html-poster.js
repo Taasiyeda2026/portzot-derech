@@ -551,7 +551,7 @@ function applyCompactPosterSpacing(posterRoot) {
     grid.style.setProperty('margin-top', '0', 'important');
   });
   posterRoot.querySelectorAll('.ph-grid-problem, .ph-grid-solution').forEach((grid) => {
-    grid.style.setProperty('column-gap', '10px', 'important');
+    grid.style.setProperty('column-gap', '16px', 'important');
   });
 
   const audienceCard = posterRoot.querySelector('.ph-audience-card');
@@ -582,7 +582,7 @@ function applyFinalLayoutCompression(posterRoot) {
     grid.style.setProperty('margin-top', '0', 'important');
   });
   posterRoot.querySelectorAll('.ph-grid-problem, .ph-grid-solution').forEach((grid) => {
-    grid.style.setProperty('column-gap', '8px', 'important');
+    grid.style.setProperty('column-gap', '12px', 'important');
   });
 
   ['#ph-images-2', '#ph-images-app', '#ph-images-web'].forEach((selector) => {
@@ -626,7 +626,7 @@ function applyMinimumLayoutSpacing(posterRoot) {
     grid.style.setProperty('margin-top', '0', 'important');
   });
   posterRoot.querySelectorAll('.ph-grid-problem, .ph-grid-solution').forEach((grid) => {
-    grid.style.setProperty('column-gap', '6px', 'important');
+    grid.style.setProperty('column-gap', '10px', 'important');
   });
 
   ['#ph-images-2', '#ph-images-app', '#ph-images-web'].forEach((selector) => {
