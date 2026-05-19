@@ -1,15 +1,15 @@
 const POSTER_WIDTH_PX = 794;
 const POSTER_HEIGHT_PX = 1123;
-const PHYSICAL_FRAME_MAX_WIDTH = 405;
-const PHYSICAL_FRAME_MAX_HEIGHT = 254;
-const PHYSICAL_FRAME_DEFAULT_WIDTH = 394;
-const PHYSICAL_FRAME_DEFAULT_HEIGHT = 246;
-const PHYSICAL_FRAME_MIN_WIDTH = 356;
-const PHYSICAL_FRAME_MIN_HEIGHT = 227;
+const PHYSICAL_FRAME_MAX_WIDTH = 330;
+const PHYSICAL_FRAME_MAX_HEIGHT = 264;
+const PHYSICAL_FRAME_DEFAULT_WIDTH = 316;
+const PHYSICAL_FRAME_DEFAULT_HEIGHT = 252;
+const PHYSICAL_FRAME_MIN_WIDTH = 285;
+const PHYSICAL_FRAME_MIN_HEIGHT = 228;
 const PHYSICAL_FRAME_STEPS = [
   { width: PHYSICAL_FRAME_DEFAULT_WIDTH, height: PHYSICAL_FRAME_DEFAULT_HEIGHT },
-  { width: 383, height: 240 },
-  { width: 370, height: 232 },
+  { width: 306, height: 244 },
+  { width: 296, height: 237 },
   { width: PHYSICAL_FRAME_MIN_WIDTH, height: PHYSICAL_FRAME_MIN_HEIGHT },
 ];
 const PHYSICAL_FRAME_EXPAND_STEPS = [
@@ -24,7 +24,7 @@ const APP_SCREEN_RATIO = 9 / 16;
 const WEB_SCREEN_RATIO = 16 / 9;
 const WEB_FRAME_WIDTH_STEPS = [254, 242, 230, 217];
 const IMAGE_LAYOUT_FALLBACKS = {
-  physical: { fit: 'contain', height: PHYSICAL_FRAME_HEIGHT, width: PHYSICAL_FRAME_WIDTH, background: '#f5eef2', aspectRatio: '30 / 19' },
+  physical: { fit: 'contain', height: PHYSICAL_FRAME_HEIGHT, width: PHYSICAL_FRAME_WIDTH, background: '#f5eef2', aspectRatio: '5 / 4' },
   app: { fit: 'contain', height: APP_FRAME_HEIGHT_STEPS[0], width: Math.round(APP_FRAME_HEIGHT_STEPS[0] * APP_SCREEN_RATIO), background: 'linear-gradient(180deg, #fbf8fc 0%, #f0e7f5 100%)', aspectRatio: '9 / 16' },
   website: { fit: 'contain', height: Math.round(WEB_FRAME_WIDTH_STEPS[0] / WEB_SCREEN_RATIO), width: WEB_FRAME_WIDTH_STEPS[0], background: 'linear-gradient(180deg, #fbf8ff 0%, #f2edf8 100%)', aspectRatio: '16 / 9' },
 };
