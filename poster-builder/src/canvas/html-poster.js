@@ -297,8 +297,8 @@ function renderPosterFrameImage(frame, src, index, productType) {
     frame.style.removeProperty('background-repeat');
   }
 
-  // Physical product images fill the frame (cover); screenshots must show in full (contain)
-  const imgFit = layoutKey === 'physical' ? 'cover' : 'contain';
+  // All images show in full (contain); blurred background fills empty edges for physical frames
+  const imgFit = 'contain';
   const img = document.createElement('img');
   img.alt = `תמונה ${index + 1}`;
   img.crossOrigin = 'anonymous';
