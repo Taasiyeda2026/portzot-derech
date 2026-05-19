@@ -24,6 +24,13 @@ const PHYSICAL_UNDERFLOW_GAP_PX = 20;
 const PHYSICAL_FRAME_SCALE_STEPS = [1, 0.95, 0.9, 0.86];
 const APP_FRAME_HEIGHT_STEPS = [335, 316, 298, 280, 268];
 const APP_SCREEN_RATIO = 9 / 16;
+const APP_FRAME_MAX_HEIGHT = APP_FRAME_HEIGHT_STEPS[0];
+const APP_FRAME_MIN_HEIGHT = APP_FRAME_HEIGHT_STEPS[APP_FRAME_HEIGHT_STEPS.length - 1];
+const APP_FRAME_DEFAULT_WIDTH = Math.round(APP_FRAME_MAX_HEIGHT * APP_SCREEN_RATIO);
+const APP_FRAME_MAX_WIDTH = 226;
+const APP_FRAME_MIN_WIDTH = 148;
+const APP_FRAME_MIN_RATIO = 0.44;
+const APP_FRAME_MAX_RATIO = 0.82;
 const WEB_SCREEN_RATIO = 16 / 9;
 const WEB_FRAME_WIDTH_STEPS = [254, 242, 230, 217];
 const IMAGE_LAYOUT_FALLBACKS = {
@@ -298,9 +305,44 @@ function renderPosterFrameImage(frame, src, index, productType) {
     const setSmartFrameSize = () => applySmartPhysicalFrameSize(frame, img);
     img.addEventListener('load', setSmartFrameSize, { once: true });
     if (img.complete) setSmartFrameSize();
+  } else if (layoutKey === 'app') {
+    const setSmartFrameSize = () => applySmartAppFrameSize(frame, img);
+    img.addEventListener('load', setSmartFrameSize, { once: true });
+    if (img.complete) setSmartFrameSize();
   }
   img.style.cssText = `position:relative;z-index:1;width:100% !important;height:100% !important;object-fit:${imgFit} !important;object-position:center !important;display:block !important;margin:0 !important;max-width:none !important;max-height:none !important;`;
   frame.appendChild(img);
+}
+
+function applySmartAppFrameSize(frame, img) {
+  if (!frame || !img) return;
+  const naturalWidth = img.naturalWidth || 0;
+  const naturalHeight = img.naturalHeight || 0;
+  if (!naturalWidth || !naturalHeight) return;
+
+  const rawRatio = naturalWidth / naturalHeight;
+  const safeRatio = Math.min(APP_FRAME_MAX_RATIO, Math.max(APP_FRAME_MIN_RATIO, rawRatio));
+
+  let height = APP_FRAME_MAX_HEIGHT;
+  let width = Math.round(height * safeRatio);
+
+  if (width > APP_FRAME_MAX_WIDTH) {
+    width = APP_FRAME_MAX_WIDTH;
+    height = Math.round(width / safeRatio);
+  }
+
+  if (width < APP_FRAME_MIN_WIDTH) {
+    width = APP_FRAME_MIN_WIDTH;
+    height = Math.round(width / safeRatio);
+  }
+
+  width = Math.max(APP_FRAME_MIN_WIDTH, Math.min(APP_FRAME_MAX_WIDTH, width));
+  height = Math.max(APP_FRAME_MIN_HEIGHT, Math.min(APP_FRAME_MAX_HEIGHT, height));
+
+  frame.dataset.appBaseWidth = `${width}`;
+  frame.dataset.appBaseHeight = `${height}`;
+  applyImageFrameSize(frame, 'app', height, width);
+  syncAppGridColumns(frame.closest('#ph-images-app'));
 }
 
 function applySmartPhysicalFrameSize(frame, img) {
@@ -345,6 +387,16 @@ function syncPhysicalGridColumns(grid) {
   const widths = frames.map((frame) => parseFloat(frame.style.width) || PHYSICAL_FRAME_DEFAULT_WIDTH);
   grid.style.setProperty('grid-template-columns', widths.map((w) => `${Math.round(w)}px`).join(' '), 'important');
   grid.style.setProperty('gap', '76px', 'important');
+  grid.style.setProperty('justify-content', 'center', 'important');
+}
+
+function syncAppGridColumns(grid) {
+  if (!grid) return;
+  const frames = [...grid.querySelectorAll('[data-layout="app"]')];
+  if (!frames.length) return;
+  const widths = frames.map((frame) => parseFloat(frame.style.width) || APP_FRAME_DEFAULT_WIDTH);
+  grid.style.setProperty('grid-template-columns', widths.map((w) => `${Math.round(w)}px`).join(' '), 'important');
+  grid.style.setProperty('gap', '11px', 'important');
   grid.style.setProperty('justify-content', 'center', 'important');
 }
 
@@ -407,6 +459,7 @@ function applyImageFrameSize(frame, layoutKey, height, width) {
   }
 
   if (layoutKey === 'app') frame.style.aspectRatio = '9 / 16';
+  if (layoutKey === 'app' && width && height) frame.style.aspectRatio = `${width} / ${height}`;
   else if (layoutKey === 'website') frame.style.aspectRatio = '16 / 9';
   else if (layoutKey === 'physical') frame.style.aspectRatio = `${width || PHYSICAL_FRAME_WIDTH} / ${height}`;
   else frame.style.removeProperty('aspect-ratio');
