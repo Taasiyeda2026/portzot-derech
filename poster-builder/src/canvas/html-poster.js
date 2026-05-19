@@ -980,7 +980,7 @@ export async function exportHTMLPosterToPDF() {
   <style>
     ${fontFaceCSS}
     *, *::before, *::after { box-sizing: border-box; }
-    html, body { width: 210mm; height: 297mm; margin: 0; padding: 0; background: white; overflow: hidden; }
+    html, body { width: 794px; height: 1123px; margin: 0; padding: 0; background: transparent; overflow: hidden; }
     @page { size: 210mm 297mm; margin: 0; }
     #poster-html {
       position: relative !important;
