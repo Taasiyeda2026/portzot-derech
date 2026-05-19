@@ -1,4 +1,4 @@
-const CACHE_NAME = "portzot-derech-v94";
+const CACHE_NAME = "portzot-derech-v95";
 
 // ── נכסים שנשמרים ב-Cache בהתקנה ─────────────────────────────────────────
 const CORE_ASSETS = [
