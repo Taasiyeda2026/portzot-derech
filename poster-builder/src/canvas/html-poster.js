@@ -1,15 +1,15 @@
 const POSTER_WIDTH_PX = 794;
 const POSTER_HEIGHT_PX = 1123;
-const PHYSICAL_FRAME_MAX_WIDTH = 355;
-const PHYSICAL_FRAME_MAX_HEIGHT = 266;
-const PHYSICAL_FRAME_DEFAULT_WIDTH = 340;
-const PHYSICAL_FRAME_DEFAULT_HEIGHT = 255;
-const PHYSICAL_FRAME_MIN_WIDTH = 300;
-const PHYSICAL_FRAME_MIN_HEIGHT = 225;
+const PHYSICAL_FRAME_MAX_WIDTH = 335;
+const PHYSICAL_FRAME_MAX_HEIGHT = 251;
+const PHYSICAL_FRAME_DEFAULT_WIDTH = 320;
+const PHYSICAL_FRAME_DEFAULT_HEIGHT = 240;
+const PHYSICAL_FRAME_MIN_WIDTH = 280;
+const PHYSICAL_FRAME_MIN_HEIGHT = 210;
 const PHYSICAL_FRAME_STEPS = [
   { width: PHYSICAL_FRAME_DEFAULT_WIDTH, height: PHYSICAL_FRAME_DEFAULT_HEIGHT },
-  { width: 325, height: 244 },
-  { width: 312, height: 234 },
+  { width: 308, height: 231 },
+  { width: 296, height: 222 },
   { width: PHYSICAL_FRAME_MIN_WIDTH, height: PHYSICAL_FRAME_MIN_HEIGHT },
 ];
 const PHYSICAL_FRAME_EXPAND_STEPS = [
@@ -328,7 +328,7 @@ function configureImageGrid(productType, layoutKey) {
 
   if (grid && config.width) {
     grid.style.setProperty('grid-template-columns', `repeat(${frameCount}, ${config.width}px)`, 'important');
-    grid.style.setProperty('gap', layoutKey === 'physical' ? '10px' : '11px', 'important');
+    grid.style.setProperty('gap', layoutKey === 'physical' ? '76px' : '11px', 'important');
     grid.style.justifyContent = 'center';
   }
 
