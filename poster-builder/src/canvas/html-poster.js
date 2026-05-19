@@ -281,14 +281,14 @@ function renderPosterFrameImage(frame, src, index, productType) {
   frame.style.overflow = 'hidden';
 
   if (layoutKey === 'physical') {
-    frame.style.backgroundImage = `linear-gradient(rgba(245,238,242,.36), rgba(245,238,242,.36)), url("${src}")`;
+    frame.style.backgroundImage = `url("${src}")`;
     frame.style.backgroundSize = 'cover';
     frame.style.backgroundPosition = 'center';
     frame.style.backgroundRepeat = 'no-repeat';
 
     const fill = document.createElement('div');
     fill.setAttribute('aria-hidden', 'true');
-    fill.style.cssText = 'position:absolute;inset:-8px;background:inherit;filter:blur(7px);opacity:.42;transform:scale(1.05);z-index:0;';
+    fill.style.cssText = 'position:absolute;inset:0;background:inherit;filter:blur(10px);opacity:.22;transform:scale(1.08);z-index:0;';
     frame.appendChild(fill);
   } else {
     frame.style.removeProperty('background-image');

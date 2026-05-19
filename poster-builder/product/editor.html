@@ -236,9 +236,9 @@
       object-position: center;
       display: block;
     }
-    /* Physical product images fill the frame; screenshots/logos stay unclipped */
+    /* Physical product images: contain so nothing is cropped */
     .ph-img-frame[data-layout="physical"] img {
-      object-fit: cover;
+      object-fit: contain;
       object-position: center;
     }
     .ph-img-frame[data-layout="physical"] {
