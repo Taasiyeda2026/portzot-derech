@@ -544,10 +544,12 @@ function applyCompactPosterSpacing(posterRoot) {
     card.style.setProperty('padding', '8px 10px', 'important');
   });
 
-  posterRoot.querySelectorAll('.ph-grid-problem, .ph-grid-research, .ph-grid-solution, .ph-grid-process').forEach((grid) => {
+  posterRoot.querySelectorAll('.ph-grid-problem, .ph-grid-solution, .ph-grid-process').forEach((grid) => {
     grid.style.setProperty('gap', '5px', 'important');
     grid.style.setProperty('margin-top', '0', 'important');
   });
+  const researchGridTight = posterRoot.querySelector('.ph-grid-research');
+  if (researchGridTight) researchGridTight.style.setProperty('gap', '18px', 'important');
   posterRoot.querySelectorAll('.ph-grid-problem, .ph-grid-solution').forEach((grid) => {
     grid.style.setProperty('column-gap', '16px', 'important');
   });
@@ -575,10 +577,12 @@ function applyFinalLayoutCompression(posterRoot) {
   const imageLabel = posterRoot.querySelector('#ph-images-label');
   if (imageLabel) imageLabel.style.setProperty('margin-bottom', '1px', 'important');
 
-  posterRoot.querySelectorAll('.ph-grid-problem, .ph-grid-research, .ph-grid-solution, .ph-grid-process').forEach((grid) => {
+  posterRoot.querySelectorAll('.ph-grid-problem, .ph-grid-solution, .ph-grid-process').forEach((grid) => {
     grid.style.setProperty('gap', '3px', 'important');
     grid.style.setProperty('margin-top', '0', 'important');
   });
+  const researchGridFinal = posterRoot.querySelector('.ph-grid-research');
+  if (researchGridFinal) researchGridFinal.style.setProperty('gap', '16px', 'important');
   posterRoot.querySelectorAll('.ph-grid-problem, .ph-grid-solution').forEach((grid) => {
     grid.style.setProperty('column-gap', '12px', 'important');
   });
@@ -619,10 +623,12 @@ function applyMinimumLayoutSpacing(posterRoot) {
   const imageLabel = posterRoot.querySelector('#ph-images-label');
   if (imageLabel) imageLabel.style.setProperty('margin-bottom', '0', 'important');
 
-  posterRoot.querySelectorAll('.ph-grid-problem, .ph-grid-research, .ph-grid-solution, .ph-grid-process').forEach((grid) => {
+  posterRoot.querySelectorAll('.ph-grid-problem, .ph-grid-solution, .ph-grid-process').forEach((grid) => {
     grid.style.setProperty('gap', '2px', 'important');
     grid.style.setProperty('margin-top', '0', 'important');
   });
+  const researchGridMin = posterRoot.querySelector('.ph-grid-research');
+  if (researchGridMin) researchGridMin.style.setProperty('gap', '14px', 'important');
   posterRoot.querySelectorAll('.ph-grid-problem, .ph-grid-solution').forEach((grid) => {
     grid.style.setProperty('column-gap', '10px', 'important');
   });
