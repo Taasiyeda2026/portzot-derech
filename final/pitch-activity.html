@@ -1220,4 +1220,133 @@
         html += '</section>';
 
         doc.innerHTML = html;
- 
+      }
+
+      function updateTimerDisplay() {
+        var display = document.getElementById("timerDisplay");
+        if (!display) return;
+        var minutes = Math.floor(timerSeconds / 60);
+        var seconds = timerSeconds % 60;
+        display.textContent = String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
+      }
+
+      function stopTimer() {
+        if (timerId) {
+          clearInterval(timerId);
+          timerId = null;
+        }
+        var startBtn = document.getElementById("startTimer");
+        if (startBtn) startBtn.textContent = "התחלה";
+      }
+
+      function startOrPauseTimer() {
+        var startBtn = document.getElementById("startTimer");
+        if (timerId) {
+          stopTimer();
+          return;
+        }
+
+        if (startBtn) startBtn.textContent = "עצירה";
+        timerId = setInterval(function () {
+          if (timerSeconds <= 0) {
+            stopTimer();
+            return;
+          }
+          timerSeconds -= 1;
+          updateTimerDisplay();
+        }, 1000);
+      }
+
+      function resetTimer() {
+        stopTimer();
+        timerSeconds = 180;
+        updateTimerDisplay();
+      }
+
+      function attachEvents() {
+        var generatePitchBtn = document.getElementById("generatePitch");
+        var generateElevatorBtn = document.getElementById("generateElevator");
+        var printBtn = document.getElementById("printPage");
+        var presenterCount = document.getElementById("presenterCount");
+        var startTimerBtn = document.getElementById("startTimer");
+        var resetTimerBtn = document.getElementById("resetTimer");
+
+        if (generatePitchBtn) {
+          generatePitchBtn.addEventListener("click", function () {
+            updatePitchPreview();
+            saveAll();
+          });
+        }
+
+        if (generateElevatorBtn) {
+          generateElevatorBtn.addEventListener("click", function () {
+            var output = document.getElementById("elevatorPitch");
+            if (output) output.value = buildElevatorPitch();
+            buildPrintDocument();
+            saveAll();
+          });
+        }
+
+        if (printBtn) {
+          printBtn.addEventListener("click", function () {
+            buildPrintDocument();
+            window.print();
+          });
+        }
+
+        if (presenterCount) {
+          presenterCount.addEventListener("change", function () {
+            renderPresenterInputs(readSavedData());
+            updatePitchPreview();
+            buildPrintDocument();
+            saveAll();
+          });
+        }
+
+        if (startTimerBtn) startTimerBtn.addEventListener("click", startOrPauseTimer);
+        if (resetTimerBtn) resetTimerBtn.addEventListener("click", resetTimer);
+
+        getSaveFields().forEach(function (field) {
+          field.addEventListener("input", function () {
+            if (field.id !== "fullPitch" && field.id !== "elevatorPitch") {
+              updatePitchPreview();
+            } else {
+              renderRoles();
+              buildPrintDocument();
+            }
+            saveAll();
+          });
+
+          field.addEventListener("change", function () {
+            if (field.id !== "fullPitch" && field.id !== "elevatorPitch") {
+              updatePitchPreview();
+            } else {
+              renderRoles();
+              buildPrintDocument();
+            }
+            saveAll();
+          });
+        });
+      }
+
+      function init() {
+        var saved = readSavedData();
+        var presenterCount = document.getElementById("presenterCount");
+        var countFromSaved = Number(saved.presenterCount);
+        if (presenterCount && countFromSaved >= 1 && countFromSaved <= 5) {
+          presenterCount.value = String(countFromSaved);
+        }
+
+        renderPresenterInputs(saved);
+        applySavedData(saved);
+        updateTimerDisplay();
+        attachEvents();
+        updatePitchPreview();
+        buildPrintDocument();
+      }
+
+      init();
+    }());
+  </script>
+</body>
+</html>
