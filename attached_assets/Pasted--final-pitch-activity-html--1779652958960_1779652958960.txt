@@ -1,0 +1,118 @@
+יש תקלה בעמוד:
+final/pitch-activity.html
+
+לפי בדיקה ויזואלית, מופיעים כפתורים/תגיות בשם "פיץ׳ סופי", אבל הם לא נלחצים בפועל.
+
+נדרש לבצע תיקון ממוקד:
+
+1. להסיר כפילות של כפתורי "פיץ׳ סופי"
+כרגע נראה שיש גם תגית/כפתור "פיץ׳ סופי" באזור העליון וגם אלמנט נוסף בתוך ההירו.
+צריך להשאיר רק כפתור אחד שמיועד לפתיחת ניהול:
+#adminTrigger
+
+2. הכפתור #adminTrigger צריך להיות כפתור אמיתי ולחיץ
+לוודא שהוא:
+button type="button"
+id="adminTrigger"
+לא span
+לא a בלי href
+לא אלמנט מוסתר
+לא אלמנט שנמצא מאחורי שכבה אחרת
+
+3. לחיצה רגילה אחת על הכפתור "פיץ׳ סופי" תפתח את חלון הסיסמה
+לא להשתמש יותר ב־3 לחיצות.
+לא להשתמש ב־adminClicks.
+לא להשתמש ב־adminClickTimer.
+לא להשתמש ב־Alt+Click.
+
+הקוד צריך להיות פשוט:
+
+var adminTrigger = document.getElementById("adminTrigger");
+var adminModal = document.getElementById("adminModal");
+
+if (adminTrigger && adminModal) {
+  adminTrigger.addEventListener("click", function () {
+    adminModal.classList.add("open");
+  });
+}
+
+4. לבדוק שאין שכבת CSS שחוסמת לחיצה
+יש לבדוק במיוחד:
+pointer-events
+z-index
+position absolute/fixed
+::before / ::after
+אלמנטים שקופים מעל ההידר
+hero או section שחופפים לכפתור
+
+אם צריך, להוסיף ל־#adminTrigger:
+position: relative;
+z-index: 30;
+pointer-events: auto;
+
+5. לתקן את כפתורי הניווט שמובילים ל־FinalPitch.html
+העמוד:
+final/FinalPitch.html
+צריך להימחק, ולכן אין להשאיר אליו כפתורים.
+
+יש להסיר או להחליף כל href שמוביל אל:
+FinalPitch.html
+final/FinalPitch.html
+../final/FinalPitch.html
+./FinalPitch.html
+
+במיוחד לבדוק את:
+final/pitch-activity.html
+
+אם מופיע כפתור:
+"חזרה לעמוד הפיץ׳"
+עם href="FinalPitch.html"
+יש להסיר אותו או להחליף לקישור תקין לעמוד הבית/תפריט הרלוונטי.
+
+לא להשאיר קישור לעמוד שנמחק.
+
+6. הסיסמה צריכה לעבוד
+לאחר פתיחת המודאל:
+הסיסמה 1234 צריכה לפתוח את פאנל הניהול.
+
+לוודא:
+pass.value.trim() === "1234"
+
+אם נכון:
+#adminAuth מוסתר
+#adminContent מוצג
+מוצגת הודעה "כניסה בוצעה"
+refreshGroups() מופעל אם קיים
+
+אם שגוי:
+מוצגת הודעה "סיסמה שגויה"
+
+7. Enter בשדה הסיסמה
+לחיצה על Enter בתוך #adminPassword תפעיל את אותה פעולה כמו כפתור "כניסה".
+
+8. בדיקות קבלה חובה
+יש לבדוק בפועל בדפדפן:
+- הכפתור "פיץ׳ סופי" לחיץ.
+- לחיצה אחת פותחת חלון סיסמה.
+- 1234 פותח את פאנל הניהול.
+- Enter בשדה הסיסמה עובד.
+- אין כפתור שמוביל ל־FinalPitch.html.
+- אין קישור שבור ל־FinalPitch.html.
+- אין שגיאות Console.
+- הפיץ׳ עצמו עדיין עובד.
+- חלוקת התפקידים עדיין עובדת.
+- שמירה/טעינה מ־Supabase עדיין עובדות.
+
+9. Service Worker מלא
+חובה לעדכן/לבדוק Service Worker ברמת כל האתר:
+- להעלות גרסת CACHE_NAME / SW_VERSION אם קיימת.
+- להסיר את final/FinalPitch.html מה־precache אם הוא מופיע שם.
+- לוודא ש־final/pitch-activity.html נטען בגרסה החדשה.
+- לוודא שהקובץ שנמחק לא ממשיך להיטען מהקאש.
+- לוודא שאין גרסה ישנה שבה הכפתור עדיין לא לחיץ.
+- לבדוק שאין שגיאות Console הקשורות ל־Service Worker.
+
+לא לשנות עיצוב כללי מעבר למה שנדרש כדי שהכפתור יהיה לחיץ.
+לא לשנות ניווטים אחרים.
+לא לשכתב את כל העמוד.
+לבצע תיקון ממוקד בלבד.
