@@ -114,10 +114,18 @@
     }
     .admin-modal{position:fixed;inset:0;background:rgba(20,16,30,.45);display:none;align-items:center;justify-content:center;z-index:60;padding:1rem}
     .admin-modal.open{display:flex}
-    .admin-panel{width:min(100%,760px);max-height:85vh;overflow:auto;background:#fff;border:1px solid var(--line);border-radius:16px;padding:1rem}
-    .admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
-    .admin-grid > .section h4{margin-bottom:.35rem}
-    .admin-hint{margin:.15rem 0 .5rem;font-size:.84rem;color:var(--muted)}
+    .admin-panel{width:min(100%,900px);max-height:85vh;overflow:auto;background:#fff;border:1px solid var(--line);border-radius:16px;padding:1rem}
+    .admin-groups-list{display:grid;gap:.6rem}
+    .group-card{border:1px solid var(--line);border-radius:14px;padding:.75rem;background:#fff}
+    .group-head{display:flex;justify-content:space-between;gap:.8rem;flex-wrap:wrap}
+    .group-title{font-weight:800;color:var(--ink)}
+    .group-meta{font-size:.86rem;color:var(--muted)}
+    .group-actions{display:flex;gap:.45rem;flex-wrap:wrap;margin-top:.55rem}
+    .group-data{display:none;margin-top:.6rem;padding:.6rem;border-top:1px dashed var(--line);background:#faf7ff;border-radius:10px}
+    .group-data.open{display:block}
+    .group-data-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.35rem .8rem}
+    .group-data-item b{color:var(--ink)}
+    @media (max-width:700px){.group-data-grid{grid-template-columns:1fr}}
     .admin-preview{margin-top:.5rem;padding:.55rem .7rem;border:1px solid var(--line);border-radius:12px;background:#faf7ff;font-size:.86rem}
     .admin-preview strong{display:block;margin-bottom:.2rem;color:var(--ink)}
     .admin-title{margin-bottom:.6rem}
@@ -913,22 +921,11 @@
           <p class="admin-status" id="adminLoginStatus"></p>
         </div>
         <div id="adminContent" style="display:none">
-          <div class="admin-grid">
-            <section class="section" style="margin-top:0">
-              <h4>ניהול נוסחי שאלות בלבד</h4>
-              <p class="admin-hint">קובץ זה מעדכן את נוסחי השאלות בלבד. הוא לא טוען קבוצות ולא ממלא נתוני מיזמים.</p>
-              <div class="admin-actions"><button class="btn secondary" type="button" id="downloadQuestionsTemplate">הורדת טמפלייט שאלות</button><label class="btn secondary" for="uploadQuestionsFile">העלאת קובץ שאלות</label><input type="file" id="uploadQuestionsFile" accept=".xlsx,.xls,.csv" style="display:none" /></div>
-            </section>
-            <section class="section" style="margin-top:0">
-              <h4>טעינת נתוני קבוצות מ־Supabase</h4>
-              <label for="groupNameInput">שם קבוצה</label><input id="groupNameInput" type="text" placeholder="לדוגמה: קבוצה א׳" />
-              <label for="groupCodeInput">קוד קבוצה</label><input id="groupCodeInput" type="text" placeholder="group_1" />
-              <div class="admin-actions"><button class="btn secondary" type="button" id="createGroupBtn">יצירת קבוצה</button></div>
-              <label for="groupsSelect">קבוצות קיימות</label><select id="groupsSelect"></select>
-              <div class="admin-preview" id="groupPreviewBox"><strong>קבוצה שנבחרה</strong><div id="groupPreviewContent">יש לבחור קבוצה מהרשימה כדי לראות פרטים לזיהוי.</div></div>
-              <div class="admin-actions"><button class="btn secondary" type="button" id="loadGroupBtn">טעינת קבוצה</button><button class="btn secondary" type="button" id="saveGroupBtn">שמירת קבוצה</button></div>
-            </section>
-          </div>
+          <section class="section" style="margin-top:0">
+            <h4>בחירת קבוצה וטעינה לפיץ׳</h4>
+            <p class="admin-hint">הרשימה נטענת מתוך public.pitch_groups. אפשר לפתוח נתונים, לטעון לפיץ׳ ולהעתיק קישור ייעודי לקבוצה.</p>
+            <div id="adminGroupsList" class="admin-groups-list"></div>
+          </section>
           <p class="admin-status" id="adminStatus"></p>
           <div class="admin-actions"><button class="btn secondary" type="button" id="adminClose2">סגירה</button></div>
         </div>
@@ -950,6 +947,12 @@
       var SUPABASE_ANON_KEY = window.PORTZOT_SUPABASE_ANON_KEY || "";
       var supabaseClient = null;
       var cachedGroups = [];
+      var QUESTION_FIELDS = [
+        "project_name","problem","audience","situation","difficulty","main_need",
+        "quality_1","quality_2","quality_3","idea","product_action","prototype_description",
+        "focus_1","focus_2","focus_3","feedback","improvement",
+        "step_1","step_2","step_3","tech_part","tech_value","main_value"
+      ];
       var pitchUnitWeights = [1, 2, 2, 3, 2, 3, 2, 3, 3, 2];
       var questionWeights = { opening:1,problem:2,audience:2,difficulty:3,solution:2,idea:3,product_action:2,prototype:3,feedback:3,flow:2,unique:3,value:2 };
 
@@ -1474,31 +1477,68 @@
           console.warn("[pitch-activity] loadQuestionsFromSupabase exception:", err);
         }
       }
+      function buildGroupLink(groupCode) {
+        var url = new URL(window.location.href);
+        url.searchParams.set("group", groupCode);
+        return url.toString();
+      }
+
+      function formatDate(value) {
+        if (!value) return "—";
+        var d = new Date(value);
+        return isNaN(d.getTime()) ? String(value) : d.toLocaleString("he-IL");
+      }
+
+      function getQuestionsOnlyFromGroup(group) {
+        var src = (group && group.data_json) || {};
+        var out = {};
+        QUESTION_FIELDS.forEach(function (key) {
+          if (Object.prototype.hasOwnProperty.call(src, key)) out[key] = src[key];
+        });
+        return out;
+      }
+
+      async function loadGroupIntoPitch(groupCode) {
+        if (!supabaseClient) return setAdminStatus("חסר חיבור Supabase");
+        var res = await supabaseClient.from("pitch_groups").select("*").eq("group_code", groupCode).single();
+        if (res.error || !res.data) return setAdminStatus("שגיאה בטעינת קבוצה");
+        applySavedData(getQuestionsOnlyFromGroup(res.data));
+        var pc = document.getElementById("presenterCount");
+        if (pc) pc.value = "1";
+        var fp = document.getElementById("fullPitch"); if (fp) fp.value = "";
+        var ep = document.getElementById("elevatorPitch"); if (ep) ep.value = "";
+        renderPresenterInputs({});
+        updatePitchPreview(); renderRoles(); buildPrintDocument(); saveAll();
+        setAdminStatus("הקבוצה נטענה בהצלחה כברירת מחדל למציגה אחת");
+      }
+
+      function renderAdminGroups() {
+        var root = document.getElementById("adminGroupsList");
+        if (!root) return;
+        if (!cachedGroups.length) {
+          root.innerHTML = "<p>לא נמצאו קבוצות.</p>";
+          return;
+        }
+        root.innerHTML = cachedGroups.map(function (g) {
+          var code = esc(g.group_code);
+          var name = esc(g.group_name || "—");
+          var project = esc(resolveProjectName(g) || "—");
+          var updated = esc(formatDate(g.updated_at || ((g.data_json || {}).updated_at)));
+          return '<article class="group-card" data-code="' + code + '"><div class="group-head"><div><div class="group-title">' + name + ' / ' + code + '</div><div class="group-meta">מיזם: ' + project + '</div><div class="group-meta">עודכן: ' + updated + '</div></div></div><div class="group-actions"><button class="btn secondary open-data-btn" type="button">פתחי נתונים</button><button class="btn secondary load-group-btn" type="button">טעני לפיץ׳</button><button class="btn secondary copy-link-btn" type="button">העתקת קישור לקבוצה</button></div><div class="group-data" id="group-data-' + code + '"></div></article>';
+        }).join("");
+      }
+
       async function refreshGroups() {
-        var sel = document.getElementById("groupsSelect");
-        if (!sel) return;
         if (!supabaseClient) {
           cachedGroups = [];
-          sel.innerHTML = '<option value=\"\">חסר חיבור Supabase — לא ניתן לטעון קבוצות</option>';
-          renderGroupPreview("");
+          renderAdminGroups();
           return setAdminStatus("חסר חיבור Supabase — לא ניתן לטעון קבוצות");
         }
         var res = await supabaseClient.from("pitch_groups").select("id, group_code, group_name, project_name, speaker_1, speaker_2, speaker_3, speaker_4, speaker_5, data_json, updated_at").order("group_code");
         if (res.error) return setAdminStatus("שגיאה בטעינת קבוצות");
         cachedGroups = res.data || [];
-        if (!cachedGroups.length) {
-          sel.innerHTML = '<option value=\"\">לא נמצאו קבוצות ב־Supabase</option>';
-          renderGroupPreview("");
-          return setAdminStatus("לא נמצאו קבוצות ב־Supabase");
-        }
-        sel.innerHTML = '<option value=\"\">בחירת קבוצה</option>' + cachedGroups.map(function (g) {
-          var projectName = resolveProjectName(g);
-          var speakers = getGroupSpeakers(g);
-          var speakersSuffix = speakers.length ? " (שמות: " + speakers.join(", ") + ")" : "";
-          var label = [g.group_code, projectName, g.group_name].filter(Boolean).join(" — ");
-          return '<option value=\"' + esc(g.group_code) + '\">' + esc(label + speakersSuffix) + '</option>';
-        }).join("");
-        renderGroupPreview("");
+        renderAdminGroups();
+        if (!cachedGroups.length) return setAdminStatus("לא נמצאו קבוצות ב־Supabase");
       }
 
       function attachEvents() {
@@ -1567,61 +1607,31 @@
         });
 
         /* admin wiring moved to bindAdminModal() + bindAdminContent() — see below */
-        var createBtn = document.getElementById("createGroupBtn");
-        var saveBtn = document.getElementById("saveGroupBtn");
-        var loadBtn = document.getElementById("loadGroupBtn");
-        if (createBtn) createBtn.addEventListener("click", async function () {
-          if (!supabaseClient) return setAdminStatus("חסר חיבור Supabase");
-          var code = getElementValue("groupCodeInput"); if (!code) return setAdminStatus("יש להזין קוד קבוצה");
-          var name = getElementValue("groupNameInput");
-          var res = await supabaseClient.from("pitch_groups").upsert({ group_code: code, group_name: name }, { onConflict: "group_code" });
-          if (res.error) return setAdminStatus("שגיאה ביצירת קבוצה");
-          setAdminStatus("קבוצה נשמרה"); refreshGroups();
+        var adminContent = document.getElementById("adminContent");
+        if (adminContent) adminContent.addEventListener("click", async function (e) {
+          var card = e.target.closest(".group-card");
+          if (!card) return;
+          var code = card.getAttribute("data-code");
+          if (e.target.closest(".load-group-btn")) return loadGroupIntoPitch(code);
+          if (e.target.closest(".copy-link-btn")) {
+            var link = buildGroupLink(code);
+            await navigator.clipboard.writeText(link);
+            return setAdminStatus("הקישור הועתק ללוח");
+          }
+          if (e.target.closest(".open-data-btn")) {
+            var panel = card.querySelector(".group-data");
+            panel.classList.toggle("open");
+            if (!panel.dataset.ready) {
+              var group = cachedGroups.find(function (g) { return g.group_code === code; });
+              var data = getQuestionsOnlyFromGroup(group);
+              var entries = QUESTION_FIELDS.filter(function (key) { return String(data[key] || "").trim(); }).map(function (key) {
+                return '<div class="group-data-item"><b>' + esc(key) + ':</b> ' + esc(data[key]) + '</div>';
+              });
+              panel.innerHTML = '<div class="group-data-grid">' + (entries.join("") || "<div>—</div>") + "</div>";
+              panel.dataset.ready = "1";
+            }
+          }
         });
-        if (saveBtn) saveBtn.addEventListener("click", async function () {
-          if (!supabaseClient) return setAdminStatus("חסר חיבור Supabase");
-          var selected = getElementValue("groupsSelect"); if (!selected) return setAdminStatus("יש לבחור או ליצור קבוצה לפני שמירה");
-          var data = {}; getSaveFields().forEach(function (f) { if (!f.id) return; data[f.id] = f.type === "checkbox" ? f.checked : f.value; });
-          var payload = { group_code: selected, group_name: getElementValue("groupNameInput"), project_name: getElementValue("project_name"), presenter_count: getPresenterCount(), speaker_1: getElementValue("speaker_1"), speaker_2: getElementValue("speaker_2"), speaker_3: getElementValue("speaker_3"), speaker_4: getElementValue("speaker_4"), speaker_5: getElementValue("speaker_5"), data_json: data };
-          var res = await supabaseClient.from("pitch_groups").upsert(payload, { onConflict: "group_code" });
-          setAdminStatus(res.error ? "שגיאה בשמירת קבוצה" : "הקבוצה נשמרה בהצלחה");
-        });
-        if (loadBtn) loadBtn.addEventListener("click", async function () {
-          if (!supabaseClient) return setAdminStatus("חסר חיבור Supabase");
-          var selected = getElementValue("groupsSelect"); if (!selected) return setAdminStatus("יש לבחור קבוצה");
-          var res = await supabaseClient.from("pitch_groups").select("*").eq("group_code", selected).single();
-          if (res.error || !res.data) return setAdminStatus("שגיאה בטעינת קבוצה");
-
-          var src = res.data.data_json || {};
-          var QUESTION_FIELDS = [
-            "project_name","problem","audience","situation","difficulty","main_need",
-            "quality_1","quality_2","quality_3","idea","product_action","prototype_description",
-            "focus_1","focus_2","focus_3","feedback","improvement",
-            "step_1","step_2","step_3","tech_part","tech_value","main_value"
-          ];
-          var questionsOnly = {};
-          QUESTION_FIELDS.forEach(function (key) {
-            if (Object.prototype.hasOwnProperty.call(src, key)) questionsOnly[key] = src[key];
-          });
-
-          applySavedData(questionsOnly);
-
-          var pc = document.getElementById("presenterCount");
-          if (pc) { pc.value = "1"; }
-
-          var fp = document.getElementById("fullPitch");
-          if (fp) fp.value = "";
-          var ep = document.getElementById("elevatorPitch");
-          if (ep) ep.value = "";
-
-          renderPresenterInputs({});
-          updatePitchPreview();
-          renderRoles();
-          buildPrintDocument();
-          setAdminStatus("הקבוצה נטענה. הנתונים נטענו כמציגה אחת. ניתן לשנות את מספר המשתתפות בבורר בעמוד. (הקבוצה נטענה כמציגה אחת)");
-        });
-        var groupsSelect = document.getElementById("groupsSelect");
-        if (groupsSelect) groupsSelect.addEventListener("change", function () { renderGroupPreview(groupsSelect.value); });
       }
 
       function bindAdminContent() {
@@ -1777,6 +1787,10 @@
         setupSupabase();
         try { applyQuestionSettings(JSON.parse(localStorage.getItem(QUESTIONS_KEY) || "[]")); } catch (e) {}
         loadQuestionsFromSupabase();
+        var groupCode = new URLSearchParams(window.location.search).get("group");
+        if (groupCode) {
+          setTimeout(function () { loadGroupIntoPitch(groupCode); }, 300);
+        }
         updateTimerDisplay();
         attachEvents();
         bindAdminTrigger();
