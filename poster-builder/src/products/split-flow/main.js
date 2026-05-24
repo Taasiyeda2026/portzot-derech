@@ -2,6 +2,7 @@ import { getVisualSlots, getPosterFields, FIELD_DEFINITIONS, BACKGROUNDS, AVAILA
 import { saveProject, loadProject } from '../../shared/storage.js';
 import { createPosterSubmission, updatePosterSubmission } from '../../shared/poster-submissions.js';
 import { resolveSchoolConfig } from '../../shared/poster-schools.js';
+import { normalizeImagePrompts } from '../../shared/poster-submissions.js';
 
 const PRODUCT_TYPES = ['app', 'physical', 'website', 'digital'];
 
@@ -225,6 +226,67 @@ function migrateSharedVisualPrompt(splitFlowState = {}) {
   };
 }
 
+function mapImagePromptsToSplitFlow(imagePrompts = {}) {
+  const prompts = normalizeImagePrompts(imagePrompts);
+  const screens = Array.isArray(prompts.screens) ? prompts.screens : [];
+  const styleList = (prompts.visual_style || '')
+    .split(/[,\n;|]+/)
+    .map((value) => value.trim())
+    .filter(Boolean);
+  const avoidList = (prompts.avoid_showing || '')
+    .split(/[,\n;|]+/)
+    .map((value) => value.trim())
+    .filter(Boolean);
+
+  const sharedVisualPrompt = {
+    ...SHARED_VISUAL_DEFAULTS,
+    style: styleList,
+    realism: prompts.realism_level || '',
+    colors: prompts.important_colors || '',
+    avoid: avoidList
+  };
+
+  const prototypeScreens = Array.from({ length: 3 }, (_, index) => {
+    const source = screens[index] || {};
+    return {
+      number: index + 1,
+      type: source.screen_type || '',
+      shortName: source.screen_title || '',
+      view: source.what_we_see || '',
+      action: source.what_user_does || '',
+      components: (source.components || '')
+        .split(/[,\n;|]+/)
+        .map((value) => value.trim())
+        .filter(Boolean),
+      componentsOther: '',
+      emphasis: (source.main_focus || source.what_stands_out || '')
+        .split(/[,\n;|]+/)
+        .map((value) => value.trim())
+        .filter(Boolean),
+      emphasisOther: '',
+      viewerUnderstand: source.what_to_understand || '',
+      primaryFocus: source.main_focus || source.what_stands_out || '',
+      secondaryElements: ''
+    };
+  });
+
+  const images = Array.from({ length: 3 }, (_, index) => {
+    const source = screens[index] || {};
+    return {
+      id: index + 1,
+      screenRef: `${index + 1}`,
+      emphasis: (source.main_focus || source.what_stands_out || '')
+        .split(/[,\n;|]+/)
+        .map((value) => value.trim())
+        .filter(Boolean),
+      emphasisOther: '',
+      takeaway: source.what_to_understand || ''
+    };
+  });
+
+  return { sharedVisualPrompt, prototypeScreens, images };
+}
+
 function hydrateStateFromStorage() {
   if (freshStartRequested) return;
   const project = loadProject(schoolSlug);
@@ -256,6 +318,20 @@ function hydrateStateFromStorage() {
     state.images = state.images.map((image, idx) => ({ ...image, ...(stored.images[idx] || {}) }));
   }
   state.sharedVisualPrompt = migrateSharedVisualPrompt(stored);
+
+  const imagePrompts = project?.image_prompts;
+  if (imagePrompts && typeof imagePrompts === 'object') {
+    const mapped = mapImagePromptsToSplitFlow(imagePrompts);
+    state.sharedVisualPrompt = migrateSharedVisualPrompt({ ...stored, sharedVisualPrompt: mapped.sharedVisualPrompt });
+    state.prototypeScreens = state.prototypeScreens.map((screen, idx) => ({
+      ...screen,
+      ...(mapped.prototypeScreens[idx] || {})
+    }));
+    state.images = state.images.map((image, idx) => ({
+      ...image,
+      ...(mapped.images[idx] || {})
+    }));
+  }
   state.slotImages = { visual_1: null, visual_2: null, visual_3: null, ...(project?.slotImages || {}) };
   Object.keys(state.slotUploadStatus).forEach((slotKey) => {
     state.slotUploadStatus[slotKey] = state.slotImages[slotKey] ? 'done' : 'empty';
