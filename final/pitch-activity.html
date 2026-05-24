@@ -940,6 +940,7 @@
       var SUPABASE_URL = window.PORTZOT_SUPABASE_URL || "";
       var SUPABASE_ANON_KEY = window.PORTZOT_SUPABASE_ANON_KEY || "";
       var supabaseClient = null;
+      var pitchUnitWeights = [1, 2, 2, 3, 2, 3, 2, 3, 3, 2];
       var questionWeights = { opening:1,problem:2,audience:2,difficulty:3,solution:2,idea:3,product_action:2,prototype:3,feedback:3,flow:2,unique:3,value:2 };
 
       function getElementValue(id) {
@@ -1112,8 +1113,7 @@
             "לאחר מכן הצגתי את האב־טיפוס וקיבלתי עליו משוב. מהמשוב הבנתי ש־" + fill("feedback") + ". בעקבות זה שיפרתי את " + fill("improvement") + ", כדי שהתוצר יהיה ברור יותר, נוח יותר ומתאים יותר לקהל היעד.",
             "היום המוצר עובד כך: קודם " + fill("step_1") + ", אחר כך " + fill("step_2") + ", ובסוף " + fill("step_3") + ". הייחודיות של המיזם שלי היא " + fill("tech_part") + ", והיתרון המרכזי שהוא נותן לקהל היעד הוא " + fill("tech_value") + ". הערך המרכזי של המוצר הוא " + fill("main_value") + ". לסיכום, עברתי תהליך של זיהוי בעיה, הבנת קהל יעד, אפיון, אב־טיפוס, משוב ושיפור — ומתוכו הגעתי לפתרון שנותן מענה אמיתי לצורך אמיתי. תודה רבה."
           ].map(function (text, index) {
-            var weights = [1, 2, 2, 3, 2, 3, 2, 3, 3, 2];
-            return { id: "unit-" + index, label: "יחידה " + (index + 1), weight: weights[index], text: sentence(text) };
+            return { id: "unit-" + index, label: "יחידה " + (index + 1), weight: pitchUnitWeights[index] || 1, text: sentence(text) };
           });
         }
 
@@ -1129,8 +1129,7 @@
           "לאחר מכן הצגנו את האב־טיפוס וקיבלנו עליו משוב. מהמשוב הבנו ש־" + fill("feedback") + ". בעקבות זה שיפרנו את " + fill("improvement") + ", כדי שהתוצר יהיה ברור יותר, נוח יותר ומתאים יותר לקהל היעד.",
           "היום המוצר עובד כך: קודם " + fill("step_1") + ", אחר כך " + fill("step_2") + ", ובסוף " + fill("step_3") + ". הייחודיות של המיזם שלנו היא " + fill("tech_part") + ", והיתרון המרכזי שהוא נותן לקהל היעד הוא " + fill("tech_value") + ". הערך המרכזי של המוצר הוא " + fill("main_value") + ". לסיכום, עברנו תהליך של זיהוי בעיה, הבנת קהל יעד, אפיון, אב־טיפוס, משוב ושיפור — ומתוכו הגענו לפתרון שנותן מענה אמיתי לצורך אמיתי. תודה רבה."
         ].map(function (text, index) {
-          var weights = [1, 2, 2, 3, 2, 3, 2, 3, 3, 2];
-          return { id: "unit-" + index, label: "יחידה " + (index + 1), weight: weights[index], text: sentence(text) };
+          return { id: "unit-" + index, label: "יחידה " + (index + 1), weight: pitchUnitWeights[index] || 1, text: sentence(text) };
         });
       }
 
@@ -1350,11 +1349,28 @@
       function getQuestionRows() {
         return [
           ["project_name","שם המיזם","text","לדוגמה: SafeWalk","pitch-data",1,true,""],
-          ["problem","איזו בעיה זיהיתן?","textarea","","pitch-data",2,true,"problem:2"],
-          ["audience","אצל מי הבעיה הזאת מופיעה בעיקר?","textarea","","pitch-data",3,true,"audience:2"],
-          ["situation","באיזה מצב או סיטואציה הבעיה מופיעה?","textarea","","pitch-data",4,true,"audience:2"],
-          ["difficulty","מה קשה לקהל היעד במצב הזה?","textarea","","pitch-data",5,true,"difficulty:3"],
-          ["main_need","מה קהל היעד צריך מהפתרון?","textarea","","pitch-data",6,true,"solution:2"]
+          ["problem","איזו בעיה זיהיתן?","textarea","","pitch-data",2,true,""],
+          ["audience","אצל מי הבעיה הזאת מופיעה בעיקר?","textarea","","pitch-data",3,true,""],
+          ["situation","באיזה מצב או סיטואציה הבעיה מופיעה?","textarea","","pitch-data",4,true,""],
+          ["difficulty","מה קשה לקהל היעד במצב הזה?","textarea","","pitch-data",5,true,""],
+          ["main_need","מה קהל היעד צריך מהפתרון?","textarea","","pitch-data",6,true,""],
+          ["quality_1","איזו תכונה חשוב שתהיה בפתרון?","text","","pitch-data",7,true,""],
+          ["quality_2","איזו תכונה נוספת חשובה בפתרון?","text","","pitch-data",8,true,""],
+          ["quality_3","איזו תכונה שלישית חשובה בפתרון?","text","","pitch-data",9,true,""],
+          ["idea","מה הרעיון שפיתחתן?","textarea","","pitch-data",10,true,""],
+          ["product_action","מה המוצר אמור לעשות עבור המשתמשות והמשתמשים?","textarea","","pitch-data",11,true,""],
+          ["prototype_description","איך האב־טיפוס ממחיש את המוצר?","textarea","","pitch-data",12,true,""],
+          ["focus_1","על מה שמתן דגש באפיון המוצר?","text","","pitch-data",13,true,""],
+          ["focus_2","על מה נוסף שמתן דגש באפיון?","text","","pitch-data",14,true,""],
+          ["focus_3","מה היה הדגש השלישי באפיון?","text","","pitch-data",15,true,""],
+          ["feedback","איזה משוב קיבלתן על האב־טיפוס?","textarea","","pitch-data",16,true,""],
+          ["improvement","מה שיפרתן בעקבות המשוב?","textarea","","pitch-data",17,true,""],
+          ["step_1","מה המשתמשת עושה קודם?","textarea","","pitch-data",18,true,""],
+          ["step_2","מה קורה אחר כך?","textarea","","pitch-data",19,true,""],
+          ["step_3","מה קורה בסוף?","textarea","","pitch-data",20,true,""],
+          ["tech_part","מה הייחודיות של המיזם שלכן?","textarea","","pitch-data",21,true,""],
+          ["tech_value","מה היתרון המרכזי שהמיזם נותן לקהל היעד?","textarea","","pitch-data",22,true,""],
+          ["main_value","מה הערך המרכזי של המוצר?","textarea","","pitch-data",23,true,""]
         ];
       }
       function applyQuestionSettings(settings) {
@@ -1370,6 +1386,47 @@
       }
       function setupSupabase() {
         if (window.supabase && SUPABASE_URL && SUPABASE_ANON_KEY) supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      }
+
+      async function loadQuestionsFromSupabase() {
+        if (!supabaseClient) return;
+        try {
+          var res = await supabaseClient
+            .from("pitch_questions")
+            .select("*")
+            .eq("is_active", true)
+            .order("order_index");
+          if (res.error) {
+            console.warn("[pitch-activity] pitch_questions load error:", res.error.message);
+            setAdminStatus("שגיאה בטעינת שאלות מ-Supabase");
+            return;
+          }
+          var rows = res.data || [];
+          if (!rows.length) return;
+
+          applyQuestionSettings(rows.map(function (r) {
+            return { id: r.id, label: r.label, placeholder: r.placeholder || "" };
+          }));
+
+          var newWeights = pitchUnitWeights.slice();
+          var weightChanged = false;
+          rows.forEach(function (r) {
+            if (r.speech_unit_key !== undefined && r.speech_unit_key !== null &&
+                r.speech_weight !== undefined && r.speech_weight !== null) {
+              var idx = Number(r.speech_unit_key);
+              if (!isNaN(idx) && idx >= 0 && idx < newWeights.length) {
+                newWeights[idx] = Number(r.speech_weight) || 1;
+                weightChanged = true;
+              }
+            }
+          });
+          if (weightChanged) {
+            pitchUnitWeights = newWeights;
+            renderRoles();
+          }
+        } catch (err) {
+          console.warn("[pitch-activity] loadQuestionsFromSupabase exception:", err);
+        }
       }
       async function refreshGroups() {
         if (!supabaseClient) return;
@@ -1626,6 +1683,7 @@
         applySavedData(saved);
         setupSupabase();
         try { applyQuestionSettings(JSON.parse(localStorage.getItem(QUESTIONS_KEY) || "[]")); } catch (e) {}
+        loadQuestionsFromSupabase();
         updateTimerDisplay();
         attachEvents();
         bindAdminTrigger();
