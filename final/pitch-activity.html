@@ -120,7 +120,6 @@
     .admin-status{font-size:.85rem;color:var(--muted)}
     .admin-actions{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem}
     .admin-hidden-btn{background:transparent;color:var(--muted);box-shadow:none;border:1px solid var(--line)}
-    #adminTrigger{position:relative;z-index:30;pointer-events:auto;cursor:pointer}
     @media print {.admin-modal,#adminTrigger{display:none!important}}
 
     .page {
@@ -692,7 +691,6 @@
       <img src="../icon/favicon.png" alt="" />
       <span>פורצות דרך</span>
     </a>
-    <button class="btn secondary admin-hidden-btn" type="button" id="adminTrigger">פיץ׳ סופי</button>
     <a class="back-link" href="final.html">חזרה לתפריט הסיום</a>
   </header>
 
@@ -701,7 +699,7 @@
 
     <section class="hero">
       <span class="eyebrow">פיץ׳ סופי</span>
-      <h1>בונות את הפיץ׳ שלנו</h1>
+      <h1 id="adminTrigger" title="פתיחת ניהול" style="cursor:pointer">בונות את הפיץ׳ שלנו</h1>
       <p class="intro">בדף הזה נרכז את הנתונים של המיזם, נבנה מהם פיץ׳ ברור, נחלק תפקידים בין המשתתפות ונתרגל לקראת ההצגה.</p>
     </section>
 
