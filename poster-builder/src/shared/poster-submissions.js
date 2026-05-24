@@ -43,18 +43,55 @@ export function normalizePosterData(project = {}) {
 }
 
 const EMPTY_IMAGE_PROMPTS = {
+  visual_style: '',
+  realism_level: '',
+  important_colors: '',
+  avoid_showing: '',
   main_image_prompt: '',
   problem_image_prompt: '',
   solution_image_prompt: '',
   prototype_image_prompt: '',
-  background_prompt: ''
+  background_prompt: '',
+  screens: []
 };
+
+const EMPTY_SCREEN_PROMPT = {
+  screen_number: '',
+  screen_type: '',
+  what_we_see: '',
+  what_user_does: '',
+  components: '',
+  what_stands_out: '',
+  what_to_understand: '',
+  main_focus: '',
+  secondary_elements: ''
+};
+
+function normalizeScreenPrompt(screen = {}, fallbackNumber = '') {
+  const current = (screen && typeof screen === 'object') ? screen : {};
+  const normalized = { ...current };
+  Object.keys(EMPTY_SCREEN_PROMPT).forEach((key) => {
+    if (key === 'screen_number') {
+      normalized[key] = String(current[key] || fallbackNumber || '');
+      return;
+    }
+    normalized[key] = String(current[key] || '');
+  });
+  return normalized;
+}
 
 export function normalizeImagePrompts(value = {}) {
   const current = (value && typeof value === 'object') ? value : {};
+  const normalized = { ...current };
+  Object.keys(EMPTY_IMAGE_PROMPTS).forEach((key) => {
+    if (key === 'screens') return;
+    normalized[key] = String(current[key] || '');
+  });
+  const screens = Array.isArray(current.screens) ? current.screens : [];
+  normalized.screens = screens.map((screen, index) => normalizeScreenPrompt(screen, index + 1));
   return {
     ...EMPTY_IMAGE_PROMPTS,
-    ...Object.fromEntries(Object.keys(EMPTY_IMAGE_PROMPTS).map((key) => [key, String(current[key] || '')]))
+    ...normalized
   };
 }
 
