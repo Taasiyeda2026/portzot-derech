@@ -37,7 +37,24 @@ export function normalizePosterData(project = {}) {
     fieldSettings: project.fieldSettings || {},
     titleStyle: project.titleStyle || {},
     slotImages: project.slotImages || {},
-    splitFlowState: project.splitFlowState || null
+    splitFlowState: project.splitFlowState || null,
+    image_prompts: project.image_prompts || null
+  };
+}
+
+const EMPTY_IMAGE_PROMPTS = {
+  main_image_prompt: '',
+  problem_image_prompt: '',
+  solution_image_prompt: '',
+  prototype_image_prompt: '',
+  background_prompt: ''
+};
+
+export function normalizeImagePrompts(value = {}) {
+  const current = (value && typeof value === 'object') ? value : {};
+  return {
+    ...EMPTY_IMAGE_PROMPTS,
+    ...Object.fromEntries(Object.keys(EMPTY_IMAGE_PROMPTS).map((key) => [key, String(current[key] || '')]))
   };
 }
 
@@ -102,6 +119,69 @@ export async function fetchPosterSubmission(id) {
     .single();
   if (error) throw error;
   return data;
+}
+
+export async function listPitchGroupsForPoster() {
+  const client = getPosterSubmissionsClient();
+  if (!client) throw new Error('Poster submissions are not configured.');
+  const { data, error } = await client
+    .from('pitch_groups')
+    .select('id, group_code, group_name, project_name, data_json')
+    .order('group_code', { ascending: true });
+  if (error) throw error;
+  return data || [];
+}
+
+export async function fetchPosterSubmissionByGroup(groupId) {
+  const client = getPosterSubmissionsClient();
+  if (!client) throw new Error('Poster submissions are not configured.');
+  const { data, error } = await client
+    .from(POSTER_SUBMISSIONS_TABLE)
+    .select('id, poster_data, product_type, pitch_group_id, pitch_group_code')
+    .eq('pitch_group_id', groupId)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (error) throw error;
+  return data || null;
+}
+
+export async function upsertPosterSubmissionForGroup(group, project, imagePrompts = EMPTY_IMAGE_PROMPTS) {
+  const client = getPosterSubmissionsClient();
+  if (!client) throw new Error('Poster submissions are not configured.');
+  const existing = await fetchPosterSubmissionByGroup(group.id);
+  const row = buildSubmissionRow(project);
+  const normalizedPrompts = normalizeImagePrompts(imagePrompts);
+  const previousData = existing?.poster_data && typeof existing.poster_data === 'object' ? existing.poster_data : {};
+  row.poster_data = {
+    ...previousData,
+    ...row.poster_data,
+    image_prompts: {
+      ...normalizeImagePrompts(previousData.image_prompts || {}),
+      ...normalizedPrompts
+    }
+  };
+  row.pitch_group_id = group.id;
+  row.pitch_group_code = group.group_code || null;
+
+  if (existing?.id) {
+    const { data, error } = await client
+      .from(POSTER_SUBMISSIONS_TABLE)
+      .update(row)
+      .eq('id', existing.id)
+      .select('id')
+      .single();
+    if (error) throw error;
+    return data?.id || existing.id;
+  }
+
+  const { data, error } = await client
+    .from(POSTER_SUBMISSIONS_TABLE)
+    .insert(row)
+    .select('id')
+    .single();
+  if (error) throw error;
+  return data?.id || null;
 }
 
 export async function updatePosterSubmission(id, project) {
