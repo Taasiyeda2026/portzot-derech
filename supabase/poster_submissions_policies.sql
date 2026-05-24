@@ -29,6 +29,22 @@ to anon
 using (true)
 with check (true);
 
+drop policy if exists "anon can read poster submissions" on public.poster_submissions;
+create policy "anon can read poster submissions"
+on public.poster_submissions
+for select
+to anon
+using (true);
+
+alter table public.pitch_groups enable row level security;
+
+drop policy if exists "anon can read pitch groups" on public.pitch_groups;
+create policy "anon can read pitch groups"
+on public.pitch_groups
+for select
+to anon
+using (true);
+
 -- If the app is moved to Supabase Auth and uses authenticated clients for this
 -- admin flow, enable a narrower authenticated policy instead of the anon policy
 -- above. The broad policy below is also for demos/tests only:

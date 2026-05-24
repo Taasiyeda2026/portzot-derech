@@ -12,6 +12,7 @@ import {
 } from '../products/physical/config.js';
 import { saveProject, loadProject } from './storage.js';
 import { renderHTMLPoster, exportHTMLPosterToPDF } from '../canvas/html-poster.js';
+import { fetchPosterSubmissionByGroup, listPitchGroupsForPoster, normalizeImagePrompts, normalizePosterData, upsertPosterSubmissionForGroup } from './poster-submissions.js';
 
 const { useEffect, useRef, useState } = React;
 const h = React.createElement;
@@ -41,6 +42,10 @@ function App() {
   const [currentShape, setCurrentShape] = useState(20);
   const [physicalSubStep, setPhysicalSubStep] = useState(1);
   const [promptAnswers, setPromptAnswers] = useState(EMPTY_PROMPT_ANSWERS);
+  const [pitchGroups, setPitchGroups] = useState([]);
+  const [selectedGroupId, setSelectedGroupId] = useState('');
+  const [imagePrompts, setImagePrompts] = useState(normalizeImagePrompts());
+  const [groupMessage, setGroupMessage] = useState('');
 
   const productTypeRef = useRef(productType);
   const currentBackgroundRef = useRef(currentBackground);
@@ -58,6 +63,90 @@ function App() {
   useEffect(()=>{slotImagesRef.current=slotImages;},[slotImages]);
   useEffect(()=>{textColorRef.current=textColor;},[textColor]);
   useEffect(()=>{titleReadabilityEffectRef.current=titleReadabilityEffect;},[titleReadabilityEffect]);
+
+  async function loadPitchGroupsForPoster() {
+    try {
+      const groups = await listPitchGroupsForPoster();
+      setPitchGroups(groups);
+      if (!selectedGroupId && groups[0]?.id) setSelectedGroupId(groups[0].id);
+      setGroupMessage('');
+      return groups;
+    } catch (error) {
+      setGroupMessage('לא הצלחנו להתחבר ל-Supabase ולטעון קבוצות.');
+      return [];
+    }
+  }
+
+  async function loadPosterByGroup(groupId) {
+    if (!groupId) return null;
+    try {
+      const row = await fetchPosterSubmissionByGroup(groupId);
+      if (!row) {
+        setGroupMessage('לקבוצה זו עדיין אין פוסטר שמור. אפשר להתחיל ולשמור.');
+        return null;
+      }
+      const data = normalizePosterData(row.poster_data || {});
+      applyPosterData(data);
+      applyImagePrompts((row.poster_data || {}).image_prompts || {});
+      setGroupMessage('פוסטר הקבוצה נטען בהצלחה.');
+      return row;
+    } catch {
+      setGroupMessage('טעינת פוסטר לקבוצה נכשלה.');
+      return null;
+    }
+  }
+
+  function collectPosterData() {
+    return {
+      school_slug: CURRENT_SCHOOL_SLUG,
+      posterSize,
+      productType: productTypeRef.current,
+      background: currentBackgroundRef.current,
+      contentValues: contentValuesRef.current,
+      fieldSettings: fieldSettingsRef.current,
+      titleStyle: { fontFamily: titleFont, color: titleColor, textColor: textColorRef.current, titleReadabilityEffect: titleReadabilityEffectRef.current },
+      slotImages: slotImagesRef.current
+    };
+  }
+
+  function applyPosterData(data) {
+    setProductType(data.productType || 'physical');
+    setCurrentBackground(data.background || BACKGROUNDS[0].path);
+    setContentValues({ ...EMPTY_CONTENT, ...(data.contentValues || {}) });
+    setFieldSettings({ ...DEFAULT_SETTINGS, ...(data.fieldSettings || {}) });
+    setSlotImages({ ...EMPTY_SLOT_IMAGES, ...(data.slotImages || {}) });
+    if (data.titleStyle?.fontFamily) setTitleFont(data.titleStyle.fontFamily);
+    if (data.titleStyle?.color) setTitleColor(data.titleStyle.color);
+    if (data.titleStyle?.textColor) setTextColor(data.titleStyle.textColor);
+  }
+
+  function collectImagePrompts() { return normalizeImagePrompts(imagePrompts); }
+  function applyImagePrompts(prompts = {}) { setImagePrompts(normalizeImagePrompts(prompts)); }
+
+  async function savePosterForGroup(groupId) {
+    const group = pitchGroups.find((item) => item.id === groupId);
+    if (!group) {
+      setGroupMessage('יש לבחור קבוצה לפני שמירה.');
+      return;
+    }
+    try {
+      await upsertPosterSubmissionForGroup(group, collectPosterData(), collectImagePrompts());
+      setGroupMessage('הפוסטר נשמר לקבוצה בהצלחה.');
+    } catch {
+      setGroupMessage('שמירת הפוסטר לקבוצה נכשלה.');
+    }
+  }
+
+  useEffect(() => { loadPitchGroupsForPoster(); }, []);
+  useEffect(() => {
+    window.loadPitchGroupsForPoster = loadPitchGroupsForPoster;
+    window.loadPosterByGroup = loadPosterByGroup;
+    window.savePosterForGroup = savePosterForGroup;
+    window.collectPosterData = collectPosterData;
+    window.applyPosterData = applyPosterData;
+    window.collectImagePrompts = collectImagePrompts;
+    window.applyImagePrompts = applyImagePrompts;
+  });
 
   useEffect(()=>{
     const saved = loadProject(CURRENT_SCHOOL_SLUG);
@@ -116,7 +205,20 @@ function App() {
   };
   const isStep4 = wizardStep === 4;
 
-  return h('div',{className:'app'}, h('div',{className:'step4-wrapper',style:{display:isStep4?'flex':'none'}}, h('div',{className:'step4-bar'}, h('div',{className:'step4-bar-start'}, h('button',{className:'step4-back-btn',onClick:()=>{if(productType==='physical'){setPhysicalSubStep(2);} goToStep(3);}},'‹ חזרה')), h('div',{className:'step4-bar-center'},productType==='physical'?h(PhysicalStepIndicator,{current:4}):h(StepIndicator,{current:4})), h('div',{className:'step4-bar-end'}, h('button',{className:'step4-export-btn',onClick:handleExportPdf},'ייצוא PDF'), h('button',{className:'step4-finish-btn',onClick:()=>goToStep(5)},'סיום ›'))),
+  return h('div',{className:'app'},
+  h('div',{style:{padding:'10px 16px',background:'#fff',borderBottom:'1px solid #eee'}},
+    h('label',null,'בחירת קבוצה ',h('select',{value:selectedGroupId,onChange:(e)=>setSelectedGroupId(e.target.value),style:{marginInline:'8px'}},h('option',{value:''},'בחרי קבוצה'),...pitchGroups.map((g)=>h('option',{value:g.id,key:g.id},`${g.group_code || ''} ${g.group_name || ''}`)))),
+    h('button',{onClick:()=>loadPosterByGroup(selectedGroupId),style:{marginInline:'6px'}},'טעינת קבוצה'),
+    h('button',{onClick:()=>savePosterForGroup(selectedGroupId)},'שמירת פוסטר לקבוצה'),
+    h('div',{style:{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(180px,1fr))',gap:'6px',marginTop:'8px'}},
+      h('input',{placeholder:'פרומפט לתמונה ראשית',value:imagePrompts.main_image_prompt,onChange:(e)=>setImagePrompts((p)=>({...p,main_image_prompt:e.target.value}))}),
+      h('input',{placeholder:'פרומפט לבעיה',value:imagePrompts.problem_image_prompt,onChange:(e)=>setImagePrompts((p)=>({...p,problem_image_prompt:e.target.value}))}),
+      h('input',{placeholder:'פרומפט לפתרון',value:imagePrompts.solution_image_prompt,onChange:(e)=>setImagePrompts((p)=>({...p,solution_image_prompt:e.target.value}))}),
+      h('input',{placeholder:'פרומפט לאב-טיפוס',value:imagePrompts.prototype_image_prompt,onChange:(e)=>setImagePrompts((p)=>({...p,prototype_image_prompt:e.target.value}))}),
+      h('input',{placeholder:'פרומפט לרקע / סגנון',value:imagePrompts.background_prompt,onChange:(e)=>setImagePrompts((p)=>({...p,background_prompt:e.target.value}))})
+    ),
+    groupMessage ? h('div',{style:{marginTop:'6px',fontSize:'13px'}},groupMessage) : null
+  ), h('div',{className:'step4-wrapper',style:{display:isStep4?'flex':'none'}}, h('div',{className:'step4-bar'}, h('div',{className:'step4-bar-start'}, h('button',{className:'step4-back-btn',onClick:()=>{if(productType==='physical'){setPhysicalSubStep(2);} goToStep(3);}},'‹ חזרה')), h('div',{className:'step4-bar-center'},productType==='physical'?h(PhysicalStepIndicator,{current:4}):h(StepIndicator,{current:4})), h('div',{className:'step4-bar-end'}, h('button',{className:'step4-export-btn',onClick:handleExportPdf},'ייצוא PDF'), h('button',{className:'step4-finish-btn',onClick:()=>goToStep(5)},'סיום ›'))),
     h('div',{className:'step4-body'}, h('div',{className:'html-poster-area'}, h('div',{id:'poster-html',style:{width:'794px',height:'1123px',minHeight:'1123px',position:'relative',overflow:'visible',direction:'rtl',background:'#fff',display:'flex',flexDirection:'column',boxShadow:'0 16px 56px rgba(94,39,80,.2), 0 4px 16px rgba(0,0,0,.08)',flexShrink:0}}, h('div',{id:'poster-bg',style:{position:'absolute',inset:'-6px',zIndex:0,overflow:'hidden',backgroundColor:'#f5eef8'}}), h('div',{id:'poster-inner',style:{position:'relative',zIndex:1,display:'flex',flexDirection:'column',height:'1123px',minHeight:'1123px'}}, h('div',{style:{height:'5px',background:'linear-gradient(90deg,#5E2750,#d61f8c,#9b40c0,#5E2750)',flexShrink:0}}), h('div',{style:{padding:'16px 32px 10px',textAlign:'center',position:'relative',flexShrink:0}}, h('div',{style:{position:'absolute',top:'12px',left:'22px',zIndex:5}},h('img',{src:'/poster-builder/assets/logoposter.svg',alt:'פורצות דרך',crossOrigin:'anonymous',style:{height:'120px',width:'auto',objectFit:'contain',display:'block'}})), h('div',{id:'ph-name',style:{fontWeight:900,lineHeight:1.1,marginBottom:'8px',wordBreak:'break-word',overflowWrap:'anywhere'}}), h('div',{id:'ph-title-line',style:{width:'120px',maxWidth:'620px',height:'3px',background:'linear-gradient(90deg,#5E2750,#d61f8c)',borderRadius:'2px',margin:'0 auto 10px'}}), h('div',{id:'ph-desc',style:{fontSize:'15px',fontWeight:700,maxWidth:'500px',margin:'0 auto',lineHeight:1.75}}), h('div',{id:'ph-team',style:{background:'rgba(255,255,255,.96)',border:'1px solid rgba(94,39,80,.2)',borderRadius:'10px',padding:'6px 12px',width:'fit-content',maxWidth:'390px',margin:'7px auto 0'}},h('div',{id:'ph-names',style:{fontSize:'10px',fontWeight:400,lineHeight:1.65}}),h('div',{id:'ph-school',style:{fontSize:'9px',fontWeight:400,lineHeight:1.45,marginTop:'2px'}}))), h('div',{id:'ph-main',style:{flex:'1 1 auto',display:'flex',flexDirection:'column',justifyContent:'space-between',gap:'6px',padding:'0 24px 8px'}}, h('div',{className:'ph-grid-problem',style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'7px',flexShrink:0}}, h('div',{className:'ph-card ph-card-compact'},h('div',{className:'ph-cap','data-icon':'prob'},'הבעיה שזיהינו'),h('div',{id:'ph-problem',className:'ph-body'})),h('div',{className:'ph-card ph-card-compact'},h('div',{className:'ph-cap','data-icon':'rq'},'שאלת החקר'),h('div',{id:'ph-rq',className:'ph-body'}))), h('div',{className:'ph-card ph-audience-card'},h('div',{id:'ph-audience',className:'ph-sub','data-icon':'aud'})), h('div',{className:'ph-grid-research',style:{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:'6px',flexShrink:0}},h('div',{className:'ph-card'},h('div',{className:'ph-cap','data-icon':'res'},'החקר שביצענו'),h('ul',{id:'ph-research',className:'ph-bullets'})),h('div',{className:'ph-card'},h('div',{className:'ph-cap','data-icon':'ins'},'תובנות מהחקר'),h('div',{id:'ph-findings',className:'ph-body'})),h('div',{className:'ph-card'},h('div',{className:'ph-cap','data-icon':'req'},'דרישות הפתרון'),h('ul',{id:'ph-reqs',className:'ph-bullets'}))), h('div',{className:'ph-images-wrap',style:{flexShrink:0}},h('div',{id:'ph-images-label',style:{fontSize:'7.5px',fontWeight:700,color:'#5E2750',textTransform:'uppercase',letterSpacing:'1.5px',textAlign:'center',marginBottom:'4px'}}),h('div',{id:'ph-images-2',style:{display:'none',gridTemplateColumns:'repeat(2, 300px)',gap:'14px',justifyContent:'center'}},h('div',{id:'ph-img-physical-0','data-ph-img':'0','data-layout':'physical',className:'ph-img-frame',style:{height:'190px',width:'300px',aspectRatio:'300 / 190'}}),h('div',{id:'ph-img-physical-1','data-ph-img':'1','data-layout':'physical',className:'ph-img-frame',style:{height:'190px',width:'300px',aspectRatio:'300 / 190'}})),h('div',{id:'ph-images-app',style:{display:'none',gridTemplateColumns:'1fr 1fr 1fr',gap:'7px'}},h('div',{id:'ph-img-app-0','data-ph-img':'0','data-layout':'app',className:'ph-img-frame ph-notch',style:{height:'270px'}}),h('div',{id:'ph-img-app-1','data-ph-img':'1','data-layout':'app',className:'ph-img-frame ph-notch',style:{height:'270px'}}),h('div',{id:'ph-img-app-2','data-ph-img':'2','data-layout':'app',className:'ph-img-frame ph-notch',style:{height:'270px'}})),h('div',{id:'ph-images-web',style:{display:'none',gridTemplateColumns:'repeat(3, 205px)',gap:'11px',justifyContent:'center'}},h('div',{id:'ph-img-web-0','data-ph-img':'0','data-layout':'website',className:'ph-img-frame',style:{height:'115px',width:'205px',aspectRatio:'16 / 9'}}),h('div',{id:'ph-img-web-1','data-ph-img':'1','data-layout':'website',className:'ph-img-frame',style:{height:'115px',width:'205px',aspectRatio:'16 / 9'}}),h('div',{id:'ph-img-web-2','data-ph-img':'2','data-layout':'website',className:'ph-img-frame',style:{height:'115px',width:'205px',aspectRatio:'16 / 9'}}))), h('div',{className:'ph-grid-solution',style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'7px',flexShrink:0}},h('div',{className:'ph-card ph-solution-card'},h('div',{id:'ph-solution-cap',className:'ph-cap','data-icon':'sol'}),h('div',{id:'ph-solution',className:'ph-body'})),h('div',{className:'ph-card'},h('div',{id:'ph-usage-cap',className:'ph-cap','data-icon':'use'}),h('ul',{id:'ph-usage',className:'ph-bullets'}))), h('div',{className:'ph-grid-process',style:{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:'6px',flexShrink:0}},h('div',{className:'ph-card ph-card-accent'},h('div',{className:'ph-cap','data-icon':'fb'},'המשוב שקיבלנו'),h('div',{id:'ph-feedback',className:'ph-body'})),h('div',{className:'ph-card ph-card-accent'},h('div',{className:'ph-cap','data-icon':'imp'},'מה שיפרנו'),h('div',{id:'ph-improved',className:'ph-body'})),h('div',{className:'ph-card ph-card-accent'},h('div',{className:'ph-cap','data-icon':'val'},'הערך המרכזי'),h('div',{id:'ph-value',className:'ph-body'})))), h('div',{id:'ph-footer',style:{background:'linear-gradient(135deg,#4a1f40,#5E2750,#9b40c0)',padding:'8px 28px',display:'flex',alignItems:'center',justifyContent:'center',textAlign:'center',flexShrink:0}},h('div',{id:'ph-slogan',style:{fontStyle:'italic',fontSize:'13px',color:'rgba(255,255,255,.95)'}})))))))))),
   (wizardStep<4||wizardStep===5)&&h('div',{className:'wz-overlay'}, !PRESELECTED_PRODUCT_TYPE&&wizardStep===1&&h(WizardStep1,{productType,onProductTypeChange:handleProductTypeChange,onNext:()=>goToStep(2)}), wizardStep===2&&productType==='physical'&&h(PhysicalStep1,{contentValues,onContentChange:onContentFieldChange,onBack:()=>{if(PRESELECTED_PRODUCT_TYPE==='physical'){window.location.href='../index.html';return;}goToStep(1);},onNext:()=>{setPhysicalSubStep(1);goToStep(3);}}), wizardStep===3&&productType==='physical'&&physicalSubStep===1&&h(PhysicalStep2,{promptAnswers,onPromptChange:(k,v)=>setPromptAnswers((p)=>({...p,[k]:v})),contentValues,onBack:()=>goToStep(2),onNext:()=>setPhysicalSubStep(2)}), wizardStep===3&&productType==='physical'&&physicalSubStep===2&&h(PhysicalStep3,{contentValues,promptAnswers,posterSize,slotImages,onSlotUpload,onSlotClear,onBack:()=>setPhysicalSubStep(1),onNext:()=>goToStep(4)}), wizardStep===2&&productType!=='physical'&&h(WizardStep2,{currentBackground,currentShape,titleFont,titleColor,textColor,onBackground:handleBackground,onShape:handleShape,onTitleFont:handleTitleFont,onTitleColor:handleTitleColor,titleReadabilityEffect,onTitleReadabilityEffect:setTitleReadabilityEffect,onTextColor:setTextColor,onNext:()=>goToStep(3),onBack:()=>goToStep(1)}), wizardStep===3&&productType!=='physical'&&h(WizardStep3,{productType,contentValues,slotImages,posterSize,onContentChange:onContentFieldChange,onSlotUpload,onSlotClear,onNext:()=>goToStep(4),onBack:()=>goToStep(2)}), wizardStep===5&&h(WizardStep5,{onExportPdf:handleExportPdf,onBack:()=>goToStep(4)})));
 }

@@ -13,3 +13,15 @@ create table if not exists public.poster_submissions (
 
 alter table public.poster_submissions
   add column if not exists school_slug text not null default 'default';
+
+alter table public.poster_submissions
+add column if not exists pitch_group_id uuid references public.pitch_groups(id) on delete set null;
+
+alter table public.poster_submissions
+add column if not exists pitch_group_code text;
+
+create index if not exists idx_poster_submissions_pitch_group_id
+on public.poster_submissions(pitch_group_id);
+
+create index if not exists idx_poster_submissions_pitch_group_code
+on public.poster_submissions(pitch_group_code);
