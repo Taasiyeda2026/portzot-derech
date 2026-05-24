@@ -939,8 +939,6 @@
       var SUPABASE_URL = window.PORTZOT_SUPABASE_URL || "";
       var SUPABASE_ANON_KEY = window.PORTZOT_SUPABASE_ANON_KEY || "";
       var supabaseClient = null;
-      var adminClicks = 0;
-      var adminClickTimer = null;
       var questionWeights = { opening:1,problem:2,audience:2,difficulty:3,solution:2,idea:3,product_action:2,prototype:3,feedback:3,flow:2,unique:3,value:2 };
 
       function getElementValue(id) {
@@ -1466,31 +1464,32 @@
         });
 
         function openAdminModal() {
-          if (!adminModal) return;
-          adminModal.classList.add("open");
-          adminClicks = 0;
-        }
-
-        if (adminTrigger) adminTrigger.addEventListener("click", function (event) {
-          if (event.altKey) {
-            openAdminModal();
+          if (!adminModal) {
+            console.warn("[pitch-activity] adminModal not found");
             return;
           }
-          adminClicks += 1;
-          if (adminClickTimer) clearTimeout(adminClickTimer);
-          adminClickTimer = setTimeout(function () { adminClicks = 0; }, 3000);
-          if (adminClicks >= 3) openAdminModal();
-        });
+          adminModal.classList.add("open");
+        }
+
+        if (adminTrigger) {
+          adminTrigger.addEventListener("click", openAdminModal);
+        } else {
+          console.warn("[pitch-activity] adminTrigger not found");
+        }
         function closeAdmin() { if (adminModal) adminModal.classList.remove("open"); }
         if (adminClose) adminClose.addEventListener("click", closeAdmin);
         if (adminClose2) adminClose2.addEventListener("click", closeAdmin);
 
         function attemptAdminLogin() {
           if (!adminPassword || !adminAuth || !adminContent) {
+            console.warn("[pitch-activity] Admin login elements missing");
             setAdminStatus("שגיאת תצורה בפאנל ניהול");
             return;
           }
-          if (adminPassword.value.trim() !== "1234") return setAdminStatus("סיסמה שגויה");
+          if (adminPassword.value.trim() !== "1234") {
+            setAdminStatus("סיסמה שגויה");
+            return;
+          }
           adminAuth.style.display = "none";
           adminContent.style.display = "block";
           setAdminStatus("כניסה בוצעה");
@@ -1501,13 +1500,21 @@
           if (typeof refreshGroups === "function") refreshGroups();
         }
 
-        if (adminLogin) adminLogin.addEventListener("click", attemptAdminLogin);
-        if (adminPassword) adminPassword.addEventListener("keydown", function (event) {
-          if (event.key === "Enter") {
-            event.preventDefault();
-            attemptAdminLogin();
-          }
-        });
+        if (adminLogin) {
+          adminLogin.addEventListener("click", attemptAdminLogin);
+        } else {
+          console.warn("[pitch-activity] adminLogin not found");
+        }
+        if (adminPassword) {
+          adminPassword.addEventListener("keydown", function (event) {
+            if (event.key === "Enter") {
+              event.preventDefault();
+              attemptAdminLogin();
+            }
+          });
+        } else {
+          console.warn("[pitch-activity] adminPassword not found");
+        }
         var dl = document.getElementById("downloadQuestionsTemplate");
         if (dl) dl.addEventListener("click", function () {
           if (!window.XLSX) return setAdminStatus("ספריית אקסל לא נטענה");
