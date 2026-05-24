@@ -1,0 +1,107 @@
+בעמוד:
+final/pitch-activity.html
+
+מצאנו את התקלה המדויקת:
+הכותרת קיימת:
+<h1 id="adminTrigger" title="פתיחת ניהול" style="cursor:pointer">בונות את הפיץ׳ שלנו</h1>
+
+והמודאל קיים:
+#adminModal
+
+אבל בדיקה בדפדפן הראתה:
+document.getElementById("adminTrigger").click();
+document.getElementById("adminModal").className;
+
+מחזיר:
+"admin-modal no-print"
+
+כלומר לחיצה על adminTrigger לא מוסיפה class open ל־adminModal.
+המסקנה: event listener לא מחובר בפועל, או שהפונקציה attachEvents נעצרת לפני החיבור.
+
+יש לבצע תיקון חזק וממוקד:
+
+1. לא להסתמך על attachEvents בלבד לפתיחת האדמין.
+יש להוסיף binding עצמאי, מוקדם ופשוט לפתיחת המודאל.
+
+2. להוסיף פונקציה גלובלית/עצמאית ברורה:
+
+function bindAdminTrigger() {
+  var trigger = document.getElementById("adminTrigger");
+  var modal = document.getElementById("adminModal");
+
+  if (!trigger || !modal) {
+    console.warn("[pitch-activity] Admin trigger or modal not found");
+    return;
+  }
+
+  trigger.onclick = function () {
+    modal.classList.add("open");
+  };
+
+  trigger.addEventListener("click", function () {
+    modal.classList.add("open");
+  });
+}
+
+3. לקרוא ל־bindAdminTrigger בשני מקומות:
+- מיד אחרי שה־DOM מוכן:
+document.addEventListener("DOMContentLoaded", bindAdminTrigger);
+
+- וגם בסוף init(), אחרי attachEvents():
+bindAdminTrigger();
+
+המטרה: גם אם attachEvents נכשל באמצע בגלל שגיאה אחרת, פתיחת האדמין עדיין תעבוד.
+
+4. להוסיף fallback נוסף עם event delegation:
+document.addEventListener("click", function (event) {
+  var trigger = event.target.closest("#adminTrigger");
+  if (!trigger) return;
+
+  var modal = document.getElementById("adminModal");
+  if (modal) modal.classList.add("open");
+});
+
+5. אסור שהפתיחה של האדמין תהיה תלויה ב:
+- Supabase
+- localStorage
+- Excel
+- renderRoles
+- buildPrintDocument
+- attachEvents
+- טעינת קבוצות
+
+לחיצה על הכותרת צריכה רק לפתוח את חלון הסיסמה.
+
+6. לוודא שאין CSS שחוסם לחיצה על הכותרת:
+להוסיף ל־#adminTrigger:
+position: relative;
+z-index: 50;
+pointer-events: auto;
+cursor: pointer;
+
+7. בדיקות קבלה חובה בדפדפן:
+אחרי הפריסה, להריץ:
+document.getElementById("adminTrigger").click();
+document.getElementById("adminModal").className;
+
+התוצאה חייבת לכלול:
+open
+
+לדוגמה:
+"admin-modal no-print open"
+
+בנוסף:
+- לחיצה ידנית על הכותרת "בונות את הפיץ׳ שלנו" פותחת חלון סיסמה.
+- הסיסמה 1234 פותחת את פאנל הניהול.
+- Enter בשדה הסיסמה עובד.
+- אין שגיאות Console.
+
+8. Service Worker:
+לעדכן גרסת SW / CACHE_NAME.
+לוודא ש־final/pitch-activity.html נטען בגרסה החדשה.
+לאחר הפריסה לוודא שאין קאש ישן.
+
+לא לשנות עיצוב כללי.
+לא לשנות ניווטים.
+לא לשנות את מבנה הפיץ׳.
+לבצע תיקון ממוקד בלבד.

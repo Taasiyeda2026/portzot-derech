@@ -120,6 +120,7 @@
     .admin-status{font-size:.85rem;color:var(--muted)}
     .admin-actions{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem}
     .admin-hidden-btn{background:transparent;color:var(--muted);box-shadow:none;border:1px solid var(--line)}
+    #adminTrigger{position:relative;z-index:50;pointer-events:auto;cursor:pointer}
     @media print {.admin-modal,#adminTrigger{display:none!important}}
 
     .page {
@@ -1553,6 +1554,25 @@
         });
       }
 
+      function bindAdminTrigger() {
+        var trigger = document.getElementById("adminTrigger");
+        var modal = document.getElementById("adminModal");
+        if (!trigger || !modal) {
+          console.warn("[pitch-activity] Admin trigger or modal not found");
+          return;
+        }
+        trigger.onclick = function () { modal.classList.add("open"); };
+      }
+
+      document.addEventListener("DOMContentLoaded", bindAdminTrigger);
+
+      document.addEventListener("click", function (e) {
+        if (e.target.closest("#adminTrigger")) {
+          var modal = document.getElementById("adminModal");
+          if (modal) modal.classList.add("open");
+        }
+      });
+
       function init() {
         var saved = readSavedData();
         var presenterCount = document.getElementById("presenterCount");
@@ -1567,6 +1587,7 @@
         try { applyQuestionSettings(JSON.parse(localStorage.getItem(QUESTIONS_KEY) || "[]")); } catch (e) {}
         updateTimerDisplay();
         attachEvents();
+        bindAdminTrigger();
         updatePitchPreview();
         buildPrintDocument();
       }
