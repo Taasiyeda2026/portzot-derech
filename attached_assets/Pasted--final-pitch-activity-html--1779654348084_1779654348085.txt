@@ -1,0 +1,121 @@
+בעמוד:
+final/pitch-activity.html
+
+נבדק הקוד בריפו ונמצאה הסיבה לבעיה:
+הכניסה לאדמין עדיין לא מופרדת מספיק מבדיקת Supabase/סטטוס, ולכן בפועל המשתמש נתקע או לא מקבל מעבר ברור אחרי הכנסת הסיסמה.
+
+הדרישה:
+להפריד לחלוטין בין אימות הסיסמה לבין בדיקת Supabase.
+
+1. הסיסמה 1234 חייבת תמיד לפתוח את פאנל הניהול
+אם:
+adminPassword.value.trim() === "1234"
+
+אז תמיד לבצע:
+adminAuth.style.display = "none";
+adminContent.style.display = "block";
+setAdminStatus("כניסה בוצעה");
+
+רק אחרי שהפאנל כבר מוצג, לבדוק Supabase.
+
+2. חוסר חיבור Supabase לא עוצר כניסה
+אם supabaseClient חסר:
+לא להחזיר את המשתמש למסך הסיסמה.
+לא לעצור את פתיחת הפאנל.
+לא להרגיש כאילו הכניסה נכשלה.
+
+במקום זה:
+להשאיר את adminContent מוצג
+ולהציג בפאנל:
+"חסר חיבור Supabase — ניהול קבוצות לא זמין כרגע"
+
+3. refreshGroups צריך להיות עטוף ב־try/catch
+אם יש supabaseClient:
+להפעיל refreshGroups בתוך try/catch.
+
+אם refreshGroups נכשל:
+להציג:
+"שגיאה בטעינת קבוצות"
+אבל להשאיר את פאנל הניהול פתוח.
+
+4. attemptAdminLogin צריך להיות בנוי כך:
+
+function attemptAdminLogin() {
+  if (!adminPassword || !adminAuth || !adminContent) {
+    console.warn("[pitch-activity] Admin login elements missing");
+    setAdminStatus("שגיאת תצורה בפאנל ניהול");
+    return;
+  }
+
+  if (adminPassword.value.trim() !== "1234") {
+    setAdminStatus("סיסמה שגויה");
+    return;
+  }
+
+  adminAuth.style.display = "none";
+  adminContent.style.display = "block";
+  setAdminStatus("כניסה בוצעה");
+
+  if (!supabaseClient) {
+    setAdminStatus("כניסה בוצעה. חסר חיבור Supabase — ניהול קבוצות לא זמין כרגע");
+    return;
+  }
+
+  try {
+    if (typeof refreshGroups === "function") {
+      refreshGroups();
+    }
+  } catch (error) {
+    console.warn("[pitch-activity] refreshGroups failed", error);
+    setAdminStatus("כניסה בוצעה. שגיאה בטעינת קבוצות");
+  }
+}
+
+5. openAdminModal צריך לאפס מצב בצורה ברורה
+כאשר פותחים את האדמין:
+adminModal.classList.add("open");
+adminAuth.style.display = "block";
+adminContent.style.display = "none";
+adminPassword.value = "";
+setAdminStatus("");
+
+6. סטטוס חייב להיות גלוי לפני ואחרי כניסה
+setAdminStatus חייב לעדכן גם:
+#adminLoginStatus
+וגם:
+#adminStatus
+
+כך:
+- "סיסמה שגויה" תופיע במסך הסיסמה.
+- "חסר חיבור Supabase" יופיע אחרי הכניסה בתוך הפאנל.
+
+7. בדיקות קבלה חובה
+יש לבדוק בפועל:
+- לחיצה על הכותרת "בונות את הפיץ׳ שלנו" פותחת חלון סיסמה.
+- סיסמה שגויה מציגה "סיסמה שגויה" באותו חלון.
+- סיסמה 1234 תמיד פותחת את adminContent.
+- גם אם Supabase חסר, adminContent עדיין נפתח.
+- אם Supabase חסר, מופיעה הודעה: "חסר חיבור Supabase — ניהול קבוצות לא זמין כרגע".
+- אם Supabase תקין, רשימת הקבוצות נטענת.
+- Enter בשדה הסיסמה עובד.
+- כפתור סגירה סוגר את המודאל.
+- אין שגיאות Console.
+
+8. לבדוק config
+לוודא שהקובץ:
+config/supabase-config.js
+
+מגדיר בפועל:
+window.PORTZOT_SUPABASE_URL
+window.PORTZOT_SUPABASE_ANON_KEY
+
+אם אחד מהם חסר, להציג הודעת סטטוס ברורה בתוך הפאנל, אבל לא לחסום כניסה.
+
+9. Service Worker
+לעדכן גרסת SW / CACHE_NAME.
+לוודא שהאתר החי מקבל את הגרסה החדשה של final/pitch-activity.html ושל config/supabase-config.js.
+
+לא לשנות עיצוב כללי.
+לא לשנות ניווטים.
+לא לשנות את מבנה הפיץ׳.
+לבצע תיקון ממוקד בלבד.

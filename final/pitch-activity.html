@@ -1445,79 +1445,7 @@
           });
         });
 
-        var adminTrigger = document.getElementById("adminTrigger");
-        var adminModal = document.getElementById("adminModal");
-        var adminPassword = document.getElementById("adminPassword");
-        var adminLogin = document.getElementById("adminLogin");
-        var adminAuth = document.getElementById("adminAuth");
-        var adminContent = document.getElementById("adminContent");
-        var adminClose = document.getElementById("adminClose");
-        var adminClose2 = document.getElementById("adminClose2");
-
-        var requiredAdminElements = [
-          ["adminTrigger", adminTrigger],
-          ["adminModal", adminModal],
-          ["adminPassword", adminPassword],
-          ["adminLogin", adminLogin],
-          ["adminAuth", adminAuth],
-          ["adminContent", adminContent]
-        ];
-        requiredAdminElements.forEach(function (entry) {
-          if (!entry[1]) console.warn("[pitch-activity] Missing required admin element:", entry[0]);
-        });
-
-        function openAdminModal() {
-          if (!adminModal) {
-            console.warn("[pitch-activity] adminModal not found");
-            return;
-          }
-          adminModal.classList.add("open");
-        }
-
-        if (adminTrigger) {
-          adminTrigger.addEventListener("click", openAdminModal);
-        } else {
-          console.warn("[pitch-activity] adminTrigger not found");
-        }
-        function closeAdmin() { if (adminModal) adminModal.classList.remove("open"); }
-        if (adminClose) adminClose.addEventListener("click", closeAdmin);
-        if (adminClose2) adminClose2.addEventListener("click", closeAdmin);
-
-        function attemptAdminLogin() {
-          if (!adminPassword || !adminAuth || !adminContent) {
-            console.warn("[pitch-activity] Admin login elements missing");
-            setAdminStatus("שגיאת תצורה בפאנל ניהול");
-            return;
-          }
-          if (adminPassword.value.trim() !== "1234") {
-            setAdminStatus("סיסמה שגויה");
-            return;
-          }
-          adminAuth.style.display = "none";
-          adminContent.style.display = "block";
-          if (!supabaseClient) {
-            setAdminStatus("חסר חיבור Supabase");
-            return;
-          }
-          setAdminStatus("כניסה בוצעה");
-          if (typeof refreshGroups === "function") refreshGroups();
-        }
-
-        if (adminLogin) {
-          adminLogin.addEventListener("click", attemptAdminLogin);
-        } else {
-          console.warn("[pitch-activity] adminLogin not found");
-        }
-        if (adminPassword) {
-          adminPassword.addEventListener("keydown", function (event) {
-            if (event.key === "Enter") {
-              event.preventDefault();
-              attemptAdminLogin();
-            }
-          });
-        } else {
-          console.warn("[pitch-activity] adminPassword not found");
-        }
+        /* admin wiring moved to bindAdminModal() — see below */
         var dl = document.getElementById("downloadQuestionsTemplate");
         if (dl) dl.addEventListener("click", function () {
           if (!window.XLSX) return setAdminStatus("ספריית אקסל לא נטענה");
@@ -1557,29 +1485,87 @@
         });
       }
 
+      function bindAdminModal() {
+        var modal    = document.getElementById("adminModal");
+        var auth     = document.getElementById("adminAuth");
+        var content  = document.getElementById("adminContent");
+        var password = document.getElementById("adminPassword");
+        var loginBtn = document.getElementById("adminLogin");
+        var closeBtn = document.getElementById("adminClose");
+        var closeBtn2= document.getElementById("adminClose2");
+
+        if (!modal || !auth || !content || !password || !loginBtn) {
+          console.warn("[pitch-activity] bindAdminModal: missing elements");
+          return;
+        }
+
+        function closeAdmin() { modal.classList.remove("open"); }
+
+        function attemptAdminLogin() {
+          if (password.value.trim() !== "1234") {
+            setAdminStatus("סיסמה שגויה");
+            return;
+          }
+          auth.style.display = "none";
+          content.style.display = "block";
+          if (!supabaseClient) {
+            setAdminStatus("כניסה בוצעה. חסר חיבור Supabase — ניהול קבוצות לא זמין כרגע");
+            return;
+          }
+          setAdminStatus("כניסה בוצעה");
+          try {
+            if (typeof refreshGroups === "function") refreshGroups();
+          } catch (err) {
+            console.warn("[pitch-activity] refreshGroups failed", err);
+            setAdminStatus("כניסה בוצעה. שגיאה בטעינת קבוצות");
+          }
+        }
+
+        loginBtn.onclick = attemptAdminLogin;
+        if (closeBtn)  closeBtn.onclick  = closeAdmin;
+        if (closeBtn2) closeBtn2.onclick = closeAdmin;
+
+        password.onkeydown = function (e) {
+          if (e.key === "Enter") { e.preventDefault(); attemptAdminLogin(); }
+        };
+      }
+
       function bindAdminTrigger() {
         var trigger = document.getElementById("adminTrigger");
-        var modal = document.getElementById("adminModal");
+        var modal   = document.getElementById("adminModal");
         if (!trigger || !modal) {
           console.warn("[pitch-activity] Admin trigger or modal not found");
           return;
         }
         trigger.onclick = function () {
-          var auth = document.getElementById("adminAuth");
-          var content = document.getElementById("adminContent");
-          if (auth) auth.style.display = "block";
-          if (content) content.style.display = "none";
+          var auth     = document.getElementById("adminAuth");
+          var content  = document.getElementById("adminContent");
+          var password = document.getElementById("adminPassword");
+          if (auth)     auth.style.display    = "block";
+          if (content)  content.style.display = "none";
+          if (password) password.value        = "";
           setAdminStatus("");
           modal.classList.add("open");
         };
       }
 
-      document.addEventListener("DOMContentLoaded", bindAdminTrigger);
+      document.addEventListener("DOMContentLoaded", function () {
+        bindAdminTrigger();
+        bindAdminModal();
+      });
 
       document.addEventListener("click", function (e) {
         if (e.target.closest("#adminTrigger")) {
-          var modal = document.getElementById("adminModal");
-          if (modal) modal.classList.add("open");
+          var modal    = document.getElementById("adminModal");
+          var auth     = document.getElementById("adminAuth");
+          var content  = document.getElementById("adminContent");
+          var password = document.getElementById("adminPassword");
+          if (!modal) return;
+          if (auth)     auth.style.display    = "block";
+          if (content)  content.style.display = "none";
+          if (password) password.value        = "";
+          setAdminStatus("");
+          modal.classList.add("open");
         }
       });
 
@@ -1598,6 +1584,7 @@
         updateTimerDisplay();
         attachEvents();
         bindAdminTrigger();
+        bindAdminModal();
         updatePitchPreview();
         buildPrintDocument();
       }
