@@ -122,6 +122,16 @@ function App() {
 
   function collectImagePrompts() { return normalizeImagePrompts(imagePrompts); }
   function applyImagePrompts(prompts = {}) { setImagePrompts(normalizeImagePrompts(prompts)); }
+  function updateScreenPrompt(index, key, value) {
+    setImagePrompts((prev) => {
+      const next = normalizeImagePrompts(prev);
+      while (next.screens.length < 3) next.screens.push({ screen_number: String(next.screens.length + 1) });
+      next.screens = next.screens.map((screen, screenIndex) => (
+        screenIndex === index ? { ...screen, [key]: value, screen_number: String(screenIndex + 1) } : screen
+      ));
+      return next;
+    });
+  }
 
   async function savePosterForGroup(groupId) {
     const group = pitchGroups.find((item) => item.id === groupId);
@@ -216,6 +226,33 @@ function App() {
       h('input',{placeholder:'פרומפט לפתרון',value:imagePrompts.solution_image_prompt,onChange:(e)=>setImagePrompts((p)=>({...p,solution_image_prompt:e.target.value}))}),
       h('input',{placeholder:'פרומפט לאב-טיפוס',value:imagePrompts.prototype_image_prompt,onChange:(e)=>setImagePrompts((p)=>({...p,prototype_image_prompt:e.target.value}))}),
       h('input',{placeholder:'פרומפט לרקע / סגנון',value:imagePrompts.background_prompt,onChange:(e)=>setImagePrompts((p)=>({...p,background_prompt:e.target.value}))})
+    ),
+    h('div',{style:{marginTop:'12px',padding:'10px',border:'1px solid #e5d9ef',borderRadius:'10px',background:'#faf7fd'}},
+      h('h4',{style:{margin:'0 0 8px',color:'#5E2750'}},'פרומפטים למסכי המוקאפ'),
+      h('div',{style:{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(180px,1fr))',gap:'6px',marginBottom:'10px'}},
+        h('input',{placeholder:'סגנון חזותי',value:imagePrompts.visual_style || '',onChange:(e)=>setImagePrompts((p)=>({...p,visual_style:e.target.value}))}),
+        h('input',{placeholder:'רמת ריאליזם',value:imagePrompts.realism_level || '',onChange:(e)=>setImagePrompts((p)=>({...p,realism_level:e.target.value}))}),
+        h('input',{placeholder:'צבעים חשובים',value:imagePrompts.important_colors || '',onChange:(e)=>setImagePrompts((p)=>({...p,important_colors:e.target.value}))}),
+        h('input',{placeholder:'מה לא להציג',value:imagePrompts.avoid_showing || '',onChange:(e)=>setImagePrompts((p)=>({...p,avoid_showing:e.target.value}))})
+      ),
+      h('div',{style:{display:'grid',gap:'8px'}},
+        ...Array.from({ length: 3 }).map((_, index) => {
+          const screen = (imagePrompts.screens || [])[index] || {};
+          return h('details',{key:`screen-prompt-${index}`,open:index===0,style:{background:'#fff',border:'1px solid #eadcf6',borderRadius:'8px',padding:'8px'}},
+            h('summary',{style:{cursor:'pointer',fontWeight:700,color:'#5E2750'}},`מסך ${index + 1}`),
+            h('div',{style:{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(180px,1fr))',gap:'6px',marginTop:'8px'}},
+              h('input',{placeholder:'סוג מסך',value:screen.screen_type || '',onChange:(e)=>updateScreenPrompt(index,'screen_type',e.target.value)}),
+              h('input',{placeholder:'מה רואים',value:screen.what_we_see || '',onChange:(e)=>updateScreenPrompt(index,'what_we_see',e.target.value)}),
+              h('input',{placeholder:'מה המשתמשת עושה',value:screen.what_user_does || '',onChange:(e)=>updateScreenPrompt(index,'what_user_does',e.target.value)}),
+              h('input',{placeholder:'רכיבים',value:screen.components || '',onChange:(e)=>updateScreenPrompt(index,'components',e.target.value)}),
+              h('input',{placeholder:'מה בולט',value:screen.what_stands_out || '',onChange:(e)=>updateScreenPrompt(index,'what_stands_out',e.target.value)}),
+              h('input',{placeholder:'מה צריך להבין מיד',value:screen.what_to_understand || '',onChange:(e)=>updateScreenPrompt(index,'what_to_understand',e.target.value)}),
+              h('input',{placeholder:'מוקד ראשי',value:screen.main_focus || '',onChange:(e)=>updateScreenPrompt(index,'main_focus',e.target.value)}),
+              h('input',{placeholder:'אלמנטים משניים',value:screen.secondary_elements || '',onChange:(e)=>updateScreenPrompt(index,'secondary_elements',e.target.value)})
+            )
+          );
+        })
+      )
     ),
     groupMessage ? h('div',{style:{marginTop:'6px',fontSize:'13px'}},groupMessage) : null
   ), h('div',{className:'step4-wrapper',style:{display:isStep4?'flex':'none'}}, h('div',{className:'step4-bar'}, h('div',{className:'step4-bar-start'}, h('button',{className:'step4-back-btn',onClick:()=>{if(productType==='physical'){setPhysicalSubStep(2);} goToStep(3);}},'‹ חזרה')), h('div',{className:'step4-bar-center'},productType==='physical'?h(PhysicalStepIndicator,{current:4}):h(StepIndicator,{current:4})), h('div',{className:'step4-bar-end'}, h('button',{className:'step4-export-btn',onClick:handleExportPdf},'ייצוא PDF'), h('button',{className:'step4-finish-btn',onClick:()=>goToStep(5)},'סיום ›'))),
