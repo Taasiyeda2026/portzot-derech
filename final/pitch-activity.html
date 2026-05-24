@@ -1446,25 +1446,67 @@
 
         var adminTrigger = document.getElementById("adminTrigger");
         var adminModal = document.getElementById("adminModal");
+        var adminPassword = document.getElementById("adminPassword");
         var adminLogin = document.getElementById("adminLogin");
+        var adminAuth = document.getElementById("adminAuth");
+        var adminContent = document.getElementById("adminContent");
         var adminClose = document.getElementById("adminClose");
         var adminClose2 = document.getElementById("adminClose2");
-        if (adminTrigger) adminTrigger.addEventListener("click", function () {
+
+        var requiredAdminElements = [
+          ["adminTrigger", adminTrigger],
+          ["adminModal", adminModal],
+          ["adminPassword", adminPassword],
+          ["adminLogin", adminLogin],
+          ["adminAuth", adminAuth],
+          ["adminContent", adminContent]
+        ];
+        requiredAdminElements.forEach(function (entry) {
+          if (!entry[1]) console.warn("[pitch-activity] Missing required admin element:", entry[0]);
+        });
+
+        function openAdminModal() {
+          if (!adminModal) return;
+          adminModal.classList.add("open");
+          adminClicks = 0;
+        }
+
+        if (adminTrigger) adminTrigger.addEventListener("click", function (event) {
+          if (event.altKey) {
+            openAdminModal();
+            return;
+          }
           adminClicks += 1;
           if (adminClickTimer) clearTimeout(adminClickTimer);
-          adminClickTimer = setTimeout(function () { adminClicks = 0; }, 1200);
-          if (adminClicks >= 3 && adminModal) { adminModal.classList.add("open"); adminClicks = 0; }
+          adminClickTimer = setTimeout(function () { adminClicks = 0; }, 3000);
+          if (adminClicks >= 3) openAdminModal();
         });
         function closeAdmin() { if (adminModal) adminModal.classList.remove("open"); }
         if (adminClose) adminClose.addEventListener("click", closeAdmin);
         if (adminClose2) adminClose2.addEventListener("click", closeAdmin);
-        if (adminLogin) adminLogin.addEventListener("click", function () {
-          var pass = document.getElementById("adminPassword");
-          if (!pass || pass.value !== "1234") return setAdminStatus("סיסמה שגויה");
-          document.getElementById("adminAuth").style.display = "none";
-          document.getElementById("adminContent").style.display = "block";
+
+        function attemptAdminLogin() {
+          if (!adminPassword || !adminAuth || !adminContent) {
+            setAdminStatus("שגיאת תצורה בפאנל ניהול");
+            return;
+          }
+          if (adminPassword.value.trim() !== "1234") return setAdminStatus("סיסמה שגויה");
+          adminAuth.style.display = "none";
+          adminContent.style.display = "block";
           setAdminStatus("כניסה בוצעה");
-          refreshGroups();
+          if (!supabaseClient) {
+            setAdminStatus("חסר חיבור Supabase");
+            return;
+          }
+          if (typeof refreshGroups === "function") refreshGroups();
+        }
+
+        if (adminLogin) adminLogin.addEventListener("click", attemptAdminLogin);
+        if (adminPassword) adminPassword.addEventListener("keydown", function (event) {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            attemptAdminLogin();
+          }
         });
         var dl = document.getElementById("downloadQuestionsTemplate");
         if (dl) dl.addEventListener("click", function () {
