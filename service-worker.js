@@ -1,4 +1,4 @@
-const SW_VERSION = "v111";
+const SW_VERSION = "v112";
 const CACHE_NAME = `portzot-derech-cache-${SW_VERSION}`;
 
 // ── נכסים שנשמרים ב-Cache בהתקנה ─────────────────────────────────────────
@@ -41,6 +41,7 @@ const CORE_ASSETS = [
   "./css/print.css",
 
   // ── JS ────────────────────────────────────────────────────────────────────
+  "./config/supabase-config.js",
   "./js/config.js",
   "./js/pairing-app.js",
   "./js/pairing-algorithm.js",
