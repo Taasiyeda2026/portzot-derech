@@ -1527,7 +1527,34 @@
           var selected = getElementValue("groupsSelect"); if (!selected) return setAdminStatus("יש לבחור קבוצה");
           var res = await supabaseClient.from("pitch_groups").select("*").eq("group_code", selected).single();
           if (res.error || !res.data) return setAdminStatus("שגיאה בטעינת קבוצה");
-          applySavedData(res.data.data_json || {}); renderPresenterInputs(res.data.data_json || {}); updatePitchPreview(); buildPrintDocument(); setAdminStatus("הקבוצה נטענה");
+
+          var src = res.data.data_json || {};
+          var QUESTION_FIELDS = [
+            "project_name","problem","audience","situation","difficulty","main_need",
+            "quality_1","quality_2","quality_3","idea","product_action","prototype_description",
+            "focus_1","focus_2","focus_3","feedback","improvement",
+            "step_1","step_2","step_3","tech_part","tech_value","main_value"
+          ];
+          var questionsOnly = {};
+          QUESTION_FIELDS.forEach(function (key) {
+            if (Object.prototype.hasOwnProperty.call(src, key)) questionsOnly[key] = src[key];
+          });
+
+          applySavedData(questionsOnly);
+
+          var pc = document.getElementById("presenterCount");
+          if (pc) { pc.value = "1"; }
+
+          var fp = document.getElementById("fullPitch");
+          if (fp) fp.value = "";
+          var ep = document.getElementById("elevatorPitch");
+          if (ep) ep.value = "";
+
+          renderPresenterInputs({});
+          updatePitchPreview();
+          renderRoles();
+          buildPrintDocument();
+          setAdminStatus("הקבוצה נטענה");
         });
       }
 
