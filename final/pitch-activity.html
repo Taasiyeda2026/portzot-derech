@@ -12,6 +12,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; }
 
@@ -109,6 +111,15 @@
       border: 1px solid var(--line);
       box-shadow: none;
     }
+    .admin-modal{position:fixed;inset:0;background:rgba(20,16,30,.45);display:none;align-items:center;justify-content:center;z-index:60;padding:1rem}
+    .admin-modal.open{display:flex}
+    .admin-panel{width:min(100%,760px);max-height:85vh;overflow:auto;background:#fff;border:1px solid var(--line);border-radius:16px;padding:1rem}
+    .admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+    .admin-title{margin-bottom:.6rem}
+    .admin-status{font-size:.85rem;color:var(--muted)}
+    .admin-actions{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem}
+    .admin-hidden-btn{background:transparent;color:var(--muted);box-shadow:none;border:1px solid var(--line)}
+    @media print {.admin-modal,#adminTrigger{display:none!important}}
 
     .page {
       width: min(100%, 980px);
@@ -679,6 +690,7 @@
       <img src="../icon/favicon.png" alt="" />
       <span>פורצות דרך</span>
     </a>
+    <button class="btn secondary admin-hidden-btn" type="button" id="adminTrigger">פיץ׳ סופי</button>
     <a class="back-link" href="FinalPitch.html">חזרה לעמוד הפיץ׳</a>
   </header>
 
@@ -886,6 +898,31 @@
       <button class="btn" type="button" id="printPage">שמירה כ־PDF / הדפסה</button>
       <a class="btn secondary" href="FinalPitch.html">חזרה לעמוד הפיץ׳</a>
     </div>
+    <div class="admin-modal no-print" id="adminModal">
+      <section class="admin-panel">
+        <h3 class="admin-title">ניהול פיץ׳ סופי</h3>
+        <div id="adminAuth">
+          <label for="adminPassword">סיסמה</label>
+          <input id="adminPassword" type="password" placeholder="הקלידי סיסמה" />
+          <div class="admin-actions"><button class="btn secondary" type="button" id="adminLogin">כניסה</button><button class="btn secondary" type="button" id="adminClose">סגירה</button></div>
+        </div>
+        <div id="adminContent" style="display:none">
+          <div class="admin-grid">
+            <section class="section" style="margin-top:0"><h4>ניהול שאלות הפיץ׳</h4><div class="admin-actions"><button class="btn secondary" type="button" id="downloadQuestionsTemplate">הורדת טמפלייט שאלות</button><input type="file" id="uploadQuestionsFile" accept=".xlsx,.xls,.csv" /></div></section>
+            <section class="section" style="margin-top:0">
+              <h4>ניהול קבוצות</h4>
+              <label for="groupNameInput">שם קבוצה</label><input id="groupNameInput" type="text" placeholder="לדוגמה: קבוצה א׳" />
+              <label for="groupCodeInput">קוד קבוצה</label><input id="groupCodeInput" type="text" placeholder="group_1" />
+              <div class="admin-actions"><button class="btn secondary" type="button" id="createGroupBtn">יצירת קבוצה</button></div>
+              <label for="groupsSelect">קבוצות קיימות</label><select id="groupsSelect"></select>
+              <div class="admin-actions"><button class="btn secondary" type="button" id="loadGroupBtn">טעינת קבוצה</button><button class="btn secondary" type="button" id="saveGroupBtn">שמירת קבוצה</button></div>
+            </section>
+          </div>
+          <p class="admin-status" id="adminStatus"></p>
+          <div class="admin-actions"><button class="btn secondary" type="button" id="adminClose2">סגירה</button></div>
+        </div>
+      </section>
+    </div>
   </main>
 
   <script>
@@ -894,9 +931,16 @@
 
       var STORAGE_KEY = "portzot-derech-final-pitch-activity-v4";
       var LEGACY_STORAGE_KEY = "portzot-derech-final-pitch-activity-v2";
+      var QUESTIONS_KEY = "portzot-derech-final-pitch-questions-v1";
       var timerSeconds = 180;
       var timerId = null;
       var BLANK = "________";
+      var SUPABASE_URL = window.PORTZOT_SUPABASE_URL || "";
+      var SUPABASE_ANON_KEY = window.PORTZOT_SUPABASE_ANON_KEY || "";
+      var supabaseClient = null;
+      var adminClicks = 0;
+      var adminClickTimer = null;
+      var questionWeights = { opening:1,problem:2,audience:2,difficulty:3,solution:2,idea:3,product_action:2,prototype:3,feedback:3,flow:2,unique:3,value:2 };
 
       function getElementValue(id) {
         var el = document.getElementById(id);
@@ -1068,8 +1112,8 @@
             "לאחר מכן הצגתי את האב־טיפוס וקיבלתי עליו משוב. מהמשוב הבנתי ש־" + fill("feedback") + ". בעקבות זה שיפרתי את " + fill("improvement") + ", כדי שהתוצר יהיה ברור יותר, נוח יותר ומתאים יותר לקהל היעד.",
             "היום המוצר עובד כך: קודם " + fill("step_1") + ", אחר כך " + fill("step_2") + ", ובסוף " + fill("step_3") + ". הייחודיות של המיזם שלי היא " + fill("tech_part") + ", והיתרון המרכזי שהוא נותן לקהל היעד הוא " + fill("tech_value") + ". הערך המרכזי של המוצר הוא " + fill("main_value") + ". לסיכום, עברתי תהליך של זיהוי בעיה, הבנת קהל יעד, אפיון, אב־טיפוס, משוב ושיפור — ומתוכו הגעתי לפתרון שנותן מענה אמיתי לצורך אמיתי. תודה רבה."
           ].map(function (text, index) {
-            var weights = [1, 2, 2, 3, 2, 3, 2, 3, 3, 4];
-            return { id: "unit-" + index, weight: weights[index], text: sentence(text) };
+            var weights = [1, 2, 2, 3, 2, 3, 2, 3, 3, 2];
+            return { id: "unit-" + index, label: "יחידה " + (index + 1), weight: weights[index], text: sentence(text) };
           });
         }
 
@@ -1085,8 +1129,8 @@
           "לאחר מכן הצגנו את האב־טיפוס וקיבלנו עליו משוב. מהמשוב הבנו ש־" + fill("feedback") + ". בעקבות זה שיפרנו את " + fill("improvement") + ", כדי שהתוצר יהיה ברור יותר, נוח יותר ומתאים יותר לקהל היעד.",
           "היום המוצר עובד כך: קודם " + fill("step_1") + ", אחר כך " + fill("step_2") + ", ובסוף " + fill("step_3") + ". הייחודיות של המיזם שלנו היא " + fill("tech_part") + ", והיתרון המרכזי שהוא נותן לקהל היעד הוא " + fill("tech_value") + ". הערך המרכזי של המוצר הוא " + fill("main_value") + ". לסיכום, עברנו תהליך של זיהוי בעיה, הבנת קהל יעד, אפיון, אב־טיפוס, משוב ושיפור — ומתוכו הגענו לפתרון שנותן מענה אמיתי לצורך אמיתי. תודה רבה."
         ].map(function (text, index) {
-          var weights = [1, 2, 2, 3, 2, 3, 2, 3, 3, 4];
-          return { id: "unit-" + index, weight: weights[index], text: sentence(text) };
+          var weights = [1, 2, 2, 3, 2, 3, 2, 3, 3, 2];
+          return { id: "unit-" + index, label: "יחידה " + (index + 1), weight: weights[index], text: sentence(text) };
         });
       }
 
@@ -1297,6 +1341,42 @@
         timerSeconds = 180;
         updateTimerDisplay();
       }
+      function setAdminStatus(msg) {
+        var el = document.getElementById("adminStatus");
+        if (el) el.textContent = msg || "";
+      }
+      function getQuestionRows() {
+        return [
+          ["project_name","שם המיזם","text","לדוגמה: SafeWalk","pitch-data",1,true,""],
+          ["problem","איזו בעיה זיהיתן?","textarea","","pitch-data",2,true,"problem:2"],
+          ["audience","אצל מי הבעיה הזאת מופיעה בעיקר?","textarea","","pitch-data",3,true,"audience:2"],
+          ["situation","באיזה מצב או סיטואציה הבעיה מופיעה?","textarea","","pitch-data",4,true,"audience:2"],
+          ["difficulty","מה קשה לקהל היעד במצב הזה?","textarea","","pitch-data",5,true,"difficulty:3"],
+          ["main_need","מה קהל היעד צריך מהפתרון?","textarea","","pitch-data",6,true,"solution:2"]
+        ];
+      }
+      function applyQuestionSettings(settings) {
+        (settings || []).forEach(function (row) {
+          if (!row.id) return;
+          var lbl = document.querySelector('label[for=\"' + row.id + '\"]');
+          if (lbl && row.label) lbl.textContent = row.label;
+          if (row.placeholder) {
+            var field = document.getElementById(row.id);
+            if (field) field.setAttribute("placeholder", row.placeholder);
+          }
+        });
+      }
+      function setupSupabase() {
+        if (window.supabase && SUPABASE_URL && SUPABASE_ANON_KEY) supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      }
+      async function refreshGroups() {
+        if (!supabaseClient) return;
+        var sel = document.getElementById("groupsSelect");
+        if (!sel) return;
+        var res = await supabaseClient.from("pitch_groups").select("group_code,group_name").order("group_code");
+        if (res.error) return setAdminStatus("שגיאה בטעינת קבוצות");
+        sel.innerHTML = '<option value=\"\">בחירת קבוצה</option>' + (res.data || []).map(function (g) { return '<option value=\"' + esc(g.group_code) + '\">' + esc(g.group_code + (g.group_name ? " — " + g.group_name : "")) + '</option>'; }).join("");
+      }
 
       function attachEvents() {
         var generatePitchBtn = document.getElementById("generatePitch");
@@ -1362,6 +1442,66 @@
             saveAll();
           });
         });
+
+        var adminTrigger = document.getElementById("adminTrigger");
+        var adminModal = document.getElementById("adminModal");
+        var adminLogin = document.getElementById("adminLogin");
+        var adminClose = document.getElementById("adminClose");
+        var adminClose2 = document.getElementById("adminClose2");
+        if (adminTrigger) adminTrigger.addEventListener("click", function () {
+          adminClicks += 1;
+          if (adminClickTimer) clearTimeout(adminClickTimer);
+          adminClickTimer = setTimeout(function () { adminClicks = 0; }, 1200);
+          if (adminClicks >= 3 && adminModal) { adminModal.classList.add("open"); adminClicks = 0; }
+        });
+        function closeAdmin() { if (adminModal) adminModal.classList.remove("open"); }
+        if (adminClose) adminClose.addEventListener("click", closeAdmin);
+        if (adminClose2) adminClose2.addEventListener("click", closeAdmin);
+        if (adminLogin) adminLogin.addEventListener("click", function () {
+          var pass = document.getElementById("adminPassword");
+          if (!pass || pass.value !== "1234") return setAdminStatus("סיסמה שגויה");
+          document.getElementById("adminAuth").style.display = "none";
+          document.getElementById("adminContent").style.display = "block";
+          setAdminStatus("כניסה בוצעה");
+          refreshGroups();
+        });
+        var dl = document.getElementById("downloadQuestionsTemplate");
+        if (dl) dl.addEventListener("click", function () {
+          if (!window.XLSX) return setAdminStatus("ספריית אקסל לא נטענה");
+          var ws = XLSX.utils.aoa_to_sheet([["id","label","type","placeholder","section","order","required","weight"]].concat(getQuestionRows()));
+          var wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "questions"); XLSX.writeFile(wb, "pitch-questions-template.xlsx");
+        });
+        var up = document.getElementById("uploadQuestionsFile");
+        if (up) up.addEventListener("change", function (ev) {
+          var f = ev.target.files && ev.target.files[0]; if (!f || !window.XLSX) return setAdminStatus("הקובץ לא תואם לטמפלייט השאלות");
+          var r = new FileReader(); r.onload = function (e) { try { var wb = XLSX.read(e.target.result, { type: "array" }); var rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]); if (!rows.length || !rows[0].id) throw new Error(); localStorage.setItem(QUESTIONS_KEY, JSON.stringify(rows)); applyQuestionSettings(rows); updatePitchPreview(); setAdminStatus("השאלות עודכנו בהצלחה"); } catch (_) { setAdminStatus("הקובץ לא תואם לטמפלייט השאלות"); } }; r.readAsArrayBuffer(f);
+        });
+        var createBtn = document.getElementById("createGroupBtn");
+        var saveBtn = document.getElementById("saveGroupBtn");
+        var loadBtn = document.getElementById("loadGroupBtn");
+        if (createBtn) createBtn.addEventListener("click", async function () {
+          if (!supabaseClient) return setAdminStatus("חסר חיבור Supabase");
+          var code = getElementValue("groupCodeInput"); if (!code) return setAdminStatus("יש להזין קוד קבוצה");
+          var name = getElementValue("groupNameInput");
+          var res = await supabaseClient.from("pitch_groups").upsert({ group_code: code, group_name: name }, { onConflict: "group_code" });
+          if (res.error) return setAdminStatus("שגיאה ביצירת קבוצה");
+          setAdminStatus("קבוצה נשמרה"); refreshGroups();
+        });
+        if (saveBtn) saveBtn.addEventListener("click", async function () {
+          if (!supabaseClient) return setAdminStatus("חסר חיבור Supabase");
+          var selected = getElementValue("groupsSelect"); if (!selected) return setAdminStatus("יש לבחור או ליצור קבוצה לפני שמירה");
+          var data = {}; getSaveFields().forEach(function (f) { if (!f.id) return; data[f.id] = f.type === "checkbox" ? f.checked : f.value; });
+          var payload = { group_code: selected, group_name: getElementValue("groupNameInput"), project_name: getElementValue("project_name"), presenter_count: getPresenterCount(), speaker_1: getElementValue("speaker_1"), speaker_2: getElementValue("speaker_2"), speaker_3: getElementValue("speaker_3"), speaker_4: getElementValue("speaker_4"), speaker_5: getElementValue("speaker_5"), data_json: data };
+          var res = await supabaseClient.from("pitch_groups").upsert(payload, { onConflict: "group_code" });
+          setAdminStatus(res.error ? "שגיאה בשמירת קבוצה" : "הקבוצה נשמרה בהצלחה");
+        });
+        if (loadBtn) loadBtn.addEventListener("click", async function () {
+          if (!supabaseClient) return setAdminStatus("חסר חיבור Supabase");
+          var selected = getElementValue("groupsSelect"); if (!selected) return setAdminStatus("יש לבחור קבוצה");
+          var res = await supabaseClient.from("pitch_groups").select("*").eq("group_code", selected).single();
+          if (res.error || !res.data) return setAdminStatus("שגיאה בטעינת קבוצה");
+          applySavedData(res.data.data_json || {}); renderPresenterInputs(res.data.data_json || {}); updatePitchPreview(); buildPrintDocument(); setAdminStatus("הקבוצה נטענה");
+        });
       }
 
       function init() {
@@ -1374,6 +1514,8 @@
 
         renderPresenterInputs(saved);
         applySavedData(saved);
+        setupSupabase();
+        try { applyQuestionSettings(JSON.parse(localStorage.getItem(QUESTIONS_KEY) || "[]")); } catch (e) {}
         updateTimerDisplay();
         attachEvents();
         updatePitchPreview();
