@@ -1,4 +1,4 @@
-const SW_VERSION = "v115";
+const SW_VERSION = "v116";
 const CACHE_NAME = `portzot-derech-cache-${SW_VERSION}`;
 
 // ── נכסים שנשמרים ב-Cache בהתקנה ─────────────────────────────────────────
@@ -104,7 +104,6 @@ const CORE_ASSETS = [
   "./steps/prd.html",
   "./steps/tree.html",
   "./final/final.html",
-  "./final/FinalPitch.html",
   "./final/pitch-activity.html",
 
   // ── p.nativ ───────────────────────────────────────────────────────────────
