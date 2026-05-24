@@ -1,4 +1,4 @@
-const SW_VERSION = "v129";
+const SW_VERSION = "v130";
 const CACHE_NAME = `portzot-derech-cache-${SW_VERSION}`;
 
 // ── נכסים שנשמרים ב-Cache בהתקנה ─────────────────────────────────────────
