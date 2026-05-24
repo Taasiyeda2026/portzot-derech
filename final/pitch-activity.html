@@ -898,13 +898,6 @@
       var timerId = null;
       var BLANK = "________";
 
-      var speakerRanges = {
-        2: [[0, 4], [5, 9]],
-        3: [[0, 2], [3, 5], [6, 9]],
-        4: [[0, 1], [2, 4], [5, 7], [8, 9]],
-        5: [[0, 1], [2, 3], [4, 5], [6, 7], [8, 9]]
-      };
-
       function getElementValue(id) {
         var el = document.getElementById(id);
         return el ? el.value.trim() : "";
@@ -1057,7 +1050,7 @@
         }
       }
 
-      function buildSegments(isSingle) {
+      function buildSpeechUnits(isSingle) {
         var project = fill("project_name");
         var firstName = getSpeakerName(0);
         var allNames = getPresenterNames().join(", ");
@@ -1074,7 +1067,10 @@
             "כדי להפוך את הרעיון למשהו שאפשר לראות ולהבין, יצרתי אב־טיפוס ראשוני. האב־טיפוס ממחיש " + fill("prototype_description") + ". באפיון שמתי דגש על " + fill("focus_1") + ", על " + fill("focus_2") + " ועל " + fill("focus_3") + ", כדי שהרעיון יהיה ברור גם למי שפוגש אותו בפעם הראשונה.",
             "לאחר מכן הצגתי את האב־טיפוס וקיבלתי עליו משוב. מהמשוב הבנתי ש־" + fill("feedback") + ". בעקבות זה שיפרתי את " + fill("improvement") + ", כדי שהתוצר יהיה ברור יותר, נוח יותר ומתאים יותר לקהל היעד.",
             "היום המוצר עובד כך: קודם " + fill("step_1") + ", אחר כך " + fill("step_2") + ", ובסוף " + fill("step_3") + ". הייחודיות של המיזם שלי היא " + fill("tech_part") + ", והיתרון המרכזי שהוא נותן לקהל היעד הוא " + fill("tech_value") + ". הערך המרכזי של המוצר הוא " + fill("main_value") + ". לסיכום, עברתי תהליך של זיהוי בעיה, הבנת קהל יעד, אפיון, אב־טיפוס, משוב ושיפור — ומתוכו הגעתי לפתרון שנותן מענה אמיתי לצורך אמיתי. תודה רבה."
-          ].map(sentence);
+          ].map(function (text, index) {
+            var weights = [1, 2, 2, 3, 2, 3, 2, 3, 3, 4];
+            return { id: "unit-" + index, weight: weights[index], text: sentence(text) };
+          });
         }
 
         return [
@@ -1088,20 +1084,56 @@
           "כדי להפוך את הרעיון למשהו שאפשר לראות ולהבין, יצרנו אב־טיפוס ראשוני. האב־טיפוס ממחיש " + fill("prototype_description") + ". באפיון שמנו דגש על " + fill("focus_1") + ", על " + fill("focus_2") + " ועל " + fill("focus_3") + ", כדי שהרעיון יהיה ברור גם למי שפוגש אותו בפעם הראשונה.",
           "לאחר מכן הצגנו את האב־טיפוס וקיבלנו עליו משוב. מהמשוב הבנו ש־" + fill("feedback") + ". בעקבות זה שיפרנו את " + fill("improvement") + ", כדי שהתוצר יהיה ברור יותר, נוח יותר ומתאים יותר לקהל היעד.",
           "היום המוצר עובד כך: קודם " + fill("step_1") + ", אחר כך " + fill("step_2") + ", ובסוף " + fill("step_3") + ". הייחודיות של המיזם שלנו היא " + fill("tech_part") + ", והיתרון המרכזי שהוא נותן לקהל היעד הוא " + fill("tech_value") + ". הערך המרכזי של המוצר הוא " + fill("main_value") + ". לסיכום, עברנו תהליך של זיהוי בעיה, הבנת קהל יעד, אפיון, אב־טיפוס, משוב ושיפור — ומתוכו הגענו לפתרון שנותן מענה אמיתי לצורך אמיתי. תודה רבה."
-        ].map(sentence);
+        ].map(function (text, index) {
+          var weights = [1, 2, 2, 3, 2, 3, 2, 3, 3, 4];
+          return { id: "unit-" + index, weight: weights[index], text: sentence(text) };
+        });
+      }
+
+      function splitUnitsBySpeechLoad(units, count) {
+        if (count <= 1) return [{ start: 0, end: units.length - 1 }];
+        var totalWeight = units.reduce(function (sum, unit) { return sum + unit.weight; }, 0);
+        var target = totalWeight / count;
+        var ranges = [];
+        var start = 0;
+        var runningWeight = 0;
+        var speakerIndex = 0;
+
+        for (var i = 0; i < units.length; i += 1) {
+          runningWeight += units[i].weight;
+          var remainingSpeakers = count - speakerIndex - 1;
+          var remainingUnits = units.length - i - 1;
+          if (!remainingSpeakers) continue;
+          var reachedTarget = runningWeight >= target * (speakerIndex + 1);
+          var mustSplit = remainingUnits === remainingSpeakers;
+          if (reachedTarget || mustSplit) {
+            ranges.push({ start: start, end: i });
+            start = i + 1;
+            speakerIndex += 1;
+          }
+        }
+        ranges.push({ start: start, end: units.length - 1 });
+        return ranges;
+      }
+
+      function buildAssignments() {
+        var count = getPresenterCount();
+        var units = buildSpeechUnits(count === 1);
+        return { units: units, ranges: splitUnitsBySpeechLoad(units, count) };
       }
 
       function buildPitchText() {
         var count = getPresenterCount();
-        var segments = buildSegments(count === 1);
+        var assignment = buildAssignments();
+        var segments = assignment.units;
 
         if (count === 1) {
-          return segments.join("\n\n");
+          return segments.map(function (u) { return u.text; }).join("\n\n");
         }
 
-        return speakerRanges[count].map(function (range, index) {
+        return assignment.ranges.map(function (range, index) {
           var name = getSpeakerName(index);
-          return name + ":\n" + segments.slice(range[0], range[1] + 1).join("\n\n");
+          return name + ":\n" + segments.slice(range.start, range.end + 1).map(function (u) { return u.text; }).join("\n\n");
         }).join("\n\n─────\n\n");
       }
 
@@ -1133,7 +1165,8 @@
         if (!roleList) return;
 
         var count = getPresenterCount();
-        var segments = buildSegments(count === 1);
+        var assignment = buildAssignments();
+        var segments = assignment.units;
         roleList.replaceChildren();
 
         if (count === 1) {
@@ -1148,15 +1181,16 @@
           return;
         }
 
-        speakerRanges[count].forEach(function (range, index) {
+        assignment.ranges.forEach(function (range, index) {
           var card = document.createElement("article");
           var title = document.createElement("h3");
           var text = document.createElement("p");
-          var part = segments.slice(range[0], range[1] + 1).join(" ");
+          var part = segments.slice(range.start, range.end + 1).map(function (u) { return u.text; }).join(" ");
 
           card.className = "role-card";
           title.textContent = getSpeakerName(index);
-          text.textContent = part.substring(0, 300) + (part.length > 300 ? "…" : "");
+          var load = segments.slice(range.start, range.end + 1).reduce(function (sum, unit) { return sum + unit.weight; }, 0);
+          text.textContent = "עומס דיבור: כ־" + load + " יחידות | " + (part.substring(0, 260) + (part.length > 260 ? "…" : ""));
 
           card.append(title, text);
           roleList.appendChild(card);
@@ -1172,7 +1206,8 @@
         var presenters = getPresenterNames().filter(function (name) { return name && !/^משתתפת \d+$/.test(name); });
         var elevatorField = document.getElementById("elevatorPitch");
         var elevatorText = cleanText(elevatorField && elevatorField.value ? elevatorField.value : "");
-        var segments = buildSegments(count === 1);
+        var assignment = buildAssignments();
+        var segments = assignment.units;
 
         var html = "";
         html += '<section class="print-sheet">';
@@ -1201,11 +1236,11 @@
         if (count === 1) {
           html += '<article class="pd-role-item">';
           html += '<div class="pd-role-name">' + esc(getSpeakerName(0)) + '</div>';
-          html += '<div class="pd-role-excerpt">' + esc(segments.join("\\n\\n")) + '</div>';
+          html += '<div class="pd-role-excerpt">' + esc(segments.map(function (u) { return u.text; }).join("\\n\\n")) + '</div>';
           html += '</article>';
         } else {
-          speakerRanges[count].forEach(function (range, index) {
-            var roleText = segments.slice(range[0], range[1] + 1).join("\\n\\n");
+          assignment.ranges.forEach(function (range, index) {
+            var roleText = segments.slice(range.start, range.end + 1).map(function (u) { return u.text; }).join("\\n\\n");
             html += '<article class="pd-role-item">';
             html += '<div class="pd-role-name">' + esc(getSpeakerName(index)) + '</div>';
             html += '<div class="pd-role-excerpt">' + esc(roleText) + '</div>';
