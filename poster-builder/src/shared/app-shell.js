@@ -27,6 +27,34 @@ const DEFAULT_SETTINGS = Object.fromEntries(FIELD_DEFINITIONS.map((f) => [f.id, 
 const EMPTY_SLOT_IMAGES = { visual: null, visual_1: null, visual_2: null, visual_3: null };
 const DEFAULT_TITLE_READABILITY_EFFECT = 'none';
 
+function mapImagePromptsToPromptAnswers(imagePrompts = {}) {
+  const prompts = normalizeImagePrompts(imagePrompts);
+  const screens = Array.isArray(prompts.screens) ? prompts.screens : [];
+  const mainScreen = screens[0] || {};
+  const usageScreen = screens[1] || {};
+  const usageWhere = usageScreen.what_we_see || usageScreen.what_to_understand || '';
+  const usageUnderstand = usageScreen.what_to_understand || usageScreen.what_we_see || '';
+
+  return {
+    ...EMPTY_PROMPT_ANSWERS,
+    main_whatToSee: mainScreen.what_we_see || '',
+    main_appearance: mainScreen.components || '',
+    main_highlight: mainScreen.main_focus || mainScreen.what_stands_out || '',
+    main_style: prompts.visual_style || '',
+    main_realism: prompts.realism_level || '',
+    main_colors: prompts.important_colors || '',
+    main_exclude: prompts.avoid_showing || '',
+    usage_action: usageScreen.what_user_does || '',
+    usage_where: usageWhere,
+    usage_understand: usageUnderstand,
+    usage_highlight: usageScreen.main_focus || usageScreen.what_stands_out || '',
+    usage_style: prompts.visual_style || '',
+    usage_realism: prompts.realism_level || '',
+    usage_colors: prompts.important_colors || '',
+    usage_exclude: prompts.avoid_showing || ''
+  };
+}
+
 function App() {
   const [wizardStep, setWizardStep] = useState(PRESELECTED_START_STEP || (PRESELECTED_PRODUCT_TYPE === 'physical' ? 2 : 1));
   const [posterSize] = useState('A4');
@@ -87,7 +115,10 @@ function App() {
       }
       const data = normalizePosterData(row.poster_data || {});
       applyPosterData(data);
-      applyImagePrompts((row.poster_data || {}).image_prompts || {});
+      const loadedImagePrompts = (row.poster_data || {}).image_prompts || {};
+      applyImagePrompts(loadedImagePrompts);
+      const mappedPromptAnswers = mapImagePromptsToPromptAnswers(loadedImagePrompts);
+      setPromptAnswers({ ...EMPTY_PROMPT_ANSWERS, ...mappedPromptAnswers, ...(data.promptAnswers || {}) });
       setGroupMessage('פוסטר הקבוצה נטען בהצלחה.');
       return row;
     } catch {
@@ -103,6 +134,7 @@ function App() {
       productType: productTypeRef.current,
       background: currentBackgroundRef.current,
       contentValues: contentValuesRef.current,
+      promptAnswers,
       fieldSettings: fieldSettingsRef.current,
       titleStyle: { fontFamily: titleFont, color: titleColor, textColor: textColorRef.current, titleReadabilityEffect: titleReadabilityEffectRef.current },
       slotImages: slotImagesRef.current
@@ -113,6 +145,7 @@ function App() {
     setProductType(data.productType || 'physical');
     setCurrentBackground(data.background || BACKGROUNDS[0].path);
     setContentValues({ ...EMPTY_CONTENT, ...(data.contentValues || {}) });
+    setPromptAnswers({ ...EMPTY_PROMPT_ANSWERS, ...(data.promptAnswers || {}) });
     setFieldSettings({ ...DEFAULT_SETTINGS, ...(data.fieldSettings || {}) });
     setSlotImages({ ...EMPTY_SLOT_IMAGES, ...(data.slotImages || {}) });
     if (data.titleStyle?.fontFamily) setTitleFont(data.titleStyle.fontFamily);
@@ -164,6 +197,7 @@ function App() {
     setProductType(PRESELECTED_PRODUCT_TYPE || saved.productType || 'physical');
     setCurrentBackground(saved.background || BACKGROUNDS[0].path);
     setContentValues({ ...EMPTY_CONTENT, ...(saved.contentValues || {}) });
+    setPromptAnswers({ ...EMPTY_PROMPT_ANSWERS, ...(saved.promptAnswers || {}) });
     setFieldSettings({ ...DEFAULT_SETTINGS, ...(saved.fieldSettings || {}) });
     setSlotImages({ ...EMPTY_SLOT_IMAGES, ...(saved.slotImages || {}) });
     if (saved.titleStyle?.fontFamily) setTitleFont(saved.titleStyle.fontFamily);
@@ -173,7 +207,7 @@ function App() {
   },[]);
 
   useEffect(() => {
-    saveProject({ ...loadProject(CURRENT_SCHOOL_SLUG), school_slug: CURRENT_SCHOOL_SLUG, posterSize, productType, background: currentBackground, contentValues, fieldSettings, titleStyle: { fontFamily: titleFont, color: titleColor, textColor, titleReadabilityEffect }, slotImages });
+    saveProject({ ...loadProject(CURRENT_SCHOOL_SLUG), school_slug: CURRENT_SCHOOL_SLUG, posterSize, productType, background: currentBackground, contentValues, promptAnswers, fieldSettings, titleStyle: { fontFamily: titleFont, color: titleColor, textColor, titleReadabilityEffect }, slotImages });
     if (wizardStep === 4) {
       // Debounce poster re-render so rapid keystrokes don't thrash the DOM
       clearTimeout(renderTimerRef.current);
@@ -181,7 +215,7 @@ function App() {
         renderHTMLPoster(contentValuesRef.current, productTypeRef.current, titleFont, titleColor, textColorRef.current, currentBackgroundRef.current, slotImagesRef.current, titleReadabilityEffectRef.current);
       }, 120);
     }
-  }, [posterSize, productType, currentBackground, contentValues, fieldSettings, titleFont, titleColor, textColor, titleReadabilityEffect, slotImages, wizardStep]);
+  }, [posterSize, productType, currentBackground, contentValues, promptAnswers, fieldSettings, titleFont, titleColor, textColor, titleReadabilityEffect, slotImages, wizardStep]);
 
   const handleProductTypeChange = (type) => { if (!PRESELECTED_PRODUCT_TYPE) setProductType(type); };
   const handleBackground = (path) => { currentBackgroundRef.current = path; setCurrentBackground(path); saveProject({ ...loadProject(CURRENT_SCHOOL_SLUG), school_slug: CURRENT_SCHOOL_SLUG, background: path }); if (wizardStep===4) renderHTMLPoster(contentValuesRef.current, productTypeRef.current, titleFont, titleColor, textColorRef.current, path, slotImagesRef.current, titleReadabilityEffectRef.current); };
@@ -201,6 +235,7 @@ function App() {
       productType: productTypeRef.current,
       background: currentBackgroundRef.current,
       contentValues: contentValuesRef.current,
+      promptAnswers,
       fieldSettings: fieldSettingsRef.current,
       titleStyle: { fontFamily: titleFont, color: titleColor, textColor: textColorRef.current, titleReadabilityEffect: titleReadabilityEffectRef.current },
       slotImages: slotImagesRef.current
