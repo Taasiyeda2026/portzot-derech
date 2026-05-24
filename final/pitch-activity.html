@@ -1445,18 +1445,7 @@
           });
         });
 
-        /* admin wiring moved to bindAdminModal() — see below */
-        var dl = document.getElementById("downloadQuestionsTemplate");
-        if (dl) dl.addEventListener("click", function () {
-          if (!window.XLSX) return setAdminStatus("ספריית אקסל לא נטענה");
-          var ws = XLSX.utils.aoa_to_sheet([["id","label","type","placeholder","section","order","required","weight"]].concat(getQuestionRows()));
-          var wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "questions"); XLSX.writeFile(wb, "pitch-questions-template.xlsx");
-        });
-        var up = document.getElementById("uploadQuestionsFile");
-        if (up) up.addEventListener("change", function (ev) {
-          var f = ev.target.files && ev.target.files[0]; if (!f || !window.XLSX) return setAdminStatus("הקובץ לא תואם לטמפלייט השאלות");
-          var r = new FileReader(); r.onload = function (e) { try { var wb = XLSX.read(e.target.result, { type: "array" }); var rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]); if (!rows.length || !rows[0].id) throw new Error(); localStorage.setItem(QUESTIONS_KEY, JSON.stringify(rows)); applyQuestionSettings(rows); updatePitchPreview(); setAdminStatus("השאלות עודכנו בהצלחה"); } catch (_) { setAdminStatus("הקובץ לא תואם לטמפלייט השאלות"); } }; r.readAsArrayBuffer(f);
-        });
+        /* admin wiring moved to bindAdminModal() + bindAdminContent() — see below */
         var createBtn = document.getElementById("createGroupBtn");
         var saveBtn = document.getElementById("saveGroupBtn");
         var loadBtn = document.getElementById("loadGroupBtn");
@@ -1483,6 +1472,61 @@
           if (res.error || !res.data) return setAdminStatus("שגיאה בטעינת קבוצה");
           applySavedData(res.data.data_json || {}); renderPresenterInputs(res.data.data_json || {}); updatePitchPreview(); buildPrintDocument(); setAdminStatus("הקבוצה נטענה");
         });
+      }
+
+      function bindAdminContent() {
+        var dl = document.getElementById("downloadQuestionsTemplate");
+        if (dl) {
+          dl.onclick = function () {
+            try {
+              if (window.XLSX) {
+                var rows = [["id","label","type","placeholder","section","order","required","weight"]].concat(getQuestionRows());
+                var ws = XLSX.utils.aoa_to_sheet(rows);
+                var wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "questions");
+                XLSX.writeFile(wb, "pitch-questions-template.xlsx");
+                setAdminStatus("הטמפלייט הורד");
+              } else {
+                var csvRows = [["id","label","type","placeholder","section","order","required","weight"]].concat(getQuestionRows());
+                var csv = csvRows.map(function(r){ return r.join(","); }).join("\n");
+                var blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+                var url = URL.createObjectURL(blob);
+                var a = document.createElement("a");
+                a.href = url; a.download = "pitch-questions-template.csv";
+                document.body.appendChild(a); a.click();
+                setTimeout(function(){ URL.revokeObjectURL(url); a.remove(); }, 2000);
+                setAdminStatus("הטמפלייט הורד כ-CSV (ספריית Excel לא זמינה)");
+              }
+            } catch (err) {
+              console.warn("[pitch-activity] download template failed", err);
+              setAdminStatus("שגיאה בהורדת הטמפלייט: " + err.message);
+            }
+          };
+        }
+
+        var up = document.getElementById("uploadQuestionsFile");
+        if (up) {
+          up.onchange = function (ev) {
+            var f = ev.target.files && ev.target.files[0];
+            if (!f) return;
+            if (!window.XLSX) return setAdminStatus("ספריית Excel לא נטענה — לא ניתן לקרוא xlsx");
+            var r = new FileReader();
+            r.onload = function (e) {
+              try {
+                var wb = XLSX.read(e.target.result, { type: "array" });
+                var rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
+                if (!rows.length || !rows[0].id) throw new Error("מבנה קובץ לא תקין");
+                localStorage.setItem(QUESTIONS_KEY, JSON.stringify(rows));
+                applyQuestionSettings(rows);
+                updatePitchPreview();
+                setAdminStatus("השאלות עודכנו בהצלחה");
+              } catch (err) {
+                setAdminStatus("הקובץ לא תואם לטמפלייט: " + err.message);
+              }
+            };
+            r.readAsArrayBuffer(f);
+          };
+        }
       }
 
       function bindAdminModal() {
@@ -1552,6 +1596,7 @@
       document.addEventListener("DOMContentLoaded", function () {
         bindAdminTrigger();
         bindAdminModal();
+        bindAdminContent();
       });
 
       document.addEventListener("click", function (e) {
@@ -1585,6 +1630,7 @@
         attachEvents();
         bindAdminTrigger();
         bindAdminModal();
+        bindAdminContent();
         updatePitchPreview();
         buildPrintDocument();
       }
