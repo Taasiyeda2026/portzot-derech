@@ -116,6 +116,10 @@
     .admin-modal.open{display:flex}
     .admin-panel{width:min(100%,760px);max-height:85vh;overflow:auto;background:#fff;border:1px solid var(--line);border-radius:16px;padding:1rem}
     .admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+    .admin-grid > .section h4{margin-bottom:.35rem}
+    .admin-hint{margin:.15rem 0 .5rem;font-size:.84rem;color:var(--muted)}
+    .admin-preview{margin-top:.5rem;padding:.55rem .7rem;border:1px solid var(--line);border-radius:12px;background:#faf7ff;font-size:.86rem}
+    .admin-preview strong{display:block;margin-bottom:.2rem;color:var(--ink)}
     .admin-title{margin-bottom:.6rem}
     .admin-status{font-size:.85rem;color:var(--muted)}
     .admin-actions{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem}
@@ -910,13 +914,18 @@
         </div>
         <div id="adminContent" style="display:none">
           <div class="admin-grid">
-            <section class="section" style="margin-top:0"><h4>ניהול שאלות הפיץ׳</h4><div class="admin-actions"><button class="btn secondary" type="button" id="downloadQuestionsTemplate">הורדת טמפלייט שאלות</button><input type="file" id="uploadQuestionsFile" accept=".xlsx,.xls,.csv" /></div></section>
             <section class="section" style="margin-top:0">
-              <h4>ניהול קבוצות</h4>
+              <h4>ניהול נוסחי שאלות בלבד</h4>
+              <p class="admin-hint">קובץ זה מעדכן את נוסחי השאלות בלבד. הוא לא טוען קבוצות ולא ממלא נתוני מיזמים.</p>
+              <div class="admin-actions"><button class="btn secondary" type="button" id="downloadQuestionsTemplate">הורדת טמפלייט שאלות</button><label class="btn secondary" for="uploadQuestionsFile">העלאת קובץ שאלות</label><input type="file" id="uploadQuestionsFile" accept=".xlsx,.xls,.csv" style="display:none" /></div>
+            </section>
+            <section class="section" style="margin-top:0">
+              <h4>טעינת נתוני קבוצות מ־Supabase</h4>
               <label for="groupNameInput">שם קבוצה</label><input id="groupNameInput" type="text" placeholder="לדוגמה: קבוצה א׳" />
               <label for="groupCodeInput">קוד קבוצה</label><input id="groupCodeInput" type="text" placeholder="group_1" />
               <div class="admin-actions"><button class="btn secondary" type="button" id="createGroupBtn">יצירת קבוצה</button></div>
               <label for="groupsSelect">קבוצות קיימות</label><select id="groupsSelect"></select>
+              <div class="admin-preview" id="groupPreviewBox"><strong>קבוצה שנבחרה</strong><div id="groupPreviewContent">יש לבחור קבוצה מהרשימה כדי לראות פרטים לזיהוי.</div></div>
               <div class="admin-actions"><button class="btn secondary" type="button" id="loadGroupBtn">טעינת קבוצה</button><button class="btn secondary" type="button" id="saveGroupBtn">שמירת קבוצה</button></div>
             </section>
           </div>
@@ -940,6 +949,7 @@
       var SUPABASE_URL = window.PORTZOT_SUPABASE_URL || "";
       var SUPABASE_ANON_KEY = window.PORTZOT_SUPABASE_ANON_KEY || "";
       var supabaseClient = null;
+      var cachedGroups = [];
       var pitchUnitWeights = [1, 2, 2, 3, 2, 3, 2, 3, 3, 2];
       var questionWeights = { opening:1,problem:2,audience:2,difficulty:3,solution:2,idea:3,product_action:2,prototype:3,feedback:3,flow:2,unique:3,value:2 };
 
@@ -970,6 +980,42 @@
           .replace(/</g, "&lt;")
           .replace(/>/g, "&gt;")
           .replace(/"/g, "&quot;");
+      }
+      function toDisplayText(value, fallback) {
+        var txt = String(value || "").trim();
+        return txt || (fallback || "—");
+      }
+      function getGroupSpeakers(group) {
+        if (!group) return [];
+        var direct = [group.speaker_1, group.speaker_2, group.speaker_3, group.speaker_4, group.speaker_5]
+          .map(function (name) { return String(name || "").trim(); })
+          .filter(Boolean);
+        if (direct.length) return direct;
+        var src = group.data_json || {};
+        return [src.speaker_1, src.speaker_2, src.speaker_3, src.speaker_4, src.speaker_5]
+          .map(function (name) { return String(name || "").trim(); })
+          .filter(Boolean);
+      }
+      function resolveProjectName(group) {
+        if (!group) return "";
+        return String(group.project_name || ((group.data_json || {}).project_name) || "").trim();
+      }
+      function renderGroupPreview(groupCode) {
+        var box = document.getElementById("groupPreviewContent");
+        if (!box) return;
+        var group = cachedGroups.find(function (g) { return g.group_code === groupCode; });
+        if (!group) {
+          box.textContent = "יש לבחור קבוצה מהרשימה כדי לראות פרטים לזיהוי.";
+          return;
+        }
+        var projectName = resolveProjectName(group);
+        var speakers = getGroupSpeakers(group);
+        var updatedAt = group.updated_at || ((group.data_json || {}).updated_at) || "";
+        box.innerHTML = "קוד קבוצה: " + esc(toDisplayText(group.group_code)) +
+          "<br>שם מיזם: " + esc(toDisplayText(projectName)) +
+          "<br>שם קבוצה: " + esc(toDisplayText(group.group_name)) +
+          "<br>שמות מציגות: " + esc(speakers.length ? speakers.join(", ") : "לא זמין") +
+          "<br>עדכון אחרון: " + esc(toDisplayText(updatedAt, "לא קיים"));
       }
 
       function getSpeakerName(index) {
@@ -1429,12 +1475,30 @@
         }
       }
       async function refreshGroups() {
-        if (!supabaseClient) return;
         var sel = document.getElementById("groupsSelect");
         if (!sel) return;
-        var res = await supabaseClient.from("pitch_groups").select("group_code,group_name").order("group_code");
+        if (!supabaseClient) {
+          cachedGroups = [];
+          sel.innerHTML = '<option value=\"\">חסר חיבור Supabase — לא ניתן לטעון קבוצות</option>';
+          renderGroupPreview("");
+          return setAdminStatus("חסר חיבור Supabase — לא ניתן לטעון קבוצות");
+        }
+        var res = await supabaseClient.from("pitch_groups").select("id, group_code, group_name, project_name, speaker_1, speaker_2, speaker_3, speaker_4, speaker_5, data_json, updated_at").order("group_code");
         if (res.error) return setAdminStatus("שגיאה בטעינת קבוצות");
-        sel.innerHTML = '<option value=\"\">בחירת קבוצה</option>' + (res.data || []).map(function (g) { return '<option value=\"' + esc(g.group_code) + '\">' + esc(g.group_code + (g.group_name ? " — " + g.group_name : "")) + '</option>'; }).join("");
+        cachedGroups = res.data || [];
+        if (!cachedGroups.length) {
+          sel.innerHTML = '<option value=\"\">לא נמצאו קבוצות ב־Supabase</option>';
+          renderGroupPreview("");
+          return setAdminStatus("לא נמצאו קבוצות ב־Supabase");
+        }
+        sel.innerHTML = '<option value=\"\">בחירת קבוצה</option>' + cachedGroups.map(function (g) {
+          var projectName = resolveProjectName(g);
+          var speakers = getGroupSpeakers(g);
+          var speakersSuffix = speakers.length ? " (שמות: " + speakers.join(", ") + ")" : "";
+          var label = [g.group_code, projectName, g.group_name].filter(Boolean).join(" — ");
+          return '<option value=\"' + esc(g.group_code) + '\">' + esc(label + speakersSuffix) + '</option>';
+        }).join("");
+        renderGroupPreview("");
       }
 
       function attachEvents() {
@@ -1554,8 +1618,10 @@
           updatePitchPreview();
           renderRoles();
           buildPrintDocument();
-          setAdminStatus("הקבוצה נטענה");
+          setAdminStatus("הקבוצה נטענה. הנתונים נטענו כמציגה אחת. ניתן לשנות את מספר המשתתפות בבורר בעמוד. (הקבוצה נטענה כמציגה אחת)");
         });
+        var groupsSelect = document.getElementById("groupsSelect");
+        if (groupsSelect) groupsSelect.addEventListener("change", function () { renderGroupPreview(groupsSelect.value); });
       }
 
       function bindAdminContent() {
@@ -1603,7 +1669,7 @@
                 localStorage.setItem(QUESTIONS_KEY, JSON.stringify(rows));
                 applyQuestionSettings(rows);
                 updatePitchPreview();
-                setAdminStatus("השאלות עודכנו בהצלחה");
+                setAdminStatus("נוסחי השאלות עודכנו. זה לא משנה את נתוני הקבוצות.");
               } catch (err) {
                 setAdminStatus("הקובץ לא תואם לטמפלייט: " + err.message);
               }
