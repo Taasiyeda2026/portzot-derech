@@ -1,4 +1,5 @@
-const CACHE_NAME = "portzot-derech-v110";
+const SW_VERSION = "v111";
+const CACHE_NAME = `portzot-derech-cache-${SW_VERSION}`;
 
 // ── נכסים שנשמרים ב-Cache בהתקנה ─────────────────────────────────────────
 const CORE_ASSETS = [
@@ -318,13 +319,13 @@ self.addEventListener("install", function (event) {
         return Promise.allSettled(
           CORE_ASSETS.map(function (asset) {
             return cache.add(asset).catch(function (err) {
-              console.warn("[SW v68] Failed to cache:", asset, err.message);
+              console.warn(`[SW ${SW_VERSION}] Failed to cache:`, asset, err.message);
             });
           })
         );
       })
       .then(function () {
-        console.log("[SW v68] Installed, skipping waiting");
+        console.log(`[SW ${SW_VERSION}] Installed, skipping waiting`);
         return self.skipWaiting();
       })
   );
@@ -339,13 +340,13 @@ self.addEventListener("activate", function (event) {
           cacheNames
             .filter(function (name) { return name !== CACHE_NAME; })
             .map(function (name) {
-              console.log("[SW v68] Deleting old cache:", name);
+              console.log(`[SW ${SW_VERSION}] Deleting old cache:`, name);
               return caches.delete(name);
             })
         );
       })
       .then(function () {
-        console.log("[SW v68] Activated, claiming clients");
+        console.log(`[SW ${SW_VERSION}] Activated, claiming clients`);
         return self.clients.claim();
       })
   );
@@ -376,10 +377,13 @@ self.addEventListener("fetch", function (event) {
       fetch(event.request)
         .then(function (response) {
           if (response && response.ok) {
-            var clone = response.clone();
-            caches.open(CACHE_NAME).then(function (cache) {
-              cache.put(event.request, clone);
-            });
+            // HTML תמיד מהרשת, עם fallback בלבד כדי להימנע מנעילה על תוכן ישן.
+            if (!isNavigate && ext !== ".html") {
+              var clone = response.clone();
+              caches.open(CACHE_NAME).then(function (cache) {
+                cache.put(event.request, clone);
+              });
+            }
           }
           return response;
         })
