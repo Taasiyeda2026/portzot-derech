@@ -1,4 +1,4 @@
-const CACHE_NAME = "portzot-derech-v105";
+const CACHE_NAME = "portzot-derech-v107";
 
 // ── נכסים שנשמרים ב-Cache בהתקנה ─────────────────────────────────────────
 const CORE_ASSETS = [
@@ -385,7 +385,7 @@ self.addEventListener("fetch", function (event) {
         })
         .catch(function () {
           return caches.match(event.request).then(function (cached) {
-            return cached || caches.match("./index.html");
+            return cached || caches.match("./strongermenu-2026.html");
           });
         })
     );
