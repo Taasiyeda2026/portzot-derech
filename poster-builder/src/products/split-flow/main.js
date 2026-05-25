@@ -32,6 +32,13 @@ const hasScopedPosterContext = Boolean(requestedPosterId || requestedGroupCode);
 const schoolConfig = await resolveSchoolConfig(requestedSchoolSlug);
 const schoolSlug = schoolConfig.slug || 'default';
 const schoolKnown = schoolConfig.known !== false;
+const SUBMISSION_ID_KEY = `poster_submission_id:${schoolSlug}:${productType}`;
+const SCOPED_SUBMISSION_ID_KEY = requestedPosterId
+  ? `poster_submission_id:${schoolSlug}:poster:${requestedPosterId}`
+  : requestedGroupCode
+    ? `poster_submission_id:${schoolSlug}:group:${requestedGroupCode}`
+    : SUBMISSION_ID_KEY;
+const CONTEXT_STORAGE_PREFIX = `poster_submission_id:${schoolSlug}:`;
 const STEP_LABELS = productType === 'physical'
   ? ['שאלות חקר', 'פרומפט ותמונות', 'פוסטר']
   : ['שאלות חקר', 'פרומפט', 'תמונות', 'פוסטר'];
@@ -290,22 +297,39 @@ function mapImagePromptsToSplitFlow(imagePrompts = {}) {
   return { sharedVisualPrompt, prototypeScreens, images };
 }
 
-async function resolveSubmissionFromParams() {
-  try {
-    if (requestedPosterId) {
+async function resolveExistingSubmission() {
+  if (requestedPosterId) {
+    console.info('[split-flow] poster_id requested:', requestedPosterId);
+    try {
       const submission = await fetchPosterSubmission(requestedPosterId);
-      if (!submission) return { mode: 'none' };
+      if (!submission) {
+        console.warn('[split-flow] submission not found for poster_id:', requestedPosterId);
+        return { mode: 'not_found', message: `לא נמצא פוסטר עבור poster_id=${requestedPosterId}.` };
+      }
+      if (!submission?.poster_data) {
+        console.warn('[split-flow] submission found without poster_data for poster_id:', requestedPosterId);
+        return { mode: 'invalid', message: `הפוסטר poster_id=${requestedPosterId} לא מכיל נתונים תקינים.` };
+      }
       const submissionGroupCode = (submission?.poster_data?.pitch_group_code || '').toString().trim();
       if (requestedGroupCode && submissionGroupCode && submissionGroupCode !== requestedGroupCode) {
         return { mode: 'conflict', message: 'poster_id לא שייך לקבוצה המבוקשת.' };
       }
+      console.info('[split-flow] submission found for poster_id:', requestedPosterId, submission.id);
       return { mode: 'single', submission };
+    } catch (error) {
+      console.error('[split-flow] failed to fetch poster by poster_id:', requestedPosterId, error);
+      return { mode: 'error', message: `טעינת הפוסטר poster_id=${requestedPosterId} נכשלה.` };
     }
+  }
+
+  try {
     if (!requestedGroupCode) return { mode: 'none' };
+    console.info('[split-flow] group requested without poster_id:', requestedGroupCode);
     const matches = await listPosterSubmissionsByGroupCode(requestedGroupCode);
+    console.info('[split-flow] group submissions found:', matches.length);
     if (matches.length === 1) return { mode: 'single', submission: matches[0] };
     if (matches.length > 1) return { mode: 'multi', message: `נמצאו כמה פוסטרים לקבוצה ${requestedGroupCode}. בחרי poster_id מדויק מהאדמין.` };
-    return { mode: 'new' };
+    return { mode: 'new_group' };
   } catch (error) {
     return { mode: 'error', message: 'טעינת הפוסטר מהשרת נכשלה.' };
   }
@@ -346,6 +370,7 @@ function hydrateStateFromSubmission(submission) {
   state.sharedVisualPrompt = migrateSharedVisualPrompt(split);
   state.slotImages = { ...(posterData.slotImages || {}) };
   if (submission?.id) localStorage.setItem(SCOPED_SUBMISSION_ID_KEY, submission.id);
+  console.info('[split-flow] hydrated from Supabase', submission?.id || null);
   saveProject({ ...(loadProject(schoolSlug) || {}), ...posterData, submissionId: submission?.id || null, pitch_group_code: requestedGroupCode || posterData.pitch_group_code || null });
 }
 
@@ -399,6 +424,7 @@ function hydrateStateFromStorage() {
     state.slotUploadStatus[slotKey] = state.slotImages[slotKey] ? 'done' : 'empty';
   });
   if (stored.step) state.step = stored.step;
+  console.info('[split-flow] hydrated from localStorage');
 }
 
 function splitStudentNames(rawNames) {
@@ -1180,14 +1206,6 @@ function seedPosterBuilderState() {
   const project = buildCurrentPosterProject();
   saveProject(project);
 }
-
-const SUBMISSION_ID_KEY = `poster_submission_id:${schoolSlug}:${productType}`;
-const SCOPED_SUBMISSION_ID_KEY = requestedPosterId
-  ? `poster_submission_id:${schoolSlug}:poster:${requestedPosterId}`
-  : requestedGroupCode
-    ? `poster_submission_id:${schoolSlug}:group:${requestedGroupCode}`
-    : SUBMISSION_ID_KEY;
-const CONTEXT_STORAGE_PREFIX = `poster_submission_id:${schoolSlug}:`;
 
 function getScopedContextStorageKey() {
   if (requestedPosterId) return `poster_ctx:${schoolSlug}:poster:${requestedPosterId}`;
@@ -2052,18 +2070,29 @@ function wireEvents() {
 
 resetActivePosterState();
 initializeFreshStartIfRequested();
-const resolvedSubmission = await resolveSubmissionFromParams();
+const resolvedSubmission = await resolveExistingSubmission();
+let hydratedFromSubmission = false;
 if (resolvedSubmission.mode === 'single') {
   clearLocalPosterContextKeys();
   const scopedContextKey = getScopedContextStorageKey();
   if (scopedContextKey) localStorage.setItem(scopedContextKey, Date.now().toString());
   hydrateStateFromSubmission(resolvedSubmission.submission);
-} else if (resolvedSubmission.mode === 'multi' || resolvedSubmission.mode === 'conflict' || resolvedSubmission.mode === 'error') {
+  hydratedFromSubmission = true;
+} else if (resolvedSubmission.mode === 'multi' || resolvedSubmission.mode === 'conflict' || resolvedSubmission.mode === 'error' || resolvedSubmission.mode === 'not_found' || resolvedSubmission.mode === 'invalid') {
   state.submitStatus = 'error';
   state.submitMessage = resolvedSubmission.message;
 }
 initializeFreshStartIfRequested();
-if (!hasScopedPosterContext || resolvedSubmission.mode === 'none') hydrateStateFromStorage();
+if (!hydratedFromSubmission && (!hasScopedPosterContext || resolvedSubmission.mode === 'none')) {
+  hydrateStateFromStorage();
+}
+if (!hydratedFromSubmission && resolvedSubmission.mode === 'new_group') {
+  console.info('[split-flow] started new for group with no submissions:', requestedGroupCode);
+}
+if (!hydratedFromSubmission && requestedPosterId) {
+  state.submitStatus = 'error';
+  state.submitMessage = state.submitMessage || `לא ניתן לטעון את הפוסטר poster_id=${requestedPosterId}.`;
+}
 const resetMsg = pageParams.get('local_reset_msg');
 if (resetMsg) {
   state.submitStatus = 'success';
