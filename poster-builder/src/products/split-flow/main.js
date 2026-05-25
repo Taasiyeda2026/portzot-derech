@@ -310,6 +310,28 @@ async function resolveSubmissionFromParams() {
   }
 }
 
+function resetActivePosterState() {
+  state.step = 1;
+  state.research = Object.fromEntries(activeQuestions.map(([key]) => [key, '']));
+  state.errors = {};
+  state.visibleErrors = [];
+  state.navErrorMessage = '';
+  state.sharedVisualPrompt = { ...SHARED_VISUAL_DEFAULTS };
+  state.physicalPrompt = {
+    main: { appearance: '', appearanceOther: '', highlight: [], highlightOther: '', material: '', materialOther: '', background: '', backgroundOther: '', description: '', mainMessage: '', angle: '', angleOther: '' },
+    usage: { user: '', userOther: '', peopleCount: '', peopleCountOther: '', location: '', locationOther: '', action: '', props: [], propsOther: '', highlight: [], highlightOther: '', takeaway: '', feeling: '', feelingOther: '' }
+  };
+  state.prototypeScreens = Array.from({ length: 3 }, (_, index) => ({ number: index + 1, type: '', shortName: '', view: '', action: '', components: [], componentsOther: '', emphasis: [], emphasisOther: '', viewerUnderstand: '', primaryFocus: '', secondaryElements: '' }));
+  state.prototypeFlow = { start: '', end: '', summary: '', hasBranch: '', branch: '' };
+  state.images = Array.from({ length: 3 }, (_, index) => ({ id: index + 1, screenRef: `${index + 1}`, emphasis: [], emphasisOther: '', takeaway: '' }));
+  state.design = { background: null, titleFont: AVAILABLE_FONTS[0]?.value || 'IBM Plex Sans Hebrew', titleColor: '#5E2750', textColor: '#1f2937', titleReadabilityEffect: 'none', shape: 20 };
+  state.slotImages = { visual_1: null, visual_2: null, visual_3: null };
+  state.slotUploadStatus = { visual_1: 'empty', visual_2: 'empty', visual_3: 'empty' };
+  state.pendingWarningStep = null;
+  state.submitStatus = 'idle';
+  state.submitMessage = '';
+}
+
 function hydrateStateFromSubmission(submission) {
   const posterData = submission?.poster_data || {};
   const split = posterData.splitFlowState || {};
@@ -322,7 +344,7 @@ function hydrateStateFromSubmission(submission) {
   if (Array.isArray(split.images)) state.images = state.images.map((image, idx) => ({ ...image, ...(split.images[idx] || {}) }));
   state.sharedVisualPrompt = migrateSharedVisualPrompt(split);
   state.slotImages = { ...(posterData.slotImages || {}) };
-  if (submission?.id) localStorage.setItem(SUBMISSION_ID_KEY, submission.id);
+  if (submission?.id) localStorage.setItem(SCOPED_SUBMISSION_ID_KEY, submission.id);
   saveProject({ ...(loadProject(schoolSlug) || {}), ...posterData, submissionId: submission?.id || null, pitch_group_code: requestedGroupCode || posterData.pitch_group_code || null });
 }
 
@@ -1159,6 +1181,10 @@ function seedPosterBuilderState() {
 }
 
 const SUBMISSION_ID_KEY = `poster_submission_id:${schoolSlug}:${productType}`;
+const URL_SCOPE_KEY = requestedPosterId ? `poster:${requestedPosterId}` : (requestedGroupCode ? `group:${requestedGroupCode}` : `school:${schoolSlug}`);
+const LEGACY_SCOPE_KEYS = [SUBMISSION_ID_KEY, `poster_submission_id:${schoolSlug}`];
+const SCOPED_SUBMISSION_ID_KEY = `poster_submission_id:${schoolSlug}:${productType}:${URL_SCOPE_KEY}`;
+
 
 function removeFreshParamsFromUrl() {
   if (!freshStartRequested) return;
@@ -1187,6 +1213,7 @@ function initializeFreshStartIfRequested() {
   delete nextProject.submissionId;
   saveProject(nextProject);
   localStorage.removeItem(SUBMISSION_ID_KEY);
+  localStorage.removeItem(SCOPED_SUBMISSION_ID_KEY);
   state.step = 1;
   removeFreshParamsFromUrl();
 }
@@ -1199,21 +1226,21 @@ async function submitPoster() {
 
   try {
     const baseProject = buildCurrentPosterProject();
-    const existingIdFromKey = localStorage.getItem(SUBMISSION_ID_KEY);
+    const existingIdFromKey = localStorage.getItem(SCOPED_SUBMISSION_ID_KEY) || localStorage.getItem(SUBMISSION_ID_KEY);
     const existingIdFromProject = baseProject?.submissionId || loadProject(schoolSlug)?.submissionId || null;
     const existingId = existingIdFromKey || existingIdFromProject;
 
     if (existingId) {
       const projectForUpdate = { ...baseProject, submissionId: existingId };
       await updatePosterSubmission(existingId, projectForUpdate);
-      localStorage.setItem(SUBMISSION_ID_KEY, existingId);
+      localStorage.setItem(SCOPED_SUBMISSION_ID_KEY, existingId);
       saveProject(projectForUpdate);
       state.submitStatus = 'success';
       state.submitMessage = 'הפוסטר עודכן בהצלחה.';
     } else {
       const newId = await createPosterSubmission(baseProject);
       const projectForCreate = newId ? { ...baseProject, submissionId: newId } : baseProject;
-      if (newId) localStorage.setItem(SUBMISSION_ID_KEY, newId);
+      if (newId) localStorage.setItem(SCOPED_SUBMISSION_ID_KEY, newId);
       saveProject(projectForCreate);
       state.submitStatus = 'success';
       state.submitMessage = 'הפוסטר נשלח בהצלחה.';
@@ -1981,13 +2008,26 @@ function wireEvents() {
   });
 }
 
-const resolvedSubmission = await resolveSubmissionFromParams();
-if (resolvedSubmission.mode === 'single') {
-  hydrateStateFromSubmission(resolvedSubmission.submission);
-} else if (resolvedSubmission.mode === 'multi' || resolvedSubmission.mode === 'conflict' || resolvedSubmission.mode === 'error') {
-  state.submitStatus = 'error';
-  state.submitMessage = resolvedSubmission.message;
-}
+resetActivePosterState();
 initializeFreshStartIfRequested();
-hydrateStateFromStorage();
+const resolvedSubmission = await resolveSubmissionFromParams();
+if (requestedPosterId) {
+  if (resolvedSubmission.mode === 'single') {
+    hydrateStateFromSubmission(resolvedSubmission.submission);
+  } else if (resolvedSubmission.mode === 'conflict' || resolvedSubmission.mode === 'error' || resolvedSubmission.mode === 'none') {
+    state.submitStatus = 'error';
+    state.submitMessage = resolvedSubmission.message || 'לא נמצא פוסטר עבור poster_id המבוקש.';
+  }
+} else {
+  if (resolvedSubmission.mode === 'single') {
+    hydrateStateFromSubmission(resolvedSubmission.submission);
+  } else {
+    hydrateStateFromStorage();
+  }
+  if (resolvedSubmission.mode === 'multi' || resolvedSubmission.mode === 'conflict' || resolvedSubmission.mode === 'error') {
+    state.submitStatus = 'error';
+    state.submitMessage = resolvedSubmission.message;
+  }
+}
+LEGACY_SCOPE_KEYS.forEach((key) => localStorage.removeItem(key));
 render();
