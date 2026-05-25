@@ -1178,14 +1178,25 @@
           return [
             "שלום, אני " + firstName + ", והיום אציג את המיזם: " + project + ".",
             "התהליך שלי התחיל מבעיה שזיהיתי:\n" + fill("problem") + ".",
-            "שמתי לב שהבעיה מופיעה בעיקר אצל " + fieldText("audience", { stripFinalPunctuation: true }) + ". היא מתרחשת בעיקר " + fieldText("situation", { stripFinalPunctuation: true }) + ".",
-            "בשלב הראשון ניסיתי להבין את הנושא בצורה מדויקת יותר: מי פוגש אותו, מה קשה לו, מתי זה קורה, ומה יכול להפוך את ההתמודדות לפשוטה, ברורה או נוחה יותר. מתוך זה הבנתי שהקושי המרכזי הוא " + fieldText("difficulty", { stripFinalPunctuation: true }) + ".",
-            "הצורך המרכזי שעלה הוא פתרון שנותן מענה ל־" + fill("main_need") + ". לכן היה לי חשוב לפתח פתרון שיהיה " + fill("quality_1") + ", " + fill("quality_2") + " ו־" + fill("quality_3") + ".",
+            "שמתי לב שהבעיה מופיעה בעיקר אצל " + fieldText("audience", { stripFinalPunctuation: true }) + ".",
+            "המצב הזה קורה בעיקר " + fieldText("situation", { stripFinalPunctuation: true }) + ".",
+            "בשלב הראשון ניסיתי להבין את הבעיה בצורה מדויקת יותר: מי פוגש אותה, מתי זה קורה, מה הקושי המרכזי, ומה יכול להפוך את ההתמודדות איתה לפשוטה ונוחה יותר.",
+            "מתוך זה הבנתי שהקושי המרכזי הוא " + fieldText("difficulty", { stripFinalPunctuation: true }) + ".",
+            "הצורך המרכזי שעלה הוא " + fill("main_need") + ".",
+            "לכן היה לי חשוב לפתח פתרון שכולל:\n" + fill("quality_1") + "\n" + fill("quality_2") + "\n" + fill("quality_3") + ".",
             "אחרי שהבנתי למי אני מפתחת את המוצר ומה הצורך המרכזי, התחלתי לאפיין את הרעיון. חשבתי מה המוצר צריך לעשות, איך ישתמשו בו, ומה המשתמשים יקבלו ממנו בסוף.",
-            "כך הגעתי לרעיון שלי: " + fill("idea") + ". המוצר שפיתחתי אמור " + fill("product_action") + ".",
-            "כדי להפוך את הרעיון למשהו שאפשר לראות ולהבין, יצרתי אב־טיפוס ראשוני. בשלב האב־טיפוס: " + fieldText("prototype_description", { stripFinalPunctuation: true }) + ". באפיון שמתי דגש על " + fill("focus_1") + ", על " + fill("focus_2") + " ועל " + fill("focus_3") + ", כדי שהרעיון יהיה ברור גם למי שפוגש אותו בפעם הראשונה.",
-            "לאחר מכן הצגתי את האב־טיפוס וקיבלתי עליו משוב. מהמשוב הבנתי ש־" + fill("feedback") + ". בעקבות זה שיפרתי את " + fill("improvement") + ", כדי שהתוצר יהיה ברור יותר, נוח יותר ומתאים יותר לקהל היעד.",
-            "היום המוצר עובד כך: קודם " + fill("step_1") + ", אחר כך " + fill("step_2") + ", ובסוף " + fill("step_3") + ". מה שמייחד את המיזם הוא " + fieldText("tech_part", { stripFinalPunctuation: true }) + ", והיתרון המרכזי שהוא נותן לקהל היעד הוא " + fill("tech_value") + ". הערך המרכזי של המוצר הוא " + fill("main_value") + ". לסיכום, עברתי תהליך של זיהוי בעיה, הבנת קהל יעד, אפיון, אב־טיפוס, משוב ושיפור — ומתוכו הגעתי לפתרון שנותן מענה אמיתי לצורך אמיתי. תודה רבה."
+            "כך הגעתי לרעיון שלי:\n" + fill("idea") + ".",
+            fieldText("product_action", { stripFinalPunctuation: true }) + ".",
+            "כדי להפוך את הרעיון למשהו שאפשר לראות ולהבין, יצרתי אב־טיפוס ראשוני.",
+            "בשלב האב־טיפוס:\n" + fieldText("prototype_description", { stripFinalPunctuation: true }) + ".",
+            "באפיון שמתי דגש על:\n" + fill("focus_1") + "\n" + fill("focus_2") + "\n" + fill("focus_3") + ".",
+            "לאחר מכן הצגתי את האב־טיפוס וקיבלתי עליו משוב.",
+            "מהמשוב הבנתי:\n" + fill("feedback") + ".",
+            "בעקבות זאת:\n" + fill("improvement") + ".",
+            "היום המוצר עובד כך: קודם " + fill("step_1") + ", אחר כך " + fill("step_2") + ", ובסוף " + fill("step_3") + ".",
+            "מה שמייחד את המיזם הוא " + fieldText("tech_part", { stripFinalPunctuation: true }) + ".",
+            "הערך המרכזי של המוצר הוא " + fill("main_value") + ".",
+            "לסיכום, עברתי תהליך של זיהוי בעיה, הבנת קהל יעד, אפיון, אב־טיפוס, משוב ושיפור — ומתוכו הגעתי לפתרון שנותן מענה אמיתי לצורך אמיתי. תודה רבה."
           ].map(function (text, index) {
             return { id: "unit-" + index, label: "יחידה " + (index + 1), weight: pitchUnitWeights[index] || 1, text: ensureSentence(text) };
           });
@@ -1194,14 +1205,25 @@
         return [
           "שלום, אנחנו " + allNames + ", והיום נציג את המיזם: " + project + ".",
           "התהליך שלנו התחיל מבעיה שזיהינו:\n" + fill("problem") + ".",
-          "שמנו לב שהבעיה מופיעה בעיקר אצל " + fieldText("audience", { stripFinalPunctuation: true }) + ". היא מתרחשת בעיקר " + fieldText("situation", { stripFinalPunctuation: true }) + ".",
-          "בשלב הראשון ניסינו להבין את הנושא בצורה מדויקת יותר: מי פוגש אותו, מה קשה לו, מתי זה קורה, ומה יכול להפוך את ההתמודדות לפשוטה, ברורה או נוחה יותר. מתוך זה הבנו שהקושי המרכזי הוא " + fieldText("difficulty", { stripFinalPunctuation: true }) + ".",
-          "הצורך המרכזי שעלה הוא פתרון שנותן מענה ל־" + fill("main_need") + ". לכן היה לנו חשוב לפתח פתרון שיהיה " + fill("quality_1") + ", " + fill("quality_2") + " ו־" + fill("quality_3") + ".",
+          "שמנו לב שהבעיה מופיעה בעיקר אצל " + fieldText("audience", { stripFinalPunctuation: true }) + ".",
+          "המצב הזה קורה בעיקר " + fieldText("situation", { stripFinalPunctuation: true }) + ".",
+          "בשלב הראשון ניסינו להבין את הבעיה בצורה מדויקת יותר: מי פוגש אותה, מתי זה קורה, מה הקושי המרכזי, ומה יכול להפוך את ההתמודדות איתה לפשוטה ונוחה יותר.",
+          "מתוך זה הבנו שהקושי המרכזי הוא " + fieldText("difficulty", { stripFinalPunctuation: true }) + ".",
+          "הצורך המרכזי שעלה הוא " + fill("main_need") + ".",
+          "לכן היה לנו חשוב לפתח פתרון שכולל:\n" + fill("quality_1") + "\n" + fill("quality_2") + "\n" + fill("quality_3") + ".",
           "אחרי שהבנו למי אנחנו מפתחות את המוצר ומה הצורך המרכזי, התחלנו לאפיין את הרעיון. חשבנו מה המוצר צריך לעשות, איך ישתמשו בו, ומה המשתמשים יקבלו ממנו בסוף.",
-          "כך הגענו לרעיון שלנו: " + fill("idea") + ". המוצר שפיתחנו אמור " + fill("product_action") + ".",
-          "כדי להפוך את הרעיון למשהו שאפשר לראות ולהבין, יצרנו אב־טיפוס ראשוני. בשלב האב־טיפוס: " + fieldText("prototype_description", { stripFinalPunctuation: true }) + ". באפיון שמנו דגש על " + fill("focus_1") + ", על " + fill("focus_2") + " ועל " + fill("focus_3") + ", כדי שהרעיון יהיה ברור גם למי שפוגש אותו בפעם הראשונה.",
-          "לאחר מכן הצגנו את האב־טיפוס וקיבלנו עליו משוב. מהמשוב הבנו ש־" + fill("feedback") + ". בעקבות זה שיפרנו את " + fill("improvement") + ", כדי שהתוצר יהיה ברור יותר, נוח יותר ומתאים יותר לקהל היעד.",
-          "היום המוצר עובד כך: קודם " + fill("step_1") + ", אחר כך " + fill("step_2") + ", ובסוף " + fill("step_3") + ". מה שמייחד את המיזם הוא " + fieldText("tech_part", { stripFinalPunctuation: true }) + ", והיתרון המרכזי שהוא נותן לקהל היעד הוא " + fill("tech_value") + ". הערך המרכזי של המוצר הוא " + fill("main_value") + ". לסיכום, עברנו תהליך של זיהוי בעיה, הבנת קהל יעד, אפיון, אב־טיפוס, משוב ושיפור — ומתוכו הגענו לפתרון שנותן מענה אמיתי לצורך אמיתי. תודה רבה."
+          "כך הגענו לרעיון שלנו:\n" + fill("idea") + ".",
+          fieldText("product_action", { stripFinalPunctuation: true }) + ".",
+          "כדי להפוך את הרעיון למשהו שאפשר לראות ולהבין, יצרנו אב־טיפוס ראשוני.",
+          "בשלב האב־טיפוס:\n" + fieldText("prototype_description", { stripFinalPunctuation: true }) + ".",
+          "באפיון שמנו דגש על:\n" + fill("focus_1") + "\n" + fill("focus_2") + "\n" + fill("focus_3") + ".",
+          "לאחר מכן הצגנו את האב־טיפוס וקיבלנו עליו משוב.",
+          "מהמשוב הבנו:\n" + fill("feedback") + ".",
+          "בעקבות זאת:\n" + fill("improvement") + ".",
+          "היום המוצר עובד כך: קודם " + fill("step_1") + ", אחר כך " + fill("step_2") + ", ובסוף " + fill("step_3") + ".",
+          "מה שמייחד את המיזם הוא " + fieldText("tech_part", { stripFinalPunctuation: true }) + ".",
+          "הערך המרכזי של המוצר הוא " + fill("main_value") + ".",
+          "לסיכום, עברנו תהליך של זיהוי בעיה, הבנת קהל יעד, אפיון, אב־טיפוס, משוב ושיפור — ומתוכו הגענו לפתרון שנותן מענה אמיתי לצורך אמיתי. תודה רבה."
         ].map(function (text, index) {
           return { id: "unit-" + index, label: "יחידה " + (index + 1), weight: pitchUnitWeights[index] || 1, text: ensureSentence(text) };
         });
