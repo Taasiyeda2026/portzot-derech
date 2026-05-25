@@ -813,7 +813,7 @@
         <span class="step-number">2</span>
         <div>
           <h2 id="pitch-data-title">שאלות קצרות לבניית הפיץ׳</h2>
-          <p>ענו במשפט קצר. הפיץ׳ יבנה מהתשובות האלה אוטומטית.</p>
+          <p>ענו במשפט קצר. לאחר מכן תוכלו ליצור פרומפט ל־AI ולהמשיך לפי הזרימה החדשה.</p>
         </div>
       </div>
       <div class="grid">
@@ -908,73 +908,52 @@
       </div>
     </section>
 
-    <section class="section" aria-labelledby="create-pitch-title">
+    <section class="section" aria-labelledby="ai-pitch-title">
       <div class="section-title">
         <span class="step-number">3</span>
         <div>
-          <h2 id="create-pitch-title">הפיץ׳ המסכם</h2>
-          <p>הפיץ׳ נבנה מכל התשובות. לחצי על "רענון" לאחר שינוי. אפשר לערוך ידנית.</p>
-        </div>
-      </div>
-      <div class="grid">
-        <div class="actions">
-          <button class="btn" type="button" id="generatePitch">רענון הפיץ׳</button>
-        </div>
-        <div class="field output-block">
-          <span class="auto-badge" aria-label="תוכן שנוצר אוטומטית">✦ נוצר אוטומטית — אפשר לערוך</span>
-          <label for="fullPitch">הפיץ׳ המלא</label>
-          <textarea id="fullPitch" class="large-textarea auto-filled" data-save></textarea>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" aria-labelledby="ai-pitch-title">
-      <div class="section-title">
-        <span class="step-number">4</span>
-        <div>
-          <h2 id="ai-pitch-title">חלוקת הפיץ׳ בעזרת AI</h2>
-          <p>צרו פרומפט, שלחו ל-ChatGPT, הדביקו את התוצאה וקבלו מסמך פיץ׳ מעוצב ומחולק למציגות.</p>
+          <h2 id="ai-pitch-title">יצירת פרומפט ל־AI</h2>
+          <p>לאחר מילוי השאלות, ניתן ליצור פרומפט מסודר ל־AI שיבנה פיץ׳ מחולק, מתוקן וברור להצגה.</p>
         </div>
       </div>
 
-      <!-- שלב 1: יצירת פרומפט -->
       <div class="ai-step">
-        <div class="ai-step-header">
-          <span class="ai-step-num">שלב 1</span>
-          <span class="ai-step-label">יצירת פרומפט ל-AI</span>
-        </div>
         <div class="actions">
-          <button class="btn" type="button" id="generateAIPrompt">יצירת פרומפט לחלוקת הפיץ׳</button>
+          <button class="btn" type="button" id="generateAIPrompt">יצירת פרומפט</button>
+          <p id="copyStatusMessage" class="note" style="display:none; flex-basis:100%"></p>
         </div>
-        <div id="promptContainer" style="display:none; margin-top:0.75rem">
-          <div class="field">
-            <label for="aiPromptOutput">הפרומפט ל-AI</label>
-            <textarea id="aiPromptOutput" class="large-textarea auto-filled" readonly style="min-height:14rem"></textarea>
-          </div>
-          <div class="actions" style="margin-top:0.5rem; flex-wrap:wrap; gap:0.65rem; align-items:center">
-            <button class="btn secondary" type="button" id="copyAIPrompt">העתקת הפרומפט</button>
-            <span id="copySuccessMsg" class="copy-success" style="display:none">הועתק ✓</span>
-            <p class="note" style="flex-basis:100%">העתיקו את הפרומפט ל-ChatGPT, קבלו פיץ׳ מתוקן ומחולק, ולאחר מכן הדביקו את התוצאה בשלב הבא.</p>
+        <div id="aiToolsArea" style="display:none; margin-top:0.75rem">
+          <p class="note" style="margin-bottom:0.55rem">בחרו כלי, הדביקו את הפרומפט, והחזירו לכאן את הפיץ׳ שהתקבל.</p>
+          <div class="actions ai-tool-buttons" style="margin-top:0.3rem">
+            <a class="btn secondary ai-tool-btn" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">פתיחה ב־ChatGPT</a>
+            <a class="btn secondary ai-tool-btn" href="https://claude.ai/" target="_blank" rel="noopener noreferrer">פתיחה ב־Claude</a>
+            <a class="btn secondary ai-tool-btn" href="https://www.google.com/" target="_blank" rel="noopener noreferrer">חיפוש בגוגל</a>
           </div>
         </div>
       </div>
 
-      <!-- שלב 2: הדבקת פיץ׳ מתוקן -->
       <div class="ai-step">
         <div class="ai-step-header">
-          <span class="ai-step-num">שלב 2</span>
-          <span class="ai-step-label">הדבקת הפיץ׳ המתוקן מה-AI</span>
+          <span class="ai-step-num">המשך</span>
+          <span class="ai-step-label">הדבקת הפיץ׳ מה־AI</span>
         </div>
-        <div class="field">
-          <label for="aiPitchInput">הדבקת הפיץ׳ המתוקן מה-AI</label>
-          <textarea id="aiPitchInput" class="large-textarea" placeholder="הדביקי כאן את הפיץ׳ שקיבלת מה-AI..." style="min-height:12rem"></textarea>
+        <p class="ai-hint">לאחר קבלת הפיץ׳ מה־AI, הדביקו אותו כאן כדי ליצור מסמך פיץ׳ מסודר.</p>
+        <div class="field" style="margin-top:0.45rem">
+          <label for="fullPitch">הדבקת הפיץ׳ מה־AI</label>
+          <textarea id="fullPitch" class="large-textarea" data-save placeholder="הדביקו כאן את הפיץ׳ שקיבלתן מה־AI..." style="min-height:12rem"></textarea>
         </div>
         <div class="actions" style="margin-top:0.55rem">
-          <button class="btn" type="button" id="renderAIPitch">יצירת מסך פיץ׳ מעוצב</button>
+          <button class="btn" type="button" id="renderAIPitch">יצירת מסמך פיץ׳</button>
         </div>
       </div>
 
-      <!-- שלב 3: תצוגת פיץ׳ מחולקת למציגות -->
+      <div id="aiPromptFallback" style="display:none; margin-top:0.75rem">
+        <div class="field">
+          <label for="aiPromptOutput">העתקה ידנית (רק במקרה של כשל)</label>
+          <textarea id="aiPromptOutput" class="large-textarea auto-filled" readonly style="min-height:10rem"></textarea>
+        </div>
+      </div>
+
       <div id="aiPitchDisplay" style="display:none">
         <div class="ai-step">
           <div class="ai-step-header">
@@ -1569,7 +1548,7 @@
           html += '<div class="pd-pitch-card">';
           html += '<div class="pd-pitch-text" style="color:#6b7280;text-align:center;padding:8mm 0">';
           html += 'כדי לייצר PDF מעוצב יש להשלים את שלב 4:\n';
-          html += 'יצירת פרומפט ← שליחה ל-AI ← הדבקת תוצאה ← יצירת מסך פיץ׳ מעוצב.';
+          html += 'יצירת פרומפט ← שליחה ל-AI ← הדבקת תוצאה ← יצירת מסמך פיץ׳.';
           html += '</div>';
           html += '</div>';
         }
@@ -1741,7 +1720,7 @@
         var fp = document.getElementById("fullPitch"); if (fp) fp.value = "";
         var ep = document.getElementById("elevatorPitch"); if (ep) ep.value = "";
         renderPresenterInputs({});
-        updatePitchPreview(); renderRoles(); buildPrintDocument(); saveAll();
+        renderRoles(); buildPrintDocument(); saveAll();
         setAdminStatus("הקבוצה נטענה בהצלחה כברירת מחדל למציגה אחת");
       }
 
@@ -1775,47 +1754,48 @@
       }
 
       function attachEvents() {
-        var generatePitchBtn = document.getElementById("generatePitch");
-        var generateAIPromptBtn = document.getElementById("generateAIPrompt");
-        var copyAIPromptBtn = document.getElementById("copyAIPrompt");
-        var renderAIPitchBtn = document.getElementById("renderAIPitch");
+                var generateAIPromptBtn = document.getElementById("generateAIPrompt");
+                var renderAIPitchBtn = document.getElementById("renderAIPitch");
         var printBtn = document.getElementById("printPage");
         var presenterCount = document.getElementById("presenterCount");
         var startTimerBtn = document.getElementById("startTimer");
         var resetTimerBtn = document.getElementById("resetTimer");
 
-        if (generatePitchBtn) {
-          generatePitchBtn.addEventListener("click", function () {
-            updatePitchPreview();
-            saveAll();
-          });
-        }
-
         if (generateAIPromptBtn) {
           generateAIPromptBtn.addEventListener("click", function () {
             var promptText = generateAIPromptText();
-            var outputEl = document.getElementById("aiPromptOutput");
-            if (outputEl) outputEl.value = promptText;
-            var container = document.getElementById("promptContainer");
-            if (container) container.style.display = "block";
-            if (outputEl) setTimeout(function () { outputEl.scrollIntoView({ behavior: "smooth", block: "nearest" }); }, 60);
-          });
-        }
-
-        if (copyAIPromptBtn) {
-          copyAIPromptBtn.addEventListener("click", function () {
-            var outputEl = document.getElementById("aiPromptOutput");
-            var successMsg = document.getElementById("copySuccessMsg");
-            if (!outputEl || !outputEl.value) return;
-            var copyFn = function () {
-              if (successMsg) { successMsg.style.display = "inline"; setTimeout(function () { successMsg.style.display = "none"; }, 2200); }
-            };
+            var statusEl = document.getElementById("copyStatusMessage");
+            var toolsArea = document.getElementById("aiToolsArea");
+            var fallbackArea = document.getElementById("aiPromptFallback");
+            var fallbackOutput = document.getElementById("aiPromptOutput");
+            if (statusEl) statusEl.style.display = "none";
+            if (fallbackArea) fallbackArea.style.display = "none";
             if (navigator.clipboard && navigator.clipboard.writeText) {
-              navigator.clipboard.writeText(outputEl.value).then(copyFn).catch(function () {
-                outputEl.select(); document.execCommand("copy"); copyFn();
+              navigator.clipboard.writeText(promptText).then(function () {
+                if (statusEl) {
+                  statusEl.textContent = "הפרומפט הועתק. עכשיו אפשר לפתוח כלי AI, להדביק את הפרומפט ולקבל פיץ׳ מחולק ומתוקן.";
+                  statusEl.style.display = "block";
+                }
+                if (toolsArea) toolsArea.style.display = "block";
+              }).catch(function () {
+                if (statusEl) {
+                  statusEl.textContent = "לא הצלחנו להעתיק אוטומטית. נסו שוב או בדקו הרשאות דפדפן.";
+                  statusEl.style.display = "block";
+                }
+                if (fallbackArea && fallbackOutput) {
+                  fallbackOutput.value = promptText;
+                  fallbackArea.style.display = "block";
+                }
               });
             } else {
-              outputEl.select(); document.execCommand("copy"); copyFn();
+              if (statusEl) {
+                statusEl.textContent = "לא הצלחנו להעתיק אוטומטית. נסו שוב או בדקו הרשאות דפדפן.";
+                statusEl.style.display = "block";
+              }
+              if (fallbackArea && fallbackOutput) {
+                fallbackOutput.value = promptText;
+                fallbackArea.style.display = "block";
+              }
             }
           });
         }
@@ -1836,7 +1816,6 @@
         if (presenterCount) {
           presenterCount.addEventListener("change", function () {
             renderPresenterInputs(readSavedData());
-            updatePitchPreview();
             buildPrintDocument();
             saveAll();
           });
@@ -1848,7 +1827,6 @@
         getSaveFields().forEach(function (field) {
           field.addEventListener("input", function () {
             if (field.id !== "fullPitch" && field.id !== "elevatorPitch") {
-              updatePitchPreview();
             } else {
               renderRoles();
               buildPrintDocument();
@@ -1858,7 +1836,6 @@
 
           field.addEventListener("change", function () {
             if (field.id !== "fullPitch" && field.id !== "elevatorPitch") {
-              updatePitchPreview();
             } else {
               renderRoles();
               buildPrintDocument();
@@ -1939,8 +1916,7 @@
                 if (!rows.length || !rows[0].id) throw new Error("מבנה קובץ לא תקין");
                 localStorage.setItem(QUESTIONS_KEY, JSON.stringify(rows));
                 applyQuestionSettings(rows);
-                updatePitchPreview();
-                setAdminStatus("נוסחי השאלות עודכנו. זה לא משנה את נתוני הקבוצות.");
+                  setAdminStatus("נוסחי השאלות עודכנו. זה לא משנה את נתוני הקבוצות.");
               } catch (err) {
                 setAdminStatus("הקובץ לא תואם לטמפלייט: " + err.message);
               }
@@ -2171,9 +2147,9 @@
       }
 
       function renderAIPitchCards() {
-        var rawText = document.getElementById("aiPitchInput");
+        var rawText = document.getElementById("fullPitch");
         if (!rawText || !rawText.value.trim()) {
-          alert("יש להדביק את הפיץ׳ מה-AI בשלב 2 לפני יצירת המסך המעוצב.");
+          alert("יש להדביק את הפיץ׳ מה-AI לפני יצירת מסמך הפיץ׳.");
           return;
         }
         var text = rawText.value.trim();
