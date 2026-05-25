@@ -1247,19 +1247,6 @@ function resetLocalWorkAndReload() {
   window.location.href = `${nextUrl.pathname}${nextUrl.search}${nextUrl.hash}`;
 }
 
-function resetLocalWorkAndReload() {
-  clearPosterLocalWorkData();
-  const nextUrl = new URL(window.location.href);
-  nextUrl.searchParams.delete('fresh');
-  nextUrl.searchParams.delete('start');
-  const hasContext = requestedPosterId || requestedGroupCode;
-  const msg = hasContext
-    ? 'הנתונים המקומיים נוקו. הנתונים השמורים של הקבוצה נטענו מחדש.'
-    : 'הנתונים המקומיים נוקו.';
-  nextUrl.searchParams.set('local_reset_msg', msg);
-  window.location.href = `${nextUrl.pathname}${nextUrl.search}${nextUrl.hash}`;
-}
-
 async function submitPoster() {
   if (state.submitStatus === 'sending') return;
   state.submitStatus = 'sending';
