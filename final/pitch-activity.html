@@ -979,13 +979,63 @@
 
       function cleanFieldText(text) {
         return String(text || "")
+          .replace(/\r\n?/g, "\n")
           .replace(/[ \t]+/g, " ")
-          .replace(/\s*\.\s*\./g, ".")
+          .replace(/[ \t]*\n[ \t]*/g, "\n")
+          .replace(/\n{3,}/g, "\n\n")
+          .replace(/\.\s*\./g, ".")
+          .replace(/,\s*,+/g, ",")
+          .replace(/\.\s*,+/g, ".")
+          .replace(/,\s*\.+/g, ".")
+          .replace(/:\s*[.,:]+/g, ":")
+          .replace(/([.,:])\1+/g, "$1")
+          .replace(/\s+([.,:!?])/g, "$1")
           .replace(/\n{3,}/g, "\n\n")
           .trim();
       }
       function stripFinalPunctuation(text) {
-        return cleanFieldText(text).replace(/[.!?]+$/g, "").trim();
+        return cleanFieldText(text).replace(/[.,:;!?]+$/g, "").trim();
+      }
+      function normalizeField(id) {
+        return fieldText(id, { stripFinalPunctuation: true });
+      }
+      function startsWithHebrewSh(text) {
+        return /^\s*ש/.test(String(text || ""));
+      }
+      function prefixWithSh(text) {
+        var cleaned = stripFinalPunctuation(text);
+        if (!cleaned || cleaned === BLANK) return cleaned;
+        return startsWithHebrewSh(cleaned) ? cleaned : "ש" + cleaned;
+      }
+      function removeLeadingPhrases(text, phrases) {
+        var value = stripFinalPunctuation(text);
+        if (!value || value === BLANK) return value;
+        for (var i = 0; i < phrases.length; i += 1) {
+          var phrase = phrases[i];
+          var pattern = new RegExp("^\\s*" + phrase.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\s*", "i");
+          value = value.replace(pattern, "").trim();
+        }
+        return value || BLANK;
+      }
+      function normalizeFeedbackText(text) {
+        return removeLeadingPhrases(text, ["במשוב עלה ש", "במשוב עלה", "מהמשוב הבנו ש", "מהמשוב הבנתי ש"]);
+      }
+      function normalizeImprovementText(text) {
+        return removeLeadingPhrases(text, ["בעקבות זאת", "בעקבות המשוב"]);
+      }
+      function normalizeTechPartText(text) {
+        return removeLeadingPhrases(text, ["הייחודיות היא ש", "הייחודיות היא", "מה שמייחד את המיזם הוא"]);
+      }
+      function normalizeMainValueText(text) {
+        return removeLeadingPhrases(text, ["הערך המרכזי של המוצר הוא", "הערך המרכזי הוא", "הערך הוא"]);
+      }
+      function sameNormalizedText(a, b) {
+        return stripFinalPunctuation(a).toLowerCase() === stripFinalPunctuation(b).toLowerCase();
+      }
+      function focusMatchesQuality() {
+        return sameNormalizedText(getElementValue("focus_1"), getElementValue("quality_1")) &&
+          sameNormalizedText(getElementValue("focus_2"), getElementValue("quality_2")) &&
+          sameNormalizedText(getElementValue("focus_3"), getElementValue("quality_3"));
       }
       function ensureSentence(text) {
         var cleaned = cleanFieldText(text);
@@ -1173,29 +1223,48 @@
         var project = fill("project_name");
         var firstName = getSpeakerName(0);
         var allNames = getPresenterNames().join(", ");
+        var problem = normalizeField("problem");
+        var mainNeed = normalizeField("main_need");
+        var quality1 = normalizeField("quality_1");
+        var quality2 = normalizeField("quality_2");
+        var quality3 = normalizeField("quality_3");
+        var idea = normalizeField("idea");
+        var feedback = normalizeFeedbackText(getElementValue("feedback"));
+        var improvement = normalizeImprovementText(getElementValue("improvement"));
+        var step1 = normalizeField("step_1");
+        var step2 = normalizeField("step_2");
+        var step3 = normalizeField("step_3");
+        var techPart = normalizeTechPartText(getElementValue("tech_part"));
+        var mainValue = normalizeMainValueText(getElementValue("main_value"));
+        var focusBlockSingle = focusMatchesQuality()
+          ? "הדגשים האלה ליוו גם את שלב האפיון של האב־טיפוס."
+          : "באפיון שמתי דגש על:\n" + normalizeField("focus_1") + "\n" + normalizeField("focus_2") + "\n" + normalizeField("focus_3") + ".";
+        var focusBlockPlural = focusMatchesQuality()
+          ? "הדגשים האלה ליוו גם את שלב האפיון של האב־טיפוס."
+          : "באפיון שמנו דגש על:\n" + normalizeField("focus_1") + "\n" + normalizeField("focus_2") + "\n" + normalizeField("focus_3") + ".";
 
         if (isSingle) {
           return [
             "שלום, אני " + firstName + ", והיום אציג את המיזם: " + project + ".",
-            "התהליך שלי התחיל מבעיה שזיהיתי:\n" + fill("problem") + ".",
+            "התהליך שלי התחיל מבעיה שזיהיתי:\n" + problem + ".",
             "שמתי לב שהבעיה מופיעה בעיקר אצל " + fieldText("audience", { stripFinalPunctuation: true }) + ".",
             "המצב הזה קורה בעיקר " + fieldText("situation", { stripFinalPunctuation: true }) + ".",
             "בשלב הראשון ניסיתי להבין את הבעיה בצורה מדויקת יותר: מי פוגש אותה, מתי זה קורה, מה הקושי המרכזי, ומה יכול להפוך את ההתמודדות איתה לפשוטה ונוחה יותר.",
-            "מתוך זה הבנתי שהקושי המרכזי הוא " + fieldText("difficulty", { stripFinalPunctuation: true }) + ".",
-            "הצורך המרכזי שעלה הוא " + fill("main_need") + ".",
-            "לכן היה לי חשוב לפתח פתרון שכולל:\n" + fill("quality_1") + "\n" + fill("quality_2") + "\n" + fill("quality_3") + ".",
+            "מתוך זה הבנתי שהקושי המרכזי הוא " + prefixWithSh(getElementValue("difficulty")) + ".",
+            "הצורך המרכזי שעלה הוא " + mainNeed + ".",
+            "לכן היה לי חשוב לפתח פתרון שכולל:\n" + quality1 + "\n" + quality2 + "\n" + quality3 + ".",
             "אחרי שהבנתי למי אני מפתחת את המוצר ומה הצורך המרכזי, התחלתי לאפיין את הרעיון. חשבתי מה המוצר צריך לעשות, איך ישתמשו בו, ומה המשתמשים יקבלו ממנו בסוף.",
-            "כך הגעתי לרעיון שלי:\n" + fill("idea") + ".",
+            "כך הגעתי לרעיון שלי:\n" + idea + ".",
             fieldText("product_action", { stripFinalPunctuation: true }) + ".",
             "כדי להפוך את הרעיון למשהו שאפשר לראות ולהבין, יצרתי אב־טיפוס ראשוני.",
             "בשלב האב־טיפוס:\n" + fieldText("prototype_description", { stripFinalPunctuation: true }) + ".",
-            "באפיון שמתי דגש על:\n" + fill("focus_1") + "\n" + fill("focus_2") + "\n" + fill("focus_3") + ".",
+            focusBlockSingle,
             "לאחר מכן הצגתי את האב־טיפוס וקיבלתי עליו משוב.",
-            "מהמשוב הבנתי:\n" + fill("feedback") + ".",
-            "בעקבות זאת:\n" + fill("improvement") + ".",
-            "היום המוצר עובד כך: קודם " + fill("step_1") + ", אחר כך " + fill("step_2") + ", ובסוף " + fill("step_3") + ".",
-            "מה שמייחד את המיזם הוא " + fieldText("tech_part", { stripFinalPunctuation: true }) + ".",
-            "הערך המרכזי של המוצר הוא " + fill("main_value") + ".",
+            "מהמשוב הבנתי ש" + feedback + ".",
+            "בעקבות המשוב שיפרתי את המוצר: " + improvement + ".",
+            "היום המוצר עובד כך: קודם " + step1 + ", אחר כך " + step2 + ", ובסוף " + step3 + ".",
+            "מה שמייחד את המיזם הוא " + techPart + ".",
+            "הערך המרכזי של המוצר הוא " + mainValue + ".",
             "לסיכום, עברתי תהליך של זיהוי בעיה, הבנת קהל יעד, אפיון, אב־טיפוס, משוב ושיפור — ומתוכו הגעתי לפתרון שנותן מענה אמיתי לצורך אמיתי. תודה רבה."
           ].map(function (text, index) {
             return { id: "unit-" + index, label: "יחידה " + (index + 1), weight: pitchUnitWeights[index] || 1, text: ensureSentence(text) };
@@ -1204,25 +1273,25 @@
 
         return [
           "שלום, אנחנו " + allNames + ", והיום נציג את המיזם: " + project + ".",
-          "התהליך שלנו התחיל מבעיה שזיהינו:\n" + fill("problem") + ".",
+          "התהליך שלנו התחיל מבעיה שזיהינו:\n" + problem + ".",
           "שמנו לב שהבעיה מופיעה בעיקר אצל " + fieldText("audience", { stripFinalPunctuation: true }) + ".",
           "המצב הזה קורה בעיקר " + fieldText("situation", { stripFinalPunctuation: true }) + ".",
           "בשלב הראשון ניסינו להבין את הבעיה בצורה מדויקת יותר: מי פוגש אותה, מתי זה קורה, מה הקושי המרכזי, ומה יכול להפוך את ההתמודדות איתה לפשוטה ונוחה יותר.",
-          "מתוך זה הבנו שהקושי המרכזי הוא " + fieldText("difficulty", { stripFinalPunctuation: true }) + ".",
-          "הצורך המרכזי שעלה הוא " + fill("main_need") + ".",
-          "לכן היה לנו חשוב לפתח פתרון שכולל:\n" + fill("quality_1") + "\n" + fill("quality_2") + "\n" + fill("quality_3") + ".",
+          "מתוך זה הבנו שהקושי המרכזי הוא " + prefixWithSh(getElementValue("difficulty")) + ".",
+          "הצורך המרכזי שעלה הוא " + mainNeed + ".",
+          "לכן היה לנו חשוב לפתח פתרון שכולל:\n" + quality1 + "\n" + quality2 + "\n" + quality3 + ".",
           "אחרי שהבנו למי אנחנו מפתחות את המוצר ומה הצורך המרכזי, התחלנו לאפיין את הרעיון. חשבנו מה המוצר צריך לעשות, איך ישתמשו בו, ומה המשתמשים יקבלו ממנו בסוף.",
-          "כך הגענו לרעיון שלנו:\n" + fill("idea") + ".",
+          "כך הגענו לרעיון שלנו:\n" + idea + ".",
           fieldText("product_action", { stripFinalPunctuation: true }) + ".",
           "כדי להפוך את הרעיון למשהו שאפשר לראות ולהבין, יצרנו אב־טיפוס ראשוני.",
           "בשלב האב־טיפוס:\n" + fieldText("prototype_description", { stripFinalPunctuation: true }) + ".",
-          "באפיון שמנו דגש על:\n" + fill("focus_1") + "\n" + fill("focus_2") + "\n" + fill("focus_3") + ".",
+          focusBlockPlural,
           "לאחר מכן הצגנו את האב־טיפוס וקיבלנו עליו משוב.",
-          "מהמשוב הבנו:\n" + fill("feedback") + ".",
-          "בעקבות זאת:\n" + fill("improvement") + ".",
-          "היום המוצר עובד כך: קודם " + fill("step_1") + ", אחר כך " + fill("step_2") + ", ובסוף " + fill("step_3") + ".",
-          "מה שמייחד את המיזם הוא " + fieldText("tech_part", { stripFinalPunctuation: true }) + ".",
-          "הערך המרכזי של המוצר הוא " + fill("main_value") + ".",
+          "מהמשוב הבנו ש" + feedback + ".",
+          "בעקבות המשוב שיפרנו את המוצר: " + improvement + ".",
+          "היום המוצר עובד כך: קודם " + step1 + ", אחר כך " + step2 + ", ובסוף " + step3 + ".",
+          "מה שמייחד את המיזם הוא " + techPart + ".",
+          "הערך המרכזי של המוצר הוא " + mainValue + ".",
           "לסיכום, עברנו תהליך של זיהוי בעיה, הבנת קהל יעד, אפיון, אב־טיפוס, משוב ושיפור — ומתוכו הגענו לפתרון שנותן מענה אמיתי לצורך אמיתי. תודה רבה."
         ].map(function (text, index) {
           return { id: "unit-" + index, label: "יחידה " + (index + 1), weight: pitchUnitWeights[index] || 1, text: ensureSentence(text) };
