@@ -431,6 +431,25 @@
 
     .print-only { display: none; }
 
+    /* ── AI Pitch Section ── */
+    .ai-step { padding: 1rem; border: 1px solid rgba(139,92,246,.13); border-radius: 16px; background: rgba(245,243,255,.45); margin-bottom: .75rem; }
+    .ai-step-header { display: flex; align-items: center; gap: .65rem; margin-bottom: .75rem; }
+    .ai-step-num { display: inline-flex; align-items: center; padding: .24rem .8rem; border-radius: 999px; color: #fff; font-weight: 900; font-size: .8rem; background: linear-gradient(135deg, var(--pink), var(--purple)); white-space: nowrap; }
+    .ai-step-label { font-weight: 800; color: var(--ink); font-size: .97rem; }
+    .ai-hint { margin: .3rem 0 0; color: var(--muted); font-size: .88rem; line-height: 1.5; }
+    .pitch-cards-container { display: grid; gap: 1rem; }
+    .pitch-card { padding: 1.15rem 1.35rem; border: 1px solid rgba(139,92,246,.18); border-radius: 18px; background: #fff; box-shadow: 0 6px 20px rgba(88,28,135,.07); direction: rtl; text-align: right; }
+    .pitch-card-header { display: flex; align-items: center; gap: .65rem; margin-bottom: .8rem; padding-bottom: .6rem; border-bottom: 2px solid rgba(139,92,246,.14); }
+    .pitch-card-num { display: inline-grid; place-items: center; width: 2rem; height: 2rem; border-radius: 50%; background: linear-gradient(135deg, var(--pink), var(--purple)); color: #fff; font-weight: 900; font-size: .85rem; flex-shrink: 0; }
+    .pitch-card-name { font-size: 1.08rem; font-weight: 900; color: var(--purple-dark); }
+    .pitch-card-text { font-size: .98rem; line-height: 1.88; color: var(--text); white-space: pre-wrap; direction: rtl; text-align: right; margin: 0; }
+    .pitch-tips-card { padding: .9rem 1.1rem; border-radius: 14px; background: linear-gradient(135deg,rgba(236,72,153,.06),rgba(139,92,246,.06)); border: 1px solid rgba(236,72,153,.15); direction: rtl; text-align: right; margin-top: .5rem; }
+    .pitch-tips-title { font-weight: 900; color: var(--pink-dark); margin-bottom: .45rem; font-size: .95rem; }
+    .pitch-tips-list { margin: 0; padding-right: 1.2rem; font-size: .93rem; color: var(--text); line-height: 1.8; }
+    .pitch-display-title { font-size: 1.25rem; font-weight: 900; color: var(--ink); margin-bottom: .2rem; }
+    .pitch-display-meta { color: var(--muted); font-size: .9rem; margin-bottom: .9rem; }
+    .copy-success { color: #16a34a; font-size: .88rem; font-weight: 700; }
+
     @media (max-width: 720px) {
       .site-header { align-items: flex-start; }
       .brand span { display: none; }
@@ -695,6 +714,53 @@
         border-top: 1px solid rgba(139, 92, 246, 0.16);
         padding-top: 2.5mm;
       }
+
+      /* Print styles for AI pitch cards */
+      .pd-ai-cards { display: grid; gap: 4mm; }
+      .pd-ai-card {
+        padding: 4mm 5mm;
+        border-radius: 4mm;
+        background: rgba(255,255,255,0.92);
+        border: 1px solid rgba(139,92,246,0.18);
+        border-right: 4px solid #8b5cf6;
+        break-inside: avoid;
+        direction: rtl;
+        text-align: right;
+      }
+      .pd-ai-card-header {
+        display: flex;
+        align-items: center;
+        gap: 2.5mm;
+        margin-bottom: 2.5mm;
+        padding-bottom: 2mm;
+        border-bottom: 1px solid rgba(139,92,246,0.14);
+      }
+      .pd-ai-card-num {
+        display: inline-grid;
+        place-items: center;
+        width: 6mm;
+        height: 6mm;
+        border-radius: 50%;
+        background: linear-gradient(135deg,#ec4899,#8b5cf6);
+        color: #fff;
+        font-size: 7.5pt;
+        font-weight: 900;
+        flex-shrink: 0;
+      }
+      .pd-ai-card-name { color: #6d28d9; font-size: 10.5pt; font-weight: 900; }
+      .pd-ai-card-text { color: #111827; font-size: 10.2pt; line-height: 1.75; white-space: pre-wrap; word-break: break-word; }
+      .pd-ai-tips {
+        margin-top: 4mm;
+        padding: 3.5mm 4.5mm;
+        border-radius: 3.5mm;
+        background: rgba(245,243,255,0.85);
+        border: 1px solid rgba(139,92,246,0.18);
+        break-inside: avoid;
+        direction: rtl;
+        text-align: right;
+      }
+      .pd-ai-tips-label { color: #7c3aed; font-size: 9pt; font-weight: 900; margin-bottom: 1.5mm; }
+      .pd-ai-tips-text { color: #111827; font-size: 9.5pt; line-height: 1.65; white-space: pre-wrap; }
     }
   </style>
 </head>
@@ -862,22 +928,70 @@
       </div>
     </section>
 
-    <section class="section" aria-labelledby="roles-title">
+    <section class="section" aria-labelledby="ai-pitch-title">
       <div class="section-title">
         <span class="step-number">4</span>
         <div>
-          <h2 id="roles-title">חלוקת תפקידים</h2>
-          <p>הפיץ׳ מחולק כאן לחלקים ברורים לפי מספר המשתתפות ושמותיהן.</p>
+          <h2 id="ai-pitch-title">חלוקת הפיץ׳ בעזרת AI</h2>
+          <p>צרו פרומפט, שלחו ל-ChatGPT, הדביקו את התוצאה וקבלו מסמך פיץ׳ מעוצב ומחולק למציגות.</p>
         </div>
       </div>
-      <div id="roleList" class="role-list" aria-live="polite"></div>
+
+      <!-- שלב 1: יצירת פרומפט -->
+      <div class="ai-step">
+        <div class="ai-step-header">
+          <span class="ai-step-num">שלב 1</span>
+          <span class="ai-step-label">יצירת פרומפט ל-AI</span>
+        </div>
+        <div class="actions">
+          <button class="btn" type="button" id="generateAIPrompt">יצירת פרומפט לחלוקת הפיץ׳</button>
+        </div>
+        <div id="promptContainer" style="display:none; margin-top:0.75rem">
+          <div class="field">
+            <label for="aiPromptOutput">הפרומפט ל-AI</label>
+            <textarea id="aiPromptOutput" class="large-textarea auto-filled" readonly style="min-height:14rem"></textarea>
+          </div>
+          <div class="actions" style="margin-top:0.5rem; flex-wrap:wrap; gap:0.65rem; align-items:center">
+            <button class="btn secondary" type="button" id="copyAIPrompt">העתקת הפרומפט</button>
+            <span id="copySuccessMsg" class="copy-success" style="display:none">הועתק ✓</span>
+            <p class="note" style="flex-basis:100%">העתיקו את הפרומפט ל-ChatGPT, קבלו פיץ׳ מתוקן ומחולק, ולאחר מכן הדביקו את התוצאה בשלב הבא.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- שלב 2: הדבקת פיץ׳ מתוקן -->
+      <div class="ai-step">
+        <div class="ai-step-header">
+          <span class="ai-step-num">שלב 2</span>
+          <span class="ai-step-label">הדבקת הפיץ׳ המתוקן מה-AI</span>
+        </div>
+        <div class="field">
+          <label for="aiPitchInput">הדבקת הפיץ׳ המתוקן מה-AI</label>
+          <textarea id="aiPitchInput" class="large-textarea" placeholder="הדביקי כאן את הפיץ׳ שקיבלת מה-AI..." style="min-height:12rem"></textarea>
+        </div>
+        <div class="actions" style="margin-top:0.55rem">
+          <button class="btn" type="button" id="renderAIPitch">יצירת מסך פיץ׳ מעוצב</button>
+        </div>
+      </div>
+
+      <!-- שלב 3: תצוגת פיץ׳ מחולקת למציגות -->
+      <div id="aiPitchDisplay" style="display:none">
+        <div class="ai-step">
+          <div class="ai-step-header">
+            <span class="ai-step-num">שלב 3</span>
+            <span class="ai-step-label">פיץ׳ סופי להצגה</span>
+          </div>
+          <div id="aiPitchDisplayMeta" class="pitch-display-meta"></div>
+          <div id="aiPitchCards" class="pitch-cards-container" aria-live="polite"></div>
+        </div>
+      </div>
     </section>
 
     <section class="section" aria-labelledby="practice-title">
       <div class="section-title">
         <span class="step-number">5</span>
         <div>
-          <h2 id="practice-title">תרגול, נאום מעלית ובדיקת מוכנות</h2>
+          <h2 id="practice-title">תרגול ובדיקת מוכנות</h2>
           <p>סמנו יחד מה כבר מוכן לפני ההצגה.</p>
         </div>
       </div>
@@ -889,15 +1003,8 @@
         <li><label><input type="checkbox" id="checkRoles" data-save />כל דוברת יודעת מה היא אומרת</label></li>
         <li><label><input type="checkbox" id="checkPractice" data-save />תרגלנו בקול ועמדנו בזמן</label></li>
       </ul>
-      <div class="grid">
-        <div class="actions">
-          <button class="btn secondary" type="button" id="generateElevator">יצירת נאום מעלית</button>
-        </div>
-        <div class="field output-block">
-          <span class="auto-badge" aria-label="תוכן שנוצר אוטומטית">✦ נוצר אוטומטית — אפשר לערוך</span>
-          <label for="elevatorPitch">נאום המעלית</label>
-          <textarea id="elevatorPitch" class="medium-textarea auto-filled" data-save></textarea>
-        </div>
+      <div style="display:none" aria-hidden="true">
+        <textarea id="elevatorPitch" data-save></textarea>
       </div>
       <div class="timer no-print" aria-label="טיימר תרגול של שלוש דקות">
         <strong>טיימר תרגול:</strong>
@@ -937,8 +1044,10 @@
     (function () {
       "use strict";
 
-      var STORAGE_KEY = "portzot-derech-final-pitch-activity-v4";
-      var LEGACY_STORAGE_KEY = "portzot-derech-final-pitch-activity-v2";
+      var STORAGE_KEY = "portzot-derech-final-pitch-activity-v5";
+      var aiPitchCards = [];
+      var aiPitchTips = [];
+      var LEGACY_STORAGE_KEY = "portzot-derech-final-pitch-activity-v4";
       var QUESTIONS_KEY = "portzot-derech-final-pitch-questions-v1";
       var timerSeconds = 180;
       var timerId = null;
@@ -1413,13 +1522,9 @@
         var doc = document.getElementById("printDocument");
         if (!doc) return;
 
-        var count = getPresenterCount();
         var projectName = getElementValue("project_name") || "פיץ׳ סופי";
         var presenters = getPresenterNames().filter(function (name) { return name && !/^משתתפת \d+$/.test(name); });
-        var elevatorField = document.getElementById("elevatorPitch");
-        var elevatorText = cleanText(elevatorField && elevatorField.value ? elevatorField.value : "");
-        var assignment = buildAssignments();
-        var segments = assignment.units;
+        var count = getPresenterCount();
 
         var html = "";
         html += '<section class="print-sheet">';
@@ -1427,43 +1532,51 @@
         html += '<header class="pd-header">';
         html += '<img src="../icon/favicon.png" alt="פורצות דרך" />';
         html += '<div>';
-        html += '<div class="pd-header-brand">פורצות דרך — פיץ׳ סופי</div>';
+        html += '<div class="pd-header-brand">פורצות דרך — פיץ׳ סופי להצגה</div>';
         html += '<div class="pd-project-name">' + esc(projectName) + '</div>';
         if (presenters.length) {
-          html += '<div class="pd-meta-row"><span class="pd-chip">משתתפות: ' + esc(presenters.join(", ")) + '</span></div>';
+          html += '<div class="pd-meta-row">';
+          html += '<span class="pd-chip">משתתפות: ' + esc(presenters.join(", ")) + '</span>';
+          html += '<span class="pd-chip">מספר מציגות: ' + esc(String(count)) + '</span>';
+          html += '</div>';
         }
         html += '</div>';
         html += '</header>';
 
-        if (elevatorText) {
-          html += '<section class="pd-elevator">';
-          html += '<div class="pd-elevator-label">נאום מעלית</div>';
-          html += '<div class="pd-elevator-text">' + esc(elevatorText) + '</div>';
-          html += '</section>';
-        }
-
         html += '<section class="pd-section">';
-        html += '<div class="pd-section-title">הפיץ׳ הסופי — חלוקה לפי מציגות</div>';
-        html += '<div class="pd-roles">';
-        if (count === 1) {
-          html += '<article class="pd-role-item">';
-          html += '<div class="pd-role-name">' + esc(getSpeakerName(0)) + '</div>';
-          html += '<div class="pd-role-excerpt">' + esc(segments.map(function (u) { return u.text; }).join("\\n\\n")) + '</div>';
-          html += '</article>';
-        } else {
-          assignment.ranges.forEach(function (range, index) {
-            var roleText = segments.slice(range.start, range.end + 1).map(function (u) { return u.text; }).join("\\n\\n");
-            html += '<article class="pd-role-item">';
-            html += '<div class="pd-role-name">' + esc(getSpeakerName(index)) + '</div>';
-            html += '<div class="pd-role-excerpt">' + esc(roleText) + '</div>';
+        html += '<div class="pd-section-title">פיץ׳ סופי להצגה — מחולק למציגות</div>';
+
+        if (aiPitchCards && aiPitchCards.length) {
+          html += '<div class="pd-ai-cards">';
+          aiPitchCards.forEach(function (card) {
+            html += '<article class="pd-ai-card">';
+            html += '<div class="pd-ai-card-header">';
+            html += '<span class="pd-ai-card-num">' + esc(String(card.num)) + '</span>';
+            html += '<span class="pd-ai-card-name">' + esc(card.name) + '</span>';
+            html += '</div>';
+            html += '<div class="pd-ai-card-text">' + esc(card.text) + '</div>';
             html += '</article>';
           });
-        }
-        html += '</div>';
-        html += '</section>';
+          html += '</div>';
 
+          if (aiPitchTips && aiPitchTips.length) {
+            html += '<div class="pd-ai-tips">';
+            html += '<div class="pd-ai-tips-label">דגשים להצגה</div>';
+            html += '<div class="pd-ai-tips-text">' + esc(aiPitchTips.map(function (t) { return "• " + t; }).join("\n")) + '</div>';
+            html += '</div>';
+          }
+        } else {
+          html += '<div class="pd-pitch-card">';
+          html += '<div class="pd-pitch-text" style="color:#6b7280;text-align:center;padding:8mm 0">';
+          html += 'כדי לייצר PDF מעוצב יש להשלים את שלב 4:\n';
+          html += 'יצירת פרומפט ← שליחה ל-AI ← הדבקת תוצאה ← יצירת מסך פיץ׳ מעוצב.';
+          html += '</div>';
+          html += '</div>';
+        }
+
+        html += '</section>';
         html += '</div>';
-        html += '<footer class="pd-footer"><span>פורצות דרך</span><span>פיץ׳ סופי להדפסה</span></footer>';
+        html += '<footer class="pd-footer"><span>פורצות דרך</span><span>פיץ׳ סופי להצגה</span></footer>';
         html += '</section>';
 
         doc.innerHTML = html;
@@ -1663,7 +1776,9 @@
 
       function attachEvents() {
         var generatePitchBtn = document.getElementById("generatePitch");
-        var generateElevatorBtn = document.getElementById("generateElevator");
+        var generateAIPromptBtn = document.getElementById("generateAIPrompt");
+        var copyAIPromptBtn = document.getElementById("copyAIPrompt");
+        var renderAIPitchBtn = document.getElementById("renderAIPitch");
         var printBtn = document.getElementById("printPage");
         var presenterCount = document.getElementById("presenterCount");
         var startTimerBtn = document.getElementById("startTimer");
@@ -1676,12 +1791,38 @@
           });
         }
 
-        if (generateElevatorBtn) {
-          generateElevatorBtn.addEventListener("click", function () {
-            var output = document.getElementById("elevatorPitch");
-            if (output) output.value = buildElevatorPitch();
-            buildPrintDocument();
-            saveAll();
+        if (generateAIPromptBtn) {
+          generateAIPromptBtn.addEventListener("click", function () {
+            var promptText = generateAIPromptText();
+            var outputEl = document.getElementById("aiPromptOutput");
+            if (outputEl) outputEl.value = promptText;
+            var container = document.getElementById("promptContainer");
+            if (container) container.style.display = "block";
+            if (outputEl) setTimeout(function () { outputEl.scrollIntoView({ behavior: "smooth", block: "nearest" }); }, 60);
+          });
+        }
+
+        if (copyAIPromptBtn) {
+          copyAIPromptBtn.addEventListener("click", function () {
+            var outputEl = document.getElementById("aiPromptOutput");
+            var successMsg = document.getElementById("copySuccessMsg");
+            if (!outputEl || !outputEl.value) return;
+            var copyFn = function () {
+              if (successMsg) { successMsg.style.display = "inline"; setTimeout(function () { successMsg.style.display = "none"; }, 2200); }
+            };
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(outputEl.value).then(copyFn).catch(function () {
+                outputEl.select(); document.execCommand("copy"); copyFn();
+              });
+            } else {
+              outputEl.select(); document.execCommand("copy"); copyFn();
+            }
+          });
+        }
+
+        if (renderAIPitchBtn) {
+          renderAIPitchBtn.addEventListener("click", function () {
+            renderAIPitchCards();
           });
         }
 
@@ -1893,6 +2034,210 @@
           modal.classList.add("open");
         }
       });
+
+      function generateAIPromptText() {
+        var count = getPresenterCount();
+        var projectName = getElementValue("project_name") || "—";
+        var isSingle = count === 1;
+        var genderInstruction = isSingle
+          ? "כתבי את הפיץ׳ בגוף ראשון יחיד."
+          : "כתבי את הפיץ׳ בגוף ראשון רבים, וצרי מעבר טבעי בין מציגה למציגה.";
+
+        var speakersSection = "";
+        for (var i = 1; i <= count; i++) {
+          var spName = getElementValue("speaker_" + i) || ("משתתפת " + i);
+          speakersSection += "משתתפת " + i + ": " + spName + "\n";
+        }
+
+        var prompt =
+          "אנא כתבי פיץ׳ מקצועי בעברית עבור קבוצת נערות בתוכנית ׳פורצות דרך׳.\n\n" +
+          "━━━━━━━━━━━━━━━━━━━━━\n" +
+          "נתוני המיזם:\n" +
+          "━━━━━━━━━━━━━━━━━━━━━\n" +
+          "שם המיזם: " + projectName + "\n" +
+          "מספר מציגות: " + count + "\n" +
+          speakersSection + "\n" +
+          "בעיה שזוהתה: " + (getElementValue("problem") || "—") + "\n" +
+          "קהל יעד: " + (getElementValue("audience") || "—") + "\n" +
+          "סיטואציה שבה הבעיה מופיעה: " + (getElementValue("situation") || "—") + "\n" +
+          "מה קשה לקהל היעד: " + (getElementValue("difficulty") || "—") + "\n" +
+          "הצורך המרכזי: " + (getElementValue("main_need") || "—") + "\n" +
+          "תכונה 1 בפתרון: " + (getElementValue("quality_1") || "—") + "\n" +
+          "תכונה 2 בפתרון: " + (getElementValue("quality_2") || "—") + "\n" +
+          "תכונה 3 בפתרון: " + (getElementValue("quality_3") || "—") + "\n" +
+          "הרעיון שפותח: " + (getElementValue("idea") || "—") + "\n" +
+          "מה המוצר עושה: " + (getElementValue("product_action") || "—") + "\n" +
+          "תיאור האב-טיפוס: " + (getElementValue("prototype_description") || "—") + "\n" +
+          "דגש 1 באפיון: " + (getElementValue("focus_1") || "—") + "\n" +
+          "דגש 2 באפיון: " + (getElementValue("focus_2") || "—") + "\n" +
+          "דגש 3 באפיון: " + (getElementValue("focus_3") || "—") + "\n" +
+          "משוב על האב-טיפוס: " + (getElementValue("feedback") || "—") + "\n" +
+          "שיפורים שנעשו: " + (getElementValue("improvement") || "—") + "\n" +
+          "שלב שימוש ראשון: " + (getElementValue("step_1") || "—") + "\n" +
+          "שלב שימוש שני: " + (getElementValue("step_2") || "—") + "\n" +
+          "שלב שימוש שלישי: " + (getElementValue("step_3") || "—") + "\n" +
+          "ייחודיות המיזם: " + (getElementValue("tech_part") || "—") + "\n" +
+          "יתרון לקהל היעד: " + (getElementValue("tech_value") || "—") + "\n" +
+          "הערך המרכזי של המוצר: " + (getElementValue("main_value") || "—") + "\n\n" +
+          "━━━━━━━━━━━━━━━━━━━━━\n" +
+          "הוראות לכתיבה:\n" +
+          "━━━━━━━━━━━━━━━━━━━━━\n" +
+          "1. כתבי פיץ׳ מלא בעברית בלבד.\n" +
+          "2. חלקי את הפיץ׳ ל-" + count + " חלקים — אחד לכל מציגה.\n" +
+          "3. אזני את עומס הדיבור בין המציגות לפי משקל תוכני, לא לפי מספר שורות בלבד.\n" +
+          "4. שמרי על רצף הגיוני: פתיחה ← בעיה ← קהל יעד ← סיטואציה ← קושי ← צורך ← רעיון ← מוצר ← אב-טיפוס ← משוב ← שיפור ← שלבי שימוש ← ייחודיות ← ערך ← סיכום.\n" +
+          "5. כתבי בעברית טבעית, בגובה של נערות בגיל 15, אבל בצורה מכובדת וברורה.\n" +
+          "6. אל תמציאי מידע שלא מופיע בנתונים.\n" +
+          "7. תקני כפילויות וניסוחים לא טבעיים.\n" +
+          "8. נקי משפטים בעייתיים כגון:\n" +
+          "   • 'הקושי המרכזי הוא קשה לדעת'\n" +
+          "   • 'מהמשוב הבנתי: במשוב עלה'\n" +
+          "   • 'בעקבות זאת: בעקבות זאת'\n" +
+          "   • 'מה שמייחד את המיזם הוא הייחודיות היא'\n" +
+          "   • סימני פיסוק כפולים כמו .,\n" +
+          "9. " + genderInstruction + "\n" +
+          "10. אין לכלול נאום מעלית.\n\n" +
+          "━━━━━━━━━━━━━━━━━━━━━\n" +
+          "מבנה הפלט הנדרש — יש לשמור על מבנה זה בדיוק:\n" +
+          "━━━━━━━━━━━━━━━━━━━━━\n\n" +
+          "פיץ׳ סופי מחולק למציגות\n\n" +
+          "שם המיזם: " + projectName + "\n\n";
+
+        for (var j = 1; j <= count; j++) {
+          var spn = getElementValue("speaker_" + j) || ("משתתפת " + j);
+          prompt += "משתתפת " + j + ": " + spn + "\n[טקסט מלא של משתתפת " + j + "]\n\n";
+        }
+
+        prompt += "דגשים להצגה:\n";
+        if (count > 1) {
+          prompt += "- לדבר בקצב ברור.\n- לא להקריא מהר מדי.\n- לשמור על קשר עין.\n- להעביר דיבור בצורה טבעית בין המציגות.\n";
+        } else {
+          prompt += "- לדבר בקצב ברור.\n- להדגיש את הבעיה, הפתרון והערך.\n- לסיים בביטחון.\n";
+        }
+
+        return prompt;
+      }
+
+      function parseAIPitchOutput(text) {
+        var lines = text.split("\n");
+        var cards = [];
+        var currentCard = null;
+        var tipsLines = [];
+        var inTips = false;
+
+        for (var i = 0; i < lines.length; i++) {
+          var line = lines[i];
+          var trimmed = line.trim();
+
+          if (/^דגשים להצגה/.test(trimmed)) {
+            if (currentCard) { cards.push(currentCard); currentCard = null; }
+            inTips = true;
+            continue;
+          }
+
+          if (inTips) {
+            if (trimmed) tipsLines.push(trimmed);
+            continue;
+          }
+
+          var presenterMatch = trimmed.match(/^משתתפת\s+(\d+)\s*:\s*(.*)$/);
+          if (presenterMatch) {
+            if (currentCard) cards.push(currentCard);
+            currentCard = {
+              num: parseInt(presenterMatch[1], 10),
+              name: presenterMatch[2].trim() || ("משתתפת " + presenterMatch[1]),
+              lines: []
+            };
+            continue;
+          }
+
+          if (currentCard) {
+            currentCard.lines.push(line);
+          }
+        }
+
+        if (currentCard) cards.push(currentCard);
+
+        cards = cards.map(function (card) {
+          return { num: card.num, name: card.name, text: card.lines.join("\n").trim() };
+        });
+
+        var tips = tipsLines
+          .filter(function (l) { return /^[-•]/.test(l); })
+          .map(function (l) { return l.replace(/^[-•]\s*/, "").trim(); })
+          .filter(Boolean);
+
+        return { cards: cards, tips: tips };
+      }
+
+      function renderAIPitchCards() {
+        var rawText = document.getElementById("aiPitchInput");
+        if (!rawText || !rawText.value.trim()) {
+          alert("יש להדביק את הפיץ׳ מה-AI בשלב 2 לפני יצירת המסך המעוצב.");
+          return;
+        }
+        var text = rawText.value.trim();
+        var parsed = parseAIPitchOutput(text);
+        aiPitchCards = parsed.cards;
+        aiPitchTips = parsed.tips;
+
+        var container = document.getElementById("aiPitchCards");
+        var display = document.getElementById("aiPitchDisplay");
+        var metaEl = document.getElementById("aiPitchDisplayMeta");
+        if (!container || !display) return;
+
+        container.replaceChildren();
+
+        var projectName = getElementValue("project_name") || "";
+        var presenters = getPresenterNames();
+        if (metaEl) {
+          metaEl.textContent =
+            (projectName ? "מיזם: " + projectName + " | " : "") +
+            "מציגות: " + presenters.join(", ");
+        }
+
+        if (!aiPitchCards.length) {
+          var singleCard = document.createElement("article");
+          singleCard.className = "pitch-card";
+          singleCard.innerHTML =
+            '<div class="pitch-card-header">' +
+              '<span class="pitch-card-num">1</span>' +
+              '<span class="pitch-card-name">פיץ׳ מלא</span>' +
+            "</div>" +
+            '<p class="pitch-card-text">' + esc(text) + "</p>";
+          container.appendChild(singleCard);
+          aiPitchCards = [{ num: 1, name: "פיץ׳ מלא", text: text }];
+        } else {
+          aiPitchCards.forEach(function (cardData) {
+            var card = document.createElement("article");
+            card.className = "pitch-card";
+            card.innerHTML =
+              '<div class="pitch-card-header">' +
+                '<span class="pitch-card-num">' + esc(String(cardData.num)) + "</span>" +
+                '<span class="pitch-card-name">' + esc(cardData.name) + "</span>" +
+              "</div>" +
+              '<p class="pitch-card-text">' + esc(cardData.text) + "</p>";
+            container.appendChild(card);
+          });
+        }
+
+        if (aiPitchTips && aiPitchTips.length) {
+          var tipsCard = document.createElement("div");
+          tipsCard.className = "pitch-tips-card";
+          tipsCard.innerHTML =
+            '<div class="pitch-tips-title">דגשים להצגה</div>' +
+            '<ul class="pitch-tips-list">' +
+              aiPitchTips.map(function (tip) { return "<li>" + esc(tip) + "</li>"; }).join("") +
+            "</ul>";
+          container.appendChild(tipsCard);
+        }
+
+        display.style.display = "block";
+        buildPrintDocument();
+        setTimeout(function () {
+          display.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 80);
+      }
 
       function init() {
         var saved = readSavedData();
