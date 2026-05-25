@@ -360,6 +360,9 @@ function resetActivePosterState() {
 function hydrateStateFromSubmission(submission) {
   const posterData = submission?.poster_data || {};
   const split = posterData.splitFlowState || {};
+  const recoveredContentValues = (!posterData.contentValues || !Object.keys(posterData.contentValues).length) && hasRenderableResearch(split.research)
+    ? buildPosterContentValuesFromResearch(split.research)
+    : null;
   Object.assign(state.research, split.research || {});
   Object.assign(state.design, split.design || {});
   if (split.physicalPrompt?.main) Object.assign(state.physicalPrompt.main, split.physicalPrompt.main);
@@ -371,7 +374,15 @@ function hydrateStateFromSubmission(submission) {
   state.slotImages = { ...(posterData.slotImages || {}) };
   if (submission?.id) localStorage.setItem(SCOPED_SUBMISSION_ID_KEY, submission.id);
   console.info('[split-flow] hydrated from Supabase', submission?.id || null);
-  saveProject({ ...(loadProject(schoolSlug) || {}), ...posterData, submissionId: submission?.id || null, pitch_group_code: requestedGroupCode || posterData.pitch_group_code || null });
+  saveProject({
+    ...(loadProject(schoolSlug) || {}),
+    ...posterData,
+    contentValues: recoveredContentValues
+      ? { ...(posterData.contentValues || {}), ...recoveredContentValues }
+      : posterData.contentValues,
+    submissionId: submission?.id || null,
+    pitch_group_code: requestedGroupCode || posterData.pitch_group_code || null
+  });
 }
 
 function hydrateStateFromStorage() {
@@ -435,35 +446,43 @@ function splitStudentNames(rawNames) {
   return [names[0] || '', names[1] || '', names[2] || ''];
 }
 
-function buildPosterContentValues() {
-  const [student1, student2, student3] = splitStudentNames(state.research.studentNames);
+function buildPosterContentValuesFromResearch(research = {}) {
+  const [student1, student2, student3] = splitStudentNames(research.studentNames);
   return {
-    projectName: state.research.projectName,
-    description: state.research.description,
-    problem: state.research.problem,
-    audience: state.research.audience,
-    researchQuestion: state.research.researchQuestion,
-    research_1: state.research.research_1,
-    research_2: state.research.research_2,
-    research_3: state.research.research_3,
-    findings: state.research.findings,
-    requirements_1: state.research.requirements_1,
-    requirements_2: state.research.requirements_2,
-    requirements_3: state.research.requirements_3,
-    solution: state.research.solution,
-    howItWorks_1: state.research.howItWorks_1,
-    howItWorks_2: state.research.howItWorks_2,
-    howItWorks_3: state.research.howItWorks_3,
-    value: state.research.value,
-    feedbackReceived: state.research.feedbackReceived || '',
-    improvementsAfterFeedback: state.research.improvementsAfterFeedback || '',
-    slogan: state.research.slogan || '',
+    projectName: research.projectName,
+    description: research.description,
+    problem: research.problem,
+    audience: research.audience,
+    researchQuestion: research.researchQuestion,
+    research_1: research.research_1,
+    research_2: research.research_2,
+    research_3: research.research_3,
+    findings: research.findings,
+    requirements_1: research.requirements_1,
+    requirements_2: research.requirements_2,
+    requirements_3: research.requirements_3,
+    solution: research.solution,
+    howItWorks_1: research.howItWorks_1,
+    howItWorks_2: research.howItWorks_2,
+    howItWorks_3: research.howItWorks_3,
+    value: research.value,
+    feedbackReceived: research.feedbackReceived || '',
+    improvementsAfterFeedback: research.improvementsAfterFeedback || '',
+    slogan: research.slogan || '',
     student1,
     student2,
     student3,
-    className: state.research.className || '',
-    schoolName: state.research.schoolName || ''
+    className: research.className || '',
+    schoolName: research.schoolName || ''
   };
+}
+
+function buildPosterContentValues() {
+  return buildPosterContentValuesFromResearch(state.research);
+}
+
+function hasRenderableResearch(research = {}) {
+  return Object.values(research || {}).some((value) => typeof value === 'string' && value.trim());
 }
 
 function persistSplitFlowState() {
