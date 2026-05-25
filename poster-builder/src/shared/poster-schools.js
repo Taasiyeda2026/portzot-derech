@@ -36,7 +36,7 @@ const HEBREW_TRANSLITERATION = {
   נ: 'n', ן: 'n', ס: 's', ע: 'a', פ: 'p', ף: 'p', צ: 'tz', ץ: 'tz', ק: 'k', ר: 'r', ש: 'sh', ת: 't'
 };
 
-function getClient() {
+async function getClient() {
   return getPosterSubmissionsClient();
 }
 
@@ -93,7 +93,7 @@ export function normalizeSchoolRow(row) {
 }
 
 export async function listPosterSchools() {
-  const client = getClient();
+  const client = await getClient();
   if (!client) return [];
   const { data, error } = await client
     .from(POSTER_SCHOOLS_TABLE)
@@ -106,7 +106,7 @@ export async function listPosterSchools() {
 export async function fetchPosterSchoolBySlug(slug) {
   const normalizedSlug = slug || DEFAULT_SCHOOL_SLUG;
   if (normalizedSlug === DEFAULT_SCHOOL_SLUG) return null;
-  const client = getClient();
+  const client = await getClient();
   if (!client) return null;
   const { data, error } = await client
     .from(POSTER_SCHOOLS_TABLE)
@@ -119,7 +119,7 @@ export async function fetchPosterSchoolBySlug(slug) {
 }
 
 export async function createPosterSchool(payload) {
-  const client = getClient();
+  const client = await getClient();
   if (!client) throw new Error('Supabase לא מוגדר.');
   const { data, error } = await client
     .from(POSTER_SCHOOLS_TABLE)
@@ -131,7 +131,7 @@ export async function createPosterSchool(payload) {
 }
 
 export async function updatePosterSchool(id, payload) {
-  const client = getClient();
+  const client = await getClient();
   if (!client) throw new Error('Supabase לא מוגדר.');
   const { data, error } = await client
     .from(POSTER_SCHOOLS_TABLE)
@@ -144,7 +144,7 @@ export async function updatePosterSchool(id, payload) {
 }
 
 export async function deletePosterSchool(id) {
-  const client = getClient();
+  const client = await getClient();
   if (!client) throw new Error('Supabase לא מוגדר.');
   const { error } = await client
     .from(POSTER_SCHOOLS_TABLE)
@@ -155,7 +155,7 @@ export async function deletePosterSchool(id) {
 
 export async function buildUniqueSchoolSlug(name, existingId = null) {
   const base = slugifySchoolName(name);
-  const client = getClient();
+  const client = await getClient();
   if (!client) return base;
   let slug = base;
   let suffix = 2;
