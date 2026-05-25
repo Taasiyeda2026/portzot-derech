@@ -437,9 +437,7 @@
     .ai-step-num { display: inline-flex; align-items: center; padding: .24rem .8rem; border-radius: 999px; color: #fff; font-weight: 900; font-size: .8rem; background: linear-gradient(135deg, var(--pink), var(--purple)); white-space: nowrap; }
     .ai-step-label { font-weight: 800; color: var(--ink); font-size: .97rem; }
     .ai-hint { margin: .3rem 0 0; color: var(--muted); font-size: .88rem; line-height: 1.5; }
-    .pitch-cards-container { display: grid; gap: 1rem; }
-    .pitch-card { padding: 1.15rem 1.35rem; border: 1px solid rgba(139,92,246,.18); border-radius: 18px; background: #fff; box-shadow: 0 6px 20px rgba(88,28,135,.07); direction: rtl; text-align: right; }
-    .pitch-card-header { display: flex; align-items: center; gap: .65rem; margin-bottom: .8rem; padding-bottom: .6rem; border-bottom: 2px solid rgba(139,92,246,.14); }
+        .pitch-card-header { display: flex; align-items: center; gap: .65rem; margin-bottom: .8rem; padding-bottom: .6rem; border-bottom: 2px solid rgba(139,92,246,.14); }
     .pitch-card-num { display: inline-grid; place-items: center; width: 2rem; height: 2rem; border-radius: 50%; background: linear-gradient(135deg, var(--pink), var(--purple)); color: #fff; font-weight: 900; font-size: .85rem; flex-shrink: 0; }
     .pitch-card-name { font-size: 1.08rem; font-weight: 900; color: var(--purple-dark); }
     .pitch-card-text { font-size: .98rem; line-height: 1.88; color: var(--text); white-space: pre-wrap; direction: rtl; text-align: right; margin: 0; }
@@ -449,8 +447,19 @@
     .pitch-display-title { font-size: 1.25rem; font-weight: 900; color: var(--ink); margin-bottom: .2rem; }
     .pitch-display-meta { color: var(--muted); font-size: .9rem; margin-bottom: .9rem; }
     .copy-success { color: #16a34a; font-size: .88rem; font-weight: 700; }
+    .ai-flow-list { margin: 0.2rem 0 0; padding-right: 1.1rem; color: var(--muted); font-size: .9rem; line-height: 1.7; }
+    .ai-flow-list li { margin-bottom: .15rem; }
+    .ai-tool-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.55rem; }
+    .ai-tool-btn { width:100%; justify-content:center; min-height:2.2rem; padding:.45rem .6rem; font-weight:700; }
+    .pitch-paste-textarea { min-height: 16rem; resize: vertical; direction: rtl; text-align: right; line-height: 1.75; }
+    .print-preview-shell { margin-top: .8rem; padding: 1rem; border: 1px solid rgba(139,92,246,.14); border-radius: 16px; background: #fff; }
+    .print-preview-shell .print-doc { max-width: 860px; margin: 0 auto; }
+    .print-preview-shell .print-doc-header h1 { color:#111827; background:none; -webkit-text-fill-color: initial; }
+    .print-preview-actions { margin-top: .75rem; }
+
 
     @media (max-width: 720px) {
+      .ai-tool-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
       .site-header { align-items: flex-start; }
       .brand span { display: none; }
       .grid { grid-template-columns: 1fr; }
@@ -717,30 +726,37 @@
       </div>
 
       <div class="ai-step">
+        <p class="note">הזרימה הקצרה: ממלאים שאלות → יוצרים פרומפט → מדביקים בכלי AI → חוזרים עם פיץ׳ → יוצרים מסמך → מדפיסים/שומרים PDF.</p>
+        <ul class="ai-flow-list">
+          <li>מלאו את השאלות למעלה.</li>
+          <li>לחצו על <strong>יצירת פרומפט</strong> (הפרומפט יועתק אוטומטית).</li>
+          <li>עברו לכלי AI, הדביקו, קבלו פיץ׳ וחזרו לכאן.</li>
+        </ul>
         <div class="actions">
           <button class="btn" type="button" id="generateAIPrompt">יצירת פרומפט</button>
           <p id="copyStatusMessage" class="note" style="display:none; flex-basis:100%"></p>
         </div>
         <div id="aiToolsArea" style="display:none; margin-top:0.75rem">
-          <p class="note" style="margin-bottom:0.55rem">בחרו כלי, הדביקו את הפרומפט, והחזירו לכאן את הפיץ׳ שהתקבל.</p>
-          <div class="actions ai-tool-buttons" style="margin-top:0.3rem">
-            <a class="btn secondary ai-tool-btn" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">פתיחה ב־ChatGPT</a>
-            <a class="btn secondary ai-tool-btn" href="https://claude.ai/" target="_blank" rel="noopener noreferrer">פתיחה ב־Claude</a>
-            <a class="btn secondary ai-tool-btn" href="https://www.google.com/" target="_blank" rel="noopener noreferrer">חיפוש בגוגל</a>
+          <div class="ai-tool-grid" style="margin-top:0.3rem">
+            <a class="btn secondary ai-tool-btn" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">ChatGPT</a>
+            <a class="btn secondary ai-tool-btn" href="https://claude.ai/" target="_blank" rel="noopener noreferrer">Claude</a>
+            <a class="btn secondary ai-tool-btn" href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer">Gemini</a>
+            <a class="btn secondary ai-tool-btn" href="https://www.google.com/" target="_blank" rel="noopener noreferrer">Google</a>
           </div>
         </div>
       </div>
 
       <div class="ai-step">
         <div class="ai-step-header">
-          <span class="ai-step-num">המשך</span>
-          <span class="ai-step-label">הדבקת הפיץ׳ מה־AI</span>
+          <span class="ai-step-num">שלב ב׳</span>
+          <span class="ai-step-label">הדבקת הפיץ׳ שהתקבל מה־AI</span>
         </div>
-        <p class="ai-hint">לאחר קבלת הפיץ׳ מה־AI, הדביקו אותו כאן כדי ליצור מסמך פיץ׳ מסודר.</p>
+        <p class="ai-hint">הדביקי כאן את הפיץ׳ שחזר מכלי ה־AI. לאחר מכן ניתן ליצור מסמך פיץ׳ מסודר להדפסה או שמירה כ־PDF.</p>
         <div class="field" style="margin-top:0.45rem">
-          <label for="fullPitch">הדבקת הפיץ׳ מה־AI</label>
-          <textarea id="fullPitch" class="large-textarea" data-save placeholder="הדביקו כאן את הפיץ׳ שקיבלתן מה־AI..." style="min-height:12rem"></textarea>
+          <label for="fullPitch">הדבקת הפיץ׳ שהתקבל מה־AI</label>
+          <textarea id="fullPitch" class="pitch-paste-textarea" data-save placeholder="הדביקי כאן את הפיץ׳ שקיבלת מה־AI..."></textarea>
         </div>
+        <p id="pasteStatusMessage" class="note" style="display:none; margin-top:0.35rem"></p>
         <div class="actions" style="margin-top:0.55rem">
           <button class="btn" type="button" id="renderAIPitch">יצירת מסמך פיץ׳</button>
         </div>
@@ -752,19 +768,9 @@
           <textarea id="aiPromptOutput" class="large-textarea auto-filled" readonly style="min-height:10rem"></textarea>
         </div>
       </div>
-
-        <div id="aiPitchDisplay" style="display:none">
-        <div class="ai-step">
-          <div class="ai-step-header">
-            <span class="ai-step-num">שלב 3</span>
-            <span class="ai-step-label">פיץ׳ סופי להצגה</span>
-          </div>
-          <div id="aiPitchDisplayMeta" class="pitch-display-meta"></div>
-          <div class="actions" style="margin:0.45rem 0 0.35rem">
-            <button class="btn secondary" type="button" id="copyPitchDocument">העתקת מסמך הפיץ׳</button>
-          </div>
-          <div id="aiPitchCards" class="pitch-cards-container" aria-live="polite"></div>
-        </div>
+      <div id="pitchDocumentPreview" class="print-preview-shell" style="display:none" aria-live="polite"></div>
+      <div class="actions print-preview-actions" id="pitchPreviewActions" style="display:none">
+        <button class="btn secondary" type="button" id="printPitchDocumentBtn">הדפסה / שמירה ל־PDF</button>
       </div>
     </section>
 
@@ -1579,7 +1585,7 @@
       function attachEvents() {
         var generateAIPromptBtn = document.getElementById("generateAIPrompt");
         var renderAIPitchBtn = document.getElementById("renderAIPitch");
-        var copyPitchDocumentBtn = document.getElementById("copyPitchDocument");
+        var printPitchDocumentBtn = document.getElementById("printPitchDocumentBtn");
         var printBtn = document.getElementById("printPage");
         var presenterCount = document.getElementById("presenterCount");
         var startTimerBtn = document.getElementById("startTimer");
@@ -1597,7 +1603,7 @@
             if (navigator.clipboard && navigator.clipboard.writeText) {
               navigator.clipboard.writeText(promptText).then(function () {
                 if (statusEl) {
-                  statusEl.textContent = "הפרומפט הועתק. עכשיו אפשר לפתוח כלי AI, להדביק את הפרומפט ולקבל פיץ׳ מחולק ומתוקן.";
+                  statusEl.textContent = "הפרומפט הועתק. עכשיו אפשר להדביק אותו בכלי AI, לקבל פיץ׳ מוכן ולחזור לכאן.";
                   statusEl.style.display = "block";
                 }
                 if (toolsArea) toolsArea.style.display = "block";
@@ -1629,15 +1635,10 @@
             renderAIPitchCards();
           });
         }
-        if (copyPitchDocumentBtn) {
-          copyPitchDocumentBtn.addEventListener("click", function () {
-            var text = buildCopyablePitchDocumentText();
-            if (!text) return alert("אין מסמך פיץ׳ להעתקה. יש להדביק תחילה פיץ׳ מה־AI וליצור מסמך.");
-            navigator.clipboard.writeText(text).then(function () {
-              alert("מסמך הפיץ׳ הועתק בהצלחה.");
-            }).catch(function () {
-              alert("לא הצלחנו להעתיק. נסו שוב.");
-            });
+        if (printPitchDocumentBtn) {
+          printPitchDocumentBtn.addEventListener("click", function () {
+            buildPrintDocument();
+            window.print();
           });
         }
 
@@ -1909,13 +1910,16 @@
           "9. " + genderInstruction + "\n" +
           "10. אין לכלול נאום מעלית.\n\n" +
           "חשוב מאוד:\n" +
-          "החזר את התוצאה בלבד, ללא הסברים לפני או אחרי.\n" +
-          "אל תשתמש בטבלה.\n" +
-          "אל תשתמש בעיצוב מורכב.\n" +
-          "כתוב טקסט נקי שאפשר להעתיק בלחיצה אחת ולהדביק ישירות באתר או בכל מסמך אחר.\n" +
-          "אל תכתוב משפטי פתיחה כמו 'בטח', 'הנה', 'להלן' או הערות צד.\n" +
-          "אל תשתמש ב-Markdown מורכב.\n" +
-          "כן השתמש בכותרות פשוטות וברורות לפי המבנה בלבד.\n\n" +
+          "להחזיר רק את התוצאה הסופית.\n" +
+          "לא להוסיף הסברים לפני או אחרי.\n" +
+          "לא להשתמש בטבלה.\n" +
+          "לא להשתמש בעיצוב מורכב.\n" +
+          "להשתמש בכותרות פשוטות בלבד.\n" +
+          "להחזיר טקסט נקי שניתן להעתיק בלחיצה אחת ולהדביק בכל מקום.\n" +
+          "להחזיר טקסט נקי שמתאים להדבקה באתר או במסמך.\n" +
+          "אם יש כמה מציגות, לחלק את הפיץ׳ לפי המציגות.\n" +
+          "לשמור על עברית טבעית, ברורה ומכובדת.\n" +
+          "לא להמציא מידע שלא מופיע בנתונים.\n\n" +
           "━━━━━━━━━━━━━━━━━━━━━\n" +
           "מבנה הפלט הנדרש — יש לשמור על מבנה זה בדיוק:\n" +
           "━━━━━━━━━━━━━━━━━━━━━\n\n" +
@@ -1991,70 +1995,35 @@
 
       function renderAIPitchCards() {
         var rawText = document.getElementById("fullPitch");
+        var pasteStatusEl = document.getElementById("pasteStatusMessage");
         if (!rawText || !rawText.value.trim()) {
-          alert("יש להדביק את הפיץ׳ מה-AI לפני יצירת מסמך הפיץ׳.");
+          if (pasteStatusEl) {
+            pasteStatusEl.textContent = "יש להדביק קודם את הפיץ׳ שהתקבל מה־AI.";
+            pasteStatusEl.style.display = "block";
+          }
+          alert("יש להדביק קודם את הפיץ׳ שהתקבל מה־AI.");
           return;
         }
         var text = rawText.value.trim();
+        if (pasteStatusEl) {
+          pasteStatusEl.textContent = "הפיץ׳ התקבל. עכשיו אפשר ליצור מסמך פיץ׳.";
+          pasteStatusEl.style.display = "block";
+        }
         var parsed = parseAIPitchOutput(text);
         aiPitchCards = parsed.cards;
         aiPitchTips = parsed.tips;
-
-        var container = document.getElementById("aiPitchCards");
-        var display = document.getElementById("aiPitchDisplay");
-        var metaEl = document.getElementById("aiPitchDisplayMeta");
-        if (!container || !display) return;
-
-        container.replaceChildren();
-
-        var projectName = getElementValue("project_name") || "";
-        var presenters = getPresenterNames();
-        if (metaEl) {
-          metaEl.textContent =
-            (projectName ? "מיזם: " + projectName + " | " : "") +
-            "מציגות: " + presenters.join(", ");
-        }
-
-        if (!aiPitchCards.length) {
-          var singleCard = document.createElement("article");
-          singleCard.className = "pitch-card";
-          singleCard.innerHTML =
-            '<div class="pitch-card-header">' +
-              '<span class="pitch-card-num">1</span>' +
-              '<span class="pitch-card-name">פיץ׳ מלא</span>' +
-            "</div>" +
-            '<p class="pitch-card-text">' + esc(text) + "</p>";
-          container.appendChild(singleCard);
-          aiPitchCards = [{ num: 1, name: "פיץ׳ מלא", text: text }];
-        } else {
-          aiPitchCards.forEach(function (cardData) {
-            var card = document.createElement("article");
-            card.className = "pitch-card";
-            card.innerHTML =
-              '<div class="pitch-card-header">' +
-                '<span class="pitch-card-num">' + esc(String(cardData.num)) + "</span>" +
-                '<span class="pitch-card-name">' + esc(cardData.name) + "</span>" +
-              "</div>" +
-              '<p class="pitch-card-text">' + esc(cardData.text) + "</p>";
-            container.appendChild(card);
-          });
-        }
-
-        if (aiPitchTips && aiPitchTips.length) {
-          var tipsCard = document.createElement("div");
-          tipsCard.className = "pitch-tips-card";
-          tipsCard.innerHTML =
-            '<div class="pitch-tips-title">דגשים להצגה</div>' +
-            '<ul class="pitch-tips-list">' +
-              aiPitchTips.map(function (tip) { return "<li>" + esc(tip) + "</li>"; }).join("") +
-            "</ul>";
-          container.appendChild(tipsCard);
-        }
-
-        display.style.display = "block";
         buildPrintDocument();
+
+        var printDoc = document.getElementById("printPitchDocument");
+        var preview = document.getElementById("pitchDocumentPreview");
+        var actions = document.getElementById("pitchPreviewActions");
+        if (preview && printDoc) {
+          preview.innerHTML = printDoc.innerHTML;
+          preview.style.display = "block";
+        }
+        if (actions) actions.style.display = "flex";
         setTimeout(function () {
-          display.scrollIntoView({ behavior: "smooth", block: "start" });
+          if (preview) preview.scrollIntoView({ behavior: "smooth", block: "start" });
         }, 80);
       }
 
