@@ -1,16 +1,32 @@
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 import { SUPABASE_URL, SUPABASE_ANON_KEY, POSTER_SUBMISSIONS_TABLE } from './supabase-config.js';
 
 let supabaseClient = null;
+let supabaseInitAttempted = false;
+
+async function loadSupabaseFactory() {
+  const module = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm');
+  return module?.createClient || null;
+}
 
 function hasSupabaseConfig() {
   return Boolean(SUPABASE_URL && SUPABASE_ANON_KEY);
 }
 
-export function getPosterSubmissionsClient() {
+export async function getPosterSubmissionsClient() {
   if (!hasSupabaseConfig()) return null;
-  if (!supabaseClient) supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  return supabaseClient;
+  if (supabaseClient) return supabaseClient;
+  if (supabaseInitAttempted) return null;
+
+  supabaseInitAttempted = true;
+  try {
+    const createClient = await loadSupabaseFactory();
+    if (!createClient) return null;
+    supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    return supabaseClient;
+  } catch (error) {
+    console.warn('Could not load Supabase client. Poster Builder will continue without remote submissions.', error);
+    return null;
+  }
 }
 
 export function buildStudentNames(contentValues = {}) {
@@ -113,7 +129,7 @@ function buildSubmissionRow(project) {
 }
 
 export async function createPosterSubmission(project) {
-  const client = getPosterSubmissionsClient();
+  const client = await getPosterSubmissionsClient();
   if (!client) throw new Error('Poster submissions are not configured.');
 
   const { data, error } = await client
@@ -127,7 +143,7 @@ export async function createPosterSubmission(project) {
 }
 
 export async function createPosterSubmissions(projects) {
-  const client = getPosterSubmissionsClient();
+  const client = await getPosterSubmissionsClient();
   if (!client) throw new Error('Poster submissions are not configured.');
   if (!Array.isArray(projects) || projects.length === 0) return;
 
@@ -139,7 +155,7 @@ export async function createPosterSubmissions(projects) {
 }
 
 export async function listPosterSubmissions() {
-  const client = getPosterSubmissionsClient();
+  const client = await getPosterSubmissionsClient();
   if (!client) throw new Error('Poster submissions are not configured.');
   const { data, error } = await client
     .from(POSTER_SUBMISSIONS_TABLE)
@@ -150,7 +166,7 @@ export async function listPosterSubmissions() {
 }
 
 export async function fetchPosterSubmission(id) {
-  const client = getPosterSubmissionsClient();
+  const client = await getPosterSubmissionsClient();
   if (!client) throw new Error('Poster submissions are not configured.');
   const { data, error } = await client
     .from(POSTER_SUBMISSIONS_TABLE)
@@ -163,7 +179,7 @@ export async function fetchPosterSubmission(id) {
 
 
 export async function listPosterSubmissionsByGroupCode(groupCode) {
-  const client = getPosterSubmissionsClient();
+  const client = await getPosterSubmissionsClient();
   if (!client) throw new Error('Poster submissions are not configured.');
   const code = (groupCode || '').toString().trim();
   if (!code) return [];
@@ -177,7 +193,7 @@ export async function listPosterSubmissionsByGroupCode(groupCode) {
 }
 
 export async function listPitchGroupsForPoster() {
-  const client = getPosterSubmissionsClient();
+  const client = await getPosterSubmissionsClient();
   if (!client) throw new Error('Poster submissions are not configured.');
   const { data, error } = await client
     .from('pitch_groups')
@@ -188,7 +204,7 @@ export async function listPitchGroupsForPoster() {
 }
 
 export async function fetchPosterSubmissionByGroup(groupId) {
-  const client = getPosterSubmissionsClient();
+  const client = await getPosterSubmissionsClient();
   if (!client) throw new Error('Poster submissions are not configured.');
   const { data, error } = await client
     .from(POSTER_SUBMISSIONS_TABLE)
@@ -202,7 +218,7 @@ export async function fetchPosterSubmissionByGroup(groupId) {
 }
 
 export async function upsertPosterSubmissionForGroup(group, project, imagePrompts = EMPTY_IMAGE_PROMPTS) {
-  const client = getPosterSubmissionsClient();
+  const client = await getPosterSubmissionsClient();
   if (!client) throw new Error('Poster submissions are not configured.');
   const existing = await fetchPosterSubmissionByGroup(group.id);
   const row = buildSubmissionRow(project);
@@ -240,7 +256,7 @@ export async function upsertPosterSubmissionForGroup(group, project, imagePrompt
 }
 
 export async function updatePosterSubmission(id, project) {
-  const client = getPosterSubmissionsClient();
+  const client = await getPosterSubmissionsClient();
   if (!client) throw new Error('Poster submissions are not configured.');
 
   const { error } = await client
@@ -252,7 +268,7 @@ export async function updatePosterSubmission(id, project) {
 }
 
 export async function deletePosterSubmission(id) {
-  const client = getPosterSubmissionsClient();
+  const client = await getPosterSubmissionsClient();
   if (!client) throw new Error('Poster submissions are not configured.');
   const { error } = await client
     .from(POSTER_SUBMISSIONS_TABLE)
