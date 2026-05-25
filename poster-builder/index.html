@@ -62,12 +62,14 @@
       const params = new URLSearchParams(window.location.search);
       const requestedSchool = params.get('school') || 'default';
       const shouldStartFresh = params.get('fresh') === '1' || params.get('start') === '1';
+      const groupCode = params.get('group') || '';
       const config = await resolveSchoolConfig(requestedSchool);
       const activeSlug = config.slug || 'default';
       document.querySelectorAll('[data-product-link]').forEach((link) => {
         const url = new URL(link.getAttribute('href'), window.location.href);
         if (activeSlug !== 'default') url.searchParams.set('school', activeSlug);
         if (shouldStartFresh) url.searchParams.set('fresh', '1');
+        if (groupCode) url.searchParams.set('group', groupCode);
         link.href = url.pathname.split('/poster-builder/')[1] + url.search;
       });
     })();
