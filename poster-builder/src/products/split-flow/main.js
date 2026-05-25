@@ -1159,19 +1159,26 @@ async function submitPoster() {
   render();
 
   try {
-    const project = buildCurrentPosterProject();
-    saveProject(project);
+    const baseProject = buildCurrentPosterProject();
+    const existingIdFromKey = localStorage.getItem(SUBMISSION_ID_KEY);
+    const existingIdFromProject = baseProject?.submissionId || loadProject(schoolSlug)?.submissionId || null;
+    const existingId = existingIdFromKey || existingIdFromProject;
 
-    const existingId = localStorage.getItem(SUBMISSION_ID_KEY);
     if (existingId) {
-      await updatePosterSubmission(existingId, project);
+      const projectForUpdate = { ...baseProject, submissionId: existingId };
+      await updatePosterSubmission(existingId, projectForUpdate);
+      localStorage.setItem(SUBMISSION_ID_KEY, existingId);
+      saveProject(projectForUpdate);
+      state.submitStatus = 'success';
+      state.submitMessage = 'הפוסטר עודכן בהצלחה.';
     } else {
-      const newId = await createPosterSubmission(project);
+      const newId = await createPosterSubmission(baseProject);
+      const projectForCreate = newId ? { ...baseProject, submissionId: newId } : baseProject;
       if (newId) localStorage.setItem(SUBMISSION_ID_KEY, newId);
+      saveProject(projectForCreate);
+      state.submitStatus = 'success';
+      state.submitMessage = 'הפוסטר נשלח בהצלחה.';
     }
-
-    state.submitStatus = 'success';
-    state.submitMessage = 'הפוסטר נשלח בהצלחה.';
   } catch (err) {
     state.submitStatus = 'error';
     state.submitMessage = 'לא הצלחנו לשלוח את הפוסטר. נסו שוב.';

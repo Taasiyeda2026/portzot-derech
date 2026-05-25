@@ -407,6 +407,8 @@ function buildPosterOpenUrl(productType, schoolSlug) {
 
 function navigateWithProject(posterData, productType, splitFlowState, submissionId, schoolSlug) {
   const projectData = { ...(posterData || {}) };
+  const resolvedSchoolSlug = schoolSlug || projectData.school_slug || 'default';
+  const submissionStorageKey = `poster_submission_id:${resolvedSchoolSlug}:${productType}`;
   delete projectData.schoolLogoImage;
   delete projectData.schoolLogoAssetId;
   saveProject({
@@ -414,8 +416,9 @@ function navigateWithProject(posterData, productType, splitFlowState, submission
     productType,
     splitFlowState,
     submissionId,
-    school_slug: schoolSlug || 'default'
+    school_slug: resolvedSchoolSlug
   });
+  if (submissionId) localStorage.setItem(submissionStorageKey, submissionId);
   const url = buildPosterOpenUrl(productType, schoolSlug);
   const opened = window.open(url, '_blank', 'noopener');
   if (!opened) {
