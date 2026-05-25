@@ -504,263 +504,66 @@
       }
 
       .page {
-        width: 210mm;
-        min-height: 297mm;
+        width: auto;
+        min-height: auto;
         padding: 0 !important;
         margin: 0 !important;
       }
 
       #printDocument {
-        width: 210mm;
-        min-height: 297mm;
+        display: block !important;
+        width: auto;
+        min-height: auto;
         margin: 0;
         padding: 0;
-        background: #ffffff;
+        background: #ffffff !important;
+        direction: rtl;
       }
 
-      .print-sheet {
-        position: relative;
-        width: 210mm;
-        min-height: 297mm;
-        overflow: hidden;
-        padding: 14mm 15mm 13mm;
-        page-break-after: always;
-        background: #ffffff;
+      .print-doc { width: 100%; background: #fff; }
+      .print-doc-header {
+        margin-bottom: 8mm;
+        padding-bottom: 5mm;
+        border-bottom: 2px solid #8b5cf6;
+        text-align: right;
+        break-after: avoid;
       }
-
-      .print-sheet::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        z-index: 0;
-        background:
-          radial-gradient(circle at 100% 0%, rgba(236, 72, 153, 0.20) 0, rgba(236, 72, 153, 0.12) 28mm, transparent 78mm),
-          radial-gradient(circle at 0% 100%, rgba(139, 92, 246, 0.18) 0, rgba(139, 92, 246, 0.10) 34mm, transparent 82mm),
-          linear-gradient(180deg, #fff7fd 0%, #ffffff 42%, #fbf8ff 100%);
-      }
-
-      .print-sheet::after {
-        content: "";
-        position: absolute;
-        inset: 5mm;
-        z-index: 0;
-        border: 1px solid rgba(139, 92, 246, 0.16);
-        border-radius: 7mm;
-        pointer-events: none;
-      }
-
-      .pd-content {
-        position: relative;
-        z-index: 1;
-      }
-
-      .pd-header {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        gap: 4mm;
-        align-items: center;
-        padding: 0 0 5mm;
-        margin-bottom: 5mm;
-        border-bottom: 2px solid #7c3aed;
-      }
-
-      .pd-header img {
-        width: 13mm;
-        height: 13mm;
-        border-radius: 50%;
-        box-shadow: 0 4px 12px rgba(124, 58, 237, 0.18);
-      }
-
-      .pd-header-brand {
-        font-size: 8.5pt;
-        color: #7c3aed;
-        font-weight: 900;
-        letter-spacing: 0.04em;
-      }
-
-      .pd-project-name {
-        margin-top: 1mm;
+      .print-doc-brand { color: #7c3aed; font-size: 10pt; font-weight: 900; }
+      .print-doc-header h1 {
+        margin: 2mm 0;
         color: #111827;
         font-size: 22pt;
-        font-weight: 900;
-        line-height: 1.15;
+        line-height: 1.2;
       }
-
-      .pd-meta-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 2mm;
-        margin-top: 2.5mm;
-      }
-
-      .pd-chip {
-        display: inline-flex;
-        align-items: center;
-        min-height: 7mm;
-        padding: 1.2mm 3mm;
-        border-radius: 99px;
-        color: #4c1d95;
-        font-size: 8.8pt;
-        font-weight: 700;
-        background: rgba(245, 243, 255, 0.92);
-        border: 1px solid rgba(139, 92, 246, 0.22);
-      }
-
-      .pd-section {
-        margin-bottom: 5mm;
-        break-inside: avoid;
-      }
-
-      .pd-section-title {
-        display: flex;
-        align-items: center;
-        gap: 2mm;
-        color: #7c3aed;
-        font-size: 10.5pt;
-        font-weight: 900;
-        margin-bottom: 2.5mm;
-      }
-
-      .pd-section-title::before {
-        content: "";
-        display: inline-block;
-        width: 4mm;
-        height: 4mm;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #ec4899, #8b5cf6);
-      }
-
-      .pd-pitch-card {
-        padding: 5mm 6mm;
-        border-radius: 5mm;
-        background: rgba(255, 255, 255, 0.88);
-        border: 1px solid rgba(139, 92, 246, 0.18);
-        box-shadow: 0 4mm 16mm rgba(88, 28, 135, 0.07);
+      .print-doc-meta { color: #4b5563; font-size: 10pt; }
+      .print-speaker-card {
+        margin-bottom: 7mm;
+        padding: 5mm;
+        border: 1px solid rgba(139, 92, 246, 0.25);
+        border-right: 4px solid #8b5cf6;
+        border-radius: 4mm;
+        background: #fff;
+        page-break-inside: auto;
         break-inside: auto;
+        text-align: right;
       }
-
-      .pd-pitch-text {
-        font-size: 10.7pt;
-        color: #111827;
-        line-height: 1.78;
-        white-space: pre-wrap;
-        word-break: break-word;
-      }
-
-      .pd-roles {
-        display: grid;
-        gap: 3.5mm;
-      }
-
-      .pd-role-item {
-        padding: 4mm 5mm;
-        border-radius: 4mm;
-        background: rgba(255, 255, 255, 0.90);
-        border: 1px solid rgba(139, 92, 246, 0.18);
-        border-right: 4px solid #8b5cf6;
-        break-inside: avoid;
-      }
-
-      .pd-role-name {
-        margin-bottom: 2mm;
+      .print-speaker-card h2 {
+        margin: 0 0 3mm;
         color: #6d28d9;
-        font-size: 10pt;
-        font-weight: 900;
+        font-size: 13pt;
+        line-height: 1.3;
+        break-after: avoid;
       }
-
-      .pd-role-excerpt {
+      .print-speaker-text {
         color: #111827;
-        font-size: 10.2pt;
-        line-height: 1.72;
-        white-space: pre-wrap;
-        word-break: break-word;
-      }
-
-      .pd-elevator {
-        margin-top: 5mm;
-        padding: 4mm 5mm;
-        border-radius: 4mm;
-        background: #f0fdf4;
-        border: 1px solid #bbf7d0;
-        break-inside: avoid;
-      }
-
-      .pd-elevator-label {
-        color: #065f46;
-        font-size: 9pt;
-        font-weight: 900;
-        margin-bottom: 2mm;
-      }
-
-      .pd-elevator-text {
-        font-size: 10pt;
-        color: #111827;
+        font-size: 11pt;
         line-height: 1.65;
+        text-align: right;
         white-space: pre-wrap;
+        overflow-wrap: anywhere;
         word-break: break-word;
       }
-
-      .pd-footer {
-        position: absolute;
-        z-index: 1;
-        right: 15mm;
-        left: 15mm;
-        bottom: 8mm;
-        display: flex;
-        justify-content: space-between;
-        gap: 4mm;
-        color: #6b7280;
-        font-size: 8.5pt;
-        border-top: 1px solid rgba(139, 92, 246, 0.16);
-        padding-top: 2.5mm;
-      }
-
-      /* Print styles for AI pitch cards */
-      .pd-ai-cards { display: grid; gap: 4mm; }
-      .pd-ai-card {
-        padding: 4mm 5mm;
-        border-radius: 4mm;
-        background: rgba(255,255,255,0.92);
-        border: 1px solid rgba(139,92,246,0.18);
-        border-right: 4px solid #8b5cf6;
-        break-inside: avoid;
-        direction: rtl;
-        text-align: right;
-      }
-      .pd-ai-card-header {
-        display: flex;
-        align-items: center;
-        gap: 2.5mm;
-        margin-bottom: 2.5mm;
-        padding-bottom: 2mm;
-        border-bottom: 1px solid rgba(139,92,246,0.14);
-      }
-      .pd-ai-card-num {
-        display: inline-grid;
-        place-items: center;
-        width: 6mm;
-        height: 6mm;
-        border-radius: 50%;
-        background: linear-gradient(135deg,#ec4899,#8b5cf6);
-        color: #fff;
-        font-size: 7.5pt;
-        font-weight: 900;
-        flex-shrink: 0;
-      }
-      .pd-ai-card-name { color: #6d28d9; font-size: 10.5pt; font-weight: 900; }
-      .pd-ai-card-text { color: #111827; font-size: 10.2pt; line-height: 1.75; white-space: pre-wrap; word-break: break-word; }
-      .pd-ai-tips {
-        margin-top: 4mm;
-        padding: 3.5mm 4.5mm;
-        border-radius: 3.5mm;
-        background: rgba(245,243,255,0.85);
-        border: 1px solid rgba(139,92,246,0.18);
-        break-inside: avoid;
-        direction: rtl;
-        text-align: right;
-      }
-      .pd-ai-tips-label { color: #7c3aed; font-size: 9pt; font-weight: 900; margin-bottom: 1.5mm; }
-      .pd-ai-tips-text { color: #111827; font-size: 9.5pt; line-height: 1.65; white-space: pre-wrap; }
+      .pd-empty { color:#6b7280; text-align:center; padding:8mm 0; }
     }
   </style>
 </head>
@@ -954,13 +757,16 @@
         </div>
       </div>
 
-      <div id="aiPitchDisplay" style="display:none">
+        <div id="aiPitchDisplay" style="display:none">
         <div class="ai-step">
           <div class="ai-step-header">
             <span class="ai-step-num">שלב 3</span>
             <span class="ai-step-label">פיץ׳ סופי להצגה</span>
           </div>
           <div id="aiPitchDisplayMeta" class="pitch-display-meta"></div>
+          <div class="actions" style="margin:0.45rem 0 0.35rem">
+            <button class="btn secondary" type="button" id="copyPitchDocument">העתקת מסמך הפיץ׳</button>
+          </div>
           <div id="aiPitchCards" class="pitch-cards-container" aria-live="polite"></div>
         </div>
       </div>
@@ -1503,62 +1309,56 @@
 
         var projectName = getElementValue("project_name") || "פיץ׳ סופי";
         var presenters = getPresenterNames().filter(function (name) { return name && !/^משתתפת \d+$/.test(name); });
-        var count = getPresenterCount();
+        var fullPitchEl = document.getElementById("fullPitch");
+        var pastedText = fullPitchEl ? fullPitchEl.value.trim() : "";
+        if (!pastedText) {
+          doc.innerHTML = '<section class="print-doc"><div class="pd-empty">אין פיץ׳ להדפסה. יש להדביק תחילה את הפיץ׳ מה־AI בשדה המתאים.</div></section>';
+          return;
+        }
+        var parsed = parseAIPitchOutput(pastedText);
+        var cards = parsed.cards && parsed.cards.length ? parsed.cards : [{ num: 1, name: "פיץ׳ מלא", text: pastedText }];
+        var tips = parsed.tips || [];
 
         var html = "";
-        html += '<section class="print-sheet">';
-        html += '<div class="pd-content">';
-        html += '<header class="pd-header">';
-        html += '<img src="../icon/favicon.png" alt="פורצות דרך" />';
-        html += '<div>';
-        html += '<div class="pd-header-brand">פורצות דרך — פיץ׳ סופי להצגה</div>';
-        html += '<div class="pd-project-name">' + esc(projectName) + '</div>';
-        if (presenters.length) {
-          html += '<div class="pd-meta-row">';
-          html += '<span class="pd-chip">משתתפות: ' + esc(presenters.join(", ")) + '</span>';
-          html += '<span class="pd-chip">מספר מציגות: ' + esc(String(count)) + '</span>';
-          html += '</div>';
+        html += '<section class="print-doc">';
+        html += '<header class="print-doc-header">';
+        html += '<div class="print-doc-brand">פורצות דרך — פיץ׳ סופי</div>';
+        html += '<h1>' + esc(projectName) + "</h1>";
+        html += '<div class="print-doc-meta">משתתפות: ' + esc(presenters.join(", ") || "—") + "</div>";
+        html += "</header>";
+        html += '<main class="print-doc-content">';
+        cards.forEach(function (card) {
+          html += '<article class="print-speaker-card">';
+          html += "<h2>משתתפת " + esc(String(card.num || 1)) + ": " + esc(card.name || "") + "</h2>";
+          html += '<div class="print-speaker-text">' + esc(card.text || "") + "</div>";
+          html += "</article>";
+        });
+        if (tips.length) {
+          html += '<article class="print-speaker-card print-tips-card"><h2>דגשים להצגה</h2><div class="print-speaker-text">' +
+            esc(tips.map(function (tip) { return "• " + tip; }).join("\n")) + "</div></article>";
         }
-        html += '</div>';
-        html += '</header>';
-
-        html += '<section class="pd-section">';
-        html += '<div class="pd-section-title">פיץ׳ סופי להצגה — מחולק למציגות</div>';
-
-        if (aiPitchCards && aiPitchCards.length) {
-          html += '<div class="pd-ai-cards">';
-          aiPitchCards.forEach(function (card) {
-            html += '<article class="pd-ai-card">';
-            html += '<div class="pd-ai-card-header">';
-            html += '<span class="pd-ai-card-num">' + esc(String(card.num)) + '</span>';
-            html += '<span class="pd-ai-card-name">' + esc(card.name) + '</span>';
-            html += '</div>';
-            html += '<div class="pd-ai-card-text">' + esc(card.text) + '</div>';
-            html += '</article>';
-          });
-          html += '</div>';
-
-          if (aiPitchTips && aiPitchTips.length) {
-            html += '<div class="pd-ai-tips">';
-            html += '<div class="pd-ai-tips-label">דגשים להצגה</div>';
-            html += '<div class="pd-ai-tips-text">' + esc(aiPitchTips.map(function (t) { return "• " + t; }).join("\n")) + '</div>';
-            html += '</div>';
-          }
-        } else {
-          html += '<div class="pd-pitch-card">';
-          html += '<div class="pd-pitch-text" style="color:#6b7280;text-align:center;padding:8mm 0">';
-          html += 'כדי לייצר PDF מעוצב יש להשלים את שלב 4:\n';
-          html += 'יצירת פרומפט ← שליחה ל-AI ← הדבקת תוצאה ← יצירת מסמך פיץ׳.';
-          html += '</div>';
-          html += '</div>';
-        }
-
-        html += '</section>';
-        html += '</div>';
-        html += '<footer class="pd-footer"><span>פורצות דרך</span><span>פיץ׳ סופי להצגה</span></footer>';
-        html += '</section>';
+        html += "</main></section>";
 
         doc.innerHTML = html;
+      }
+
+      function buildCopyablePitchDocumentText() {
+        var fullPitchEl = document.getElementById("fullPitch");
+        var pastedText = fullPitchEl ? fullPitchEl.value.trim() : "";
+        if (!pastedText) return "";
+        var parsed = parseAIPitchOutput(pastedText);
+        var lines = ["פיץ׳ סופי להצגה", "", "שם המיזם: " + (getElementValue("project_name") || "—"), ""];
+        var cards = parsed.cards && parsed.cards.length ? parsed.cards : [{ num: 1, name: "פיץ׳ מלא", text: pastedText }];
+        cards.forEach(function (card) {
+          lines.push("משתתפת " + (card.num || 1) + ": " + (card.name || ""));
+          lines.push((card.text || "").trim());
+          lines.push("");
+        });
+        if (parsed.tips && parsed.tips.length) {
+          lines.push("דגשים להצגה:");
+          parsed.tips.forEach(function (tip) { lines.push("- " + tip); });
+        }
+        return lines.join("\n").trim();
       }
 
       function updateTimerDisplay() {
@@ -1754,8 +1554,9 @@
       }
 
       function attachEvents() {
-                var generateAIPromptBtn = document.getElementById("generateAIPrompt");
-                var renderAIPitchBtn = document.getElementById("renderAIPitch");
+        var generateAIPromptBtn = document.getElementById("generateAIPrompt");
+        var renderAIPitchBtn = document.getElementById("renderAIPitch");
+        var copyPitchDocumentBtn = document.getElementById("copyPitchDocument");
         var printBtn = document.getElementById("printPage");
         var presenterCount = document.getElementById("presenterCount");
         var startTimerBtn = document.getElementById("startTimer");
@@ -1803,6 +1604,17 @@
         if (renderAIPitchBtn) {
           renderAIPitchBtn.addEventListener("click", function () {
             renderAIPitchCards();
+          });
+        }
+        if (copyPitchDocumentBtn) {
+          copyPitchDocumentBtn.addEventListener("click", function () {
+            var text = buildCopyablePitchDocumentText();
+            if (!text) return alert("אין מסמך פיץ׳ להעתקה. יש להדביק תחילה פיץ׳ מה־AI וליצור מסמך.");
+            navigator.clipboard.writeText(text).then(function () {
+              alert("מסמך הפיץ׳ הועתק בהצלחה.");
+            }).catch(function () {
+              alert("לא הצלחנו להעתיק. נסו שוב.");
+            });
           });
         }
 
@@ -2073,10 +1885,18 @@
           "   • סימני פיסוק כפולים כמו .,\n" +
           "9. " + genderInstruction + "\n" +
           "10. אין לכלול נאום מעלית.\n\n" +
+          "חשוב מאוד:\n" +
+          "החזר את התוצאה בלבד, ללא הסברים לפני או אחרי.\n" +
+          "אל תשתמש בטבלה.\n" +
+          "אל תשתמש בעיצוב מורכב.\n" +
+          "כתוב טקסט נקי שאפשר להעתיק בלחיצה אחת ולהדביק ישירות באתר או בכל מסמך אחר.\n" +
+          "אל תכתוב משפטי פתיחה כמו 'בטח', 'הנה', 'להלן' או הערות צד.\n" +
+          "אל תשתמש ב-Markdown מורכב.\n" +
+          "כן השתמש בכותרות פשוטות וברורות לפי המבנה בלבד.\n\n" +
           "━━━━━━━━━━━━━━━━━━━━━\n" +
           "מבנה הפלט הנדרש — יש לשמור על מבנה זה בדיוק:\n" +
           "━━━━━━━━━━━━━━━━━━━━━\n\n" +
-          "פיץ׳ סופי מחולק למציגות\n\n" +
+          "פיץ׳ סופי להצגה\n\n" +
           "שם המיזם: " + projectName + "\n\n";
 
         for (var j = 1; j <= count; j++) {
