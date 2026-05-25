@@ -966,9 +966,17 @@
           .filter(Boolean);
         if (direct.length) return direct;
         var src = group.data_json || {};
+        if (Array.isArray(src.speakers)) return src.speakers.map(function (name) { return String(name || "").trim(); }).filter(Boolean);
+        if (Array.isArray(src.students)) return src.students.map(function (name) { return String(name || "").trim(); }).filter(Boolean);
         return [src.speaker_1, src.speaker_2, src.speaker_3, src.speaker_4, src.speaker_5]
           .map(function (name) { return String(name || "").trim(); })
           .filter(Boolean);
+      }
+      function resolvePresenterCount(group, speakers) {
+        var direct = Number(group && group.presenter_count);
+        if (direct > 0) return Math.min(5, direct);
+        if (speakers && speakers.length) return Math.min(5, speakers.length);
+        return 1;
       }
       function resolveProjectName(group) {
         if (!group) return "";
@@ -1536,21 +1544,31 @@
         QUESTION_FIELDS.forEach(function (key) {
           if (Object.prototype.hasOwnProperty.call(src, key)) out[key] = src[key];
         });
+        if (group && group.project_name && !out.project_name) out.project_name = group.project_name;
         return out;
+      }
+      function buildImagePromptsLink(groupCode) {
+        return "../final/image-prompts.html?group=" + encodeURIComponent(groupCode);
+      }
+      function buildPosterLink(groupCode) {
+        return "../poster-builder/index.html?group=" + encodeURIComponent(groupCode);
       }
 
       async function loadGroupIntoPitch(groupCode) {
         if (!supabaseClient) return setAdminStatus("חסר חיבור Supabase");
         var res = await supabaseClient.from("pitch_groups").select("*").eq("group_code", groupCode).single();
         if (res.error || !res.data) return setAdminStatus("שגיאה בטעינת קבוצה");
-        applySavedData(getQuestionsOnlyFromGroup(res.data));
+        var group = res.data;
+        applySavedData(getQuestionsOnlyFromGroup(group));
+        var speakers = getGroupSpeakers(group);
+        var presenterCount = resolvePresenterCount(group, speakers);
         var pc = document.getElementById("presenterCount");
-        if (pc) pc.value = "1";
-        var fp = document.getElementById("fullPitch"); if (fp) fp.value = "";
-        var ep = document.getElementById("elevatorPitch"); if (ep) ep.value = "";
-        renderPresenterInputs({});
+        if (pc) pc.value = String(presenterCount);
+        var speakerData = {};
+        for (var i = 0; i < 5; i += 1) speakerData["speaker_" + (i + 1)] = speakers[i] || "";
+        renderPresenterInputs(speakerData);
         renderRoles(); buildPrintDocument(); saveAll();
-        setAdminStatus("הקבוצה נטענה בהצלחה כברירת מחדל למציגה אחת");
+        setAdminStatus("הקבוצה נטענה בהצלחה");
       }
 
       function renderAdminGroups() {
@@ -1565,7 +1583,12 @@
           var name = esc(g.group_name || "—");
           var project = esc(resolveProjectName(g) || "—");
           var updated = esc(formatDate(g.updated_at || ((g.data_json || {}).updated_at)));
-          return '<article class="group-card" data-code="' + code + '"><div class="group-head"><div><div class="group-title">' + name + ' / ' + code + '</div><div class="group-meta">מיזם: ' + project + '</div><div class="group-meta">עודכן: ' + updated + '</div></div></div><div class="group-actions"><button class="btn secondary open-data-btn" type="button">פתחי נתונים</button><button class="btn secondary load-group-btn" type="button">טעני לפיץ׳</button><button class="btn secondary copy-link-btn" type="button">העתקת קישור לקבוצה</button></div><div class="group-data" id="group-data-' + code + '"></div></article>';
+          var speakers = getGroupSpeakers(g);
+          var presenterCount = resolvePresenterCount(g, speakers);
+          var speakersLabel = esc(speakers.length ? speakers.join(", ") : "—");
+          var posterExists = !!g.poster_exists;
+          var posterStatus = posterExists ? "קיים" : "חסר";
+          return '<article class="group-card" data-code="' + code + '"><div class="group-head"><div><div class="group-title">' + name + ' / ' + code + '</div><div class="group-meta">מיזם: ' + project + '</div><div class="group-meta">מציגות (' + presenterCount + '): ' + speakersLabel + '</div><div class="group-meta">סטטוס פוסטר: ' + posterStatus + '</div><div class="group-meta">עודכן: ' + updated + '</div></div></div><div class="group-actions"><button class="btn secondary open-data-btn" type="button">פתחי נתונים</button><button class="btn secondary load-group-btn" type="button">טעני לפיץ׳</button><button class="btn secondary open-pitch-link-btn" type="button">פתיחת פיץ׳</button><button class="btn secondary open-poster-btn" type="button">פתיחת פוסטר</button><button class="btn secondary image-prompts-btn" type="button">פרומפטים לתמונות</button><button class="btn secondary copy-link-btn" type="button">העתקת קישור לקבוצה</button></div><div class="group-data" id="group-data-' + code + '"></div></article>';
         }).join("");
       }
 
@@ -1575,9 +1598,12 @@
           renderAdminGroups();
           return setAdminStatus("חסר חיבור Supabase — לא ניתן לטעון קבוצות");
         }
-        var res = await supabaseClient.from("pitch_groups").select("id, group_code, group_name, project_name, speaker_1, speaker_2, speaker_3, speaker_4, speaker_5, data_json, updated_at").order("group_code");
+        var res = await supabaseClient.from("pitch_groups").select("id, group_code, group_name, project_name, presenter_count, speaker_1, speaker_2, speaker_3, speaker_4, speaker_5, data_json, updated_at").order("group_code");
         if (res.error) return setAdminStatus("שגיאה בטעינת קבוצות");
         cachedGroups = res.data || [];
+        var posterRes = await supabaseClient.from("poster_submissions").select("pitch_group_code");
+        var codes = new Set((posterRes.data || []).map(function (row) { return row.pitch_group_code; }).filter(Boolean));
+        cachedGroups.forEach(function (g) { g.poster_exists = codes.has(g.group_code); });
         renderAdminGroups();
         if (!cachedGroups.length) return setAdminStatus("לא נמצאו קבוצות ב־Supabase");
       }
@@ -1692,6 +1718,9 @@
             await navigator.clipboard.writeText(link);
             return setAdminStatus("הקישור הועתק ללוח");
           }
+          if (e.target.closest(".open-pitch-link-btn")) return window.open(buildGroupLink(code), "_blank");
+          if (e.target.closest(".open-poster-btn")) return window.open(buildPosterLink(code), "_blank");
+          if (e.target.closest(".image-prompts-btn")) return window.open(buildImagePromptsLink(code), "_blank");
           if (e.target.closest(".open-data-btn")) {
             var panel = card.querySelector(".group-data");
             panel.classList.toggle("open");
@@ -1701,7 +1730,13 @@
               var entries = QUESTION_FIELDS.filter(function (key) { return String(data[key] || "").trim(); }).map(function (key) {
                 return '<div class="group-data-item"><b>' + esc(key) + ':</b> ' + esc(data[key]) + '</div>';
               });
-              panel.innerHTML = '<div class="group-data-grid">' + (entries.join("") || "<div>—</div>") + "</div>";
+              var speakers = getGroupSpeakers(group);
+              var operational = [
+                '<div class="group-data-item"><b>שם מיזם:</b> ' + esc(resolveProjectName(group) || "—") + '</div>',
+                '<div class="group-data-item"><b>מספר מציגות:</b> ' + esc(String(resolvePresenterCount(group, speakers))) + '</div>',
+                '<div class="group-data-item"><b>שמות מציגות:</b> ' + esc(speakers.join(", ") || "—") + '</div>'
+              ];
+              panel.innerHTML = '<div class="group-data-grid">' + operational.join("") + (entries.join("") || "<div>—</div>") + "</div>";
               panel.dataset.ready = "1";
             }
           }

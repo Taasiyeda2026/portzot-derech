@@ -19,6 +19,7 @@ const h = React.createElement;
 const PRESELECTED_PRODUCT_TYPE = window.__POSTER_BUILDER_PRODUCT_TYPE || null;
 const PRESELECTED_START_STEP = Number(window.__POSTER_BUILDER_START_STEP || 0) || null;
 const CURRENT_SCHOOL_SLUG = new URLSearchParams(window.location.search).get('school') || 'default';
+const URL_GROUP_CODE = new URLSearchParams(window.location.search).get('group') || '';
 
 const ALL_CONTENT_KEYS = getAllContentKeys();
 const EMPTY_PROMPT_ANSWERS = { main_whatToSee:'',main_appearance:'',main_highlight:'',main_material:'',main_background:'',main_style:'',main_realism:'',main_colors:'',main_exclude:'',usage_who:'',usage_howMany:'',usage_action:'',usage_where:'',usage_understand:'',usage_highlight:'',usage_style:'',usage_realism:'',usage_colors:'',usage_exclude:'' };
@@ -96,7 +97,10 @@ function App() {
     try {
       const groups = await listPitchGroupsForPoster();
       setPitchGroups(groups);
-      if (!selectedGroupId && groups[0]?.id) setSelectedGroupId(groups[0].id);
+      if (!selectedGroupId && groups.length) {
+        const matched = URL_GROUP_CODE ? groups.find((g) => g.group_code === URL_GROUP_CODE) : null;
+        setSelectedGroupId((matched && matched.id) || groups[0].id || '');
+      }
       setGroupMessage('');
       return groups;
     } catch (error) {
@@ -181,6 +185,7 @@ function App() {
   }
 
   useEffect(() => { loadPitchGroupsForPoster(); }, []);
+  useEffect(() => { if (selectedGroupId) loadPosterByGroup(selectedGroupId); }, [selectedGroupId]);
   useEffect(() => {
     window.loadPitchGroupsForPoster = loadPitchGroupsForPoster;
     window.loadPosterByGroup = loadPosterByGroup;
