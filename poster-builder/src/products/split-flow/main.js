@@ -1,5 +1,5 @@
 import { getVisualSlots, getPosterFields, FIELD_DEFINITIONS, BACKGROUNDS, AVAILABLE_FONTS } from '../physical/config.js';
-import { saveProject, loadProject } from '../../shared/storage.js';
+import { saveProject, loadProject, clearProject } from '../../shared/storage.js';
 import { createPosterSubmission, updatePosterSubmission, fetchPosterSubmission, listPosterSubmissionsByGroupCode } from '../../shared/poster-submissions.js';
 import { resolveSchoolConfig } from '../../shared/poster-schools.js';
 import { normalizeImagePrompts } from '../../shared/poster-submissions.js';
@@ -28,6 +28,7 @@ const requestedSchoolSlug = pageParams.get('school') || 'default';
 const freshStartRequested = pageParams.get('fresh') === '1' || pageParams.get('start') === '1';
 const requestedPosterId = (pageParams.get('poster_id') || '').trim();
 const requestedGroupCode = (pageParams.get('group') || '').trim();
+const hasScopedPosterContext = Boolean(requestedPosterId || requestedGroupCode);
 const schoolConfig = await resolveSchoolConfig(requestedSchoolSlug);
 const schoolSlug = schoolConfig.slug || 'default';
 const schoolKnown = schoolConfig.known !== false;
@@ -1181,11 +1182,27 @@ function seedPosterBuilderState() {
 }
 
 const SUBMISSION_ID_KEY = `poster_submission_id:${schoolSlug}:${productType}`;
-const URL_SCOPE_KEY = requestedPosterId ? `poster:${requestedPosterId}` : (requestedGroupCode ? `group:${requestedGroupCode}` : `school:${schoolSlug}`);
-const LEGACY_SCOPE_KEYS = [SUBMISSION_ID_KEY, `poster_submission_id:${schoolSlug}`];
-const SCOPED_SUBMISSION_ID_KEY = `poster_submission_id:${schoolSlug}:${productType}:${URL_SCOPE_KEY}`;
+const CONTEXT_STORAGE_PREFIX = `poster_submission_id:${schoolSlug}:`;
 
+function getScopedContextStorageKey() {
+  if (requestedPosterId) return `poster_ctx:${schoolSlug}:poster:${requestedPosterId}`;
+  if (requestedGroupCode) return `poster_ctx:${schoolSlug}:group:${requestedGroupCode}`;
+  return '';
+}
 
+function clearLocalPosterContextKeys() {
+  const scopedContextKey = getScopedContextStorageKey();
+  Object.keys(localStorage).forEach((key) => {
+    if (key.startsWith(CONTEXT_STORAGE_PREFIX)) localStorage.removeItem(key);
+    if (scopedContextKey && key.startsWith('poster_ctx:') && key !== scopedContextKey) localStorage.removeItem(key);
+  });
+}
+
+function clearPosterLocalWorkData() {
+  clearLocalPosterContextKeys();
+  clearProject(schoolSlug);
+  localStorage.removeItem(SUBMISSION_ID_KEY);
+}
 function removeFreshParamsFromUrl() {
   if (!freshStartRequested) return;
   const nextUrl = new URL(window.location.href);
@@ -1216,6 +1233,31 @@ function initializeFreshStartIfRequested() {
   localStorage.removeItem(SCOPED_SUBMISSION_ID_KEY);
   state.step = 1;
   removeFreshParamsFromUrl();
+}
+
+function resetLocalWorkAndReload() {
+  clearPosterLocalWorkData();
+  const nextUrl = new URL(window.location.href);
+  nextUrl.searchParams.delete('fresh');
+  nextUrl.searchParams.delete('start');
+  const msg = hasScopedPosterContext
+    ? 'הנתונים המקומיים נוקו. הנתונים השמורים של הקבוצה נטענו מחדש.'
+    : 'הנתונים המקומיים נוקו.';
+  nextUrl.searchParams.set('local_reset_msg', msg);
+  window.location.href = `${nextUrl.pathname}${nextUrl.search}${nextUrl.hash}`;
+}
+
+function resetLocalWorkAndReload() {
+  clearPosterLocalWorkData();
+  const nextUrl = new URL(window.location.href);
+  nextUrl.searchParams.delete('fresh');
+  nextUrl.searchParams.delete('start');
+  const hasContext = requestedPosterId || requestedGroupCode;
+  const msg = hasContext
+    ? 'הנתונים המקומיים נוקו. הנתונים השמורים של הקבוצה נטענו מחדש.'
+    : 'הנתונים המקומיים נוקו.';
+  nextUrl.searchParams.set('local_reset_msg', msg);
+  window.location.href = `${nextUrl.pathname}${nextUrl.search}${nextUrl.hash}`;
 }
 
 async function submitPoster() {
@@ -1292,6 +1334,9 @@ function renderStep1() {
     <article class="split-card">
       <h3>ערך, משוב ושיפורים</h3>
       ${bottomFields.map(renderResearchField).join('')}
+      <div style="margin-top:8px;display:flex;justify-content:flex-start">
+        <button type="button" class="split-btn ghost split-compact-btn" data-clear-local-work>ניקוי נתוני עבודה קודמת</button>
+      </div>
     </article>`;
 }
 
@@ -1429,8 +1474,8 @@ function renderStep2() {
         <h3>פרומפטים לתמונות</h3>
         <p style="margin:0;font-size:14px;color:#4b5563">העתיקי כל פרומפט והדביקי אותו בכלי AI ליצירת תמונות.</p>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <button type="button" class="split-btn ghost" data-copy-physical="main" style="font-size:14px">1. העתיקי פרומפט — תמונה ראשית</button>
-          <button type="button" class="split-btn ghost" data-copy-physical="usage" style="font-size:14px">2. העתיקי פרומפט — תמונת שימוש</button>
+          <button type="button" class="split-btn ghost" data-copy-physical="main" style="font-size:14px">1. העתקת פרומפט — תמונה ראשית</button>
+          <button type="button" class="split-btn ghost" data-copy-physical="usage" style="font-size:14px">2. העתקת פרומפט — תמונת שימוש</button>
           <button type="button" class="split-btn primary" data-copy-physical="all" style="font-size:14px">העתיקי את שניהם</button>
         </div>
       </article>
@@ -1454,7 +1499,7 @@ function renderStep2() {
 
 function renderStep3() {
   const buttons = state.images.map((_, index) =>
-    `<button type="button" class="split-btn ghost" data-copy-image="${index}" style="font-size:14px">${index + 1}. העתיקי פרומפט — מסך ${index + 1}</button>`
+    `<button type="button" class="split-btn ghost" data-copy-image="${index}" style="font-size:14px">${index + 1}. העתקת פרומפט — מסך ${index + 1}</button>`
   ).join('');
 
   return `<article class="split-card">
@@ -1689,6 +1734,7 @@ function render() {
     .split-slot-label{font-size:13px;font-weight:700;color:#4c1d95;text-align:center}
     .split-slot-upload-lbl{cursor:pointer;font-size:13px;padding:8px 14px}
     .split-upload-error{margin:0;padding:10px 12px;border-radius:10px;background:#fff1f2;color:#b91c1c;border:1px solid #fecdd3;font-size:13px;font-weight:600}
+    .split-compact-btn{font-size:12px;padding:6px 10px;line-height:1.2;opacity:.88}
     .split-upload-slot{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:12px;background:#faf8ff;border:1px solid #e2d4fb}
     .split-upload-slot.is-uploaded{background:#f0fdf4;border-color:#86efac}
     .split-upload-slot.is-uploading{background:#eff6ff;border-color:#93c5fd}
@@ -1881,6 +1927,10 @@ function wireEvents() {
       return copyText(`פרומפט תמונה ראשית:\n${buildPhysicalPrompt('main')}\n\nפרומפט תמונת שימוש:\n${buildPhysicalPrompt('usage')}`, button);
     });
   });
+  const clearLocalWorkBtn = root.querySelector('[data-clear-local-work]');
+  if (clearLocalWorkBtn) {
+    clearLocalWorkBtn.addEventListener('click', () => resetLocalWorkAndReload());
+  }
 
   root.querySelectorAll('[data-slot-upload]').forEach((input) => {
     input.addEventListener('change', async () => {
@@ -2011,23 +2061,23 @@ function wireEvents() {
 resetActivePosterState();
 initializeFreshStartIfRequested();
 const resolvedSubmission = await resolveSubmissionFromParams();
-if (requestedPosterId) {
-  if (resolvedSubmission.mode === 'single') {
-    hydrateStateFromSubmission(resolvedSubmission.submission);
-  } else if (resolvedSubmission.mode === 'conflict' || resolvedSubmission.mode === 'error' || resolvedSubmission.mode === 'none') {
-    state.submitStatus = 'error';
-    state.submitMessage = resolvedSubmission.message || 'לא נמצא פוסטר עבור poster_id המבוקש.';
-  }
-} else {
-  if (resolvedSubmission.mode === 'single') {
-    hydrateStateFromSubmission(resolvedSubmission.submission);
-  } else {
-    hydrateStateFromStorage();
-  }
-  if (resolvedSubmission.mode === 'multi' || resolvedSubmission.mode === 'conflict' || resolvedSubmission.mode === 'error') {
-    state.submitStatus = 'error';
-    state.submitMessage = resolvedSubmission.message;
-  }
+if (resolvedSubmission.mode === 'single') {
+  clearLocalPosterContextKeys();
+  const scopedContextKey = getScopedContextStorageKey();
+  if (scopedContextKey) localStorage.setItem(scopedContextKey, Date.now().toString());
+  hydrateStateFromSubmission(resolvedSubmission.submission);
+} else if (resolvedSubmission.mode === 'multi' || resolvedSubmission.mode === 'conflict' || resolvedSubmission.mode === 'error') {
+  state.submitStatus = 'error';
+  state.submitMessage = resolvedSubmission.message;
 }
-LEGACY_SCOPE_KEYS.forEach((key) => localStorage.removeItem(key));
+initializeFreshStartIfRequested();
+if (!hasScopedPosterContext || resolvedSubmission.mode === 'none') hydrateStateFromStorage();
+const resetMsg = pageParams.get('local_reset_msg');
+if (resetMsg) {
+  state.submitStatus = 'success';
+  state.submitMessage = resetMsg;
+  const cleanUrl = new URL(window.location.href);
+  cleanUrl.searchParams.delete('local_reset_msg');
+  history.replaceState({}, '', `${cleanUrl.pathname}${cleanUrl.search}${cleanUrl.hash}`);
+}
 render();
