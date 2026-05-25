@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>לוח אדמין קבוצות | פורצות דרך</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../config/supabase-config.js"></script>
+  <style>
+    :root{--pink:#ec4899;--purple:#8b5cf6;--bg:#fff7fd;--card:#fff;--line:#ead9f8;--txt:#2b1f3f;--muted:#6f6483;--ok:#059669;--bad:#dc2626}
+    *{box-sizing:border-box} body{margin:0;font-family:Rubik,Arial,sans-serif;background:var(--bg);color:var(--txt)}
+    .wrap{max-width:1100px;margin:auto;padding:14px}.top{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+    .top h1{margin:0;font-size:1.25rem}.muted{color:var(--muted);font-size:.9rem}
+    .search{padding:8px 10px;border:1px solid var(--line);border-radius:10px;min-width:220px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;margin-top:12px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px}
+    .card h3{margin:.15rem 0 .4rem;font-size:1.03rem}.row{font-size:.88rem;margin:2px 0}.row b{color:#4b2c78}
+    .status-ok{color:var(--ok);font-weight:700}.status-bad{color:var(--bad);font-weight:700}
+    .btns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-top:8px}
+    button,.linkbtn{border:1px solid #d9c2f7;background:#fff;padding:7px;border-radius:8px;font-size:.83rem;cursor:pointer;text-decoration:none;color:#3a2559;text-align:center}
+    button:hover,.linkbtn:hover{background:#faf4ff}.danger{border-color:#fecaca;color:#b91c1c}
+    .details{display:none;margin-top:8px;background:#faf7ff;border:1px dashed var(--line);border-radius:10px;padding:8px}
+    .details.open{display:block}.pairs{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px;font-size:.84rem}
+    .toast{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);background:#1f1431;color:#fff;padding:8px 14px;border-radius:999px;display:none}
+    .login{position:fixed;inset:0;display:grid;place-items:center;background:rgba(32,18,46,.3)}
+    .panel{background:#fff;padding:16px;border-radius:12px;border:1px solid var(--line);width:min(340px,92vw)}
+    .panel input{width:100%;padding:9px;border:1px solid var(--line);border-radius:8px;margin:8px 0}
+    @media (max-width:640px){.btns{grid-template-columns:1fr}.pairs{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div id="login" class="login"><div class="panel"><h3>כניסת אדמין</h3><input id="pass" type="password" placeholder="סיסמה" /><button id="enter">כניסה</button><div id="loginMsg" class="muted"></div></div></div>
+  <div class="wrap">
+    <div class="top">
+      <div><h1>לוח אדמין קבוצות</h1><div id="meta" class="muted">טוען נתונים…</div></div>
+      <input id="search" class="search" placeholder="חיפוש לפי קוד / קבוצה / מיזם" />
+    </div>
+    <div id="cards" class="grid"></div>
+  </div>
+  <div id="toast" class="toast">הקישור הועתק.</div>
+<script>
+(() => {
+  const ADMIN_PASS='1234';
+  const loginEl=document.getElementById('login');
+  const passEl=document.getElementById('pass');
+  const enterBtn=document.getElementById('enter');
+  const loginMsg=document.getElementById('loginMsg');
+  const cardsEl=document.getElementById('cards');
+  const metaEl=document.getElementById('meta');
+  const searchEl=document.getElementById('search');
+  const toastEl=document.getElementById('toast');
+
+  const client = window.supabase.createClient(window.PORTZOT_SUPABASE_URL, window.PORTZOT_SUPABASE_ANON_KEY);
+  let all=[];
+
+  function showToast(msg='הקישור הועתק.') { toastEl.textContent=msg; toastEl.style.display='block'; setTimeout(()=>toastEl.style.display='none',1300); }
+  function norm(v){return (v??'').toString().trim();}
+  function dField(dj,keys){for(const k of keys){const v=norm(dj?.[k]); if(v) return v;} return '—';}
+  function speakerList(g){
+    const direct=[g.speaker_1,g.speaker_2,g.speaker_3,g.speaker_4,g.speaker_5].map(norm).filter(Boolean);
+    if(direct.length) return direct;
+    const a=Array.isArray(g.data_json?.speakers)?g.data_json.speakers:[];
+    if(a.length) return a.map(norm).filter(Boolean);
+    const b=Array.isArray(g.data_json?.students)?g.data_json.students:[];
+    return b.map(x=>typeof x==='string'?x:norm(x?.name||x?.full_name||x?.student_name)).filter(Boolean);
+  }
+  function fullUrl(path){return new URL(path, location.origin + location.pathname.replace(/[^/]+$/, '')).href;}
+
+  async function load(){
+    const {data:groups,error}=await client.from('pitch_groups').select('group_code,group_name,project_name,presenter_count,speaker_1,speaker_2,speaker_3,speaker_4,speaker_5,data_json,updated_at').order('group_code');
+    if(error){metaEl.textContent='שגיאה בטעינת קבוצות';return;}
+    const {data:posters}=await client.from('poster_submissions').select('pitch_group_code');
+    const counts=(posters||[]).reduce((m,r)=>{m[r.pitch_group_code]=(m[r.pitch_group_code]||0)+1;return m;},{});
+    all=(groups||[]).map(g=>({...g, poster_count:counts[g.group_code]||0}));
+    metaEl.textContent=`נטענו ${all.length} קבוצות`;
+    render(all);
+  }
+
+  function render(list){
+    cardsEl.innerHTML=list.map(g=>{
+      const speakers=speakerList(g);
+      const st=g.poster_count>0?`<span class='status-ok'>קיים (${g.poster_count})</span>`:`<span class='status-bad'>חסר</span>`;
+      const pitchPath=`final/pitch-activity.html?group=${encodeURIComponent(g.group_code)}`;
+      const posterPath=`poster-builder/product/app.html?group=${encodeURIComponent(g.group_code)}`;
+      const promptsPath=`final/image-prompts.html?group=${encodeURIComponent(g.group_code)}`;
+      const details=[['שם מיזם',g.project_name||'—'],['שם קבוצה',g.group_name||'—'],['קוד קבוצה',g.group_code||'—'],['מספר מציגות',g.presenter_count??'—'],['שמות מציגות',speakers.join(', ')||'—'],['בעיה',dField(g.data_json,['problem'])],['קהל יעד',dField(g.data_json,['audience','target_audience'])],['צורך מרכזי',dField(g.data_json,['main_need','need'])],['רעיון',dField(g.data_json,['idea'])],['מה המוצר עושה',dField(g.data_json,['product_action','solution'])],['תיאור אב-טיפוס',dField(g.data_json,['prototype_description','prototype'])],['ייחודיות',dField(g.data_json,['uniqueness','tech_part'])],['ערך מרכזי',dField(g.data_json,['main_value','value'])],['סטטוס פוסטר',g.poster_count>0?`קיים (${g.poster_count})`:'חסר']]
+      .map(([k,v])=>`<div><b>${k}:</b> ${v}</div>`).join('');
+      return `<article class='card' data-key='${[g.group_code,g.group_name,g.project_name].join(' ').toLowerCase()}' data-group='${g.group_code}'>
+        <h3>${g.project_name||'ללא שם מיזם'}</h3>
+        <div class='row'><b>שם קבוצה:</b> ${g.group_name||'—'}</div>
+        <div class='row'><b>קוד:</b> ${g.group_code||'—'}</div>
+        <div class='row'><b>מציגות:</b> ${speakers.join(', ')||'—'}</div>
+        <div class='row'><b>מספר מציגות:</b> ${g.presenter_count??'—'}</div>
+        <div class='row'><b>סטטוס פוסטר:</b> ${st}</div>
+        <div class='row'><b>עודכן:</b> ${g.updated_at?new Date(g.updated_at).toLocaleString('he-IL'):'—'}</div>
+        <div class='btns'>
+          <a class='linkbtn' target='_blank' href='../${posterPath}'>פתיחת פוסטר</a>
+          <a class='linkbtn' target='_blank' href='../${pitchPath}'>פתיחת פיץ׳</a>
+          <a class='linkbtn' target='_blank' href='../${promptsPath}'>פרומפטים לתמונות</a>
+          <button data-copy='poster' data-group='${g.group_code}'>העתקת קישור לפוסטר</button>
+          <button data-copy='pitch' data-group='${g.group_code}'>העתקת קישור לפיץ׳</button>
+          <button data-toggle='${g.group_code}'>פתחי נתונים</button>
+          <button class='danger' data-delete='${g.group_code}' data-posters='${g.poster_count}'>מחיקה</button>
+        </div>
+        <div id='d-${g.group_code}' class='details'><div class='pairs'>${details}</div></div>
+      </article>`;
+    }).join('');
+  }
+
+  searchEl.addEventListener('input',()=>{
+    const q=searchEl.value.trim().toLowerCase();
+    render(!q?all:all.filter(g=>`${g.group_code} ${g.group_name} ${g.project_name}`.toLowerCase().includes(q)));
+  });
+
+  cardsEl.addEventListener('click', async (e) => {
+    const t=e.target;
+    const tg=t.getAttribute('data-toggle');
+    if(tg){document.getElementById(`d-${tg}`)?.classList.toggle('open'); return;}
+    const cp=t.getAttribute('data-copy');
+    if(cp){
+      const g=t.getAttribute('data-group');
+      const path=cp==='pitch'?`final/pitch-activity.html?group=${encodeURIComponent(g)}`:`poster-builder/product/app.html?group=${encodeURIComponent(g)}`;
+      await navigator.clipboard.writeText(fullUrl(path)); showToast(); return;
+    }
+    const del=t.getAttribute('data-delete');
+    if(del){
+      const posters=Number(t.getAttribute('data-posters')||0);
+      if(posters>0){alert('לקבוצה זו יש פוסטרים מחוברים. המחיקה תסיר את הקבוצה, אך לא תמחק את הפוסטרים.');}
+      if(!confirm('האם למחוק את הקבוצה ואת החיבורים שלה? פעולה זו לא הפיכה.')) return;
+      if(!confirm(`אישור אחרון למחיקת ${del}`)) return;
+      const {error}=await client.from('pitch_groups').delete().eq('group_code',del);
+      if(error){alert('מחיקה נכשלה: '+error.message);return;}
+      all=all.filter(x=>x.group_code!==del); render(all); showToast('הקבוצה נמחקה.');
+    }
+  });
+
+  enterBtn.addEventListener('click',()=>{
+    if(passEl.value===ADMIN_PASS){loginEl.style.display='none';sessionStorage.setItem('groups_admin_ok','1');load();}
+    else loginMsg.textContent='סיסמה שגויה';
+  });
+  if(sessionStorage.getItem('groups_admin_ok')==='1'){loginEl.style.display='none';load();}
+})();
+</script>
+</body>
+</html>
