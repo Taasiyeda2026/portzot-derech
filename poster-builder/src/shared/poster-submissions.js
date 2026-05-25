@@ -106,7 +106,9 @@ function buildSubmissionRow(project) {
     school_name: contentValues.schoolName || null,
     product_type: posterData.productType,
     school_slug: posterData.school_slug || 'default',
-    poster_data: posterData
+    poster_data: posterData,
+    pitch_group_id: project.pitch_group_id || null,
+    pitch_group_code: project.pitch_group_code || null
   };
 }
 
@@ -152,11 +154,26 @@ export async function fetchPosterSubmission(id) {
   if (!client) throw new Error('Poster submissions are not configured.');
   const { data, error } = await client
     .from(POSTER_SUBMISSIONS_TABLE)
-    .select('id, poster_data, product_type')
+    .select('id, poster_data, product_type, pitch_group_code')
     .eq('id', id)
     .single();
   if (error) throw error;
   return data;
+}
+
+
+export async function listPosterSubmissionsByGroupCode(groupCode) {
+  const client = getPosterSubmissionsClient();
+  if (!client) throw new Error('Poster submissions are not configured.');
+  const code = (groupCode || '').toString().trim();
+  if (!code) return [];
+  const { data, error } = await client
+    .from(POSTER_SUBMISSIONS_TABLE)
+    .select('id, poster_data, product_type, pitch_group_id, pitch_group_code, created_at')
+    .eq('pitch_group_code', code)
+    .order('created_at', { ascending: false });
+  if (error) throw error;
+  return data || [];
 }
 
 export async function listPitchGroupsForPoster() {

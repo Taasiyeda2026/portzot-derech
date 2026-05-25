@@ -69,9 +69,9 @@
   async function load(){
     const {data:groups,error}=await client.from('pitch_groups').select('group_code,group_name,project_name,presenter_count,speaker_1,speaker_2,speaker_3,speaker_4,speaker_5,data_json,updated_at').order('group_code');
     if(error){metaEl.textContent='שגיאה בטעינת קבוצות';return;}
-    const {data:posters}=await client.from('poster_submissions').select('pitch_group_code');
-    const counts=(posters||[]).reduce((m,r)=>{m[r.pitch_group_code]=(m[r.pitch_group_code]||0)+1;return m;},{});
-    all=(groups||[]).map(g=>({...g, poster_count:counts[g.group_code]||0}));
+    const {data:posters}=await client.from('poster_submissions').select('id,pitch_group_code,created_at').order('created_at',{ascending:false});
+    const byGroup=(posters||[]).reduce((m,r)=>{const k=norm(r.pitch_group_code); if(!k) return m; (m[k] ||= []).push(r); return m;},{});
+    all=(groups||[]).map(g=>({...g, posters:byGroup[g.group_code]||[], poster_count:(byGroup[g.group_code]||[]).length}));
     metaEl.textContent=`נטענו ${all.length} קבוצות`;
     render(all);
   }
@@ -79,10 +79,12 @@
   function render(list){
     cardsEl.innerHTML=list.map(g=>{
       const speakers=speakerList(g);
-      const st=g.poster_count>0?`<span class='status-ok'>קיים (${g.poster_count})</span>`:`<span class='status-bad'>חסר</span>`;
+      const st=g.poster_count===1?`<span class='status-ok'>קיים (1)</span>`:g.poster_count>1?`<span class='status-bad'>נמצאו כמה פוסטרים (${g.poster_count})</span>`:`<span class='status-bad'>חסר</span>`;
       const pitchPath=`final/pitch-activity.html?group=${encodeURIComponent(g.group_code)}`;
-      const posterPath=`poster-builder/product/app.html?group=${encodeURIComponent(g.group_code)}`;
-      const promptsPath=`final/image-prompts.html?group=${encodeURIComponent(g.group_code)}`;
+      const primaryPoster=g.poster_count===1?g.posters[0]:null;
+      const posterPath=primaryPoster
+        ?`poster-builder/product/app.html?poster_id=${encodeURIComponent(primaryPoster.id)}&group=${encodeURIComponent(g.group_code)}`
+        :`poster-builder/product/app.html?group=${encodeURIComponent(g.group_code)}`;
       const details=[['שם מיזם',g.project_name||'—'],['שם קבוצה',g.group_name||'—'],['קוד קבוצה',g.group_code||'—'],['מספר מציגות',g.presenter_count??'—'],['שמות מציגות',speakers.join(', ')||'—'],['בעיה',dField(g.data_json,['problem'])],['קהל יעד',dField(g.data_json,['audience','target_audience'])],['צורך מרכזי',dField(g.data_json,['main_need','need'])],['רעיון',dField(g.data_json,['idea'])],['מה המוצר עושה',dField(g.data_json,['product_action','solution'])],['תיאור אב-טיפוס',dField(g.data_json,['prototype_description','prototype'])],['ייחודיות',dField(g.data_json,['uniqueness','tech_part'])],['ערך מרכזי',dField(g.data_json,['main_value','value'])],['סטטוס פוסטר',g.poster_count>0?`קיים (${g.poster_count})`:'חסר']]
       .map(([k,v])=>`<div><b>${k}:</b> ${v}</div>`).join('');
       return `<article class='card' data-key='${[g.group_code,g.group_name,g.project_name].join(' ').toLowerCase()}' data-group='${g.group_code}'>
@@ -94,10 +96,9 @@
         <div class='row'><b>סטטוס פוסטר:</b> ${st}</div>
         <div class='row'><b>עודכן:</b> ${g.updated_at?new Date(g.updated_at).toLocaleString('he-IL'):'—'}</div>
         <div class='btns'>
-          <a class='linkbtn' target='_blank' href='../${posterPath}'>פתיחת פוסטר</a>
+          <a class='linkbtn' target='_blank' href='../${posterPath}'>פתיחת פוסטר / פרומפטים</a>
           <a class='linkbtn' target='_blank' href='../${pitchPath}'>פתיחת פיץ׳</a>
-          <a class='linkbtn' target='_blank' href='../${promptsPath}'>פרומפטים לתמונות</a>
-          <button data-copy='poster' data-group='${g.group_code}'>העתקת קישור לפוסטר</button>
+                    <button data-copy='poster' data-group='${g.group_code}'>העתקת קישור לפוסטר</button>
           <button data-copy='pitch' data-group='${g.group_code}'>העתקת קישור לפיץ׳</button>
           <button data-toggle='${g.group_code}'>פתחי נתונים</button>
           <button class='danger' data-delete='${g.group_code}' data-posters='${g.poster_count}'>מחיקה</button>
@@ -119,7 +120,12 @@
     const cp=t.getAttribute('data-copy');
     if(cp){
       const g=t.getAttribute('data-group');
-      const path=cp==='pitch'?`final/pitch-activity.html?group=${encodeURIComponent(g)}`:`poster-builder/product/app.html?group=${encodeURIComponent(g)}`;
+      const group=(all.find(x=>x.group_code===g)||{});
+      let posterLink=`poster-builder/product/app.html?group=${encodeURIComponent(g)}`;
+      if(group.poster_count===1 && group.posters?.[0]?.id){
+        posterLink=`poster-builder/product/app.html?poster_id=${encodeURIComponent(group.posters[0].id)}&group=${encodeURIComponent(g)}`;
+      }
+      const path=cp==='pitch'?`final/pitch-activity.html?group=${encodeURIComponent(g)}`:posterLink;
       await navigator.clipboard.writeText(fullUrl(path)); showToast(); return;
     }
     const del=t.getAttribute('data-delete');
