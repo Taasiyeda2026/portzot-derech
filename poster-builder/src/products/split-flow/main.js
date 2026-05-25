@@ -1,6 +1,6 @@
 import { getVisualSlots, getPosterFields, FIELD_DEFINITIONS, BACKGROUNDS, AVAILABLE_FONTS } from '../physical/config.js';
 import { saveProject, loadProject } from '../../shared/storage.js';
-import { createPosterSubmission, updatePosterSubmission } from '../../shared/poster-submissions.js';
+import { createPosterSubmission, updatePosterSubmission, fetchPosterSubmission, listPosterSubmissionsByGroupCode } from '../../shared/poster-submissions.js';
 import { resolveSchoolConfig } from '../../shared/poster-schools.js';
 import { normalizeImagePrompts } from '../../shared/poster-submissions.js';
 
@@ -26,6 +26,8 @@ const root = document.getElementById('root');
 const pageParams = new URLSearchParams(window.location.search);
 const requestedSchoolSlug = pageParams.get('school') || 'default';
 const freshStartRequested = pageParams.get('fresh') === '1' || pageParams.get('start') === '1';
+const requestedPosterId = (pageParams.get('poster_id') || '').trim();
+const requestedGroupCode = (pageParams.get('group') || '').trim();
 const schoolConfig = await resolveSchoolConfig(requestedSchoolSlug);
 const schoolSlug = schoolConfig.slug || 'default';
 const schoolKnown = schoolConfig.known !== false;
@@ -285,6 +287,43 @@ function mapImagePromptsToSplitFlow(imagePrompts = {}) {
   });
 
   return { sharedVisualPrompt, prototypeScreens, images };
+}
+
+async function resolveSubmissionFromParams() {
+  try {
+    if (requestedPosterId) {
+      const submission = await fetchPosterSubmission(requestedPosterId);
+      if (!submission) return { mode: 'none' };
+      const submissionGroupCode = (submission?.poster_data?.pitch_group_code || '').toString().trim();
+      if (requestedGroupCode && submissionGroupCode && submissionGroupCode !== requestedGroupCode) {
+        return { mode: 'conflict', message: 'poster_id לא שייך לקבוצה המבוקשת.' };
+      }
+      return { mode: 'single', submission };
+    }
+    if (!requestedGroupCode) return { mode: 'none' };
+    const matches = await listPosterSubmissionsByGroupCode(requestedGroupCode);
+    if (matches.length === 1) return { mode: 'single', submission: matches[0] };
+    if (matches.length > 1) return { mode: 'multi', message: `נמצאו כמה פוסטרים לקבוצה ${requestedGroupCode}. בחרי poster_id מדויק מהאדמין.` };
+    return { mode: 'new' };
+  } catch (error) {
+    return { mode: 'error', message: 'טעינת הפוסטר מהשרת נכשלה.' };
+  }
+}
+
+function hydrateStateFromSubmission(submission) {
+  const posterData = submission?.poster_data || {};
+  const split = posterData.splitFlowState || {};
+  Object.assign(state.research, split.research || {});
+  Object.assign(state.design, split.design || {});
+  if (split.physicalPrompt?.main) Object.assign(state.physicalPrompt.main, split.physicalPrompt.main);
+  if (split.physicalPrompt?.usage) Object.assign(state.physicalPrompt.usage, split.physicalPrompt.usage);
+  if (Array.isArray(split.prototypeScreens)) state.prototypeScreens = state.prototypeScreens.map((screen, idx) => ({ ...screen, ...(split.prototypeScreens[idx] || {}) }));
+  Object.assign(state.prototypeFlow, split.prototypeFlow || {});
+  if (Array.isArray(split.images)) state.images = state.images.map((image, idx) => ({ ...image, ...(split.images[idx] || {}) }));
+  state.sharedVisualPrompt = migrateSharedVisualPrompt(split);
+  state.slotImages = { ...(posterData.slotImages || {}) };
+  if (submission?.id) localStorage.setItem(SUBMISSION_ID_KEY, submission.id);
+  saveProject({ ...(loadProject(schoolSlug) || {}), ...posterData, submissionId: submission?.id || null, pitch_group_code: requestedGroupCode || posterData.pitch_group_code || null });
 }
 
 function hydrateStateFromStorage() {
@@ -1942,6 +1981,13 @@ function wireEvents() {
   });
 }
 
+const resolvedSubmission = await resolveSubmissionFromParams();
+if (resolvedSubmission.mode === 'single') {
+  hydrateStateFromSubmission(resolvedSubmission.submission);
+} else if (resolvedSubmission.mode === 'multi' || resolvedSubmission.mode === 'conflict' || resolvedSubmission.mode === 'error') {
+  state.submitStatus = 'error';
+  state.submitMessage = resolvedSubmission.message;
+}
 initializeFreshStartIfRequested();
 hydrateStateFromStorage();
 render();
