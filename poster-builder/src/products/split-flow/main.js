@@ -1182,6 +1182,11 @@ function seedPosterBuilderState() {
 }
 
 const SUBMISSION_ID_KEY = `poster_submission_id:${schoolSlug}:${productType}`;
+const SCOPED_SUBMISSION_ID_KEY = requestedPosterId
+  ? `poster_submission_id:${schoolSlug}:poster:${requestedPosterId}`
+  : requestedGroupCode
+    ? `poster_submission_id:${schoolSlug}:group:${requestedGroupCode}`
+    : SUBMISSION_ID_KEY;
 const CONTEXT_STORAGE_PREFIX = `poster_submission_id:${schoolSlug}:`;
 
 function getScopedContextStorageKey() {
