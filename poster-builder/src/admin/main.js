@@ -477,9 +477,9 @@ function renderTable() {
           <p class="admin-subtitle">פתיחת פוסטר לעריכה או מחיקה ידנית מהרשימה.</p>
         </div>
         <div class="admin-actions admin-actions-top">
-          <button class="admin-btn ghost compact" type="button" data-download-template>הורדת תבנית Excel</button>
+          <button id="downloadQuestionsTemplate" class="admin-btn ghost compact" type="button" data-download-template>הורדת תבנית Excel</button>
           <button class="admin-btn ghost compact" type="button" data-import-excel>ייבוא קובץ Excel</button>
-          <input class="admin-file-input" type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" data-import-file />
+          <input id="uploadQuestionsFile" class="admin-file-input" type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" data-import-file />
           <button class="admin-btn ghost compact" type="button" data-refresh ${state.loading ? 'disabled' : ''}>רענון</button>
           <a class="admin-back" href="./index.html">חזרה</a>
         </div>

@@ -3,19 +3,53 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>מערכת ניהול ישנה נסגרה</title>
-    <meta http-equiv="refresh" content="0; url=../final/admin-groups.html" />
-    <style>
-      body{font-family:Rubik,Arial,sans-serif;background:#fff7fd;color:#2b1f3f;margin:0;display:grid;place-items:center;min-height:100vh;padding:24px}
-      .card{max-width:560px;background:#fff;border:1px solid #ead9f8;border-radius:14px;padding:20px;text-align:center}
-      a{display:inline-block;margin-top:12px;padding:10px 14px;border:1px solid #d9c2f7;border-radius:10px;text-decoration:none;color:#3a2559}
-    </style>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>ניהול פוסטרים ובתי ספר | פורצות דרך</title>
+    <link rel="icon" type="image/png" href="../icon/favicon.png" />
+    <link rel="apple-touch-icon" href="../icon/favicon.png" />
+    <meta name="theme-color" content="#5E2750" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./src/styles/admin.css" />
+    <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js" defer></script>
   </head>
   <body>
-    <main class="card">
-      <h1>מערכת הניהול הישנה נסגרה. יש לעבור ללוח האדמין החדש.</h1>
-      <a href="../final/admin-groups.html">מעבר ללוח האדמין החדש</a>
-    </main>
-    <script>window.location.replace('../final/admin-groups.html');</script>
+    <div id="admin-root" aria-live="polite">
+      <section class="admin-login">
+        <h1 class="admin-title">טוען את ממשק האדמין...</h1>
+        <p class="admin-subtitle">ניהול פוסטרים ובתי ספר</p>
+      </section>
+    </div>
+    <script src="./env.js"></script>
+    <script type="module">
+      const root = document.getElementById('admin-root');
+
+      function renderAdminLoadError(error) {
+        const message = error?.message || 'שגיאה לא צפויה בטעינת ממשק האדמין.';
+        if (!root) return;
+        root.innerHTML = `
+          <section class="admin-login admin-card" style="text-align:right;">
+            <h1 class="admin-title">לא הצלחנו לטעון את ממשק האדמין</h1>
+            <p class="admin-subtitle">נסו לבצע hard refresh או ניקוי cache, ולאחר מכן לפתוח שוב את העמוד.</p>
+            <pre style="direction:ltr;text-align:left;white-space:pre-wrap;word-break:break-word;background:#fff1f2;border:1px solid #fecdd3;border-radius:10px;padding:10px;color:#991b1b;">${message}</pre>
+            <div class="admin-actions">
+              <a class="admin-back" href="./index.html">חזרה לבונה הפוסטרים</a>
+              <a class="admin-back" href="../final/admin-groups.html">ניהול קבוצות/מיזמים</a>
+            </div>
+          </section>
+        `;
+      }
+
+      try {
+        await import('./src/admin/main.js?v=155');
+      } catch (error) {
+        console.error('Failed to initialize poster-builder admin:', error);
+        renderAdminLoadError(error);
+      }
+    </script>
   </body>
 </html>
