@@ -14,6 +14,8 @@
     .search{padding:8px 10px;border:1px solid var(--line);border-radius:10px;min-width:220px}
     .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;margin-top:12px}
     .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px}
+    .card.direct-poster{border-color:#f0abfc;background:#fffaff}
+    .badge{display:inline-block;margin:0 0 .35rem;padding:3px 8px;border-radius:999px;background:#f5d0fe;color:#6b21a8;font-size:.78rem;font-weight:700}
     .card h3{margin:.15rem 0 .4rem;font-size:1.03rem}.row{font-size:.88rem;margin:2px 0}.row b{color:#4b2c78}
     .status-ok{color:var(--ok);font-weight:700}.status-bad{color:var(--bad);font-weight:700}
     .btns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-top:8px}
@@ -55,6 +57,7 @@
 
   function showToast(msg='הקישור הועתק.') { toastEl.textContent=msg; toastEl.style.display='block'; setTimeout(()=>toastEl.style.display='none',1300); }
   function norm(v){return (v??'').toString().trim();}
+  function esc(v){return norm(v).replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[c]));}
   function dField(dj,keys){for(const k of keys){const v=norm(dj?.[k]); if(v) return v;} return '—';}
   function speakerList(g){
     const direct=[g.speaker_1,g.speaker_2,g.speaker_3,g.speaker_4,g.speaker_5].map(norm).filter(Boolean);
@@ -75,54 +78,122 @@
   function buildPosterPath(groupCode, poster){
     const page=productPageFromType(poster?.product_type);
     const base=`poster-builder/product/${page}`;
-    return poster?.id
-      ?`${base}?poster_id=${encodeURIComponent(poster.id)}&group=${encodeURIComponent(groupCode)}`
-      :`${base}?group=${encodeURIComponent(groupCode)}`;
+    const params=new URLSearchParams();
+    if(poster?.id) params.set('poster_id', poster.id);
+    if(norm(groupCode)) params.set('group', norm(groupCode));
+    if(norm(poster?.school_slug) && norm(poster.school_slug)!=='default') params.set('school', norm(poster.school_slug));
+    const query=params.toString();
+    return query?`${base}?${query}`:base;
   }
 
+  function posterDate(p){return p?.created_at?new Date(p.created_at).getTime():0;}
+  function itemDate(item){
+    if(item.type==='direct') return posterDate(item.poster);
+    const groupPosterDate=Math.max(0,...(item.group.posters||[]).map(posterDate));
+    return groupPosterDate || (item.group.updated_at?new Date(item.group.updated_at).getTime():0);
+  }
+  function posterValue(p, key){return norm(p?.[key]) || norm(p?.poster_data?.contentValues?.[key === 'student_names' ? 'studentNames' : key === 'class_name' ? 'className' : key === 'school_name' ? 'schoolName' : key === 'project_name' ? 'projectName' : key]) || '—';}
+
   async function load(){
-    const {data:groups,error}=await client.from('pitch_groups').select('group_code,group_name,project_name,presenter_count,speaker_1,speaker_2,speaker_3,speaker_4,speaker_5,data_json,updated_at').order('group_code');
+    const {data:groups,error}=await client.from('pitch_groups').select('id,group_code,group_name,project_name,presenter_count,speaker_1,speaker_2,speaker_3,speaker_4,speaker_5,data_json,updated_at').order('group_code');
     if(error){metaEl.textContent='שגיאה בטעינת קבוצות';return;}
-    const {data:posters}=await client.from('poster_submissions').select('id,pitch_group_code,product_type,created_at').order('created_at',{ascending:false});
-    const byGroup=(posters||[]).reduce((m,r)=>{const k=norm(r.pitch_group_code); if(!k) return m; (m[k] ||= []).push(r); return m;},{});
-    all=(groups||[]).map(g=>({...g, posters:byGroup[g.group_code]||[], poster_count:(byGroup[g.group_code]||[]).length}));
-    metaEl.textContent=`נטענו ${all.length} קבוצות`;
+    const {data:posters,error:posterError}=await client.from('poster_submissions').select('id,pitch_group_id,pitch_group_code,project_name,student_names,class_name,school_name,product_type,school_slug,created_at,poster_data').order('created_at',{ascending:false});
+    if(posterError){metaEl.textContent='שגיאה בטעינת פוסטרים';return;}
+    const byGroupCode={};
+    const byGroupId={};
+    (posters||[]).forEach(r=>{
+      const code=norm(r.pitch_group_code);
+      const id=norm(r.pitch_group_id);
+      if(code) (byGroupCode[code] ||= []).push(r);
+      if(id) (byGroupId[id] ||= []).push(r);
+    });
+    const groupItems=(groups||[]).map(g=>{
+      const seen=new Set();
+      const linked=[...(byGroupCode[norm(g.group_code)]||[]),...(byGroupId[norm(g.id)]||[])].filter(p=>{
+        if(seen.has(p.id)) return false;
+        seen.add(p.id);
+        return true;
+      });
+      return {type:'group', group:{...g, posters:linked, poster_count:linked.length}};
+    });
+    const directItems=(posters||[])
+      .filter(p=>!norm(p.pitch_group_code)&&!norm(p.pitch_group_id))
+      .map(p=>({type:'direct', poster:p}));
+    all=[...groupItems,...directItems].sort((a,b)=>itemDate(b)-itemDate(a));
+    metaEl.textContent=`נטענו ${groupItems.length} קבוצות ו-${directItems.length} פוסטרים ישירים`;
     render(all);
   }
 
   function render(list){
-    cardsEl.innerHTML=list.map(g=>{
+    cardsEl.innerHTML=list.map(item=>item.type==='direct'?renderDirectPoster(item.poster):renderGroup(item.group)).join('');
+  }
+
+  function renderGroup(g){
       const speakers=speakerList(g);
       const st=g.poster_count===1?`<span class='status-ok'>קיים (1)</span>`:g.poster_count>1?`<span class='status-bad'>נמצאו כמה פוסטרים (${g.poster_count})</span>`:`<span class='status-bad'>חסר</span>`;
       const pitchPath=`final/pitch-activity.html?group=${encodeURIComponent(g.group_code)}`;
       const primaryPoster=g.poster_count===1?g.posters[0]:null;
       const posterPath=buildPosterPath(g.group_code, primaryPoster);
       const details=[['שם מיזם',g.project_name||'—'],['שם קבוצה',g.group_name||'—'],['קוד קבוצה',g.group_code||'—'],['מספר מציגות',g.presenter_count??'—'],['שמות מציגות',speakers.join(', ')||'—'],['בעיה',dField(g.data_json,['problem'])],['קהל יעד',dField(g.data_json,['audience','target_audience'])],['צורך מרכזי',dField(g.data_json,['main_need','need'])],['רעיון',dField(g.data_json,['idea'])],['מה המוצר עושה',dField(g.data_json,['product_action','solution'])],['תיאור אב-טיפוס',dField(g.data_json,['prototype_description','prototype'])],['ייחודיות',dField(g.data_json,['uniqueness','tech_part'])],['ערך מרכזי',dField(g.data_json,['main_value','value'])],['סטטוס פוסטר',g.poster_count>0?`קיים (${g.poster_count})`:'חסר']]
-      .map(([k,v])=>`<div><b>${k}:</b> ${v}</div>`).join('');
-      return `<article class='card' data-key='${[g.group_code,g.group_name,g.project_name].join(' ').toLowerCase()}' data-group='${g.group_code}'>
-        <h3>${g.project_name||'ללא שם מיזם'}</h3>
-        <div class='row'><b>שם קבוצה:</b> ${g.group_name||'—'}</div>
-        <div class='row'><b>קוד:</b> ${g.group_code||'—'}</div>
-        <div class='row'><b>מציגות:</b> ${speakers.join(', ')||'—'}</div>
-        <div class='row'><b>מספר מציגות:</b> ${g.presenter_count??'—'}</div>
+      .map(([k,v])=>`<div><b>${esc(k)}:</b> ${esc(v)}</div>`).join('');
+      return `<article class='card' data-key='${esc([g.group_code,g.group_name,g.project_name].join(' ').toLowerCase())}' data-group='${esc(g.group_code)}'>
+        <h3>${esc(g.project_name||'ללא שם מיזם')}</h3>
+        <div class='row'><b>שם קבוצה:</b> ${esc(g.group_name||'—')}</div>
+        <div class='row'><b>קוד:</b> ${esc(g.group_code||'—')}</div>
+        <div class='row'><b>מציגות:</b> ${esc(speakers.join(', ')||'—')}</div>
+        <div class='row'><b>מספר מציגות:</b> ${esc(g.presenter_count??'—')}</div>
         <div class='row'><b>סטטוס פוסטר:</b> ${st}</div>
-        <div class='row'><b>עודכן:</b> ${g.updated_at?new Date(g.updated_at).toLocaleString('he-IL'):'—'}</div>
+        <div class='row'><b>עודכן:</b> ${g.updated_at?esc(new Date(g.updated_at).toLocaleString('he-IL')):'—'}</div>
         <div class='btns'>
-          <a class='linkbtn' target='_blank' href='../${posterPath}'>פתיחת פוסטר / פרומפטים</a>
-          <a class='linkbtn' target='_blank' href='../${pitchPath}'>פתיחת פיץ׳</a>
-                    <button data-copy='poster' data-group='${g.group_code}'>העתקת קישור לפוסטר</button>
-          <button data-copy='pitch' data-group='${g.group_code}'>העתקת קישור לפיץ׳</button>
-          <button data-toggle='${g.group_code}'>פתחי נתונים</button>
-          <button class='danger' data-delete='${g.group_code}' data-posters='${g.poster_count}'>מחיקה</button>
+          <a class='linkbtn' target='_blank' href='../${esc(posterPath)}'>פתיחת פוסטר / פרומפטים</a>
+          <a class='linkbtn' target='_blank' href='../${esc(pitchPath)}'>פתיחת פיץ׳</a>
+          <button data-copy='poster' data-group='${esc(g.group_code)}'>העתקת קישור לפוסטר</button>
+          <button data-copy='pitch' data-group='${esc(g.group_code)}'>העתקת קישור לפיץ׳</button>
+          <button data-toggle='${esc(g.group_code)}'>פתחי נתונים</button>
+          <button class='danger' data-delete='${esc(g.group_code)}' data-posters='${esc(g.poster_count)}'>מחיקה</button>
         </div>
-        <div id='d-${g.group_code}' class='details'><div class='pairs'>${details}</div></div>
+        <div id='d-${esc(g.group_code)}' class='details'><div class='pairs'>${details}</div></div>
       </article>`;
-    }).join('');
+  }
+
+  function renderDirectPoster(p){
+    const posterPath=buildPosterPath('', p);
+    const key=[p.id,p.project_name,p.student_names,p.class_name,p.school_name,p.product_type,p.school_slug,p.created_at].join(' ').toLowerCase();
+    const created=p.created_at?new Date(p.created_at).toLocaleString('he-IL'):'—';
+    const details=[['מזהה פוסטר',p.id],['שם מיזם',posterValue(p,'project_name')],['תלמידות/תלמידים',posterValue(p,'student_names')],['כיתה',posterValue(p,'class_name')],['בית ספר',posterValue(p,'school_name')],['סוג מוצר',productLabel(p.product_type)],['תאריך שמירה',created],['מקור','פוסטר ישיר — נשמר מממשק הפוסטרים']]
+      .map(([k,v])=>`<div><b>${esc(k)}:</b> ${esc(v)}</div>`).join('');
+    return `<article class='card direct-poster' data-key='${esc(key)}' data-poster-id='${esc(p.id)}'>
+      <span class='badge'>פוסטר ישיר · נשמר מממשק הפוסטרים</span>
+      <h3>${esc(posterValue(p,'project_name')||'ללא שם מיזם')}</h3>
+      <div class='row'><b>תלמידות/תלמידים:</b> ${esc(posterValue(p,'student_names'))}</div>
+      <div class='row'><b>כיתה:</b> ${esc(posterValue(p,'class_name'))}</div>
+      <div class='row'><b>בית ספר:</b> ${esc(posterValue(p,'school_name'))}</div>
+      <div class='row'><b>סוג מוצר:</b> ${esc(productLabel(p.product_type))}</div>
+      <div class='row'><b>תאריך שמירה:</b> ${esc(created)}</div>
+      <div class='btns'>
+        <a class='linkbtn' target='_blank' href='../${esc(posterPath)}'>פתיחת פוסטר / פרומפטים</a>
+        <button data-copy='direct-poster' data-poster='${esc(p.id)}'>העתקת קישור לפוסטר</button>
+        <button data-toggle='poster-${esc(p.id)}'>פתחי נתונים</button>
+      </div>
+      <div id='d-poster-${esc(p.id)}' class='details'><div class='pairs'>${details}</div></div>
+    </article>`;
+  }
+
+  function productLabel(productType){
+    const labels={physical:'מוצר פיזי',app:'אפליקציה',website:'אתר',digital:'מוצר דיגיטלי'};
+    return labels[norm(productType).toLowerCase()]||norm(productType)||'—';
   }
 
   searchEl.addEventListener('input',()=>{
     const q=searchEl.value.trim().toLowerCase();
-    render(!q?all:all.filter(g=>`${g.group_code} ${g.group_name} ${g.project_name}`.toLowerCase().includes(q)));
+    render(!q?all:all.filter(item=>{
+      if(item.type==='direct'){
+        const p=item.poster;
+        return `${p.id} ${p.project_name} ${p.student_names} ${p.class_name} ${p.school_name} ${p.product_type}`.toLowerCase().includes(q);
+      }
+      const g=item.group;
+      return `${g.group_code} ${g.group_name} ${g.project_name}`.toLowerCase().includes(q);
+    }));
   });
 
   cardsEl.addEventListener('click', async (e) => {
@@ -131,11 +202,18 @@
     if(tg){document.getElementById(`d-${tg}`)?.classList.toggle('open'); return;}
     const cp=t.getAttribute('data-copy');
     if(cp){
+      if(cp==='direct-poster'){
+        const id=t.getAttribute('data-poster');
+        const item=all.find(x=>x.type==='direct'&&x.poster.id===id);
+        if(!item) return;
+        await navigator.clipboard.writeText(fullUrl('../'+buildPosterPath('', item.poster))); showToast(); return;
+      }
       const g=t.getAttribute('data-group');
-      const group=(all.find(x=>x.group_code===g)||{});
+      const item=all.find(x=>x.type==='group'&&x.group.group_code===g);
+      const group=item?.group||{};
       const primaryPoster=group.poster_count===1?group.posters?.[0]:null;
       const posterLink=buildPosterPath(g, primaryPoster);
-      const path=cp==='pitch'?`final/pitch-activity.html?group=${encodeURIComponent(g)}`:posterLink;
+      const path=cp==='pitch'?`../final/pitch-activity.html?group=${encodeURIComponent(g)}`:`../${posterLink}`;
       await navigator.clipboard.writeText(fullUrl(path)); showToast(); return;
     }
     const del=t.getAttribute('data-delete');
@@ -146,7 +224,7 @@
       if(!confirm(`אישור אחרון למחיקת ${del}`)) return;
       const {error}=await client.from('pitch_groups').delete().eq('group_code',del);
       if(error){alert('מחיקה נכשלה: '+error.message);return;}
-      all=all.filter(x=>x.group_code!==del); render(all); showToast('הקבוצה נמחקה.');
+      all=all.filter(x=>x.type!=='group'||x.group.group_code!==del); render(all); showToast('הקבוצה נמחקה.');
     }
   });
 
