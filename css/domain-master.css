@@ -270,6 +270,17 @@ strong{font-weight:700;color:#27304e}
 /* --- locked content --- */
 .scroll-locked #locked-content{display:none}
 .scroll-locked .master-footer{display:none}
+.scroll-locked .master-nav{
+  visibility:hidden;
+  opacity:0;
+  pointer-events:none;
+}
+.scroll-unlocked .master-nav{
+  visibility:visible;
+  opacity:1;
+  pointer-events:auto;
+  transition:opacity .22s ease;
+}
 #locked-content{background:#fff}
 
 /* --- short editorial bridge: keeps the full introduction out of the hero --- */
