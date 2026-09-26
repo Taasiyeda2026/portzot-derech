@@ -33,12 +33,23 @@
   function unlockAndScroll(targetId) {
     unlock();
     var target = document.getElementById(targetId);
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      if (history.replaceState) {
-        history.replaceState(null, '', '#' + targetId);
-      }
-    }
+    if (!target) return;
+
+    // Wait for the previously hidden article area and chapter nav to take
+    // their final dimensions before calculating the anchor position.
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        var header = document.querySelector('.master-header');
+        var headerHeight = header ? header.getBoundingClientRect().height : 0;
+        var top = target.getBoundingClientRect().top + window.pageYOffset - headerHeight - 18;
+
+        window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+
+        if (history.replaceState) {
+          history.replaceState(null, '', '#' + targetId);
+        }
+      });
+    });
   }
 
   var unlockBtn = findUnlockButton();
@@ -69,7 +80,14 @@
     var initial = document.getElementById(location.hash.substring(1));
     if (initial && locked.contains(initial)) {
       unlock();
-      requestAnimationFrame(function() { initial.scrollIntoView({ block: 'start' }); });
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() {
+          var header = document.querySelector('.master-header');
+          var headerHeight = header ? header.getBoundingClientRect().height : 0;
+          var top = initial.getBoundingClientRect().top + window.pageYOffset - headerHeight - 18;
+          window.scrollTo({ top: Math.max(0, top), behavior: 'auto' });
+        });
+      });
     }
   }
 })();
