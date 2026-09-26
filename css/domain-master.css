@@ -282,6 +282,27 @@ strong{font-weight:700;color:#27304e}
 .scroll-locked #locked-content{display:none}
 #locked-content{background:#fff}
 
+/* --- short editorial bridge: keeps the full introduction out of the hero --- */
+.master-preface{
+  background:#fff;
+  border-bottom:1px solid var(--line);
+}
+.master-preface__inner{
+  width:min(930px,calc(100% - 42px));
+  margin:auto;
+  padding:28px 0 30px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:34px;
+}
+.master-preface p{
+  margin:0;
+  color:#596078;
+  font-size:.96rem;
+  line-height:1.72;
+}
+.master-preface strong{color:#25345d}
+
 /* --- magazine chapters --- */
 .magazine{
   width:min(var(--max),calc(100% - 42px));
@@ -559,6 +580,7 @@ strong{font-weight:700;color:#27304e}
   .master-hero__hand{font-size:1.2rem;max-width:170px}
   .master-hero__copy{padding:30px 22px 36px}
   .master-hero h1{font-size:3.4rem}
+  .master-preface__inner{grid-template-columns:1fr;gap:12px;padding:22px 0 24px}
   .master-hero__subtitle{font-size:1.3rem}
   .magazine{width:calc(100% - 24px)}
   .master-chapter{
