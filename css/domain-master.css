@@ -272,7 +272,7 @@ summary{cursor:pointer}
   justify-content:center;
   position:relative;
   z-index:3;
-  padding:34px 48px 30px 38px;
+  padding:24px 46px 22px 36px;
   background:
     linear-gradient(90deg,rgba(255,255,255,.96) 0%,rgba(255,255,255,.88) 18%,rgba(255,255,255,.72) 48%,rgba(255,255,255,.90) 100%);
 }
@@ -295,33 +295,26 @@ summary{cursor:pointer}
   max-width:720px;
   font-family:"Gveret Levin","IBM Plex Sans Hebrew",sans-serif;
   color:#11194d;
-  font-size:clamp(2.85rem,3.3vw,3.85rem);
+  font-size:clamp(2.55rem,3vw,3.55rem);
   line-height:1.02;
   letter-spacing:-.025em;
 }
 .master-hero__subtitle{
-  margin:8px 0 9px;
+  margin:5px 0 6px;
   max-width:650px;
   color:#28315c;
-  font-size:clamp(1.03rem,1.25vw,1.25rem);
+  font-size:clamp(.96rem,1.1vw,1.12rem);
   line-height:1.42;
   font-weight:600;
 }
-.master-hero__intro{
-  max-width:620px;
-  color:#535d73;
-  font-size:.88rem;
-  line-height:1.58;
-}
-.master-hero__intro p{margin:0 0 5px}
 .master-hero__cta{
   display:inline-flex;
   align-items:center;
   justify-content:center;
   gap:10px;
   min-width:190px;
-  margin-top:8px;
-  padding:10px 20px;
+  margin-top:7px;
+  padding:9px 19px;
   border-radius:999px;
   color:#fff;
   background:var(--domain-gradient);
@@ -331,34 +324,16 @@ summary{cursor:pointer}
 }
 .master-hero__cta svg{width:18px;height:18px}
 
-/* FULL INTRO remains available without interrupting the magazine rhythm */
-.master-hero__more{
-  margin-top:8px;
+/* FULL INTRO — fully visible but deliberately compact */
+.master-hero__intro{
   max-width:620px;
+  margin-top:5px;
+  color:#535d73;
+  font-size:.76rem;
+  line-height:1.43;
 }
-.master-hero__more > summary{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  color:#7a8397;
-  font-size:.73rem;
-  font-weight:600;
-  list-style:none;
-}
-.master-hero__more > summary::-webkit-details-marker{display:none}
-.master-hero__more > summary::after{content:"⌄";color:#7f6fd5}
-.master-hero__more[open] > summary::after{content:"⌃"}
-.master-hero__more-body{
-  margin-top:8px;
-  padding-top:8px;
-  border-top:1px solid var(--line);
-}
-.master-hero__more-body p{
-  margin:0 0 6px;
-  color:#5e667c;
-  font-size:.82rem;
-  line-height:1.56;
-}
+.master-hero__intro p{margin:0 0 4px}
+.master-hero__intro strong{font-weight:700;color:#313a5c}
 
 /* FIVE EDITORIAL ROWS */
 .magazine{
