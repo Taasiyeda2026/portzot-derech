@@ -311,10 +311,12 @@ summary{cursor:pointer}
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  gap:10px;
-  min-width:190px;
+  align-self:flex-start;
+  width:auto;
+  gap:8px;
+  min-width:0;
   margin-top:7px;
-  padding:9px 19px;
+  padding:8px 16px;
   border-radius:999px;
   color:#fff;
   background:var(--domain-gradient);
@@ -322,7 +324,7 @@ summary{cursor:pointer}
   font-size:.9rem;
   font-weight:700;
 }
-.master-hero__cta svg{width:18px;height:18px}
+.master-hero__cta svg{width:17px;height:17px}
 
 /* FULL INTRO — fully visible but deliberately compact */
 .master-hero__intro{
