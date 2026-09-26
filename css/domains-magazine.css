@@ -360,7 +360,7 @@ body.mag-contents {
   font-size: var(--mag-fs-display);
   font-weight: 800;
   line-height: var(--mag-lh-tight);
-  letter-spacing: -0.01em;
+  letter-spacing:0;
   color: var(--mag-text);
   overflow-wrap: anywhere;
 }
@@ -471,7 +471,7 @@ body.mag-contents {
   font-size: var(--mag-fs-h2);
   font-weight: 800;
   line-height: var(--mag-lh-heading);
-  letter-spacing: -0.005em;
+  letter-spacing:0;
 }
 .mag-domain .mag-section h3 {
   font-size: var(--mag-fs-h3);
@@ -989,7 +989,7 @@ body.mag-contents {
 .mag-domain .mag-hero__title {
   font-size: clamp(2.9rem, 2rem + 3.3vw, 5.25rem);
   line-height: 1.03;
-  letter-spacing: -.035em;
+  letter-spacing:0;
 }
 
 .mag-domain .mag-hero__subtitle {
@@ -1052,7 +1052,7 @@ body.mag-contents {
   font-size: clamp(2.7rem, 1.9rem + 2.6vw, 5rem);
   font-weight: 300;
   line-height: .8;
-  letter-spacing: -.08em;
+  letter-spacing:0;
   text-align: left;
   font-variant-numeric: tabular-nums;
 }
@@ -1074,7 +1074,7 @@ body.mag-contents {
 .mag-domain .mag-section .mag-section-header h2 {
   font-size: clamp(2rem, 1.55rem + 1.7vw, 3.2rem);
   line-height: 1.08;
-  letter-spacing: -.025em;
+  letter-spacing:0;
 }
 
 .mag-domain .mag-eyebrow {
@@ -1190,7 +1190,7 @@ body.mag-contents {
 }
 
 .mag-domain .mag-section h3 {
-  letter-spacing: -.012em;
+  letter-spacing:0;
 }
 
 .mag-domain .mag-section .space-y-6,
