@@ -1007,12 +1007,12 @@ body.mag-contents {
   counter-reset: mag-editorial-chapter;
 }
 
-.mag-domain .mag-section:not(.mag-section--closing) {
+.mag-domain .mag-section:not(.mag-section--closing):not(.mag-section--epilogue) {
   counter-increment: mag-editorial-chapter;
 }
 
 @media (min-width: 901px) {
-  .mag-domain .mag-section:not(.mag-section--closing) {
+  .mag-domain .mag-section:not(.mag-section--closing):not(.mag-section--epilogue) {
     min-height: 690px;
   }
 }
@@ -1057,7 +1057,8 @@ body.mag-contents {
   font-variant-numeric: tabular-nums;
 }
 
-.mag-domain .mag-section--closing .mag-section-header::after {
+.mag-domain .mag-section--closing .mag-section-header::after,
+.mag-domain .mag-section--epilogue .mag-section-header::after {
   display: none;
 }
 
