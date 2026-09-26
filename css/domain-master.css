@@ -29,6 +29,11 @@
   src:url("../fonts/Dana%20Yad%20Alef%20Alef%20Alef%20Normal.ttf") format("truetype");
   font-style:normal;font-weight:400;font-display:swap;
 }
+@font-face{
+  font-family:"Gveret Levin";
+  src:url("../fonts/GveretLevin-Regular.ttf") format("truetype");
+  font-style:normal;font-weight:400;font-display:swap;
+}
 
 :root{
   --ink:#15204b;
@@ -175,7 +180,7 @@ strong{font-weight:700;color:#27304e}
 .master-chip svg{width:20px;height:20px}
 .master-hero h1{
   margin:0;
-  font-family:"Pil Kahol","IBM Plex Sans Hebrew",sans-serif;
+  font-family:"Gveret Levin","IBM Plex Sans Hebrew",sans-serif;
   font-size:clamp(3.8rem,5vw,6rem);
   line-height:.95;
   color:#11194d;
