@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 600" fill="none">
-  <rect width="480" height="600" fill="#ecfeff"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 120 480 360" fill="none">
+  <rect x="-400" y="-400" width="1280" height="1400" fill="#ecfeff"/>
   <circle cx="360" cy="120" r="150" fill="#cffafe"/>
   <circle cx="90" cy="520" r="160" fill="#e0e7ff" opacity=".8"/>
   <!-- clock ring -->

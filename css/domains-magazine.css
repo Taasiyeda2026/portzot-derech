@@ -32,6 +32,7 @@
   --mag-surface-soft: #f8fafc;
 
   --mag-text: #1f2937;
+  --mag-heading: #1e1b4b;
   --mag-text-muted: #64748b;
   --mag-text-soft: #475569;
 
@@ -48,9 +49,8 @@
 
   --mag-content-width: 68rem;
   --mag-reading-width: 44rem;
-  --mag-article-width: 76rem;
-  --mag-aside-width: 250px;
-  --mag-copy-width: 620px;
+  --mag-article-width: 72rem;
+  --mag-aside-width: 280px;
   --mag-gutter: clamp(1rem, 0.6rem + 2vw, 2.5rem);
 
   --mag-space-section: clamp(3.5rem, 2.5rem + 4vw, 6rem);
@@ -318,55 +318,73 @@ body.mag-contents {
 
 /* 5. Editorial article ------------------------------------------------------
    כל תחום = כתבה אחת: editorial-hero → 5 × editorial-chapter → editorial-closing.
-   פרק = גריד של שלושה אזורים: מודול צד | גוף הכתבה | מודול צד.
-   בכל פרק לכל היותר Visual אחד + editorial-aside אחד; שורות מתחלפות (--flip). */
+   שורת פרק = שלושה אזורים: מודול צד | גוף הכתבה | מודול צד.
+   בכל שורה Visual אחד + editorial-aside אחד לכל היותר; הצדדים מתחלפים (--flip). */
+@font-face {
+  font-family: "Dana Yad";
+  src: url("../fonts/Dana%20Yad%20Alef%20Alef%20Alef%20Normal.ttf") format("truetype");
+  font-display: swap;
+}
 .editorial-article { background: var(--mag-surface); }
+body:has(.editorial-article) .mag-page { max-width: none; box-shadow: none; }
 
-/* 5a. Hero */
+/* 5a. Hero — באנר רחב: טקסט מימין, ויז'ואל גדול משמאל שנמוג אל הטקסט */
 .editorial-hero {
+  position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  grid-template-columns: minmax(0, 34rem) minmax(0, 1fr);
   grid-template-areas:
     "chip     visual"
     "title    visual"
     "subtitle visual"
     "intro    visual"
     "cta      visual";
-  grid-template-rows: auto auto auto auto 1fr;
-  column-gap: clamp(2rem, 5vw, 5rem);
   align-content: center;
-  max-width: var(--mag-article-width);
-  margin: 0 auto;
-  min-height: calc(100svh - var(--mag-header-h));
-  padding: clamp(2rem, 1.5rem + 3vw, 4.5rem) var(--mag-gutter);
+  column-gap: 0;
+  min-height: clamp(360px, 32vw, 460px);
+  padding-inline-start: max(var(--mag-gutter), calc((100% - var(--mag-article-width)) / 2));
+  background: linear-gradient(90deg, var(--mag-surface) 0%, var(--domain-soft) 100%);
+  overflow: hidden;
 }
-.editorial-hero__chip { grid-area: chip; justify-self: start; margin-bottom: 18px; }
+.scroll-locked .editorial-hero { min-height: calc(100svh - var(--mag-header-h)); }
+.editorial-hero > :not(.editorial-hero__visual) { position: relative; z-index: 1; }
+.editorial-hero__chip {
+  grid-area: chip;
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 28px 0 16px;
+}
+.editorial-hero__chip span[aria-hidden] { font-size: 1rem; line-height: 1; }
 .editorial-hero__title {
   grid-area: title;
-  margin: 0 0 14px;
+  margin: 0 0 10px;
   font-size: var(--mag-fs-display);
   font-weight: 800;
   line-height: 1.12;
   letter-spacing: -0.015em;
-  color: var(--mag-text);
+  color: var(--mag-heading);
 }
 .editorial-hero__subtitle {
   grid-area: subtitle;
-  margin: 0 0 22px;
+  margin: 0 0 16px;
   font-size: var(--mag-fs-lead);
   font-weight: 500;
-  line-height: 1.55;
-  color: var(--domain-ink);
+  line-height: 1.5;
+  color: var(--mag-text);
 }
-.editorial-hero__intro { grid-area: intro; max-width: 34rem; }
-.editorial-hero__intro p { margin: 0 0 14px; color: var(--mag-text-soft); line-height: var(--mag-lh-body); }
-.editorial-hero__cta { grid-area: cta; align-self: start; margin-top: 14px; }
+.editorial-hero__intro { grid-area: intro; }
+.editorial-hero__intro p { margin: 0 0 10px; font-size: var(--mag-fs-small); line-height: 1.75; color: var(--mag-text-soft); }
+.editorial-hero__cta { grid-area: cta; align-self: start; margin: 12px 0 32px; }
 .editorial-hero__visual {
   grid-area: visual;
-  align-self: center;
+  position: relative;
   margin: 0;
-  aspect-ratio: 5 / 4;
-  border-radius: var(--mag-radius-lg);
+  margin-inline-start: -3rem;
+  min-height: 100%;
+  -webkit-mask-image: linear-gradient(to left, transparent 0, #000 7rem);
+  mask-image: linear-gradient(to left, transparent 0, #000 7rem);
 }
 
 /* 5b. Visual slot — ה־asset נקבע ב־CSS (סעיף 5g), כך שהחלפה לא דורשת שינוי HTML */
@@ -381,88 +399,80 @@ body.mag-contents {
   overflow: hidden;
 }
 
-/* 5c. Chapter */
+.editorial-hero > .editorial-hero__visual { width: auto; }
+
+/* 5c. Chapter rows */
+.editorial-chapters {
+  max-width: var(--mag-article-width);
+  margin: 0 auto;
+  padding: clamp(1rem, 0.6rem + 1.5vw, 2rem) var(--mag-gutter) 0;
+}
 .editorial-chapter {
   display: grid;
-  grid-template-columns:
-    minmax(180px, var(--mag-aside-width))
-    minmax(0, var(--mag-copy-width))
-    minmax(180px, var(--mag-aside-width));
+  grid-template-columns: minmax(0, var(--mag-aside-width)) minmax(0, 1fr) minmax(0, var(--mag-aside-width));
   grid-template-areas:
-    "aside copy  media"
-    "aside deep  media";
-  grid-template-rows: auto 1fr;
-  justify-content: center;
-  column-gap: clamp(1.5rem, 3.5vw, 3.5rem);
-  align-items: start;
-  padding: clamp(2.5rem, 1.8rem + 2.2vw, 4rem) var(--mag-gutter);
-  border-top: 1px solid var(--mag-border);
+    "media copy aside"
+    "media deep aside";
+  grid-template-rows: auto auto;
+  column-gap: clamp(1.25rem, 3vw, 2.75rem);
+  align-items: center;
+  padding: clamp(1rem, 0.7rem + 1vw, 1.5rem) 0;
+  border-bottom: 1px solid var(--mag-border);
   scroll-margin-top: var(--mag-header-h);
 }
 .editorial-chapter--flip {
   grid-template-areas:
-    "media copy  aside"
-    "media deep  aside";
+    "aside copy media"
+    "aside deep media";
 }
-.editorial-chapter__copy { grid-area: copy; min-width: 0; }
+.editorial-chapter__copy { grid-area: copy; min-width: 0; align-self: end; }
+.editorial-chapter > .editorial-deep-dive { grid-area: deep; align-self: start; }
 .editorial-chapter__media {
   grid-area: media;
   margin: 0;
-  aspect-ratio: 4 / 5;
-  border-radius: var(--mag-radius-md);
+  aspect-ratio: 4 / 3;
+  border-radius: var(--mag-radius-sm);
+  box-shadow: var(--mag-shadow-sm);
 }
 .editorial-chapter__side { grid-area: aside; min-width: 0; }
-.editorial-chapter > .editorial-deep-dive { grid-area: deep; }
 
+.editorial-chapter__heading {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin: 0 0 10px;
+}
 .editorial-chapter__number {
-  display: block;
-  margin: 0 0 6px;
-  font-size: clamp(2.5rem, 1.9rem + 2vw, 3.5rem);
-  font-weight: 800;
+  flex: 0 0 auto;
+  font-size: clamp(2.25rem, 1.8rem + 1.4vw, 3rem);
+  font-weight: 300;
   line-height: 1;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
-  background: var(--domain-gradient);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: var(--domain-primary);
+  color: color-mix(in srgb, var(--domain-primary) 38%, white);
 }
 .editorial-chapter__title {
-  margin: 0 0 16px;
+  margin: 0;
   font-size: var(--mag-fs-h2);
   font-weight: 800;
   line-height: var(--mag-lh-heading);
-  color: var(--mag-text);
-}
-.editorial-chapter__lead {
-  margin: 0 0 16px;
-  font-size: var(--mag-fs-lead);
-  line-height: 1.65;
   color: var(--domain-ink);
 }
-.editorial-chapter__copy > p,
-.editorial-deep-dive__body > p { margin: 0 0 16px; line-height: var(--mag-lh-body); color: var(--mag-text); }
+.editorial-chapter__copy > p { margin: 0 0 10px; font-size: var(--mag-fs-body); line-height: 1.8; color: var(--mag-text); }
+.editorial-deep-dive__body > p { margin: 0 0 12px; font-size: var(--mag-fs-small); line-height: 1.75; color: var(--mag-text); }
 
-/* פריטי תוכן פתוחים: כותרת קטנה + טקסט, מופרדים בקו דק — לא כרטיסים */
-.editorial-points { list-style: none; margin: 8px 0 0; padding: 0; }
-.editorial-points > li { padding: 11px 0; border-top: 1px solid var(--mag-border); }
-.editorial-points > li:last-child { border-bottom: 1px solid var(--mag-border); }
-.editorial-points h3 {
-  margin: 0 0 4px;
-  font-size: var(--mag-fs-h4);
-  font-weight: 700;
-  line-height: 1.4;
-  color: var(--mag-text);
-}
+/* פריטי תוכן פתוחים (בתוך ההעמקה): כותרת קטנה + טקסט, מופרדים בקו דק */
+.editorial-points { list-style: none; margin: 4px 0 12px; padding: 0; }
+.editorial-points > li { padding: 10px 0; border-top: 1px solid var(--mag-border); }
+.editorial-points h3 { margin: 0 0 2px; font-size: var(--mag-fs-small); font-weight: 700; line-height: 1.45; color: var(--mag-text); }
 .editorial-points p { margin: 0; font-size: var(--mag-fs-small); line-height: 1.7; color: var(--mag-text-soft); }
-.editorial-points p + p { margin-top: 6px; }
-.editorial-points .editorial-meta { font-size: var(--mag-fs-caption); font-weight: 600; color: var(--domain-primary); }
+.editorial-points p + p { margin-top: 4px; }
+.editorial-meta { font-size: var(--mag-fs-caption) !important; font-weight: 600; color: var(--domain-primary) !important; }
 
-.editorial-list { list-style: none; margin: 0 0 16px; padding: 0; }
+.editorial-list { list-style: none; margin: 0 0 12px; padding: 0; }
 .editorial-list li {
   position: relative;
-  padding-inline-start: 20px;
+  padding-inline-start: 18px;
   margin-bottom: 4px;
   font-size: var(--mag-fs-small);
   line-height: 1.6;
@@ -472,119 +482,140 @@ body.mag-contents {
   content: "";
   position: absolute;
   inset-inline-start: 2px;
-  top: 0.7em;
-  width: 7px;
-  height: 7px;
+  top: 0.68em;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: var(--domain-secondary);
 }
-.editorial-subhead {
-  margin: 18px 0 6px;
-  font-size: var(--mag-fs-h4);
-  font-weight: 700;
-  color: var(--mag-text);
-}
-
-/* ציטוט/נקודה למחשבה בגוף הכתבה — קו אקסנט, בלי קופסה */
+.editorial-subhead { margin: 14px 0 6px; font-size: var(--mag-fs-small); font-weight: 700; color: var(--domain-ink); }
 .editorial-pullquote {
-  margin: 22px 0 0;
-  padding: 4px 0 4px;
-  padding-inline-start: 20px;
+  margin: 12px 0;
+  padding-inline-start: 16px;
   border-inline-start: 3px solid var(--domain-secondary);
 }
-.editorial-pullquote p { margin: 0; font-size: var(--mag-fs-lead); line-height: 1.6; color: var(--domain-ink); }
+.editorial-pullquote p { margin: 0; font-size: var(--mag-fs-small); line-height: 1.7; color: var(--domain-ink); }
 .editorial-label {
   display: block;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   font-size: var(--mag-fs-caption);
   font-weight: 700;
-  letter-spacing: 0.04em;
   color: var(--domain-primary);
 }
 
-/* 5d. Asides — הרכיבים היחידים שמותר להם להיות boxed */
+/* 5d. Asides — הרכיבים היחידים שמותר להם להיות boxed.
+   לכל סוג אייקון קבוע (mask), כך שה־HTML נשאר נקי. */
 .editorial-aside {
+  --aside-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.8.8 1 1.5 1 2.5h6c0-1 .2-1.7 1-2.5A6 6 0 0 0 12 3z'/%3E%3C/svg%3E");
   position: relative;
-  padding: 22px 22px 20px;
+  padding: 18px 20px;
   border-radius: var(--mag-radius-md);
   background: var(--domain-soft);
-  border: 1px solid color-mix(in srgb, var(--domain-primary) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--domain-primary) 10%, transparent);
 }
-.editorial-aside__title { margin: 0 0 10px; font-size: var(--mag-fs-h4); font-weight: 700; line-height: 1.4; color: var(--mag-text); }
-.editorial-aside p { margin: 0 0 10px; font-size: var(--mag-fs-small); line-height: 1.7; color: var(--mag-text-soft); }
-.editorial-aside p:last-child { margin-bottom: 0; }
-.editorial-aside .editorial-list { margin-bottom: 0; }
-.editorial-aside--reflection { border-top: 4px solid var(--domain-primary); }
-.editorial-aside--insight { background: var(--domain-soft-2); border-top: 4px solid var(--domain-tertiary); }
-.editorial-aside--task {
-  background: var(--mag-surface);
-  border: 1.5px dashed color-mix(in srgb, var(--domain-secondary) 60%, transparent);
-  border-top: 4px solid var(--domain-secondary);
-}
-.editorial-aside--warning { background: var(--mag-warning-bg); border-color: rgba(234, 88, 12, 0.2); border-top: 4px solid var(--mag-warning-edge); }
-.editorial-aside--warning .editorial-label { color: var(--mag-warning-text); }
-.editorial-aside--quote { background: transparent; border: 0; padding: 30px 4px 8px; }
-.editorial-aside--quote::before {
-  content: "”";
-  position: absolute;
-  top: -14px;
-  inset-inline-start: 0;
-  font-size: 4.5rem;
-  line-height: 1;
-  font-weight: 800;
-  background: var(--domain-gradient);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.editorial-aside--quote p { font-size: var(--mag-fs-lead); color: var(--domain-ink); font-weight: 500; }
-
-/* 5e. Deep dive — <details> אחד לכל היותר בפרק */
-.editorial-deep-dive { margin-top: 26px; border-top: 1px solid var(--mag-border-strong); }
-.editorial-deep-dive > summary {
+.editorial-aside__title {
   display: flex;
   align-items: center;
-  gap: 10px;
-  min-height: 48px;
-  padding: 12px 0;
+  gap: 8px;
+  margin: 0 0 8px;
+  font-size: var(--mag-fs-h4);
+  font-weight: 800;
+  line-height: 1.35;
+  color: var(--domain-ink);
+}
+.editorial-aside__title::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  background: var(--domain-primary);
+  -webkit-mask: var(--aside-icon) center / contain no-repeat;
+  mask: var(--aside-icon) center / contain no-repeat;
+}
+.editorial-aside p { margin: 0 0 8px; font-size: var(--mag-fs-small); line-height: 1.65; color: var(--mag-text); }
+.editorial-aside p:last-child { margin-bottom: 0; }
+.editorial-aside .editorial-list { margin-bottom: 0; }
+.editorial-aside .editorial-list li { color: var(--mag-text); }
+.editorial-aside--insight {
+  background: var(--domain-soft-2);
+  --aside-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M5 20V13M10 20V8M15 20v-9M20 20V4'/%3E%3C/svg%3E");
+}
+.editorial-aside--task {
+  background: color-mix(in srgb, #10b981 8%, white);
+  border-color: color-mix(in srgb, #10b981 20%, transparent);
+  --aside-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Ccircle cx='12' cy='12' r='5'/%3E%3Ccircle cx='12' cy='12' r='1.5'/%3E%3C/svg%3E");
+}
+.editorial-aside--task .editorial-aside__title::before { background: #0f766e; }
+.editorial-aside--warning {
+  background: var(--mag-warning-bg);
+  border-color: rgba(234, 88, 12, 0.2);
+  --aside-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3 2 20h20L12 3zM12 10v4M12 17h.01'/%3E%3C/svg%3E");
+}
+.editorial-aside--warning .editorial-aside__title { color: var(--mag-warning-text); }
+.editorial-aside--warning .editorial-aside__title::before { background: var(--mag-warning-edge); }
+.editorial-aside--quote {
+  --aside-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Cpath d='M10 7H6a2 2 0 0 0-2 2v4h4v4l4-4V9a2 2 0 0 0-2-2zm10 0h-4a2 2 0 0 0-2 2v4h4v4l4-4V9a2 2 0 0 0-2-2z'/%3E%3C/svg%3E");
+}
+.editorial-aside--quote { background: linear-gradient(135deg, var(--domain-soft-2), var(--domain-soft)); }
+.editorial-aside--quote p { font-size: var(--mag-fs-body); font-style: italic; font-weight: 500; line-height: 1.7; color: var(--domain-ink); }
+
+/* 5e. Deep dive — <details> אחד לכל היותר בפרק */
+.editorial-deep-dive { margin-top: 2px; }
+.editorial-deep-dive > summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
   cursor: pointer;
   list-style: none;
+  font-size: var(--mag-fs-small);
   font-weight: 700;
   color: var(--domain-primary);
 }
 .editorial-deep-dive > summary::-webkit-details-marker { display: none; }
 .editorial-deep-dive > summary::after {
   content: "";
-  width: 9px;
-  height: 9px;
+  width: 8px;
+  height: 8px;
   border-inline-start: 2px solid currentColor;
   border-bottom: 2px solid currentColor;
   transform: rotate(-45deg);
   transition: transform .2s ease;
-  margin-top: -4px;
 }
-.editorial-deep-dive[open] > summary::after { transform: rotate(135deg); margin-top: 4px; }
+.editorial-deep-dive[open] > summary::after { transform: rotate(135deg); }
 .editorial-deep-dive > summary:hover { text-decoration: underline; text-underline-offset: 4px; }
-.editorial-deep-dive__body { padding: 4px 0 8px; }
+.editorial-deep-dive__body {
+  margin-top: 8px;
+  padding: 16px 18px 6px;
+  border-radius: var(--mag-radius-sm);
+  background: var(--mag-surface-soft);
+  border: 1px solid var(--mag-border);
+}
 
-/* 5f. Closing */
+/* 5f. Closing — פס נוף רך עם משפט מסכם בכתב יד */
 .editorial-closing {
-  max-width: 46rem;
-  margin: 0 auto;
-  padding: clamp(3.5rem, 2.5rem + 4vw, 6rem) var(--mag-gutter);
-  border-top: 1px solid var(--mag-border);
+  position: relative;
+  margin-top: clamp(1.5rem, 1rem + 2vw, 3rem);
+  padding: clamp(2.5rem, 2rem + 3vw, 4.5rem) var(--mag-gutter) clamp(3rem, 2.5rem + 3vw, 5rem);
   text-align: center;
+  background-color: var(--domain-soft);
+  background-image: linear-gradient(180deg, var(--mag-surface) 0%, rgba(255, 255, 255, 0.55) 45%, rgba(255, 255, 255, 0) 100%), var(--visual, none);
+  background-size: cover;
+  background-position: center bottom;
 }
-.editorial-closing__title {
-  margin: 0 0 22px;
-  font-size: var(--mag-fs-h2);
-  font-weight: 800;
-  line-height: var(--mag-lh-heading);
+.editorial-closing > * { max-width: 44rem; margin-inline: auto; }
+.editorial-closing__title { margin: 0 auto 16px; font-size: var(--mag-fs-h2); font-weight: 800; line-height: var(--mag-lh-heading); color: var(--domain-ink); }
+.editorial-closing > p { margin: 0 auto 12px; font-size: var(--mag-fs-body); line-height: 1.8; color: var(--mag-text); }
+.editorial-closing__quote { margin: 26px auto 0; }
+.editorial-closing__quote p {
+  margin: 0;
+  font-family: "Dana Yad", var(--mag-font);
+  font-size: clamp(1.4rem, 1.2rem + 0.8vw, 1.9rem);
+  line-height: 1.45;
+  color: var(--mag-heading);
 }
-.editorial-closing > p { margin: 0 0 16px; font-size: var(--mag-fs-lead); line-height: 1.7; color: var(--mag-text-soft); }
-.editorial-closing .editorial-aside--quote { margin: 34px auto 0; max-width: 36rem; }
-.editorial-closing .editorial-aside--quote::before { inset-inline-start: 50%; transform: translateX(50%); }
-.editorial-closing__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 36px; }
+.editorial-closing__quote p:first-child { font-family: var(--mag-font); font-size: var(--mag-fs-small); font-weight: 700; color: var(--domain-primary); margin-bottom: 6px; }
+.editorial-closing__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 30px !important; }
 
 /* 5g. Visual slots (asset registry). להחלפת תמונה: לשנות כאן או להחליף את הקובץ. */
 [data-visual="d2-hero"] { --visual: url("../domains/visuals/d2-hero.svg"); }
@@ -593,39 +624,49 @@ body.mag-contents {
 [data-visual="d2-03"] { --visual: url("../domains/visuals/d2-03.svg"); }
 [data-visual="d2-04"] { --visual: url("../domains/visuals/d2-04.svg"); }
 [data-visual="d2-05"] { --visual: url("../domains/visuals/d2-05.svg"); }
+[data-visual="d2-closing"] { --visual: url("../domains/visuals/d2-closing.svg"); }
 
 /* 5h. Editorial responsive */
 @media (max-width: 1023.98px) {
   .editorial-hero {
     grid-template-columns: minmax(0, 1fr);
     grid-template-areas: "chip" "title" "subtitle" "intro" "visual" "cta";
-    grid-template-rows: none;
-    min-height: 0;
+    padding-inline: var(--mag-gutter);
+    background: linear-gradient(180deg, var(--mag-surface), var(--domain-soft));
   }
-  .editorial-hero__visual { margin: 10px 0 24px; aspect-ratio: 16 / 10; }
-  .editorial-hero__intro { max-width: none; }
+  .editorial-hero__visual {
+    width: 100%;
+    margin: 8px 0 0;
+    aspect-ratio: 16 / 10;
+    min-height: 0;
+    border-radius: var(--mag-radius-md);
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .editorial-hero__cta { margin-top: 20px; }
 }
-@media (max-width: 899.98px) {
+@media (max-width: 859.98px) {
   .editorial-chapter,
   .editorial-chapter--flip {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     grid-template-areas:
       "copy  copy"
-      "media aside"
-      "deep  deep";
-    grid-template-rows: none;
-    row-gap: 24px;
+      "deep  deep"
+      "media aside";
+    row-gap: 16px;
+    align-items: start;
+    padding: 28px 0;
   }
-  .editorial-chapter__media { aspect-ratio: auto; min-height: 240px; height: 100%; }
-  .editorial-chapter > .editorial-deep-dive { margin-top: 0; }
+  .editorial-chapter__media { aspect-ratio: auto; min-height: 200px; height: 100%; }
 }
 @media (max-width: 599.98px) {
   .editorial-chapter,
   .editorial-chapter--flip {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-areas: "copy" "media" "aside" "deep";
+    grid-template-areas: "copy" "deep" "media" "aside";
   }
   .editorial-chapter__media { aspect-ratio: 16 / 10; min-height: 0; height: auto; }
+  .editorial-chapter__heading { gap: 12px; }
   .editorial-hero__cta .mag-cta { width: 100%; }
 }
 

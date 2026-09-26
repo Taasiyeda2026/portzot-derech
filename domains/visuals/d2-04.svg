@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 600" fill="none">
-  <rect width="480" height="600" fill="#ecfeff"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-33 128 546 410" fill="none">
+  <rect x="-400" y="-400" width="1280" height="1400" fill="#ecfeff"/>
   <circle cx="110" cy="140" r="150" fill="#cffafe"/>
   <circle cx="400" cy="500" r="180" fill="#e0e7ff" opacity=".8"/>
   <!-- stand -->
