@@ -97,31 +97,20 @@ strong{font-weight:700;color:#27304e}
   display:flex;
   align-items:center;
   justify-content:flex-start;
-  gap:11px;
+  gap:10px;
   min-width:0;
 }
 .master-brand__mark{
-  width:52px;
-  height:52px;
+  width:46px;
+  height:46px;
   object-fit:contain;
   flex:0 0 auto;
 }
-.master-brand__words{
-  display:grid;
-  line-height:1.05;
-}
 .master-brand__name{
-  font-size:1.45rem;
+  font-size:1.35rem;
   font-weight:700;
   color:#182054;
   letter-spacing:-.035em;
-}
-.master-brand__tagline{
-  margin-top:4px;
-  font-size:.67rem;
-  font-weight:500;
-  color:#6a7089;
-  white-space:nowrap;
 }
 .master-nav{
   display:flex;
@@ -280,6 +269,7 @@ strong{font-weight:700;color:#27304e}
 
 /* --- locked content --- */
 .scroll-locked #locked-content{display:none}
+.scroll-locked .master-footer{display:none}
 #locked-content{background:#fff}
 
 /* --- short editorial bridge: keeps the full introduction out of the hero --- */
@@ -572,9 +562,8 @@ strong{font-weight:700;color:#27304e}
   body{font-size:16px}
   .master-header{height:var(--header)}
   .master-header__inner{width:calc(100% - 24px)}
-  .master-brand__mark{width:42px;height:42px}
+  .master-brand__mark{width:40px;height:40px}
   .master-brand__name{font-size:1.15rem}
-  .master-brand__tagline{display:none}
   .master-back span{display:none}
   .master-hero__media{min-height:245px}
   .master-hero__hand{font-size:1.2rem;max-width:170px}
