@@ -293,6 +293,9 @@ summary{cursor:pointer}
 .master-hero h1{
   margin:0;
   max-width:720px;
+  text-wrap:balance;
+  word-break:normal;
+  hyphens:none;
   font-family:"Gveret Levin","IBM Plex Sans Hebrew",sans-serif;
   color:#11194d;
   font-size:clamp(2.55rem,3vw,3.55rem);
@@ -302,6 +305,9 @@ summary{cursor:pointer}
 .master-hero__subtitle{
   margin:5px 0 6px;
   max-width:650px;
+  text-wrap:balance;
+  word-break:normal;
+  hyphens:none;
   color:#28315c;
   font-size:clamp(.96rem,1.1vw,1.12rem);
   line-height:1.42;
@@ -331,8 +337,11 @@ summary{cursor:pointer}
   max-width:620px;
   margin-top:5px;
   color:#535d73;
-  font-size:.76rem;
-  line-height:1.43;
+  font-size:.80rem;
+  line-height:1.48;
+  text-wrap:pretty;
+  word-break:normal;
+  hyphens:none;
 }
 .master-hero__intro p{margin:0 0 4px}
 .master-hero__intro strong{font-weight:700;color:#313a5c}
@@ -409,6 +418,9 @@ summary{cursor:pointer}
 .master-chapter h2{
   margin:0;
   color:var(--domain-primary);
+  text-wrap:balance;
+  word-break:normal;
+  hyphens:none;
   font-size:clamp(1.62rem,2vw,2.15rem);
   line-height:1.12;
   font-weight:700;
@@ -417,15 +429,21 @@ summary{cursor:pointer}
 .master-chapter__lead{
   margin:0 0 7px!important;
   color:#3f4966!important;
+  text-wrap:pretty;
+  word-break:normal;
+  hyphens:none;
   font-size:.96rem!important;
   line-height:1.56!important;
   font-weight:500;
 }
 .master-chapter__article p{
-  margin:0 0 6px;
+  margin:0 0 7px;
   color:#566079;
-  font-size:.86rem;
-  line-height:1.58;
+  font-size:.87rem;
+  line-height:1.62;
+  text-wrap:pretty;
+  word-break:normal;
+  hyphens:none;
 }
 .master-chapter__article .question-line{
   color:#263154;
@@ -468,6 +486,7 @@ summary{cursor:pointer}
 .aside-heading{
   display:flex;
   align-items:center;
+  text-wrap:balance;
   gap:8px;
   margin-bottom:9px;
   color:var(--domain-ink);
@@ -487,9 +506,13 @@ summary{cursor:pointer}
 .master-chapter__aside p{
   margin:0;
   color:#4f5972;
-  font-size:.82rem;
-  line-height:1.55;
+  font-size:.83rem;
+  line-height:1.58;
+  text-wrap:pretty;
+  word-break:normal;
+  hyphens:none;
 }
+.master-chapter__aside p + p{margin-top:10px}
 .master-chapter__aside--quote p{
   font-family:"IBM Plex Sans Hebrew",Arial,sans-serif;
   color:#4f4375;
@@ -517,6 +540,7 @@ summary{cursor:pointer}
 .master-chapter__continuation > summary{
   display:inline-flex;
   align-items:center;
+  white-space:nowrap;
   gap:6px;
   padding:3px 0 1px;
   color:#738099;
@@ -529,12 +553,15 @@ summary{cursor:pointer}
 .master-chapter__continuation[open] > summary::after{content:"↑"}
 .master-chapter__deep{
   margin-top:12px;
-  padding-top:14px;
+  padding-top:15px;
   border-top:1px solid var(--line);
 }
 .master-chapter__deep h3{
   margin:18px 0 7px;
   color:#28345a;
+  text-wrap:balance;
+  word-break:normal;
+  hyphens:none;
   font-size:1rem;
   line-height:1.35;
   font-weight:700;
@@ -582,15 +609,20 @@ summary{cursor:pointer}
 .master-closing h2{
   margin:0 0 7px;
   color:#17214e;
+  text-wrap:balance;
   font-size:1.85rem;
   line-height:1.1;
   font-weight:700;
 }
 .master-closing p{
-  margin:0 auto 5px;
+  margin:0 auto 6px;
+  max-width:68ch;
   color:#576078;
-  font-size:.84rem;
-  line-height:1.52;
+  font-size:.85rem;
+  line-height:1.56;
+  text-wrap:pretty;
+  word-break:normal;
+  hyphens:none;
 }
 .master-closing__hand{
   margin-top:10px!important;
