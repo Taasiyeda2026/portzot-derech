@@ -1,311 +1,94 @@
 <!doctype html>
-<html lang="he" dir="rtl" class="h-full">
- <head>
-  <link rel="icon" type="image/png" href="../icon/favicon.png">
-  <link rel="manifest" href="../manifest.json">
-  <meta name="theme-color" content="#ec4899">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <link rel="apple-touch-icon" href="../icon/favicon.png">
+<html lang="he" dir="rtl">
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>תנועה ומרחב | נערות בעיר</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>תנועה ומרחב | פורצות דרך</title>
+  <link rel="icon" type="image/png" href="../icon/favicon.png">
+  <link rel="manifest" href="../manifest.json">
+  <meta name="theme-color" content="#0e7490">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="apple-touch-icon" href="../icon/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700;800&amp;family=Rubik:wght@400;500;700&amp;display=swap" rel="stylesheet">
-  
-  <style>
-    body {
-      box-sizing: border-box;
-    }
-    
-    * {
-      font-family: 'Assistant', 'Rubik', sans-serif;
-    }
-    
-    .gradient-text {
-      background: linear-gradient(135deg, #0891b2, #06b6d4, #22d3ee);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    
-    .hero-pattern {
-      background-image: 
-        linear-gradient(135deg, rgba(8, 145, 178, 0.05) 25%, transparent 25%),
-        linear-gradient(225deg, rgba(8, 145, 178, 0.05) 25%, transparent 25%),
-        linear-gradient(45deg, rgba(8, 145, 178, 0.05) 25%, transparent 25%),
-        linear-gradient(315deg, rgba(8, 145, 178, 0.05) 25%, transparent 25%);
-      background-position: 20px 0, 20px 0, 0 0, 0 0;
-      background-size: 40px 40px;
-      background-repeat: repeat;
-    }
-    
-    .section-card {
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .section-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, #0891b2, #06b6d4, #22d3ee);
-      transform: scaleX(0);
-      transform-origin: right;
-      transition: transform 0.3s ease;
-    }
-    
-    .section-card:hover::before {
-      transform: scaleX(1);
-      transform-origin: left;
-    }
-    
-    .section-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 20px 40px -12px rgba(8, 145, 178, 0.15);
-    }
-    
-    @keyframes move-path {
-      0%, 100% { stroke-dashoffset: 0; }
-      50% { stroke-dashoffset: 100; }
-    }
-    
-    .animated-path {
-      stroke-dasharray: 100;
-      animation: move-path 4s ease-in-out infinite;
-    }
-    
-    @keyframes float-gentle {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
-    }
-    
-    .float-gentle {
-      animation: float-gentle 4s ease-in-out infinite;
-    }
-    
-    .warning-box {
-      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-      border-right: 4px solid #f59e0b;
-    }
-    
-    .safety-box {
-      background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-      border-right: 4px solid #3b82f6;
-    }
-    
-    .empowerment-box {
-      background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
-      border-right: 4px solid #6366f1;
-    }
-    
-    .tip-card {
-      background: white;
-      border-right: 3px solid #0891b2;
-      transition: all 0.3s ease;
-    }
-    
-    .tip-card:hover {
-      border-right-width: 6px;
-      transform: translateX(-3px);
-    }
-    
-    @keyframes pulse-ring {
-      0% { transform: scale(1); opacity: 0.6; }
-      50% { transform: scale(1.1); opacity: 0.3; }
-      100% { transform: scale(1); opacity: 0.6; }
-    }
-    
-    .pulse-ring {
-      animation: pulse-ring 2s ease-in-out infinite;
-    }
-    
-    .mode-icon {
-      transition: all 0.3s ease;
-    }
-    
-    .mode-icon:hover {
-      transform: scale(1.1) rotate(5deg);
-    }
-    
-    .nav-link {
-      position: relative;
-      transition: color 0.3s ease;
-    }
-    
-    .nav-link::after {
-      content: '';
-      position: absolute;
-      bottom: -2px;
-      right: 0;
-      width: 0;
-      height: 2px;
-      background: #0891b2;
-      transition: width 0.3s ease;
-    }
-    
-    .nav-link:hover::after {
-      width: 100%;
-    }
-    
-    .intersection-visual {
-      position: relative;
-    }
-    
-    .intersection-line {
-      stroke: #0891b2;
-      stroke-width: 2;
-      fill: none;
-      opacity: 0.6;
-    }
-    
-    @keyframes slide-in {
-      from { opacity: 0; transform: translateX(20px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-    
-    .slide-in {
-      animation: slide-in 0.6s ease-out;
-    }
-  .nav-3d-btn {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-      width: 70px;
-      height: 54px;
-      padding: 6px 4px;
-      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
-      border-radius: 12px;
-      box-shadow: 0 4px 0 rgba(100, 100, 100, 0.2), 0 6px 12px rgba(0, 0, 0, 0.1);
-      transition: all 0.15s ease;
-      text-decoration: none;
-    }
-    .nav-3d-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 0 rgba(100, 100, 100, 0.2), 0 10px 20px rgba(0, 0, 0, 0.12);
-    }
-    .nav-3d-btn:active {
-      transform: translateY(2px);
-      box-shadow: 0 2px 0 rgba(100, 100, 100, 0.2), 0 3px 6px rgba(0, 0, 0, 0.08);
-    }
-    .nav-3d-btn .nav-icon { font-size: 1.2rem; }
-    .nav-3d-btn .nav-label { font-size: 11px; font-weight: 600; color: #374151; }
-    
-    @media (max-width: 768px) {
-      .nav-3d-btn { width: 48px; height: 42px; padding: 4px 2px; gap: 2px; }
-      .nav-3d-btn .nav-icon { font-size: 1rem; }
-      .nav-3d-btn .nav-label { font-size: 9px; }
-      #nav-title { font-size: 14px !important; }
-    }
-    @media (max-width: 480px) {
-      .nav-3d-btn { width: 40px; height: 36px; }
-      .nav-3d-btn .nav-label { display: none; }
-      #nav-title { display: none; }
-    }
-    
-    /* Scroll Lock Mechanism */
-    .scroll-locked {
-      overflow: hidden !important;
-      height: 100vh !important;
-    }
-    .scroll-locked .content-locked {
-      display: none !important;
-    }
-    .scroll-unlocked .content-locked {
-      display: block;
-    }
-  </style>
-  
-  
- </head>
- <body class="h-full min-h-screen bg-gray-100 overflow-x-hidden"><div class="max-w-5xl mx-auto shadow-2xl rounded-lg my-4 bg-gradient-to-b from-white via-cyan-50/30 to-blue-50/30 text-gray-800 overflow-visible"><!-- Navigation -->
-  <nav class="fixed top-0 left-1/2 transform -translate-x-1/2 w-full max-w-5xl z-50 bg-white/80 backdrop-blur-md border-b border-cyan-100/50 shadow-sm">
-   <div class="max-w-6xl mx-auto px-6 py-4">
-    <div class="flex items-center justify-between">
-     <div class="flex items-center gap-3">
-      <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center">
-       <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-       </svg>
-      </div><span id="nav-title" class="text-xl font-bold gradient-text">תנועה ומרחב</span>
-     </div>
-     <div class="flex items-center gap-1 md:gap-3">
-      <a href="#walking" class="nav-3d-btn"><span class="nav-icon">🚶‍♀️</span><span class="nav-label">הליכה</span></a>
-      <a href="#bus" class="nav-3d-btn"><span class="nav-icon">🚌</span><span class="nav-label">תחבורה</span></a>
-      <a href="#bike" class="nav-3d-btn"><span class="nav-icon">🚲</span><span class="nav-label">אופניים</span></a>
-      <a href="#safety" class="nav-3d-btn"><span class="nav-icon">🛡️</span><span class="nav-label">בטיחות</span></a>
-      <a href="#empowerment" class="nav-3d-btn"><span class="nav-icon">💪</span><span class="nav-label">העצמה</span></a>
-      <a href="alldomains.html" class="nav-3d-btn"><span class="nav-icon">🏠</span><span class="nav-label">לתחומים</span></a>
-     </div>
-    </div>
-   </div>
-    </div>
-   </div>
- </nav>
- <!-- Hero Section -->
-  <section class="h-screen flex items-center justify-center px-6 pt-16 pb-8 relative overflow-hidden hero-pattern"><!-- Decorative elements -->
-   <div class="absolute top-20 right-10 w-72 h-72 bg-cyan-200/20 rounded-full blur-3xl float-gentle"></div>
-   <div class="absolute bottom-20 left-10 w-80 h-80 bg-blue-200/20 rounded-full blur-3xl float-gentle" style="animation-delay: 2s;"></div>
-   <div class="max-w-5xl mx-auto text-center relative z-10"><!-- City movement illustration -->
-    <div class="mb-6 flex justify-center">
-     <svg class="w-80 h-64" viewbox="0 0 300 200" fill="none"><!-- City buildings silhouette --> <rect x="20" y="120" width="30" height="60" fill="#0891b2" opacity="0.2" /> <rect x="60" y="100" width="35" height="80" fill="#06b6d4" opacity="0.25" /> <rect x="105" y="90" width="28" height="90" fill="#0891b2" opacity="0.2" /> <rect x="230" y="110" width="32" height="70" fill="#06b6d4" opacity="0.25" /> <rect x="270" y="95" width="25" height="85" fill="#0891b2" opacity="0.2" /> <!-- Street/path --> <line x1="0" y1="180" x2="300" y2="180" stroke="#cbd5e1" stroke-width="8" opacity="0.3" /> <line x1="0" y1="180" x2="300" y2="180" stroke="#0891b2" stroke-width="2" stroke-dasharray="10,5" opacity="0.4" class="animated-path" /> <!-- Walking person --> <g transform="translate(70, 155)" class="float-gentle">
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/domains-magazine.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="mag-domain" data-domain="6">
+ <header class="mag-header">
+  <div class="mag-header__inner">
+   <a class="mag-header__brand" href="#top">
+    <span class="mag-header__icon" aria-hidden="true">🏃‍♀️</span>
+    <span class="mag-header__text"><span class="mag-header__kicker">פורצות דרך · מדור 6</span><span class="mag-header__title">תנועה ומרחב</span></span>
+   </a>
+   <nav class="mag-chapters" aria-label="פרקי התחום">
+    <a class="mag-chapters__link" href="#walking"><span class="mag-chapters__icon" aria-hidden="true">🚶‍♀️</span><span class="mag-chapters__label">הליכה</span></a>
+    <a class="mag-chapters__link" href="#bus"><span class="mag-chapters__icon" aria-hidden="true">🚌</span><span class="mag-chapters__label">תחבורה</span></a>
+    <a class="mag-chapters__link" href="#bike"><span class="mag-chapters__icon" aria-hidden="true">🚲</span><span class="mag-chapters__label">אופניים</span></a>
+    <a class="mag-chapters__link" href="#safety"><span class="mag-chapters__icon" aria-hidden="true">🛡️</span><span class="mag-chapters__label">בטיחות</span></a>
+    <a class="mag-chapters__link" href="#empowerment"><span class="mag-chapters__icon" aria-hidden="true">💪</span><span class="mag-chapters__label">העצמה</span></a>
+   </nav>
+   <a class="mag-header__back" href="alldomains.html"><svg aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg><span>לתחומים</span></a>
+  </div>
+ </header>
+ <div class="mag-page">
+ <main id="top">
+  <section class="mag-hero" aria-labelledby="hero-title">
+   <div class="mag-hero__inner">
+    <div class="mag-hero__visual" aria-hidden="true">
+     <svg class="mag-hero__svg" viewbox="0 0 300 200" fill="none"><!-- City buildings silhouette --> <rect x="20" y="120" width="30" height="60" fill="#0891b2" opacity="0.2" /> <rect x="60" y="100" width="35" height="80" fill="#06b6d4" opacity="0.25" /> <rect x="105" y="90" width="28" height="90" fill="#0891b2" opacity="0.2" /> <rect x="230" y="110" width="32" height="70" fill="#06b6d4" opacity="0.25" /> <rect x="270" y="95" width="25" height="85" fill="#0891b2" opacity="0.2" /> <!-- Street/path --> <line x1="0" y1="180" x2="300" y2="180" stroke="#cbd5e1" stroke-width="8" opacity="0.3" /> <line x1="0" y1="180" x2="300" y2="180" stroke="#0891b2" stroke-width="2" stroke-dasharray="10,5" opacity="0.4" class="mag-dash" /> <!-- Walking person --> <g transform="translate(70, 155)" class="mag-float">
        <circle cx="0" cy="-8" r="5" fill="#0891b2" />
        <line x1="0" y1="-3" x2="0" y2="10" stroke="#0891b2" stroke-width="2.5" />
        <line x1="0" y1="2" x2="-5" y2="7" stroke="#0891b2" stroke-width="2" />
        <line x1="0" y1="2" x2="5" y2="7" stroke="#0891b2" stroke-width="2" />
        <line x1="0" y1="10" x2="-4" y2="20" stroke="#0891b2" stroke-width="2.5" />
        <line x1="0" y1="10" x2="4" y2="20" stroke="#0891b2" stroke-width="2.5" />
-      </g> <!-- Bicycle --> <g transform="translate(180, 165)" class="float-gentle" style="animation-delay: 1s">
+      </g> <!-- Bicycle --> <g transform="translate(180, 165)" class="mag-float" style="animation-delay: 1s">
        <circle cx="-8" cy="8" r="7" stroke="#06b6d4" stroke-width="2" fill="none" />
        <circle cx="12" cy="8" r="7" stroke="#06b6d4" stroke-width="2" fill="none" />
        <line x1="-8" y1="8" x2="2" y2="-2" stroke="#06b6d4" stroke-width="2" />
        <line x1="2" y1="-2" x2="12" y2="8" stroke="#06b6d4" stroke-width="2" />
        <line x1="2" y1="-2" x2="2" y2="-8" stroke="#06b6d4" stroke-width="2" />
        <circle cx="2" cy="-11" r="3" fill="#06b6d4" />
-      </g> <!-- Bus --> <g transform="translate(240, 150)" class="float-gentle" style="animation-delay: 0.5s">
+      </g> <!-- Bus --> <g transform="translate(240, 150)" class="mag-float" style="animation-delay: 0.5s">
        <rect x="-15" y="0" width="30" height="20" rx="3" fill="#22d3ee" opacity="0.8" />
        <rect x="-12" y="3" width="8" height="6" fill="#ffffff" opacity="0.6" />
        <rect x="-2" y="3" width="8" height="6" fill="#ffffff" opacity="0.6" />
        <circle cx="-8" cy="20" r="2.5" fill="#0891b2" />
        <circle cx="8" cy="20" r="2.5" fill="#0891b2" />
-      </g> <!-- Connecting paths --> <path d="M 70 175 Q 125 170 180 175" stroke="#0891b2" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.3" class="animated-path" /> <path d="M 180 175 Q 210 173 240 175" stroke="#06b6d4" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.3" class="animated-path" style="animation-delay: 1.5s" /> <!-- Location markers --> <g transform="translate(150, 50)">
-       <circle cx="0" cy="0" r="8" fill="#0891b2" opacity="0.2" class="pulse-ring" />
+      </g> <!-- Connecting paths --> <path d="M 70 175 Q 125 170 180 175" stroke="#0891b2" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.3" class="mag-dash" /> <path d="M 180 175 Q 210 173 240 175" stroke="#06b6d4" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.3" class="mag-dash" style="animation-delay: 1.5s" /> <!-- Location markers --> <g transform="translate(150, 50)">
+       <circle cx="0" cy="0" r="8" fill="#0891b2" opacity="0.2" class="mag-pulse" />
        <circle cx="0" cy="0" r="5" fill="#0891b2" />
        <path d="M 0 -5 L 0 0 L -3 3" stroke="white" stroke-width="1.5" fill="none" />
       </g>
      </svg>
     </div>
-    <h1 id="hero-title" class="text-4xl md:text-6xl font-bold mb-4 leading-tight"><span class="gradient-text">תנועה ומרחב</span></h1>
-    <p id="hero-subtitle" class="text-lg md:text-xl text-gray-600 mb-6 leading-relaxed max-w-3xl mx-auto">איך נערות נעות בעולם - על עצמאות, בטיחות, והזכות לתפוס מקום</p>
-    <div class="bg-white/70 backdrop-blur-sm rounded-2xl p-5 mb-6 shadow-lg max-w-3xl mx-auto border border-cyan-100">
-     <p class="text-lg text-gray-700 leading-relaxed mb-4">התנועה שלך בעולם היא <strong>חלק מהחופש שלך</strong>. איך את הולכת ברחוב, נוסעת באוטובוס, רוכבת על אופניים — כל אלה חלק מהעצמאות שלך, מהביטחון שלך, ומהזכות שלך לתפוס מקום.</p>
-     <p class="text-lg text-gray-700 leading-relaxed">אבל יחד עם החופש הזה, יש גם שאלות: <em>איך להישאר בטוחה? איך להרגיש בנוח? איך לא לוותר על החופש בגלל פחד?</em> בואי נחקור את זה ביחד.</p>
-    </div><a href="#walking" class="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-8 py-4 rounded-full font-semibold hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-300"> בואי נתחיל למפות את המסלול 
-     <svg class="w-5 h-5 rotate-180" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-     </svg></a>
-   </div>
-  </section><!-- Content Sections (locked until button click) -->
-  <div id="locked-content" class="content-locked"><!-- Section 1: Walking -->
-  <section id="walking" class="py-24 px-6 bg-white">
-   <div class="max-w-5xl mx-auto">
-    <div class="flex items-center gap-4 mb-12">
-     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-100 to-emerald-200 flex items-center justify-center">
-      <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-      </svg>
-     </div>
-     <div><span class="text-sm font-medium text-green-500 tracking-wide uppercase">אמצעי תנועה 1</span>
-      <h2 class="text-4xl font-bold text-gray-800">הליכה ברחוב</h2>
-     </div>
+    <p class="mag-hero__kicker"><span class="mag-chip">מדור 6</span><span>פורצות דרך · 5 פרקים</span></p>
+    <h1 id="hero-title" class="mag-hero__title"><span class="gradient-text">תנועה ומרחב</span></h1>
+    <p id="hero-subtitle" class="mag-hero__subtitle">איך נערות נעות בעולם - על עצמאות, בטיחות, והזכות לתפוס מקום</p>
+    <div class="mag-hero__intro">
+     <p>התנועה שלך בעולם היא <strong>חלק מהחופש שלך</strong>. איך את הולכת ברחוב, נוסעת באוטובוס, רוכבת על אופניים — כל אלה חלק מהעצמאות שלך, מהביטחון שלך, ומהזכות שלך לתפוס מקום.</p>
+     <p>אבל יחד עם החופש הזה, יש גם שאלות: <em>איך להישאר בטוחה? איך להרגיש בנוח? איך לא לוותר על החופש בגלל פחד?</em> בואי נחקור את זה ביחד.</p>
     </div>
-    <p class="text-xl text-gray-600 mb-12 max-w-3xl">ללכת ברחוב זה הדבר הכי בסיסי — וגם אחד הכי מורכבים. זה המקום שבו את לפעמים הכי חשופה.</p>
+    <div class="mag-hero__cta"><a href="#walking" class="mag-cta" data-unlock-content>בואי נתחיל למפות את המסלול <svg aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg></a></div>
+   </div>
+  </section>
+  <!-- Content Sections (locked until the hero CTA is clicked) -->
+  <div id="locked-content" class="content-locked">
+  <section id="walking" class="mag-section">
+   <div class="mag-container">
+    <header class="mag-section-header">
+     <div class="mag-section-header__icon" aria-hidden="true"><svg aria-hidden="true" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+      </svg></div>
+     <div class="mag-section-header__text">
+      <span class="mag-eyebrow">אמצעי תנועה 1</span>
+      <h2>הליכה ברחוב</h2>
+     </div>
+    </header>
+    <p class="mag-lead">ללכת ברחוב זה הדבר הכי בסיסי — וגם אחד הכי מורכבים. זה המקום שבו את לפעמים הכי חשופה.</p>
     <div class="grid md:grid-cols-2 gap-8 mb-12">
-     <div class="section-card bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-8 border border-green-100">
+     <div class="mag-card mag-card--soft mag-card--lg mag-card--hover">
       <h3 class="text-2xl font-bold text-gray-800 mb-6">החוויה של נערות ברחוב</h3>
       <div class="space-y-4">
        <div class="flex items-start gap-3">
@@ -351,7 +134,7 @@
       </div>
      </div>
      <div class="space-y-6">
-      <div class="tip-card rounded-xl p-6 shadow-lg">
+      <div class="mag-card mag-card--hover">
        <h3 class="text-xl font-bold text-gray-800 mb-4">טיפים להליכה בטוחה</h3>
        <ul class="space-y-3">
         <li class="flex items-start gap-2">
@@ -391,7 +174,7 @@
          </div></li>
        </ul>
       </div>
-      <div class="warning-box rounded-xl p-6">
+      <div class="mag-card mag-card--warning">
        <div class="flex items-start gap-3">
         <svg class="w-6 h-6 text-amber-600 mt-1 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
         </svg>
@@ -408,7 +191,7 @@
       </div>
      </div>
     </div>
-    <div class="empowerment-box rounded-2xl p-8">
+    <div class="mag-card mag-card--insight mag-card--lg">
      <div class="flex items-start gap-4">
       <svg class="w-8 h-8 text-indigo-600 mt-1 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
       </svg>
@@ -420,20 +203,19 @@
     </div>
    </div>
   </section><!-- Section 2: Bus -->
-  <section id="bus" class="py-24 px-6 bg-gradient-to-b from-white to-cyan-50/30">
-   <div class="max-w-5xl mx-auto">
-    <div class="flex items-center gap-4 mb-12">
-     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-100 to-sky-200 flex items-center justify-center">
-      <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-      </svg>
+  <section id="bus" class="mag-section">
+   <div class="mag-container">
+    <header class="mag-section-header">
+     <div class="mag-section-header__icon" aria-hidden="true"><svg aria-hidden="true" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+      </svg></div>
+     <div class="mag-section-header__text">
+      <span class="mag-eyebrow">אמצעי תנועה 2</span>
+      <h2>תחבורה ציבורית - אוטובוס ורכבת</h2>
      </div>
-     <div><span class="text-sm font-medium text-blue-500 tracking-wide uppercase">אמצעי תנועה 2</span>
-      <h2 class="text-4xl font-bold text-gray-800">תחבורה ציבורית - אוטובוס ורכבת</h2>
-     </div>
-    </div>
-    <p class="text-xl text-gray-600 mb-12 max-w-3xl">אוטובוס ורכבת הם כלי לעצמאות — אבל הם גם מרחבים שיכולים להרגיש מאיימים או לא נוחים.</p>
+    </header>
+    <p class="mag-lead">אוטובוס ורכבת הם כלי לעצמאות — אבל הם גם מרחבים שיכולים להרגיש מאיימים או לא נוחים.</p>
     <div class="grid md:grid-cols-2 gap-8 mb-12">
-     <div class="section-card bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+     <div class="mag-card mag-card--lg mag-card--hover">
       <h3 class="text-2xl font-bold text-gray-800 mb-6">אתגרים בתחבורה ציבורית</h3>
       <div class="space-y-4">
        <div class="bg-red-50 rounded-lg p-4 border-r-4 border-red-400">
@@ -459,7 +241,7 @@
       </div>
      </div>
      <div class="space-y-6">
-      <div class="tip-card rounded-xl p-6 shadow-lg">
+      <div class="mag-card mag-card--hover">
        <h3 class="text-xl font-bold text-gray-800 mb-4">טיפים לנסיעה בטוחה יותר</h3>
        <ul class="space-y-3">
         <li class="flex items-start gap-2">
@@ -506,7 +288,7 @@
          </div></li>
        </ul>
       </div>
-      <div class="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl p-6 border border-indigo-100">
+      <div class="mag-card mag-card--soft">
        <h4 class="font-bold text-gray-800 mb-3 flex items-center gap-2">
         <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
         </svg> אפליקציות שימושיות</h4>
@@ -518,7 +300,7 @@
       </div>
      </div>
     </div>
-    <div class="safety-box rounded-2xl p-8 mb-8">
+    <div class="mag-card mag-card--insight mag-card--lg mb-8">
      <div class="flex items-start gap-4">
       <svg class="w-8 h-8 text-blue-600 mt-1 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
       </svg>
@@ -530,20 +312,19 @@
     </div>
    </div>
   </section><!-- Section 3: Bike -->
-  <section id="bike" class="py-24 px-6 bg-white">
-   <div class="max-w-5xl mx-auto">
-    <div class="flex items-center gap-4 mb-12">
-     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-teal-100 to-cyan-200 flex items-center justify-center">
-      <svg class="w-8 h-8 text-teal-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
-      </svg>
+  <section id="bike" class="mag-section">
+   <div class="mag-container">
+    <header class="mag-section-header">
+     <div class="mag-section-header__icon" aria-hidden="true"><svg aria-hidden="true" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+      </svg></div>
+     <div class="mag-section-header__text">
+      <span class="mag-eyebrow">אמצעי תנועה 3</span>
+      <h2>רכיבה על אופניים</h2>
      </div>
-     <div><span class="text-sm font-medium text-teal-500 tracking-wide uppercase">אמצעי תנועה 3</span>
-      <h2 class="text-4xl font-bold text-gray-800">רכיבה על אופניים</h2>
-     </div>
-    </div>
-    <p class="text-xl text-gray-600 mb-12 max-w-3xl">אופניים נותנים חופש, מהירות, ועצמאות — אבל גם דורשים ביטחון ומודעות למרחב.</p>
+    </header>
+    <p class="mag-lead">אופניים נותנים חופש, מהירות, ועצמאות — אבל גם דורשים ביטחון ומודעות למרחב.</p>
     <div class="grid md:grid-cols-2 gap-8 mb-12">
-     <div class="section-card bg-gradient-to-br from-teal-50 to-cyan-50 rounded-2xl p-8 border border-teal-100">
+     <div class="mag-card mag-card--soft mag-card--lg mag-card--hover">
       <h3 class="text-2xl font-bold text-gray-800 mb-6">היתרונות של רכיבה</h3>
       <ul class="space-y-4">
        <li class="flex items-start gap-3">
@@ -585,7 +366,7 @@
       </ul>
      </div>
      <div class="space-y-6">
-      <div class="tip-card rounded-xl p-6 shadow-lg">
+      <div class="mag-card mag-card--hover">
        <h3 class="text-xl font-bold text-gray-800 mb-4">טיפים לרכיבה בטוחה</h3>
        <ul class="space-y-3">
         <li class="flex items-start gap-2">
@@ -632,7 +413,7 @@
          </div></li>
        </ul>
       </div>
-      <div class="warning-box rounded-xl p-6">
+      <div class="mag-card mag-card--warning">
        <div class="flex items-start gap-3">
         <svg class="w-6 h-6 text-amber-600 mt-1 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
         </svg>
@@ -649,7 +430,7 @@
       </div>
      </div>
     </div>
-    <div class="empowerment-box rounded-2xl p-8">
+    <div class="mag-card mag-card--insight mag-card--lg">
      <div class="flex items-start gap-4">
       <svg class="w-8 h-8 text-indigo-600 mt-1 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
       </svg>
@@ -662,20 +443,19 @@
     </div>
    </div>
   </section><!-- Section 4: Safety -->
-  <section id="safety" class="py-24 px-6 bg-gradient-to-b from-white to-blue-50/30">
-   <div class="max-w-5xl mx-auto">
-    <div class="flex items-center gap-4 mb-12">
-     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-red-100 to-orange-200 flex items-center justify-center">
-      <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-      </svg>
+  <section id="safety" class="mag-section">
+   <div class="mag-container">
+    <header class="mag-section-header">
+     <div class="mag-section-header__icon" aria-hidden="true"><svg aria-hidden="true" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+      </svg></div>
+     <div class="mag-section-header__text">
+      <span class="mag-eyebrow">חלק מרכזי</span>
+      <h2 id="safety-title">בטיחות במרחב הציבורי</h2>
      </div>
-     <div><span class="text-sm font-medium text-red-500 tracking-wide uppercase">חלק מרכזי</span>
-      <h2 id="safety-title" class="text-4xl font-bold text-gray-800">בטיחות במרחב הציבורי</h2>
-     </div>
-    </div>
-    <p class="text-xl text-gray-600 mb-12 max-w-3xl">בטיחות זה לא רק להימנע מסכנות — זה גם <strong>להרגיש בטוחה להיות מי שאת</strong> במרחב הציבורי.</p>
+    </header>
+    <p class="mag-lead">בטיחות זה לא רק להימנע מסכנות — זה גם <strong>להרגיש בטוחה להיות מי שאת</strong> במרחב הציבורי.</p>
     <div class="grid md:grid-cols-2 gap-8 mb-12">
-     <div class="section-card bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+     <div class="mag-card mag-card--lg mag-card--hover">
       <h3 class="text-2xl font-bold text-gray-800 mb-6">סכנות שנערות חוות</h3>
       <div class="space-y-4">
        <div class="flex items-start gap-3">
@@ -731,7 +511,7 @@
       </div>
      </div>
      <div class="space-y-6">
-      <div class="safety-box rounded-xl p-6">
+      <div class="mag-card mag-card--insight">
        <h3 class="text-xl font-bold text-gray-800 mb-4">כלים לבטיחות</h3>
        <ul class="space-y-3">
         <li class="flex items-start gap-2">
@@ -778,7 +558,7 @@
          </div></li>
        </ul>
       </div>
-      <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-6 border border-purple-100">
+      <div class="mag-card mag-card--soft">
        <h4 class="font-bold text-gray-800 mb-3">מה לעשות אם את מרגישה מאוימת?</h4>
        <ol class="space-y-2 text-sm text-gray-700 list-decimal list-inside">
         <li><strong>הגיבי מיד:</strong> אל תחכי שזה "יעבור מעצמו"</li>
@@ -790,7 +570,7 @@
       </div>
      </div>
     </div>
-    <div class="bg-gradient-to-r from-red-500 to-orange-500 rounded-2xl p-8 text-white">
+    <div class="mag-card mag-card--feature mag-card--alert mag-card--lg">
      <div class="flex items-start gap-4">
       <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center shrink-0">
        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
@@ -805,20 +585,19 @@
     </div>
    </div>
   </section><!-- Section 5: Empowerment -->
-  <section id="empowerment" class="py-24 px-6 bg-white">
-   <div class="max-w-5xl mx-auto">
-    <div class="flex items-center gap-4 mb-12">
-     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-100 to-indigo-200 flex items-center justify-center">
-      <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-      </svg>
+  <section id="empowerment" class="mag-section">
+   <div class="mag-container">
+    <header class="mag-section-header">
+     <div class="mag-section-header__icon" aria-hidden="true"><svg aria-hidden="true" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+      </svg></div>
+     <div class="mag-section-header__text">
+      <span class="mag-eyebrow">המסר המרכזי</span>
+      <h2>את שייכת למרחב הציבורי</h2>
      </div>
-     <div><span class="text-sm font-medium text-purple-500 tracking-wide uppercase">המסר המרכזי</span>
-      <h2 class="text-4xl font-bold text-gray-800">את שייכת למרחב הציבורי</h2>
-     </div>
-    </div>
-    <p class="text-xl text-gray-600 mb-12 max-w-3xl">המרחב הציבורי לא "שייך לגברים" ונערות רק "עוברות בו". <strong>זה גם שלך.</strong></p>
+    </header>
+    <p class="mag-lead">המרחב הציבורי לא "שייך לגברים" ונערות רק "עוברות בו". <strong>זה גם שלך.</strong></p>
     <div class="mb-12">
-     <div class="empowerment-box rounded-2xl p-8 mb-8">
+     <div class="mag-card mag-card--insight mag-card--lg mb-8">
       <h3 class="text-2xl font-bold text-gray-800 mb-6">מה זה אומר לתפוס מקום?</h3>
       <div class="grid md:grid-cols-2 gap-6">
        <ul class="space-y-4">
@@ -882,21 +661,21 @@
       </div>
      </div>
      <div class="grid md:grid-cols-3 gap-6 mb-12">
-      <div class="section-card bg-gradient-to-br from-cyan-50 to-blue-50 rounded-xl p-6 border border-cyan-100">
+      <div class="mag-card mag-card--soft mag-card--hover">
        <div class="text-4xl mb-4">
         🚶‍♀️
        </div>
        <h4 class="font-bold text-gray-800 mb-3">הליכה = חופש</h4>
        <p class="text-sm text-gray-700">כל פעם שאת יוצאת לבד, את מבטאת עצמאות. זה לא מובן מאליו — זו זכות שצריך לשמור עליה.</p>
       </div>
-      <div class="section-card bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-6 border border-purple-100">
+      <div class="mag-card mag-card--soft mag-card--hover">
        <div class="text-4xl mb-4">
         🚌
        </div>
        <h4 class="font-bold text-gray-800 mb-3">נסיעה = גישה</h4>
        <p class="text-sm text-gray-700">תחבורה ציבורית נותנת לך גישה לעבודה, לימודים, חברות, הזדמנויות. זה מפתח לעצמאות כלכלית וחברתית.</p>
       </div>
-      <div class="section-card bg-gradient-to-br from-green-50 to-teal-50 rounded-xl p-6 border border-green-100">
+      <div class="mag-card mag-card--soft mag-card--hover">
        <div class="text-4xl mb-4">
         🚲
        </div>
@@ -905,17 +684,17 @@
       </div>
      </div>
     </div>
-    <div class="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl p-10 text-white text-center">
+    <div class="mag-card mag-card--feature mag-card--lg text-center">
      <h3 class="text-3xl font-bold mb-6">המסר האחרון</h3>
      <p class="text-xl leading-relaxed mb-6 max-w-3xl mx-auto opacity-95"><strong>המרחב הציבורי שייך לך בדיוק כמו שהוא שייך לכולם.</strong></p>
      <p class="text-lg leading-relaxed max-w-3xl mx-auto opacity-90">את לא צריכה להיות קטנה, שקטה, זהירה מדי. את צריכה להיות <em>בטוחה</em> — ושזה יהיה אחריות החברה, לא רק שלך. עד אז, תלכי בביטחון, תדעי את הזכויות שלך, ותזכרי: <strong>את ראויה לתפוס מקום.</strong></p>
     </div>
    </div>
   </section><!-- Closing Section -->
-  <section class="py-24 px-6 bg-gradient-to-b from-white to-cyan-50">
-   <div class="max-w-4xl mx-auto text-center">
+  <section class="mag-section mag-section--closing">
+   <div class="mag-container mag-container--narrow text-center">
     <div class="mb-6 flex justify-center">
-     <svg class="w-32 h-32" viewbox="0 0 120 120" fill="none"><circle cx="60" cy="60" r="50" fill="#ecfeff" opacity="0.5" /> <path d="M 30 60 Q 45 40 60 60 T 90 60" stroke="#0891b2" stroke-width="3" fill="none" class="animated-path" /> <circle cx="30" cy="60" r="6" fill="#06b6d4" /> <circle cx="60" cy="60" r="6" fill="#0891b2" /> <circle cx="90" cy="60" r="6" fill="#22d3ee" /> <path d="M 60 20 L 60 100" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="5,5" opacity="0.3" /> <path d="M 20 60 L 100 60" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="5,5" opacity="0.3" />
+     <svg class="w-32 h-32" viewbox="0 0 120 120" fill="none"><circle cx="60" cy="60" r="50" fill="#ecfeff" opacity="0.5" /> <path d="M 30 60 Q 45 40 60 60 T 90 60" stroke="#0891b2" stroke-width="3" fill="none" class="mag-dash" /> <circle cx="30" cy="60" r="6" fill="#06b6d4" /> <circle cx="60" cy="60" r="6" fill="#0891b2" /> <circle cx="90" cy="60" r="6" fill="#22d3ee" /> <path d="M 60 20 L 60 100" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="5,5" opacity="0.3" /> <path d="M 20 60 L 100 60" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="5,5" opacity="0.3" />
      </svg>
     </div>
     <h2 class="text-4xl font-bold text-gray-800 mb-8"><span class="gradient-text">המסע שלך במרחב</span></h2>
@@ -924,186 +703,24 @@
      <p class="text-xl text-gray-700 leading-relaxed">זה לא תמיד קל. יש הטרדות, יש פחדים, יש סכנות. אבל זה לא אומר שאת צריכה לוותר על החופש שלך — זה אומר שהעולם צריך להשתנות.</p>
      <p class="text-xl text-gray-700 leading-relaxed">עד אז: <em>תזוזי בביטחון. תדעי את הזכויות שלך. ותזכרי שאת שייכת למרחב הזה.</em></p>
     </div>
-    <div class="bg-white rounded-2xl p-8 shadow-lg border border-cyan-100 max-w-2xl mx-auto mb-12">
+    <div class="mag-card mag-card--lg max-w-2xl mx-auto mb-12">
      <p class="text-lg font-medium text-gray-800 italic">"הרחוב הוא לא סכנה — הרחוב הוא הבית שלי, ושל כל אישה. אנחנו לא צריכות לברוח ממנו, אלא לדרוש שהוא יהיה בטוח עבורנו."</p>
-    </div><a href="#walking" class="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-8 py-4 rounded-full font-semibold hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-300"> לחזור להתחלה 
+    </div><a href="#walking" class="mag-cta"> לחזור להתחלה 
      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
      </svg></a>
    </div>
   </section>
   </div><!-- End locked-content -->
-
-  <!-- Footer -->
-  <footer class="py-12 px-6 bg-gradient-to-r from-cyan-600 to-blue-600 text-white">
-   <div class="max-w-5xl mx-auto text-center">
-    <div class="flex items-center justify-center gap-3 mb-6">
-     <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
-      <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-      </svg>
-     </div><span class="text-2xl font-bold">תנועה ומרחב</span>
-    </div>
-    <p class="text-white/80 text-lg mb-4">איך נערות נעות בעולם - על עצמאות, בטיחות, והזכות לתפוס מקום</p>
-    <p class="text-white/60 text-sm">תוכנית חינוכית לנערות | בנושא תנועה במרחב הציבורי</p>
-    <div class="mt-6 pt-6 border-t border-white/20">
-     <p class="text-white/70 text-sm">מספרי חירום: משטרה 100 | אמבולנס 101 | עזרה ראשונה 1-800-HELP</p>
-    </div>
-    <p class="text-white/50 text-xs mt-4">© 2026 פורצות דרך</p>
-   </div>
+ </main>
+  <footer class="mag-footer">
+   <div class="mag-footer__brand"><span class="mag-footer__icon" aria-hidden="true">🏃‍♀️</span><span>תנועה ומרחב</span></div>
+   <p class="mag-footer__tagline">איך נערות נעות בעולם - על עצמאות, בטיחות, והזכות לתפוס מקום</p>
+   <p class="mag-footer__meta">תוכנית חינוכית לנערות | בנושא תנועה במרחב הציבורי</p>
+   <p class="mag-footer__meta">מספרי חירום: משטרה 100 | אמבולנס 101 | עזרה ראשונה 1-800-HELP</p>
+   <p class="mag-footer__copy">© 2026 פורצות דרך</p>
   </footer>
-  <script>
-    // Element SDK initialization
-    const defaultConfig = {
-      site_title: 'תנועה ומרחב',
-      hero_subtitle: 'איך נערות נעות בעולם - על עצמאות, בטיחות, והזכות לתפוס מקום',
-      safety_header: 'בטיחות במרחב הציבורי',
-      background_color: '#ffffff',
-      primary_color: '#0891b2',
-      secondary_color: '#06b6d4',
-      text_color: '#1f2937',
-      accent_color: '#22d3ee'
-    };
-
-    let config = { ...defaultConfig };
-
-    async function onConfigChange(newConfig) {
-      config = newConfig;
-      
-      // Update nav title
-      const navTitle = document.getElementById('nav-title');
-      if (navTitle) {
-        navTitle.textContent = config.site_title || defaultConfig.site_title;
-      }
-      
-      // Update hero title
-      const heroTitle = document.getElementById('hero-title');
-      if (heroTitle) {
-        heroTitle.innerHTML = `<span class="gradient-text">${config.site_title || defaultConfig.site_title}</span>`;
-      }
-      
-      // Update hero subtitle
-      const heroSubtitle = document.getElementById('hero-subtitle');
-      if (heroSubtitle) {
-        heroSubtitle.textContent = config.hero_subtitle || defaultConfig.hero_subtitle;
-      }
-      
-      // Update safety title
-      const safetyTitle = document.getElementById('safety-title');
-      if (safetyTitle) {
-        safetyTitle.textContent = config.safety_header || defaultConfig.safety_header;
-      }
-    }
-
-    function mapToCapabilities(config) {
-      return {
-        recolorables: [
-          {
-            get: () => config.background_color || defaultConfig.background_color,
-            set: (value) => {
-              config.background_color = value;
-              if (window.elementSdk) {
-                window.elementSdk.setConfig({ background_color: value });
-              }
-            }
-          },
-          {
-            get: () => config.primary_color || defaultConfig.primary_color,
-            set: (value) => {
-              config.primary_color = value;
-              if (window.elementSdk) {
-                window.elementSdk.setConfig({ primary_color: value });
-              }
-            }
-          },
-          {
-            get: () => config.secondary_color || defaultConfig.secondary_color,
-            set: (value) => {
-              config.secondary_color = value;
-              if (window.elementSdk) {
-                window.elementSdk.setConfig({ secondary_color: value });
-              }
-            }
-          },
-          {
-            get: () => config.text_color || defaultConfig.text_color,
-            set: (value) => {
-              config.text_color = value;
-              if (window.elementSdk) {
-                window.elementSdk.setConfig({ text_color: value });
-              }
-            }
-          },
-          {
-            get: () => config.accent_color || defaultConfig.accent_color,
-            set: (value) => {
-              config.accent_color = value;
-              if (window.elementSdk) {
-                window.elementSdk.setConfig({ accent_color: value });
-              }
-            }
-          }
-        ],
-        borderables: [],
-        fontEditable: undefined,
-        fontSizeable: undefined
-      };
-    }
-
-    function mapToEditPanelValues(config) {
-      return new Map([
-        ['site_title', config.site_title || defaultConfig.site_title],
-        ['hero_subtitle', config.hero_subtitle || defaultConfig.hero_subtitle],
-        ['safety_header', config.safety_header || defaultConfig.safety_header]
-      ]);
-    }
-
-    // Initialize SDK
-    if (window.elementSdk) {
-      window.elementSdk.init({
-        defaultConfig,
-        onConfigChange,
-        mapToCapabilities,
-        mapToEditPanelValues
-      });
-    }
-
-    // Smooth scroll for navigation
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-          target.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-          });
-        }
-      });
-    });
-
-    // Add scroll-based navigation highlight
-    const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('.nav-link');
-
-    window.addEventListener('scroll', () => {
-      let current = '';
-      sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        if (scrollY >= sectionTop - 200) {
-          current = section.getAttribute('id');
-        }
-      });
-
-      navLinks.forEach(link => {
-        link.classList.remove('text-cyan-600');
-        if (link.getAttribute('href') === `#${current}`) {
-          link.classList.add('text-cyan-600');
-        }
-      });
-    });
-  </script>
-<script src="../js/scroll-lock.js"></script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c03a85807d37da0',t:'MTc2ODc5NzY2NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></div>
-</div>
+ </div>
+ <script src="../js/scroll-lock.js"></script>
 <script>
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", function() {
@@ -1113,6 +730,5 @@
     });
   }
 </script>
-
 </body>
 </html>

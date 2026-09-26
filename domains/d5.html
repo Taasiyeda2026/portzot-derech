@@ -1,298 +1,50 @@
 <!doctype html>
-<html lang="he" dir="rtl" class="h-full">
- <head>
-  <link rel="icon" type="image/png" href="../icon/favicon.png">
-  <link rel="manifest" href="../manifest.json">
-  <meta name="theme-color" content="#ec4899">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <link rel="apple-touch-icon" href="../icon/favicon.png">
+<html lang="he" dir="rtl">
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>כסף קטן, קניות ובחירות | נערות וכלכלה</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>כסף קטן, קניות ובחירות | פורצות דרך</title>
+  <link rel="icon" type="image/png" href="../icon/favicon.png">
+  <link rel="manifest" href="../manifest.json">
+  <meta name="theme-color" content="#047857">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="apple-touch-icon" href="../icon/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&amp;family=Varela+Round&amp;display=swap" rel="stylesheet">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/domains-magazine.css">
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body {
-      box-sizing: border-box;
-    }
-    
-    * {
-      font-family: 'Heebo', 'Varela Round', sans-serif;
-    }
-    
-    .gradient-text {
-      background: linear-gradient(135deg, #059669, #10b981, #34d399);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    
-    .hero-pattern {
-      background-image: 
-        radial-gradient(circle at 20% 50%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(52, 211, 153, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 40% 20%, rgba(5, 150, 105, 0.08) 0%, transparent 50%);
-    }
-    
-    .money-card {
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .money-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.1), transparent);
-      transition: left 0.6s ease;
-    }
-    
-    .money-card:hover::before {
-      left: 100%;
-    }
-    
-    .money-card:hover {
-      transform: translateY(-8px) scale(1.02);
-      box-shadow: 0 20px 40px -12px rgba(5, 150, 105, 0.25);
-    }
-    
-    @keyframes coin-flip {
-      0%, 100% { transform: rotateY(0deg); }
-      50% { transform: rotateY(180deg); }
-    }
-    
-    .coin-flip {
-      animation: coin-flip 3s ease-in-out infinite;
-    }
-    
-    @keyframes float-money {
-      0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-15px) rotate(5deg); }
-    }
-    
-    .float-money {
-      animation: float-money 4s ease-in-out infinite;
-    }
-    
-    .price-tag {
-      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-      border-right: 4px solid #f59e0b;
-      position: relative;
-    }
-    
-    .price-tag::after {
-      content: '💰';
-      position: absolute;
-      top: 50%;
-      left: 12px;
-      transform: translateY(-50%);
-      font-size: 1.5rem;
-      opacity: 0.3;
-    }
-    
-    .savings-box {
-      background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-      border-right: 4px solid #3b82f6;
-    }
-    
-    .warning-box {
-      background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
-      border-right: 4px solid #ef4444;
-    }
-    
-    .tip-card {
-      background: white;
-      border-right: 3px solid #10b981;
-      transition: all 0.3s ease;
-    }
-    
-    .tip-card:hover {
-      border-right-width: 6px;
-      transform: translateX(-3px);
-      box-shadow: 0 8px 16px -4px rgba(16, 185, 129, 0.2);
-    }
-    
-    @keyframes pulse-glow {
-      0%, 100% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.3); }
-      50% { box-shadow: 0 0 40px rgba(16, 185, 129, 0.6); }
-    }
-    
-    .pulse-glow {
-      animation: pulse-glow 2s ease-in-out infinite;
-    }
-    
-    .calculator-display {
-      background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
-      font-family: 'Courier New', monospace;
-      color: #10b981;
-      text-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
-    }
-    
-    .trend-wave {
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .trend-wave::before {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: -100%;
-      width: 200%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.1), transparent);
-      animation: wave-move 3s linear infinite;
-    }
-    
-    @keyframes wave-move {
-      0% { left: -100%; }
-      100% { left: 100%; }
-    }
-    
-    .category-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.5rem 1rem;
-      border-radius: 9999px;
-      font-weight: 600;
-      font-size: 0.875rem;
-      transition: all 0.3s ease;
-    }
-    
-    .category-badge:hover {
-      transform: scale(1.05);
-    }
-    
-    .spending-bar {
-      height: 8px;
-      background: linear-gradient(90deg, #10b981, #34d399, #6ee7b7);
-      border-radius: 9999px;
-      transition: width 1s ease-out;
-    }
-    
-    @keyframes slide-in-right {
-      from { opacity: 0; transform: translateX(30px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-    
-    .slide-in-right {
-      animation: slide-in-right 0.6s ease-out;
-    }
-    
-    .interactive-chart {
-      transition: all 0.3s ease;
-    }
-    
-    .interactive-chart:hover {
-      transform: scale(1.05);
-    }
-    
-    .empowerment-box {
-      background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
-      border-right: 4px solid #6366f1;
-    }
-    
-    .nav-3d-btn {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-      width: 70px;
-      height: 54px;
-      padding: 6px 4px;
-      background: linear-gradient(180deg, #ffffff 0%, #f0fdf4 100%);
-      border-radius: 12px;
-      box-shadow: 0 4px 0 rgba(16, 185, 129, 0.3), 0 6px 12px rgba(0, 0, 0, 0.1);
-      transition: all 0.15s ease;
-      text-decoration: none;
-    }
-    
-    .nav-3d-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 0 rgba(16, 185, 129, 0.3), 0 10px 20px rgba(0, 0, 0, 0.12);
-    }
-    
-    .nav-3d-btn:active {
-      transform: translateY(2px);
-      box-shadow: 0 2px 0 rgba(16, 185, 129, 0.3), 0 3px 6px rgba(0, 0, 0, 0.08);
-    }
-    
-    .nav-3d-btn .nav-icon {
-      font-size: 1.2rem;
-    }
-    
-    .nav-3d-btn .nav-label {
-      font-size: 11px;
-      font-weight: 600;
-      color: #059669;
-    }
-    
-    @media (max-width: 768px) {
-      .nav-3d-btn { width: 48px; height: 42px; padding: 4px 2px; gap: 2px; }
-      .nav-3d-btn .nav-icon { font-size: 1rem; }
-      .nav-3d-btn .nav-label { font-size: 9px; }
-      #nav-title { font-size: 14px !important; }
-    }
-    @media (max-width: 480px) {
-      .nav-3d-btn { width: 40px; height: 36px; }
-      .nav-3d-btn .nav-label { display: none; }
-      #nav-title { display: none; }
-    }
-    
-    /* Scroll Lock Mechanism */
-    .scroll-locked {
-      overflow: hidden !important;
-      height: 100vh !important;
-    }
-    .scroll-locked .content-locked {
-      display: none !important;
-    }
-    .scroll-unlocked .content-locked {
-      display: block;
-    }
+    /* d5 בלבד: פס התקדמות לחיסכון */
+    .spending-bar { height: 8px; border-radius: 999px; background: var(--domain-gradient); }
   </style>
-  
-  
- </head>
- <body class="h-full min-h-screen bg-gray-100 overflow-x-hidden"><div class="max-w-5xl mx-auto shadow-2xl rounded-lg my-4 bg-gradient-to-b from-white via-emerald-50/20 to-green-50/30 text-gray-800 overflow-visible"><!-- Navigation -->
-  <nav class="fixed top-0 left-1/2 transform -translate-x-1/2 w-full max-w-5xl z-50 bg-white/90 backdrop-blur-md border-b border-emerald-100/50 shadow-sm">
-   <div class="max-w-6xl mx-auto px-6 py-4">
-    <div class="flex items-center justify-between">
-     <div class="flex items-center gap-3">
-      <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-green-500 flex items-center justify-center coin-flip"><span class="text-2xl">💰</span>
-      </div><span id="nav-title" class="text-xl font-bold gradient-text">כסף קטן, קניות ובחירות</span>
-     </div>
-     <div class="flex items-center gap-1 md:gap-3">
-      <a href="#work" class="nav-3d-btn"><span class="nav-icon">💼</span><span class="nav-label">עבודה</span></a>
-      <a href="#spending" class="nav-3d-btn"><span class="nav-icon">🛒</span><span class="nav-label">בזבוז</span></a>
-      <a href="#saving" class="nav-3d-btn"><span class="nav-icon">🐷</span><span class="nav-label">חיסכון</span></a>
-      <a href="#desire" class="nav-3d-btn"><span class="nav-icon">💭</span><span class="nav-label">רצון</span></a>
-      <a href="#trends" class="nav-3d-btn"><span class="nav-icon">✨</span><span class="nav-label">טרנדים</span></a>
-      <a href="alldomains.html" class="nav-3d-btn"><span class="nav-icon">🏠</span><span class="nav-label">לתחומים</span></a>
-     </div>
-    </div>
-    </div>
-   </div>
-  </nav>
- <!-- Hero Section -->
-  <section class="h-screen flex items-center justify-center px-6 pt-16 pb-8 relative overflow-hidden hero-pattern">
-   <div class="absolute top-20 right-10 w-64 h-64 bg-emerald-200/20 rounded-full blur-3xl float-money"></div>
-   <div class="absolute bottom-20 left-10 w-72 h-72 bg-green-200/20 rounded-full blur-3xl float-money" style="animation-delay: 2s;"></div>
-   <div class="max-w-5xl mx-auto text-center relative z-10"><!-- Money illustration -->
-    <div class="mb-6 flex justify-center">
-     <svg class="w-80 h-64" viewbox="0 0 300 200" fill="none"><!-- Wallet --> <rect x="80" y="70" width="140" height="90" rx="8" fill="#059669" opacity="0.2" /> <rect x="85" y="75" width="130" height="80" rx="6" fill="#10b981" opacity="0.3" /> <line x1="85" y1="95" x2="215" y2="95" stroke="#059669" stroke-width="2" /> <!-- Cards coming out --> <rect x="100" y="50" width="50" height="30" rx="4" fill="#34d399" opacity="0.6" class="float-money" /> <rect x="160" y="45" width="50" height="30" rx="4" fill="#6ee7b7" opacity="0.6" class="float-money" style="animation-delay: 0.5s" /> <!-- Coins --> <circle cx="50" cy="120" r="15" fill="#fbbf24" opacity="0.7" class="float-money" style="animation-delay: 1s" /> <circle cx="250" cy="130" r="12" fill="#fcd34d" opacity="0.7" class="float-money" style="animation-delay: 1.5s" /> <circle cx="240" cy="100" r="10" fill="#fde68a" opacity="0.7" class="float-money" style="animation-delay: 2s" /> <!-- Shopping bags --> <g transform="translate(30, 140)" class="float-money" style="animation-delay: 0.8s">
+</head>
+<body class="mag-domain" data-domain="5">
+ <header class="mag-header">
+  <div class="mag-header__inner">
+   <a class="mag-header__brand" href="#top">
+    <span class="mag-header__icon" aria-hidden="true">💸</span>
+    <span class="mag-header__text"><span class="mag-header__kicker">פורצות דרך · מדור 5</span><span class="mag-header__title">כסף קטן, קניות ובחירות</span></span>
+   </a>
+   <nav class="mag-chapters" aria-label="פרקי התחום">
+    <a class="mag-chapters__link" href="#work"><span class="mag-chapters__icon" aria-hidden="true">💼</span><span class="mag-chapters__label">עבודה</span></a>
+    <a class="mag-chapters__link" href="#spending"><span class="mag-chapters__icon" aria-hidden="true">🛒</span><span class="mag-chapters__label">בזבוז</span></a>
+    <a class="mag-chapters__link" href="#saving"><span class="mag-chapters__icon" aria-hidden="true">🐷</span><span class="mag-chapters__label">חיסכון</span></a>
+    <a class="mag-chapters__link" href="#desire"><span class="mag-chapters__icon" aria-hidden="true">💭</span><span class="mag-chapters__label">רצון</span></a>
+    <a class="mag-chapters__link" href="#trends"><span class="mag-chapters__icon" aria-hidden="true">✨</span><span class="mag-chapters__label">טרנדים</span></a>
+   </nav>
+   <a class="mag-header__back" href="alldomains.html"><svg aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg><span>לתחומים</span></a>
+  </div>
+ </header>
+ <div class="mag-page">
+ <main id="top">
+  <section class="mag-hero" aria-labelledby="hero-title">
+   <div class="mag-hero__inner">
+    <div class="mag-hero__visual" aria-hidden="true">
+     <svg class="mag-hero__svg" viewbox="0 0 300 200" fill="none"><!-- Wallet --> <rect x="80" y="70" width="140" height="90" rx="8" fill="#059669" opacity="0.2" /> <rect x="85" y="75" width="130" height="80" rx="6" fill="#10b981" opacity="0.3" /> <line x1="85" y1="95" x2="215" y2="95" stroke="#059669" stroke-width="2" /> <!-- Cards coming out --> <rect x="100" y="50" width="50" height="30" rx="4" fill="#34d399" opacity="0.6" class="mag-float" /> <rect x="160" y="45" width="50" height="30" rx="4" fill="#6ee7b7" opacity="0.6" class="mag-float" style="animation-delay: 0.5s" /> <!-- Coins --> <circle cx="50" cy="120" r="15" fill="#fbbf24" opacity="0.7" class="mag-float" style="animation-delay: 1s" /> <circle cx="250" cy="130" r="12" fill="#fcd34d" opacity="0.7" class="mag-float" style="animation-delay: 1.5s" /> <circle cx="240" cy="100" r="10" fill="#fde68a" opacity="0.7" class="mag-float" style="animation-delay: 2s" /> <!-- Shopping bags --> <g transform="translate(30, 140)" class="mag-float" style="animation-delay: 0.8s">
        <rect x="0" y="10" width="30" height="35" rx="2" fill="#10b981" opacity="0.4" />
        <path d="M 8 10 Q 15 5 22 10" stroke="#059669" stroke-width="2" fill="none" />
-      </g> <g transform="translate(240, 150)" class="float-money" style="animation-delay: 1.2s">
+      </g> <g transform="translate(240, 150)" class="mag-float" style="animation-delay: 1.2s">
        <rect x="0" y="8" width="25" height="30" rx="2" fill="#34d399" opacity="0.4" />
        <path d="M 6 8 Q 12.5 3 19 8" stroke="#10b981" stroke-width="2" fill="none" />
       </g> <!-- Money symbols --> <text x="150" y="125" font-size="24" fill="#059669" opacity="0.3" text-anchor="middle" font-weight="bold">
@@ -304,27 +56,30 @@
       </text>
      </svg>
     </div>
-    <h1 id="hero-title" class="text-4xl md:text-6xl font-bold mb-4 leading-tight"><span class="gradient-text">כסף קטן, קניות ובחירות</span></h1>
-    <p id="hero-subtitle" class="text-lg md:text-xl text-gray-600 mb-6 leading-relaxed max-w-3xl mx-auto">איך להיות חכמה עם הכסף שלך - בלי לוותר על מה שחשוב</p>
-    <div class="bg-white/70 backdrop-blur-sm rounded-2xl p-5 mb-6 shadow-lg max-w-3xl mx-auto border border-emerald-100">
-     <p class="text-lg text-gray-700 leading-relaxed mb-4">הכסף שיש לך — בין אם זה דמי כיס, משכורת מעבודה, או מתנה — זה <strong>הכוח שלך</strong>. איך את מחליטה להוציא אותו, לחסוך אותו, או לא לבזבז אותו — זה משקף מי את ומה חשוב לך.</p>
-     <p class="text-lg text-gray-700 leading-relaxed">אבל יש הרבה לחצים: <em>טרנדים שמושכים אותך לקנות, פרסומות שגורמות לך להרגיש חסרה, חברות שקונות דברים שגם את רוצה.</em> איך עושים את זה נכון? בואי נחקור.</p>
-    </div><a href="#work" class="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-green-500 text-white px-8 py-4 rounded-full font-semibold hover:shadow-lg hover:shadow-emerald-500/25 transition-all duration-300 pulse-glow"> בואי נתחיל לחשב <span class="text-xl">💸</span> </a>
-   </div>
-  </section><!-- Content Sections (locked until button click) -->
-  <div id="locked-content" class="content-locked"><!-- Section 1: Work & Income -->
-  <section id="work" class="py-24 px-6 bg-white">
-   <div class="max-w-5xl mx-auto">
-    <div class="flex items-center gap-4 mb-12">
-     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-100 to-indigo-200 flex items-center justify-center"><span class="text-3xl">💼</span>
-     </div>
-     <div><span class="text-sm font-medium text-blue-500 tracking-wide uppercase">חלק 1</span>
-      <h2 class="text-4xl font-bold text-gray-800">עבודה וההכנסה הראשונה</h2>
-     </div>
+    <p class="mag-hero__kicker"><span class="mag-chip">מדור 5</span><span>פורצות דרך · 5 פרקים</span></p>
+    <h1 id="hero-title" class="mag-hero__title"><span class="gradient-text">כסף קטן, קניות ובחירות</span></h1>
+    <p id="hero-subtitle" class="mag-hero__subtitle">איך להיות חכמה עם הכסף שלך - בלי לוותר על מה שחשוב</p>
+    <div class="mag-hero__intro">
+     <p>הכסף שיש לך — בין אם זה דמי כיס, משכורת מעבודה, או מתנה — זה <strong>הכוח שלך</strong>. איך את מחליטה להוציא אותו, לחסוך אותו, או לא לבזבז אותו — זה משקף מי את ומה חשוב לך.</p>
+     <p>אבל יש הרבה לחצים: <em>טרנדים שמושכים אותך לקנות, פרסומות שגורמות לך להרגיש חסרה, חברות שקונות דברים שגם את רוצה.</em> איך עושים את זה נכון? בואי נחקור.</p>
     </div>
-    <p class="text-xl text-gray-600 mb-12 max-w-3xl">לעבוד זה לא רק להרוויח כסף — זה גם <strong>עצמאות, אחריות, וערך עצמי</strong>.</p>
+    <div class="mag-hero__cta"><a href="#work" class="mag-cta" data-unlock-content>בואי נתחיל לחשב <svg aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg></a></div>
+   </div>
+  </section>
+  <!-- Content Sections (locked until the hero CTA is clicked) -->
+  <div id="locked-content" class="content-locked">
+  <section id="work" class="mag-section">
+   <div class="mag-container">
+    <header class="mag-section-header">
+     <div class="mag-section-header__icon" aria-hidden="true">💼</div>
+     <div class="mag-section-header__text">
+      <span class="mag-eyebrow">חלק 1</span>
+      <h2>עבודה וההכנסה הראשונה</h2>
+     </div>
+    </header>
+    <p class="mag-lead">לעבוד זה לא רק להרוויח כסף — זה גם <strong>עצמאות, אחריות, וערך עצמי</strong>.</p>
     <div class="grid md:grid-cols-2 gap-8 mb-12">
-     <div class="money-card bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-100">
+     <div class="mag-card mag-card--soft mag-card--lg mag-card--hover">
       <h3 class="text-2xl font-bold text-gray-800 mb-6">למה לעבוד?</h3>
       <div class="space-y-4">
        <div class="flex items-start gap-3">
@@ -362,7 +117,7 @@
       </div>
      </div>
      <div class="space-y-6">
-      <div class="tip-card rounded-xl p-6 shadow-lg">
+      <div class="mag-card mag-card--hover">
        <h3 class="text-xl font-bold text-gray-800 mb-4">איפה נערות עובדות?</h3>
        <ul class="space-y-3">
         <li class="flex items-start gap-2">
@@ -402,31 +157,31 @@
          </div></li>
        </ul>
       </div>
-      <div class="savings-box rounded-xl p-6">
+      <div class="mag-card mag-card--insight">
        <h4 class="font-bold text-gray-800 mb-3 flex items-center gap-2"><span class="text-2xl">💡</span> טיפ חשוב</h4>
        <p class="text-sm text-gray-700 leading-relaxed"><strong>העבודה הראשונה היא לא הקריירה שלך.</strong> זה בסדר לעבוד בקופה או במטבח גם אם את רוצה להיות רופאה או מהנדסת. כל עבודה מלמדת מיומנויות חיים: אחריות, תקשורת, התמודדות עם לחץ.</p>
       </div>
      </div>
     </div>
-    <div class="price-tag rounded-2xl p-8 pr-12">
+    <div class="mag-card mag-card--insight mag-card--lg">
      <h3 class="text-xl font-bold text-gray-800 mb-4">ההכנסה הראשונה שלך</h3>
      <p class="text-gray-700 leading-relaxed mb-4">הרגע הראשון שאת מקבלת משכורת או דמי כיס — זה <strong>רגע מיוחד</strong>. פתאום יש לך כוח קנייה, את יכולה להחליט לבד.</p>
      <p class="text-gray-700 leading-relaxed">אבל זה גם רגע קריטי: <em>מה את עושה עם הכסף הזה?</em> את מוציאה הכול מיד? את חוסכת? את קונה משהו שחלמת עליו? ההחלטה הזו קובעת הרבה על ההרגלים הכלכליים שלך לעתיד.</p>
     </div>
    </div>
   </section><!-- Section 2: Spending vs Wasting -->
-  <section id="spending" class="py-24 px-6 bg-gradient-to-b from-white to-red-50/20">
-   <div class="max-w-5xl mx-auto">
-    <div class="flex items-center gap-4 mb-12">
-     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-red-100 to-orange-200 flex items-center justify-center"><span class="text-3xl">🛍️</span>
+  <section id="spending" class="mag-section">
+   <div class="mag-container">
+    <header class="mag-section-header">
+     <div class="mag-section-header__icon" aria-hidden="true">🛍️</div>
+     <div class="mag-section-header__text">
+      <span class="mag-eyebrow">חלק 2</span>
+      <h2>הוצאה חכמה מול בזבוז</h2>
      </div>
-     <div><span class="text-sm font-medium text-red-500 tracking-wide uppercase">חלק 2</span>
-      <h2 class="text-4xl font-bold text-gray-800">הוצאה חכמה מול בזבוז</h2>
-     </div>
-    </div>
-    <p class="text-xl text-gray-600 mb-12 max-w-3xl">לא כל הוצאה היא בזבוז, ולא כל חיסכון הוא חכם. איך יודעים מה שווה?</p>
+    </header>
+    <p class="mag-lead">לא כל הוצאה היא בזבוז, ולא כל חיסכון הוא חכם. איך יודעים מה שווה?</p>
     <div class="grid md:grid-cols-2 gap-8 mb-12">
-     <div class="money-card bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+     <div class="mag-card mag-card--lg mag-card--hover">
       <h3 class="text-2xl font-bold text-emerald-600 mb-6">הוצאה חכמה ✅</h3>
       <div class="space-y-4">
        <div class="bg-emerald-50 rounded-lg p-4 border-r-4 border-emerald-400">
@@ -447,7 +202,7 @@
        </div>
       </div>
      </div>
-     <div class="money-card bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+     <div class="mag-card mag-card--lg mag-card--hover">
       <h3 class="text-2xl font-bold text-red-600 mb-6">בזבוז ❌</h3>
       <div class="space-y-4">
        <div class="bg-red-50 rounded-lg p-4 border-r-4 border-red-400">
@@ -469,7 +224,7 @@
       </div>
      </div>
     </div>
-    <div class="tip-card rounded-xl p-8 shadow-lg mb-8">
+    <div class="mag-card mag-card--lg mag-card--hover mb-8">
      <h3 class="text-2xl font-bold text-gray-800 mb-6">כלל ה-24 שעות</h3>
      <div class="flex items-start gap-4">
       <div class="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
@@ -483,7 +238,7 @@
       </div>
      </div>
     </div>
-    <div class="warning-box rounded-2xl p-8">
+    <div class="mag-card mag-card--warning mag-card--lg">
      <div class="flex items-start gap-4">
       <svg class="w-8 h-8 text-red-600 mt-1 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
       </svg>
@@ -501,18 +256,18 @@
     </div>
    </div>
   </section><!-- Section 3: Saving -->
-  <section id="saving" class="py-24 px-6 bg-white">
-   <div class="max-w-5xl mx-auto">
-    <div class="flex items-center gap-4 mb-12">
-     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-100 to-blue-200 flex items-center justify-center"><span class="text-3xl">🏦</span>
+  <section id="saving" class="mag-section">
+   <div class="mag-container">
+    <header class="mag-section-header">
+     <div class="mag-section-header__icon" aria-hidden="true">🏦</div>
+     <div class="mag-section-header__text">
+      <span class="mag-eyebrow">חלק 3</span>
+      <h2>חיסכון - הכוח של "אחר כך"</h2>
      </div>
-     <div><span class="text-sm font-medium text-cyan-500 tracking-wide uppercase">חלק 3</span>
-      <h2 class="text-4xl font-bold text-gray-800">חיסכון - הכוח של "אחר כך"</h2>
-     </div>
-    </div>
-    <p class="text-xl text-gray-600 mb-12 max-w-3xl">חיסכון זה לא סתם "לא לבזבז" — זה <strong>לתת לעצמך אפשרויות בעתיד</strong>.</p>
+    </header>
+    <p class="mag-lead">חיסכון זה לא סתם "לא לבזבז" — זה <strong>לתת לעצמך אפשרויות בעתיד</strong>.</p>
     <div class="grid md:grid-cols-3 gap-6 mb-12">
-     <div class="money-card bg-gradient-to-br from-emerald-50 to-green-50 rounded-xl p-6 border border-emerald-100">
+     <div class="mag-card mag-card--soft mag-card--hover">
       <div class="text-4xl mb-4">
        🎯
       </div>
@@ -527,7 +282,7 @@
        <p class="text-xs text-gray-500 mt-1">60% מהיעד - עוד 600 ₪ 💪</p>
       </div>
      </div>
-     <div class="money-card bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-100">
+     <div class="mag-card mag-card--soft mag-card--hover">
       <div class="text-4xl mb-4">
        🚨
       </div>
@@ -539,7 +294,7 @@
        <p class="text-xs text-gray-500 mt-2">זה נותן לך שקט נפשי 😌</p>
       </div>
      </div>
-     <div class="money-card bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-6 border border-purple-100">
+     <div class="mag-card mag-card--soft mag-card--hover">
       <div class="text-4xl mb-4">
        🔮
       </div>
@@ -552,7 +307,7 @@
       </div>
      </div>
     </div>
-    <div class="tip-card rounded-xl p-8 shadow-lg mb-8">
+    <div class="mag-card mag-card--lg mag-card--hover mb-8">
      <h3 class="text-2xl font-bold text-gray-800 mb-6">שיטת 50/30/20</h3>
      <p class="text-gray-700 mb-6">כלל פשוט לניהול כסף — חלקי כל הכנסה ל-3 חלקים:</p>
      <div class="grid md:grid-cols-3 gap-6">
@@ -580,7 +335,7 @@
      </div>
      <p class="text-sm text-gray-500 mt-6 italic">זה לא מושלם לכולם, אבל זו נקודת התחלה מצוינת 📊</p>
     </div>
-    <div class="savings-box rounded-2xl p-8">
+    <div class="mag-card mag-card--insight mag-card--lg">
      <h3 class="text-2xl font-bold text-gray-800 mb-6">טריקים לחיסכון קל יותר</h3>
      <div class="grid md:grid-cols-2 gap-6">
       <ul class="space-y-3">
@@ -633,18 +388,18 @@
     </div>
    </div>
   </section><!-- Section 4: Desire vs Need -->
-  <section id="desire" class="py-24 px-6 bg-gradient-to-b from-white to-purple-50/20">
-   <div class="max-w-5xl mx-auto">
-    <div class="flex items-center gap-4 mb-12">
-     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-100 to-purple-200 flex items-center justify-center"><span class="text-3xl">💭</span>
+  <section id="desire" class="mag-section">
+   <div class="mag-container">
+    <header class="mag-section-header">
+     <div class="mag-section-header__icon" aria-hidden="true">💭</div>
+     <div class="mag-section-header__text">
+      <span class="mag-eyebrow">חלק 4</span>
+      <h2>רצון מול צורך</h2>
      </div>
-     <div><span class="text-sm font-medium text-pink-500 tracking-wide uppercase">חלק 4</span>
-      <h2 class="text-4xl font-bold text-gray-800">רצון מול צורך</h2>
-     </div>
-    </div>
-    <p class="text-xl text-gray-600 mb-12 max-w-3xl">איך יודעים אם את <em>צריכה</em> משהו או רק <em>רוצה</em> אותו? וזה בכלל משנה?</p>
+    </header>
+    <p class="mag-lead">איך יודעים אם את <em>צריכה</em> משהו או רק <em>רוצה</em> אותו? וזה בכלל משנה?</p>
     <div class="grid md:grid-cols-2 gap-8 mb-12">
-     <div class="money-card bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-8 border border-blue-100">
+     <div class="mag-card mag-card--soft mag-card--lg mag-card--hover">
       <h3 class="text-2xl font-bold text-blue-600 mb-6">צורך 🆘</h3>
       <p class="text-gray-700 mb-6">משהו שאת <strong>חייבת</strong> כדי לתפקד — בלעדיו יש בעיה אמיתית.</p>
       <div class="space-y-3">
@@ -662,7 +417,7 @@
        </div>
       </div>
      </div>
-     <div class="money-card bg-gradient-to-br from-pink-50 to-purple-50 rounded-2xl p-8 border border-pink-100">
+     <div class="mag-card mag-card--soft mag-card--lg mag-card--hover">
       <h3 class="text-2xl font-bold text-pink-600 mb-6">רצון 💖</h3>
       <p class="text-gray-700 mb-6">משהו שאת <strong>רוצה</strong> — זה יעשה אותך מאושרת, אבל את תשרדי בלעדיו.</p>
       <div class="space-y-3">
@@ -681,14 +436,14 @@
       </div>
      </div>
     </div>
-    <div class="price-tag rounded-2xl p-8 pr-12 mb-8">
+    <div class="mag-card mag-card--insight mag-card--lg mb-8">
      <h3 class="text-xl font-bold text-gray-800 mb-4">האם רצון זה רע?</h3>
      <p class="text-gray-700 leading-relaxed mb-4"><strong>בכלל לא!</strong> זה בסדר לקנות דברים שאת <em>רוצה</em> ולא רק <em>צריכה</em>. הבעיה היא כש<strong>רצון מתחפש לצורך</strong> — כשאת משכנעת את עצמך שאת "חייבת" משהו כדי להצדיק קנייה.</p>
      <div class="bg-white/60 rounded-lg p-4 border-r-4 border-amber-500">
       <p class="text-sm text-gray-700"><span class="font-bold">הכלל:</span> תהיי כנה עם עצמך. אם זה רצון — תגידי "אני רוצה את זה" ותחליטי אם זה שווה לך את הכסף. אל תשכנעי את עצמך שזה "הכרחי" כשזה לא.</p>
      </div>
     </div>
-    <div class="tip-card rounded-xl p-8 shadow-lg">
+    <div class="mag-card mag-card--lg mag-card--hover">
      <h3 class="text-2xl font-bold text-gray-800 mb-6">4 שאלות לפני כל קנייה</h3>
      <div class="grid md:grid-cols-2 gap-6">
       <div class="flex items-start gap-3">
@@ -730,18 +485,18 @@
     </div>
    </div>
   </section><!-- Section 5: Trends -->
-  <section id="trends" class="py-24 px-6 bg-white">
-   <div class="max-w-5xl mx-auto">
-    <div class="flex items-center gap-4 mb-12">
-     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-100 to-red-200 flex items-center justify-center"><span class="text-3xl">📈</span>
+  <section id="trends" class="mag-section">
+   <div class="mag-container">
+    <header class="mag-section-header">
+     <div class="mag-section-header__icon" aria-hidden="true">📈</div>
+     <div class="mag-section-header__text">
+      <span class="mag-eyebrow">חלק 5</span>
+      <h2>ההשפעה של טרנדים</h2>
      </div>
-     <div><span class="text-sm font-medium text-orange-500 tracking-wide uppercase">חלק 5</span>
-      <h2 class="text-4xl font-bold text-gray-800">ההשפעה של טרנדים</h2>
-     </div>
-    </div>
-    <p class="text-xl text-gray-600 mb-12 max-w-3xl">טרנדים הם חזקים — הם גורמים לך להרגיש שאת <em>חייבת</em> משהו. איך לא להיסחף?</p>
+    </header>
+    <p class="mag-lead">טרנדים הם חזקים — הם גורמים לך להרגיש שאת <em>חייבת</em> משהו. איך לא להיסחף?</p>
     <div class="grid md:grid-cols-2 gap-8 mb-12">
-     <div class="money-card bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl p-8 border border-orange-100">
+     <div class="mag-card mag-card--soft mag-card--lg mag-card--hover">
       <h3 class="text-2xl font-bold text-gray-800 mb-6">איך טרנדים עובדים עליך</h3>
       <div class="space-y-4">
        <div class="flex items-start gap-3">
@@ -787,7 +542,7 @@
       </div>
      </div>
      <div class="space-y-6">
-      <div class="warning-box rounded-xl p-6">
+      <div class="mag-card mag-card--warning">
        <h3 class="text-xl font-bold text-gray-800 mb-4">הבעיה עם טרנדים</h3>
        <ul class="space-y-3">
         <li class="flex items-start gap-2">
@@ -820,7 +575,7 @@
          </div></li>
        </ul>
       </div>
-      <div class="tip-card rounded-xl p-6 shadow-lg">
+      <div class="mag-card mag-card--hover">
        <h3 class="text-xl font-bold text-gray-800 mb-4">איך לא להיסחף?</h3>
        <ul class="space-y-3">
         <li class="flex items-start gap-2">
@@ -855,7 +610,7 @@
       </div>
      </div>
     </div>
-    <div class="bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl p-8 text-white mb-8">
+    <div class="mag-card mag-card--feature mag-card--lg mb-8">
      <div class="flex items-start gap-4">
       <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center shrink-0"><span class="text-3xl">💡</span>
       </div>
@@ -868,31 +623,31 @@
     </div>
    </div>
   </section><!-- Wisdom Section -->
-  <section id="wisdom" class="py-24 px-6 bg-gradient-to-b from-white to-emerald-50">
-   <div class="max-w-5xl mx-auto">
-    <div class="flex items-center gap-4 mb-12">
-     <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-100 to-green-200 flex items-center justify-center"><span class="text-3xl">🧠</span>
+  <section id="wisdom" class="mag-section">
+   <div class="mag-container">
+    <header class="mag-section-header">
+     <div class="mag-section-header__icon" aria-hidden="true">🧠</div>
+     <div class="mag-section-header__text">
+      <span class="mag-eyebrow">לסיכום</span>
+      <h2 id="wisdom-title">החוכמה הכלכלית שלך</h2>
      </div>
-     <div><span class="text-sm font-medium text-emerald-500 tracking-wide uppercase">לסיכום</span>
-      <h2 id="wisdom-title" class="text-4xl font-bold text-gray-800">החוכמה הכלכלית שלך</h2>
-     </div>
-    </div>
+    </header>
     <div class="grid md:grid-cols-3 gap-6 mb-12">
-     <div class="empowerment-box rounded-xl p-6">
+     <div class="mag-card mag-card--insight">
       <div class="text-4xl mb-4">
        🎯
       </div>
       <h3 class="text-xl font-bold text-gray-800 mb-3">הכסף שלך = הכוח שלך</h3>
       <p class="text-sm text-gray-700">כל שקל שיש לך הוא החלטה. את בוחרת לאן הוא הולך, ומה הוא עושה. זה כוח אמיתי.</p>
      </div>
-     <div class="empowerment-box rounded-xl p-6">
+     <div class="mag-card mag-card--insight">
       <div class="text-4xl mb-4">
        💪
       </div>
       <h3 class="text-xl font-bold text-gray-800 mb-3">להרוויח = להיות עצמאית</h3>
       <p class="text-sm text-gray-700">כשאת עובדת ומרוויחה, את לא תלויה בהורים או באף אחד. זה חלק מהדרך להיות מי שאת רוצה להיות.</p>
      </div>
-     <div class="empowerment-box rounded-xl p-6">
+     <div class="mag-card mag-card--insight">
       <div class="text-4xl mb-4">
        🧘‍♀️
       </div>
@@ -900,17 +655,17 @@
       <p class="text-sm text-gray-700">כשאת לא עוקבת אחרי כל טרנד, את חוסכת כסף ומוצאת את הסגנון שלך. זה לא חיסכון — זו עצמאות.</p>
      </div>
     </div>
-    <div class="bg-gradient-to-r from-emerald-600 to-green-600 rounded-2xl p-10 text-white text-center mb-8">
+    <div class="mag-card mag-card--feature mag-card--lg text-center mb-8">
      <h3 class="text-3xl font-bold mb-6">המסר האחרון</h3>
      <p class="text-xl leading-relaxed mb-6 max-w-3xl mx-auto opacity-95"><strong>הכסף לא קובע מי את — את קובעת מה הכסף אומר עליך.</strong></p>
      <p class="text-lg leading-relaxed max-w-3xl mx-auto opacity-90">את יכולה לבחור: <em>להוציא בחוכמה, לחסוך למטרה, לא להיסחף מלחצים.</em> ככל שתתחילי מוקדם יותר — כך יהיה לך קל יותר. הכסף הקטן של היום הוא העתיד הגדול שלך. 💚</p>
     </div>
    </div>
   </section><!-- Closing Section -->
-  <section class="py-24 px-6 bg-white">
-   <div class="max-w-4xl mx-auto text-center">
+  <section class="mag-section mag-section--closing">
+   <div class="mag-container mag-container--narrow text-center">
     <div class="mb-6 flex justify-center">
-     <svg class="w-32 h-32" viewbox="0 0 120 120" fill="none"><circle cx="60" cy="60" r="50" fill="#d1fae5" opacity="0.3" /> <circle cx="60" cy="60" r="35" fill="#10b981" opacity="0.2" class="pulse-ring" /> <text x="60" y="72" font-size="48" text-anchor="middle" class="coin-flip">
+     <svg class="w-32 h-32" viewbox="0 0 120 120" fill="none"><circle cx="60" cy="60" r="50" fill="#d1fae5" opacity="0.3" /> <circle cx="60" cy="60" r="35" fill="#10b981" opacity="0.2" class="mag-pulse" /> <text x="60" y="72" font-size="48" text-anchor="middle" class="mag-spin-y">
        💰
       </text>
      </svg>
@@ -920,160 +675,23 @@
      <p class="text-xl text-gray-700 leading-relaxed">הכסף הוא לא רק מספרים — זה <strong>אפשרויות</strong>. כל החלטה שאת מקבלת עכשיו מעצבת את העתיד שלך.</p>
      <p class="text-xl text-gray-700 leading-relaxed">לעבוד, לחסוך, לקנות בחוכמה, לא להיסחף — זה לא "משעמם". <em>זה כוח.</em></p>
     </div>
-    <div class="bg-emerald-50 rounded-2xl p-8 shadow-lg border border-emerald-100 max-w-2xl mx-auto mb-12">
+    <div class="mag-card mag-card--soft mag-card--lg max-w-2xl mx-auto mb-12">
      <p class="text-lg font-medium text-gray-800 italic">"הכסף הקטן שלי היום הוא החופש הגדול שלי מחר."</p>
-    </div><a href="#work" class="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-green-500 text-white px-8 py-4 rounded-full font-semibold hover:shadow-lg hover:shadow-emerald-500/25 transition-all duration-300"> לחזור להתחלה 
+    </div><a href="#work" class="mag-cta"> לחזור להתחלה 
      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
      </svg></a>
    </div>
   </section>
   </div><!-- End locked-content -->
-
-  <!-- Footer -->
-  <footer class="py-12 px-6 bg-gradient-to-r from-emerald-600 to-green-600 text-white">
-   <div class="max-w-5xl mx-auto text-center">
-    <div class="flex items-center justify-center gap-3 mb-6">
-     <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center coin-flip"><span class="text-2xl">💰</span>
-     </div><span class="text-2xl font-bold">כסף קטן, קניות ובחירות</span>
-    </div>
-    <p class="text-white/80 text-lg mb-4">איך להיות חכמה עם הכסף שלך - בלי לוותר על מה שחשוב</p>
-    <p class="text-white/60 text-sm">תוכנית חינוכית לנערות | בנושא ניהול כספי חכם</p>
-    <p class="text-white/50 text-xs mt-4">© 2026 פורצות דרך</p>
-   </div>
+ </main>
+  <footer class="mag-footer">
+   <div class="mag-footer__brand"><span class="mag-footer__icon" aria-hidden="true">💸</span><span>כסף קטן, קניות ובחירות</span></div>
+   <p class="mag-footer__tagline">איך להיות חכמה עם הכסף שלך - בלי לוותר על מה שחשוב</p>
+   <p class="mag-footer__meta">תוכנית חינוכית לנערות | בנושא ניהול כספי חכם</p>
+   <p class="mag-footer__copy">© 2026 פורצות דרך</p>
   </footer>
-  <script>
-    // Element SDK initialization
-    const defaultConfig = {
-      site_title: 'כסף קטן, קניות ובחירות',
-      hero_subtitle: 'איך להיות חכמה עם הכסף שלך - בלי לוותר על מה שחשוב',
-      money_wisdom_header: 'החוכמה הכלכלית שלך',
-      background_color: '#ffffff',
-      primary_color: '#10b981',
-      secondary_color: '#059669',
-      text_color: '#1f2937',
-      accent_color: '#34d399'
-    };
-
-    let config = { ...defaultConfig };
-
-    async function onConfigChange(newConfig) {
-      config = newConfig;
-      
-      // Update nav title
-      const navTitle = document.getElementById('nav-title');
-      if (navTitle) {
-        navTitle.textContent = config.site_title || defaultConfig.site_title;
-      }
-      
-      // Update hero title
-      const heroTitle = document.getElementById('hero-title');
-      if (heroTitle) {
-        heroTitle.innerHTML = `<span class="gradient-text">${config.site_title || defaultConfig.site_title}</span>`;
-      }
-      
-      // Update hero subtitle
-      const heroSubtitle = document.getElementById('hero-subtitle');
-      if (heroSubtitle) {
-        heroSubtitle.textContent = config.hero_subtitle || defaultConfig.hero_subtitle;
-      }
-      
-      // Update wisdom title
-      const wisdomTitle = document.getElementById('wisdom-title');
-      if (wisdomTitle) {
-        wisdomTitle.textContent = config.money_wisdom_header || defaultConfig.money_wisdom_header;
-      }
-    }
-
-    function mapToCapabilities(config) {
-      return {
-        recolorables: [
-          {
-            get: () => config.background_color || defaultConfig.background_color,
-            set: (value) => {
-              config.background_color = value;
-              if (window.elementSdk) {
-                window.elementSdk.setConfig({ background_color: value });
-              }
-            }
-          },
-          {
-            get: () => config.primary_color || defaultConfig.primary_color,
-            set: (value) => {
-              config.primary_color = value;
-              if (window.elementSdk) {
-                window.elementSdk.setConfig({ primary_color: value });
-              }
-            }
-          },
-          {
-            get: () => config.secondary_color || defaultConfig.secondary_color,
-            set: (value) => {
-              config.secondary_color = value;
-              if (window.elementSdk) {
-                window.elementSdk.setConfig({ secondary_color: value });
-              }
-            }
-          },
-          {
-            get: () => config.text_color || defaultConfig.text_color,
-            set: (value) => {
-              config.text_color = value;
-              if (window.elementSdk) {
-                window.elementSdk.setConfig({ text_color: value });
-              }
-            }
-          },
-          {
-            get: () => config.accent_color || defaultConfig.accent_color,
-            set: (value) => {
-              config.accent_color = value;
-              if (window.elementSdk) {
-                window.elementSdk.setConfig({ accent_color: value });
-              }
-            }
-          }
-        ],
-        borderables: [],
-        fontEditable: undefined,
-        fontSizeable: undefined
-      };
-    }
-
-    function mapToEditPanelValues(config) {
-      return new Map([
-        ['site_title', config.site_title || defaultConfig.site_title],
-        ['hero_subtitle', config.hero_subtitle || defaultConfig.hero_subtitle],
-        ['money_wisdom_header', config.money_wisdom_header || defaultConfig.money_wisdom_header]
-      ]);
-    }
-
-    // Initialize SDK
-    if (window.elementSdk) {
-      window.elementSdk.init({
-        defaultConfig,
-        onConfigChange,
-        mapToCapabilities,
-        mapToEditPanelValues
-      });
-    }
-
-    // Smooth scroll for navigation
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-          target.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-          });
-        }
-      });
-    });
-  </script>
-<script src="../js/scroll-lock.js"></script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c03afeca5357da0',t:'MTc2ODc5Nzk3NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></div>
-</div>
+ </div>
+ <script src="../js/scroll-lock.js"></script>
 <script>
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", function() {
@@ -1083,6 +701,5 @@
     });
   }
 </script>
-
 </body>
 </html>
