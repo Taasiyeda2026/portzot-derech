@@ -1,37 +1,75 @@
 /**
  * Scroll Lock Mechanism for Domain Pages
- * - Locks scroll on page load, showing only hero section
- * - Unlocks when user clicks the "בואי נתחיל" button
- * - Relocks on page exit (via navigation)
+ * - On load the page shows only the hero (body.scroll-locked hides #locked-content)
+ * - The hero CTA marked with [data-unlock-content] releases the page and
+ *   smooth-scrolls to its target chapter
+ * - Chapter links in the header (or any in-page link into the locked content)
+ *   also release the page, so anchor navigation always works
+ * - Legacy fallback: an a.inline-flex link containing "בואי"
  */
 
 (function() {
-  // Lock scroll on page load
-  document.body.classList.add('scroll-locked');
-  
-  // Find the unlock button - look for buttons with text containing "בואי"
-  const buttons = document.querySelectorAll('a.inline-flex');
-  let unlockBtn = null;
-  
-  buttons.forEach(function(btn) {
-    if (btn.textContent.includes('בואי') && btn.getAttribute('href') && btn.getAttribute('href').startsWith('#')) {
-      unlockBtn = btn;
-    }
-  });
-  
-  if (unlockBtn) {
-    const targetId = unlockBtn.getAttribute('href').substring(1);
-    
-    unlockBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      // Unlock scroll
-      document.body.classList.remove('scroll-locked');
-      document.body.classList.add('scroll-unlocked');
-      // Scroll to the target section
-      const target = document.getElementById(targetId);
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth' });
+  var body = document.body;
+  body.classList.add('scroll-locked');
+
+  function findUnlockButton() {
+    var explicit = document.querySelector('a[data-unlock-content][href^="#"]');
+    if (explicit) return explicit;
+    var legacy = null;
+    document.querySelectorAll('a.inline-flex').forEach(function(btn) {
+      var href = btn.getAttribute('href');
+      if (btn.textContent.indexOf('בואי') !== -1 && href && href.charAt(0) === '#') {
+        legacy = btn;
       }
     });
+    return legacy;
+  }
+
+  function unlock() {
+    body.classList.remove('scroll-locked');
+    body.classList.add('scroll-unlocked');
+  }
+
+  function unlockAndScroll(targetId) {
+    unlock();
+    var target = document.getElementById(targetId);
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (history.replaceState) {
+        history.replaceState(null, '', '#' + targetId);
+      }
+    }
+  }
+
+  var unlockBtn = findUnlockButton();
+  var locked = document.getElementById('locked-content');
+
+  if (unlockBtn) {
+    unlockBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      unlockAndScroll(unlockBtn.getAttribute('href').substring(1));
+    });
+  }
+
+  // In-page links whose target lives inside the locked content
+  document.addEventListener('click', function(e) {
+    if (!body.classList.contains('scroll-locked')) return;
+    var link = e.target.closest ? e.target.closest('a[href^="#"]') : null;
+    if (!link || link === unlockBtn || !locked) return;
+    var id = link.getAttribute('href').substring(1);
+    var target = id && document.getElementById(id);
+    if (target && locked.contains(target)) {
+      e.preventDefault();
+      unlockAndScroll(id);
+    }
+  });
+
+  // Direct visit with a chapter hash (e.g. d1.html#hunger)
+  if (location.hash && locked) {
+    var initial = document.getElementById(location.hash.substring(1));
+    if (initial && locked.contains(initial)) {
+      unlock();
+      requestAnimationFrame(function() { initial.scrollIntoView({ block: 'start' }); });
+    }
   }
 })();
