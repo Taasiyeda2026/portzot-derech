@@ -635,3 +635,13 @@ summary{cursor:pointer}
   .master-chapter h2{font-size:1.75rem}
   .master-chapter__number{font-size:2.2rem}
 }
+
+.master-hero__media img,
+.master-chapter__media img{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+}
+.master-hero__media img{object-position:center center}
+.master-chapter__media img{object-position:center center}
