@@ -1,4 +1,4 @@
-const SW_VERSION = "v159";
+const SW_VERSION = "v160";
 const CACHE_NAME = `portzot-derech-cache-${SW_VERSION}`;
 
 // ── נכסים שנשמרים ב-Cache בהתקנה ─────────────────────────────────────────
@@ -81,6 +81,12 @@ const CORE_ASSETS = [
   "./domains/alldomains.html",
   "./domains/d1.html",
   "./domains/d2.html",
+  "./domains/visuals/d2-hero.svg",
+  "./domains/visuals/d2-01.svg",
+  "./domains/visuals/d2-02.svg",
+  "./domains/visuals/d2-03.svg",
+  "./domains/visuals/d2-04.svg",
+  "./domains/visuals/d2-05.svg",
   "./domains/d3.html",
   "./domains/d4.html",
   "./domains/d5.html",

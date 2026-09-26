@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 600" fill="none">
+  <rect width="480" height="600" fill="#ecfeff"/>
+  <circle cx="360" cy="120" r="150" fill="#cffafe"/>
+  <circle cx="90" cy="520" r="160" fill="#e0e7ff" opacity=".8"/>
+  <!-- clock ring -->
+  <circle cx="240" cy="300" r="170" stroke="#a5f3fc" stroke-width="10"/>
+  <path d="M240 130 A170 170 0 0 1 402 352" stroke="#0891b2" stroke-width="10" stroke-linecap="round"/>
+  <g stroke="#67e8f9" stroke-width="6" stroke-linecap="round"><path d="M240 104v16M240 480v16M44 300h16M420 300h16"/></g>
+  <!-- phone -->
+  <rect x="170" y="175" width="140" height="250" rx="24" fill="#0f172a"/>
+  <rect x="180" y="190" width="120" height="220" rx="16" fill="#fff"/>
+  <!-- eye -->
+  <path d="M196 290 Q240 240 284 290 Q240 340 196 290Z" fill="#ecfeff" stroke="#0e7490" stroke-width="5"/>
+  <circle cx="240" cy="290" r="18" fill="#3b82f6"/><circle cx="240" cy="290" r="7" fill="#0f172a"/>
+  <rect x="202" y="352" width="76" height="8" rx="4" fill="#cbd5e1"/><rect x="214" y="370" width="52" height="8" rx="4" fill="#e2e8f0"/>
+  <circle cx="240" cy="210" r="4" fill="#cbd5e1"/>
+</svg>

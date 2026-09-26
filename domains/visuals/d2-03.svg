@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 600" fill="none">
+  <rect width="480" height="600" fill="#f5f3ff"/>
+  <circle cx="370" cy="130" r="150" fill="#e0e7ff"/>
+  <circle cx="80" cy="480" r="170" fill="#cffafe" opacity=".8"/>
+  <!-- moon -->
+  <path d="M402 96 a46 46 0 1 0 34 70 a38 38 0 1 1 -34 -70Z" fill="#a5b4fc"/>
+  <circle cx="330" cy="80" r="5" fill="#8b5cf6"/><circle cx="440" cy="210" r="4" fill="#8b5cf6"/>
+  <!-- profile head -->
+  <path d="M110 600 C110 470 150 420 210 410 L236 410 C300 420 330 470 330 600Z" fill="#4338ca"/>
+  <path d="M190 330 h48 v90 h-48Z" fill="#f2c4b3"/>
+  <path d="M154 250 C150 170 210 140 262 160 C300 176 314 220 306 262 C318 274 324 290 312 300 C300 306 300 320 298 334 C292 360 262 368 236 362 C200 356 160 320 154 250Z" fill="#f5d0c5"/>
+  <path d="M150 262 C130 170 200 120 262 142 C312 158 320 210 300 230 C282 200 250 196 226 214 C206 250 196 300 180 340 C160 320 152 294 150 262Z" fill="#1e293b"/>
+  <circle cx="278" cy="262" r="5" fill="#334155"/>
+  <!-- waves toward screen -->
+  <g stroke="#06b6d4" stroke-width="6" stroke-linecap="round" fill="none">
+    <path d="M330 300 q14 20 0 40"/><path d="M350 286 q24 34 0 68" opacity=".7"/><path d="M370 272 q34 48 0 96" opacity=".45"/>
+  </g>
+  <rect x="380" y="270" width="70" height="120" rx="14" fill="#0f172a"/>
+  <rect x="388" y="280" width="54" height="100" rx="8" fill="#67e8f9"/>
+  <!-- thought dots -->
+  <circle cx="120" cy="150" r="12" fill="#c4b5fd"/><circle cx="92" cy="112" r="18" fill="#ddd6fe"/><circle cx="60" cy="64" r="26" fill="#ede9fe"/>
+</svg>

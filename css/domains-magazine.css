@@ -48,6 +48,9 @@
 
   --mag-content-width: 68rem;
   --mag-reading-width: 44rem;
+  --mag-article-width: 76rem;
+  --mag-aside-width: 250px;
+  --mag-copy-width: 620px;
   --mag-gutter: clamp(1rem, 0.6rem + 2vw, 2.5rem);
 
   --mag-space-section: clamp(3.5rem, 2.5rem + 4vw, 6rem);
@@ -313,6 +316,320 @@ body.mag-contents {
 }
 .mag-header__back svg { width: 16px; height: 16px; flex: 0 0 auto; }
 
+/* 5. Editorial article ------------------------------------------------------
+   כל תחום = כתבה אחת: editorial-hero → 5 × editorial-chapter → editorial-closing.
+   פרק = גריד של שלושה אזורים: מודול צד | גוף הכתבה | מודול צד.
+   בכל פרק לכל היותר Visual אחד + editorial-aside אחד; שורות מתחלפות (--flip). */
+.editorial-article { background: var(--mag-surface); }
+
+/* 5a. Hero */
+.editorial-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  grid-template-areas:
+    "chip     visual"
+    "title    visual"
+    "subtitle visual"
+    "intro    visual"
+    "cta      visual";
+  grid-template-rows: auto auto auto auto 1fr;
+  column-gap: clamp(2rem, 5vw, 5rem);
+  align-content: center;
+  max-width: var(--mag-article-width);
+  margin: 0 auto;
+  min-height: calc(100svh - var(--mag-header-h));
+  padding: clamp(2rem, 1.5rem + 3vw, 4.5rem) var(--mag-gutter);
+}
+.editorial-hero__chip { grid-area: chip; justify-self: start; margin-bottom: 18px; }
+.editorial-hero__title {
+  grid-area: title;
+  margin: 0 0 14px;
+  font-size: var(--mag-fs-display);
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  color: var(--mag-text);
+}
+.editorial-hero__subtitle {
+  grid-area: subtitle;
+  margin: 0 0 22px;
+  font-size: var(--mag-fs-lead);
+  font-weight: 500;
+  line-height: 1.55;
+  color: var(--domain-ink);
+}
+.editorial-hero__intro { grid-area: intro; max-width: 34rem; }
+.editorial-hero__intro p { margin: 0 0 14px; color: var(--mag-text-soft); line-height: var(--mag-lh-body); }
+.editorial-hero__cta { grid-area: cta; align-self: start; margin-top: 14px; }
+.editorial-hero__visual {
+  grid-area: visual;
+  align-self: center;
+  margin: 0;
+  aspect-ratio: 5 / 4;
+  border-radius: var(--mag-radius-lg);
+}
+
+/* 5b. Visual slot — ה־asset נקבע ב־CSS (סעיף 5g), כך שהחלפה לא דורשת שינוי HTML */
+.editorial-visual {
+  display: block;
+  width: 100%;
+  background-color: var(--domain-soft);
+  background-image: var(--visual, none);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+
+/* 5c. Chapter */
+.editorial-chapter {
+  display: grid;
+  grid-template-columns:
+    minmax(180px, var(--mag-aside-width))
+    minmax(0, var(--mag-copy-width))
+    minmax(180px, var(--mag-aside-width));
+  grid-template-areas:
+    "aside copy  media"
+    "aside deep  media";
+  grid-template-rows: auto 1fr;
+  justify-content: center;
+  column-gap: clamp(1.5rem, 3.5vw, 3.5rem);
+  align-items: start;
+  padding: clamp(2.5rem, 1.8rem + 2.2vw, 4rem) var(--mag-gutter);
+  border-top: 1px solid var(--mag-border);
+  scroll-margin-top: var(--mag-header-h);
+}
+.editorial-chapter--flip {
+  grid-template-areas:
+    "media copy  aside"
+    "media deep  aside";
+}
+.editorial-chapter__copy { grid-area: copy; min-width: 0; }
+.editorial-chapter__media {
+  grid-area: media;
+  margin: 0;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--mag-radius-md);
+}
+.editorial-chapter__side { grid-area: aside; min-width: 0; }
+.editorial-chapter > .editorial-deep-dive { grid-area: deep; }
+
+.editorial-chapter__number {
+  display: block;
+  margin: 0 0 6px;
+  font-size: clamp(2.5rem, 1.9rem + 2vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  background: var(--domain-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: var(--domain-primary);
+}
+.editorial-chapter__title {
+  margin: 0 0 16px;
+  font-size: var(--mag-fs-h2);
+  font-weight: 800;
+  line-height: var(--mag-lh-heading);
+  color: var(--mag-text);
+}
+.editorial-chapter__lead {
+  margin: 0 0 16px;
+  font-size: var(--mag-fs-lead);
+  line-height: 1.65;
+  color: var(--domain-ink);
+}
+.editorial-chapter__copy > p,
+.editorial-deep-dive__body > p { margin: 0 0 16px; line-height: var(--mag-lh-body); color: var(--mag-text); }
+
+/* פריטי תוכן פתוחים: כותרת קטנה + טקסט, מופרדים בקו דק — לא כרטיסים */
+.editorial-points { list-style: none; margin: 8px 0 0; padding: 0; }
+.editorial-points > li { padding: 11px 0; border-top: 1px solid var(--mag-border); }
+.editorial-points > li:last-child { border-bottom: 1px solid var(--mag-border); }
+.editorial-points h3 {
+  margin: 0 0 4px;
+  font-size: var(--mag-fs-h4);
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--mag-text);
+}
+.editorial-points p { margin: 0; font-size: var(--mag-fs-small); line-height: 1.7; color: var(--mag-text-soft); }
+.editorial-points p + p { margin-top: 6px; }
+.editorial-points .editorial-meta { font-size: var(--mag-fs-caption); font-weight: 600; color: var(--domain-primary); }
+
+.editorial-list { list-style: none; margin: 0 0 16px; padding: 0; }
+.editorial-list li {
+  position: relative;
+  padding-inline-start: 20px;
+  margin-bottom: 4px;
+  font-size: var(--mag-fs-small);
+  line-height: 1.6;
+  color: var(--mag-text-soft);
+}
+.editorial-list li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 2px;
+  top: 0.7em;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--domain-secondary);
+}
+.editorial-subhead {
+  margin: 18px 0 6px;
+  font-size: var(--mag-fs-h4);
+  font-weight: 700;
+  color: var(--mag-text);
+}
+
+/* ציטוט/נקודה למחשבה בגוף הכתבה — קו אקסנט, בלי קופסה */
+.editorial-pullquote {
+  margin: 22px 0 0;
+  padding: 4px 0 4px;
+  padding-inline-start: 20px;
+  border-inline-start: 3px solid var(--domain-secondary);
+}
+.editorial-pullquote p { margin: 0; font-size: var(--mag-fs-lead); line-height: 1.6; color: var(--domain-ink); }
+.editorial-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: var(--mag-fs-caption);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--domain-primary);
+}
+
+/* 5d. Asides — הרכיבים היחידים שמותר להם להיות boxed */
+.editorial-aside {
+  position: relative;
+  padding: 22px 22px 20px;
+  border-radius: var(--mag-radius-md);
+  background: var(--domain-soft);
+  border: 1px solid color-mix(in srgb, var(--domain-primary) 12%, transparent);
+}
+.editorial-aside__title { margin: 0 0 10px; font-size: var(--mag-fs-h4); font-weight: 700; line-height: 1.4; color: var(--mag-text); }
+.editorial-aside p { margin: 0 0 10px; font-size: var(--mag-fs-small); line-height: 1.7; color: var(--mag-text-soft); }
+.editorial-aside p:last-child { margin-bottom: 0; }
+.editorial-aside .editorial-list { margin-bottom: 0; }
+.editorial-aside--reflection { border-top: 4px solid var(--domain-primary); }
+.editorial-aside--insight { background: var(--domain-soft-2); border-top: 4px solid var(--domain-tertiary); }
+.editorial-aside--task {
+  background: var(--mag-surface);
+  border: 1.5px dashed color-mix(in srgb, var(--domain-secondary) 60%, transparent);
+  border-top: 4px solid var(--domain-secondary);
+}
+.editorial-aside--warning { background: var(--mag-warning-bg); border-color: rgba(234, 88, 12, 0.2); border-top: 4px solid var(--mag-warning-edge); }
+.editorial-aside--warning .editorial-label { color: var(--mag-warning-text); }
+.editorial-aside--quote { background: transparent; border: 0; padding: 30px 4px 8px; }
+.editorial-aside--quote::before {
+  content: "”";
+  position: absolute;
+  top: -14px;
+  inset-inline-start: 0;
+  font-size: 4.5rem;
+  line-height: 1;
+  font-weight: 800;
+  background: var(--domain-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.editorial-aside--quote p { font-size: var(--mag-fs-lead); color: var(--domain-ink); font-weight: 500; }
+
+/* 5e. Deep dive — <details> אחד לכל היותר בפרק */
+.editorial-deep-dive { margin-top: 26px; border-top: 1px solid var(--mag-border-strong); }
+.editorial-deep-dive > summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 12px 0;
+  cursor: pointer;
+  list-style: none;
+  font-weight: 700;
+  color: var(--domain-primary);
+}
+.editorial-deep-dive > summary::-webkit-details-marker { display: none; }
+.editorial-deep-dive > summary::after {
+  content: "";
+  width: 9px;
+  height: 9px;
+  border-inline-start: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(-45deg);
+  transition: transform .2s ease;
+  margin-top: -4px;
+}
+.editorial-deep-dive[open] > summary::after { transform: rotate(135deg); margin-top: 4px; }
+.editorial-deep-dive > summary:hover { text-decoration: underline; text-underline-offset: 4px; }
+.editorial-deep-dive__body { padding: 4px 0 8px; }
+
+/* 5f. Closing */
+.editorial-closing {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: clamp(3.5rem, 2.5rem + 4vw, 6rem) var(--mag-gutter);
+  border-top: 1px solid var(--mag-border);
+  text-align: center;
+}
+.editorial-closing__title {
+  margin: 0 0 22px;
+  font-size: var(--mag-fs-h2);
+  font-weight: 800;
+  line-height: var(--mag-lh-heading);
+}
+.editorial-closing > p { margin: 0 0 16px; font-size: var(--mag-fs-lead); line-height: 1.7; color: var(--mag-text-soft); }
+.editorial-closing .editorial-aside--quote { margin: 34px auto 0; max-width: 36rem; }
+.editorial-closing .editorial-aside--quote::before { inset-inline-start: 50%; transform: translateX(50%); }
+.editorial-closing__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 36px; }
+
+/* 5g. Visual slots (asset registry). להחלפת תמונה: לשנות כאן או להחליף את הקובץ. */
+[data-visual="d2-hero"] { --visual: url("../domains/visuals/d2-hero.svg"); }
+[data-visual="d2-01"] { --visual: url("../domains/visuals/d2-01.svg"); }
+[data-visual="d2-02"] { --visual: url("../domains/visuals/d2-02.svg"); }
+[data-visual="d2-03"] { --visual: url("../domains/visuals/d2-03.svg"); }
+[data-visual="d2-04"] { --visual: url("../domains/visuals/d2-04.svg"); }
+[data-visual="d2-05"] { --visual: url("../domains/visuals/d2-05.svg"); }
+
+/* 5h. Editorial responsive */
+@media (max-width: 1023.98px) {
+  .editorial-hero {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "chip" "title" "subtitle" "intro" "visual" "cta";
+    grid-template-rows: none;
+    min-height: 0;
+  }
+  .editorial-hero__visual { margin: 10px 0 24px; aspect-ratio: 16 / 10; }
+  .editorial-hero__intro { max-width: none; }
+}
+@media (max-width: 899.98px) {
+  .editorial-chapter,
+  .editorial-chapter--flip {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas:
+      "copy  copy"
+      "media aside"
+      "deep  deep";
+    grid-template-rows: none;
+    row-gap: 24px;
+  }
+  .editorial-chapter__media { aspect-ratio: auto; min-height: 240px; height: 100%; }
+  .editorial-chapter > .editorial-deep-dive { margin-top: 0; }
+}
+@media (max-width: 599.98px) {
+  .editorial-chapter,
+  .editorial-chapter--flip {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "copy" "media" "aside" "deep";
+  }
+  .editorial-chapter__media { aspect-ratio: 16 / 10; min-height: 0; height: auto; }
+  .editorial-hero__cta .mag-cta { width: 100%; }
+}
+
+/* ===== LEGACY (mag-section / mag-card) — יוסר בשלב 6 אחרי העברת כל התחומים ===== */
 /* 5. Hero ------------------------------------------------------------------ */
 .mag-hero {
   position: relative;
