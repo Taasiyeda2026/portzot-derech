@@ -1,4 +1,4 @@
-const SW_VERSION = "v159";
+const SW_VERSION = "v160";
 const CACHE_NAME = `portzot-derech-cache-${SW_VERSION}`;
 
 // ── נכסים שנשמרים ב-Cache בהתקנה ─────────────────────────────────────────
@@ -40,6 +40,7 @@ const CORE_ASSETS = [
   "./css/pairing.css",
   "./css/print.css",
   "./css/domains-magazine.css",
+  "./css/domain-master.css",
 
   // ── JS ────────────────────────────────────────────────────────────────────
   "./config/supabase-config.js",
@@ -71,6 +72,7 @@ const CORE_ASSETS = [
   "./fonts/Lora-Bold.ttf",
   "./fonts/FtPilKahol2.ttf",
   "./fonts/FtPilKahol2.woff2",
+  "./fonts/Dana Yad Alef Alef Alef Normal.ttf",
   "./fonts/yehudaclm-bold-webfont.ttf",
   "./fonts/yehudaclm-bold-webfont.woff",
   "./fonts/yehudaclm-light-webfont.ttf",
@@ -90,6 +92,7 @@ const CORE_ASSETS = [
   "./domains/d9.html",
   "./domains/d10.html",
   "./domains/d1-dev.html",
+  "./domains/d1-master.html",
   "./pairing/pairing.html",
   "./pairing/questionnaire.html",
   "./pairing/matching.html",
