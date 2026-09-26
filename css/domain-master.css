@@ -345,7 +345,7 @@ summary{cursor:pointer}
 .master-chapter{
   position:relative;
   display:grid;
-  grid-template-columns:240px minmax(0,1fr) 240px;
+  grid-template-columns:265px minmax(0,1fr) 265px;
   grid-template-rows:auto auto;
   column-gap:30px;
   row-gap:8px;
@@ -442,7 +442,7 @@ summary{cursor:pointer}
 
 /* one substantial image slot per row — intentionally no fake artwork */
 .master-chapter__media{
-  min-height:176px;
+  min-height:192px;
   aspect-ratio:1.38/1;
   border-radius:16px;
   overflow:hidden;
@@ -491,10 +491,11 @@ summary{cursor:pointer}
   line-height:1.55;
 }
 .master-chapter__aside--quote p{
-  font-family:"Dana Yad","IBM Plex Sans Hebrew",sans-serif;
+  font-family:"IBM Plex Sans Hebrew",Arial,sans-serif;
   color:#4f4375;
-  font-size:1rem;
-  line-height:1.4;
+  font-size:.86rem;
+  line-height:1.55;
+  font-weight:500;
 }
 
 /* Physical alternation exactly follows the reference */
@@ -550,7 +551,7 @@ summary{cursor:pointer}
   position:relative;
   overflow:hidden;
   margin-top:0;
-  min-height:215px;
+  min-height:185px;
   border-top:1px solid var(--line);
   background:linear-gradient(180deg,#fff 0%,#f7f5ff 55%,#e9efff 100%);
 }
@@ -575,28 +576,29 @@ summary{cursor:pointer}
   z-index:2;
   width:min(760px,calc(100% - 34px));
   margin:auto;
-  padding:28px 0 66px;
+  padding:22px 0 48px;
   text-align:center;
 }
 .master-closing h2{
-  margin:0 0 9px;
+  margin:0 0 7px;
   color:#17214e;
-  font-size:2rem;
+  font-size:1.85rem;
   line-height:1.1;
   font-weight:700;
 }
 .master-closing p{
-  margin:0 auto 7px;
+  margin:0 auto 5px;
   color:#576078;
-  font-size:.86rem;
-  line-height:1.6;
+  font-size:.84rem;
+  line-height:1.52;
 }
 .master-closing__hand{
-  margin-top:15px!important;
-  font-family:"Dana Yad","IBM Plex Sans Hebrew",sans-serif;
+  margin-top:10px!important;
+  font-family:"IBM Plex Sans Hebrew",Arial,sans-serif;
   color:#343461!important;
-  font-size:1.18rem!important;
-  line-height:1.38!important;
+  font-size:.9rem!important;
+  line-height:1.5!important;
+  font-weight:600;
 }
 .master-footer{
   padding:18px;
