@@ -174,7 +174,20 @@ editFields.forEach(function(k){$(k).addEventListener('input',function(){if(!reco
 $('timelineEditor').addEventListener('input',function(e){var a=e.target.dataset.y,b=e.target.dataset.t;if(a===undefined&&b===undefined)return;if(!records.length){records=[norm(demo,0)];collections[language]=records;index=0}var j=+(a===undefined?b:a);current().timeline[j][a!==undefined?'year':'text']=e.target.value;sync();draw()});
 $('theme').onchange=function(){if(!records.length){records=[norm(demo,0)];collections[language]=records;index=0}current().theme=this.value;sync();draw()};
 $('which').onchange=function(){index=+this.value;bindEdit()};
-$('pairId').onchange=function(){if(!records.length)return;current().pairId=this.value.trim();sync();bindSecret();draw()};
+$('pairId').onchange=function(){
+if(!records.length)return;
+var oldKey=pairKey(current(),index),newKey=this.value.trim()||oldKey;if(newKey===oldKey){bindSecret();return}
+var memberIndexes=records.map(function(p,i){return pairKey(p,i)===oldKey?i:-1}).filter(function(i){return i>=0});
+var collisions=records.filter(function(p,i){return memberIndexes.indexOf(i)<0&&pairKey(p,i)===newKey});
+if(collisions.length){status('המזהה '+newKey+' כבר שייך לקבוצה אחרת. בחרי מזהה ייחודי.',true);this.value=oldKey;return}
+memberIndexes.forEach(function(i){records[i].pairId=newKey});
+var other=collections[language==='he'?'ar':'he'];
+if(other.length===records.length)memberIndexes.forEach(function(i){if(other[i])other[i].pairId=newKey});
+if(secretIcons[oldKey]&&!secretIcons[newKey])secretIcons[newKey]=secretIcons[oldKey];
+delete secretIcons[oldKey];saveSecretSettings();sync();
+try{localStorage.setItem('womancard-records-v1-'+(language==='he'?'ar':'he'),JSON.stringify(other))}catch(e){}
+bindSecret();draw();status('מזהה הזוג/שלישייה עודכן יחד עבור כל החברות, ללא שינוי הסמל.')
+};
 async function compactSymbol(file){
   if(file.size>3*1024*1024)throw Error('בחרו סמל קטן מ־3MB');
   if(!/^(image\/(png|webp|svg\+xml))$/.test(file.type)&&!/\.(png|webp|svg)$/i.test(file.name))throw Error('פורמטים מותרים: PNG, WebP, SVG');
