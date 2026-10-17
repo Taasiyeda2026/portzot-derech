@@ -46,6 +46,9 @@ textarea{resize:vertical;min-height:60px;line-height:1.4}label{display:block;mar
 .hint{font-size:11.5px;line-height:1.55;color:#728494;margin:7px 0}
 .status{margin:12px 0 0;padding:10px;background:#edf7f1;border:1px solid #b9dbc6;color:#285943;border-radius:8px;font-size:12px}
 .status.warn{background:#fff4e7;border-color:#eacbaa;color:#875128}
+.import-report{padding:10px 12px;margin-top:8px;border-radius:9px;background:#f2f6fa;border:1px solid #dce6ef;color:#486177;font-size:12px;line-height:1.55;overflow-wrap:anywhere}
+.import-report.success{background:#eef8f1;border-color:#bddcc9;color:#2d6542}
+.import-report.error{background:#fff0ee;border-color:#eebbb3;color:#a63d2f}
 .stage{display:flex;flex-direction:column;align-items:center;padding:14px;gap:12px;min-height:760px}
 .stagehead{width:100%;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#697d92}
 .paper{box-shadow:0 16px 40px #10284030;max-width:100%}
@@ -100,7 +103,7 @@ textarea{resize:vertical;min-height:60px;line-height:1.4}label{display:block;mar
 <div class="shell">
 <aside class="panel sidebar">
 <h2>נתונים וכרטיסים</h2>
-<label for="excel">ייבוא Excel / CSV / JSON</label><input id="excel" type="file" accept=".xlsx,.xls,.csv,.json">
+<label for="excel">ייבוא Excel / CSV / JSON</label><input id="excel" type="file" accept=".xlsx,.xls,.csv,.json" hidden><button id="chooseExcel" type="button" class="primary" style="width:100%;margin-top:7px">בחירת קובץ נתונים מהמחשב</button><div id="importReport" class="import-report" role="status" aria-live="polite">טרם נבחר קובץ לייבוא. ניתן לטעון Excel עם 63 הנשים.</div>
 <p class="hint">הנתונים נקראים מקומית בדפדפן ולא נשלחים לשרת. בקובץ Excel יש לכלול כותרות כגון ״שם האישה״, ״פתיחה״, ״שנה 1״ ו״אירוע 1״.</p>
 <div class="grid2"><button id="save">שמירת JSON</button><button id="clear">ניקוי נתונים</button></div>
 <label for="lang">שפת הכרטיסים</label><select id="lang"><option value="he">עברית</option><option value="ar">العربية</option></select><label for="which">בחירת אישה</label><select id="which"></select>
@@ -147,6 +150,14 @@ textarea{resize:vertical;min-height:60px;line-height:1.4}label{display:block;mar
 var FONT_LIST=['IBM','IBM Light','IBM Medium','IBM SemiBold','IBM ExtraLight','Alef','Arimo','Arimo Medium','Arimo SemiBold','Choco','Dana','Gveret','PilKahol','Yehuda','Alice','Lora'];
 var language='he',collections={he:[],ar:[]},records=collections.he,index=0,sharedBg='',perBg={},uploadedFont='',fontSel={title:'Choco',body:'IBM',time:'IBM',link:'Choco'},bodySize=12,tracking=5,secretIcons={},secretPosition={x:8,y:91,size:9};
 var $=function(id){return document.getElementById(id)};
+var importInfoByLang={he:null,ar:null};
+function importInfo(msg,kind){var box=$('importReport');box.textContent=msg;box.className='import-report'+(kind?' '+kind:'')}
+function updateImportInfo(){
+ var obj=importInfoByLang[language];
+ if(obj&&records.length){importInfo('נטענו '+records.length+' נשים | מקור: '+obj.file+(obj.sheet?' | גיליון: '+obj.sheet:'')+(obj.loadedAt?' | עודכן: '+obj.loadedAt:''),'success')}
+ else if(records.length){importInfo('נמצאו '+records.length+' נשים שנשמרו בדפדפן. שם קובץ המקור אינו שמור; אפשר לייבא מחדש כדי לעדכן את הנתונים.','success')}
+ else {importInfo('לא נטען קובץ '+(language==='ar'?'בערבית.':'בעברית.')+' לחצו על הכפתור ובחרו Excel.')}
+}
 var editFields=['name','field','intro','breakthrough','challenges','different','impact','surprise','connection'];
 var demo={name:'כרטיס לדוגמה',field:'פורצת דרך',intro:'ייבאי Excel כדי לטעון את נתוני 63 הנשים. כאן תוצג פסקת הפתיחה המלאה.',breakthrough:'כאן תופיע פריצת הדרך.',challenges:'כאן יופיעו האתגרים בדרך.',different:'כאן יופיע מה עשתה אחרת.',impact:'כאן תופיע ההשפעה שלה.',surprise:'כאן יופיע פרט מסקרן.',connection:'כאן יופיע המשפט המחבר בלבד.',theme:'tech',timeline:[{year:'2016',text:'אירוע מרכזי ראשון'},{year:'2018',text:'נקודת מפנה נוספת'},{year:'2020',text:'הישג משמעותי'},{year:'2023',text:'ציון דרך אחרון'}]};
 function status(s,error){$('status').textContent=s;$('status').className='status'+(error?' warn':'')}
@@ -157,13 +168,13 @@ function get(p,k){return p&&p[k]||''}
 function norm(item,i){var t=item.timeline||[];return {name:item.name||'',field:item.field||'',intro:item.intro||'',breakthrough:item.breakthrough||'',challenges:item.challenges||'',different:item.different||'',impact:item.impact||'',surprise:item.surprise||'',connection:clean(item.connection),theme:item.theme||'tech',pairId:item.pairId||item.pair_id||'',timeline:Array.from({length:4},function(_,j){return {year:String(t[j]&&t[j].year||''),text:String(t[j]&&(t[j].short||t[j].text)||'')}}),id:item.id||'woman-'+(i+1)}}
 function defTheme(s){if(/חלל|תעופה|מתמטיקה|فضاء|رياضيات/.test(s))return 'space';if(/בריאות|רפואה|מדע|כימיה|ביולוגיה|طب|علوم/.test(s))return 'science';if(/קולנוע|אמנות|מוזיקה|ספרות|תרבות|فن|موسيقى/.test(s))return 'culture';if(/ספורט|טניס|ג׳ודו|رياضة/.test(s))return 'sport';if(/עיצוב|אופנה|تصميم/.test(s))return 'design';if(/פיננס|כלכלה|مالية/.test(s))return 'finance';if(/בינה|מחשב|טכנולוגיה|AI|תקשורת|برمجة|حاسوب/.test(s))return 'tech';return 'social'}
 function col(row,names){var obj={};Object.keys(row).forEach(function(key){obj[String(key).trim().replace(/\s+/g,' ')]=row[key]});for(var i=0;i<names.length;i++){if(obj[names[i]]!==undefined)return String(obj[names[i]]==null?'':obj[names[i]])}return ''}
-function parseRow(row,i){var f=col(row,['תחום','תחום התמחות','المجال','field']);var tl=[];for(var k=1;k<=4;k++){tl.push({year:col(row,['שנה '+k,'שנה'+k,'שנת אירוע '+k,'year'+k,'year '+k]),text:col(row,['אירוע '+k,'אירוע'+k,'ציר זמן '+k,'נקודה '+k,'event'+k,'event '+k,'timeline '+k])})}return norm({id:'woman-'+(i+1),name:col(row,['שם האישה','שם','name','اسم المرأة']),field:f,intro:col(row,['פתיחה','פסקת פתיחה','פתיחה (ללא כותרת)','intro']),breakthrough:col(row,['פריצת הדרך','breakthrough']),challenges:col(row,['האתגרים בדרך','אתגרים','challenges']),different:col(row,['מה עשתה אחרת','מה עשתה אחרת?','different']),impact:col(row,['ההשפעה שלה','השפעה','impact']),surprise:col(row,['רגע באמת','רגע, באמת?!','רגע, באמת','surprise']),connection:col(row,['משפט מחבר','המכנה המשותף','connection','القاسم المشترك']),theme:col(row,['משפחת צבע','theme'])||defTheme(f),pairId:col(row,['מזהה זוג','מספר זוג','קבוצת התאמה','זוג/שלישייה','קבוצה','pairId','pair_id','pair id']),timeline:tl},i)}
+function parseRow(row,i){var f=col(row,['תחום','תחום התמחות','المجال','field']);var tl=[];for(var k=1;k<=4;k++){tl.push({year:col(row,['שנה '+k,'שנה'+k,'שנת אירוע '+k,'year'+k,'year '+k]),text:col(row,['אירוע '+k,'אירוע'+k,'ציר זמן '+k,'נקודה '+k,'event'+k,'event '+k,'timeline '+k])})}return norm({id:'woman-'+(i+1),name:col(row,['שם האישה','שם','name','اسم المرأة']),field:f,intro:col(row,['פתיחה','פסקת פתיחה','פתיחה (ללא כותרת)','intro']),breakthrough:col(row,['פריצת הדרך','breakthrough']),challenges:col(row,['האתגרים בדרך','אתגרים','challenges']),different:col(row,['מה עשתה אחרת','מה עשתה אחרת?','different']),impact:col(row,['ההשפעה שלה','השפעה','impact']),surprise:col(row,['רגע באמת','רגע, באמת?!','רגע, באמת','surprise']),connection:col(row,['משפט מחבר','המכנה המשותף','connection','القاسم المشترك']),theme:col(row,['משפחת צבע','theme'])||defTheme(f),pairId:col(row,['זוג','מזהה זוג','מספר זוג','קבוצת התאמה','זוג/שלישייה','קבוצה','pairId','pair_id','pair id']),timeline:tl},i)}
 function pairKey(r,i){var custom=String(r&&r.pairId||'').trim();return custom||((i>=60&&records.length===63)?'T31':('Z'+String(Math.floor(i/2)+1).padStart(2,'0')))}
 function membersOfPair(key){return records.map(function(r,i){return {person:r,key:pairKey(r,i)}}).filter(function(x){return x.key===key}).map(function(x){return x.person.name})}
 function saveSecretSettings(){try{localStorage.setItem('womancard-secrets-v1',JSON.stringify({icons:secretIcons,position:secretPosition}))}catch(err){status('האחסון המקומי מלא. שמרי JSON לגיבוי הסמלים.',true)}}
 function bindSecret(){var hasData=records.length>0,key=pairKey(current(),index);$('pairId').value=current().pairId||key;$('pairId').disabled=!hasData;$('secretIcon').disabled=!hasData;$('removeSecret').disabled=!hasData;$('pairMembers').textContent=hasData?('קבוצה '+key+' · '+membersOfPair(key).join(' + ')):'ייבוא Excel יציג את בנות הזוג. אין סמל ברירת מחדל.';$('secretState').textContent=secretIcons[key]?'סמל מוגדר ✓':'טרם נבחר סמל'}
 function refreshList(){var arr=records.length?records:[demo];$('which').innerHTML=arr.map(function(r,i){return '<option value="'+i+'">'+esc((i+1)+'. '+r.name)+'</option>'}).join('');if(index>=arr.length)index=0;$('which').value=String(index);$('counter').textContent=(index+1)+' / '+arr.length+' · '+current().name}
-function bindEdit(){var r=current();editFields.forEach(function(k){$(k).value=get(r,k)});$('theme').value=r.theme||'tech';$('timelineEditor').innerHTML='';for(var j=0;j<4;j++){var row=document.createElement('div');row.className='tl-row';row.innerHTML='<input type="text" aria-label="שנת אירוע" data-y="'+j+'" placeholder="שנה"><textarea data-t="'+j+'" aria-label="אירוע" rows="2" placeholder="אירוע קצר"></textarea>';$('timelineEditor').appendChild(row);row.querySelector('[data-y]').value=r.timeline[j]?r.timeline[j].year:'';row.querySelector('[data-t]').value=r.timeline[j]?r.timeline[j].text:''}refreshList();bindSecret();draw()}
+function bindEdit(){updateImportInfo();var r=current();editFields.forEach(function(k){$(k).value=get(r,k)});$('theme').value=r.theme||'tech';$('timelineEditor').innerHTML='';for(var j=0;j<4;j++){var row=document.createElement('div');row.className='tl-row';row.innerHTML='<input type="text" aria-label="שנת אירוע" data-y="'+j+'" placeholder="שנה"><textarea data-t="'+j+'" aria-label="אירוע" rows="2" placeholder="אירוע קצר"></textarea>';$('timelineEditor').appendChild(row);row.querySelector('[data-y]').value=r.timeline[j]?r.timeline[j].year:'';row.querySelector('[data-t]').value=r.timeline[j]?r.timeline[j].text:''}refreshList();bindSecret();draw()}
 function card(r,i){var bg=perBg[r.id]||sharedBg;var symbolData=secretIcons[pairKey(r,i)]||'';var symbol=symbolData?'<img class="secret-symbol" alt="" src="'+esc(symbolData)+'">':'';var back=bg?'url("'+bg+'")':'none',sty='--font-title:"'+fontSel.title+'";--font-body:"'+fontSel.body+'";--font-time:"'+fontSel.time+'";--font-link:"'+fontSel.link+'";--body-size:'+bodySize+'px;--bg-image:'+back+';--tracking:'+(tracking/100)+'em;--secret-x:'+secretPosition.x+'%;--secret-y:'+secretPosition.y+'%;--secret-size:'+secretPosition.size+'mm;';
 var time=(r.timeline||[]).map(function(t){return '<div class="station"><strong class="year">'+esc(t.year)+'</strong><span class="node"></span><span class="event">'+esc(t.text||t.short)+'</span></div>'}).join('');
 return '<article class="card" data-has-bg="'+(bg?'yes':'no')+'" data-lang="'+language+'" data-theme="'+esc(r.theme||'tech')+'" style="'+esc(sty)+'">'+'<div class="sheet"><div class="name">'+esc(r.name)+'</div><div class="time">'+time+'</div><div class="field">'+esc(r.field)+'</div><div class="story"><p>'+esc(r.intro)+'</p>'+[[language==='ar'?'الإنجاز الرائد':'פריצת הדרך',r.breakthrough],[language==='ar'?'التحديات':'האתגרים בדרך',r.challenges],[language==='ar'?'ماذا فعلت بشكل مختلف؟':'מה עשתה אחרת?',r.different],[language==='ar'?'أثرها':'ההשפעה שלה',r.impact]].map(function(z){return '<section><h3>'+z[0]+'</h3><p>'+esc(z[1])+'</p></section>'}).join('')+'<div class="surprise"><b>'+(language==='ar'?'هل تعلمين؟':'רגע, באמת?!')+'</b> '+esc(r.surprise)+'</div></div><div class="linkline">'+esc(clean(r.connection))+'</div></div>'+symbol+'</article>'}
@@ -208,13 +219,67 @@ $('tracking').oninput=function(){tracking=+this.value;$('trackingValue').textCon
 var bgTemp='';
 $('bg').onchange=function(e){var f=e.target.files[0];if(!f)return;if(!f.type.startsWith('image/')){status('יש לבחור קובץ תמונה PNG, JPG או WebP.',true);return}bgTemp=URL.createObjectURL(f);if($('bgScope').value==='one'){perBg[current().id]=bgTemp;draw();status('הרקע החדש הוחל מיד על הכרטיס הנוכחי בלבד.')}else{sharedBg=bgTemp;perBg={};draw();status('הרקע החדש הוחל מיד על כל הכרטיסים.')}};
 
+$('chooseExcel').onclick=function(){$('excel').click()};
 $('save').onclick=function(){var obj={version:2,records:records,design:{fonts:fontSel,bodySize:bodySize,tracking:tracking},secretSymbols:{icons:secretIcons,position:secretPosition}};var a=document.createElement('a'),u=URL.createObjectURL(new Blob([JSON.stringify(obj,null,2)],{type:'application/json'}));a.href=u;a.download='womancard-data.json';a.click();setTimeout(function(){URL.revokeObjectURL(u)},1500)};
-$('clear').onclick=function(){if(!confirm('לנקות את הנתונים השמורים בדפדפן?'))return;records=[];collections[language]=records;localStorage.removeItem('womancard-records-v1-'+language);index=0;bindEdit();status('נתונים נוקו.')};
-$('excel').onchange=async function(e){var f=e.target.files[0];if(!f)return;try{var loaded;if(/\.json$/i.test(f.name)){var obj=JSON.parse(await f.text());loaded=Array.isArray(obj)?obj:(obj.records||[]);if(!Array.isArray(loaded)&&loaded.he)loaded=loaded.he;if(obj.secretSymbols&&obj.secretSymbols.icons){secretIcons=Object.assign({},secretIcons,obj.secretSymbols.icons);if(obj.secretSymbols.position){secretPosition=Object.assign(secretPosition,obj.secretSymbols.position);[['secretSize','size',' מ״מ'],['secretX','x','%'],['secretY','y','%']].forEach(function(a){$(a[0]).value=secretPosition[a[1]];$(a[0]+'Value').textContent=secretPosition[a[1]]+a[2]})}saveSecretSettings()}}else{if(!window.XLSX)throw Error('ספריית Excel לא נטענה. בדקי את החיבור לאינטרנט ונסי שוב.');var wb=XLSX.read(await f.arrayBuffer(),{type:'array'});var candidates=[];wb.SheetNames.forEach(function(n){var rows=XLSX.utils.sheet_to_json(wb.Sheets[n],{defval:''});if(rows.some(function(r){return Object.keys(r).some(function(k){return /שם האישה|name|اسم المرأة/.test(k)})}))candidates=rows});loaded=candidates.map(parseRow).filter(function(r){return r.name})}if(!Array.isArray(loaded)||!loaded.length)throw Error('לא נמצאו רשומות עם עמודת שם האישה');records=loaded.map(norm);collections[language]=records;index=0;sync();bindEdit();status('נטענו '+records.length+' נשים. הנתונים נשארים בדפדפן.')}catch(err){status('ייבוא נכשל: '+err.message,true)}e.target.value=''};
+$('clear').onclick=function(){if(!confirm('לנקות את הנתונים השמורים בדפדפן?'))return;records=[];collections[language]=records;localStorage.removeItem('womancard-records-v1-'+language);localStorage.removeItem('womancard-import-meta-v1-'+language);importInfoByLang[language]=null;index=0;bindEdit();status('נתונים נוקו.')};
+$('excel').onchange=async function(e){
+ var file=e.target.files[0];if(!file)return;
+ importInfo('קורא את הקובץ "'+file.name+'"…');
+ try{
+  var loaded,sourceSheet='';
+  if(/\.json$/i.test(file.name)){
+   var obj=JSON.parse(await file.text());
+   loaded=Array.isArray(obj)?obj:(obj.records||[]);
+   if(!Array.isArray(loaded)&&loaded.he)loaded=loaded.he;
+   if(obj.secretSymbols&&obj.secretSymbols.icons){
+    secretIcons=Object.assign({},secretIcons,obj.secretSymbols.icons);
+    if(obj.secretSymbols.position){
+     secretPosition=Object.assign(secretPosition,obj.secretSymbols.position);
+     [['secretSize','size',' מ״מ'],['secretX','x','%'],['secretY','y','%']].forEach(function(a){$(a[0]).value=secretPosition[a[1]];$(a[0]+'Value').textContent=secretPosition[a[1]]+a[2]})
+    }
+    saveSecretSettings()
+   }
+   if(!Array.isArray(loaded))throw Error('קובץ JSON אינו מכיל רשימת נשים תקינה.');
+  }else{
+   if(!window.XLSX)throw Error('לא הצלחנו לטעון את מנוע קריאת Excel. בדקו חיבור לאינטרנט ורעננו את העמוד.');
+   var workbook=XLSX.read(await file.arrayBuffer(),{type:'array'});
+   var best=null;
+   workbook.SheetNames.forEach(function(name){
+    var rows=XLSX.utils.sheet_to_json(workbook.Sheets[name],{defval:'',raw:false});
+    if(!rows.length)return;
+    var header=Object.keys(rows[0]).map(function(k){return k.trim().replace(/^\uFEFF/,'')});
+    if(!header.some(function(k){return ['שם האישה','שם','name','اسم المرأة'].includes(k)}))return;
+    var parsed=rows.map(parseRow).filter(function(r){return r.name&&r.name.trim()});
+    if(!parsed.length)return;
+    var details=parsed.filter(function(p){return p.intro||p.breakthrough||p.timeline.some(function(t){return t.year||t.text})}).length;
+    var score=details*10+parsed.length;
+    if(!best||score>best.score)best={parsed:parsed,sheet:name,score:score};
+   });
+   if(!best)throw Error('לא זוהתה לשונית המכילה עמודה "שם האישה" ונתונים. ודאו שהכותרות מופיעות בשורה הראשונה.');
+   loaded=best.parsed;sourceSheet=best.sheet;
+  }
+  if(!Array.isArray(loaded)||loaded.length===0)throw Error('הקובץ לא מכיל רשומות תקינות עם שם אישה.');
+  var valid=loaded.map(norm).filter(function(r){return r.name&&r.name.trim()});
+  if(!valid.length)throw Error('הקובץ לא מכיל שמות נשים.');
+  records=valid;collections[language]=records;index=0;
+  sync();
+  var date=new Date();
+  var meta={file:file.name,sheet:sourceSheet,count:records.length,loadedAt:date.toLocaleString('he-IL')};
+  importInfoByLang[language]=meta;
+  try{localStorage.setItem('womancard-import-meta-v1-'+language,JSON.stringify(meta))}catch(err){}
+  bindEdit();
+  status('ייבוא הושלם: '+records.length+' נשים נטענו מתוך "'+file.name+'".');
+ }catch(err){
+  importInfo('שגיאה בייבוא "'+file.name+'": '+err.message+' הנתונים שהיו במערכת נשמרו ללא שינוי.','error');
+  status('הייבוא נכשל: '+err.message,true);
+ }finally{
+  e.target.value='';
+ }
+};
 async function printCards(all){if(!records.length){status('יש לייבא את קובץ Excel לפני ההדפסה.',true);return}var arr=all?records:[current()],area=$('printArea');area.innerHTML=arr.map(function(r,i){return card(r,all?i:index)}).join('');await document.fonts.ready;await Promise.all(Array.from(area.querySelectorAll('img.secret-symbol')).map(function(img){return img.decode?img.decode().catch(function(){}):Promise.resolve()}));var overflow=[];Array.from(area.children).forEach(function(el,i){if(fit(el))overflow.push(i+1)});if(overflow.length){if(!confirm('נמצאה צפיפות בטקסט ב־'+overflow.length+' כרטיסים. להמשיך להדפסה למרות זאת?'))return}status('מוכנים '+arr.length+' עמודים. בחלון ההדפסה בחרי "שמירה כ־PDF", שוליים "ללא", וגרפיקת רקע.');window.print()}
 $('printOne').onclick=function(){printCards(false)};$('printAll').onclick=function(){printCards(true)};
 try{var stored=JSON.parse(localStorage.getItem('womancard-secrets-v1')||'{}');if(stored.icons&&typeof stored.icons==='object')secretIcons=stored.icons;if(stored.position)secretPosition=Object.assign(secretPosition,stored.position);[['secretSize','size',' מ״מ'],['secretX','x','%'],['secretY','y','%']].forEach(function(a){$(a[0]).value=secretPosition[a[1]];$(a[0]+'Value').textContent=secretPosition[a[1]]+a[2]})}catch(e){}
-try{['he','ar'].forEach(function(l){var saved=JSON.parse(localStorage.getItem('womancard-records-v1-'+l)||'[]');if(Array.isArray(saved))collections[l]=saved.map(norm)});records=collections.he;if(records.length)status('שוחזרו '+records.length+' נשים מהדפדפן המקומי.')}catch(e){}
+try{['he','ar'].forEach(function(l){var saved=JSON.parse(localStorage.getItem('womancard-records-v1-'+l)||'[]');if(Array.isArray(saved))collections[l]=saved.map(norm);try{importInfoByLang[l]=JSON.parse(localStorage.getItem('womancard-import-meta-v1-'+l)||'null')}catch(_){} });records=collections.he;if(records.length)status('שוחזרו '+records.length+' נשים מהדפדפן המקומי.')}catch(e){}
 $('lang').onchange=function(){language=this.value;records=collections[language];index=0;bindEdit();status(records.length?'נטענו '+records.length+' כרטיסים בשפה שנבחרה.':'אפשר לייבא Excel עבור השפה שנבחרה.')};bindEdit();
 })();
 </script>
