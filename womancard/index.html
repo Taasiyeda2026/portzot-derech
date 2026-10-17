@@ -64,12 +64,14 @@ textarea{resize:vertical;min-height:60px;line-height:1.4}label{display:block;mar
 .card:after{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;background:linear-gradient(90deg,rgba(255,255,255,.20),transparent 12%,transparent 88%,rgba(255,255,255,.20))}.card[data-has-bg="yes"]{background:#fff}.card[data-has-bg="yes"]:after{display:none}
 .sheet{position:relative;z-index:2;height:100%;padding:4.8mm 6.4mm 4.1mm;display:flex;flex-direction:column}
 .name{text-align:center;color:white;font:normal 30px/1.06 var(--font-title);min-height:12mm;max-height:16mm;display:flex;justify-content:center;align-items:center;text-shadow:0 2px 3px #11334c55}
-.time{height:24mm;min-height:24mm;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:2mm;position:relative;margin:2mm 0 1mm;background:rgba(255,255,255,.89);border-radius:2.2mm;padding:2.2mm 1.4mm 1.1mm}
-.time:before{content:"";position:absolute;height:.42mm;top:10.8mm;left:10%;right:10%;background:linear-gradient(90deg,transparent,var(--gold) 8%,var(--gold) 92%,transparent)}
-.station{position:relative;text-align:center;display:flex;flex-direction:column;align-items:center;min-width:0;gap:1.5mm}
-.year{font:700 16px/1 var(--font-time);color:var(--tone)}
-.node{width:2.7mm;height:2.7mm;border-radius:50%;background:var(--gold);border:.6mm solid white;box-shadow:0 0 0 .35mm var(--gold);margin:1.6mm auto .5mm;z-index:1}
-.event{font:400 9.4px/1.12 var(--font-time);text-wrap:pretty;overflow-wrap:anywhere;padding:0 .3mm;max-height:9.6mm;overflow:hidden}
+/* מאסטר: 4 תיבות קצרות בשורה אחת, חיצים ביניהן; שנים משמאל לימין. */
+.time{height:15.8mm;min-height:15.8mm;max-height:15.8mm;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4.1mm;direction:ltr;position:relative;margin:1.8mm 0 1.1mm;padding:0;background:none;border:0;border-radius:0;align-items:stretch;overflow:visible}
+.time:before{display:none;content:none}
+.station{box-sizing:border-box;position:relative;direction:rtl;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:.4mm;min-width:0;height:15.8mm;background:rgba(255,255,255,.97);border:1.1px solid #293342;border-radius:1.9mm;padding:.8mm .8mm .5mm}
+.station:not(:last-child):after{content:"➤";position:absolute;direction:ltr;right:-3.8mm;top:50%;transform:translateY(-50%);width:3.1mm;text-align:center;font:700 12px/1 Arial,sans-serif;color:#1c5688;text-shadow:0 0 .4px #193951;pointer-events:none}
+.year{font:700 13px/1.05 var(--font-time);color:#9b731e;white-space:nowrap}
+.node{display:none}
+.event{font:400 9.1px/1.16 var(--font-time);color:#243145;text-align:center;letter-spacing:0;text-wrap:pretty;overflow-wrap:anywhere;white-space:normal;max-height:9.5mm;overflow:hidden;display:block;width:100%}
 .field{font:normal 22px/1.1 var(--font-title);color:var(--tone);text-align:center;min-height:8.3mm;margin:.6mm 0 2mm}
 .story{flex:1;min-height:0;font:400 var(--body-size)/1.28 var(--font-body);overflow:visible;text-align:right}
 .story p{margin:0 0 1.2mm;white-space:pre-wrap;overflow-wrap:anywhere}
@@ -88,8 +90,8 @@ textarea{resize:vertical;min-height:60px;line-height:1.4}label{display:block;mar
 .card:before{opacity:1!important;background-size:100% 100%!important}
 .card .name{font-size:30px;line-height:1.1;font-weight:700;letter-spacing:var(--tracking);height:14mm;min-height:14mm;max-height:14mm;overflow:hidden;text-shadow:0 1px 0 rgba(255,255,255,.25),0 2px 0 #184c79,0 4px 0 #123451,0 6px 9px rgba(0,20,49,.65);-webkit-text-stroke:.15px rgba(5,39,70,.2)}
 .card .field{font-size:22px;line-height:1.12;font-weight:700;letter-spacing:var(--tracking);height:8.3mm;min-height:8.3mm;overflow:hidden}
-.card .year{font-size:16px;line-height:1.1;font-weight:700;letter-spacing:var(--tracking)}
-.card .event{font-size:9.4px;line-height:1.26;letter-spacing:var(--tracking)}
+.card .year{font-size:13px;line-height:1.05;font-weight:700;letter-spacing:0;color:#9b731e}
+.card .event{font-size:9.1px;line-height:1.16;letter-spacing:0;color:#243145}
 .card .story{line-height:1.32;letter-spacing:var(--tracking)}
 .card .story section h3{font-weight:700;line-height:1.22;letter-spacing:var(--tracking)}
 .card .surprise{line-height:1.32}
@@ -176,7 +178,7 @@ function bindSecret(){var hasData=records.length>0,key=pairKey(current(),index);
 function refreshList(){var arr=records.length?records:[demo];$('which').innerHTML=arr.map(function(r,i){return '<option value="'+i+'">'+esc((i+1)+'. '+r.name)+'</option>'}).join('');if(index>=arr.length)index=0;$('which').value=String(index);$('counter').textContent=(index+1)+' / '+arr.length+' · '+current().name}
 function bindEdit(){updateImportInfo();var r=current();editFields.forEach(function(k){$(k).value=get(r,k)});$('theme').value=r.theme||'tech';$('timelineEditor').innerHTML='';for(var j=0;j<4;j++){var row=document.createElement('div');row.className='tl-row';row.innerHTML='<input type="text" aria-label="שנת אירוע" data-y="'+j+'" placeholder="שנה"><textarea data-t="'+j+'" aria-label="אירוע" rows="2" placeholder="אירוע קצר"></textarea>';$('timelineEditor').appendChild(row);row.querySelector('[data-y]').value=r.timeline[j]?r.timeline[j].year:'';row.querySelector('[data-t]').value=r.timeline[j]?r.timeline[j].text:''}refreshList();bindSecret();draw()}
 function card(r,i){var bg=perBg[r.id]||sharedBg;var symbolData=secretIcons[pairKey(r,i)]||'';var symbol=symbolData?'<img class="secret-symbol" alt="" src="'+esc(symbolData)+'">':'';var back=bg?'url("'+bg+'")':'none',sty='--font-title:"'+fontSel.title+'";--font-body:"'+fontSel.body+'";--font-time:"'+fontSel.time+'";--font-link:"'+fontSel.link+'";--body-size:'+bodySize+'px;--bg-image:'+back+';--tracking:'+(tracking/100)+'em;--secret-x:'+secretPosition.x+'%;--secret-y:'+secretPosition.y+'%;--secret-size:'+secretPosition.size+'mm;';
-var time=(r.timeline||[]).map(function(t){return '<div class="station"><strong class="year">'+esc(t.year)+'</strong><span class="node"></span><span class="event">'+esc(t.text||t.short)+'</span></div>'}).join('');
+var time=(r.timeline||[]).map(function(t){return '<div class="station"><strong class="year">'+esc(t.year)+'</strong><span class="event">'+esc(t.text||t.short)+'</span></div>'}).join('');
 return '<article class="card" data-has-bg="'+(bg?'yes':'no')+'" data-lang="'+language+'" data-theme="'+esc(r.theme||'tech')+'" style="'+esc(sty)+'">'+'<div class="sheet"><div class="name">'+esc(r.name)+'</div><div class="time">'+time+'</div><div class="field">'+esc(r.field)+'</div><div class="story"><p>'+esc(r.intro)+'</p>'+[[language==='ar'?'الإنجاز الرائد':'פריצת הדרך',r.breakthrough],[language==='ar'?'التحديات':'האתגרים בדרך',r.challenges],[language==='ar'?'ماذا فعلت بشكل مختلف؟':'מה עשתה אחרת?',r.different],[language==='ar'?'أثرها':'ההשפעה שלה',r.impact]].map(function(z){return '<section><h3>'+z[0]+'</h3><p>'+esc(z[1])+'</p></section>'}).join('')+'<div class="surprise"><b>'+(language==='ar'?'هل تعلمين؟':'רגע, באמת?!')+'</b> '+esc(r.surprise)+'</div></div><div class="linkline">'+esc(clean(r.connection))+'</div></div>'+symbol+'</article>'}
 function fit(el){var overflow=false;var story=el.querySelector('.story');if(story&&story.scrollHeight>story.clientHeight+2)overflow=true;el.querySelectorAll('.name,.field,.event,.linkline').forEach(function(n){if(n.scrollHeight>n.clientHeight+2||n.scrollWidth>n.clientWidth+2)overflow=true});return overflow}
 function draw(){var r=current();$('preview').innerHTML=card(r,index);$('warn').textContent=fit($('preview').firstElementChild)?'אזהרה: חריגת עימוד. הגופן והריווח קבועים לכל הסדרה; יש לקצר טקסט או לעדכן את הגודל באופן אחיד.':'תצוגה חיה — הטקסט נשאר ניתן לסימון והעתקה ב־PDF.'}
