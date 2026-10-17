@@ -16,6 +16,14 @@
 @font-face{font-family:Dana;src:url("../fonts/Dana Yad Alef Alef Alef Normal.ttf") format("truetype")}
 @font-face{font-family:Gveret;src:url("../fonts/GveretLevin-Regular.ttf") format("truetype")}
 @font-face{font-family:PilKahol;src:url("../fonts/FtPilKahol2.woff2") format("woff2")}
+@font-face{font-family:"IBM Light";src:url("../fonts/IBMPlexSansHebrew-Light.ttf") format("truetype")}
+@font-face{font-family:"IBM Medium";src:url("../fonts/IBMPlexSansHebrew-Medium.ttf") format("truetype")}
+@font-face{font-family:"IBM SemiBold";src:url("../fonts/IBMPlexSansHebrew-SemiBold.ttf") format("truetype")}
+@font-face{font-family:"IBM ExtraLight";src:url("../fonts/IBMPlexSansHebrew-ExtraLight.ttf") format("truetype")}
+@font-face{font-family:"Arimo Medium";src:url("../fonts/Arimo-Medium.ttf") format("truetype")}
+@font-face{font-family:"Arimo SemiBold";src:url("../fonts/Arimo-SemiBold.ttf") format("truetype")}
+@font-face{font-family:"Alice";src:url("../fonts/Alice-Regular.ttf") format("truetype")}
+@font-face{font-family:"Lora";src:url("../fonts/Lora-Regular.ttf") format("truetype")}
 @font-face{font-family:Yehuda;src:url("../fonts/yehudaclm-light-webfont.woff") format("woff");font-weight:400}
 @font-face{font-family:Yehuda;src:url("../fonts/yehudaclm-bold-webfont.woff") format("woff");font-weight:700}
 :root{--navy:#102d51;--blue:#21649d;--gold:#ae852c;--light:#f2f6fa}
@@ -115,7 +123,7 @@ textarea{resize:vertical;min-height:60px;line-height:1.4}label{display:block;mar
 <script>
 (function(){
 'use strict';
-var FONT_LIST=['IBM','Alef','Arimo','Choco','Dana','Gveret','PilKahol','Yehuda'];
+var FONT_LIST=['IBM','IBM Light','IBM Medium','IBM SemiBold','IBM ExtraLight','Alef','Arimo','Arimo Medium','Arimo SemiBold','Choco','Dana','Gveret','PilKahol','Yehuda','Alice','Lora'];
 var language='he',collections={he:[],ar:[]},records=collections.he,index=0,sharedBg='',perBg={},portraitImages={},uploadedFont='',fontSel={title:'Choco',body:'IBM',time:'IBM',link:'Choco'},fitBg='cover',bgOpacity=1,bodySize=12;
 var $=function(id){return document.getElementById(id)};
 var editFields=['name','field','intro','breakthrough','challenges','different','impact','surprise','connection'];
