@@ -92,7 +92,7 @@ textarea{resize:vertical;min-height:60px;line-height:1.4}label{display:block;mar
 <label for="lang">שפת הכרטיסים</label><select id="lang"><option value="he">עברית</option><option value="ar">العربية</option></select><label for="which">בחירת אישה</label><select id="which"></select>
 <div class="grid2" style="margin-top:10px"><button id="printOne" class="primary">הדפסת כרטיס</button><button id="printAll" class="primary">הדפסת הכול</button></div>
 <div class="block"><h2>עיצוב</h2>
-<label for="bg">רקע משלך (JPG, PNG, WebP) — מתעדכן מיד</label><input id="bg" type="file" accept="image/*"><div class="grid2"><button id="bgAll">לכל הכרטיסים</button><button id="bgOne">לכרטיס הנוכחי</button></div>
+<label for="bgScope">החלת רקע חדש על</label><select id="bgScope"><option value="all">כל הכרטיסים</option><option value="one">הכרטיס הנוכחי בלבד</option></select><label for="bg">רקע משלך (JPG, PNG, WebP) — מתעדכן מיד</label><input id="bg" type="file" accept="image/*"><div class="grid2"><button id="bgAll">לכל הכרטיסים</button><button id="bgOne">לכרטיס הנוכחי</button></div>
 <label>מיקום הרקע</label><select id="bgFit"><option value="cover">מילוי / חיתוך קצוות</option><option value="contain">תמונה מלאה</option><option value="100% 100%">מתיחה</option></select>
 <label for="opacity">עוצמת רקע</label><input id="opacity" type="range" min="20" max="100" value="100">
 <label for="theme">משפחת צבע</label><select id="theme"><option value="tech">כחול · טכנולוגיה ו־AI</option><option value="science">ירוק · מדע ורפואה</option><option value="space">סגול · חלל ומתמטיקה</option><option value="culture">ורוד־אדום · תרבות</option><option value="social">זהב · חברה והשפעה</option><option value="sport">כתום · ספורט</option><option value="design">צהוב · עיצוב</option><option value="finance">שמפניה · פיננסים</option></select>
@@ -155,7 +155,7 @@ $('bodySize').oninput=function(){bodySize=+this.value;draw()};
 $('bgFit').onchange=function(){fitBg=this.value;draw()};
 $('opacity').oninput=function(){bgOpacity=+this.value/100;draw()};
 var bgTemp='';
-$('bg').onchange=function(e){var f=e.target.files[0];if(!f)return;if(!f.type.startsWith('image/')){status('יש לבחור קובץ תמונה PNG, JPG או WebP.',true);return}bgTemp=URL.createObjectURL(f);sharedBg=bgTemp;perBg={};draw();status('הרקע החדש הוחל מיד על כל הכרטיסים. אפשר לבחור כרטיס מסוים ולהחליף רק את הרקע שלו.')};
+$('bg').onchange=function(e){var f=e.target.files[0];if(!f)return;if(!f.type.startsWith('image/')){status('יש לבחור קובץ תמונה PNG, JPG או WebP.',true);return}bgTemp=URL.createObjectURL(f);if($('bgScope').value==='one'){perBg[current().id]=bgTemp;draw();status('הרקע החדש הוחל מיד על הכרטיס הנוכחי בלבד.')}else{sharedBg=bgTemp;perBg={};draw();status('הרקע החדש הוחל מיד על כל הכרטיסים.')}};
 $('bgAll').onclick=function(){if(!bgTemp){status('יש להעלות קובץ רקע תחילה.',true);return}sharedBg=bgTemp;perBg={};draw();status('הרקע הוחל על כל הכרטיסים.')};
 $('bgOne').onclick=function(){if(!bgTemp){status('יש להעלות קובץ רקע תחילה.',true);return}perBg[current().id]=bgTemp;draw();status('הרקע הוחל על הכרטיס הנוכחי.')};
 $('portrait').onchange=function(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(){portraitImages[current().id]=r.result;draw()};r.readAsDataURL(f)};
