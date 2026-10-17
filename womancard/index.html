@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>womancard — סטודיו נושמות השראה</title>
+<link rel="icon" href="../icon/favicon.png">
+<style>
+@font-face{font-family:Alef;src:url("../fonts/Alef-regular.woff") format("woff");font-weight:400}
+@font-face{font-family:Alef;src:url("../fonts/Alef-bold.woff") format("woff");font-weight:700}
+@font-face{font-family:IBM;src:url("../fonts/IBMPlexSansHebrew-Regular.ttf") format("truetype");font-weight:400}
+@font-face{font-family:IBM;src:url("../fonts/IBMPlexSansHebrew-Bold.ttf") format("truetype");font-weight:700}
+@font-face{font-family:Arimo;src:url("../fonts/Arimo-Regular.ttf") format("truetype");font-weight:400}
+@font-face{font-family:Arimo;src:url("../fonts/Arimo-Bold.ttf") format("truetype");font-weight:700}
+@font-face{font-family:Choco;src:url("../fonts/Choco.otf") format("opentype")}
+@font-face{font-family:Dana;src:url("../fonts/Dana Yad Alef Alef Alef Normal.ttf") format("truetype")}
+@font-face{font-family:Gveret;src:url("../fonts/GveretLevin-Regular.ttf") format("truetype")}
+@font-face{font-family:PilKahol;src:url("../fonts/FtPilKahol2.woff2") format("woff2")}
+@font-face{font-family:Yehuda;src:url("../fonts/yehudaclm-light-webfont.woff") format("woff");font-weight:400}
+@font-face{font-family:Yehuda;src:url("../fonts/yehudaclm-bold-webfont.woff") format("woff");font-weight:700}
+:root{--navy:#102d51;--blue:#21649d;--gold:#ae852c;--light:#f2f6fa}
+*{box-sizing:border-box}body{margin:0;background:#eef2f7;color:#203348;font:14px IBM,Alef,Arial,sans-serif}
+button,input,textarea,select{font:inherit}button{background:#fff;border:1px solid #cdd9e4;border-radius:9px;padding:9px 12px;cursor:pointer;color:#183d60}
+button.primary{background:#1b5989;color:#fff;border-color:#1b5989;font-weight:700}button:disabled{opacity:.45}
+input,textarea,select{width:100%;padding:8px 10px;border:1px solid #ccd9e5;border-radius:7px;background:#fff;color:#1e334a}
+input[type=file]{padding:6px;font-size:12px}input[type=range]{padding:0}
+textarea{resize:vertical;min-height:60px;line-height:1.4}label{display:block;margin:10px 0 4px;color:#476078;font-size:12px;font-weight:700}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 24px;background:#fff;border-bottom:1px solid #dce5ed}
+.top h1{font-size:20px;margin:0;color:#143b61}.top p{font-size:12px;margin:3px 0 0;color:#6a7e91}
+.tag{padding:6px 12px;border-radius:18px;background:#e7f0f7;color:#315777;font-size:12px}
+.shell{display:grid;grid-template-columns:365px 1fr;gap:18px;max-width:1300px;margin:18px auto;align-items:start;padding:0 16px}
+.panel{background:#fff;border:1px solid #d7e2ed;border-radius:16px;box-shadow:0 7px 24px #274a6b11}
+.sidebar{padding:17px;max-height:calc(100vh - 110px);overflow:auto;position:sticky;top:12px}
+.sidebar h2{font-size:15px;margin:0 0 10px}.block{border-top:1px solid #e4ebf2;padding-top:12px;margin-top:14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.inline{display:flex;gap:7px;align-items:center}.inline>*{flex:1;min-width:0}
+.tl-row{display:grid;grid-template-columns:74px 1fr;gap:7px;margin-bottom:6px}
+.hint{font-size:11.5px;line-height:1.55;color:#728494;margin:7px 0}
+.status{margin:12px 0 0;padding:10px;background:#edf7f1;border:1px solid #b9dbc6;color:#285943;border-radius:8px;font-size:12px}
+.status.warn{background:#fff4e7;border-color:#eacbaa;color:#875128}
+.stage{display:flex;flex-direction:column;align-items:center;padding:14px;gap:12px;min-height:760px}
+.stagehead{width:100%;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#697d92}
+.paper{box-shadow:0 16px 40px #10284030;max-width:100%}
+.card{--tone:#1c588e;--tint:#dcebf7;--gold:#ac832f;--bg-image:none;--bg-opacity:1;--bg-size:cover;--bg-pos:center;--font-title:Choco;--font-body:IBM;--font-time:IBM;--font-link:Choco;--body-size:12px;position:relative;width:120mm;height:180mm;overflow:hidden;background:linear-gradient(180deg,#14518e 0,#4384b8 12%,#d5e9f7 17%,#fefbf2 25%,#fefbf4 94%,#d7edf8 100%);color:#1f2e41;direction:rtl;print-color-adjust:exact;-webkit-print-color-adjust:exact;page-break-after:always;break-after:page;isolation:isolate}
+.card[data-theme=space]{--tone:#68458c;--tint:#e9e0f2;--gold:#a98b47}
+.card[data-theme=science]{--tone:#237256;--tint:#e0f1e8;--gold:#a78b4d}
+.card[data-theme=culture]{--tone:#ab405b;--tint:#fae0ea;--gold:#b88455}
+.card[data-theme=social]{--tone:#986332;--tint:#f9edda;--gold:#ab7a38}
+.card[data-theme=sport]{--tone:#b35d2d;--tint:#f9e7d8;--gold:#b37a31}
+.card[data-theme=design]{--tone:#988126;--tint:#fff1bd;--gold:#a68129}
+.card[data-theme=finance]{--tone:#8e7955;--tint:#eee7d9;--gold:#a68b68}
+.card:before{content:"";position:absolute;inset:0;background-image:var(--bg-image);background-size:var(--bg-size);background-position:var(--bg-pos);opacity:var(--bg-opacity);z-index:-1}
+.card:after{content:"";position:absolute;inset:0;pointer-events:none;z-index:-1;background:linear-gradient(90deg,rgba(255,255,255,.20),transparent 12%,transparent 88%,rgba(255,255,255,.20))}
+.sheet{height:100%;padding:4.8mm 6.4mm 4.1mm;display:flex;flex-direction:column}
+.name{text-align:center;color:white;font:normal 30px/1.06 var(--font-title);min-height:12mm;max-height:16mm;display:flex;justify-content:center;align-items:center;text-shadow:0 2px 3px #11334c55}
+.time{height:24mm;min-height:24mm;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:2mm;position:relative;margin:2mm 0 1mm;background:rgba(255,255,255,.89);border-radius:2.2mm;padding:2.2mm 1.4mm 1.1mm}
+.time:before{content:"";position:absolute;height:.42mm;top:10.8mm;left:10%;right:10%;background:linear-gradient(90deg,transparent,var(--gold) 8%,var(--gold) 92%,transparent)}
+.station{position:relative;text-align:center;display:flex;flex-direction:column;align-items:center;min-width:0;gap:1.5mm}
+.year{font:700 16px/1 var(--font-time);color:var(--tone)}
+.node{width:2.7mm;height:2.7mm;border-radius:50%;background:var(--gold);border:.6mm solid white;box-shadow:0 0 0 .35mm var(--gold);margin:1.6mm auto .5mm;z-index:1}
+.event{font:400 9.4px/1.12 var(--font-time);text-wrap:pretty;overflow-wrap:anywhere;padding:0 .3mm;max-height:9.6mm;overflow:hidden}
+.field{font:normal 22px/1.1 var(--font-title);color:var(--tone);text-align:center;min-height:8.3mm;margin:.6mm 0 2mm}
+.story{flex:1;min-height:0;font:400 var(--body-size)/1.28 var(--font-body);overflow:visible;text-align:right}
+.story p{margin:0 0 1.2mm;white-space:pre-wrap;overflow-wrap:anywhere}
+.story section{margin:0 0 1mm}.story section h3{font:bold calc(var(--body-size) + 1px)/1.15 var(--font-body);margin:0 0 .3mm;color:var(--tone);text-decoration:underline;text-underline-offset:2px}
+.surprise{margin-top:1mm;font:400 var(--body-size)/1.24 var(--font-body)}
+.surprise b{color:var(--tone);font-size:calc(var(--body-size) + 1px);text-decoration:underline}
+.linkline{font:normal 13px/1.16 var(--font-link);color:var(--tone);text-align:center;border-top:1px solid var(--gold);padding-top:1.2mm;margin-top:1.9mm}
+.watermark{position:absolute;top:69mm;left:17mm;width:52mm;height:82mm;object-fit:contain;opacity:.14;pointer-events:none;filter:grayscale(20%);mask-image:radial-gradient(ellipse,black 15%,transparent 78%)}
+[hidden]{display:none!important}
+@media(max-width:900px){.shell{grid-template-columns:1fr}.sidebar{position:static;max-height:none}.card{transform:scale(.85);transform-origin:top center}.stage{min-height:650px}.top{flex-wrap:wrap}}
+#printArea{position:absolute;left:-100000px;top:0;visibility:hidden;pointer-events:none}
+@media print{@page{size:120mm 180mm;margin:0}html,body{margin:0!important;padding:0!important;background:#fff!important}.top,.shell{display:none!important}#printArea{position:static!important;left:auto!important;visibility:visible!important;pointer-events:auto!important}.card{margin:0!important;box-shadow:none!important;break-inside:avoid-page;page-break-inside:avoid}.card:last-child{page-break-after:auto;break-after:auto}}
+</style>
+</head>
+<body>
+<header class="top"><div><h1>womancard <span style="font-weight:400;color:#6d8da5">/ נושמות השראה</span></h1><p>סטודיו לכרטיסי 12×18 ס״מ • Excel → תצוגה → הדפסה ל־PDF אמיתי</p></div><span class="tag">קבצים נשארים בדפדפן שלך</span></header>
+<div class="shell">
+<aside class="panel sidebar">
+<h2>נתונים וכרטיסים</h2>
+<label for="excel">ייבוא Excel / CSV / JSON</label><input id="excel" type="file" accept=".xlsx,.xls,.csv,.json">
+<p class="hint">הנתונים נקראים מקומית בדפדפן ולא נשלחים לשרת. בקובץ Excel יש לכלול כותרות כגון ״שם האישה״, ״פתיחה״, ״שנה 1״ ו״אירוע 1״.</p>
+<div class="grid2"><button id="save">שמירת JSON</button><button id="clear">ניקוי נתונים</button></div>
+<label for="which">בחרי אישה</label><select id="which"></select>
+<div class="grid2" style="margin-top:10px"><button id="printOne" class="primary">הדפסת כרטיס</button><button id="printAll" class="primary">הדפסת הכול</button></div>
+<div class="block"><h2>עיצוב</h2>
+<label for="bg">רקע משלך (JPG, PNG, WebP)</label><input id="bg" type="file" accept="image/*"><div class="grid2"><button id="bgAll">לכל הכרטיסים</button><button id="bgOne">לכרטיס הנוכחי</button></div>
+<label>מיקום הרקע</label><select id="bgFit"><option value="cover">מילוי / חיתוך קצוות</option><option value="contain">תמונה מלאה</option><option value="100% 100%">מתיחה</option></select>
+<label for="opacity">עוצמת רקע</label><input id="opacity" type="range" min="20" max="100" value="100">
+<label for="theme">משפחת צבע</label><select id="theme"><option value="tech">כחול · טכנולוגיה ו־AI</option><option value="science">ירוק · מדע ורפואה</option><option value="space">סגול · חלל ומתמטיקה</option><option value="culture">ורוד־אדום · תרבות</option><option value="social">זהב · חברה והשפעה</option><option value="sport">כתום · ספורט</option><option value="design">צהוב · עיצוב</option><option value="finance">שמפניה · פיננסים</option></select>
+<label>גופנים מהריפו</label>
+<div class="grid2"><div><label for="fTitle">שם וכותרת</label><select id="fTitle"></select></div><div><label for="fBody">ביוגרפיה</label><select id="fBody"></select></div><div><label for="fTime">ציר הזמן</label><select id="fTime"></select></div><div><label for="fLink">משפט מחבר</label><select id="fLink"></select></div></div>
+<label for="fontFile">העלאת גופן אישי</label><input id="fontFile" type="file" accept=".ttf,.otf,.woff,.woff2">
+<label for="bodySize">גודל גוף טקסט</label><input id="bodySize" type="range" min="9" max="15" step=".25" value="12">
+</div>
+<div class="block"><h2>עריכת הכרטיס הנבחר</h2>
+<label>שם האישה</label><input id="name" type="text">
+<label>תחום</label><input id="field" type="text">
+<label>ציר הזמן — ארבע תחנות</label><div id="timelineEditor"></div>
+<label>פתיחה</label><textarea id="intro" rows="4"></textarea>
+<label>פריצת הדרך</label><textarea id="breakthrough"></textarea>
+<label>האתגרים בדרך</label><textarea id="challenges"></textarea>
+<label>מה עשתה אחרת?</label><textarea id="different"></textarea>
+<label>ההשפעה שלה</label><textarea id="impact"></textarea>
+<label>רגע, באמת?!</label><textarea id="surprise"></textarea>
+<label>משפט מחבר בלבד (בלי כותרת)</label><textarea id="connection"></textarea>
+<label>דמות שקופה ברקע</label><input id="portrait" type="file" accept="image/*">
+</div>
+<p class="status" id="status">ממתין לייבוא Excel. ניתן גם לערוך את כרטיס הדוגמה.</p>
+</aside>
+<main class="panel stage"><div class="stagehead"><span id="counter">תצוגת כרטיס</span><span>120 × 180 מ״מ · טקסט חי · ללא צילום מסך</span></div><div class="paper" id="preview"></div><p class="hint" id="warn"></p></main>
+</div>
+<div id="printArea" aria-hidden="true"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+(function(){
+'use strict';
+var FONT_LIST=['IBM','Alef','Arimo','Choco','Dana','Gveret','PilKahol','Yehuda'];
+var records=[],index=0,sharedBg='',perBg={},portraitImages={},uploadedFont='',fontSel={title:'Choco',body:'IBM',time:'IBM',link:'Choco'},fitBg='cover',bgOpacity=1,bodySize=12;
+var $=function(id){return document.getElementById(id)};
+var editFields=['name','field','intro','breakthrough','challenges','different','impact','surprise','connection'];
+var demo={name:'כרטיס לדוגמה',field:'פורצת דרך',intro:'ייבאי Excel כדי לטעון את נתוני 63 הנשים. כאן תוצג פסקת הפתיחה המלאה.',breakthrough:'כאן תופיע פריצת הדרך.',challenges:'כאן יופיעו האתגרים בדרך.',different:'כאן יופיע מה עשתה אחרת.',impact:'כאן תופיע ההשפעה שלה.',surprise:'כאן יופיע פרט מסקרן.',connection:'כאן יופיע המשפט המחבר בלבד.',theme:'tech',timeline:[{year:'2016',text:'אירוע מרכזי ראשון'},{year:'2018',text:'נקודת מפנה נוספת'},{year:'2020',text:'הישג משמעותי'},{year:'2023',text:'ציון דרך אחרון'}]};
+function status(s,error){$('status').textContent=s;$('status').className='status'+(error?' warn':'')}
+function clean(s){return String(s==null?'':s).replace(/^\s*(המכנה המשותף\s*:|القاسم المشترك\s*:)\s*/i,'').trim()}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function current(){return records[index]||demo}
+function get(p,k){return p&&p[k]||''}
+function norm(item,i){var t=item.timeline||[];return {name:item.name||'',field:item.field||'',intro:item.intro||'',breakthrough:item.breakthrough||'',challenges:item.challenges||'',different:item.different||'',impact:item.impact||'',surprise:item.surprise||'',connection:clean(item.connection),theme:item.theme||'tech',timeline:Array.from({length:4},function(_,j){return {year:String(t[j]&&t[j].year||''),text:String(t[j]&&(t[j].short||t[j].text)||'')}}),id:item.id||'woman-'+(i+1)}}
+function defTheme(s){if(/חלל|תעופה|מתמטיקה|فضاء|رياضيات/.test(s))return 'space';if(/בריאות|רפואה|מדע|כימיה|ביולוגיה|طب|علوم/.test(s))return 'science';if(/קולנוע|אמנות|מוזיקה|ספרות|תרבות|فن|موسيقى/.test(s))return 'culture';if(/ספורט|טניס|ג׳ודו|رياضة/.test(s))return 'sport';if(/עיצוב|אופנה|تصميم/.test(s))return 'design';if(/פיננס|כלכלה|مالية/.test(s))return 'finance';if(/בינה|מחשב|טכנולוגיה|AI|תקשורת|برمجة|حاسوب/.test(s))return 'tech';return 'social'}
+function col(row,names){var obj={};Object.keys(row).forEach(function(key){obj[String(key).trim().replace(/\s+/g,' ')]=row[key]});for(var i=0;i<names.length;i++){if(obj[names[i]]!==undefined)return String(obj[names[i]]==null?'':obj[names[i]])}return ''}
+function parseRow(row,i){var f=col(row,['תחום','תחום התמחות','المجال','field']);var tl=[];for(var k=1;k<=4;k++){tl.push({year:col(row,['שנה '+k,'שנה'+k,'שנת אירוע '+k,'year'+k,'year '+k]),text:col(row,['אירוע '+k,'אירוע'+k,'ציר זמן '+k,'נקודה '+k,'event'+k,'event '+k,'timeline '+k])})}return norm({id:'woman-'+(i+1),name:col(row,['שם האישה','שם','name','اسم المرأة']),field:f,intro:col(row,['פתיחה','פסקת פתיחה','פתיחה (ללא כותרת)','intro']),breakthrough:col(row,['פריצת הדרך','breakthrough']),challenges:col(row,['האתגרים בדרך','אתגרים','challenges']),different:col(row,['מה עשתה אחרת','מה עשתה אחרת?','different']),impact:col(row,['ההשפעה שלה','השפעה','impact']),surprise:col(row,['רגע באמת','רגע, באמת?!','רגע, באמת','surprise']),connection:col(row,['משפט מחבר','המכנה המשותף','connection','القاسم المشترك']),theme:col(row,['משפחת צבע','theme'])||defTheme(f),timeline:tl},i)}
+function refreshList(){var arr=records.length?records:[demo];$('which').innerHTML=arr.map(function(r,i){return '<option value="'+i+'">'+esc((i+1)+'. '+r.name)+'</option>'}).join('');if(index>=arr.length)index=0;$('which').value=String(index);$('counter').textContent=(index+1)+' / '+arr.length+' · '+current().name}
+function bindEdit(){var r=current();editFields.forEach(function(k){$(k).value=get(r,k)});$('theme').value=r.theme||'tech';$('timelineEditor').innerHTML='';for(var j=0;j<4;j++){var row=document.createElement('div');row.className='tl-row';row.innerHTML='<input type="text" aria-label="שנת אירוע" data-y="'+j+'" placeholder="שנה"><textarea data-t="'+j+'" aria-label="אירוע" rows="2" placeholder="אירוע קצר"></textarea>';$('timelineEditor').appendChild(row);row.querySelector('[data-y]').value=r.timeline[j]?r.timeline[j].year:'';row.querySelector('[data-t]').value=r.timeline[j]?r.timeline[j].text:''}refreshList();draw()}
+function card(r,i){var bg=perBg[r.id]||sharedBg;var back=bg?'url("'+bg+'")':'none',portrait=portraitImages[r.id]||'',sty='--font-title:"'+fontSel.title+'";--font-body:"'+fontSel.body+'";--font-time:"'+fontSel.time+'";--font-link:"'+fontSel.link+'";--body-size:'+bodySize+'px;--bg-image:'+back+';--bg-size:'+fitBg+';--bg-opacity:'+bgOpacity+';';
+var time=(r.timeline||[]).map(function(t){return '<div class="station"><strong class="year">'+esc(t.year)+'</strong><span class="node"></span><span class="event">'+esc(t.text||t.short)+'</span></div>'}).join('');
+return '<article class="card" data-theme="'+esc(r.theme||'tech')+'" style="'+esc(sty)+'">'+(portrait?'<img class="watermark" src="'+portrait+'" alt="">':'')+'<div class="sheet"><div class="name">'+esc(r.name)+'</div><div class="time">'+time+'</div><div class="field">'+esc(r.field)+'</div><div class="story"><p>'+esc(r.intro)+'</p>'+[['פריצת הדרך',r.breakthrough],['האתגרים בדרך',r.challenges],['מה עשתה אחרת?',r.different],['ההשפעה שלה',r.impact]].map(function(z){return '<section><h3>'+z[0]+'</h3><p>'+esc(z[1])+'</p></section>'}).join('')+'<div class="surprise"><b>רגע, באמת?!</b> '+esc(r.surprise)+'</div></div><div class="linkline">'+esc(clean(r.connection))+'</div></div></article>'}
+function fit(el){var story=el.querySelector('.story');var size=bodySize;el.style.setProperty('--body-size',size+'px');while(story.scrollHeight>story.clientHeight+2&&size>8.5){size-=.25;el.style.setProperty('--body-size',size+'px')}return story.scrollHeight>story.clientHeight+2}
+function draw(){var r=current();$('preview').innerHTML=card(r,index);$('warn').textContent=fit($('preview').firstElementChild)?'אזהרה: הטקסט ארוך מדי גם לאחר הקטנת גופן. יש לבדוק עימוד לפני הדפסה.':'תצוגה חיה — הטקסט נשאר ניתן לסימון והעתקה ב־PDF.'}
+function sync(){if(records.length){try{localStorage.setItem('womancard-records-v1',JSON.stringify(records))}catch(e){status('נתוני הרקע גדולים מדי לשמירה בדפדפן; ייצאי JSON לגיבוי.',true)}}}
+editFields.forEach(function(k){$(k).addEventListener('input',function(){if(!records.length){records=[norm(demo,0)];index=0}current()[k]=k==='connection'?clean(this.value):this.value;sync();draw()})});
+$('timelineEditor').addEventListener('input',function(e){var a=e.target.dataset.y,b=e.target.dataset.t;if(a===undefined&&b===undefined)return;if(!records.length){records=[norm(demo,0)];index=0}var j=+(a===undefined?b:a);current().timeline[j][a!==undefined?'year':'text']=e.target.value;sync();draw()});
+$('theme').onchange=function(){if(!records.length){records=[norm(demo,0)];index=0}current().theme=this.value;sync();draw()};
+$('which').onchange=function(){index=+this.value;bindEdit()};
+['fTitle','fBody','fTime','fLink'].forEach(function(id){FONT_LIST.forEach(function(f){var op=document.createElement('option');op.value=f;op.textContent=f;$(id).appendChild(op)});var kind={fTitle:'title',fBody:'body',fTime:'time',fLink:'link'}[id];$(id).value=fontSel[kind];$(id).onchange=function(){fontSel[kind]=this.value;draw()}});
+$('fontFile').onchange=async function(e){var f=e.target.files[0];if(!f)return;var family='Custom-'+Date.now();try{var face=new FontFace(family,await f.arrayBuffer());await face.load();document.fonts.add(face);FONT_LIST.push(family);['fTitle','fBody','fTime','fLink'].forEach(function(id){var op=document.createElement('option');op.value=family;op.textContent=f.name;$(id).appendChild(op)});fontSel.title=family;$('fTitle').value=family;draw();status('הגופן נטען. בהדפסה בדקי שהוא מוטמע ב־PDF.')}catch(err){status('לא ניתן לטעון את קובץ הגופן: '+err.message,true)}};
+$('bodySize').oninput=function(){bodySize=+this.value;draw()};
+$('bgFit').onchange=function(){fitBg=this.value;draw()};
+$('opacity').oninput=function(){bgOpacity=+this.value/100;draw()};
+var bgTemp='';
+$('bg').onchange=function(e){var f=e.target.files[0];if(!f)return;var reader=new FileReader();reader.onload=function(){bgTemp=reader.result;status('רקע נטען. בחרי האם להחילו על כל הכרטיסים או רק על הנוכחי.')};reader.readAsDataURL(f)};
+$('bgAll').onclick=function(){if(!bgTemp){status('יש להעלות קובץ רקע תחילה.',true);return}sharedBg=bgTemp;draw();status('הרקע הוחל על כל הכרטיסים.')};
+$('bgOne').onclick=function(){if(!bgTemp){status('יש להעלות קובץ רקע תחילה.',true);return}perBg[current().id]=bgTemp;draw();status('הרקע הוחל על הכרטיס הנוכחי.')};
+$('portrait').onchange=function(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(){portraitImages[current().id]=r.result;draw()};r.readAsDataURL(f)};
+$('save').onclick=function(){var obj={version:1,records:records,design:{fonts:fontSel,fit:fitBg,opacity:bgOpacity,bodySize:bodySize}};var a=document.createElement('a'),u=URL.createObjectURL(new Blob([JSON.stringify(obj,null,2)],{type:'application/json'}));a.href=u;a.download='womancard-data.json';a.click();setTimeout(function(){URL.revokeObjectURL(u)},1500)};
+$('clear').onclick=function(){if(!confirm('לנקות את הנתונים השמורים בדפדפן?'))return;records=[];localStorage.removeItem('womancard-records-v1');index=0;bindEdit();status('נתונים נוקו.')};
+$('excel').onchange=async function(e){var f=e.target.files[0];if(!f)return;try{var loaded;if(/\.json$/i.test(f.name)){var obj=JSON.parse(await f.text());loaded=Array.isArray(obj)?obj:(obj.records||[]);if(!Array.isArray(loaded)&&loaded.he)loaded=loaded.he}else{if(!window.XLSX)throw Error('ספריית Excel לא נטענה. בדקי את החיבור לאינטרנט ונסי שוב.');var wb=XLSX.read(await f.arrayBuffer(),{type:'array'});var candidates=[];wb.SheetNames.forEach(function(n){var rows=XLSX.utils.sheet_to_json(wb.Sheets[n],{defval:''});if(rows.some(function(r){return Object.keys(r).some(function(k){return /שם האישה|name|اسم المرأة/.test(k)})}))candidates=rows});loaded=candidates.map(parseRow).filter(function(r){return r.name})}if(!Array.isArray(loaded)||!loaded.length)throw Error('לא נמצאו רשומות עם עמודת שם האישה');records=loaded.map(norm);index=0;sync();bindEdit();status('נטענו '+records.length+' נשים. הנתונים נשארים בדפדפן.')}catch(err){status('ייבוא נכשל: '+err.message,true)}e.target.value=''};
+async function printCards(all){if(!records.length){status('יש לייבא את קובץ Excel לפני ההדפסה.',true);return}var arr=all?records:[current()],area=$('printArea');area.innerHTML=arr.map(card).join('');await document.fonts.ready;var overflow=[];Array.from(area.children).forEach(function(el,i){if(fit(el))overflow.push(i+1)});if(overflow.length){if(!confirm('נמצאה צפיפות בטקסט ב־'+overflow.length+' כרטיסים. להמשיך להדפסה למרות זאת?'))return}status('מוכנים '+arr.length+' עמודים. בחלון ההדפסה בחרי "שמירה כ־PDF", שוליים "ללא", וגרפיקת רקע.');window.print()}
+$('printOne').onclick=function(){printCards(false)};$('printAll').onclick=function(){printCards(true)};
+try{var saved=JSON.parse(localStorage.getItem('womancard-records-v1')||'[]');if(Array.isArray(saved))records=saved.map(norm);if(records.length)status('שוחזרו '+records.length+' נשים מהדפדפן המקומי.')}catch(e){}
+bindEdit();
+})();
+</script>
+</body></html>
