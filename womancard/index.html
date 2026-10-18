@@ -107,7 +107,7 @@ textarea{resize:vertical;min-height:60px;line-height:1.4}label{display:block;mar
 .card{--tracking:.15em;--bg-size:100% 100%}
 .card:before{opacity:1!important;background-size:100% 100%!important}
 .card .name{font-size:24px;line-height:1.3;font-weight:700;letter-spacing:var(--tracking);height:14mm;min-height:14mm;max-height:14mm;overflow:hidden;text-shadow:0 1px 0 rgba(255,255,255,.25),0 2px 0 #184c79,0 4px 0 #123451,0 6px 9px rgba(0,20,49,.65);-webkit-text-stroke:.15px rgba(5,39,70,.2)}
-.card .field{font-size:22px;line-height:1.3;font-weight:700;letter-spacing:var(--tracking);height:8.3mm;min-height:8.3mm;overflow:hidden}
+.card .field{font-size:18px;line-height:1.3;font-weight:700;letter-spacing:var(--tracking);height:8.3mm;min-height:8.3mm;overflow:hidden;white-space:nowrap}
 .card .year{font-size:11px;line-height:1.3;font-weight:700;letter-spacing:var(--tracking);color:#9b731e}
 .card .event{font-size:8.5px;line-height:1.3;letter-spacing:var(--tracking);color:#243145}
 .card .story{font-size:var(--body-size);line-height:1.3;letter-spacing:var(--tracking)}
@@ -195,6 +195,15 @@ function status(s,error){
 }
 function clean(s){return String(s==null?'':s).replace(/^\s*(המכנה המשותף\s*:|القاسم المشترك\s*:)\s*/i,'').trim()}
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function displayFieldHeading(field,lang){
+ var value=String(field||'').trim();
+ if(lang==='ar'||!value)return value;
+ if(/^פורצות דרך(?:\s|$)/.test(value))return value;
+ if(/^פורצת דרך(?:\s|$)/.test(value))return value.replace(/^פורצת דרך/,'פורצות דרך');
+ if(/^(?:AI|A\.I\.)$/i.test(value))return 'פורצות דרך בבינה מלאכותית';
+ if(/^[A-Za-z0-9]/.test(value))return 'פורצות דרך ב־'+value;
+ return 'פורצות דרך ב'+value
+}
 function current(){return records[index]||demo}
 function get(p,k){return p&&p[k]||''}
 function norm(item,i){var t=item.timeline||[];return {name:item.name||'',field:item.field||'',intro:item.intro||'',breakthrough:item.breakthrough||'',challenges:item.challenges||'',different:item.different||'',impact:item.impact||'',surprise:item.surprise||'',connection:clean(item.connection),theme:item.theme||'tech',pairId:item.pairId||item.pair_id||'',timeline:Array.from({length:4},function(_,j){return {year:String(t[j]&&t[j].year||''),text:String(t[j]&&(t[j].short||t[j].text)||'')}}),id:item.id||'woman-'+(i+1)}}
@@ -282,7 +291,7 @@ function refreshList(){var arr=records.length?records:[demo];$('which').innerHTM
 function bindEdit(){updateImportInfo();var r=current();editFields.forEach(function(k){$(k).value=get(r,k)});$('theme').value=r.theme||'tech';$('timelineEditor').innerHTML='';for(var j=0;j<4;j++){var row=document.createElement('div');row.className='tl-row';row.innerHTML='<input type="text" aria-label="שנת אירוע" data-y="'+j+'" placeholder="שנה"><textarea data-t="'+j+'" aria-label="אירוע" rows="2" placeholder="אירוע קצר"></textarea>';$('timelineEditor').appendChild(row);row.querySelector('[data-y]').value=r.timeline[j]?r.timeline[j].year:'';row.querySelector('[data-t]').value=r.timeline[j]?r.timeline[j].text:''}refreshList();bindSecret();updateBgPicker();draw()}
 function card(r,i){var bg=perBg[r.id]||sharedBg;var symbolData=secretIcons[pairKey(r,i)]||'';var symbol=symbolData?'<img class="secret-symbol" alt="" src="'+esc(symbolData)+'">':'';var back=bg?'url("'+bg+'")':'none',sty='--font-title:"'+fontSel.title+'";--font-body:"'+fontSel.body+'";--font-time:"'+fontSel.time+'";--font-link:"'+fontSel.link+'";--body-size:'+bodySize+'px;--bg-image:'+back+';--tracking:'+(tracking/100)+'em;--secret-x:'+secretPosition.x+'%;--secret-y:'+secretPosition.y+'%;--secret-size:'+secretPosition.size+'mm;';
 var time=(r.timeline||[]).map(function(t){return '<div class="station"><strong class="year">'+esc(t.year)+'</strong><span class="event">'+esc(t.text||t.short)+'</span></div>'}).join('');
-return '<article class="card" data-has-bg="'+(bg?'yes':'no')+'" data-lang="'+language+'" data-theme="'+esc(r.theme||'tech')+'" style="'+esc(sty)+'">'+'<div class="sheet"><div class="name">'+esc(r.name)+'</div><div class="time">'+time+'</div><div class="field">'+esc(r.field)+'</div><div class="story"><p>'+esc(r.intro)+'</p>'+[[language==='ar'?'الإنجاز الرائد':'פריצת הדרך',r.breakthrough],[language==='ar'?'التحديات':'האתגרים בדרך',r.challenges],[language==='ar'?'ماذا فعلت بشكل مختلف؟':'מה עשתה אחרת?',r.different],[language==='ar'?'أثرها':'ההשפעה שלה',r.impact]].map(function(z){return '<section><h3>'+z[0]+'</h3><p>'+esc(z[1])+'</p></section>'}).join('')+'<div class="surprise"><b>'+(language==='ar'?'هل تعلمين؟':'רגע, באמת?!')+'</b> '+esc(r.surprise)+'</div></div><div class="linkline">'+esc(clean(r.connection))+'</div></div>'+symbol+'</article>'}
+return '<article class="card" data-has-bg="'+(bg?'yes':'no')+'" data-lang="'+language+'" data-theme="'+esc(r.theme||'tech')+'" style="'+esc(sty)+'">'+'<div class="sheet"><div class="name">'+esc(r.name)+'</div><div class="time">'+time+'</div><div class="field">'+esc(displayFieldHeading(r.field,language))+'</div><div class="story"><p>'+esc(r.intro)+'</p>'+[[language==='ar'?'الإنجاز الرائد':'פריצת הדרך',r.breakthrough],[language==='ar'?'التحديات':'האתגרים בדרך',r.challenges],[language==='ar'?'ماذا فعلت بشكل مختلف؟':'מה עשתה אחרת?',r.different],[language==='ar'?'أثرها':'ההשפעה שלה',r.impact]].map(function(z){return '<section><h3>'+z[0]+'</h3><p>'+esc(z[1])+'</p></section>'}).join('')+'<div class="surprise"><b>'+(language==='ar'?'هل تعلمين؟':'רגע, באמת?!')+'</b> '+esc(r.surprise)+'</div></div><div class="linkline">'+esc(clean(r.connection))+'</div></div>'+symbol+'</article>'}
 function fit(el){var overflow=false;var story=el.querySelector('.story');if(story&&story.scrollHeight>story.clientHeight+2)overflow=true;el.querySelectorAll('.name,.field,.event,.linkline').forEach(function(n){if(n.scrollHeight>n.clientHeight+2||n.scrollWidth>n.clientWidth+2)overflow=true});return overflow}
 function draw(){var r=current();$('preview').innerHTML=card(r,index);$('warn').textContent=fit($('preview').firstElementChild)?'אזהרה: חריגת עימוד. הגופן והריווח קבועים לכל הסדרה; יש לקצר טקסט או לעדכן את הגודל באופן אחיד.':''}
 function sync(){if(records.length){try{localStorage.setItem('womancard-records-v1-'+language,JSON.stringify(records))}catch(e){status('נתוני הרקע גדולים מדי לשמירה בדפדפן; ייצאי JSON לגיבוי.',true)}}}
