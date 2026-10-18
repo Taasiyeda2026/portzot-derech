@@ -46,6 +46,20 @@ textarea{resize:vertical;min-height:60px;line-height:1.4}label{display:block;mar
 .hint{font-size:11.5px;line-height:1.55;color:#728494;margin:7px 0}
 .status{margin:12px 0 0;padding:10px;background:#edf7f1;border:1px solid #b9dbc6;color:#285943;border-radius:8px;font-size:12px}
 .status.warn{background:#fff4e7;border-color:#eacbaa;color:#875128}
+.bg-batch{margin:10px 0;border:1px solid #d8e2ec;border-radius:10px;background:#fafcfe}
+.bg-batch summary{padding:11px;cursor:pointer;color:#214b72;font-weight:700}
+.bg-batch-inner{padding:0 10px 10px}
+.bg-batch-head{display:flex;gap:8px;align-items:center;margin-bottom:9px}
+.bg-batch-head strong{font-size:17px;background:#1b5788;color:#fff;border-radius:6px;padding:6px 9px}
+.bg-batch-head span:nth-child(2){flex:1}
+.bg-batch-head span:last-child{color:#688095}
+.bg-gallery{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;max-height:275px;overflow:auto;margin:10px 0}
+.bg-gallery:empty{display:none}
+.bg-thumb{aspect-ratio:2/3;min-width:0;position:relative;overflow:hidden;background:#fff;border:2px solid #d4dfe8;border-radius:7px;padding:0}
+.bg-thumb[data-assigned=yes]{border-color:#218b66}
+.bg-thumb img{height:100%;width:100%;object-fit:cover}
+.bg-thumb span{position:absolute;top:3px;right:3px;padding:2px 4px;background:#1c4975;color:white;border-radius:4px;font-size:10px}
+.bg-thumb:focus-visible{outline:3px solid #1976bd;outline-offset:1px}
 .status:empty,.import-report:empty,#warn:empty,#pairMembers:empty{display:none}
 .sidebar label{margin-top:8px}
 .sidebar .block{padding-top:10px;margin-top:12px}
@@ -116,6 +130,13 @@ textarea{resize:vertical;min-height:60px;line-height:1.4}label{display:block;mar
 <div class="grid2" style="margin-top:10px"><button id="printOne" class="primary">הדפסת כרטיס</button><button id="printAll" class="primary">הדפסת הכול</button></div>
 <div class="block"><h2>עיצוב</h2>
 <label for="bgScope">החלת רקע</label><select id="bgScope"><option value="all">כל הכרטיסים</option><option value="one">הכרטיס הנוכחי בלבד</option></select><label for="bg">רקע הכרטיס</label><input id="bg" type="file" accept="image/*">
+<details id="batchPanel" class="bg-batch"><summary>שיוך רקעים מהיר · 01–63</summary>
+<div class="bg-batch-inner"><div class="bg-batch-head"><strong id="bgNumber">01</strong><span id="bgWoman">בחרי אישה</span><span id="bgCount">0 / 63</span></div>
+<button type="button" class="primary" id="bulkBgButton" style="width:100%">העלאת תמונות רקע</button>
+<input id="bulkBgFiles" type="file" accept="image/png,image/jpeg,image/webp" multiple hidden>
+<div id="bgGallery" class="bg-gallery"></div>
+<div class="grid2"><button type="button" id="bgNextMissing">הבאה ללא רקע</button><button type="button" id="bgRemoveCurrent">הסרת רקע</button></div>
+</div></details>
 <label for="theme">משפחת צבע</label><select id="theme"><option value="tech">כחול · טכנולוגיה ו־AI</option><option value="science">ירוק · מדע ורפואה</option><option value="space">סגול · חלל ומתמטיקה</option><option value="culture">ורוד־אדום · תרבות</option><option value="social">זהב · חברה והשפעה</option><option value="sport">כתום · ספורט</option><option value="design">צהוב · עיצוב</option><option value="finance">שמפניה · פיננסים</option></select>
 <label>גופנים</label>
 <div class="grid2"><div><label for="fTitle">שם וכותרת</label><select id="fTitle"></select></div><div><label for="fBody">ביוגרפיה</label><select id="fBody"></select></div><div><label for="fTime">ציר הזמן</label><select id="fTime"></select></div><div><label for="fLink">משפט מחבר</label><select id="fLink"></select></div></div>
@@ -154,7 +175,7 @@ textarea{resize:vertical;min-height:60px;line-height:1.4}label{display:block;mar
 (function(){
 'use strict';
 var FONT_LIST=['IBM','IBM Light','IBM Medium','IBM SemiBold','IBM ExtraLight','Alef','Arimo','Arimo Medium','Arimo SemiBold','Choco','Dana','Gveret','PilKahol','Yehuda','Alice','Lora'];
-var language='he',collections={he:[],ar:[]},records=collections.he,index=0,sharedBg='',perBg={},uploadedFont='',fontSel={title:'Choco',body:'IBM',time:'IBM',link:'Choco'},bodySize=10,tracking=15,secretIcons={},secretPosition={x:8,y:91,size:9};
+var language='he',collections={he:[],ar:[]},records=collections.he,index=0,sharedBg='',perBg={},uploadedFont='',fontSel={title:'Choco',body:'IBM',time:'IBM',link:'Choco'},bodySize=10,tracking=15,bgChoices=[],secretIcons={},secretPosition={x:8,y:91,size:9};
 var $=function(id){return document.getElementById(id)};
 var importInfoByLang={he:null,ar:null};
 function importInfo(msg,kind){var box=$('importReport');box.textContent=msg;box.className='import-report'+(kind?' '+kind:'')}
@@ -184,8 +205,81 @@ function pairKey(r,i){var custom=String(r&&r.pairId||'').trim();return custom||(
 function membersOfPair(key){return records.map(function(r,i){return {person:r,key:pairKey(r,i)}}).filter(function(x){return x.key===key}).map(function(x){return x.person.name})}
 function saveSecretSettings(){try{localStorage.setItem('womancard-secrets-v1',JSON.stringify({icons:secretIcons,position:secretPosition}))}catch(err){status('האחסון המקומי מלא. שמרי JSON לגיבוי הסמלים.',true)}}
 function bindSecret(){var hasData=records.length>0,key=pairKey(current(),index);$('pairId').value=current().pairId||key;$('pairId').disabled=!hasData;$('secretIcon').disabled=!hasData;$('removeSecret').disabled=!hasData;$('pairMembers').textContent=hasData?('קבוצה '+key+' · '+membersOfPair(key).join(' + ')):'';$('secretState').textContent=secretIcons[key]?'סמל מוגדר ✓':'אין סמל'}
+var bgStorePromise=null;
+function bgStore(){
+ if(bgStorePromise)return bgStorePromise;
+ bgStorePromise=new Promise(function(resolve,reject){
+  if(!window.indexedDB){reject(Error('שמירה מקומית אינה זמינה'));return}
+  var req=indexedDB.open('womancard-backgrounds-v1',1);
+  req.onupgradeneeded=function(){if(!req.result.objectStoreNames.contains('images'))req.result.createObjectStore('images')};
+  req.onsuccess=function(){resolve(req.result)};
+  req.onerror=function(){reject(req.error||Error('אחסון התמונות אינו זמין'))}
+ });
+ return bgStorePromise
+}
+async function persistBackground(id,blob,remove){
+ var db=await bgStore();
+ return new Promise(function(resolve,reject){
+  var tx=db.transaction('images','readwrite'),store=tx.objectStore('images');
+  if(remove)store.delete(id);else store.put(blob,id);
+  tx.oncomplete=resolve;tx.onerror=function(){reject(tx.error||Error('שמירה נכשלה'))};
+  tx.onabort=function(){reject(tx.error||Error('אין מקום באחסון המקומי'))}
+ })
+}
+async function restoreBackgrounds(){
+ try{
+  var db=await bgStore();
+  await new Promise(function(resolve,reject){
+   var tx=db.transaction('images','readonly'),req=tx.objectStore('images').openCursor();
+   req.onsuccess=function(){var cur=req.result;if(cur){if(!perBg[String(cur.key)])perBg[String(cur.key)]=URL.createObjectURL(cur.value);cur.continue()}};
+   tx.oncomplete=resolve;tx.onerror=function(){reject(tx.error||Error('שחזור נכשל'))}
+  });
+  updateBgPicker();draw()
+ }catch(e){}
+}
+function updateBgPicker(){
+ var r=current(),count=records.filter(function(x){return !!perBg[x.id]}).length;
+ $('bgNumber').textContent=String(index+1).padStart(2,'0');
+ $('bgWoman').textContent=r.name;
+ $('bgCount').textContent=count+' / '+records.length;
+ $('bgRemoveCurrent').disabled=!records.length||!perBg[r.id];
+ $('bgNextMissing').disabled=!records.length;
+ bgChoices.forEach(function(c,i){
+  if(!c.button)return;
+  var n=records.findIndex(function(w){return w.id===c.assigned});
+  c.button.dataset.assigned=n<0?'no':'yes';
+  c.button.querySelector('span').textContent=n<0?String(i+1).padStart(2,'0'):'✓ '+String(n+1).padStart(2,'0')
+ })
+}
+function nextUnassigned(){
+ for(var n=1;n<=records.length;n++){
+  var j=(index+n)%records.length;
+  if(!perBg[records[j].id]){index=j;bindEdit();return true}
+ }
+ return false
+}
+function renderBgGallery(){
+ var gallery=$('bgGallery');gallery.replaceChildren();
+ bgChoices.forEach(function(c,i){
+  var b=document.createElement('button');b.type='button';b.className='bg-thumb';
+  b.title=c.file.name;b.setAttribute('aria-label','תמונה '+(i+1)+' '+c.file.name);
+  var im=document.createElement('img');im.src=c.url;im.alt='';
+  var badge=document.createElement('span');b.append(im,badge);gallery.appendChild(b);c.button=b;
+  b.onclick=function(){
+   if(!records.length){status('יש לייבא את נתוני הנשים תחילה.',true);return}
+   var id=current().id;
+   if(c.assigned&&c.assigned!==id){status('התמונה כבר משויכת לאישה אחרת.',true);return}
+   bgChoices.forEach(function(old){if(old!==c&&old.assigned===id)old.assigned=null});
+   c.assigned=id;perBg[id]=c.url;
+   persistBackground(id,c.file,false).catch(function(err){status('הרקע מוצג אך לא נשמר למכשיר: '+err.message,true)});
+   if(!nextUnassigned()){draw();status('כל הרקעים שויכו.')}
+   updateBgPicker()
+  }
+ });
+ updateBgPicker()
+}
 function refreshList(){var arr=records.length?records:[demo];$('which').innerHTML=arr.map(function(r,i){return '<option value="'+i+'">'+esc((i+1)+'. '+r.name)+'</option>'}).join('');if(index>=arr.length)index=0;$('which').value=String(index);$('counter').textContent=(index+1)+' / '+arr.length+' · '+current().name}
-function bindEdit(){updateImportInfo();var r=current();editFields.forEach(function(k){$(k).value=get(r,k)});$('theme').value=r.theme||'tech';$('timelineEditor').innerHTML='';for(var j=0;j<4;j++){var row=document.createElement('div');row.className='tl-row';row.innerHTML='<input type="text" aria-label="שנת אירוע" data-y="'+j+'" placeholder="שנה"><textarea data-t="'+j+'" aria-label="אירוע" rows="2" placeholder="אירוע קצר"></textarea>';$('timelineEditor').appendChild(row);row.querySelector('[data-y]').value=r.timeline[j]?r.timeline[j].year:'';row.querySelector('[data-t]').value=r.timeline[j]?r.timeline[j].text:''}refreshList();bindSecret();draw()}
+function bindEdit(){updateImportInfo();var r=current();editFields.forEach(function(k){$(k).value=get(r,k)});$('theme').value=r.theme||'tech';$('timelineEditor').innerHTML='';for(var j=0;j<4;j++){var row=document.createElement('div');row.className='tl-row';row.innerHTML='<input type="text" aria-label="שנת אירוע" data-y="'+j+'" placeholder="שנה"><textarea data-t="'+j+'" aria-label="אירוע" rows="2" placeholder="אירוע קצר"></textarea>';$('timelineEditor').appendChild(row);row.querySelector('[data-y]').value=r.timeline[j]?r.timeline[j].year:'';row.querySelector('[data-t]').value=r.timeline[j]?r.timeline[j].text:''}refreshList();bindSecret();updateBgPicker();draw()}
 function card(r,i){var bg=perBg[r.id]||sharedBg;var symbolData=secretIcons[pairKey(r,i)]||'';var symbol=symbolData?'<img class="secret-symbol" alt="" src="'+esc(symbolData)+'">':'';var back=bg?'url("'+bg+'")':'none',sty='--font-title:"'+fontSel.title+'";--font-body:"'+fontSel.body+'";--font-time:"'+fontSel.time+'";--font-link:"'+fontSel.link+'";--body-size:'+bodySize+'px;--bg-image:'+back+';--tracking:'+(tracking/100)+'em;--secret-x:'+secretPosition.x+'%;--secret-y:'+secretPosition.y+'%;--secret-size:'+secretPosition.size+'mm;';
 var time=(r.timeline||[]).map(function(t){return '<div class="station"><strong class="year">'+esc(t.year)+'</strong><span class="event">'+esc(t.text||t.short)+'</span></div>'}).join('');
 return '<article class="card" data-has-bg="'+(bg?'yes':'no')+'" data-lang="'+language+'" data-theme="'+esc(r.theme||'tech')+'" style="'+esc(sty)+'">'+'<div class="sheet"><div class="name">'+esc(r.name)+'</div><div class="time">'+time+'</div><div class="field">'+esc(r.field)+'</div><div class="story"><p>'+esc(r.intro)+'</p>'+[[language==='ar'?'الإنجاز الرائد':'פריצת הדרך',r.breakthrough],[language==='ar'?'التحديات':'האתגרים בדרך',r.challenges],[language==='ar'?'ماذا فعلت بشكل مختلف؟':'מה עשתה אחרת?',r.different],[language==='ar'?'أثرها':'ההשפעה שלה',r.impact]].map(function(z){return '<section><h3>'+z[0]+'</h3><p>'+esc(z[1])+'</p></section>'}).join('')+'<div class="surprise"><b>'+(language==='ar'?'هل تعلمين؟':'רגע, באמת?!')+'</b> '+esc(r.surprise)+'</div></div><div class="linkline">'+esc(clean(r.connection))+'</div></div>'+symbol+'</article>'}
@@ -196,6 +290,23 @@ editFields.forEach(function(k){$(k).addEventListener('input',function(){if(!reco
 $('timelineEditor').addEventListener('input',function(e){var a=e.target.dataset.y,b=e.target.dataset.t;if(a===undefined&&b===undefined)return;if(!records.length){records=[norm(demo,0)];collections[language]=records;index=0}var j=+(a===undefined?b:a);current().timeline[j][a!==undefined?'year':'text']=e.target.value;sync();draw()});
 $('theme').onchange=function(){if(!records.length){records=[norm(demo,0)];collections[language]=records;index=0}current().theme=this.value;sync();draw()};
 $('which').onchange=function(){index=+this.value;bindEdit()};
+$('bulkBgButton').onclick=function(){if(!records.length){status('תחילה יש לייבא Excel.',true);return}$('bulkBgFiles').click()};
+$('bulkBgFiles').onchange=function(e){
+ var files=Array.from(e.target.files||[]).filter(function(f){return ['image/jpeg','image/png','image/webp'].includes(f.type)});
+ if(!files.length){status('יש לבחור JPG, PNG או WebP.',true);return}
+ bgChoices=files.map(function(file){return {file:file,url:URL.createObjectURL(file),assigned:null,button:null}});
+ renderBgGallery();$('batchPanel').open=true;
+ status('נטענו '+files.length+' תמונות. לחצי על הרקע המתאים לאישה שמוצגת למעלה.');
+ e.target.value=''
+};
+$('bgNextMissing').onclick=function(){if(!nextUnassigned())status('אין נשים ללא רקע.')};
+$('bgRemoveCurrent').onclick=function(){
+ if(!records.length)return;
+ var id=current().id;delete perBg[id];
+ bgChoices.forEach(function(c){if(c.assigned===id)c.assigned=null});
+ persistBackground(id,null,true).catch(function(err){status('השמירה נכשלה: '+err.message,true)});
+ updateBgPicker();draw()
+};
 $('pairId').onchange=function(){
 if(!records.length)return;
 var oldKey=pairKey(current(),index),newKey=this.value.trim()||oldKey;if(newKey===oldKey){bindSecret();return}
@@ -228,7 +339,7 @@ $('fontFile').onchange=async function(e){var f=e.target.files[0];if(!f)return;va
 $('bodySize').oninput=function(){bodySize=+this.value;draw()};
 $('tracking').oninput=function(){tracking=+this.value;$('trackingValue').textContent=String(tracking);draw()};
 var bgTemp='';
-$('bg').onchange=function(e){var f=e.target.files[0];if(!f)return;if(!f.type.startsWith('image/')){status('יש לבחור קובץ תמונה PNG, JPG או WebP.',true);return}bgTemp=URL.createObjectURL(f);if($('bgScope').value==='one'){perBg[current().id]=bgTemp;draw();status('הרקע החדש הוחל מיד על הכרטיס הנוכחי בלבד.')}else{sharedBg=bgTemp;perBg={};draw();status('הרקע החדש הוחל מיד על כל הכרטיסים.')}};
+$('bg').onchange=function(e){var f=e.target.files[0];if(!f)return;if(!f.type.startsWith('image/')){status('יש לבחור קובץ תמונה PNG, JPG או WebP.',true);return}bgTemp=URL.createObjectURL(f);if($('bgScope').value==='one'){var id=current().id;perBg[id]=bgTemp;persistBackground(id,f,false).catch(function(err){status('הרקע הוחל אך לא נשמר למכשיר: '+err.message,true)});updateBgPicker();draw();status('הרקע עודכן.')}else{sharedBg=bgTemp;perBg={};updateBgPicker();draw();status('הרקע הוחל על כל הכרטיסים.')}};
 
 $('chooseExcel').onclick=function(){$('excel').click()};
 $('save').onclick=function(){var obj={version:2,records:records,design:{fonts:fontSel,bodySize:bodySize,tracking:tracking},secretSymbols:{icons:secretIcons,position:secretPosition}};var a=document.createElement('a'),u=URL.createObjectURL(new Blob([JSON.stringify(obj,null,2)],{type:'application/json'}));a.href=u;a.download='womancard-data.json';a.click();setTimeout(function(){URL.revokeObjectURL(u)},1500)};
@@ -291,7 +402,7 @@ async function printCards(all){if(!records.length){status('יש לייבא את 
 $('printOne').onclick=function(){printCards(false)};$('printAll').onclick=function(){printCards(true)};
 try{var stored=JSON.parse(localStorage.getItem('womancard-secrets-v1')||'{}');if(stored.icons&&typeof stored.icons==='object')secretIcons=stored.icons;if(stored.position)secretPosition=Object.assign(secretPosition,stored.position);[['secretSize','size',' מ״מ'],['secretX','x','%'],['secretY','y','%']].forEach(function(a){$(a[0]).value=secretPosition[a[1]];$(a[0]+'Value').textContent=secretPosition[a[1]]+a[2]})}catch(e){}
 try{['he','ar'].forEach(function(l){var saved=JSON.parse(localStorage.getItem('womancard-records-v1-'+l)||'[]');if(Array.isArray(saved))collections[l]=saved.map(norm);try{importInfoByLang[l]=JSON.parse(localStorage.getItem('womancard-import-meta-v1-'+l)||'null')}catch(_){} });records=collections.he;if(records.length)status('שוחזרו '+records.length+' נשים מהדפדפן המקומי.')}catch(e){}
-$('lang').onchange=function(){language=this.value;records=collections[language];index=0;bindEdit();status(records.length?'נטענו '+records.length+' כרטיסים בשפה שנבחרה.':'אפשר לייבא Excel עבור השפה שנבחרה.')};bindEdit();
+$('lang').onchange=function(){language=this.value;records=collections[language];index=0;bindEdit();status(records.length?'נטענו '+records.length+' כרטיסים בשפה שנבחרה.':'אפשר לייבא Excel עבור השפה שנבחרה.')};bindEdit();restoreBackgrounds();
 })();
 </script>
 </body></html>
