@@ -1,0 +1,14 @@
+{
+  "name": "portzot-inspiration",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "vendor": "node scripts/vendor.mjs",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "2.118.0",
+    "pdfjs-dist": "6.4.299",
+    "qrcode-generator": "2.0.4"
+  }
+}

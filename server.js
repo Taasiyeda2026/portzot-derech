@@ -41,6 +41,8 @@ const mimeTypes = {
   '.html': 'text/html',
   '.css': 'text/css',
   '.js': 'application/javascript',
+  '.mjs': 'application/javascript',
+  '.pdf': 'application/pdf',
   '.json': 'application/json',
   '.png': 'image/png',
   '.jpg': 'image/jpeg',

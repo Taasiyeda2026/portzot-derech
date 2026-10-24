@@ -1,4 +1,4 @@
-const SW_VERSION = "v183";
+const SW_VERSION = "v184";
 const CACHE_NAME = `portzot-derech-cache-${SW_VERSION}`;
 
 // ── נכסים שנשמרים ב-Cache בהתקנה ─────────────────────────────────────────
@@ -364,6 +364,10 @@ self.addEventListener("fetch", function (event) {
 
   var url;
   try { url = new URL(event.request.url); } catch (e) { return; }
+
+  // Inspiration has authenticated room state and private media. Never cache it,
+  // or substitute an unrelated course page when a participant is offline.
+  if (url.pathname.includes("/inspiration/")) return;
 
   // /api/* — תמיד ישירות לשרת
   if (url.pathname.startsWith("/api/")) return;

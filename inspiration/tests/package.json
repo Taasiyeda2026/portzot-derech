@@ -1,0 +1,7 @@
+{
+  "name":"inspiration-isolated-db-tests",
+  "private":true,
+  "type":"module",
+  "scripts":{"test":"node db-integration.mjs"},
+  "dependencies":{"pg":"8.23.1"}
+}

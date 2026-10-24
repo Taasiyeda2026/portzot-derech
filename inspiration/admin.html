@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex, nofollow">
+  <title>ניהול קלפים · נושמות השראה</title>
+  <link rel="icon" href="../icon/favicon.png">
+  <link rel="stylesheet" href="./inspiration.css">
+  <script defer src="./vendor/supabase.js"></script>
+</head>
+<body data-page="admin">
+  <header class="masthead site-header">
+    <a class="brand" href="./teacher.html"><span class="brand-mark" aria-hidden="true">✦</span><span><span class="eyebrow">פורצות דרך · מרחב ניהול התוכן</span><strong>נושמות השראה</strong></span></a>
+    <a class="text-link" href="./teacher.html">חזרה לחדרי המשחק</a>
+  </header>
+  <main id="app" class="dashboard admin-shell">
+    <section class="page-intro">
+      <p class="eyebrow">מאגר ההשראה</p>
+      <h1>הסיפורים שמאחורי הקלפים</h1>
+      <p>כאן טוענים קלפים מאושרים ומגדירים את הסמלים שמחברים ביניהם. חדרים שכבר נוצרו שומרים על הקלפים וההתאמות המקוריים שלהם.</p>
+    </section>
+    <section id="auth-panel" class="panel"><p>בודקות הרשאה לניהול המאגר…</p></section>
+    <div id="admin-workspace" hidden>
+      <section class="panel">
+        <div class="section-heading"><div><p class="eyebrow">לפני שמתחילות</p><h2>תקינות המאגר</h2></div><button id="refresh-catalog" type="button" class="secondary">רענון ובדיקה</button></div>
+        <p id="catalog-summary" aria-live="polite"></p>
+        <ul id="catalog-errors" class="validation-list"></ul>
+        <p class="hint">משחק נפתח רק מקבוצות פעילות ומאושרות עם שני קלפים, או שלישייה אחת, וקובצי תוכן קיימים באחסון הפרטי.</p>
+      </section>
+      <div class="admin-grid">
+        <section class="panel">
+          <p class="eyebrow">החיבור בין הסיפורים</p><h2>קבוצת התאמה</h2>
+          <form id="group-form">
+            <input name="id" type="hidden">
+            <label>סמל הקבוצה<input name="symbol" required maxlength="32" placeholder="לדוגמה: סמל מתוך הרשימה המאושרת"></label>
+            <label>מספר קלפים בקבוצה<select name="size"><option value="2">זוג — שני קלפים</option><option value="3">שלישייה — שלושה קלפים</option></select></label>
+            <label class="checkbox"><input name="active" type="checkbox" checked>קבוצה פעילה</label>
+            <div class="actions"><button type="submit" class="primary">שמירת הקבוצה</button><button id="clear-group" type="button" class="secondary">קבוצה חדשה</button></div>
+          </form>
+          <div id="groups-list" class="catalog-list"></div>
+        </section>
+        <section class="panel">
+          <p class="eyebrow">אישה. סיפור. השראה.</p><h2>פרטי הקלף</h2>
+          <form id="card-form">
+            <input name="id" type="hidden">
+            <label>שם האישה<input name="name" required maxlength="120" autocomplete="off"></label>
+            <label>תחום העיסוק<input name="field" required maxlength="120" autocomplete="off"></label>
+            <label>קבוצת התאמה<select name="group_id" id="card-group" required></select></label>
+            <p class="hint">קבוצת ההתאמה של קלף קיים קבועה. כדי להגדיר התאמה אחרת, צרי קלף חדש בקבוצה המתאימה והשביתי את הקלף הקודם לפי הצורך.</p>
+            <label>קובץ קדמי — תמונה או PDF<input name="front_file" type="file" accept="image/png,image/jpeg,image/webp,application/pdf"></label>
+            <input name="front_path" type="hidden">
+            <p id="front-status" class="hint">טרם נבחר קובץ קדמי</p>
+            <label>קובץ אחורי — תמונה או PDF, לפי הצורך<input name="back_file" type="file" accept="image/png,image/jpeg,image/webp,application/pdf"></label>
+            <input name="back_path" type="hidden">
+            <p id="back-status" class="hint">ללא צד אחורי</p>
+            <label class="checkbox"><input name="active" type="checkbox" checked>קלף פעיל</label>
+            <p class="hint">העלאה יוצרת קובץ חדש. היא אינה מחליפה קובץ שמוצג בחדר קיים. תמונות: PNG, JPEG, WebP. מסמכים: PDF.</p>
+            <div class="actions"><button type="submit" class="primary">שמירת הקלף</button><button id="clear-card" type="button" class="secondary">קלף חדש</button></div>
+          </form>
+        </section>
+      </div>
+      <section class="panel">
+        <div class="section-heading"><div><p class="eyebrow">כל הנשים במאגר</p><h2>הקלפים</h2></div><label>חיפוש לפי שם<input id="card-search" type="search" placeholder="שם או תחום עיסוק"></label></div>
+        <div id="cards-list" class="catalog-list"></div>
+      </section>
+      <section class="panel">
+        <p class="eyebrow">טעינה מרוכזת</p><h2>יבוא רשימה מאושרת</h2>
+        <p>אפשר לטעון JSON או CSV. היבוא שומר נתונים רק לאחר בדיקת מבנה הקבוצות וקובצי התוכן. יש להעלות קבצים לפני יבוא הרשימה; נתיבי הקבצים הם נתיבים באחסון הפרטי.</p>
+        <details><summary>מבנה קובץ היבוא</summary><p class="hint">CSV: group_id, symbol, size, name, field, front_path, back_path, active. כל שורה היא קלף אחד; group_id חייב להיות מזהה UUID. העמודה group_active מאפשרת לייבא קבוצה כטיוטה. JSON: אובייקט groups עם רשימת קבוצות, ובכל קבוצה רשימת cards ושם בשדה woman_name. אפשר להשמיט id ליצירת מזהה חדש; לעדכון רשומה קיימת יש לציין את מזהה ה־UUID שלה.</p><pre class="import-example" dir="ltr">{"groups":[{"symbol":"◆","size":2,"active":false,"cards":[{"woman_name":"שם האישה הראשונה ברשימה המאושרת","field":"תחום העיסוק","active":false},{"woman_name":"שם האישה השנייה ברשימה המאושרת","field":"תחום העיסוק","active":false}]}]}</pre><p class="hint">הדוגמה מציגה מבנה של טיוטה מושבתת בלבד. לפני הפעלה יש להזין את הפרטים המאושרים ולהוסיף front_path או back_path עם נתיב קובץ שהועלה לאחסון הפרטי. אין לייבא את הדוגמה כתוכן מאושר.</p></details>
+        <form id="import-form">
+          <label>בחירת קובץ<input id="import-file" type="file" accept=".json,.csv,application/json,text/csv"></label>
+          <label>או הדבקת JSON<textarea id="import-text" rows="7" spellcheck="false" dir="ltr" placeholder='{"groups": []}'></textarea></label>
+          <button type="submit" class="primary">בדיקה ויבוא</button>
+        </form>
+      </section>
+    </div>
+  </main>
+  <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
+  <footer class="site-footer">פורצות דרך · תעשיידע</footer>
+  <script type="module" src="./admin.js"></script>
+</body>
+</html>
