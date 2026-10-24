@@ -59,6 +59,9 @@ do $$ declare t text; begin
  execute format('grant all on public.%I to service_role',t);
  end loop;
 end $$;
+-- Existing dashboard defaults grant sequence UPDATE to public-facing roles.
+-- Revoke explicitly: table RLS does not protect sequence operations.
+revoke all on sequence public.inspiration_room_events_id_seq from public,anon,authenticated;
 grant usage,select on sequence public.inspiration_room_events_id_seq to service_role;
 
 create or replace function inspiration_private.hash(p_value text) returns text

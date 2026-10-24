@@ -42,6 +42,8 @@ try{
   }
   await sql(`create role anon nologin;create role authenticated nologin;create role service_role nologin bypassrls;
     create schema auth; create schema storage; create schema realtime;
+    -- Match observed project default ACL: identity sequences inherit UPDATE.
+    alter default privileges for role postgres in schema public grant update on sequences to anon,authenticated,service_role;
     create table auth.users(id uuid primary key);
     create function auth.uid() returns uuid language sql stable as $$select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid$$;
     create table public.users(auth_user_id uuid,role text,is_active boolean,permissions jsonb default '{}');
@@ -69,6 +71,12 @@ try{
     for(const table of tables.rows){assert.equal((await sql('select has_table_privilege($1,$2,\'SELECT\') allowed',[role,`public.${table.relname}`])).rows[0].allowed,false);}
   }
   passed('all game tables use RLS and anon/authenticated cannot read tables or execute privileged RPC');
+  for(const role of ['anon','authenticated'])for(const privilege of ['USAGE','SELECT','UPDATE']){
+    assert.equal((await sql("select has_sequence_privilege($1,'public.inspiration_room_events_id_seq',$2) allowed",[role,privilege])).rows[0].allowed,false);
+  }
+  for(const privilege of ['USAGE','SELECT'])assert.equal((await sql("select has_sequence_privilege('service_role','public.inspiration_room_events_id_seq',$1) allowed",[privilege])).rows[0].allowed,true);
+  passed('inherited default sequence UPDATE is revoked from public clients while service-role sequence usage remains available');
+
   await failure('teacher.me',null,null,{},'missing verified instructor denied');
   await failure('teacher.me',ids.denied,null,{},'finance role denied');
   await failure('teacher.me',ids.inactive,null,{},'inactive instructor denied');
@@ -241,6 +249,26 @@ try{
   assert.equal(Number((await sql('select count(*) from public.inspiration_rooms where id=$1',[owned.room.id])).rows[0].count),0);
   assert.equal(Number((await sql('select count(*) from public.inspiration_rooms')).rows[0].count),existingRooms);
   passed('deleting dashboard Auth account cascades only its game rooms and cannot block account deletion');
+
+  // Exercise the operational rollback with a local cron stub and unrelated job.
+  await sql(`create schema cron;
+    create table cron.job(jobid bigint generated always as identity primary key,jobname text,schedule text,command text);
+    create function cron.unschedule(p_jobid bigint) returns boolean language sql as $$with removed as (delete from cron.job where jobid=p_jobid returning jobid) select exists(select 1 from removed)$$;
+    create function cron.schedule(p_jobname text,p_schedule text,p_command text) returns bigint language sql as $$insert into cron.job(jobname,schedule,command) values(p_jobname,p_schedule,p_command) returning jobid$$;
+    insert into cron.job(jobname,schedule,command) values('unrelated-dashboard-job','0 0 * * *','select 1'),('inspiration-retention','15 2 * * *','select inspiration_private.cleanup()');`);
+  const beforeDisable=await sql('select (select count(*) from public.inspiration_rooms) rooms,(select count(*) from auth.users) auth_users,(select count(*) from public.users) dashboard_users');
+  const disableSql=readFileSync(resolve(root,'inspiration/sql/disable-game.sql'),'utf8');
+  const restoreSql=readFileSync(resolve(root,'inspiration/sql/restore-game.sql'),'utf8');
+  await sql(disableSql);await sql(disableSql);
+  for(const signature of ['public.inspiration_rpc(text,uuid,text,jsonb)','public.inspiration_rate_limit(text,integer)','inspiration_private.cleanup()'])assert.equal((await sql("select has_function_privilege('service_role',$1,'EXECUTE') allowed",[signature])).rows[0].allowed,false);
+  assert.equal((await sql("select jobname from cron.job order by jobname")).rows.map(r=>r.jobname).join(','),'unrelated-dashboard-job');
+  assert.deepEqual((await sql('select (select count(*) from public.inspiration_rooms) rooms,(select count(*) from auth.users) auth_users,(select count(*) from public.users) dashboard_users')).rows,beforeDisable.rows);
+  passed('emergency disable is repeatable, blocks gateway calls, unschedules only its own job and preserves all game/Auth/dashboard rows');
+  await sql(restoreSql);await sql(restoreSql);
+  for(const signature of ['public.inspiration_rpc(text,uuid,text,jsonb)','public.inspiration_rate_limit(text,integer)','inspiration_private.cleanup()'])assert.equal((await sql("select has_function_privilege('service_role',$1,'EXECUTE') allowed",[signature])).rows[0].allowed,true);
+  assert.equal((await sql("select count(*) from cron.job where jobname='inspiration-retention'")).rows[0].count,'1');
+  assert.equal((await sql("select count(*) from cron.job where jobname='unrelated-dashboard-job'")).rows[0].count,'1');
+  passed('restore is repeatable and restores only gateway privileges plus one retention job');
   console.log(`\n${checks} PostgreSQL integration checks passed; all data was isolated.`);
   if(process.env.INSPIRATION_DB_FIXTURE)writeFileSync(process.env.INSPIRATION_DB_FIXTURE,JSON.stringify({config,ids,container,groups},null,2));
 }finally{
