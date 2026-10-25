@@ -145,6 +145,20 @@ test('asset authorization resolves only server-selected path and streams no-stor
   assert.match(await response.text(), /PDF/);
 });
 
+test('linked site cards redirect only after authorization to the allowlisted course artwork path', async () => {
+  const { request, storageCalls, calls } = setup({ data: { path: 'site:women/Amelia.png' } });
+  const response = await request({ action: 'participant.asset', token: TOKEN, payload: { side: 'front' } });
+  assert.equal(response.status, 303);
+  assert.equal(response.headers.get('Location'), 'https://portzot-derech.org/inspiration/cards/women/Amelia.png');
+  assert.match(response.headers.get('Cache-Control'), /no-store/);
+  assert.equal(storageCalls.length, 0, 'linked artwork is never downloaded from Supabase Storage');
+  assert.equal(calls[1][1].p_action, 'participant.asset');
+  const forged = setup({ data: { path: 'site:women/../private.png' } });
+  const invalid = await forged.request({ action: 'participant.asset', token: TOKEN, payload: { side: 'front' } });
+  assert.equal(invalid.status, 404);
+  assert.equal(invalid.headers.get('Location'), null);
+});
+
 test('invalid asset side and unsafe server paths cannot be fetched', async () => {
   const { request, storageCalls } = setup({ data: { path: '../private.pdf' } });
   assert.equal((await request({ action: 'participant.asset', token: TOKEN, payload: { side: 'all' } })).status, 400);
