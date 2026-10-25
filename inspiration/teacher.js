@@ -1,4 +1,5 @@
 import {api,el,clear,button,field,notify,errorText,requireTeacher,watchRoom,connection,phaseText,cardViewer} from './common.js';
+import {createInviteTools} from './invite-tools.js';
 
 const main=document.querySelector('#app');
 let me,roomId=new URL(location.href).searchParams.get('room'),state,stopWatching,lastState='';
@@ -66,9 +67,10 @@ function renderRoom(){
   if(room.phase!=='ended')controls.append(button('סיום המשחק',()=>{if(confirm('לסיים את המשחק? ההצטרפות ובחירת הקלפים יינעלו.'))action('teacher.phase',{phase:'ended'});},{class:'danger'}));
   header.append(controls);main.append(header);
   if(room.phase!=='ended'){
-    const qr=el('div',{class:'qr-wrap','aria-label':'קוד QR להצטרפות לחדר'});
-    try{const image=globalThis.qrcode(0,'M');image.addData(roomLink(room));image.make();const doc=new DOMParser().parseFromString(image.createSvgTag({scalable:true,margin:2}),'image/svg+xml');qr.append(document.importNode(doc.documentElement,true));}catch{qr.append(el('p',{},'אפשר להצטרף דרך הקישור למטה.'));}
-    const join=el('aside',{class:'panel'},el('h2',{},'מזמינות את המשתתפות'),qr,el('p',{class:'join-link'},roomLink(room)),el('div',{class:'actions'},button('העתקת קישור',async()=>{try{await navigator.clipboard.writeText(roomLink(room));notify('הקישור הועתק.','success');}catch{notify('לא ניתן להעתיק אוטומטית. סמני והעתיקי את הקישור שמוצג כאן.');}},{class:'secondary'})),el('p',{class:'help'},'המשתתפות נכנסות ישירות. אין צורך בחשבון או בסיסמה.'));
+    const qr=el('div',{class:'qr-wrap','aria-label':'QR וקישור להצטרפות'});
+    try { qr.append(createInviteTools(roomLink(room),message=>notify(message))); }
+    catch { qr.append(el('p',{},'לא ניתן להציג QR כרגע.')); }
+    const join=el('aside',{class:'panel invitation-panel'},el('h2',{},'הזמנת משתתפות'),qr);
     const operation=el('section',{class:'panel'},el('h2',{},'ניהול המשתתפות'));
     if(chosen===0){
       const expected=textInput(room.expected,{type:'number',min:Math.max(2,joined),step:1,required:true,inputmode:'numeric'});
