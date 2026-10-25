@@ -18,6 +18,10 @@ test('course tile opens only the instructor workspace', async () => {
   assert.doesNotMatch(menu, /id="inspiration-join-form"/);
   assert.doesNotMatch(menu, /id="inspiration-player-name"/);
   assert.doesNotMatch(menu, /id="inspiration-room-code"/);
+  assert.doesNotMatch(menu, /id="inspiration-room-link"/);
+  assert.doesNotMatch(menu, /כמה משתתפות יהיו במשחק\\?/);
+  assert.match(menu, /id="inspiration-copy-room"/);
+  assert.match(menu, /id="inspiration-manage-room"/);
   assert.doesNotMatch(menu, /sessionStorage\.setItem\('inspiration:join-intent'/);
 });
 
@@ -37,7 +41,9 @@ test('teacher gets a shareable link and QR after room creation', async () => {
   assert.match(script, /new URL\('\.\/inspiration\/index\.html', location\.href\)/);
   assert.match(script, /url\.searchParams\.set\('code', code\)/);
   assert.match(script, /globalThis\.qrcode\(0, 'M'\)/);
-  assert.match(script, /navigator\.clipboard\.writeText\(roomLink\.href\)/);
+  assert.match(script, /navigator\\.clipboard\\.writeText\\(invitationUrl\\)/);
+  assert.match(script, /invitationUrl = link\\.href/);
+  assert.doesNotMatch(script, /roomLink\\.textContent/);
   assert.match(script, /inspiration\/teacher\.html\?room=/);
   assert.match(teacher, /api\('teacher\.create'/);
   assert.match(teacher, /class:'qr-wrap'/);
