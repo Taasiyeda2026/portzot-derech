@@ -24,7 +24,7 @@ function joinScreen() {
       await refresh();startWatching();
     }catch(error){notify(errorText(error));submit.disabled=false;}
   });
-  main.append(el('section',{class:'panel intro'},el('span',{class:'eyebrow'},'קלף אחד. סיפור חדש. חיבור מפתיע.'),el('h1',{},'ברוכה הבאה לנושמות השראה!'),el('p',{class:'lead'},'במשחק הזה תפגשי אישה מעוררת השראה ותגלי מה מחבר את הסיפור שלה לסיפור של אישה אחרת.'),form,el('p',{class:'help'},'השם שלך יוצג למדריכה בלבד. אין צורך בחשבון או בסיסמה.')));
+  main.append(el('section',{class:'panel intro'},el('span',{class:'eyebrow'},'הצטרפות למשחק'),el('h1',{},'נושמות השראה'),form));
 }
 
 function personalCard(card) {
