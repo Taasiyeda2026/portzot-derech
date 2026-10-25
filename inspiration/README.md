@@ -47,7 +47,7 @@
 
 קובצי האמנות נמצאים בפורצות דרך תחת `inspiration/cards/women/`.
 גב אחיד אחד נמצא תחת `inspiration/cards/shared-back.png`.
-קובץ `inspiration/cards/women/manifest.json` מכיל את שמות 30 קובצי הנשים הקיימים באתר (לא כולל עותק הגב `גב.png`).
+קובץ `inspiration/cards/women/manifest.json` מכיל את שמות 33 קובצי הנשים הקיימים באתר (לא כולל עותק הגב `גב.png`).
 
 בממשק [ניהול הקלפים](admin.html) האדמין בוחרת את שם קובץ הכרטיס מהרשימה
 **"כרטיס האישה שכבר נמצא באתר פורצות דרך"**. המערכת שומרת ב־Supabase רק הפניה
