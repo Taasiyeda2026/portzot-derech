@@ -3,6 +3,7 @@ import {createInviteTools} from './invite-tools.js';
 import {symbolIcon} from './symbol-icons.js';
 
 const main=document.querySelector('#app');
+let mapExpanded=null;
 let me,roomId=new URL(location.href).searchParams.get('room'),state,stopWatching,lastState='';
 const phases=['waiting','choosing','matching','activity','ended'];
 async function action(name,payload={},message){
@@ -12,10 +13,11 @@ async function action(name,payload={},message){
 function stat(value,label){return el('div',{class:'stat'},el('b',{},value??0),el('span',{},label));}
 function textInput(value='',attrs={}){return el('input',{value,...attrs});}
 function roomLink(room){const url=new URL('index.html',location.href);url.searchParams.set('code',room.code);return url.href;}
-function stop(){stopWatching?.();stopWatching=null;lastState='';}
+function stop(){stopWatching?.();stopWatching=null;lastState='';mapExpanded=null;}
 
 async function home(){
   stop();
+  main.classList.remove('teacher-room-view');
   roomId=null;
   const url=new URL(location.href);
   url.searchParams.delete('room');
@@ -99,48 +101,112 @@ async function refreshRoom(force=false){
 function renderRoom(){
   const {room,players=[],cards=[],groups=[],stats={}}=state;
   clear(main);
-  const steps=el('div',{class:'steps','aria-label':'שלבי המשחק'},...phases.map(phase=>el('span',{class:phase===room.phase?'current':''},phaseText[phase])));
-  const header=el('section',{class:'panel'},el('div',{class:'room-head'},el('div',{},el('span',{class:'eyebrow'},'החדר שלך'),el('h1',{},`נושמות השראה · ${room.expected}`)),button('כל החדרים',home,{class:'secondary'})),steps,el('div',{class:'stat-grid'},stat(stats.joined??players.length,'הצטרפו'),stat(stats.chosen??players.filter(p=>p.number).length,'בחרו קלף'),stat(stats.remaining??room.expected-(stats.chosen||0),'טרם בחרו'),stat(stats.complete_groups,'קבוצות עם כל הקלפים שנבחרו')));
-  if(room.phase==='matching'||room.phase==='activity') {
-    const progress=el('p',{class:'class-progress'},
-      `אימתו חיבור: ${stats.verified??0} · המשיכו לפעילות: ${stats.continued??0}`);
-    header.append(progress);
-  }
-  const joined=stats.joined??players.length;const chosen=stats.chosen??players.filter(p=>p.number).length;
-  if(room.phase==='waiting')header.append(el('p',{class:'info'},`מחכות לעוד ${Math.max(0,room.expected-joined)} משתתפות. בחירת הקלפים תיפתח רק כאשר ${room.expected} המשתתפות רשומות בחדר.`));
+  main.classList.add('teacher-room-view');
 
-  const controls=el('div',{class:'actions'});
-  if(room.phase==='waiting')controls.append(button('מתחילות לבחור קלפים',()=>action('teacher.phase',{phase:'choosing'}),{disabled:joined!==room.expected}));
-  if(room.phase==='choosing')controls.append(button('עוברות למציאת החיבורים',()=>action('teacher.phase',{phase:'matching'}),{disabled:chosen!==room.expected}));
-  // Each verified participant opens her own hint and confirms continuation.
-  if(room.phase!=='ended')controls.append(button('סיום המשחק',()=>{if(confirm('לסיים את המשחק? ההצטרפות ובחירת הקלפים יינעלו.'))action('teacher.phase',{phase:'ended'});},{class:'danger'}));
-  header.append(controls);main.append(header);
+  const joined=stats.joined??players.length;
+  const chosen=stats.chosen??players.filter(player=>player.number).length;
+  const verified=stats.verified??0;
+  const livePhases=['waiting','choosing','matching','activity'];
+  const currentIndex=livePhases.indexOf(room.phase);
+  const stepIndex=room.phase==='ended'?4:Math.max(0,currentIndex);
+  const progress=el('div',{class:'teacher-phase-progress'},
+    el('div',{class:'teacher-phase-meta'},
+      el('strong',{},phaseText[room.phase]||'משחק'),
+      el('span',{},`שלב ${Math.min(4,stepIndex+1)} מתוך 4`)),
+    el('div',{class:'teacher-phase-track',role:'progressbar',
+      'aria-label':'התקדמות המשחק','aria-valuemin':0,
+      'aria-valuemax':4,'aria-valuenow':room.phase==='ended'?4:stepIndex+1},
+      ...livePhases.map((phase,index)=>
+        el('span',{class:index<=stepIndex?'filled':''}))));
+  const summary=el('div',{class:'teacher-status-strip','aria-label':'מצב משתתפות'},
+    el('span',{},el('b',{},`${joined}/${room.expected}`),' הצטרפו'),
+    el('span',{},el('b',{},`${chosen}/${room.expected}`),' בחרו'),
+    el('span',{},el('b',{},verified),' אימתו'));
+  if(room.phase==='activity')summary.append(el('span',{},el('b',{},stats.continued??0),' המשיכו'));
+
+  const header=el('section',{class:'panel teacher-room-overview'},
+    el('div',{class:'teacher-room-title'},
+      el('div',{},
+        el('span',{class:'eyebrow'},'ניהול חדר'),
+        el('h1',{},'נושמות השראה')),
+      el('div',{class:'teacher-room-title-actions'},
+        el('span',{class:'badge teacher-room-count'},`${room.expected} משתתפות`),
+        button('כל החדרים',home,{class:'secondary'}))),
+    progress,summary);
+  const controls=el('div',{class:'teacher-room-controls'});
+  if(room.phase==='waiting')
+    controls.append(button('מתחילות לבחור קלפים',
+      ()=>action('teacher.phase',{phase:'choosing'}),
+      {disabled:joined!==room.expected}));
+  if(room.phase==='choosing')
+    controls.append(button('עוברות למציאת החיבורים',
+      ()=>action('teacher.phase',{phase:'matching'}),
+      {disabled:chosen!==room.expected}));
+  if(room.phase!=='ended')
+    controls.append(button('סיום המשחק',()=>{
+      if(confirm('לסיים את המשחק? ההצטרפות ובחירת הקלפים יינעלו.'))
+        action('teacher.phase',{phase:'ended'});
+    },{class:'danger'}));
+  if(controls.childNodes.length)header.append(controls);
+  main.append(header);
+
   if(room.phase!=='ended'){
     const qr=el('div',{class:'qr-wrap','aria-label':'QR וקישור להצטרפות'});
-    try { qr.append(createInviteTools(roomLink(room),message=>notify(message))); }
-    catch { qr.append(el('p',{},'לא ניתן להציג QR כרגע.')); }
-    const join=el('aside',{class:'panel invitation-panel'},el('h2',{},'הזמנת משתתפות'),qr);
-    const operation=el('section',{class:'panel'},el('h2',{},'ניהול המשתתפות'));
+    try{qr.append(createInviteTools(roomLink(room),message=>notify(message)));}
+    catch{qr.append(el('p',{},'לא ניתן להציג QR כרגע.'));}
+    const invitation=el('div',{class:'teacher-invitation'},
+      el('h2',{},'הזמנת משתתפות'),qr);
+    const management=el('div',{class:'teacher-room-settings'});
     if(chosen===0){
-      const expected=textInput(room.expected,{type:'number',min:Math.max(2,joined),step:1,required:true,inputmode:'numeric'});
-      const resize=el('form',{},field('עדכון מספר המשתתפות לפני הבחירה הראשונה',expected),el('button',{type:'submit',class:'secondary'},'עדכון הכמות והחלוקה'));
-      resize.addEventListener('submit',async(event)=>{event.preventDefault();if(resize.reportValidity()&&confirm('לעדכן את הכמות ולהגריל מחדש את הקלפים לפני הבחירה הראשונה?'))await action('teacher.resize',{expected:Number(expected.value)});});operation.append(resize);
-    }else operation.append(el('p',{class:'info'},'נבחר קלף ראשון. החלוקה והמספור נעולים ולא ניתן להגריל אותם מחדש.'));
-    if(room.phase==='waiting'){
-      const name=textInput('',{maxlength:60,required:true,placeholder:'שם המשתתפת'});
-      const manual=el('form',{},field('משתתפת ללא טלפון',name),el('button',{type:'submit',class:'secondary'},'הוספת משתתפת ידנית'));
-      manual.addEventListener('submit',async(event)=>{event.preventDefault();if(manual.reportValidity())await action('teacher.manual_join',{name:name.value.trim()},'המשתתפת נוספה לחדר.');});operation.append(el('hr'),manual);
+      const expected=textInput(room.expected,{
+        type:'number',min:Math.max(2,joined),
+        max:33,step:1,required:true,inputmode:'numeric'});
+      const resize=el('form',{class:'teacher-room-resize'},
+        field('מספר משתתפות',expected),
+        el('button',{type:'submit',class:'secondary'},'עדכון'));
+      resize.addEventListener('submit',async event=>{
+        event.preventDefault();
+        if(resize.reportValidity()&&confirm('לעדכן את מספר המשתתפות לפני הבחירה הראשונה?'))
+          await action('teacher.resize',{expected:Number(expected.value)});
+      });
+      management.append(el('details',{class:'teacher-settings-details'},
+        el('summary',{},'אפשרויות חדר'),resize));
     }
-    operation.append(el('p',{class:'help'},'לאחר בחירת הקלף, הוא נשמר למשתתפת גם אם יצאה מהמסך.'));
-    main.append(el('div',{class:'split'},operation,join));
+    const row=el('div',{class:'teacher-invitation-row'},
+      invitation,management);
+    const operation=el('section',{class:'panel teacher-room-activity'},
+      row,roster(players,cards,room));
+    main.append(operation);
+  }else{
+    main.append(el('section',{class:'panel teacher-room-activity'},
+      roster(players,cards,room)));
   }
-  main.append(roster(players,cards,room));
-  const groupList=el('div',{class:'group-list'});
+
+  const groupList=el('div',{class:'group-list teacher-match-grid'});
   for(const group of groups){
     const members=players.filter(player=>player.group_id===group.id);
-    groupList.append(el('article',{class:`group-item ${(group.chosen||0)===group.size?'complete':''}`},el('h3',{class:'match-heading'},symbolIcon(group.symbol),el('span',{class:'match-group-type'},group.size===3?'שלישייה':'זוג')),el('p',{class:'match-selection'},`${group.chosen||0} מתוך ${group.size} קלפים נבחרו`),...members.map(player=>el('p',{class:'match-member'},`${player.name} · ${player.woman_name||''}`))));
+    groupList.append(el('article',{
+      class:`group-item ${(group.chosen||0)===group.size?'complete':''}`},
+      el('h3',{class:'match-heading'},
+        symbolIcon(group.symbol),
+        el('span',{class:'match-group-type'},group.size===3?'שלישייה':'זוג')),
+      el('p',{class:'match-selection'},`${group.chosen||0} מתוך ${group.size} קלפים נבחרו`),
+      ...members.map(player=>el('p',{class:'match-member'},
+        `${player.name} · ${player.woman_name||''}`))));
   }
-  main.append(el('section',{class:'panel'},el('h2',{},'מפת הקלפים וההתאמות'),el('p',{},'כאן תוכלי לראות מי שייכת לכל זוג או שלישייה.'),groupList));
+  const expand=mapExpanded===null
+    ?room.phase==='choosing'||room.phase==='matching'||room.phase==='activity'
+    :mapExpanded;
+  const map=el('details',{id:'teacher-match-map',class:'panel teacher-match-map',
+    open:expand},
+    el('summary',{class:'teacher-match-summary'},
+      el('span',{},'מפת הקלפים וההתאמות'),
+      el('span',{class:'teacher-map-toggle','aria-hidden':'true'},'⌄')),
+    groupList);
+  map.addEventListener('toggle',()=>{
+    if(map.isConnected)mapExpanded=map.open;
+  });
+  main.append(map);
 }
 
 function roster(players,cards,room){
@@ -151,12 +217,6 @@ function roster(players,cards,room){
     if(room.phase==='waiting'){
       controls.append(button('תיקון שם',async()=>{const name=prompt('השם המעודכן של המשתתפת:',player.name);if(name?.trim())await action('teacher.player_update',{player_id:player.id,name:name.trim()});},{class:'text-button'}));
       if(!chosen)controls.append(button('הסרת רישום',async()=>{if(confirm(`להסיר את הרישום של ${player.name}?`))await action('teacher.player_remove',{player_id:player.id});},{class:'text-button'}));
-    }
-    // Manual allocation uses the same atomic server claim as a phone choice.
-    if(room.phase==='choosing'&&player.manual&&!player.number){
-      const available=cards.filter(card=>!card.player_id);
-      const select=el('select',{'aria-label':`בחירת קלף עבור ${player.name}`},el('option',{value:''},'מספר קלף'),...available.map(card=>el('option',{value:card.number},card.number)));
-      controls.append(select,button('הקצאה ידנית',async()=>{if(select.value)await action('teacher.manual_claim',{player_id:player.id,number:Number(select.value)},'הקלף הוקצה וננעל.');},{class:'secondary'}));
     }
     if(player.number&&room.phase!=='ended'){
       controls.append(button('הצגת קלף',()=>{
@@ -171,7 +231,7 @@ function roster(players,cards,room){
     body.append(el('tr',{},el('td',{},player.name),el('td',{},player.number||'—'),el('td',{},player.woman_name||'—'),el('td',{},player.symbol?symbolIcon(player.symbol,true):'—'),el('td',{},el('span',{class:`badge ${player.number?'success':''}`},player.number?'הקלף נשמר':'טרם בחרה'),stale?el('small',{},' · החיבור לא עודכן לאחרונה'):null),el('td',{},controls)));
   }
   table.append(body);
-  return el('section',{class:'panel'},el('h2',{},'המשתתפות בחדר'),players.length?el('div',{class:'table-wrap'},table):el('p',{class:'empty'},'מחכות למשתתפת הראשונה. הציגי את קוד ה־QR או שתפי את הקישור.'));
+  return el('section',{class:'teacher-roster'},el('h2',{},'משתתפות בחדר'),players.length?el('div',{class:'table-wrap'},table):el('p',{class:'teacher-roster-empty'},'ממתינות להצטרפות המשתתפות'));
 }
 
 async function start(){me=await requireTeacher();if(!me)return;if(roomId)await openRoom(roomId);else await home();}

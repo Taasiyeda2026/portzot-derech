@@ -137,3 +137,86 @@
   .teacher-room-summary{gap:8px;flex-wrap:wrap}
   .teacher-room-row .badge{font-size:.72rem}
 }
+
+/* Classroom control view: compact, stage-aware layout. */
+#app.teacher-room-view{max-width:1000px;padding-top:22px}
+.teacher-room-view>.panel{padding:21px 25px;margin-bottom:16px;border-radius:19px}
+.teacher-room-title{display:flex;align-items:center;justify-content:space-between;gap:15px}
+.teacher-room-title h1{font-size:clamp(1.55rem,3.3vw,2.05rem);letter-spacing:-.025em;margin:0}
+.teacher-room-title .eyebrow{margin:0 0 2px}
+.teacher-room-title-actions{display:flex;align-items:center;gap:10px}
+.teacher-room-count{font-size:.82rem;white-space:nowrap}
+.teacher-room-title-actions .secondary{min-height:38px;padding:6px 13px;font-size:.84rem;white-space:nowrap}
+.teacher-phase-progress{margin:19px 0 13px;padding:12px 15px;background:#f9f2f7;border-radius:12px}
+.teacher-phase-meta{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:9px;font-size:.87rem}
+.teacher-phase-meta strong{color:var(--plum)}
+.teacher-phase-meta span{font-size:.76rem;color:var(--muted)}
+.teacher-phase-track{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;height:5px}
+.teacher-phase-track span{border-radius:5px;background:#e9dce5}
+.teacher-phase-track span.filled{background:#a3548e}
+.teacher-status-strip{display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:5px 2px 0;color:var(--muted);font-size:.9rem}
+.teacher-status-strip span{white-space:nowrap}
+.teacher-status-strip b{font-size:1.02rem;color:var(--plum)}
+.teacher-room-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:15px}
+.teacher-room-controls .primary{min-height:42px;padding:9px 16px;font-size:.9rem}
+.teacher-room-controls .danger{min-height:40px;padding:7px 13px;font-size:.87rem;margin-inline-start:auto}
+.teacher-room-activity{padding-top:17px!important;padding-bottom:17px!important}
+.teacher-invitation-row{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.teacher-invitation{display:flex;align-items:center;gap:15px;flex-wrap:wrap}
+.teacher-invitation h2{font-size:1rem;margin:0}
+.teacher-invitation .qr-wrap{margin:0;padding:0;border:0;background:transparent;max-width:none}
+.teacher-invitation .invite-tools{gap:10px;justify-content:flex-start}
+.teacher-invitation .invite-qr-thumb{width:87px;height:87px;flex-basis:87px;padding:5px}
+.teacher-invitation .invite-actions{grid-template-columns:repeat(4,38px);gap:7px}
+.teacher-invitation .invite-icon{width:38px;height:38px;min-height:38px;border-radius:10px}
+.teacher-invitation .invite-actions .invite-icon svg{width:20px;height:20px}
+.teacher-room-settings{margin-inline-start:auto}
+.teacher-settings-details{border:0;padding:0;position:relative}
+.teacher-settings-details>summary{color:var(--plum);font-size:.83rem;font-weight:600;padding:8px;white-space:nowrap}
+.teacher-room-resize{display:flex;align-items:flex-end;gap:9px;flex-wrap:wrap;border:1px solid var(--line);padding:12px;border-radius:12px;background:#fff;margin-top:8px}
+.teacher-room-resize label{max-width:110px;margin:0}
+.teacher-room-resize input{min-height:40px;padding:8px 10px}
+.teacher-room-resize .secondary{min-height:40px;padding:6px 10px;font-size:.84rem}
+.teacher-roster{border-top:1px solid var(--line);padding-top:15px;margin-top:15px}
+.teacher-roster h2{font-size:1rem;margin:0 0 10px}
+.teacher-roster-empty{font-size:.86rem;color:var(--muted);margin:0}
+.teacher-roster .table-wrap{border-radius:10px}
+.teacher-roster th,.teacher-roster td{padding:8px 9px}
+.teacher-roster td .actions{margin-top:0;gap:5px}
+.teacher-roster td .text-button{padding:5px;min-height:34px}
+.teacher-match-map{padding:0!important;overflow:hidden}
+.teacher-match-summary{list-style:none;display:flex;align-items:center;justify-content:space-between;cursor:pointer;font-size:1rem;font-weight:700;color:var(--ink);padding:16px 23px;margin:0}
+.teacher-match-summary::-webkit-details-marker{display:none}
+.teacher-match-summary:focus-visible{outline:3px solid #b865a8;outline-offset:-3px}
+.teacher-map-toggle{color:var(--plum);font-size:1.25rem;transition:transform .2s}
+.teacher-match-map[open] .teacher-map-toggle{transform:rotate(180deg)}
+.teacher-match-map .teacher-match-grid{padding:0 20px 19px;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}
+.teacher-match-grid .group-item{padding:10px 6px;border-radius:12px}
+.teacher-match-grid .group-symbol-icon{width:38px;height:38px}
+.teacher-match-grid .match-heading{gap:4px;margin-bottom:5px}
+.teacher-match-grid .match-group-type{font-size:.87rem}
+.teacher-match-grid .match-selection{font-size:.73rem}
+.teacher-match-grid .match-member{font-size:.74rem}
+@media(max-width:760px){
+  #app.teacher-room-view{padding:17px 14px 45px}
+  .teacher-room-view>.panel{padding:17px 15px;margin-bottom:12px}
+  .teacher-room-title{align-items:flex-start}
+  .teacher-room-title-actions{flex-wrap:wrap;justify-content:flex-end}
+  .teacher-room-controls .danger{margin-inline-start:0}
+  .teacher-match-map .teacher-match-grid{grid-template-columns:repeat(3,minmax(0,1fr));padding:0 12px 14px}
+  .teacher-invitation-row{align-items:flex-start}
+}
+@media(max-width:460px){
+  .teacher-room-title{flex-direction:column;gap:9px}
+  .teacher-room-title-actions{justify-content:flex-start}
+  .teacher-phase-progress{margin-top:13px}
+  .teacher-status-strip{gap:10px 15px;font-size:.83rem}
+  .teacher-invitation{gap:9px}
+  .teacher-invitation h2{flex-basis:100%}
+  .teacher-invitation .invite-qr-thumb{width:75px;height:75px;flex-basis:75px}
+  .teacher-invitation .invite-actions{grid-template-columns:repeat(4,36px);gap:5px}
+  .teacher-invitation .invite-icon{width:36px;height:36px}
+  .teacher-room-settings{margin-inline-start:0}
+  .teacher-match-map .teacher-match-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .teacher-match-summary{padding:14px 15px}
+}
