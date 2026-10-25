@@ -39,6 +39,40 @@ test('a concurrent creation conflict rechecks privacy and never overwrites', asy
   assert.equal(checks, 2);
 });
 
+test('observed HTTP400 with semantic404 NoSuchBucket is recognized without accepting generic400', async () => {
+  for (const error of [
+    { status: 400, statusCode: '404', code: 'NoSuchBucket', message: 'Bucket not found' },
+    { status: 400, statusCode: '404' },
+    { status: 400, code: 'NoSuchBucket' },
+  ]) {
+    let writes = 0;
+    const storage = {
+      getBucket: async () => writes ? { data: { public: false } } : { data: null, error },
+      createBucket: async (id, options) => { assert.equal(id, 'inspiration-cards'); assert.equal(options.public, false); writes++; return {}; },
+    };
+    assert.equal((await prepareStorage(storage)).status, 'missing');
+    assert.equal(writes, 0);
+    assert.equal((await prepareStorage(storage, { apply: true })).status, 'private-created');
+    assert.equal(writes, 1);
+  }
+});
+
+test('HTTP400 with semantic409 or known bucket conflict still requires a fresh private reread', async () => {
+  for (const error of [
+    { status: 400, statusCode: '409' },
+    { status: 400, code: 'BucketAlreadyExists' },
+    { status: 400, code: 'ResourceAlreadyExists' },
+  ]) {
+    let checks = 0;
+    const storage = {
+      getBucket: async () => ++checks === 1 ? { data: null, error: { status: 400, statusCode: '404' } } : { data: { public: false } },
+      createBucket: async () => ({ error }),
+    };
+    assert.equal((await prepareStorage(storage, { apply: true })).status, 'private-existing');
+    assert.equal(checks, 2);
+  }
+});
+
 test('existing public bucket is rejected without a write', async () => {
   let writes = 0;
   await assert.rejects(() => prepareStorage({
@@ -54,6 +88,8 @@ test('missing privacy metadata and denied lookup never cause creation', async ()
     { data: null, error: { status: 403 } },
     { data: null, error: { status: 500 } },
     { data: null, error: { status: 400, message: 'not found' } },
+    { data: null, error: { status: 400, statusCode: '400', code: 'InvalidRequest' } },
+    { data: { public: false }, error: { status: 400, statusCode: '404', code: 'NoSuchBucket' } },
     { data: null },
   ]) {
     let writes = 0;
@@ -69,8 +105,17 @@ test('non-conflict creation errors fail closed with no raw server details', asyn
   }, { apply: true }), error => !error.message.includes('sensitive-token'));
 });
 
+test('generic HTTP400 creation failure cannot be treated as a concurrent bucket', async () => {
+  let checks = 0;
+  await assert.rejects(() => prepareStorage({
+    getBucket: async () => { checks++; return { data: null, error: { status: 404 } }; },
+    createBucket: async () => ({ error: { status: 400, code: 'InvalidRequest' } }),
+  }, { apply: true }), /creation failed/);
+  assert.equal(checks, 1);
+});
+
 test('successful or concurrent creation cannot enable a public or unavailable bucket', async () => {
-  for (const createError of [null, { status: 409 }]) {
+  for (const createError of [null, { status: 409 }, { status: 400, statusCode: '409' }, { status: 400, code: 'BucketAlreadyExists' }]) {
     for (const verified of [{ data: { public: true } }, { data: null, error: { status: 403 } }]) {
       let checks = 0;
       await assert.rejects(() => prepareStorage({
