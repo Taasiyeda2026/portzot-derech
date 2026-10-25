@@ -1,4 +1,5 @@
 import {api,el,clear,button,field,notify,errorText,requireTeacher,watchRoom,connection,phaseText,cardViewer} from './common.js';
+import {createInviteTools} from './invite-tools.js';
 
 const main=document.querySelector('#app');
 let me,roomId=new URL(location.href).searchParams.get('room'),state,stopWatching,lastState='';
@@ -56,19 +57,25 @@ function renderRoom(){
   clear(main);
   const steps=el('div',{class:'steps','aria-label':'שלבי המשחק'},...phases.map(phase=>el('span',{class:phase===room.phase?'current':''},phaseText[phase])));
   const header=el('section',{class:'panel'},el('div',{class:'room-head'},el('div',{},el('span',{class:'eyebrow'},'החדר שלך'),el('h1',{},`נושמות השראה · ${room.expected}`)),button('כל החדרים',home,{class:'secondary'})),steps,el('div',{class:'stat-grid'},stat(stats.joined??players.length,'הצטרפו'),stat(stats.chosen??players.filter(p=>p.number).length,'בחרו קלף'),stat(stats.remaining??room.expected-(stats.chosen||0),'טרם בחרו'),stat(stats.complete_groups,'קבוצות עם כל הקלפים שנבחרו')));
+  if(room.phase==='matching'||room.phase==='activity') {
+    const progress=el('p',{class:'class-progress'},
+      `אימתו חיבור: ${stats.verified??0} · המשיכו לפעילות: ${stats.continued??0}`);
+    header.append(progress);
+  }
   const joined=stats.joined??players.length;const chosen=stats.chosen??players.filter(p=>p.number).length;
   if(room.phase==='waiting')header.append(el('p',{class:'info'},`מחכות לעוד ${Math.max(0,room.expected-joined)} משתתפות. בחירת הקלפים תיפתח רק כאשר ${room.expected} המשתתפות רשומות בחדר.`));
 
   const controls=el('div',{class:'actions'});
   if(room.phase==='waiting')controls.append(button('מתחילות לבחור קלפים',()=>action('teacher.phase',{phase:'choosing'}),{disabled:joined!==room.expected}));
   if(room.phase==='choosing')controls.append(button('עוברות למציאת החיבורים',()=>action('teacher.phase',{phase:'matching'}),{disabled:chosen!==room.expected}));
-  if(room.phase==='matching')controls.append(button('ממשיכות למפצחות את הקוד',()=>action('teacher.phase',{phase:'activity'})));
+  // Each verified participant opens her own hint and confirms continuation.
   if(room.phase!=='ended')controls.append(button('סיום המשחק',()=>{if(confirm('לסיים את המשחק? ההצטרפות ובחירת הקלפים יינעלו.'))action('teacher.phase',{phase:'ended'});},{class:'danger'}));
   header.append(controls);main.append(header);
   if(room.phase!=='ended'){
-    const qr=el('div',{class:'qr-wrap','aria-label':'קוד QR להצטרפות לחדר'});
-    try{const image=globalThis.qrcode(0,'M');image.addData(roomLink(room));image.make();const doc=new DOMParser().parseFromString(image.createSvgTag({scalable:true,margin:2}),'image/svg+xml');qr.append(document.importNode(doc.documentElement,true));}catch{qr.append(el('p',{},'אפשר להצטרף דרך הקישור למטה.'));}
-    const join=el('aside',{class:'panel'},el('h2',{},'מזמינות את המשתתפות'),qr,el('p',{class:'join-link'},roomLink(room)),el('div',{class:'actions'},button('העתקת קישור',async()=>{try{await navigator.clipboard.writeText(roomLink(room));notify('הקישור הועתק.','success');}catch{notify('לא ניתן להעתיק אוטומטית. סמני והעתיקי את הקישור שמוצג כאן.');}},{class:'secondary'})),el('p',{class:'help'},'המשתתפות נכנסות ישירות. אין צורך בחשבון או בסיסמה.'));
+    const qr=el('div',{class:'qr-wrap','aria-label':'QR וקישור להצטרפות'});
+    try { qr.append(createInviteTools(roomLink(room),message=>notify(message))); }
+    catch { qr.append(el('p',{},'לא ניתן להציג QR כרגע.')); }
+    const join=el('aside',{class:'panel invitation-panel'},el('h2',{},'הזמנת משתתפות'),qr);
     const operation=el('section',{class:'panel'},el('h2',{},'ניהול המשתתפות'));
     if(chosen===0){
       const expected=textInput(room.expected,{type:'number',min:Math.max(2,joined),step:1,required:true,inputmode:'numeric'});

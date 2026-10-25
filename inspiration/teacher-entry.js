@@ -1,4 +1,5 @@
 import { api, dashboardLogin } from './common.js';
+import { createInviteTools } from './invite-tools.js';
 
 const dialog = document.querySelector('#inspiration-dialog');
 const entry = document.querySelector('#inspiration-entry');
@@ -13,7 +14,6 @@ const createButton = document.querySelector('#inspiration-create-room');
 const resultSection = document.querySelector('#inspiration-room-created');
 const manageRoom = document.querySelector('#inspiration-manage-room');
 const qrHost = document.querySelector('#inspiration-room-qr');
-const copyButton = document.querySelector('#inspiration-copy-room');
 const newRoom = document.querySelector('#inspiration-new-room');
 const errorMessage = document.querySelector('#inspiration-entry-error');
 const tokenKey = 'inspiration-teacher-access';
@@ -134,19 +134,11 @@ function showCreatedRoom(room) {
   if (!room?.id || !room?.code) throw new Error('החדר נפתח, אך לא קיבלנו את פרטי ההצטרפות. ניתן לפתוח אותו במסך ניהול המשחקים.');
   const link = roomLinkFor(room.code);
   invitationUrl = link.href;
-  copyButton.textContent = 'העתקת קישור';
   manageRoom.href = new URL('./inspiration/teacher.html?room=' + encodeURIComponent(room.id), location.href).href;
-  qrHost.replaceChildren();
   try {
-    const qr = globalThis.qrcode(0, 'M');
-    qr.addData(link.href);
-    qr.make();
-    const svg = new DOMParser().parseFromString(qr.createSvgTag({ scalable: true, margin: 2 }), 'image/svg+xml');
-    const image = svg.documentElement;
-    if (image.nodeName.toLowerCase() !== 'svg') throw new Error('QR');
-    qrHost.append(document.importNode(image, true));
+    qrHost.replaceChildren(createInviteTools(invitationUrl, showError));
   } catch {
-    qrHost.textContent = 'קישור ההצטרפות זמין להעתקה למטה.';
+    qrHost.textContent = 'לא ניתן להציג QR. אפשר לעבור לניהול המשחק.';
   }
   workspace.hidden = true;
   resultSection.hidden = false;
@@ -178,16 +170,6 @@ form.addEventListener('submit', async (event) => {
   } finally {
     pending = false;
     createButton.disabled = false;
-  }
-});
-
-copyButton.addEventListener('click', async () => {
-  try {
-    if (!invitationUrl) throw new Error('קישור לא זמין');
-    await navigator.clipboard.writeText(invitationUrl);
-    copyButton.textContent = 'הקישור הועתק';
-  } catch {
-    showError('ההעתקה לא הצליחה. נסי שוב או פתחי את ניהול המשחק.');
   }
 });
 
