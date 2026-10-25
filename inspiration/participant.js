@@ -8,9 +8,9 @@ function readSaved(){try{return JSON.parse(localStorage.getItem(storageKey())||'
 function saveSaved(value){try{localStorage.setItem(storageKey(),JSON.stringify(value));return true;}catch{notify('הדפדפן חוסם שמירה במכשיר. השאירי את הדף פתוח כדי לשמור על ההשתתפות שלך.');return false;}}
 function resetView(){viewer?.destroy();viewer=null;clear(main);}
 
-function joinScreen(defaultName='') {
+function joinScreen() {
   resetView();connection(navigator.onLine?'מוכנה להצטרפות':'אין חיבור לאינטרנט',!navigator.onLine);
-  const name=el('input',{name:'name',id:'player-name',maxlength:60,required:true,autocomplete:'given-name',placeholder:'השם הפרטי שלך',value:defaultName});
+  const name=el('input',{name:'name',id:'player-name',maxlength:60,required:true,autocomplete:'given-name',placeholder:'השם הפרטי שלך'});
   const roomCode=el('input',{name:'code',id:'room-code',maxlength:64,required:true,value:code,autocomplete:'off',dir:'ltr',placeholder:'קוד החדר שקיבלת מהמדריכה'});
   const submit=el('button',{type:'submit',class:'primary'},'אני מצטרפת');
   const form=el('form',{},...(code?[]:[field('קוד החדר',roomCode)]),field('מה שמך?',name),el('div',{class:'actions'},submit));
@@ -76,23 +76,7 @@ function startWatching(){stopWatching?.();stopWatching=watchRoom(state?.room?.re
 
 async function start(){
   const saved=code?readSaved():null;
-  if(!saved?.token) {
-    let intent=null;
-    try {
-      intent=JSON.parse(sessionStorage.getItem('inspiration:join-intent')||'null');
-      sessionStorage.removeItem('inspiration:join-intent');
-    }catch { intent=null; }
-    if(intent && intent.code===code && typeof intent.name==='string' && intent.name.trim()) {
-      const joinKey=saved?.join_key||crypto.randomUUID();
-      saveSaved({join_key:joinKey});
-      try {
-        const joined=await api('participant.join',{code,name:intent.name.trim(),join_key:joinKey});
-        token=joined.token;saveSaved({join_key:joinKey,token});
-        await refresh();startWatching();return;
-      }catch(error){notify(errorText(error));joinScreen(intent.name.trim());return;}
-    }
-    joinScreen();return;
-  }
+  if(!saved?.token){joinScreen();return;}
   token=saved.token;
   try {await refresh();startWatching();}
   catch(error){
