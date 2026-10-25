@@ -1,0 +1,4 @@
+# This function verifies staff JWTs with Auth.getUser itself. Participants use
+# separate room-scoped bearer tokens; platform JWT verification must be disabled.
+[functions.inspiration-game]
+verify_jwt = false

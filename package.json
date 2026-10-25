@@ -5,7 +5,10 @@
   "private": true,
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "test": "node --test --test-isolation=none inspiration/tests/*.test.mjs",
+    "test:inspiration:db": "node inspiration/tests/db-integration.mjs",
+    "test:inspiration:browser": "node inspiration/tests/browser-integration.mjs"
   },
   "dependencies": {
     "puppeteer": "^25.12.0"
