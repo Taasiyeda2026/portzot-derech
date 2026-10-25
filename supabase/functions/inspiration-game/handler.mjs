@@ -6,6 +6,7 @@ const ACTIONS = new Set([
   'teacher.player_remove', 'teacher.manual_join', 'teacher.manual_claim', 'teacher.asset',
   'admin.catalog_import', 'admin.catalog_save', 'admin.catalog_validate', 'admin.cleanup',
   'participant.join', 'participant.state', 'participant.claim', 'participant.asset',
+  'participant.verify_match', 'participant.confirm_activity',
 ]);
 const DEFAULT_ORIGINS = ['https://portzot-derech.org', 'https://taasiyeda2026.github.io'];
 const MAX_JSON = 512 * 1024;
@@ -22,6 +23,11 @@ const MESSAGES = {
   invalid_token: 'ההשתתפות אינה זמינה. פני למדריכה.',
   card_taken: 'הקלף כבר נבחר. בחרי קלף אחר.',
   already_chosen: 'כבר בחרת קלף. אפשר לחזור לקלף האישי שלך.',
+  match_invalid_input: 'בדקי שהזנת את מספרי הקלפים המתאימים.',
+  match_not_ready: 'עדיין לא כל הקלפים בקבוצה נבחרו.',
+  match_incorrect: 'זה עדיין לא החיבור הנכון. בדקו את הסמל ונסו שוב.',
+  match_not_verified: 'תחילה צריך לאמת את החיבור שמצאתן.',
+  card_unassigned: 'לא נמצא קלף אישי. פני למדריכה.',
   invalid_phase: 'הפעולה אינה זמינה בשלב הזה של המשחק.',
   roster_incomplete: 'יש להמתין להצטרפות כל המשתתפות.',
   choices_incomplete: 'יש להמתין לבחירת הקלפים של כל המשתתפות.',
@@ -109,8 +115,14 @@ function personalResult(data) {
       name: player.name,
       card: card ? {
         number: card.number, woman_name: card.woman_name, field: card.field,
-        symbol: card.symbol, has_front: Boolean(card.front_path), has_back: Boolean(card.back_path),
+        has_front: Boolean(card.front_path), has_back: Boolean(card.back_path),
       } : null,
+    },
+    progress: {
+      verified: data?.progress?.verified === true,
+      confirmed: data?.progress?.confirmed === true,
+      group_size: [2,3].includes(data?.progress?.group_size) ? data.progress.group_size : null,
+      hint: data?.progress?.verified === true && typeof data?.progress?.hint === 'string' ? data.progress.hint : null,
     },
     taken: Array.isArray(data?.taken) ? data.taken.filter(Number.isInteger) : [],
   };
@@ -129,6 +141,9 @@ function payloadFor(action, value) {
   }
   if (action === 'participant.join' && (typeof payload.join_key !== 'string' || !/^[a-zA-Z0-9_-]{32,128}$/.test(payload.join_key))) throw new HttpError('invalid_request');
   if (action.endsWith('.asset') && !['front', 'back'].includes(payload.side)) throw new HttpError('invalid_request');
+  if (action === 'participant.verify_match' &&
+      (!Array.isArray(payload.numbers) || payload.numbers.length < 1 || payload.numbers.length > 2 ||
+       payload.numbers.some(n => !Number.isInteger(n) || n < 1 || n > 250))) throw new HttpError('match_invalid_input');
   return payload;
 }
 
