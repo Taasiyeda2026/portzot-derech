@@ -4,30 +4,28 @@ import { readFile } from 'node:fs/promises';
 
 const file = (path) => readFile(new URL(path, import.meta.url), 'utf8');
 
-test('course website enters the game site and never starts a participant without a room code', async () => {
+test('course website opens the teacher-only game and never joins as a participant', async () => {
   const menu = await file('../../strongermenu-2026.html');
   const landing = await file('../home.html');
-  assert.match(menu, /href="inspiration\/home\.html"/);
+  const teacherEntry = await file('../teacher-entry.js');
+  assert.match(menu, /id="inspiration-entry"/);
+  assert.match(teacherEntry, /dashboardLogin\(\)/);
+  assert.match(teacherEntry, /api\('teacher\.create'/);
   assert.doesNotMatch(menu, /href="inspiration\/index\.html"/);
-  assert.match(landing, /href="\.\/admin\.html"/);
-  assert.match(landing, /href="\.\/teacher\.html"/);
-  assert.match(landing, /src="\.\.\/icon\/logo\.png"/);
-  assert.match(landing, /נושמות השראה/);
-  assert.match(landing, /כניסה למדריכה/);
-  assert.match(landing, /לוח ניהול המשחק/);
-  assert.doesNotMatch(landing, /הדשבורד|טכני|חשבון|קוד ה־QR|סריקת קוד|מספר משתתפות/);
-  assert.doesNotMatch(landing, /כניסה למשתתפות/);
-  assert.doesNotMatch(landing, /https:\/\/taasiyeda2026\.github\.io\/dashboard_system\/\?route=/);
+  assert.match(landing, /strongermenu-2026\.html#inspiration/);
 });
 
-test('course admin is authenticated through the existing dashboard bridge, then links to rooms and QR', async () => {
-  const admin = await file('../admin.html');
+test('the card page is read-only and uses the dashboard bridge for instructor authorization', async () => {
+  const gallery = await file('../admin.html');
+  const galleryJS = await file('../admin.js');
   const common = await file('../common.js');
-  assert.match(admin, /data-page="admin"/);
-  assert.match(admin, /ניהול משחקים והצגת QR/);
-  assert.match(admin, /href="\.\/teacher\.html"/);
+  assert.match(gallery, /data-page="card-gallery"/);
+  assert.match(gallery, /href="\.\/teacher\.html"/);
+  assert.match(gallery, /id="gallery"/);
+  assert.doesNotMatch(gallery, /id="card-form"|id="group-form"|id="import-form"/);
+  assert.match(galleryJS, /api\('teacher\.catalog'\)/);
+  assert.doesNotMatch(galleryJS, /admin\.catalog_save|admin\.catalog_import/);
   assert.match(common, /loginPanel/);
   assert.match(common, /dashboardLogin/);
   assert.match(common, /inspiration-bridge\.html/);
-  assert.match(common, /לוח האדמין של המשחק/);
 });
