@@ -1,5 +1,6 @@
 import {api,el,clear,button,field,notify,errorText,requireTeacher,watchRoom,connection,phaseText,cardViewer} from './common.js';
 import {createInviteTools} from './invite-tools.js';
+import {symbolIcon} from './symbol-icons.js';
 
 const main=document.querySelector('#app');
 let me,roomId=new URL(location.href).searchParams.get('room'),state,stopWatching,lastState='';
@@ -94,7 +95,7 @@ function renderRoom(){
   const groupList=el('div',{class:'group-list'});
   for(const group of groups){
     const members=players.filter(player=>player.group_id===group.id);
-    groupList.append(el('article',{class:`group-item ${(group.chosen||0)===group.size?'complete':''}`},el('h3',{},el('span',{class:'symbol'},group.symbol),group.size===3?'שלישייה':'זוג'),el('p',{},`${group.chosen||0} מתוך ${group.size} קלפים נבחרו`),...members.map(player=>el('p',{},`${player.name} · ${player.woman_name||''}`))));
+    groupList.append(el('article',{class:`group-item ${(group.chosen||0)===group.size?'complete':''}`},el('h3',{class:'match-heading'},symbolIcon(group.symbol),el('span',{class:'match-group-type'},group.size===3?'שלישייה':'זוג')),el('p',{class:'match-selection'},`${group.chosen||0} מתוך ${group.size} קלפים נבחרו`),...members.map(player=>el('p',{class:'match-member'},`${player.name} · ${player.woman_name||''}`))));
   }
   main.append(el('section',{class:'panel'},el('h2',{},'מפת הקלפים וההתאמות'),el('p',{},'כאן תוכלי לראות מי שייכת לכל זוג או שלישייה.'),groupList));
 }
@@ -124,7 +125,7 @@ function roster(players,cards,room){
     }
     const lastSeen=player.last_seen?new Date(player.last_seen):null;
     const stale=lastSeen&&Date.now()-lastSeen.getTime()>90000;
-    body.append(el('tr',{},el('td',{},player.name),el('td',{},player.number||'—'),el('td',{},player.woman_name||'—'),el('td',{},player.symbol||'—'),el('td',{},el('span',{class:`badge ${player.number?'success':''}`},player.number?'הקלף נשמר':'טרם בחרה'),stale?el('small',{},' · החיבור לא עודכן לאחרונה'):null),el('td',{},controls)));
+    body.append(el('tr',{},el('td',{},player.name),el('td',{},player.number||'—'),el('td',{},player.woman_name||'—'),el('td',{},player.symbol?symbolIcon(player.symbol,true):'—'),el('td',{},el('span',{class:`badge ${player.number?'success':''}`},player.number?'הקלף נשמר':'טרם בחרה'),stale?el('small',{},' · החיבור לא עודכן לאחרונה'):null),el('td',{},controls)));
   }
   table.append(body);
   return el('section',{class:'panel'},el('h2',{},'המשתתפות בחדר'),players.length?el('div',{class:'table-wrap'},table):el('p',{class:'empty'},'מחכות למשתתפת הראשונה. הציגי את קוד ה־QR או שתפי את הקישור.'));
