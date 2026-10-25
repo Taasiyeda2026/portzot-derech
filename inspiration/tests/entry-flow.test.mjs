@@ -45,3 +45,26 @@ test('participant symbol remains on printed card artwork',async()=>{
   assert.doesNotMatch(participant,/symbol-badge/);
   assert.match(participant,/viewer=cardViewer\(card,token\)/);
 });
+
+test('participant join screen contains only a simple title, name field and join button',async()=>{
+  const participant=await read('../participant.js');
+  const start=participant.indexOf('function joinScreen()');
+  const end=participant.indexOf('function personalCard(',start);
+  assert.ok(start>=0 && end>start);
+  const joinScreen=participant.slice(start,end);
+  assert.match(joinScreen,/el\('h1',\{\},'נושמות השראה'\)/);
+  assert.match(joinScreen,/field\('מה שמך\?',name\)/);
+  assert.match(joinScreen,/'אני מצטרפת'/);
+  assert.doesNotMatch(joinScreen,/ברוכה הבאה|במשחק הזה תפגשי|השם שלך יוצג למדריכה בלבד|אין צורך בחשבון או בסיסמה/);
+});
+
+test('waiting room copy is brief and does not prescribe keeping the screen open',async()=>{
+  const participant=await read('../participant.js');
+  const start=participant.indexOf("if(room.phase==='waiting')");
+  const end=participant.indexOf("if(card)",start);
+  assert.ok(start>=0 && end>start);
+  const waiting=participant.slice(start,end);
+  assert.match(waiting,/ממתינות לתחילת המשחק/);
+  assert.match(waiting,/הצטרפת למשחק\. המתיני לתחילת בחירת הקלפים\./);
+  assert.doesNotMatch(waiting,/המקום שלך בחדר שמור|אפשר להשאיר את המסך פתוח|עוד רגע מגלות מי מחכה לכן/);
+});
