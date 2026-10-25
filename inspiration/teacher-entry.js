@@ -10,7 +10,6 @@ const welcome = document.querySelector('#inspiration-teacher-welcome');
 const form = document.querySelector('#inspiration-teacher-form');
 const createButton = document.querySelector('#inspiration-create-room');
 const resultSection = document.querySelector('#inspiration-room-created');
-const codeLabel = document.querySelector('#inspiration-room-code');
 const roomLink = document.querySelector('#inspiration-room-link');
 const manageRoom = document.querySelector('#inspiration-manage-room');
 const qrHost = document.querySelector('#inspiration-room-qr');
@@ -116,7 +115,6 @@ function showCreatedRoom(room) {
   roomLink.href = link.href;
   roomLink.textContent = link.href;
   manageRoom.href = new URL('./inspiration/teacher.html?room=' + encodeURIComponent(room.id), location.href).href;
-  codeLabel.textContent = 'קוד החדר: ' + room.code;
   qrHost.replaceChildren();
   try {
     const qr = globalThis.qrcode(0, 'M');
