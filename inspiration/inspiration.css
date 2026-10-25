@@ -54,3 +54,22 @@
   .gallery-name{font-size:.96rem}
   .gallery-field{font-size:.77rem}
 }
+
+/* Discreet classroom QR/share controls — icon-only and accessible by title. */
+.invitation-panel{padding:20px}
+.invitation-panel h2{font-size:1.08rem;margin-bottom:13px}
+.invitation-panel .qr-wrap{max-width:none;margin:0;padding:0;background:none;border:0}
+.invite-tools{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:14px}
+.invite-qr-thumb{display:grid;place-items:center;flex:0 0 108px;width:108px;height:108px;padding:7px;border:1px solid #e7d1df;border-radius:13px;background:white;cursor:zoom-in}
+.invite-qr-thumb svg{display:block;width:100%;height:100%}
+.invite-actions{display:grid;grid-template-columns:repeat(2,44px);gap:9px}
+.invite-icon{box-sizing:border-box;display:grid;place-items:center;width:44px;height:44px;padding:0;border:1px solid #e4cddc;border-radius:12px;background:#fff;color:var(--plum);text-decoration:none;cursor:pointer}
+.invite-icon:hover,.invite-icon:focus-visible{background:var(--soft)}
+.invite-actions .invite-icon svg,.qr-wrap .invite-actions .invite-icon svg{display:block;width:22px;height:22px}
+.invite-zoom{position:relative;padding:44px 22px 22px;border:0;border-radius:22px;max-width:min(90vw,490px);background:#fff;box-shadow:0 25px 80px #23132d55}
+.invite-zoom::backdrop{background:#180d25bd}
+.invite-zoom>svg{display:block;width:min(75vw,370px);height:auto;margin:auto}
+.invite-zoom-close{position:absolute;top:8px;left:8px;display:grid;place-items:center;width:34px;height:34px;border:0;background:#f3e6ef;border-radius:50%;cursor:pointer}
+.invite-zoom-close svg{display:block;width:18px;height:18px}
+.invite-visually-hidden{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:500px){.invitation-panel{padding:18px 14px}.invite-tools{gap:12px}}
