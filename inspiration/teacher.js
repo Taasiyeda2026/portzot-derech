@@ -30,8 +30,8 @@ async function home(){
       catch(error){notify(errorText(error));submit.disabled=false;}
     });
     const intro=el('section',{class:'panel'},el('span',{class:'eyebrow'},'מרחב המדריכה'),el('h1',{},'סיפור אחד פותח חיבור חדש'),el('p',{},'פתחי חדר, הזמיני את המשתתפות ובואו לגלות יחד מה מחבר בין הסיפורים.'),form);
-    const info=el('aside',{class:'panel'},el('h2',{},'מכינות משחק'),el('p',{},'כל משתתפת בוחרת קלף אחד. לאחר הגילוי, היא מחפשת בעצמה בכיתה את בעלות הסמל הזהה.'),el('p',{},'אין ניקוד ואין דירוג. רק סיפורים, היכרות והשראה.'),el('div',{class:'info'},`המאגר הפעיל כולל ${capacity.pairs??0} זוגות ו־${capacity.triples??0} שלישיות. מספר המשתתפות נקבע לפי הקבוצות השלמות והמאושרות.`));
-    if(!capacity.pairs&&!capacity.triples)info.append(el('p',{class:'info warning'},'טרם נטען מאגר תוכן פעיל ושלם. אדמין יכולה לטעון את הקלפים המאושרים במסך מאגר הקלפים.'));
+    const info=el('aside',{class:'panel'},el('h2',{},'מכינות משחק'),el('p',{},'כל משתתפת בוחרת קלף אחד. לאחר הגילוי, היא מחפשת בעצמה בכיתה את בעלות הסמל הזהה.'),el('p',{},'אין ניקוד ואין דירוג. רק סיפורים, היכרות והשראה.'),el('p',{},`${capacity.pairs??0} זוגות ושלישייה אחת זמינים למשחק.`));
+    if(!capacity.pairs&&!capacity.triples)info.append(el('p',{class:'info warning'},'הקלפים עדיין אינם מוכנים. פני לאחראית המשחק.'));
     main.append(el('div',{class:'split'},intro,info));
     const rooms=Array.isArray(listing)?listing:listing.rooms||[];
     const list=el('div',{class:'room-list'});
@@ -58,7 +58,7 @@ function renderRoom(){
   const header=el('section',{class:'panel'},el('div',{class:'room-head'},el('div',{},el('span',{class:'eyebrow'},'החדר שלך'),el('h1',{},`נושמות השראה · ${room.expected}`)),button('כל החדרים',home,{class:'secondary'})),steps,el('div',{class:'stat-grid'},stat(stats.joined??players.length,'הצטרפו'),stat(stats.chosen??players.filter(p=>p.number).length,'בחרו קלף'),stat(stats.remaining??room.expected-(stats.chosen||0),'טרם בחרו'),stat(stats.complete_groups,'קבוצות עם כל הקלפים שנבחרו')));
   const joined=stats.joined??players.length;const chosen=stats.chosen??players.filter(p=>p.number).length;
   if(room.phase==='waiting')header.append(el('p',{class:'info'},`מחכות לעוד ${Math.max(0,room.expected-joined)} משתתפות. בחירת הקלפים תיפתח רק כאשר ${room.expected} המשתתפות רשומות בחדר.`));
-  header.append(el('p',{class:'help'},`${stats.partial_groups??0} קבוצות עם חלק מהקלפים שנבחרו. מצב חלוקת הקלפים אינו מציין אם המשתתפות כבר מצאו זו את זו בכיתה.`));
+
   const controls=el('div',{class:'actions'});
   if(room.phase==='waiting')controls.append(button('מתחילות לבחור קלפים',()=>action('teacher.phase',{phase:'choosing'}),{disabled:joined!==room.expected}));
   if(room.phase==='choosing')controls.append(button('עוברות למציאת החיבורים',()=>action('teacher.phase',{phase:'matching'}),{disabled:chosen!==room.expected}));
@@ -80,7 +80,7 @@ function renderRoom(){
       const manual=el('form',{},field('משתתפת ללא טלפון',name),el('button',{type:'submit',class:'secondary'},'הוספת משתתפת ידנית'));
       manual.addEventListener('submit',async(event)=>{event.preventDefault();if(manual.reportValidity())await action('teacher.manual_join',{name:name.value.trim()},'המשתתפת נוספה לחדר.');});operation.append(el('hr'),manual);
     }
-    operation.append(el('p',{class:'help'},'אם משתתפת עוזבת לאחר הבחירה, הקלף שלה נשאר משויך אליה. אפשר להמשיך להציג עבורה את הקלף מהמכשיר שבו הצטרפה; אין שינוי אוטומטי בשיוכים.'));
+    operation.append(el('p',{class:'help'},'לאחר בחירת הקלף, הוא נשמר למשתתפת גם אם יצאה מהמסך.'));
     main.append(el('div',{class:'split'},operation,join));
   }
   main.append(roster(players,cards,room));
@@ -89,7 +89,7 @@ function renderRoom(){
     const members=players.filter(player=>player.group_id===group.id);
     groupList.append(el('article',{class:`group-item ${(group.chosen||0)===group.size?'complete':''}`},el('h3',{},el('span',{class:'symbol'},group.symbol),group.size===3?'שלישייה':'זוג'),el('p',{},`${group.chosen||0} מתוך ${group.size} קלפים נבחרו`),...members.map(player=>el('p',{},`${player.name} · ${player.woman_name||''}`))));
   }
-  main.append(el('section',{class:'panel'},el('h2',{},'מפת הקלפים וההתאמות'),el('p',{},'תצוגה למדריכה בלבד. המשתתפות מוצאות את החיבור באופן עצמאי בכיתה.'),groupList));
+  main.append(el('section',{class:'panel'},el('h2',{},'מפת הקלפים וההתאמות'),el('p',{},'כאן תוכלי לראות מי שייכת לכל זוג או שלישייה.'),groupList));
 }
 
 function roster(players,cards,room){
