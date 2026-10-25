@@ -5,6 +5,33 @@ const $ = (selector) => document.querySelector(selector);
 let catalog = { groups: [], capacity: {} };
 let editingCardGroup = null;
 let busy = false;
+let siteFiles = [];
+async function loadSiteFiles() {
+  const response = await fetch(new URL('./cards/women/manifest.json', import.meta.url), { cache: 'no-store' });
+  if (!response.ok) throw new Error('לא הצלחנו לטעון את רשימת הכרטיסים מאתר פורצות דרך.');
+  const manifest = await response.json();
+  if (!Array.isArray(manifest.files)) throw new Error('רשימת קובצי הכרטיסים באתר אינה תקינה.');
+  siteFiles = manifest.files.filter((name) => typeof name === 'string' && /^[A-Za-z0-9_-]+\.(?:png|jpg|jpeg|webp|pdf)$/.test(name));
+  const select = $('#site-card-file');
+  select.replaceChildren();
+  const first = node('option', 'בחרי כרטיס מתיקיית women');
+  first.value = '';
+  select.append(first);
+  for (const name of siteFiles) {
+    const option = node('option', name); option.value = name; select.append(option);
+  }
+  select.addEventListener('change', updateSitePreview);
+}
+function updateSitePreview() {
+  const filename = $('#site-card-file').value;
+  const preview = $('#site-card-preview');
+  if (!preview) return;
+  if (!filename || !siteFiles.includes(filename) || !/\.(png|jpg|jpeg|webp)$/i.test(filename)) {
+    preview.hidden = true; preview.removeAttribute('src'); return;
+  }
+  preview.src = new URL('./cards/women/' + filename, import.meta.url).href;
+  preview.hidden = false;
+}
 
 function node(tag, text, className) {
   const element = document.createElement(tag);
@@ -42,6 +69,8 @@ function resetCard() {
   $('#card-form').reset();
   $('#card-group').disabled = false;
   $('#card-form').elements.id.value = '';
+  $('#site-card-file').value = '';
+  updateSitePreview();
   $('#card-form').elements.front_path.value = '';
   $('#card-form').elements.back_path.value = '';
   $('#front-status').textContent = 'טרם נבחר קובץ קדמי';
@@ -67,6 +96,9 @@ function editCard(group, card) {
   fields.group_id.value = group.id;
   fields.group_id.disabled = true;
   fields.front_path.value = card.front_path || '';
+  const linkedName = typeof card.front_path === 'string' && card.front_path.startsWith('site:women/') ? card.front_path.slice('site:women/'.length) : '';
+  fields.site_file.value = siteFiles.includes(linkedName) ? linkedName : '';
+  updateSitePreview();
   fields.back_path.value = card.back_path || '';
   fields.active.checked = card.active;
   $('#front-status').textContent = card.front_path ? `קובץ שמור: ${card.front_path}` : 'טרם נבחר קובץ קדמי';
@@ -163,7 +195,8 @@ $('#card-form').addEventListener('submit', (event) => {
     if (!target) throw new Error('יש לבחור קבוצת התאמה לקלף.');
     const front = fields.front_file.files[0];
     const back = fields.back_file.files[0];
-    let frontPath = fields.front_path.value;
+    if (fields.site_file.value && (front || back)) throw new Error('בחרי כרטיס קיים באתר או העלי קובץ ישן, לא את שניהם.');
+    let frontPath = fields.site_file.value ? 'site:women/' + fields.site_file.value : fields.front_path.value;
     let backPath = fields.back_path.value;
     if (front) { $('#front-status').textContent = 'מעלות את הקובץ הקדמי…'; frontPath = (await upload(front)).path; }
     if (back) { $('#back-status').textContent = 'מעלות את הקובץ האחורי…'; backPath = (await upload(back)).path; }
@@ -211,6 +244,7 @@ async function init() {
     const account = await requireTeacher();
     if (!account) return;
     if (!account.is_admin) throw new Error('ניהול תוכן זמין לאדמין מורשה בלבד.');
+    await loadSiteFiles();
     await api('admin.catalog_validate');
     await refresh();
     $('#auth-panel').hidden = true;
