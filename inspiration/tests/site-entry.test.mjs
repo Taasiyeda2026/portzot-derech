@@ -11,7 +11,12 @@ test('course website enters the game site and never starts a participant without
   assert.doesNotMatch(menu, /href="inspiration\/index\.html"/);
   assert.match(landing, /href="\.\/admin\.html"/);
   assert.match(landing, /href="\.\/teacher\.html"/);
-  assert.match(landing, /קוד ה־QR/);
+  assert.match(landing, /src="\.\.\/icon\/logo\.png"/);
+  assert.match(landing, /נושמות השראה/);
+  assert.match(landing, /כניסה למדריכה/);
+  assert.match(landing, /לוח ניהול המשחק/);
+  assert.doesNotMatch(landing, /הדשבורד|טכני|חשבון|קוד ה־QR|סריקת קוד|מספר משתתפות/);
+  assert.doesNotMatch(landing, /כניסה למשתתפות/);
   assert.doesNotMatch(landing, /https:\/\/taasiyeda2026\.github\.io\/dashboard_system\/\?route=/);
 });
 
