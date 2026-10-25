@@ -20,7 +20,7 @@ function joinScreen() {
     const saved=readSaved()||{join_key:crypto.randomUUID()};saveSaved(saved);submit.disabled=true;
     try {
       const joined=await api('participant.join',{code,join_key:saved.join_key,name:name.value.trim()});
-      token=joined.token;saveSaved({...saved,token});notify('הצטרפת בהצלחה! עוד רגע מתחילות.','success');
+      token=joined.token;saveSaved({...saved,token});notify('הצטרפת למשחק.','success');
       await refresh();startWatching();
     }catch(error){notify(errorText(error));submit.disabled=false;}
   });
@@ -103,7 +103,7 @@ function render(next) {
     main.append(el('section',{class:'panel waiting'},el('div',{class:'orbit','aria-hidden':'true'},'✧'),el('h1',{},'החיבור ממשיך איתך'),el('p',{},'המשחק הסתיים. תודה שהיית חלק מנושמות השראה!'),el('p',{},'ההצטרפות ובחירת הקלפים בחדר הזה סגורות.')));return;
   }
   if(room.phase==='waiting') {
-    main.append(el('section',{class:'panel waiting'},el('span',{class:'badge'},'הצטרפת בהצלחה'),el('div',{class:'orbit','aria-hidden':'true'},'✧'),el('h1',{},'עוד רגע מגלות מי מחכה לכן!'),el('p',{},`${player.name}, המקום שלך בחדר שמור. המדריכה תפתח את בחירת הקלפים כשכולן יהיו כאן.`),el('p',{class:'help'},'אפשר להשאיר את המסך פתוח. הוא יתעדכן אוטומטית.')));return;
+    main.append(el('section',{class:'panel waiting'},el('span',{class:'badge'},'הצטרפת בהצלחה'),el('h1',{},'ממתינות לתחילת המשחק'),el('p',{},'הצטרפת למשחק. המתיני לתחילת בחירת הקלפים.')));return;
   }
   if(card) {
     const progress=next.progress||{};
