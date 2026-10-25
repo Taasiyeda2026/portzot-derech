@@ -10,7 +10,6 @@ const welcome = document.querySelector('#inspiration-teacher-welcome');
 const form = document.querySelector('#inspiration-teacher-form');
 const createButton = document.querySelector('#inspiration-create-room');
 const resultSection = document.querySelector('#inspiration-room-created');
-const roomLink = document.querySelector('#inspiration-room-link');
 const manageRoom = document.querySelector('#inspiration-manage-room');
 const qrHost = document.querySelector('#inspiration-room-qr');
 const copyButton = document.querySelector('#inspiration-copy-room');
@@ -20,6 +19,7 @@ const tokenKey = 'inspiration-teacher-access';
 
 let catalogCapacity = null;
 let pending = false;
+let invitationUrl = '';
 
 function showError(message) {
   errorMessage.textContent = message || 'לא הצלחנו להשלים את הפעולה. נסי שוב.';
@@ -42,8 +42,7 @@ function showSignedIn(profile) {
   authSection.hidden = true;
   workspace.hidden = false;
   resultSection.hidden = true;
-  const name = typeof profile?.name === 'string' ? profile.name.trim() : '';
-  welcome.textContent = name ? `שלום ${name}, כמה משתתפות יהיו במשחק?` : 'כמה משתתפות יהיו במשחק?';
+  welcome.textContent = 'מחוברת דרך תעשיידע';
   form.reset();
 }
 
@@ -112,8 +111,8 @@ function roomLinkFor(code) {
 function showCreatedRoom(room) {
   if (!room?.id || !room?.code) throw new Error('החדר נפתח, אך לא קיבלנו את פרטי ההצטרפות. ניתן לפתוח אותו במסך ניהול המשחקים.');
   const link = roomLinkFor(room.code);
-  roomLink.href = link.href;
-  roomLink.textContent = link.href;
+  invitationUrl = link.href;
+  copyButton.textContent = 'העתקת קישור';
   manageRoom.href = new URL('./inspiration/teacher.html?room=' + encodeURIComponent(room.id), location.href).href;
   qrHost.replaceChildren();
   try {
@@ -162,10 +161,11 @@ form.addEventListener('submit', async (event) => {
 
 copyButton.addEventListener('click', async () => {
   try {
-    await navigator.clipboard.writeText(roomLink.href);
+    if (!invitationUrl) throw new Error('קישור לא זמין');
+    await navigator.clipboard.writeText(invitationUrl);
     copyButton.textContent = 'הקישור הועתק';
   } catch {
-    showError('לא הצלחנו להעתיק. אפשר לסמן את הקישור ולהעתיק אותו ידנית.');
+    showError('ההעתקה לא הצליחה. נסי שוב או פתחי את ניהול המשחק.');
   }
 });
 
