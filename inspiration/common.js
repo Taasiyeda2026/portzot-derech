@@ -52,7 +52,26 @@ async function readResponse(response,binary=false) {
     const error=new Error(data.error?.message || (response.status===401?'ההתחברות הסתיימה. התחברי שוב.':'לא ניתן לבצע את הפעולה כרגע. נסי שוב.'));
     error.code=data.error?.code;error.status=response.status;throw error;
   }
-  return binary ? response.blob() : response.json();
+  if (!binary) return response.json();
+  // Authorized GitHub card images are fetched from this site's own origin.
+  // The Edge function returns only an allowlisted filename, never a redirect.
+  if ((response.headers.get('Content-Type')||'').includes('application/json')) {
+    const asset = await response.json();
+    const filename = asset?.site_asset;
+    if (typeof filename !== 'string' ||
+        !/^[A-Za-z0-9_-]+\.(?:png|jpg|jpeg|webp|pdf)$/.test(filename))
+      throw new Error('לא ניתן לטעון את תמונת הקלף כרגע.');
+    const url = new URL('./cards/women/' + filename, import.meta.url);
+    const imageResponse = await fetch(url.href,{
+      method:'GET',mode:'same-origin',credentials:'omit',cache:'force-cache'
+    }).catch(()=>{throw new Error('לא ניתן לטעון את תמונת הקלף. בדקי את החיבור ונסי שוב.');});
+    if(!imageResponse.ok) throw new Error('תמונת הקלף אינה זמינה כרגע. נסי שוב.');
+    const blob = await imageResponse.blob();
+    if(!/^(image\/(png|jpeg|webp)|application\/pdf)$/.test(blob.type))
+      throw new Error('פורמט תמונת הקלף אינו תקין.');
+    return blob;
+  }
+  return response.blob();
 }
 export async function api(action,payload={},options={}) {
   const headers={'Content-Type':'application/json',apikey:PUBLISHABLE_KEY};
