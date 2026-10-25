@@ -10,7 +10,8 @@ test('course website opens the teacher-only game and never joins as a participan
   const teacherEntry = await file('../teacher-entry.js');
   assert.match(menu, /id="inspiration-entry"/);
   assert.match(teacherEntry, /dashboardLogin\(\)/);
-  assert.match(teacherEntry, /api\('teacher\.create'/);
+  assert.match(teacherEntry, /location\.assign\(url\.href\)/);
+  assert.doesNotMatch(teacherEntry, /api\('teacher\.create'/);
   assert.doesNotMatch(menu, /href="inspiration\/index\.html"/);
   assert.match(landing, /strongermenu-2026\.html#inspiration/);
 });
