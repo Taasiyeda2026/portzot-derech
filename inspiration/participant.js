@@ -28,7 +28,7 @@ function joinScreen() {
 }
 
 function personalCard(card) {
-  const section=el('section',{class:'panel'},el('div',{class:'personal-header'},el('span',{class:'eyebrow'},`הקלף האישי שלך · ${card.number}`),el('h2',{},card.woman_name),el('p',{},card.field||'')));
+  const section=el('section',{class:'panel'},el('div',{class:'personal-header'},el('span',{class:'eyebrow'},`הקלף האישי שלך · ${card.number}`),el('h2',{},card.woman_name),el('p',{},card.field ? (card.field.startsWith('פורצת דרך ') ? card.field : 'פורצת דרך ב' + card.field) : '')));
   viewer=cardViewer(card,token);section.append(viewer.node);return section;
 }
 
@@ -49,18 +49,18 @@ function render(next) {
       main.append(el('section',{class:'panel'},el('span',{class:'badge'},'מוצאות חיבור בכיתה'),el('h1',{},'עכשיו תורך למצוא את החיבור!'),el('p',{class:'lead'},'הביטי בסמל שמופיע בקלף שלך. איפשהו בכיתה נמצאת משתתפת נוספת עם אותו הסמל. אולי אפילו שתיים!'),el('p',{},'קומי, הכירי את המשתתפות האחרות ומצאי את מי שקיבלה את הסמל התואם לשלך.')));
     }else if(room.phase==='activity') {
       main.append(el('section',{class:'panel'},el('span',{class:'badge'},'מפצחות את הקוד'),el('h1',{},'מצאתן את החיבור? נהדר!'),el('p',{class:'lead'},'עכשיו זה הזמן להכיר את הסיפורים שמאחורי הקלפים ולגלות מה משותף לנשים שפגשתן.'),el('p',{},'ממשיכות יחד עם דפי העבודה וההנחיות של המדריכה. הקלף שלך נשאר כאן בשבילך.')));
-    }else main.append(el('div',{class:'personal-header'},el('span',{class:'badge success'},'הקלף שלך נשמר'),el('h1',{},'איזו אישה מעוררת השראה קיבלת?'),el('p',{},'הכירי את הסיפור והביטי בסמל. עוד מעט נגלה את החיבור.')));
+    }else main.append(el('div',{class:'personal-header'},el('span',{class:'badge success'},'הקלף שלך נשמר'),el('h1',{},'איזו אישה מעוררת השראה קיבלת?'),el('p',{},'זה הזמן להכיר את הסיפור שמאחורי הקלף שלך.')));
     main.append(personalCard(card));return;
   }
   if(room.phase!=='choosing') {
     main.append(el('section',{class:'panel waiting'},el('h1',{},'המדריכה איתך'),el('p',{},'לא שויך לך קלף בחדר הזה. פני למדריכה כדי להמשיך יחד.')));return;
   }
   const board=el('div',{class:'board','aria-label':'לוח הקלפים לבחירה'});
-  main.append(el('section',{class:'panel'},el('span',{class:'eyebrow'},`שלום ${player.name}`),el('h1',{},'איזו השראה מחכה לך?'),el('p',{},'לפנייך קלפים מסתוריים. בחרי קלף אחד וגלי איזו אישה מעוררת השראה מחכה לך. זכרי: אפשר לבחור רק פעם אחת!'),board,el('p',{class:'help'},'קלף בהיר כבר נבחר.')));
+  main.append(el('section',{class:'panel'},el('span',{class:'eyebrow'},`שלום ${player.name}`),el('h1',{},'איזו השראה מחכה לך?'),el('p',{},'לפנייך קלפים מסתוריים. בחרי קלף אחד וגלי איזו אישה מעוררת השראה מחכה לך. זכרי: אפשר לבחור רק פעם אחת!'),board));
   const unavailable=new Set(taken.map(Number));
   for(let number=1;number<=room.expected;number++) {
     const taken=unavailable.has(number);
-    const cardButton=el('button',{type:'button',class:`card-back${taken?' taken':''}`,disabled:taken,'aria-label':taken?`קלף ${number} כבר נבחר`:`בחירת קלף ${number}`,'data-number':number},el('span',{},number),el('small',{},taken?'כבר נבחר':'ההשראה שלך?'));
+    const cardButton=el('button',{type:'button',class:`card-back${taken?' taken':''}`,disabled:taken,'aria-label':taken?`קלף ${number} כבר נבחר`:`בחירת קלף ${number}`,'data-number':number},el('span',{class:'card-number'},number),...(taken?[el('small',{},'נבחר')]:[]));
     cardButton.addEventListener('click',async()=>{
       // A local pending state never declares ownership. Only the stored RPC
       // response below can reveal a personal card.
