@@ -23,7 +23,7 @@ test('course tile opens only the instructor workspace', async () => {
   assert.doesNotMatch(menu, /id="inspiration-room-code"/);
   assert.doesNotMatch(menu, /id="inspiration-room-link"/);
   assert.doesNotMatch(menu, /כמה משתתפות יהיו במשחק\\?/);
-  assert.match(menu, /id="inspiration-copy-room"/);
+  assert.doesNotMatch(menu, /id="inspiration-copy-room"/);
   assert.match(menu, /id="inspiration-manage-room"/);
   assert.doesNotMatch(menu, /sessionStorage\.setItem\('inspiration:join-intent'/);
 });
@@ -43,19 +43,25 @@ test('opening a room requires a dashboard account with teacher permissions', asy
   assert.match(script, /sessionStorage\.getItem\(tokenKey\)/);
 });
 
-test('teacher gets a shareable link and QR after room creation', async () => {
+test('teacher gets compact QR and icon controls without exposing a room URL as text', async () => {
   const script = await load('../teacher-entry.js');
   const teacher = await load('../teacher.js');
-  assert.match(script, /new URL\('\.\/inspiration\/index\.html', location\.href\)/);
-  assert.match(script, /url\.searchParams\.set\('code', code\)/);
-  assert.match(script, /globalThis\.qrcode\(0, 'M'\)/);
-  assert.match(script, /navigator\\.clipboard\\.writeText\\(invitationUrl\\)/);
-  assert.match(script, /invitationUrl = link\\.href/);
-  assert.doesNotMatch(script, /roomLink\\.textContent/);
-  assert.match(script, /inspiration\/teacher\.html\?room=/);
-  assert.match(teacher, /api\('teacher\.create'/);
-  assert.match(teacher, /class:'qr-wrap'/);
-  assert.doesNotMatch(teacher, /class:'join-code'/);
+  const invite = await load('../invite-tools.js');
+  assert.match(script, /new URL\\('\\.\\/inspiration\\/index\\.html', location\\.href\\)/);
+  assert.match(script, /url\\.searchParams\\.set\\('code', code\\)/);
+  assert.match(script, /createInviteTools\\(invitationUrl, showError\\)/);
+  assert.match(script, /inspiration\\/teacher\\.html\\?room=/);
+  assert.match(teacher, /api\\('teacher\\.create'/);
+  assert.match(teacher, /createInviteTools\\(roomLink\\(room\\)/);
+  assert.doesNotMatch(teacher, /class:'join-link'|class:'join-code'/);
+  assert.match(invite, /createSvgTag/);
+  assert.match(invite, /zoomQR/);
+  assert.match(invite, /downloadQR/);
+  assert.match(invite, /navigator\\.clipboard\\.writeText\\(inviteUrl\\)/);
+  assert.match(invite, /https:\\/\\/wa\\.me\\/\\?text=/);
+  assert.match(invite, /mailto:/);
+  const menu = await load('../../strongermenu-2026.html');
+  assert.doesNotMatch(menu, /id="inspiration-room-link"|id="inspiration-copy-room"/);
 });
 
 test('participants arrive from invitation QR, enter their name and choose a card', async () => {
