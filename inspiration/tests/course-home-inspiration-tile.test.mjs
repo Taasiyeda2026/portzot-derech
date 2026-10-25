@@ -10,6 +10,9 @@ test('inspiration game is one of the seven matching home menu cards, not a foote
   assert.ok(grid, 'home menu grid must exist');
   assert.equal((grid.match(/class="menu-item"/g) || []).length, 7);
   assert.equal((grid.match(/href="inspiration\/home\.html"/g) || []).length, 1);
+  const tileOrder = [...grid.matchAll(/<a class="menu-item" href="([^"]+)">/g)].map((match) => match[1]);
+  assert.equal(tileOrder[0], 'start/quiz.html');
+  assert.equal(tileOrder[1], 'inspiration/home.html', 'Inspiration card must immediately follow Starting Out');
   assert.match(grid, /<a class="menu-item" href="inspiration\/home\.html">\s*<h4>נושמות השראה<\/h4>\s*<p>משחק הקלפים הקבוצתי<\/p>/);
   const closing = html.match(/<section class="closing">([\s\S]*?)<\/section>/)?.[1];
   assert.ok(closing);
