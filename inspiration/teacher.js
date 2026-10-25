@@ -39,7 +39,7 @@ async function home(){
       event.preventDefault();
       if(!form.reportValidity())return;
       const count=Number(expected.value);
-      if(!Number.isInteger(count)||count<2||count>(count%2?oddLimit:evenLimit)){
+      if(!Number.isInteger(count)||count<2||(maximum>=2&&count>(count%2?oddLimit:evenLimit))){
         notify('מספר המשתתפות אינו מתאים למאגר הקלפים.');return;
       }
       submit.disabled=true;
