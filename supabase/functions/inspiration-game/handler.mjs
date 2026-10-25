@@ -222,6 +222,19 @@ export function createHandler({ client, allowedOrigins = DEFAULT_ORIGINS, crypto
       const data = await rpc(action, actor, token, payload);
       if (action.endsWith('.asset')) {
         const path = data?.path;
+        // Public, immutable-by-path artwork lives on the existing course website.
+        // RPC authorization still runs before the redirect. The allowlisted
+        // relative path cannot be used to redirect to an arbitrary origin.
+        const siteCard = typeof path === 'string'
+          ? /^site:women\/([A-Za-z0-9_-]+\.(?:png|jpg|jpeg|webp|pdf))$/.exec(path)
+          : null;
+        if (siteCard) {
+          const mediaHeaders = new Headers(headers);
+          mediaHeaders.set('Location', new URL('./cards/women/' + siteCard[1], 'https://portzot-derech.org/inspiration/').href);
+          // 303 converts the authenticated POST to a GET on GitHub Pages.
+          // The public artwork is not mirrored to Supabase Storage.
+          return new Response(null, { status: 303, headers: mediaHeaders });
+        }
         const extension = typeof path === 'string' ? path.split('.').pop().toLowerCase() : '';
         if (!path || !MIME[extension] || path.includes('..') || path.startsWith('/') || /[?#\\]/.test(path)) throw new HttpError('file_missing', 404);
         await requirePrivateBucket();
