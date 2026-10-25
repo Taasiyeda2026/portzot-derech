@@ -165,7 +165,7 @@ copyButton.addEventListener('click', async () => {
     await navigator.clipboard.writeText(invitationUrl);
     copyButton.textContent = 'הקישור הועתק';
   } catch {
-    showError('לא הצלחנו להעתיק. אפשר לסמן את הקישור ולהעתיק אותו ידנית.');
+    showError('ההעתקה לא הצליחה. נסי שוב או פתחי את ניהול המשחק.');
   }
 });
 
