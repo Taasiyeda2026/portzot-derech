@@ -145,11 +145,12 @@ test('asset authorization resolves only server-selected path and streams no-stor
   assert.match(await response.text(), /PDF/);
 });
 
-test('linked site cards redirect only after authorization to the allowlisted course artwork path', async () => {
+test('linked site cards return authorized allowlisted filename without a CORS redirect', async () => {
   const { request, storageCalls, calls } = setup({ data: { path: 'site:women/Amelia.png' } });
   const response = await request({ action: 'participant.asset', token: TOKEN, payload: { side: 'front' } });
-  assert.equal(response.status, 303);
-  assert.equal(response.headers.get('Location'), 'https://portzot-derech.org/inspiration/cards/women/Amelia.png');
+  assert.equal(response.status, 200);
+  assert.deepEqual(await response.json(), { site_asset: 'Amelia.png' });
+  assert.equal(response.headers.get('Location'), null);
   assert.match(response.headers.get('Cache-Control'), /no-store/);
   assert.equal(storageCalls.length, 0, 'linked artwork is never downloaded from Supabase Storage');
   assert.equal(calls[1][1].p_action, 'participant.asset');
