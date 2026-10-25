@@ -49,7 +49,7 @@ function render(next) {
       main.append(el('section',{class:'panel'},el('span',{class:'badge'},'מוצאות חיבור בכיתה'),el('h1',{},'עכשיו תורך למצוא את החיבור!'),el('p',{class:'lead'},'הביטי בסמל שמופיע בקלף שלך. איפשהו בכיתה נמצאת משתתפת נוספת עם אותו הסמל. אולי אפילו שתיים!'),el('p',{},'קומי, הכירי את המשתתפות האחרות ומצאי את מי שקיבלה את הסמל התואם לשלך.')));
     }else if(room.phase==='activity') {
       main.append(el('section',{class:'panel'},el('span',{class:'badge'},'מפצחות את הקוד'),el('h1',{},'מצאתן את החיבור? נהדר!'),el('p',{class:'lead'},'עכשיו זה הזמן להכיר את הסיפורים שמאחורי הקלפים ולגלות מה משותף לנשים שפגשתן.'),el('p',{},'ממשיכות יחד עם דפי העבודה וההנחיות של המדריכה. הקלף שלך נשאר כאן בשבילך.')));
-    }else main.append(el('div',{class:'personal-header'},el('span',{class:'badge success'},'הקלף שלך נשמר'),el('h1',{},'איזו אישה מעוררת השראה קיבלת?'),el('p',{},'זה הזמן להכיר את הסיפור שמאחורי הקלף שלך.')));
+    }else main.append(el('div',{class:'personal-header'},el('span',{class:'badge success'},'הקלף שלך נשמר'),el('h1',{},'איזו אישה מעוררת השראה קיבלת?')));
     main.append(personalCard(card));return;
   }
   if(room.phase!=='choosing') {
