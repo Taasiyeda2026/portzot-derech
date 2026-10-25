@@ -561,38 +561,45 @@
       }
     }
 
-    /* Quick entry to the classroom game */
+    /* Instructor game entry */
     .menu-item:is(button){font:inherit;cursor:pointer}
-    #inspiration-dialog{border:1px solid #e6c6d9;border-radius:23px;padding:0;width:min(440px,calc(100vw - 28px));max-height:min(95vh,740px);background:#fffafd;color:#442c46;box-shadow:0 24px 80px #260f3166}
+    #inspiration-dialog{
+      box-sizing:border-box;border:1px solid #ead8e5;border-radius:24px;padding:0;
+      width:min(500px,calc(100vw - 28px));max-height:min(92vh,780px);
+      background:#fffafd;color:#442c46;box-shadow:0 26px 80px #260f314e
+    }
     #inspiration-dialog::backdrop{background:#1a1239b0;backdrop-filter:blur(3px)}
-    .inspiration-dialog-inner{padding:28px;display:grid;gap:14px;font-family:"Alef",Arial,sans-serif;text-align:right}
-    .inspiration-dialog-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
-    .inspiration-dialog-top h2{margin:0;font-size:1.65rem;color:#5c2852}
-    .inspiration-dialog-close{border:0;border-radius:50%;background:#f7e8f0;color:#5c2852;width:38px;height:38px;cursor:pointer;font-size:1.4rem}
+    .inspiration-dialog-inner{padding:clamp(22px,4vw,34px);display:grid;gap:20px;font-family:"Alef",Arial,sans-serif;text-align:right}
+    .inspiration-dialog-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:14px;border-bottom:1px solid #f0e1eb}
+    .inspiration-dialog-heading{display:grid;gap:5px}
+    .inspiration-dialog-eyebrow{font-size:.78rem;color:#946d8c}
+    .inspiration-dialog-top h2{margin:0;font-size:1.7rem;line-height:1.25;color:#5c2852}
+    .inspiration-dialog-close{flex:0 0 38px;border:0;border-radius:50%;background:#f7e8f0;color:#5c2852;width:38px;height:38px;cursor:pointer;font-size:1.4rem}
     .inspiration-dialog-inner p{margin:0;color:#775c73;font-size:.94rem;line-height:1.55}
-    .inspiration-dialog-inner label{display:grid;gap:6px;font-weight:700;font-size:.95rem}
-    .inspiration-dialog-inner input{display:block;box-sizing:border-box;width:100%;border:1px solid #d7bed2;background:#fff;border-radius:10px;min-height:46px;padding:10px 12px;color:#362b40;font:inherit}
+    .inspiration-dialog-inner label{display:grid;gap:9px;font-weight:700;font-size:.98rem}
+    .inspiration-dialog-inner input{display:block;box-sizing:border-box;width:100%;border:1px solid #d7bed2;background:#fff;border-radius:12px;min-height:52px;padding:11px 14px;color:#362b40;font:inherit;font-size:1.05rem}
     .inspiration-dialog-inner input:focus{outline:2px solid #cb72ae;outline-offset:2px}
-    .inspiration-dialog-inner form{display:grid;gap:14px;margin-top:6px}
-    .inspiration-dialog-submit{border:0;border-radius:12px;background:#682f63;color:#fff;font:inherit;font-weight:700;min-height:48px;cursor:pointer;padding:12px}
+    .inspiration-dialog-inner form{display:grid;gap:20px}
+    .inspiration-dialog-submit{box-sizing:border-box;border:0;border-radius:12px;background:#682f63;color:#fff;font:inherit;font-weight:700;min-height:50px;cursor:pointer;padding:12px 16px;text-align:center}
     .inspiration-dialog-submit:hover{background:#4f2550}
-    .inspiration-dialog-instructor{border:1px solid #dfc6d8;background:#fff;color:#632e62;font:inherit;font-weight:700;border-radius:12px;min-height:46px;cursor:pointer}
+    .inspiration-dialog-submit:disabled{opacity:.6;cursor:progress}
+    .inspiration-dialog-instructor{box-sizing:border-box;border:1px solid #dfc6d8;background:#fff;color:#632e62;font:inherit;font-weight:700;border-radius:12px;min-height:50px;cursor:pointer;padding:10px 12px}
     .inspiration-dialog-instructor:disabled{opacity:.6;cursor:progress}
-    .inspiration-dialog-line{border:0;border-top:1px solid #eadce8;width:100%;margin:3px 0}
     .inspiration-dialog-error{color:#9e3448!important;font-weight:700}
-    .inspiration-dialog-error[hidden]{display:none}
-    .inspiration-dialog-inner [hidden]{display:none!important}
-    #inspiration-teacher-auth{display:grid;gap:10px}
-    #inspiration-teacher-workspace{display:grid;gap:8px}
-    .inspiration-teacher-welcome{font-weight:700;color:#5c2852!important}
-    #inspiration-room-created{display:grid;gap:13px;text-align:center}
-    #inspiration-room-qr{width:min(245px,100%);margin:0 auto;padding:12px;border:1px solid #e8d2e0;border-radius:16px;background:white}
+    .inspiration-dialog-error[hidden],.inspiration-dialog-inner [hidden]{display:none!important}
+    #inspiration-teacher-auth,#inspiration-teacher-workspace{display:grid;gap:16px}
+    .inspiration-teacher-welcome{display:flex;align-items:center;gap:8px;font-size:.83rem!important;color:#437c5e!important}
+    .inspiration-teacher-welcome:before{content:"";width:8px;height:8px;flex:0 0 8px;border-radius:100%;background:#4a9a72}
+    #inspiration-room-created{display:grid;gap:14px;justify-items:stretch;text-align:center}
+    #inspiration-room-qr{box-sizing:border-box;width:min(245px,100%);margin:0 auto;padding:12px;border:1px solid #e8d2e0;border-radius:16px;background:white}
     #inspiration-room-qr svg{display:block;width:100%;height:auto}
-    .inspiration-room-ready{font-weight:700!important;color:#5c2852!important}
-    .inspiration-room-link{display:block;color:#682f63;overflow-wrap:anywhere;direction:ltr;font-size:.78rem}
+    .inspiration-room-ready{font-weight:700!important;color:#5c2852!important;font-size:1.2rem!important}
+    .inspiration-qr-label{font-size:.85rem!important;margin-top:-8px!important}
+    .inspiration-room-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
     .inspiration-dialog-link{display:flex;align-items:center;justify-content:center;text-decoration:none}
-    .inspiration-dialog-new{border:0;background:transparent;color:#682f63;font-weight:700;font:inherit;padding:9px;cursor:pointer}
+    .inspiration-dialog-new{border:0;background:transparent;color:#682f63;font:inherit;font-weight:700;padding:8px;cursor:pointer}
     .inspiration-dialog-new:hover{text-decoration:underline}
+    @media(max-width:440px){.inspiration-room-actions{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -704,29 +711,34 @@
     <dialog id="inspiration-dialog" aria-labelledby="inspiration-dialog-title">
       <div class="inspiration-dialog-inner">
         <div class="inspiration-dialog-top">
-          <h2 id="inspiration-dialog-title">נושמות השראה · מדריכה</h2>
+          <div class="inspiration-dialog-heading">
+            <span class="inspiration-dialog-eyebrow">פורצות דרך · מרחב המדריכה</span>
+            <h2 id="inspiration-dialog-title">נושמות השראה</h2>
+          </div>
           <button id="inspiration-dialog-close" class="inspiration-dialog-close" type="button" aria-label="סגירה">×</button>
         </div>
-        <p>פתחי משחק חדש, קבלי קישור וקוד QR והזמיני את המשתתפות.</p>
         <section id="inspiration-teacher-auth">
-          <button id="inspiration-teacher-entry" class="inspiration-dialog-submit" type="button">כניסה דרך דשבורד תעשיידע</button>
+          <p>התחברות עם חשבון תעשיידע</p>
+          <button id="inspiration-teacher-entry" class="inspiration-dialog-submit" type="button">כניסה דרך תעשיידע</button>
         </section>
         <section id="inspiration-teacher-workspace" hidden>
-          <p id="inspiration-teacher-welcome" class="inspiration-teacher-welcome"></p>
+          <p id="inspiration-teacher-welcome" class="inspiration-teacher-welcome" role="status"></p>
           <form id="inspiration-teacher-form">
-            <label>מספר המשתתפות בכיתה
-              <input id="inspiration-participant-count" name="expected" type="number" min="2" max="33" step="1" inputmode="numeric" required placeholder="למשל: 27">
+            <label>מספר המשתתפות
+              <input id="inspiration-participant-count" name="expected" type="number" min="2" max="33" step="1" inputmode="numeric" required placeholder="לדוגמה: 27">
             </label>
-            <button id="inspiration-create-room" class="inspiration-dialog-submit" type="submit">פתיחת משחק ויצירת QR</button>
+            <button id="inspiration-create-room" class="inspiration-dialog-submit" type="submit">יצירת משחק ו־QR</button>
           </form>
         </section>
         <section id="inspiration-room-created" hidden>
-          <p class="inspiration-room-ready">המשחק נפתח. אפשר להזמין את המשתתפות!</p>
+          <p class="inspiration-room-ready">המשחק מוכן</p>
+          <p class="inspiration-qr-label">QR להצטרפות</p>
           <div id="inspiration-room-qr" aria-label="קוד QR להצטרפות לחדר"></div>
-          <a id="inspiration-room-link" class="inspiration-room-link" href="#" target="_blank" rel="noopener">קישור ההצטרפות לתלמידות</a>
-          <button id="inspiration-copy-room" type="button" class="inspiration-dialog-instructor">העתקת קישור</button>
-          <a id="inspiration-manage-room" class="inspiration-dialog-submit inspiration-dialog-link" href="#">ניהול החדר והפעלת המשחק</a>
-          <button id="inspiration-new-room" type="button" class="inspiration-dialog-new">פתיחת משחק נוסף</button>
+          <div class="inspiration-room-actions">
+            <button id="inspiration-copy-room" type="button" class="inspiration-dialog-instructor">העתקת קישור</button>
+            <a id="inspiration-manage-room" class="inspiration-dialog-submit inspiration-dialog-link" href="#">ניהול המשחק</a>
+          </div>
+          <button id="inspiration-new-room" type="button" class="inspiration-dialog-new">משחק חדש</button>
         </section>
         <p id="inspiration-entry-error" class="inspiration-dialog-error" role="alert" hidden></p>
       </div>
