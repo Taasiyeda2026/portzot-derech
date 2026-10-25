@@ -57,7 +57,11 @@ function matchingPanel(card,room,progress) {
     }
     submit.disabled=true;
     try{render(await api('participant.verify_match',{numbers},{token}));}
-    catch(error){notify(errorText(error));submit.disabled=false;}
+    catch(error){
+      const code=error?.message||'';
+      const feedback=code.includes('MATCH_INCORRECT')?'המספרים אינם תואמים. בדקו שוב את מספרי הקלפים ונסו שוב.':code.includes('MATCH_NOT_READY')?'אחת המשתתפות עדיין לא בחרה קלף.':code.includes('MATCH_INVALID_INPUT')?'יש להזין מספרי קלפים שונים ותקינים.':errorText(error);
+      notify(feedback);submit.disabled=false;
+    }
   });
   panel.append(form);
   return panel;
