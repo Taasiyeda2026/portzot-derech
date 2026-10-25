@@ -81,7 +81,7 @@ export async function upload(file) {
 export function loginPanel(message='כניסה למדריכה') {
   const main=document.querySelector('#app');
   const target=document.querySelector('#auth-panel')||main;
-  if (target.querySelector('[data-login-panel]')) return;
+  if (!target || target.querySelector('[data-login-panel]')) return;
   const login=button('כניסה דרך דשבורד תעשיידע',async()=>{
     login.disabled=true;
     try { await dashboardLogin(); location.reload(); }

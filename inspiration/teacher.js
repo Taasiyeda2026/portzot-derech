@@ -35,7 +35,7 @@ async function home(){
     main.append(el('div',{class:'split'},intro,info));
     const rooms=Array.isArray(listing)?listing:listing.rooms||[];
     const list=el('div',{class:'room-list'});
-    for(const room of rooms)list.append(el('article',{class:'room-item'},el('span',{class:`badge ${room.phase==='ended'?'':'success'}`},phaseText[room.phase]||room.phase),el('h3',{},`חדר ${room.code}`),el('p',{},`${room.expected} משתתפות`),button(room.phase==='ended'?'צפייה בסיכום':'חזרה לניהול החדר',()=>openRoom(room.id),{class:'secondary'})));
+    for(const room of rooms)list.append(el('article',{class:'room-item'},el('span',{class:`badge ${room.phase==='ended'?'':'success'}`},phaseText[room.phase]||room.phase),el('h3',{},`משחק · ${new Date(room.created_at).toLocaleString('he-IL',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}`),el('p',{},`${room.expected} משתתפות`),button(room.phase==='ended'?'צפייה בסיכום':'חזרה לניהול החדר',()=>openRoom(room.id),{class:'secondary'})));
     main.append(el('section',{class:'panel'},el('h2',{},'החדרים שלך'),rooms.length?list:el('p',{class:'empty'},'כאן יופיעו החדרים שתפתחי. אפשר לחזור לחדר פעיל גם אחרי סגירת הדפדפן.')));
   }catch(error){if(error.status===401)return;clear(main).append(el('section',{class:'panel'},el('h1',{},'לא הצלחנו לטעון את החדרים'),el('p',{},errorText(error)),button('ניסיון נוסף',home)));}
 }
@@ -68,7 +68,7 @@ function renderRoom(){
   if(room.phase!=='ended'){
     const qr=el('div',{class:'qr-wrap','aria-label':'קוד QR להצטרפות לחדר'});
     try{const image=globalThis.qrcode(0,'M');image.addData(roomLink(room));image.make();const doc=new DOMParser().parseFromString(image.createSvgTag({scalable:true,margin:2}),'image/svg+xml');qr.append(document.importNode(doc.documentElement,true));}catch{qr.append(el('p',{},'אפשר להצטרף דרך הקישור למטה.'));}
-    const join=el('aside',{class:'panel'},el('h2',{},'מזמינות את המשתתפות'),qr,el('p',{class:'join-code'},room.code),el('p',{class:'join-link'},roomLink(room)),el('div',{class:'actions'},button('העתקת קישור',async()=>{try{await navigator.clipboard.writeText(roomLink(room));notify('הקישור הועתק.','success');}catch{notify('לא ניתן להעתיק אוטומטית. סמני והעתיקי את הקישור שמוצג כאן.');}},{class:'secondary'})),el('p',{class:'help'},'המשתתפות נכנסות ישירות. אין צורך בחשבון או בסיסמה.'));
+    const join=el('aside',{class:'panel'},el('h2',{},'מזמינות את המשתתפות'),qr,el('p',{class:'join-link'},roomLink(room)),el('div',{class:'actions'},button('העתקת קישור',async()=>{try{await navigator.clipboard.writeText(roomLink(room));notify('הקישור הועתק.','success');}catch{notify('לא ניתן להעתיק אוטומטית. סמני והעתיקי את הקישור שמוצג כאן.');}},{class:'secondary'})),el('p',{class:'help'},'המשתתפות נכנסות ישירות. אין צורך בחשבון או בסיסמה.'));
     const operation=el('section',{class:'panel'},el('h2',{},'ניהול המשתתפות'));
     if(chosen===0){
       const expected=textInput(room.expected,{type:'number',min:Math.max(2,joined),step:1,required:true,inputmode:'numeric'});

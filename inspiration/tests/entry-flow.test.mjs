@@ -4,24 +4,24 @@ import { readFile } from 'node:fs/promises';
 
 const read=(path)=>readFile(new URL(path,import.meta.url),'utf8');
 
-test('course tile opens one entry dialog instead of an intermediate page',async()=>{
+test('course tile opens the instructor-only dialog',async()=>{
   const menu=await read('../../strongermenu-2026.html');
   assert.match(menu,/id="inspiration-entry"/);
   assert.match(menu,/id="inspiration-dialog"/);
-  assert.match(menu,/dialog\.showModal\(\)/);
-  assert.doesNotMatch(menu,/class="menu-item" href="inspiration\/home\.html"/);
-  assert.match(menu,/id="inspiration-player-name"/);
-  assert.match(menu,/id="inspiration-room-code"/);
-  assert.match(menu,/sessionStorage\.setItem\('inspiration:join-intent'/);
-  assert.match(menu,/dashboardLogin\(\)/);
+  assert.match(menu,/id="inspiration-teacher-workspace"/);
+  assert.match(menu,/id="inspiration-participant-count"/);
+  assert.match(menu,/id="inspiration-room-qr"/);
+  assert.doesNotMatch(menu,/id="inspiration-join-form"/);
+  assert.doesNotMatch(menu,/id="inspiration-player-name"/);
+  assert.doesNotMatch(menu,/sessionStorage\\.setItem\\('inspiration:join-intent'/);
 });
 
-test('participants can join from course entry without repeating the form',async()=>{
+test('participants enter from QR invitation without a second code field',async()=>{
   const participant=await read('../participant.js');
-  assert.match(participant,/sessionStorage\.getItem\('inspiration:join-intent'\)/);
-  assert.match(participant,/api\('participant.join',\{code,name:intent\.name\.trim\(\),join_key:joinKey\}\)/);
-  assert.match(participant,/sessionStorage\.removeItem\('inspiration:join-intent'\)/);
-  assert.match(participant,/joinScreen\(intent\.name\.trim\(\)\)/);
+  assert.match(participant,/new URL\\(location\\.href\\)\\.searchParams\\.get\\('code'\\)/);
+  assert.match(participant,/api\\('participant.join'/);
+  assert.doesNotMatch(participant,/inspiration:join-intent/);
+  assert.match(participant,/code\\?\\[\\]\\s*:\\s*\\[field\\('קוד החדר',roomCode\\)\\]/);
 });
 
 test('teacher login uses dashboard bridge and protected server identity',async()=>{
