@@ -250,6 +250,26 @@ try{
   assert.equal(Number((await sql('select count(*) from public.inspiration_rooms')).rows[0].count),existingRooms);
   passed('deleting dashboard Auth account cascades only its game rooms and cannot block account deletion');
 
+  // Apply the additive migration after the original regression scenarios.
+  const linkedSql = readFileSync(resolve(root,'supabase/migrations/20261025123000_inspiration_site_card_links.sql'),'utf8');
+  await sql(linkedSql);
+  await sql(linkedSql);
+  passed('linked GitHub Pages card migration applies repeatedly without modifying existing game data');
+  const siteGroup = {
+    id: randomUUID(), symbol: 'SITE-TEST-ONLY', size: 2, active: true,
+    cards: ['Amelia.png','Katherine.png'].map((file,index) => ({
+      id: randomUUID(), woman_name: 'SITE TEST ' + index, field: 'test-only',
+      front_path: 'site:women/' + file, back_path: null, active: true
+    }))
+  };
+  await rpc('admin.catalog_import',ids.admin,null,{groups:[siteGroup]});
+  const sitePaths = await sql('select front_path from public.inspiration_cards where group_id=$1 order by front_path',[siteGroup.id]);
+  assert.deepEqual(sitePaths.rows.map(r=>r.front_path), ['site:women/Amelia.png','site:women/Katherine.png']);
+  passed('site cards are catalogued with paths only and no duplicate Storage objects');
+  const invalidSite = structuredClone(siteGroup);
+  invalidSite.cards[0].front_path = 'site:women/../private.png';
+  await failure('admin.catalog_import',ids.admin,null,{groups:[invalidSite]},'unsafe website asset path is rejected');
+
   // Exercise the operational rollback with a local cron stub and unrelated job.
   await sql(`create schema cron;
     create table cron.job(jobid bigint generated always as identity primary key,jobname text,schedule text,command text);

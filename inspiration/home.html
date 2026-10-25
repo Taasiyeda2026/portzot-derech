@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta name="theme-color" content="#542852">
+  <title>נושמות השראה | פורצות דרך</title>
+  <link rel="icon" href="../icon/favicon.png">
+  <link rel="stylesheet" href="./inspiration.css">
+  <style>
+    .inspiration-home-header {
+      max-width: 1120px;
+      min-height: 92px;
+      margin: 0 auto;
+      padding: 18px 26px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      border-bottom: 1px solid var(--line);
+    }
+    .inspiration-home-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none;
+      color: var(--ink);
+    }
+    .inspiration-home-brand img {
+      display: block;
+      width: 56px;
+      height: 56px;
+      object-fit: contain;
+    }
+    .inspiration-home-brand strong {
+      font-size: 1.45rem;
+      color: var(--plum);
+      line-height: 1.2;
+    }
+    .inspiration-home-return {
+      font-size: .92rem;
+      color: var(--plum);
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .inspiration-home-return:hover { text-decoration: underline; }
+    .inspiration-home-main {
+      max-width: 1120px;
+      min-height: calc(100svh - 155px);
+      margin: 0 auto;
+      padding: clamp(36px,7vh,80px) 24px;
+      display: grid;
+      place-items: center;
+    }
+    .inspiration-home-hero {
+      width: min(940px,100%);
+      display: grid;
+      grid-template-columns: minmax(0,1.2fr) minmax(220px,.8fr);
+      align-items: center;
+      overflow: hidden;
+      background: linear-gradient(120deg,#fffdfd 4%,#fdf7fa 70%,#f6ebf3 100%);
+      border: 1px solid #ead9e6;
+      border-radius: 30px;
+      box-shadow: 0 22px 70px rgba(83,42,75,.09);
+    }
+    .inspiration-home-copy { padding: clamp(30px,5vw,62px); }
+    .inspiration-home-kicker {
+      color: var(--pink);
+      font-size: .98rem;
+      font-weight: 700;
+      letter-spacing: .02em;
+      margin-bottom: 14px;
+    }
+    .inspiration-home-copy h1 {
+      font-size: clamp(2.4rem,5.2vw,4.1rem);
+      line-height: 1.15;
+      color: var(--ink);
+      margin: 0 0 18px;
+      letter-spacing: -.045em;
+    }
+    .inspiration-home-description {
+      max-width: 450px;
+      color: #765b77;
+      line-height: 1.8;
+      font-size: clamp(1rem,1.5vw,1.2rem);
+      margin: 0;
+    }
+    .inspiration-home-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 32px;
+    }
+    .inspiration-home-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 50px;
+      padding: 12px 22px;
+      border-radius: 12px;
+      font: inherit;
+      font-weight: 700;
+      text-decoration: none;
+      transition: transform .15s, background .15s;
+    }
+    .inspiration-home-action:hover { transform: translateY(-2px); }
+    .inspiration-home-action-primary {
+      background: var(--plum);
+      color: #fff;
+      border: 1px solid var(--plum);
+    }
+    .inspiration-home-action-primary:hover {
+      background: var(--dark);
+      color: #fff;
+    }
+    .inspiration-home-action-secondary {
+      background: #fff;
+      color: var(--plum);
+      border: 1px solid #d5b9ce;
+    }
+    .inspiration-home-art {
+      position: relative;
+      min-height: 380px;
+      display: grid;
+      place-items: center;
+      align-self: stretch;
+      isolation: isolate;
+      background: radial-gradient(ellipse at center,#f1dce9 0%,#f8edf5 55%,transparent 75%);
+    }
+    .inspiration-home-art:before {
+      content: "";
+      position: absolute;
+      width: 265px;
+      height: 265px;
+      max-width: 87%;
+      border: 1px solid rgba(189,101,127,.20);
+      border-radius: 50%;
+      z-index: -1;
+    }
+    .inspiration-home-art img {
+      width: min(238px,76%);
+      height: auto;
+      filter: drop-shadow(0 16px 22px rgba(83,42,75,.15));
+    }
+    .inspiration-home-footer {
+      text-align: center;
+      color: #98839a;
+      font-size: .78rem;
+      padding: 0 20px 26px;
+    }
+    @media (max-width: 700px) {
+      .inspiration-home-header { padding: 14px 20px; }
+      .inspiration-home-brand img { width: 42px; height: 42px; }
+      .inspiration-home-brand strong { font-size: 1.2rem; }
+      .inspiration-home-main { padding: 25px 14px 38px; }
+      .inspiration-home-hero { grid-template-columns: 1fr; }
+      .inspiration-home-copy { padding: 32px 25px 16px; }
+      .inspiration-home-art { min-height: 180px; }
+      .inspiration-home-art:before { width: 145px; height: 145px; }
+      .inspiration-home-art img { width: 140px; }
+      .inspiration-home-actions { margin-top: 26px; }
+    }
+    @media (max-width: 430px) {
+      .inspiration-home-actions { display: grid; }
+      .inspiration-home-return { font-size: .8rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .inspiration-home-action { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="inspiration-home-header">
+    <a class="inspiration-home-brand" href="../strongermenu-2026.html" aria-label="פורצות דרך — חזרה לאתר הקורס">
+      <img src="../icon/logo.png" alt="לוגו פורצות דרך">
+      <strong>פורצות דרך</strong>
+    </a>
+    <a class="inspiration-home-return" href="../strongermenu-2026.html">חזרה לאתר הקורס</a>
+  </header>
+  <main class="inspiration-home-main">
+    <section class="inspiration-home-hero" aria-labelledby="page-title">
+      <div class="inspiration-home-copy">
+        <p class="inspiration-home-kicker">משחק הקלפים של פורצות דרך</p>
+        <h1 id="page-title">נושמות השראה</h1>
+        <p class="inspiration-home-description">פוגשות נשים מעוררות השראה ומגלות את החיבורים בין הסיפורים שלהן.</p>
+        <div class="inspiration-home-actions">
+          <a href="./teacher.html" class="inspiration-home-action inspiration-home-action-primary">כניסה למדריכה</a>
+          <a href="./admin.html" class="inspiration-home-action inspiration-home-action-secondary">לוח ניהול המשחק</a>
+        </div>
+      </div>
+      <div class="inspiration-home-art" aria-hidden="true">
+        <img src="../icon/inspiration-cards.svg" alt="">
+      </div>
+    </section>
+  </main>
+  <footer class="inspiration-home-footer">© פורצות דרך · תעשיידע</footer>
+</body>
+</html>

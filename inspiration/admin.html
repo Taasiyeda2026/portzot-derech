@@ -12,8 +12,8 @@
 </head>
 <body data-page="admin">
   <header class="masthead site-header">
-    <a class="brand" href="./teacher.html"><span class="brand-mark" aria-hidden="true">✦</span><span><span class="eyebrow">פורצות דרך · מרחב ניהול התוכן</span><strong>נושמות השראה</strong></span></a>
-    <a class="text-link" href="./teacher.html">חזרה לחדרי המשחק</a>
+    <a class="brand" href="./home.html"><img class="brand-logo" src="../icon/logo.png" alt="לוגו פורצות דרך"><span><span class="eyebrow">פורצות דרך · מרחב ניהול התוכן</span><strong>נושמות השראה</strong></span></a>
+    <a class="text-link" href="./teacher.html">ניהול חדרי המשחק וקוד QR</a>
   </header>
   <main id="app" class="dashboard admin-shell">
     <section class="page-intro">
@@ -23,6 +23,11 @@
     </section>
     <section id="auth-panel" class="panel"><p>בודקות הרשאה לניהול המאגר…</p></section>
     <div id="admin-workspace" hidden>
+      <section class="panel">
+        <h2>הפעלת משחק ו־QR לכיתה</h2>
+        <p>לפתיחת משחק והצגת קוד QR למשתתפות, עברי למסך ניהול החדרים. לוח זה מיועד לניהול הנשים, הכרטיסים וקבוצות ההתאמה.</p>
+        <div class="actions"><a class="primary" href="./teacher.html">ניהול משחקים והצגת QR</a></div>
+      </section>
       <section class="panel">
         <div class="section-heading"><div><p class="eyebrow">לפני שמתחילות</p><h2>תקינות המאגר</h2></div><button id="refresh-catalog" type="button" class="secondary">רענון ובדיקה</button></div>
         <p id="catalog-summary" aria-live="polite"></p>
@@ -34,7 +39,8 @@
           <p class="eyebrow">החיבור בין הסיפורים</p><h2>קבוצת התאמה</h2>
           <form id="group-form">
             <input name="id" type="hidden">
-            <label>סמל הקבוצה<input name="symbol" required maxlength="32" placeholder="לדוגמה: סמל מתוך הרשימה המאושרת"></label>
+            <label>הסימן הסודי המוטבע בכרטיסים<input name="symbol" required maxlength="32" placeholder="למשל: כוכב, לב או גלגל שיניים"></label>
+            <p class="hint">הזיני את שם הסמל שמופיע כבר בתמונות של שתי הנשים (או שלוש הנשים בשלישייה). הוא נועד לשיוך בקבוצות ולתצוגת המדריכה בלבד. המשחק אינו מוסיף סמל על גבי הכרטיס.</p>
             <label>מספר קלפים בקבוצה<select name="size"><option value="2">זוג — שני קלפים</option><option value="3">שלישייה — שלושה קלפים</option></select></label>
             <label class="checkbox"><input name="active" type="checkbox" checked>קבוצה פעילה</label>
             <div class="actions"><button type="submit" class="primary">שמירת הקבוצה</button><button id="clear-group" type="button" class="secondary">קבוצה חדשה</button></div>
@@ -49,14 +55,19 @@
             <label>תחום העיסוק<input name="field" required maxlength="120" autocomplete="off"></label>
             <label>קבוצת התאמה<select name="group_id" id="card-group" required></select></label>
             <p class="hint">קבוצת ההתאמה של קלף קיים קבועה. כדי להגדיר התאמה אחרת, צרי קלף חדש בקבוצה המתאימה והשביתי את הקלף הקודם לפי הצורך.</p>
-            <label>קובץ קדמי — תמונה או PDF<input name="front_file" type="file" accept="image/png,image/jpeg,image/webp,application/pdf"></label>
+            <label>כרטיס האישה שכבר נמצא באתר פורצות דרך<select name="site_file" id="site-card-file"><option value="">בחרי כרטיס מתיקיית women</option></select></label>
+            <p class="hint">הכרטיס מוצג ישירות מאתר פורצות דרך. אין צורך להעלות תמונות ל־Supabase. השתמשי בשם הקובץ המתאים לאישה.</p>
+            <img id="site-card-preview" alt="תצוגה מקדימה של הכרטיס שנבחר" hidden style="width:min(100%,220px);height:auto;margin:12px auto;border-radius:12px" />
+            <details><summary>קובץ ישן ב־Supabase (תאימות לאחור בלבד)</summary>
+              <label>קובץ קדמי — תמונה או PDF<input name="front_file" type="file" accept="image/png,image/jpeg,image/webp,application/pdf"></label>
             <input name="front_path" type="hidden">
             <p id="front-status" class="hint">טרם נבחר קובץ קדמי</p>
             <label>קובץ אחורי — תמונה או PDF, לפי הצורך<input name="back_file" type="file" accept="image/png,image/jpeg,image/webp,application/pdf"></label>
             <input name="back_path" type="hidden">
             <p id="back-status" class="hint">ללא צד אחורי</p>
+            </details>
             <label class="checkbox"><input name="active" type="checkbox" checked>קלף פעיל</label>
-            <p class="hint">העלאה יוצרת קובץ חדש. היא אינה מחליפה קובץ שמוצג בחדר קיים. תמונות: PNG, JPEG, WebP. מסמכים: PDF.</p>
+            <p class="hint">כרטיסי האתר נקראים מקובצי GitHub Pages הקיימים. גב קלף אחיד לכל הנשים מוצג בלוח הבחירה בנפרד. אין צורך בקובץ גב נוסף לכל אישה.</p>
             <div class="actions"><button type="submit" class="primary">שמירת הקלף</button><button id="clear-card" type="button" class="secondary">קלף חדש</button></div>
           </form>
         </section>
@@ -67,8 +78,8 @@
       </section>
       <section class="panel">
         <p class="eyebrow">טעינה מרוכזת</p><h2>יבוא רשימה מאושרת</h2>
-        <p>אפשר לטעון JSON או CSV. היבוא שומר נתונים רק לאחר בדיקת מבנה הקבוצות וקובצי התוכן. יש להעלות קבצים לפני יבוא הרשימה; נתיבי הקבצים הם נתיבים באחסון הפרטי.</p>
-        <details><summary>מבנה קובץ היבוא</summary><p class="hint">CSV: group_id, symbol, size, name, field, front_path, back_path, active. כל שורה היא קלף אחד; group_id חייב להיות מזהה UUID. העמודה group_active מאפשרת לייבא קבוצה כטיוטה. JSON: אובייקט groups עם רשימת קבוצות, ובכל קבוצה רשימת cards ושם בשדה woman_name. אפשר להשמיט id ליצירת מזהה חדש; לעדכון רשומה קיימת יש לציין את מזהה ה־UUID שלה.</p><pre class="import-example" dir="ltr">{"groups":[{"symbol":"◆","size":2,"active":false,"cards":[{"woman_name":"שם האישה הראשונה ברשימה המאושרת","field":"תחום העיסוק","active":false},{"woman_name":"שם האישה השנייה ברשימה המאושרת","field":"תחום העיסוק","active":false}]}]}</pre><p class="hint">הדוגמה מציגה מבנה של טיוטה מושבתת בלבד. לפני הפעלה יש להזין את הפרטים המאושרים ולהוסיף front_path או back_path עם נתיב קובץ שהועלה לאחסון הפרטי. אין לייבא את הדוגמה כתוכן מאושר.</p></details>
+        <p>אפשר לטעון JSON או CSV. היבוא שומר פרטי קבוצות והתאמות בלבד. עבור תמונות שכבר באתר משתמשים בנתיב front_path בפורמט site:women/Agatha.png. אין להעלות את הקבצים שוב ל־Supabase.</p>
+        <details><summary>מבנה קובץ היבוא</summary><p class="hint">CSV: group_id, symbol, size, name, field, front_path, back_path, active. כל שורה היא קלף אחד; group_id חייב להיות מזהה UUID. העמודה group_active מאפשרת לייבא קבוצה כטיוטה. JSON: אובייקט groups עם רשימת קבוצות, ובכל קבוצה רשימת cards ושם בשדה woman_name. אפשר להשמיט id ליצירת מזהה חדש; לעדכון רשומה קיימת יש לציין את מזהה ה־UUID שלה.</p><pre class="import-example" dir="ltr">{"groups":[{"symbol":"◆","size":2,"active":false,"cards":[{"woman_name":"שם האישה הראשונה ברשימה המאושרת","field":"תחום העיסוק","active":false},{"woman_name":"שם האישה השנייה ברשימה המאושרת","field":"תחום העיסוק","active":false}]}]}</pre><p class="hint">הדוגמה מציגה מבנה של טיוטה מושבתת בלבד. לפני הפעלה יש להזין את הפרטים המאושרים ולבחור front_path מתוך תמונות הנשים המופיעות באתר. אין לייבא את הדוגמה כתוכן מאושר.</p></details>
         <form id="import-form">
           <label>בחירת קובץ<input id="import-file" type="file" accept=".json,.csv,application/json,text/csv"></label>
           <label>או הדבקת JSON<textarea id="import-text" rows="7" spellcheck="false" dir="ltr" placeholder='{"groups": []}'></textarea></label>

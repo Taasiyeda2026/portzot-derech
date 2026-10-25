@@ -28,7 +28,7 @@ function joinScreen() {
 }
 
 function personalCard(card) {
-  const section=el('section',{class:'panel'},el('div',{class:'personal-header'},el('span',{class:'eyebrow'},`הקלף האישי שלך · ${card.number}`),el('h2',{},card.woman_name),el('p',{},card.field||''),el('div',{class:'symbol symbol-badge','aria-label':`הסמל שלך: ${card.symbol}`},card.symbol)));
+  const section=el('section',{class:'panel'},el('div',{class:'personal-header'},el('span',{class:'eyebrow'},`הקלף האישי שלך · ${card.number}`),el('h2',{},card.woman_name),el('p',{},card.field||'')));
   viewer=cardViewer(card,token);section.append(viewer.node);return section;
 }
 
