@@ -9,6 +9,9 @@ test('course tile opens only the instructor workspace', async () => {
   assert.match(menu, /id="inspiration-entry"/);
   assert.match(menu, /id="inspiration-dialog"/);
   assert.match(menu, /id="inspiration-teacher-auth"/);
+  assert.match(menu, /id="inspiration-auth-status"/);
+  assert.match(menu, /id="inspiration-teacher-entry"[^>]*hidden/);
+  assert.doesNotMatch(menu, /התחברות עם חשבון תעשיידע/);
   assert.match(menu, /id="inspiration-teacher-workspace"/);
   assert.match(menu, /id="inspiration-teacher-form"/);
   assert.match(menu, /id="inspiration-participant-count"/);
@@ -28,6 +31,11 @@ test('course tile opens only the instructor workspace', async () => {
 test('opening a room requires a dashboard account with teacher permissions', async () => {
   const script = await load('../teacher-entry.js');
   assert.match(script, /dashboardLogin\(\)/);
+  assert.match(script, /entry\\.addEventListener\\('click', \\(\\) => openDialog\\(true\\)\\)/);
+  assert.match(script, /if \\(sessionStorage\\.getItem\\(tokenKey\\)\\)/);
+  assert.match(script, /void connectDashboard\\(\\)/);
+  assert.match(script, /openDialog\\(false\\)/);
+  assert.match(script, /showConnecting\\(\\)/);
   assert.match(script, /api\('teacher\.me'\)/);
   assert.match(script, /!profile\?\.can_manage && !profile\?\.is_admin/);
   assert.match(script, /api\('teacher\.catalog'\)/);
