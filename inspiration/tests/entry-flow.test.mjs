@@ -57,3 +57,14 @@ test('participant join screen contains only a simple title, name field and join 
   assert.match(joinScreen,/'אני מצטרפת'/);
   assert.doesNotMatch(joinScreen,/ברוכה הבאה|במשחק הזה תפגשי|השם שלך יוצג למדריכה בלבד|אין צורך בחשבון או בסיסמה/);
 });
+
+test('waiting room copy is brief and does not prescribe keeping the screen open',async()=>{
+  const participant=await read('../participant.js');
+  const start=participant.indexOf("if(room.phase==='waiting')");
+  const end=participant.indexOf("if(card)",start);
+  assert.ok(start>=0 && end>start);
+  const waiting=participant.slice(start,end);
+  assert.match(waiting,/ממתינות לתחילת המשחק/);
+  assert.match(waiting,/הצטרפת למשחק\. המתיני לתחילת בחירת הקלפים\./);
+  assert.doesNotMatch(waiting,/המקום שלך בחדר שמור|אפשר להשאיר את המסך פתוח|עוד רגע מגלות מי מחכה לכן/);
+});
