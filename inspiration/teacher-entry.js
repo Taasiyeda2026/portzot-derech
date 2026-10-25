@@ -5,6 +5,7 @@ const entry = document.querySelector('#inspiration-entry');
 const closeButton = document.querySelector('#inspiration-dialog-close');
 const signIn = document.querySelector('#inspiration-teacher-entry');
 const authSection = document.querySelector('#inspiration-teacher-auth');
+const authStatus = document.querySelector('#inspiration-auth-status');
 const workspace = document.querySelector('#inspiration-teacher-workspace');
 const welcome = document.querySelector('#inspiration-teacher-welcome');
 const form = document.querySelector('#inspiration-teacher-form');
@@ -31,76 +32,97 @@ function clearError() {
   errorMessage.hidden = true;
 }
 
-function showSignedOut() {
+function showConnecting() {
   authSection.hidden = false;
   workspace.hidden = true;
   resultSection.hidden = true;
+  authStatus.textContent = 'מתחברת לדשבורד תעשיידע…';
+  signIn.hidden = true;
+}
+
+function showSignedOut(message = 'יש להתחבר דרך דשבורד תעשיידע.') {
+  authSection.hidden = false;
+  workspace.hidden = true;
+  resultSection.hidden = true;
+  authStatus.textContent = message;
+  signIn.hidden = false;
   signIn.disabled = false;
 }
 
-function showSignedIn(profile) {
+function showSignedIn() {
   authSection.hidden = true;
   workspace.hidden = false;
   resultSection.hidden = true;
-  welcome.textContent = 'מחוברת דרך תעשיידע';
+  welcome.textContent = 'מחוברת דרך דשבורד תעשיידע';
   form.reset();
 }
 
+// The game's RPC validates the dashboard user and instructor role on the server.
 async function checkInstructor() {
   if (!sessionStorage.getItem(tokenKey)) {
     showSignedOut();
-    return;
+    return false;
   }
   try {
     const profile = await api('teacher.me');
     if (!profile?.can_manage && !profile?.is_admin) {
-      showSignedOut();
-      showError('החשבון הזה אינו מורשה לניהול המשחק.');
-      return;
+      showSignedOut('אין הרשאה לניהול המשחק בחשבון זה.');
+      return false;
     }
     const catalog = await api('teacher.catalog');
     catalogCapacity = catalog?.capacity || null;
-    showSignedIn(profile);
+    showSignedIn();
+    return true;
   } catch (error) {
     if (error?.status === 401 || error?.status === 403) {
       sessionStorage.removeItem(tokenKey);
-      showSignedOut();
-      showError('יש להתחבר מחדש לחשבון המדריכה.');
+      showSignedOut('יש לחדש את ההתחברות דרך דשבורד תעשיידע.');
     } else {
-      showSignedOut();
-      showError(error?.message || 'לא הצלחנו לבדוק את ההתחברות. נסי שוב.');
+      showSignedOut('לא ניתן לאמת את ההתחברות כרגע.');
+      showError(error?.message || 'נסי שוב.');
     }
+    return false;
   }
 }
 
-async function openDialog() {
-  if (dialog.open) return;
-  clearError();
-  showSignedOut();
-  dialog.showModal();
-  signIn.disabled = true;
-  await checkInstructor();
-  if (authSection.hidden === false) signIn.disabled = false;
-}
-
-entry.addEventListener('click', openDialog);
-closeButton.addEventListener('click', () => dialog.close());
-
-signIn.addEventListener('click', async () => {
+// Call dashboardLogin in the original user click, before any await, so the
+// cross-origin dashboard bridge is not blocked as an unsolicited popup.
+async function connectDashboard() {
   if (pending) return;
   pending = true;
-  signIn.disabled = true;
   clearError();
+  showConnecting();
   try {
     await dashboardLogin();
     await checkInstructor();
   } catch (error) {
-    showError(error?.message || 'ההתחברות לא הושלמה. נסי שוב.');
+    showSignedOut('לא הצלחנו להתחבר לדשבורד תעשיידע.');
+    showError(error?.message || 'נסי שוב.');
   } finally {
     pending = false;
-    signIn.disabled = false;
   }
-});
+}
+
+function openDialog(fromClick = true) {
+  if (dialog.open) return;
+  clearError();
+  showConnecting();
+  dialog.showModal();
+  if (sessionStorage.getItem(tokenKey)) {
+    void checkInstructor();
+  } else if (fromClick) {
+    // Open the already-connected dashboard automatically. No extra login
+    // button appears before the browser's dashboard session is checked.
+    void connectDashboard();
+  } else {
+    // A hash redirect is not a user gesture; browsers can block its popup.
+    showSignedOut();
+  }
+}
+
+entry.addEventListener('click', () => openDialog(true));
+closeButton.addEventListener('click', () => dialog.close());
+signIn.addEventListener('click', () => { void connectDashboard(); });
 
 function roomLinkFor(code) {
   const url = new URL('./inspiration/index.html', location.href);
@@ -178,5 +200,5 @@ newRoom.addEventListener('click', () => {
 
 if (location.hash === '#inspiration') {
   history.replaceState(null, '', location.pathname + location.search);
-  openDialog();
+  openDialog(false);
 }
