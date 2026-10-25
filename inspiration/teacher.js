@@ -15,31 +15,74 @@ function roomLink(room){const url=new URL('index.html',location.href);url.search
 function stop(){stopWatching?.();stopWatching=null;lastState='';}
 
 async function home(){
-  stop();roomId=null;const url=new URL(location.href);url.searchParams.delete('room');history.replaceState(null,'',url);
-  clear(main).append(el('section',{class:'panel waiting'},el('h1',{},'טוענות את החדרים שלך…')));
+  stop();
+  roomId=null;
+  const url=new URL(location.href);
+  url.searchParams.delete('room');
+  history.replaceState(null,'',url);
+  clear(main).append(el('section',{class:'panel teacher-home-loading'},el('p',{},'טוענות משחקים…')));
   try {
     const [listing,catalog]=await Promise.all([api('teacher.rooms'),api('teacher.catalog')]);
-    clear(main);
-    const expected=textInput('',{id:'expected',type:'number',min:2,step:1,required:true,inputmode:'numeric',placeholder:'למשל, 21'});
-    const distribution=el('p',{class:'help'},'למספר זוגי — זוגות. למספר אי־זוגי — זוגות ושלישייה אחת.');
-    const capacity=catalog.capacity||{};
-    expected.addEventListener('input',()=>{const count=Number(expected.value);distribution.textContent=Number.isInteger(count)&&count>=2?(count%2?`${(count-3)/2} זוגות ושלישייה אחת`:`${count/2} זוגות`):'יש להזין לפחות 2 משתתפות.';});
-    const submit=el('button',{type:'submit',class:'primary'},'משחק חדש');
-    const form=el('form',{},field('כמה משתתפות יהיו במשחק?',expected),distribution,el('div',{class:'actions'},submit));
-    form.addEventListener('submit',async(event)=>{
-      event.preventDefault();if(!form.reportValidity())return;submit.disabled=true;
-      try{const created=await api('teacher.create',{expected:Number(expected.value)});await openRoom(created.room?.id||created.id);}
-      catch(error){notify(errorText(error));submit.disabled=false;}
+    const capacity=catalog?.capacity||{};
+    const evenLimit=Number(capacity.max_even ?? (Number(capacity.pairs||0)*2));
+    const oddLimit=Number(capacity.max_odd ?? (Number(capacity.pairs||0)*2+(capacity.triples?3:0)));
+    const maximum=Math.max(evenLimit,oddLimit);
+
+    const expected=textInput('',{
+      id:'expected',type:'number',min:2,max:maximum||33,step:1,
+      required:true,inputmode:'numeric',placeholder:'למשל 27'
     });
-    const intro=el('section',{class:'panel'},el('span',{class:'eyebrow'},'מרחב המדריכה'),el('h1',{},'סיפור אחד פותח חיבור חדש'),el('p',{},'פתחי חדר, הזמיני את המשתתפות ובואו לגלות יחד מה מחבר בין הסיפורים.'),form);
-    const info=el('aside',{class:'panel'},el('h2',{},'מכינות משחק'),el('p',{},'כל משתתפת בוחרת קלף אחד. לאחר הגילוי, היא מחפשת בעצמה בכיתה את בעלות הסמל הזהה.'),el('p',{},'אין ניקוד ואין דירוג. רק סיפורים, היכרות והשראה.'),el('p',{},`${capacity.pairs??0} זוגות ושלישייה אחת זמינים למשחק.`));
-    if(!capacity.pairs&&!capacity.triples)info.append(el('p',{class:'info warning'},'הקלפים עדיין אינם מוכנים. פני לאחראית המשחק.'));
-    main.append(el('div',{class:'split'},intro,info));
-    const rooms=Array.isArray(listing)?listing:listing.rooms||[];
-    const list=el('div',{class:'room-list'});
-    for(const room of rooms)list.append(el('article',{class:'room-item'},el('span',{class:`badge ${room.phase==='ended'?'':'success'}`},phaseText[room.phase]||room.phase),el('h3',{},`משחק · ${new Date(room.created_at).toLocaleString('he-IL',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}`),el('p',{},`${room.expected} משתתפות`),button(room.phase==='ended'?'צפייה בסיכום':'חזרה לניהול החדר',()=>openRoom(room.id),{class:'secondary'})));
-    main.append(el('section',{class:'panel'},el('h2',{},'החדרים שלך'),rooms.length?list:el('p',{class:'empty'},'כאן יופיעו החדרים שתפתחי. אפשר לחזור לחדר פעיל גם אחרי סגירת הדפדפן.')));
-  }catch(error){if(error.status===401)return;clear(main).append(el('section',{class:'panel'},el('h1',{},'לא הצלחנו לטעון את החדרים'),el('p',{},errorText(error)),button('ניסיון נוסף',home)));}
+    const submit=el('button',{type:'submit',class:'primary'},'פתיחת משחק');
+    const form=el('form',{class:'teacher-new-game-form'},
+      field('מספר משתתפות',expected),submit);
+    form.addEventListener('submit',async event=>{
+      event.preventDefault();
+      if(!form.reportValidity())return;
+      const count=Number(expected.value);
+      if(!Number.isInteger(count)||count<2||count>(count%2?oddLimit:evenLimit)){
+        notify('מספר המשתתפות אינו מתאים למאגר הקלפים.');return;
+      }
+      submit.disabled=true;
+      try {
+        const created=await api('teacher.create',{expected:count});
+        await openRoom(created.room?.id||created.id);
+      }catch(error){
+        notify(errorText(error));
+        submit.disabled=false;
+      }
+    });
+
+    const rooms=Array.isArray(listing)?listing:listing?.rooms||[];
+    const now=Date.now();
+    const active=rooms.filter(room=>
+      room.phase!=='ended' &&
+      (!room.expires_at||new Date(room.expires_at).getTime()>now)
+    );
+    const list=el('div',{class:'teacher-room-list'});
+    for(const room of active){
+      const date=new Date(room.created_at);
+      const when=Number.isNaN(date.getTime())?'משחק':date.toLocaleString('he-IL',{
+        day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'
+      });
+      list.append(el('article',{class:'teacher-room-row'},
+        el('div',{class:'teacher-room-summary'},
+          el('strong',{},when),
+          el('span',{},`${room.expected} משתתפות`)),
+        el('span',{class:'badge success'},phaseText[room.phase]||'פעיל'),
+        button('ניהול',()=>openRoom(room.id),{class:'secondary'})));
+    }
+    clear(main).append(
+      el('section',{class:'panel teacher-home-create'},
+        el('h1',{},'ניהול משחקים'),form),
+      el('section',{class:'panel teacher-home-rooms'},
+        el('h2',{},'חדרים פעילים'),
+        active.length?list:el('p',{class:'teacher-empty-rooms'},'אין חדרים פעילים')));
+  }catch(error){
+    if(error.status===401)return;
+    clear(main).append(el('section',{class:'panel'},
+      el('h1',{},'לא הצלחנו לטעון את החדרים'),
+      el('p',{},errorText(error)),button('ניסיון נוסף',home)));
+  }
 }
 
 async function openRoom(id){
