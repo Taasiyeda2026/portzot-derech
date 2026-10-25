@@ -591,14 +591,27 @@
     .inspiration-teacher-welcome{display:flex;align-items:center;gap:8px;font-size:.83rem!important;color:#437c5e!important}
     .inspiration-teacher-welcome:before{content:"";width:8px;height:8px;flex:0 0 8px;border-radius:100%;background:#4a9a72}
     #inspiration-room-created{display:grid;gap:14px;justify-items:stretch;text-align:center}
-    #inspiration-room-qr{box-sizing:border-box;width:min(245px,100%);margin:0 auto;padding:12px;border:1px solid #e8d2e0;border-radius:16px;background:white}
-    #inspiration-room-qr svg{display:block;width:100%;height:auto}
+    #inspiration-room-qr{width:100%;padding:5px 0;margin:0}
+    #inspiration-room-qr .invite-tools{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap}
+    #inspiration-room-qr .invite-qr-thumb{width:106px;height:106px;flex:0 0 106px;padding:6px;border:1px solid #e8d2e0;border-radius:13px;background:white;cursor:zoom-in}
+    #inspiration-room-qr .invite-qr-thumb svg{display:block;width:100%;height:100%}
+    #inspiration-room-qr .invite-actions{display:grid;grid-template-columns:repeat(2,44px);gap:9px}
+    #inspiration-room-qr .invite-icon{display:grid;place-items:center;width:44px;height:44px;border:1px solid #e4cddc;border-radius:12px;background:white;color:#683565;text-decoration:none;cursor:pointer;padding:0}
+    #inspiration-room-qr .invite-icon:hover{background:#f7eaf2}
+    #inspiration-room-qr .invite-icon svg{display:block;width:22px;height:22px}
+    #inspiration-room-qr .invite-visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
     .inspiration-room-ready{font-weight:700!important;color:#5c2852!important;font-size:1.2rem!important}
     .inspiration-qr-label{font-size:.85rem!important;margin-top:-8px!important}
     .inspiration-room-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
     .inspiration-dialog-link{display:flex;align-items:center;justify-content:center;text-decoration:none}
     .inspiration-dialog-new{border:0;background:transparent;color:#682f63;font:inherit;font-weight:700;padding:8px;cursor:pointer}
     .inspiration-dialog-new:hover{text-decoration:underline}
+    .invite-zoom{padding:44px 22px 22px;border:0;border-radius:22px;max-width:min(90vw,490px);background:#fff;box-shadow:0 25px 80px #23132d55}
+    .invite-zoom::backdrop{background:#180d25bd}
+    .invite-zoom>svg{display:block;width:min(75vw,370px);height:auto;margin:auto}
+    .invite-zoom-close{position:absolute;top:8px;left:8px;border:0;background:#f3e6ef;border-radius:50%;display:grid;place-items:center;width:34px;height:34px;padding:0;cursor:pointer}
+    .invite-zoom-close svg{width:18px;height:18px}
+    #inspiration-room-created{gap:10px}
     @media(max-width:440px){.inspiration-room-actions{grid-template-columns:1fr}}
   </style>
 </head>
@@ -732,12 +745,8 @@
         </section>
         <section id="inspiration-room-created" hidden>
           <p class="inspiration-room-ready">המשחק מוכן</p>
-          <p class="inspiration-qr-label">QR להצטרפות</p>
-          <div id="inspiration-room-qr" aria-label="קוד QR להצטרפות לחדר"></div>
-          <div class="inspiration-room-actions">
-            <button id="inspiration-copy-room" type="button" class="inspiration-dialog-instructor">העתקת קישור</button>
-            <a id="inspiration-manage-room" class="inspiration-dialog-submit inspiration-dialog-link" href="#">ניהול המשחק</a>
-          </div>
+          <div id="inspiration-room-qr" aria-label="קוד QR וכלי שיתוף למשחק"></div>
+          <a id="inspiration-manage-room" class="inspiration-dialog-submit inspiration-dialog-link" href="#">ניהול המשחק</a>
           <button id="inspiration-new-room" type="button" class="inspiration-dialog-new">משחק חדש</button>
         </section>
         <p id="inspiration-entry-error" class="inspiration-dialog-error" role="alert" hidden></p>
