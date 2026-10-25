@@ -49,14 +49,18 @@
             <label>תחום העיסוק<input name="field" required maxlength="120" autocomplete="off"></label>
             <label>קבוצת התאמה<select name="group_id" id="card-group" required></select></label>
             <p class="hint">קבוצת ההתאמה של קלף קיים קבועה. כדי להגדיר התאמה אחרת, צרי קלף חדש בקבוצה המתאימה והשביתי את הקלף הקודם לפי הצורך.</p>
-            <label>קובץ קדמי — תמונה או PDF<input name="front_file" type="file" accept="image/png,image/jpeg,image/webp,application/pdf"></label>
+            <label>כרטיס האישה שכבר נמצא באתר פורצות דרך<select name="site_file" id="site-card-file"><option value="">בחרי כרטיס מתיקיית women</option></select></label>
+            <p class="hint">הכרטיס מוצג ישירות מאתר פורצות דרך. אין צורך להעלות תמונות ל־Supabase. השתמשי בשם הקובץ המתאים לאישה.</p>
+            <details><summary>קובץ ישן ב־Supabase (תאימות לאחור בלבד)</summary>
+              <label>קובץ קדמי — תמונה או PDF<input name="front_file" type="file" accept="image/png,image/jpeg,image/webp,application/pdf"></label>
             <input name="front_path" type="hidden">
             <p id="front-status" class="hint">טרם נבחר קובץ קדמי</p>
             <label>קובץ אחורי — תמונה או PDF, לפי הצורך<input name="back_file" type="file" accept="image/png,image/jpeg,image/webp,application/pdf"></label>
             <input name="back_path" type="hidden">
             <p id="back-status" class="hint">ללא צד אחורי</p>
+            </details>
             <label class="checkbox"><input name="active" type="checkbox" checked>קלף פעיל</label>
-            <p class="hint">העלאה יוצרת קובץ חדש. היא אינה מחליפה קובץ שמוצג בחדר קיים. תמונות: PNG, JPEG, WebP. מסמכים: PDF.</p>
+            <p class="hint">כרטיסי האתר נקראים מקובצי GitHub Pages הקיימים. גב קלף אחיד לכל הנשים מוצג בלוח הבחירה בנפרד. אין צורך בקובץ גב נוסף לכל אישה.</p>
             <div class="actions"><button type="submit" class="primary">שמירת הקלף</button><button id="clear-card" type="button" class="secondary">קלף חדש</button></div>
           </form>
         </section>
@@ -67,8 +71,8 @@
       </section>
       <section class="panel">
         <p class="eyebrow">טעינה מרוכזת</p><h2>יבוא רשימה מאושרת</h2>
-        <p>אפשר לטעון JSON או CSV. היבוא שומר נתונים רק לאחר בדיקת מבנה הקבוצות וקובצי התוכן. יש להעלות קבצים לפני יבוא הרשימה; נתיבי הקבצים הם נתיבים באחסון הפרטי.</p>
-        <details><summary>מבנה קובץ היבוא</summary><p class="hint">CSV: group_id, symbol, size, name, field, front_path, back_path, active. כל שורה היא קלף אחד; group_id חייב להיות מזהה UUID. העמודה group_active מאפשרת לייבא קבוצה כטיוטה. JSON: אובייקט groups עם רשימת קבוצות, ובכל קבוצה רשימת cards ושם בשדה woman_name. אפשר להשמיט id ליצירת מזהה חדש; לעדכון רשומה קיימת יש לציין את מזהה ה־UUID שלה.</p><pre class="import-example" dir="ltr">{"groups":[{"symbol":"◆","size":2,"active":false,"cards":[{"woman_name":"שם האישה הראשונה ברשימה המאושרת","field":"תחום העיסוק","active":false},{"woman_name":"שם האישה השנייה ברשימה המאושרת","field":"תחום העיסוק","active":false}]}]}</pre><p class="hint">הדוגמה מציגה מבנה של טיוטה מושבתת בלבד. לפני הפעלה יש להזין את הפרטים המאושרים ולהוסיף front_path או back_path עם נתיב קובץ שהועלה לאחסון הפרטי. אין לייבא את הדוגמה כתוכן מאושר.</p></details>
+        <p>אפשר לטעון JSON או CSV. היבוא שומר פרטי קבוצות והתאמות בלבד. עבור תמונות שכבר באתר משתמשים בנתיב front_path בפורמט site:women/Agatha.png. אין להעלות את הקבצים שוב ל־Supabase.</p>
+        <details><summary>מבנה קובץ היבוא</summary><p class="hint">CSV: group_id, symbol, size, name, field, front_path, back_path, active. כל שורה היא קלף אחד; group_id חייב להיות מזהה UUID. העמודה group_active מאפשרת לייבא קבוצה כטיוטה. JSON: אובייקט groups עם רשימת קבוצות, ובכל קבוצה רשימת cards ושם בשדה woman_name. אפשר להשמיט id ליצירת מזהה חדש; לעדכון רשומה קיימת יש לציין את מזהה ה־UUID שלה.</p><pre class="import-example" dir="ltr">{"groups":[{"symbol":"◆","size":2,"active":false,"cards":[{"woman_name":"שם האישה הראשונה ברשימה המאושרת","field":"תחום העיסוק","active":false},{"woman_name":"שם האישה השנייה ברשימה המאושרת","field":"תחום העיסוק","active":false}]}]}</pre><p class="hint">הדוגמה מציגה מבנה של טיוטה מושבתת בלבד. לפני הפעלה יש להזין את הפרטים המאושרים ולבחור front_path מתוך תמונות הנשים המופיעות באתר. אין לייבא את הדוגמה כתוכן מאושר.</p></details>
         <form id="import-form">
           <label>בחירת קובץ<input id="import-file" type="file" accept=".json,.csv,application/json,text/csv"></label>
           <label>או הדבקת JSON<textarea id="import-text" rows="7" spellcheck="false" dir="ltr" placeholder='{"groups": []}'></textarea></label>
