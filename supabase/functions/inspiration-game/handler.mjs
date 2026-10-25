@@ -237,18 +237,15 @@ export function createHandler({ client, allowedOrigins = DEFAULT_ORIGINS, crypto
       const data = await rpc(action, actor, token, payload);
       if (action.endsWith('.asset')) {
         const path = data?.path;
-        // Public, immutable-by-path artwork lives on the existing course website.
-        // RPC authorization still runs before the redirect. The allowlisted
-        // relative path cannot be used to redirect to an arbitrary origin.
+        // RPC validates access to the assigned card before revealing the asset.
+        // Respond with an allowlisted filename instead of redirecting a CORS POST.
+        // The client loads the unchanged image from this site's GitHub Pages origin.
         const siteCard = typeof path === 'string'
           ? /^site:women\/([A-Za-z0-9_-]+\.(?:png|jpg|jpeg|webp|pdf))$/.exec(path)
           : null;
         if (siteCard) {
-          const mediaHeaders = new Headers(headers);
-          mediaHeaders.set('Location', new URL('./cards/women/' + siteCard[1], 'https://portzot-derech.org/inspiration/').href);
-          // 303 converts the authenticated POST to a GET on GitHub Pages.
-          // The public artwork is not mirrored to Supabase Storage.
-          return new Response(null, { status: 303, headers: mediaHeaders });
+          // Returning JSON avoids browser cross-origin redirects after a POST.
+          return json({ site_asset: siteCard[1] });
         }
         const extension = typeof path === 'string' ? path.split('.').pop().toLowerCase() : '';
         if (!path || !MIME[extension] || path.includes('..') || path.startsWith('/') || /[?#\\]/.test(path)) throw new HttpError('file_missing', 404);
