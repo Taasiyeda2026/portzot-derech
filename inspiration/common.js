@@ -84,7 +84,14 @@ export function loginPanel(message='כניסה עם חשבון הדשבורד ש
     login.disabled=true;
     try {await dashboardLogin();location.reload();}catch(error){notify(errorText(error));login.disabled=false;}
   });
-  main.append(el('section',{class:'panel intro','data-login-panel':true},el('span',{class:'eyebrow'},'מרחב המדריכה'),el('h1',{},'מזמינות את ההשראה לכיתה'),el('p',{class:'lead'},message),el('p',{},'השתמשי בשם המשתמש או במספר העובד ובסיסמה האישית הקיימת שלך. אם את כבר מחוברת, לא תצטרכי להזין אותם שוב.'),el('div',{class:'actions'},login),el('p',{class:'help'},'חלון הדשבורד ייפתח לצורך אימות החשבון.')));
+  const adminPanel=document.body?.dataset?.page==='admin';
+  main.append(el('section',{class:'panel intro','data-login-panel':true},
+    el('span',{class:'eyebrow'},adminPanel?'לוח האדמין של נושמות השראה':'מרחב המדריכה'),
+    el('h1',{},adminPanel?'כניסה ללוח האדמין של המשחק':'מזמינות את ההשראה לכיתה'),
+    el('p',{class:'lead'},message),
+    el('p',{},'יש להתחבר עם חשבון הדשבורד הקיים. אם החשבון כבר מחובר, אין צורך להזין סיסמה נוספת.'),
+    el('div',{class:'actions'},login),
+    el('p',{class:'help'},'ההזדהות מתבצעת בחלון הדשבורד. הפעילות וניהול הקלפים נשארים באתר פורצות דרך.')));
 }
 
 export async function requireTeacher() {
