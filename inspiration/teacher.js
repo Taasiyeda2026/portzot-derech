@@ -57,13 +57,18 @@ function renderRoom(){
   clear(main);
   const steps=el('div',{class:'steps','aria-label':'שלבי המשחק'},...phases.map(phase=>el('span',{class:phase===room.phase?'current':''},phaseText[phase])));
   const header=el('section',{class:'panel'},el('div',{class:'room-head'},el('div',{},el('span',{class:'eyebrow'},'החדר שלך'),el('h1',{},`נושמות השראה · ${room.expected}`)),button('כל החדרים',home,{class:'secondary'})),steps,el('div',{class:'stat-grid'},stat(stats.joined??players.length,'הצטרפו'),stat(stats.chosen??players.filter(p=>p.number).length,'בחרו קלף'),stat(stats.remaining??room.expected-(stats.chosen||0),'טרם בחרו'),stat(stats.complete_groups,'קבוצות עם כל הקלפים שנבחרו')));
+  if(room.phase==='matching'||room.phase==='activity') {
+    const progress=el('p',{class:'class-progress'},
+      `אימתו חיבור: ${stats.verified??0} · המשיכו לפעילות: ${stats.continued??0}`);
+    header.append(progress);
+  }
   const joined=stats.joined??players.length;const chosen=stats.chosen??players.filter(p=>p.number).length;
   if(room.phase==='waiting')header.append(el('p',{class:'info'},`מחכות לעוד ${Math.max(0,room.expected-joined)} משתתפות. בחירת הקלפים תיפתח רק כאשר ${room.expected} המשתתפות רשומות בחדר.`));
 
   const controls=el('div',{class:'actions'});
   if(room.phase==='waiting')controls.append(button('מתחילות לבחור קלפים',()=>action('teacher.phase',{phase:'choosing'}),{disabled:joined!==room.expected}));
   if(room.phase==='choosing')controls.append(button('עוברות למציאת החיבורים',()=>action('teacher.phase',{phase:'matching'}),{disabled:chosen!==room.expected}));
-  if(room.phase==='matching')controls.append(button('ממשיכות למפצחות את הקוד',()=>action('teacher.phase',{phase:'activity'})));
+  // Each verified participant opens her own hint and confirms continuation.
   if(room.phase!=='ended')controls.append(button('סיום המשחק',()=>{if(confirm('לסיים את המשחק? ההצטרפות ובחירת הקלפים יינעלו.'))action('teacher.phase',{phase:'ended'});},{class:'danger'}));
   header.append(controls);main.append(header);
   if(room.phase!=='ended'){
