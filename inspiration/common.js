@@ -59,7 +59,7 @@ export async function api(action,payload={},options={}) {
   const staff=action.startsWith('teacher.') || action.startsWith('admin.');
   if (staff) {
     try {headers.Authorization=`Bearer ${await teacherToken()}`;}
-    catch(error) {if(action!=='teacher.me')loginPanel('ההתחברות הסתיימה. התחברי שוב כדי לחזור לחדר שלך.');throw error;}
+    catch(error) {if(action!=='teacher.me')loginPanel('ההתחברות הסתיימה. יש להתחבר מחדש.');throw error;}
   }
   let response;
   try {response=await fetch(ENDPOINT,{method:'POST',headers,cache:'no-store',referrerPolicy:'no-referrer',body:JSON.stringify({action,payload,...(options.token?{token:options.token}:{})})});}
@@ -73,32 +73,33 @@ export async function upload(file) {
     const response=await fetch(ENDPOINT,{method:'POST',headers:{apikey:PUBLISHABLE_KEY,Authorization:`Bearer ${await teacherToken()}`},body,cache:'no-store'});
     return await readResponse(response);
   } catch(error) {
-    if(error.status===401)loginPanel('ההתחברות הסתיימה. התחברי שוב כדי להמשיך בניהול התוכן.');
+    if(error.status===401)loginPanel('ההתחברות הסתיימה. יש להתחבר מחדש.');
     throw error;
   }
 }
 
-export function loginPanel(message='כניסה עם חשבון הדשבורד שלך') {
-  const main=document.querySelector('#app');if(main.querySelector('[data-login-panel]'))return;clear(main);
+export function loginPanel(message='כניסה למדריכה') {
+  const main=document.querySelector('#app');
+  const target=document.querySelector('#auth-panel')||main;
+  if (target.querySelector('[data-login-panel]')) return;
   const login=button('כניסה דרך דשבורד תעשיידע',async()=>{
     login.disabled=true;
-    try {await dashboardLogin();location.reload();}catch(error){notify(errorText(error));login.disabled=false;}
+    try { await dashboardLogin(); location.reload(); }
+    catch(error){ notify(errorText(error)); login.disabled=false; }
   });
-  const adminPanel=document.body?.dataset?.page==='admin';
-  main.append(el('section',{class:'panel intro','data-login-panel':true},
-    el('span',{class:'eyebrow'},adminPanel?'לוח האדמין של נושמות השראה':'מרחב המדריכה'),
-    el('h1',{},adminPanel?'כניסה ללוח האדמין של המשחק':'מזמינות את ההשראה לכיתה'),
-    el('p',{class:'lead'},message),
-    el('p',{},'יש להתחבר עם חשבון הדשבורד הקיים. אם החשבון כבר מחובר, אין צורך להזין סיסמה נוספת.'),
-    el('div',{class:'actions'},login),
-    el('p',{class:'help'},'ההזדהות מתבצעת בחלון הדשבורד. הפעילות וניהול הקלפים נשארים באתר פורצות דרך.')));
+  if(target===main)clear(main);else clear(target);
+  target.append(el('section',{class:'panel intro','data-login-panel':true},
+    el('h1',{},'כניסה לנושמות השראה'),
+    el('p',{},message),
+    el('div',{class:'actions'},login)));
 }
 
 export async function requireTeacher() {
   try {
     const me=await api('teacher.me');
     if(!me.can_manage && !me.is_admin) {
-      clear(document.querySelector('#app')).append(el('section',{class:'panel intro'},el('h1',{},'אין הרשאת ניהול משחק'),el('p',{},'לחשבון הזה לא הוענקה הרשאה לניהול נושמות השראה. פני למנהלת המערכת.')));
+      const target=document.querySelector('#auth-panel')||document.querySelector('#app');
+      clear(target).append(el('section',{class:'panel intro'},el('h1',{},'אין הרשאה לניהול משחק'),el('p',{},'החשבון אינו מורשה לניהול המשחק.')));
       return null;
     }
     const signout=document.querySelector('#signout');

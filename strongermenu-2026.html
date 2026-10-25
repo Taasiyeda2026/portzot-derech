@@ -12,7 +12,7 @@
   <script>
     const SESSION_KEY = "stronger_gate_2026";
     if (sessionStorage.getItem(SESSION_KEY) !== "ok") {
-      window.location.replace("strongermenu-2026.html");
+      window.location.replace("index.html");
     }
   </script>
 
@@ -560,6 +560,27 @@
         line-height:1.45;
       }
     }
+
+    /* Quick entry to the classroom game */
+    .menu-item:is(button){font:inherit;cursor:pointer}
+    #inspiration-dialog{border:1px solid #e6c6d9;border-radius:23px;padding:0;width:min(440px,calc(100vw - 28px));max-height:min(95vh,740px);background:#fffafd;color:#442c46;box-shadow:0 24px 80px #260f3166}
+    #inspiration-dialog::backdrop{background:#1a1239b0;backdrop-filter:blur(3px)}
+    .inspiration-dialog-inner{padding:28px;display:grid;gap:14px;font-family:"Alef",Arial,sans-serif;text-align:right}
+    .inspiration-dialog-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .inspiration-dialog-top h2{margin:0;font-size:1.65rem;color:#5c2852}
+    .inspiration-dialog-close{border:0;border-radius:50%;background:#f7e8f0;color:#5c2852;width:38px;height:38px;cursor:pointer;font-size:1.4rem}
+    .inspiration-dialog-inner p{margin:0;color:#775c73;font-size:.94rem;line-height:1.55}
+    .inspiration-dialog-inner label{display:grid;gap:6px;font-weight:700;font-size:.95rem}
+    .inspiration-dialog-inner input{display:block;box-sizing:border-box;width:100%;border:1px solid #d7bed2;background:#fff;border-radius:10px;min-height:46px;padding:10px 12px;color:#362b40;font:inherit}
+    .inspiration-dialog-inner input:focus{outline:2px solid #cb72ae;outline-offset:2px}
+    .inspiration-dialog-inner form{display:grid;gap:14px;margin-top:6px}
+    .inspiration-dialog-submit{border:0;border-radius:12px;background:#682f63;color:#fff;font:inherit;font-weight:700;min-height:48px;cursor:pointer;padding:12px}
+    .inspiration-dialog-submit:hover{background:#4f2550}
+    .inspiration-dialog-instructor{border:1px solid #dfc6d8;background:#fff;color:#632e62;font:inherit;font-weight:700;border-radius:12px;min-height:46px;cursor:pointer}
+    .inspiration-dialog-instructor:disabled{opacity:.6;cursor:progress}
+    .inspiration-dialog-line{border:0;border-top:1px solid #eadce8;width:100%;margin:3px 0}
+    .inspiration-dialog-error{color:#9e3448!important;font-weight:700}
+    .inspiration-dialog-error[hidden]{display:none}
   </style>
 </head>
 <body>
@@ -593,13 +614,13 @@
               <img src="icon/start.svg" alt="יוצאות לדרך" />
             </div>
           </a>
-          <a class="menu-item" href="inspiration/home.html">
+          <button type="button" class="menu-item" id="inspiration-entry" aria-haspopup="dialog" aria-controls="inspiration-dialog">
             <h4>נושמות השראה</h4>
             <p>משחק הקלפים הקבוצתי</p>
             <div class="icon-box">
               <img src="icon/inspiration-cards.svg" alt="קלפי השראה" />
             </div>
-          </a>
+          </button>
 
 
           <a class="menu-item" href="domains/alldomains.html">
@@ -667,6 +688,60 @@
     </div>
   </div>
 
+
+    <dialog id="inspiration-dialog" aria-labelledby="inspiration-dialog-title">
+      <div class="inspiration-dialog-inner">
+        <div class="inspiration-dialog-top"><h2 id="inspiration-dialog-title">נושמות השראה</h2><button id="inspiration-dialog-close" class="inspiration-dialog-close" type="button" aria-label="סגירה">×</button></div>
+        <p>יש לך קוד משחק מהמדריכה? הזיני את הפרטים והצטרפי.</p>
+        <form id="inspiration-join-form">
+          <label>השם הפרטי שלך<input id="inspiration-player-name" name="name" autocomplete="given-name" maxlength="60" required placeholder="שם פרטי"></label>
+          <label>קוד המשחק<input id="inspiration-room-code" name="code" dir="ltr" autocomplete="off" maxlength="64" required placeholder="הקוד שקיבלת מהמדריכה"></label>
+          <button type="submit" class="inspiration-dialog-submit">כניסה למשחק</button>
+        </form>
+        <hr class="inspiration-dialog-line">
+        <button id="inspiration-teacher-entry" class="inspiration-dialog-instructor" type="button">כניסת מדריכה דרך תעשיידע</button>
+        <p id="inspiration-entry-error" class="inspiration-dialog-error" role="alert" hidden></p>
+      </div>
+    </dialog>
+    <script type="module">
+      import { dashboardLogin } from './inspiration/common.js';
+      const dialog = document.querySelector('#inspiration-dialog');
+      const entry = document.querySelector('#inspiration-entry');
+      const error = document.querySelector('#inspiration-entry-error');
+      const teacher = document.querySelector('#inspiration-teacher-entry');
+      const open = () => { error.hidden = true; error.textContent = ''; dialog.showModal(); document.querySelector('#inspiration-player-name').focus(); };
+      entry.addEventListener('click', open);
+      document.querySelector('#inspiration-dialog-close').addEventListener('click', () => dialog.close());
+      document.querySelector('#inspiration-join-form').addEventListener('submit', (event) => {
+        event.preventDefault();
+        const form = event.currentTarget;
+        if (!form.reportValidity()) return;
+        const name = form.elements.name.value.trim();
+        const code = form.elements.code.value.trim();
+        if (!name || !code) return;
+        try { sessionStorage.setItem('inspiration:join-intent', JSON.stringify({name, code})); }
+        catch { error.textContent = 'לא ניתן לשמור את פרטי הכניסה. אפשרי אחסון בדפדפן ונסי שוב.'; error.hidden = false; return; }
+        const target = new URL('inspiration/index.html', location.href);
+        target.searchParams.set('code', code);
+        location.assign(target.href);
+      });
+      teacher.addEventListener('click', async () => {
+        teacher.disabled = true;
+        error.hidden = true;
+        try {
+          await dashboardLogin();
+          location.assign(new URL('inspiration/teacher.html', location.href).href);
+        } catch (reason) {
+          error.textContent = reason?.message || 'לא הצלחנו להשלים את הכניסה. נסי שוב.';
+          error.hidden = false;
+          teacher.disabled = false;
+        }
+      });
+      if (location.hash === '#inspiration') {
+        history.replaceState(null, '', location.pathname + location.search);
+        open();
+      }
+    </script>
   <script>
     const logoutBtn = document.getElementById("logoutBtn");
 
