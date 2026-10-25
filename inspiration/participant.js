@@ -85,11 +85,11 @@ function hintPanel(card,progress) {
   panel.append(el('div',{class:'hint-actions'},reveal,hint),el('div',{class:'actions'},proceed));
   return panel;
 }
-function activityPanel(){
+function activityPanel(progress){
   return el('section',{class:'panel'},
     el('span',{class:'badge success'},'החיבור אומת'),
     el('h1',{},'מפצחות את הקוד'),
-    el('p',{class:'lead'},'עכשיו ממשיכות יחד עם בת הזוג או השלישייה לדף הפעילות.'),
+    el('p',{class:'lead'},progress.group_size===3?'עכשיו ממשיכות יחד כשלישייה לדף הפעילות.':'עכשיו ממשיכות יחד עם בת הזוג לדף הפעילות.'),
     el('p',{},'חזרו לסיפורים של הנשים וחשבו יחד מה מחבר ביניהן.'));
 }
 
@@ -108,7 +108,7 @@ function render(next) {
   if(card) {
     const progress=next.progress||{};
     if(room.phase==='matching'||room.phase==='activity') {
-      if(progress.confirmed)main.append(activityPanel());
+      if(progress.confirmed)main.append(activityPanel(progress));
       else if(progress.verified)main.append(hintPanel(card,progress));
       else main.append(matchingPanel(card,room,progress));
     } else {
