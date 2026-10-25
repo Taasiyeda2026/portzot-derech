@@ -581,6 +581,19 @@
     .inspiration-dialog-line{border:0;border-top:1px solid #eadce8;width:100%;margin:3px 0}
     .inspiration-dialog-error{color:#9e3448!important;font-weight:700}
     .inspiration-dialog-error[hidden]{display:none}
+    .inspiration-dialog-inner [hidden]{display:none!important}
+    #inspiration-teacher-auth{display:grid;gap:10px}
+    #inspiration-teacher-workspace{display:grid;gap:8px}
+    .inspiration-teacher-welcome{font-weight:700;color:#5c2852!important}
+    #inspiration-room-created{display:grid;gap:13px;text-align:center}
+    #inspiration-room-qr{width:min(245px,100%);margin:0 auto;padding:12px;border:1px solid #e8d2e0;border-radius:16px;background:white}
+    #inspiration-room-qr svg{display:block;width:100%;height:auto}
+    .inspiration-room-ready{font-weight:700!important;color:#5c2852!important}
+    .inspiration-room-code{font-size:1rem!important;color:#5c2852!important;font-weight:700;overflow-wrap:anywhere;direction:ltr}
+    .inspiration-room-link{display:block;color:#682f63;overflow-wrap:anywhere;direction:ltr;font-size:.78rem}
+    .inspiration-dialog-link{display:flex;align-items:center;justify-content:center;text-decoration:none}
+    .inspiration-dialog-new{border:0;background:transparent;color:#682f63;font-weight:700;font:inherit;padding:9px;cursor:pointer}
+    .inspiration-dialog-new:hover{text-decoration:underline}
   </style>
 </head>
 <body>
@@ -691,57 +704,37 @@
 
     <dialog id="inspiration-dialog" aria-labelledby="inspiration-dialog-title">
       <div class="inspiration-dialog-inner">
-        <div class="inspiration-dialog-top"><h2 id="inspiration-dialog-title">נושמות השראה</h2><button id="inspiration-dialog-close" class="inspiration-dialog-close" type="button" aria-label="סגירה">×</button></div>
-        <p>יש לך קוד משחק מהמדריכה? הזיני את הפרטים והצטרפי.</p>
-        <form id="inspiration-join-form">
-          <label>השם הפרטי שלך<input id="inspiration-player-name" name="name" autocomplete="given-name" maxlength="60" required placeholder="שם פרטי"></label>
-          <label>קוד המשחק<input id="inspiration-room-code" name="code" dir="ltr" autocomplete="off" maxlength="64" required placeholder="הקוד שקיבלת מהמדריכה"></label>
-          <button type="submit" class="inspiration-dialog-submit">כניסה למשחק</button>
-        </form>
-        <hr class="inspiration-dialog-line">
-        <button id="inspiration-teacher-entry" class="inspiration-dialog-instructor" type="button">כניסת מדריכה דרך תעשיידע</button>
+        <div class="inspiration-dialog-top">
+          <h2 id="inspiration-dialog-title">נושמות השראה · מדריכה</h2>
+          <button id="inspiration-dialog-close" class="inspiration-dialog-close" type="button" aria-label="סגירה">×</button>
+        </div>
+        <p>פתחי משחק חדש, קבלי קישור וקוד QR והזמיני את המשתתפות.</p>
+        <section id="inspiration-teacher-auth">
+          <button id="inspiration-teacher-entry" class="inspiration-dialog-submit" type="button">כניסה דרך דשבורד תעשיידע</button>
+        </section>
+        <section id="inspiration-teacher-workspace" hidden>
+          <p id="inspiration-teacher-welcome" class="inspiration-teacher-welcome"></p>
+          <form id="inspiration-teacher-form">
+            <label>מספר המשתתפות בכיתה
+              <input id="inspiration-participant-count" name="expected" type="number" min="2" max="33" step="1" inputmode="numeric" required placeholder="למשל: 27">
+            </label>
+            <button id="inspiration-create-room" class="inspiration-dialog-submit" type="submit">פתיחת משחק ויצירת QR</button>
+          </form>
+        </section>
+        <section id="inspiration-room-created" hidden>
+          <p class="inspiration-room-ready">המשחק נפתח. אפשר להזמין את המשתתפות!</p>
+          <div id="inspiration-room-qr" aria-label="קוד QR להצטרפות לחדר"></div>
+          <p id="inspiration-room-code" class="inspiration-room-code"></p>
+          <a id="inspiration-room-link" class="inspiration-room-link" href="#" target="_blank" rel="noopener">קישור ההצטרפות לתלמידות</a>
+          <button id="inspiration-copy-room" type="button" class="inspiration-dialog-instructor">העתקת קישור</button>
+          <a id="inspiration-manage-room" class="inspiration-dialog-submit inspiration-dialog-link" href="#">ניהול החדר והפעלת המשחק</a>
+          <button id="inspiration-new-room" type="button" class="inspiration-dialog-new">פתיחת משחק נוסף</button>
+        </section>
         <p id="inspiration-entry-error" class="inspiration-dialog-error" role="alert" hidden></p>
       </div>
     </dialog>
-    <script type="module">
-      import { dashboardLogin } from './inspiration/common.js';
-      const dialog = document.querySelector('#inspiration-dialog');
-      const entry = document.querySelector('#inspiration-entry');
-      const error = document.querySelector('#inspiration-entry-error');
-      const teacher = document.querySelector('#inspiration-teacher-entry');
-      const open = () => { error.hidden = true; error.textContent = ''; dialog.showModal(); document.querySelector('#inspiration-player-name').focus(); };
-      entry.addEventListener('click', open);
-      document.querySelector('#inspiration-dialog-close').addEventListener('click', () => dialog.close());
-      document.querySelector('#inspiration-join-form').addEventListener('submit', (event) => {
-        event.preventDefault();
-        const form = event.currentTarget;
-        if (!form.reportValidity()) return;
-        const name = form.elements.name.value.trim();
-        const code = form.elements.code.value.trim();
-        if (!name || !code) return;
-        try { sessionStorage.setItem('inspiration:join-intent', JSON.stringify({name, code})); }
-        catch { error.textContent = 'לא ניתן לשמור את פרטי הכניסה. אפשרי אחסון בדפדפן ונסי שוב.'; error.hidden = false; return; }
-        const target = new URL('inspiration/index.html', location.href);
-        target.searchParams.set('code', code);
-        location.assign(target.href);
-      });
-      teacher.addEventListener('click', async () => {
-        teacher.disabled = true;
-        error.hidden = true;
-        try {
-          await dashboardLogin();
-          location.assign(new URL('inspiration/teacher.html', location.href).href);
-        } catch (reason) {
-          error.textContent = reason?.message || 'לא הצלחנו להשלים את הכניסה. נסי שוב.';
-          error.hidden = false;
-          teacher.disabled = false;
-        }
-      });
-      if (location.hash === '#inspiration') {
-        history.replaceState(null, '', location.pathname + location.search);
-        open();
-      }
-    </script>
+    <script src="./inspiration/vendor/qrcode.js"></script>
+    <script type="module" src="./inspiration/teacher-entry.js"></script>
   <script>
     const logoutBtn = document.getElementById("logoutBtn");
 
