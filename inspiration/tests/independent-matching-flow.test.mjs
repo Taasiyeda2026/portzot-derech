@@ -32,7 +32,7 @@ test('pair/trio form and independent continuation are participant-controlled',as
     "api('participant.verify_match',{numbers},{token})",
     "api('participant.confirm_activity',{}, {token})",
     "חומר למחשבה ✨",
-    "לפעמים החיבור בין שני סיפורים מסתתר דווקא בפרטים הקטנים.",
+    "לפעמים החיבור בין סיפורים מסתתר דווקא בפרטים הקטנים.",
     "אין תשובה אחת נכונה.",
     "המשך ואישור",
     "מפצחות את הקוד",
