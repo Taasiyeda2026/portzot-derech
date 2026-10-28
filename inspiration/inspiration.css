@@ -228,7 +228,7 @@
 .card-viewer .wow-hit-area{
   position:absolute;right:-5px;bottom:-5px;width:44px;height:44px;
   min-width:44px;min-height:44px;
-  display:flex;align-items:flex-end;justify-content:flex-end;
+  display:flex;direction:ltr;align-items:flex-end;justify-content:flex-end;
   padding:1px;border:0;border-radius:12px;background:transparent;
   color:#563072;cursor:pointer;z-index:2;touch-action:manipulation
 }
