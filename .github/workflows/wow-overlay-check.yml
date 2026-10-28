@@ -55,6 +55,7 @@ jobs:
               await page.goto(base+'/smoke');
               await page.waitForSelector('.wow-hit-area');
               await page.waitForFunction(()=>document.querySelector('.card-artwork img')?.naturalWidth>0);
+              await new Promise(ok=>setTimeout(ok,850)); // Wait for the 650ms card reveal animation before measuring hit bounds.
               const result=await page.evaluate(()=>{
                 const artwork=document.querySelector('.card-artwork').getBoundingClientRect();
                 const hit=document.querySelector('.wow-hit-area').getBoundingClientRect();
