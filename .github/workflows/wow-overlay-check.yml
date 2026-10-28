@@ -1,0 +1,84 @@
+name: Verify WOW overlay
+on:
+  push:
+    branches: [feature/inspiration-wow-thumbnail-zoom-20261028]
+jobs:
+  wow-overlay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+      - name: Install testing dependencies
+        run: npm ci --ignore-scripts
+      - name: Run focused WOW, card and media tests
+        run: node --test inspiration/tests/wow-overlay.test.mjs inspiration/tests/site-asset-delivery.test.mjs inspiration/tests/site-card-manifest.test.mjs
+      - name: Verify the live card interaction locally in Chromium
+        run: |
+          node --input-type=module <<'EOF'
+          import {createServer} from 'node:http';
+          import {readFile} from 'node:fs/promises';
+          import {resolve,extname} from 'node:path';
+          import assert from 'node:assert/strict';
+          import puppeteer from 'puppeteer';
+          const root=process.cwd();
+          const html=`<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="/inspiration/inspiration.css"></head><body><main id="test"></main><script type="module">
+            import {cardViewer} from '/inspiration/common.js';
+            const oldFetch=window.fetch.bind(window);
+            window.fetch=(url,options)=>String(url).includes('supabase.co/functions/v1/inspiration-game')
+              ? Promise.resolve(new Response(JSON.stringify({site_asset:'joy.png'}),{headers:{'Content-Type':'application/json'}}))
+              : oldFetch(url,options);
+            const viewer=cardViewer({woman_name:'ג׳וי בולאמוויני',front_path:'site:women/joy.png',has_front:true,has_back:false},'test-token');
+            document.querySelector('#test').append(viewer.node);
+            window.__viewer=viewer;
+          </script></body></html>`;
+          const mime={'.js':'text/javascript','.css':'text/css','.png':'image/png','.html':'text/html'};
+          const server=createServer(async(req,res)=>{
+            try{
+              if(req.url==='/smoke'){res.writeHead(200,{'Content-Type':'text/html; charset=utf-8'});res.end(html);return;}
+              if(!req.url?.startsWith('/inspiration/')){res.writeHead(404);res.end();return;}
+              const file=resolve(root,'.'+decodeURIComponent(req.url));
+              if(!file.startsWith(resolve(root,'inspiration')+'/')){res.writeHead(403);res.end();return;}
+              const data=await readFile(file);res.writeHead(200,{'Content-Type':mime[extname(file)]||'application/octet-stream'});res.end(data);
+            }catch{res.writeHead(404);res.end();}
+          });
+          await new Promise(ok=>server.listen(0,'127.0.0.1',ok));
+          const base=`http://127.0.0.1:${server.address().port}`;
+          const browser=await puppeteer.launch({executablePath:'/usr/bin/google-chrome',headless:true,args:['--no-sandbox','--disable-setuid-sandbox']});
+          try{
+            const page=await browser.newPage();
+            for(const [width,height] of [[390,844],[1200,900]]){
+              await page.setViewport({width,height});
+              await page.goto(base+'/smoke');
+              await page.waitForSelector('.wow-hit-area');
+              await page.waitForFunction(()=>document.querySelector('.card-artwork img')?.naturalWidth>0);
+              const result=await page.evaluate(()=>{
+                const artwork=document.querySelector('.card-artwork').getBoundingClientRect();
+                const hit=document.querySelector('.wow-hit-area').getBoundingClientRect();
+                return {within:hit.left>=artwork.left-1&&hit.right<=artwork.right+1&&hit.bottom<=artwork.bottom+1,
+                  lowerRight:hit.left>artwork.left+artwork.width*.79&&hit.top>artwork.top+artwork.height*.75,
+                  size:{w:hit.width,h:hit.height}};
+              });
+              assert.ok(result.within&&result.lowerRight,`hotspot misaligned at ${width}: ${JSON.stringify(result)}`);
+              assert.ok(result.size.w>=44&&result.size.h>=44,'touch area is too small');
+              await page.click('.wow-hit-area');
+              await page.waitForSelector('.wow-modal[open] .wow-modal-image');
+              await page.waitForFunction(()=>document.querySelector('.wow-modal-image')?.naturalWidth>0);
+              await page.click('.wow-modal-image');
+              await page.waitForFunction(()=>!document.querySelector('.wow-modal[open]'));
+              await page.click('.wow-hit-area');
+              await page.waitForSelector('.wow-modal[open]');
+              await page.click('.wow-modal-close');
+              await page.waitForFunction(()=>!document.querySelector('.wow-modal[open]'));
+              await page.click('.wow-hit-area');
+              await page.waitForSelector('.wow-modal[open]');
+              await page.keyboard.press('Escape');
+              await page.waitForFunction(()=>!document.querySelector('.wow-modal[open]'));
+              console.log('WOW overlay',width+'x'+height,'PASS',JSON.stringify(result));
+            }
+            await page.close();
+          }finally{await browser.close();await new Promise(ok=>server.close(ok));}
+          EOF
