@@ -47,8 +47,9 @@ test('the thumbnail overlay is anchored to the personal image rather than the PN
   assert.match(common,/dialog\.addEventListener\('click'/);
   assert.match(common,/event\.target===dialog\|\|event\.target===image/);
   assert.match(css,/\.card-viewer \.card-artwork\{position:relative/);
-  assert.match(css,/\.card-viewer \.wow-hit-area\{[\s\S]*?position:absolute;right:-5px;bottom:-5px;width:44px;height:44px/);
-  assert.match(css,/display:flex;direction:ltr;align-items:flex-end;justify-content:flex-end/);
+  assert.match(css,/\.card-viewer \.wow-hit-area\{[\s\S]*?position:absolute;right:3%;bottom:2\.5%;width:44px;height:44px/);
+  assert.match(css,/transform:translate\(50%,50%\)/);
+  assert.match(css,/display:grid;place-items:center;direction:ltr/);
   assert.match(css,/min-width:44px;min-height:44px/);
   assert.match(css,/color:#563072;cursor:pointer;/);
   assert.match(css,/width:18px;height:18px/);
