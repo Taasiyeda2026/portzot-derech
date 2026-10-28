@@ -1,0 +1,81 @@
+name: Verify participant WOW icon and pointer
+on:
+  push:
+    branches: [fix/inspiration-wow-icon-hidden-20261028]
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Unit regressions
+        run: node --test inspiration/tests/wow-overlay.test.mjs inspiration/tests/site-asset-delivery.test.mjs inspiration/tests/site-card-manifest.test.mjs
+      - name: Real Chromium participant asset and cursor smoke
+        run: |
+          node --input-type=module <<'EOF'
+          import {createServer} from 'node:http';
+          import {readFile} from 'node:fs/promises';
+          import {resolve,extname} from 'node:path';
+          import assert from 'node:assert/strict';
+          import puppeteer from 'puppeteer';
+          const root=process.cwd();
+          const mime={'.js':'text/javascript','.css':'text/css','.png':'image/png','.woff2':'font/woff2'};
+          const server=createServer(async(req,res)=>{
+            try {
+              if(req.url?.startsWith('/smoke')){
+                res.writeHead(200,{'Content-Type':'text/html; charset=utf-8'});
+                res.end(`<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="/inspiration/inspiration.css"></head><body><main id="app"></main><script type="module">
+                import {cardViewer} from '/inspiration/common.js';
+                const q=new URL(location.href).searchParams;const file=q.get('file')||'joy.png';
+                const old=fetch.bind(window);
+                window.fetch=(url,opts)=>String(url).includes('/functions/v1/inspiration-game')
+                  ? Promise.resolve(new Response(JSON.stringify({site_asset:file}),{headers:{'Content-Type':'application/json'}}))
+                  :old(url,opts);
+                // The actual participant state includes no front_path.
+                const card={woman_name:file,has_front:true,has_back:false};
+                const viewer=cardViewer(card,'test-token');
+                document.querySelector('#app').append(viewer.node);
+                </script></body></html>`);return;
+              }
+              if(!req.url?.startsWith('/inspiration/')){res.writeHead(404);res.end();return;}
+              const file=resolve(root,'.'+decodeURIComponent(req.url.split('?')[0]));
+              if(!file.startsWith(resolve(root,'inspiration')+'/')){res.writeHead(403);res.end();return;}
+              const data=await readFile(file);res.writeHead(200,{'Content-Type':mime[extname(file)]||'application/octet-stream'});res.end(data);
+            }catch{res.writeHead(404);res.end();}
+          });
+          await new Promise(ok=>server.listen(0,'127.0.0.1',ok));
+          const base=`http://127.0.0.1:${server.address().port}/smoke`;
+          const browser=await puppeteer.launch({executablePath:'/usr/bin/google-chrome',headless:true,args:['--no-sandbox']});
+          try{
+            const page=await browser.newPage();
+            for (const [width,height,filename] of [[390,844,'joy.png'],[1200,900,'Kylie.png'],[1200,900,'zahaa.png']]){
+              await page.setViewport({width,height});
+              await page.goto(base+'?file='+filename);
+              await page.waitForSelector('.wow-hit-area');
+              await page.waitForFunction(()=>document.querySelector('.card-artwork img')?.naturalWidth>100);
+              await new Promise(done=>setTimeout(done,700));
+              const hit=await page.$eval('.wow-hit-area',e=>{
+                const r=e.getBoundingClientRect(),a=e.closest('.card-artwork').getBoundingClientRect();
+                return {cursor:getComputedStyle(e).cursor,w:r.width,h:r.height,right:(a.right-r.right)/a.width,lower:(a.bottom-r.bottom)/a.height};
+              });
+              assert.equal(hit.cursor,'pointer');
+              assert.ok(hit.w>=44 && hit.h>=44,JSON.stringify(hit));
+              assert.ok(hit.right<.09&&hit.lower<.09,JSON.stringify(hit));
+              await page.hover('.wow-hit-area');
+              await page.click('.wow-hit-area');
+              await page.waitForSelector('.wow-modal[open] .wow-modal-image');
+              await page.waitForFunction(()=>document.querySelector('.wow-modal-image')?.naturalWidth>0);
+              const src=await page.$eval('.wow-modal-image',x=>x.src);
+              assert.ok(src.endsWith(filename.toLowerCase().replace(/\.png$/,'').replace(/^zahaa$/,'zaha')+'-wow.png'),src);
+              await page.click('.wow-modal-close');
+              await page.waitForFunction(()=>!document.querySelector('.wow-modal[open]'));
+              console.log('PASS',filename,width+'x'+height,'cursor hand, 44px touch target, correct WOW image opens/closes',JSON.stringify(hit));
+            }
+            await page.close();
+          }finally{await browser.close();await new Promise(ok=>server.close(ok));}
+          EOF
