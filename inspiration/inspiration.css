@@ -317,3 +317,30 @@
   #app.participant.phase-advance > .personal-header,
   .hint-text.hint-appear{animation:none!important}
 }
+
+
+/* Compact zoom controls on phones: preserve a 44px touch target while
+   shrinking only the visible magnifier. The full-card close control
+   must never grow to fill its dialog. */
+@media(max-width:760px){
+  .media-zoom{
+    width:calc(100vw - 20px);max-width:calc(100vw - 20px);
+    padding:12px;max-height:90dvh
+  }
+  .media-zoom .actions{
+    justify-content:flex-start;
+    margin:0 0 10px;
+  }
+  .media-zoom .actions button{
+    flex:0 0 auto;width:auto;max-width:max-content;
+    min-height:40px;padding:6px 16px;font-size:.9rem
+  }
+  .media-zoom img,.media-zoom canvas{
+    display:block;width:100%;max-width:100%;height:auto
+  }
+  .card-viewer .wow-zoom-icon{
+    width:20px;height:20px;
+    box-shadow:0 1px 5px #25102c4a
+  }
+  .card-viewer .wow-hit-area svg{width:14px;height:14px}
+}
