@@ -30,7 +30,10 @@ function joinScreen() {
 }
 
 function personalCard(card) {
-  const section=el('section',{class:'panel'},el('div',{class:'personal-header'},el('span',{class:'eyebrow'},`הקלף האישי שלך · ${card.number}`),el('h2',{},card.woman_name),el('p',{},card.field ? (card.field.startsWith('פורצת דרך ') ? card.field : 'פורצת דרך ב' + card.field) : '')));
+  const numberTag=el('div',{class:'personal-card-number','aria-label':`מספר הקלף שלך: ${card.number}`},
+    el('span',{class:'personal-card-number-value',dir:'ltr'},card.number),
+    el('span',{class:'personal-card-number-label'},'מספר הקלף שלך'));
+  const section=el('section',{class:'panel'},el('div',{class:'personal-header'},numberTag,el('h2',{},card.woman_name),el('p',{},card.field ? (card.field.startsWith('פורצת דרך ') ? card.field : 'פורצת דרך ב' + card.field) : '')));
   viewer=cardViewer(card,token);section.append(viewer.node);return section;
 }
 

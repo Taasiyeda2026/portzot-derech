@@ -345,3 +345,27 @@
   }
   .card-viewer .wow-hit-area svg{width:11px;height:11px}
 }
+
+
+/* Clear RTL card-number identity: the number stays on the right of the label.
+   Do not change the numbered-card artwork or the WOW overlay. */
+.personal-card-number{
+  display:inline-flex;direction:rtl;align-items:center;justify-content:center;
+  gap:10px;margin:0 auto 12px;max-width:100%
+}
+.personal-card-number-value{
+  direction:ltr;unicode-bidi:isolate;
+  display:inline-grid;place-items:center;flex:0 0 auto;
+  min-width:54px;min-height:48px;padding:3px 10px;
+  border:1px solid #dac2d7;border-radius:12px;background:var(--soft);
+  color:var(--plum);font-size:2.35rem;font-weight:800;line-height:1.15;
+  font-variant-numeric:lining-nums tabular-nums
+}
+.personal-card-number-label{font-size:1rem;font-weight:700;color:var(--plum)}
+.board .card-back .card-number{font-size:clamp(2.8rem,3.5vw,3.35rem);line-height:1.15}
+@media(max-width:760px){
+  .personal-card-number{gap:8px}
+  .personal-card-number-value{font-size:2.1rem;min-width:50px;min-height:46px}
+  .personal-card-number-label{font-size:.95rem}
+  .board .card-back .card-number{font-size:2.8rem}
+}
