@@ -5,6 +5,9 @@ const ENDPOINT = `${SUPABASE_URL}/functions/v1/inspiration-game`;
 const TEACHER_ACCESS_KEY = 'inspiration-teacher-access';
 let client;
 let noticeTimer;
+// Keep the server-authorized site filename attached to its loaded image blob,
+// without exposing private room-card paths in the participant state response.
+const authorizedCardFilename = new WeakMap();
 
 export function supabaseClient() {
   if (!globalThis.supabase?.createClient) throw new Error('לא ניתן לטעון את רכיב החיבור. נסי לרענן את הדף.');
@@ -69,6 +72,7 @@ async function readResponse(response,binary=false) {
     const blob = await imageResponse.blob();
     if(!/^(image\/(png|jpeg|webp)|application\/pdf)$/.test(blob.type))
       throw new Error('פורמט תמונת הקלף אינו תקין.');
+    authorizedCardFilename.set(blob,filename);
     return blob;
   }
   return response.blob();
@@ -177,8 +181,11 @@ export const phaseText={waiting:'ממתינות להצטרפות',choosing:'בו
 
 // WOW images are public, same-origin artwork. Resolve only from the authorized
 // card's stored front image, never from user-supplied names or arbitrary paths.
-export function wowImageUrl(card) {
-  const match=/^site:women\/([A-Za-z0-9_-]+)\.(?:png|jpg|jpeg|webp)$/.exec(card?.front_path||'');
+export function wowImageUrl(card, loadedFilename=null) {
+  // The participant API deliberately omits front_path. Use the filename from
+  // the *authorized* participant.asset response instead, never a guessed name.
+  const path=card?.front_path || (typeof loadedFilename==='string'?'site:women/'+loadedFilename:'');
+  const match=/^site:women\/([A-Za-z0-9_-]+)\.(?:png|jpg|jpeg|webp)$/.exec(path);
   if(!match)return null;
   const stem=match[1].toLowerCase();
   // Historical primary filename differs from the approved WOW image filename.
@@ -265,8 +272,8 @@ export function cardViewer(card,token,teacherContext=null) {
       }else if(/^image\/(png|jpeg|webp)$/.test(blob.type)){
         currentBlobUrl=URL.createObjectURL(blob);
         const artwork=el('div',{class:'card-artwork'},el('img',{src:currentBlobUrl,alt:`הקלף של ${card.woman_name}`,draggable:'false'}));
-        if(currentSide==='front'&&!teacherContext){
-          const wowUrl=wowImageUrl(card);
+        if(currentSide==='front'){
+          const wowUrl=wowImageUrl(card,authorizedCardFilename.get(blob));
           if(wowUrl)artwork.append(wowHotspot(wowUrl));
         }
         clear(body).append(artwork);status.textContent=currentSide==='front'?'הצד הקדמי של הקלף':'הצד האחורי של הקלף';controlsState();
