@@ -12,8 +12,8 @@ test('compact mobile full-card close does not inherit expanding button flex',()=
 });
 
 test('mobile magnifier stays visually small with independent touch area',()=>{
-  assert.match(css,/\.card-viewer \.wow-zoom-icon\{\s*width:20px;height:20px/);
-  assert.match(css,/\.card-viewer \.wow-hit-area svg\{width:14px;height:14px\}/);
+  assert.match(css,/\.card-viewer \.wow-zoom-icon\{\s*width:16px;height:16px/);
+  assert.match(css,/\.card-viewer \.wow-hit-area svg\{width:11px;height:11px\}/);
   assert.match(css,/min-width:44px;min-height:44px/);
   assert.match(css,/color:#563072;cursor:pointer/);
 });
