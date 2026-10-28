@@ -226,18 +226,19 @@
    Keep this an independent overlay so replacing a card PNG never moves the hit target. */
 .card-viewer .card-artwork{position:relative;width:100%}
 .card-viewer .wow-hit-area{
-  position:absolute;right:2.7%;bottom:3.7%;width:10%;height:11%;
+  position:absolute;right:1.2%;bottom:3.7%;width:10%;height:11%;
   min-width:44px;min-height:44px;max-width:76px;max-height:76px;
   display:flex;align-items:flex-start;justify-content:flex-start;
   padding:3px;border:0;border-radius:12px;background:transparent;
   color:#563072;cursor:pointer;z-index:2;touch-action:manipulation
 }
 .card-viewer .wow-zoom-icon{
-  display:grid;place-items:center;width:30px;height:30px;
-  border:1px solid #ffffffed;border-radius:50%;background:#fffdf6ed;
-  box-shadow:0 2px 9px #25102c5c;pointer-events:none
+  display:grid;place-items:center;width:18px;height:18px;
+  border:1px solid #ffffffd9;border-radius:50%;background:#fffcf4d9;
+  box-shadow:0 1px 4px #25102c40;pointer-events:none;
+  transform:translateY(-11px)
 }
-.card-viewer .wow-hit-area svg{display:block;width:21px;height:21px}
+.card-viewer .wow-hit-area svg{display:block;width:12px;height:12px}
 .card-viewer .wow-hit-area:hover .wow-zoom-icon,
 .card-viewer .wow-hit-area:focus-visible .wow-zoom-icon{background:#efe2f3}
 .wow-modal{
@@ -339,8 +340,8 @@
     display:block;width:100%;max-width:100%;height:auto
   }
   .card-viewer .wow-zoom-icon{
-    width:20px;height:20px;
-    box-shadow:0 1px 5px #25102c4a
+    width:16px;height:16px;transform:none;
+    box-shadow:0 1px 3px #25102c33
   }
-  .card-viewer .wow-hit-area svg{width:14px;height:14px}
+  .card-viewer .wow-hit-area svg{width:11px;height:11px}
 }
