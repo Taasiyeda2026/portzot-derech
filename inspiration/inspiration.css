@@ -220,3 +220,41 @@
   .teacher-match-map .teacher-match-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .teacher-match-summary{padding:14px 15px}
 }
+
+
+/* The small artwork in the lower-right "רגע באמת?" corner opens its WOW image.
+   Keep this an independent overlay so replacing a card PNG never moves the hit target. */
+.card-viewer .card-artwork{position:relative;width:100%}
+.card-viewer .wow-hit-area{
+  position:absolute;right:2.7%;bottom:3.7%;width:10%;height:11%;
+  min-width:44px;min-height:44px;max-width:76px;max-height:76px;
+  display:flex;align-items:flex-start;justify-content:flex-start;
+  padding:3px;border:0;border-radius:12px;background:transparent;
+  color:#563072;cursor:zoom-in;z-index:2;touch-action:manipulation
+}
+.card-viewer .wow-zoom-icon{
+  display:grid;place-items:center;width:30px;height:30px;
+  border:1px solid #ffffffed;border-radius:50%;background:#fffdf6ed;
+  box-shadow:0 2px 9px #25102c5c;pointer-events:none
+}
+.card-viewer .wow-hit-area svg{display:block;width:21px;height:21px}
+.card-viewer .wow-hit-area:hover .wow-zoom-icon,
+.card-viewer .wow-hit-area:focus-visible .wow-zoom-icon{background:#efe2f3}
+.wow-modal{
+  width:min(420px,calc(100vw - 28px));max-width:none;max-height:80dvh;
+  padding:14px;border:0;border-radius:20px;overflow:auto;
+  background:#fffcfe;color:var(--ink);box-shadow:0 18px 60px #25102b80;direction:rtl
+}
+.wow-modal::backdrop{background:#201126b3}
+.wow-modal-header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.wow-modal-header strong{font-size:1rem;line-height:1.4}
+.wow-modal .wow-modal-close{
+  display:grid;place-items:center;flex:0 0 38px;width:38px;height:38px;
+  padding:0;border:0;border-radius:50%;background:#f3e7f0;
+  color:var(--plum);font-size:1.7rem;line-height:1
+}
+.wow-modal .wow-modal-image{
+  display:block;width:100%;height:auto;max-height:62dvh;
+  object-fit:contain;border-radius:12px;cursor:zoom-out
+}
+.wow-modal .wow-modal-error{margin:12px 0 4px;text-align:center;color:var(--danger)}
