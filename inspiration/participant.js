@@ -33,6 +33,24 @@ function personalCard(card) {
 }
 
 
+// A successful verification gets a brief, quiet acknowledgment. The animation is
+// triggered by the verified server response, never by a state refresh or a guess.
+let matchSuccessTimer=null;
+function showMatchSuccess() {
+  document.querySelector('.match-success-moment')?.remove();
+  clearTimeout(matchSuccessTimer);
+  const moment=el('div',{class:'match-success-moment',role:'status','aria-live':'polite'},
+    el('span',{class:'match-success-mark','aria-hidden':'true'},'✓'),
+    el('span',{class:'match-success-copy'},
+      el('strong',{},'מצאתן את החיבור!'),
+      el('span',{},'ההתאמה אומתה בהצלחה')));
+  document.body.append(moment);
+  matchSuccessTimer=setTimeout(()=>{
+    moment.remove();
+    matchSuccessTimer=null;
+  },1900);
+}
+
 function matchingPanel(card,room,progress) {
   const panel=el('section',{class:'panel match-panel'},
     el('span',{class:'badge'},'מוצאות חיבור בכיתה'),
@@ -56,7 +74,11 @@ function matchingPanel(card,room,progress) {
       notify('הזיני את מספרי הקלפים של המשתתפות האחרות בקבוצה.');return;
     }
     submit.disabled=true;
-    try{render(await api('participant.verify_match',{numbers},{token}));}
+    try{
+      const result=await api('participant.verify_match',{numbers},{token});
+      render(result);
+      if(result?.progress?.verified===true)showMatchSuccess();
+    }
     catch(error){
       const code=error?.message||'';
       const feedback=code.includes('MATCH_INCORRECT')?'המספרים אינם תואמים. בדקו שוב את מספרי הקלפים ונסו שוב.':code.includes('MATCH_NOT_READY')?'אחת המשתתפות עדיין לא בחרה קלף.':code.includes('MATCH_INVALID_INPUT')?'יש להזין מספרי קלפים שונים ותקינים.':errorText(error);
@@ -147,5 +169,5 @@ async function start(){
     resetView();main.append(el('section',{class:'panel waiting'},el('h1',{},'חוזרות לחדר שלך'),el('p',{},errorText(error)),el('p',{},'ההשתתפות השמורה במכשיר עדיין כאן.'),el('div',{class:'actions'},button('ניסיון נוסף',start),button('חזרה למסך ההצטרפות',joinScreen,{class:'secondary'}))));
   }
 }
-window.addEventListener('pagehide',()=>{stopWatching?.();viewer?.destroy();});
+window.addEventListener('pagehide',()=>{stopWatching?.();viewer?.destroy();clearTimeout(matchSuccessTimer);document.querySelector('.match-success-moment')?.remove();});
 start();
