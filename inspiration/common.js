@@ -175,8 +175,19 @@ export function watchRoom(topic,refresh) {
 
 export const phaseText={waiting:'ממתינות להצטרפות',choosing:'בוחרות קלפים',matching:'מוצאות חיבור בכיתה',activity:'מפצחות את הקוד',ended:'המשחק הסתיים'};
 
+// WOW images are public, same-origin artwork. Resolve only from the authorized
+// card's stored front image, never from user-supplied names or arbitrary paths.
+export function wowImageUrl(card) {
+  const match=/^site:women\/([A-Za-z0-9_-]+)\.(?:png|jpg|jpeg|webp)$/.exec(card?.front_path||'');
+  if(!match)return null;
+  const stem=match[1].toLowerCase();
+  // Historical primary filename differs from the approved WOW image filename.
+  const wowStem=stem==='zahaa'?'zaha':stem;
+  return new URL(`./cards/wow/${wowStem}-wow.png`,import.meta.url).href;
+}
+
 export function cardViewer(card,token,teacherContext=null) {
-  let destroyed=false,currentSide=card.has_front?'front':'back',pageNumber=1,pages=1,pdfDocument=null,currentBlobUrl=null,pdfModule;
+  let destroyed=false,currentSide=card.has_front?'front':'back',pageNumber=1,pages=1,pdfDocument=null,currentBlobUrl=null,pdfModule,wowDialog=null;
   const body=el('div',{class:'card-viewer reveal'});
   const status=el('p',{class:'viewer-status',role:'status'});
   const controls=el('div',{class:'viewer-controls'});
@@ -184,6 +195,39 @@ export function cardViewer(card,token,teacherContext=null) {
   const sideButton=button('לצד השני',()=>load(currentSide==='front'?'back':'front'),{class:'secondary'});
   const previous=button('העמוד הקודם',()=>{pageNumber--;renderPdf();},{class:'secondary'});
   const next=button('העמוד הבא',()=>{pageNumber++;renderPdf();},{class:'secondary'});
+  function closeWow(){if(wowDialog?.open)wowDialog.close();}
+  function openWow(url) {
+    if(destroyed||wowDialog)return;
+    const dialog=el('dialog',{class:'wow-modal','aria-label':`רגע באמת - תמונה נוספת של ${card.woman_name}`});
+    const close=el('button',{type:'button',class:'wow-modal-close','aria-label':'סגירת התמונה'},'×');
+    close.addEventListener('click',()=>dialog.close());
+    const image=el('img',{class:'wow-modal-image',src:url,alt:`תמונה נוספת של ${card.woman_name}`,draggable:'false'});
+    const message=el('p',{class:'wow-modal-error',role:'status',hidden:true},'התמונה הנוספת אינה זמינה כרגע.');
+    image.addEventListener('error',()=>{image.hidden=true;message.hidden=false;});
+    const title=el('strong',{},`רגע באמת? · ${card.woman_name}`);
+    dialog.append(el('div',{class:'wow-modal-header'},title,close),image,message);
+    dialog.addEventListener('click',event=>{if(event.target===dialog||event.target===image)dialog.close();});
+    dialog.addEventListener('close',()=>{dialog.remove();if(wowDialog===dialog)wowDialog=null;},{once:true});
+    wowDialog=dialog;document.body.append(dialog);dialog.showModal();
+  }
+  function wowHotspot(url) {
+    const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svg.setAttribute('viewBox','0 0 24 24');
+    svg.setAttribute('fill','none');
+    svg.setAttribute('stroke','currentColor');
+    svg.setAttribute('stroke-width','2');
+    svg.setAttribute('stroke-linecap','round');
+    svg.setAttribute('stroke-linejoin','round');
+    svg.setAttribute('aria-hidden','true');
+    const circle=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    circle.setAttribute('cx','11');circle.setAttribute('cy','11');circle.setAttribute('r','8');
+    const mark=document.createElementNS('http://www.w3.org/2000/svg','path');
+    mark.setAttribute('d','m21 21-4.35-4.35M11 8v6M8 11h6');
+    svg.append(circle,mark);
+    return el('button',{type:'button',class:'wow-hit-area',title:'הצגת תמונת רגע באמת',
+      'aria-label':`הצגת תמונה נוספת של ${card.woman_name}`,onclick:()=>openWow(url)},
+      el('span',{class:'wow-zoom-icon'},svg));
+  }
   const zoom=button('הגדלת הקלף',()=>{
     const media=body.querySelector('img,canvas');if(!media)return;
     const dialog=el('dialog',{class:'media-zoom','aria-label':'הקלף בתצוגה מוגדלת'});
@@ -207,6 +251,7 @@ export function cardViewer(card,token,teacherContext=null) {
     }catch{status.textContent='לא ניתן להציג את הקלף כרגע. נסי שוב כשיש חיבור.';controlsState();}
   }
   async function load(side){
+    closeWow();
     currentSide=side;pageNumber=1;pdfDocument?.destroy();pdfDocument=null;if(currentBlobUrl){URL.revokeObjectURL(currentBlobUrl);currentBlobUrl=null;}
     sideButton.disabled=true;zoom.disabled=true;clear(body).append(el('p',{class:'info'},'טוענות את הקלף שלך…'));status.textContent='';controlsState();
     try {
@@ -218,10 +263,16 @@ export function cardViewer(card,token,teacherContext=null) {
         pdfModule ||= await import('./vendor/pdf.mjs');pdfModule.GlobalWorkerOptions.workerSrc=new URL('./vendor/pdf.worker.mjs',import.meta.url).href;
         pdfDocument=await pdfModule.getDocument({data:new Uint8Array(await blob.arrayBuffer()),isEvalSupported:false}).promise;pages=pdfDocument.numPages;await renderPdf();
       }else if(/^image\/(png|jpeg|webp)$/.test(blob.type)){
-        currentBlobUrl=URL.createObjectURL(blob);clear(body).append(el('img',{src:currentBlobUrl,alt:`הקלף של ${card.woman_name}`,draggable:'false'}));status.textContent=currentSide==='front'?'הצד הקדמי של הקלף':'הצד האחורי של הקלף';controlsState();
+        currentBlobUrl=URL.createObjectURL(blob);
+        const artwork=el('div',{class:'card-artwork'},el('img',{src:currentBlobUrl,alt:`הקלף של ${card.woman_name}`,draggable:'false'}));
+        if(currentSide==='front'&&!teacherContext){
+          const wowUrl=wowImageUrl(card);
+          if(wowUrl)artwork.append(wowHotspot(wowUrl));
+        }
+        clear(body).append(artwork);status.textContent=currentSide==='front'?'הצד הקדמי של הקלף':'הצד האחורי של הקלף';controlsState();
       }else throw new Error('unsupported');
     }catch(error){if(!destroyed){clear(body).append(el('p',{class:'error-inline'},errorText(error)),button('ניסיון נוסף',()=>load(currentSide),{class:'secondary'}));controlsState();}}
   }
   load(currentSide);
-  return {node:outer,destroy(){destroyed=true;pdfDocument?.destroy();if(currentBlobUrl)URL.revokeObjectURL(currentBlobUrl);}};
+  return {node:outer,destroy(){destroyed=true;closeWow();pdfDocument?.destroy();if(currentBlobUrl)URL.revokeObjectURL(currentBlobUrl);}};
 }
