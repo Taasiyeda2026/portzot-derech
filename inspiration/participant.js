@@ -3,13 +3,15 @@ import {api,el,clear,button,field,notify,errorText,watchRoom,connection,cardView
 const main=document.querySelector('#app');
 let code=new URL(location.href).searchParams.get('code')?.trim()||'';
 let token=null,stopWatching=null,viewer=null,state=null,lastView='',revealedHintFor=null;
+let previousRoomPhase=null,previousPhaseRoomId=null;
 const storageKey=()=>`inspiration:participant:${code}`;
 function readSaved(){try{return JSON.parse(localStorage.getItem(storageKey())||'null');}catch{return null;}}
 function saveSaved(value){try{localStorage.setItem(storageKey(),JSON.stringify(value));return true;}catch{notify('הדפדפן חוסם שמירה במכשיר. השאירי את הדף פתוח כדי לשמור על ההשתתפות שלך.');return false;}}
 function resetView(){viewer?.destroy();viewer=null;clear(main);}
 
 function joinScreen() {
-  resetView();connection(navigator.onLine?'מוכנה להצטרפות':'אין חיבור לאינטרנט',!navigator.onLine);
+  resetView();main.classList.remove('phase-advance');previousRoomPhase=null;previousPhaseRoomId=null;
+  connection(navigator.onLine?'מוכנה להצטרפות':'אין חיבור לאינטרנט',!navigator.onLine);
   const name=el('input',{name:'name',id:'player-name',maxlength:60,required:true,autocomplete:'given-name',placeholder:'השם הפרטי שלך'});
   const roomCode=el('input',{name:'code',id:'room-code',maxlength:64,required:true,value:code,autocomplete:'off',dir:'ltr',placeholder:'קוד החדר שקיבלת מהמדריכה'});
   const submit=el('button',{type:'submit',class:'primary'},'אני מצטרפת');
@@ -96,7 +98,7 @@ function hintPanel(card,progress) {
     el('p',{},'קראו את הרמז שלכן, חזרו לסיפורים וחשבו יחד: מה הוא מגלה לכן על הדרך של כל אחת מהנשים?'),
     el('p',{},'אין תשובה אחת נכונה. החיבור שלכן צריך להיות מבוסס על הסיפורים — ומעניין מספיק כדי לגרום לאחרות לחשוב.'));
   const identity=state?.room?.id+':'+card.number;
-  const reveal=button('רמז ✨',()=>{revealedHintFor=identity;reveal.hidden=true;hint.hidden=false;proceed.disabled=false;},{class:'secondary hint-trigger'});
+  const reveal=button('רמז ✨',()=>{revealedHintFor=identity;reveal.hidden=true;hint.hidden=false;hint.classList.add('hint-appear');proceed.disabled=false;},{class:'secondary hint-trigger'});
   const hint=el('p',{class:'hint-text',hidden:revealedHintFor!==identity},progress.hint||'הרמז אינו זמין כרגע. פני למדריכה.');
   reveal.hidden=revealedHintFor===identity;
   const proceed=button('המשך ואישור',async()=>{
@@ -120,6 +122,11 @@ function render(next) {
   const fingerprint=JSON.stringify({room:next.room,player:next.player,progress:next.progress,taken:next.player?.card?null:next.taken});
   if(fingerprint===lastView)return;lastView=fingerprint;resetView();
   const {room,player,taken=[]}=next;
+  // Only new phases in the same room animate. Ignore initial joins and refreshes.
+  const phaseAdvanced=previousPhaseRoomId===room?.id&&previousRoomPhase!==null&&
+    previousRoomPhase!==room.phase&&room.phase!=='ended';
+  previousRoomPhase=room.phase;previousPhaseRoomId=room.id;
+  main.classList.toggle('phase-advance',phaseAdvanced);
   const card=player?.card;
   if(room.phase==='ended') {
     main.append(el('section',{class:'panel waiting'},el('div',{class:'orbit','aria-hidden':'true'},'✧'),el('h1',{},'החיבור ממשיך איתך'),el('p',{},'המשחק הסתיים. תודה שהיית חלק מנושמות השראה!'),el('p',{},'ההצטרפות ובחירת הקלפים בחדר הזה סגורות.')));return;
