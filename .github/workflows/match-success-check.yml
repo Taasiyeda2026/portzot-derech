@@ -27,6 +27,7 @@ jobs:
           const root=process.cwd();
           const html=`<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="/inspiration/inspiration.css"></head><body><div id="connection"></div><main id="app"></main><div id="notice" class="notice" role="alert" hidden></div>
           <script>
+            history.replaceState(null,'','/smoke?code=TEST');
             localStorage.setItem('inspiration:participant:TEST',JSON.stringify({token:'test-token'}));
             window.__verified=false;window.__allowMatch=false;
             window.fetch=(url,opts)=>{
