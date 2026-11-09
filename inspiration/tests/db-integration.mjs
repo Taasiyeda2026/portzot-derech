@@ -20,7 +20,7 @@ const docker=(...args)=>execFileSync('docker',args,{encoding:'utf8',stdio:['igno
 const clients=[];
 let checks=0;
 function passed(label){checks++;console.log(`PASS ${label}`);}
-const ids={admin:randomUUID(),teacher:randomUUID(),other:randomUUID(),denied:randomUUID(),inactive:randomUUID(),explicit:randomUUID()};
+const ids={admin:randomUUID(),teacher:randomUUID(),other:randomUUID(),staff:randomUUID(),manager:randomUUID(),inactive:randomUUID(),explicit:randomUUID()};
 let connection;
 const sql=async(text,params=[])=>connection.query(text,params);
 async function connect(){const c=new Client(config);await c.connect();clients.push(c);return c;}
@@ -52,7 +52,7 @@ try{
     create table realtime.test_events(payload jsonb,event text,topic text,private boolean);
     create function realtime.send(payload jsonb,event text,topic text,private boolean default true) returns void language sql as $$insert into realtime.test_events values(payload,event,topic,private)$$;`);
   for(const [key,role,active,permissions] of [
-    ['admin','admin',true,{}],['teacher','instructor',true,{}],['other','instructor',true,{}],['denied','finance',true,{}],['inactive','instructor',false,{}],['explicit','finance',true,{inspiration_manage:true}]
+    ['admin','admin',true,{}],['teacher','instructor',true,{}],['other','instructor',true,{}],['staff','finance',true,{}],['manager','business_development_manager',true,{}],['inactive','instructor',false,{}],['explicit','finance',true,{inspiration_manage:true}]
   ]){await sql('insert into auth.users values($1)',[ids[key]]);await sql('insert into public.users values($1,$2,$3,$4)',[ids[key],role,active,permissions]);}
   const migrationDir=resolve(root,'supabase/migrations');
   const migration=process.env.INSPIRATION_MIGRATION || (existsSync(migrationDir)
@@ -64,6 +64,10 @@ try{
   // Applying again must be safe and must preserve existing data.
   await sql(migrationSql);
   passed('migration is repeatable');
+  // Apply the production permission update after the original game schema.
+  const staffAccessMigration=readFileSync(resolve(migrationDir,'20261109234404_inspiration_management_for_all_active_dashboard_users.sql'),'utf8');
+  await sql(staffAccessMigration);
+  passed('active dashboard staff management migration executes on PostgreSQL 17');
   const tables=await sql("select c.relname,c.relrowsecurity from pg_class c join pg_namespace n on n.oid=c.relnamespace where n.nspname='public' and c.relkind='r' and c.relname like 'inspiration_%'");
   assert.ok(tables.rows.length>=5);assert.ok(tables.rows.every(r=>r.relrowsecurity));
   for(const role of ['anon','authenticated']){
@@ -78,7 +82,13 @@ try{
   passed('inherited default sequence UPDATE is revoked from public clients while service-role sequence usage remains available');
 
   await failure('teacher.me',null,null,{},'missing verified instructor denied');
-  await failure('teacher.me',ids.denied,null,{},'finance role denied');
+  const staffAccess=await rpc('teacher.me',ids.staff);
+  assert.equal(staffAccess.can_manage,true);
+  assert.equal(staffAccess.is_admin,false);
+  const managerAccess=await rpc('teacher.me',ids.manager);
+  assert.equal(managerAccess.can_manage,true);
+  assert.equal(managerAccess.is_admin,false);
+  passed('active finance and management dashboard users can facilitate games without admin access');
   await failure('teacher.me',ids.inactive,null,{},'inactive instructor denied');
   assert.ok(await rpc('teacher.me',ids.explicit));passed('explicit game permission accepted without global role changes');
   const missingBucket=await rpc('admin.catalog_validate',ids.admin);
@@ -104,6 +114,7 @@ try{
   await rpc('admin.catalog_import',ids.admin,null,{groups});
   passed('approved catalog import with real storage metadata');
   await failure('admin.catalog_import',ids.teacher,null,{groups},'instructor cannot mutate content');
+  await failure('admin.catalog_import',ids.manager,null,{groups},'non-admin manager cannot edit the card catalog');
   const duplicateWoman=structuredClone(groups[0]);duplicateWoman.cards[1].woman_name='  '+duplicateWoman.cards[0].woman_name.toUpperCase()+'  ';
   await failure('admin.catalog_import',ids.admin,null,{groups:[duplicateWoman]},'duplicate active woman normalized by case and spaces rejected');
   await sql('insert into public.users values($1,$2,true,$3)',[ids.teacher,'finance',{}]);
