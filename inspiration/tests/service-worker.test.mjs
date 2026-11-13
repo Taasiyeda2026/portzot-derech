@@ -38,8 +38,8 @@ test('dashboard Supabase requests and existing environment injection keep bypass
 });
 test('existing course navigation remains network first and existing images remain cacheable', async () => {
   const worker = serviceWorker();
-  const page = await worker.fetch('https://portzot-derech.org/pairing/pairing.html', { mode: 'navigate' });
-  assert.match(await page.text(), /pairing/);assert.equal(worker.writes.length, 0);
+  const page = await worker.fetch('https://portzot-derech.org/start/quiz.html', { mode: 'navigate' });
+  assert.match(await page.text(), /quiz/);assert.equal(worker.writes.length, 0);
   const image = await worker.fetch('https://portzot-derech.org/icon/logo.png');
   assert.equal(image.status, 200);assert.equal(worker.reads.length, 1);assert.equal(worker.writes.length, 1);
 });

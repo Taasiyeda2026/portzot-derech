@@ -2,3 +2,7 @@
 # separate room-scoped bearer tokens; platform JWT verification must be disabled.
 [functions.inspiration-game]
 verify_jwt = false
+
+# Staff JWTs are verified by Auth.getUser. Participant bearer tokens are separate.
+[functions.pairing-groups]
+verify_jwt = false

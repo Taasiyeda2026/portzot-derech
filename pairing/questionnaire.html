@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="no-referrer">
   <title>מי את בקבוצה? — פורצות דרך</title>
   <style>
     * { box-sizing: border-box; }
@@ -65,14 +66,21 @@
   </main>
 
 <script type="module">
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-import { getFirestore, doc, setDoc, updateDoc, increment } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-
-const cfg={apiKey:"AIzaSyCFSq5b-HgkTxFNhBJIBdOe2ian5TZvMPE",authDomain:"portzot-derech.firebaseapp.com",projectId:"portzot-derech",storageBucket:"portzot-derech.firebasestorage.app",messagingSenderId:"236417614890",appId:"1:236417614890:web:587b0eb3c5eedfa352af53"};
-const db=getFirestore(initializeApp(cfg));
-const sessionId=new URLSearchParams(location.search).get('session');
-if(!sessionId) location.href='pairing.html';
-
+import { api, code, credential } from './common.js';
+const roomCode=code();
+if(!/^[0-9a-f]{32}$/.test(roomCode)) location.replace('pairing.html');
+const token=credential(roomCode);
+const draftKey='pairing-draft:'+roomCode;
+let draft={};try{draft=JSON.parse(sessionStorage.getItem(draftKey))||{};}catch{}
+let joined=false;
+let saving=false;
+function persist(){sessionStorage.setItem(draftKey,JSON.stringify({answers,codes,step}));}
+async function join(name){
+ const result=await api('participant.join',{code:roomCode,name},token);
+ joined=true;
+ if(result.completed){sessionStorage.removeItem(draftKey);location.replace('waiting.html?room='+roomCode);}
+ return result;
+}
 const questions = [
   {
     field: 'displayName',
@@ -273,9 +281,9 @@ const questions = [
   }
 ];
 
-const answers = {};
-const codes = {};
-let step = 0;
+const answers = draft.answers || {};
+const codes = draft.codes || {};
+let step = Number.isInteger(draft.step) ? Math.min(14,Math.max(0,draft.step)) : 0;
 
 const eyebrowEl = document.getElementById('eyebrow');
 const questionText = document.getElementById('questionText');
@@ -328,14 +336,16 @@ optionsEl.addEventListener('click', function(e) {
   var q = questions[step];
   answers[q.field] = btn.dataset.label;
   codes[q.field] = btn.dataset.code;
+  persist();
   renderQuestion();
 });
 
 backBtn.addEventListener('click', function() {
-  if (step > 0) { step--; renderQuestion(); }
+  if (step > 0) { step--; persist(); renderQuestion(); }
 });
 
 nextBtn.addEventListener('click', async function() {
+  if(saving)return;
   var q = questions[step];
   if (q.field === 'displayName') {
     var v = textAnswer.value.trim();
@@ -343,24 +353,31 @@ nextBtn.addEventListener('click', async function() {
     answers[q.field] = v;
   }
   if (!answers[q.field]) { hint.textContent = 'רגע, צריך לבחור משהו לפני שממשיכות 🙂'; return; }
-  if (step < questions.length - 1) { step++; renderQuestion(); return; }
+  persist();
+  saving=true;nextBtn.disabled=true;backBtn.disabled=true;
+  try {
+    if(!joined)await join(answers.displayName);
+    if(step < questions.length - 1){step++;persist();renderQuestion();return;}
+    const p={};
+    for(const question of questions){
+      const field=question.field;p[field]=answers[field];
+      if(field!=='displayName')p[field+'Code']=codes[field];
+    }
+    hint.textContent='שומרות את התשובות…';
+    const result=await api('participant.submit',{answers:p},token);
+    if(!result.completed)throw new Error('השמירה לא אושרה. נסי שוב.');
+    sessionStorage.removeItem(draftKey);
+    document.getElementById('questionCard').style.display='none';
+    document.getElementById('savingMessage').style.display='block';
+    location.href='waiting.html?room='+roomCode;
+  } catch(error){hint.textContent=error.message;}
+  finally{saving=false;nextBtn.disabled=false;backBtn.disabled=step===0;}
 
-  var p = { id: crypto.randomUUID(), sessionId: sessionId, submittedAt: new Date().toISOString() };
-  for (var i = 0; i < questions.length; i++) {
-    var field = questions[i].field;
-    p[field] = answers[field];
-    if (field !== 'displayName') p[field + 'Code'] = codes[field] || answers[field];
-  }
-  document.getElementById('questionCard').style.display = 'none';
-  document.getElementById('savingMessage').style.display = 'block';
-  await setDoc(doc(db, 'responses', p.id), p);
-  await updateDoc(doc(db, 'sessions', sessionId), { completedCount: increment(1) });
-  localStorage.setItem('displayName', p.displayName);
-  localStorage.setItem('responseId', p.id);
-  setTimeout(function() { location.href = 'waiting.html?session=' + sessionId; }, 700);
 });
 
+textAnswer.addEventListener('input',()=>{answers.displayName=textAnswer.value;persist();});
 renderQuestion();
+if(answers.displayName)join(answers.displayName).catch(error=>{hint.textContent=error.message;});
 </script>
 </body>
 </html>

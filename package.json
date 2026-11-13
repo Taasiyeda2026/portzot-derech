@@ -8,7 +8,9 @@
     "dev": "node server.js",
     "test": "node --test --test-isolation=none inspiration/tests/*.test.mjs",
     "test:inspiration:db": "node inspiration/tests/db-integration.mjs",
-    "test:inspiration:browser": "node inspiration/tests/browser-integration.mjs"
+    "test:inspiration:browser": "node inspiration/tests/browser-integration.mjs",
+    "test:pairing": "node --test pairing/tests/*.test.mjs",
+    "test:pairing:browser": "node pairing/tests/browser.mjs"
   },
   "dependencies": {
     "puppeteer": "^25.12.0"
@@ -20,5 +22,11 @@
     "chromium-bidi": {
       "zod": "4.6.6"
     }
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "0.3.14",
+    "@pdf-lib/fontkit": "1.1.1",
+    "bidi-js": "1.0.3",
+    "pdf-lib": "1.17.1"
   }
 }

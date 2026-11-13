@@ -1,0 +1,11 @@
+import { createClient } from 'npm:@supabase/supabase-js@2.118.0';
+import { PDFDocument, rgb } from 'npm:pdf-lib@1.17.1';
+import fontkit from 'npm:@pdf-lib/fontkit@1.1.1';
+import bidiFactory from 'npm:bidi-js@1.0.3';
+import { createHandler } from './handler.mjs';
+import { buildPdf } from './pdf.mjs';
+import { regular, bold, logo } from './assets.mjs';
+const bytes = (value: string) => Uint8Array.from(atob(value), c => c.charCodeAt(0));
+const dependencies = { PDFDocument, rgb, fontkit, bidi: bidiFactory(), regularBytes: bytes(regular), boldBytes: bytes(bold), logoBytes: bytes(logo) };
+const client = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!, { auth: { persistSession: false, autoRefreshToken: false } });
+Deno.serve(createHandler({ client, buildPdf: snapshot => buildPdf(snapshot, dependencies), readEnv: name => Deno.env.get(name) }));
