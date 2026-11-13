@@ -8,12 +8,14 @@ async function boot(){
  try{me=await api('teacher.me');}catch{login();return;}
  clear(app);
  app.append(el('p',{},`מחוברת: ${me.name}`),button('יציאה',()=>{sessionStorage.removeItem('inspiration-teacher-access');stopWatching?.();login();},{class:'secondary'}));
- if(!me.retention_days)app.append(el('p',{role:'alert'},'פתיחת פעילות תתאפשר לאחר הגדרת מדיניות שמירת דוחות מאושרת.'));
+ const canCreate=Date.parse(me.retention_until)>Date.now();
+ if(!canCreate)app.append(el('p',{role:'alert'},'אין תקופת שמירת דוחות תקפה. לא ניתן לפתוח פעילות חדשה.'));
+ else app.append(el('p',{class:'muted'},'הדוחות ופרטי המשתתפות יישמרו עד 1 ביולי 2027, בשעה 00:00 לפי שעון ישראל.'));
  const school=el('input',{required:true,maxlength:200,list:'schools',placeholder:'הקלידי לבחירה או הזיני בית ספר אחר','aria-label':'בית הספר'});
  const list=el('datalist',{id:'schools'});let schoolRows=[],searchTimer;
  school.addEventListener('input',()=>{clearTimeout(searchTimer);searchTimer=setTimeout(async()=>{try{schoolRows=(await api('teacher.schools',{query:school.value})).schools;list.replaceChildren(...schoolRows.map(s=>el('option',{value:`${s.school_name}${s.city?' · '+s.city:''}`})));}catch(e){message(e.message);}},300);});
  const klass=el('input',{required:true,maxlength:40,placeholder:'למשל ח׳1'}),count=el('input',{type:'number',required:true,min:2,max:40,value:24});
- const form=el('form',{},field('בית ספר',school),list,field('כיתה',klass),field('מספר משתתפות צפוי (2–40)',count),el('button',{type:'submit',class:'primary',disabled:!me.retention_days},'פתיחת פעילות'));
+ const form=el('form',{},field('בית ספר',school),list,field('כיתה',klass),field('מספר משתתפות צפוי (2–40)',count),el('button',{type:'submit',class:'primary',disabled:!canCreate},'פתיחת פעילות'));
  form.addEventListener('submit',event=>{event.preventDefault();void perform(async()=>{
   const choice=schoolRows.find(s=>`${s.school_name}${s.city?' · '+s.city:''}`===school.value);
   const room=await api('teacher.create',{school:choice?.school_name||school.value,class_name:klass.value,expected:Number(count.value),school_id:choice?.id||null});

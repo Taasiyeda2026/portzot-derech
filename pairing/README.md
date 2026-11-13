@@ -19,24 +19,17 @@ PDF generation happens only from the frozen server snapshot and uses packaged Al
 
 Mail: the approved Taasiyeda Dashboard app (`FEEDBACK_STAFF_MS_*`) must issue a token pinned to its app/tenant IDs with application `Mail.Send`. There is no fallback to shared payroll credentials and no new Graph grant. Both sender and recipient are fixed to `office@think.org.il`. Every report has a unique claim and audit history. A 202 response records provider acceptance, not guaranteed inbox delivery. Explicit rejection permits bounded retry; timeout, network error, 5xx or an interrupted sending claim cannot automatically retry. An admin must verify with the office before recording an explicit sent/not-sent resolution; the verification and actor are audited. Downloads never send mail.
 
-## Retention is an organizational decision
+## Approved fixed retention deadline
 
-`pairing_policy.retention_days` deliberately starts NULL: opening a new activity fails closed until an authorized owner supplies the approved period. No arbitrary retention period is inferred from Inspiration's 30-day classroom policy. After approval, configure the singleton with the agreed number, approver and timestamp:
+The task owner approved retention until **July 1, 2027** in chat on November 13, 2026. `pairing_policy.retention_until` is seeded with `2027-07-01 00:00:00 Asia/Jerusalem` (`2027-06-30T21:00:00Z`). Every activity uses this same fixed deadline; later activities do not receive a fresh rolling period. Opening an activity fails closed if the policy is missing or the deadline has passed.
 
-```sql
--- Replace the period and approver with the explicitly approved values.
-update public.pairing_policy
-set retention_days = :approved_days, approved_by = :approver, approved_at = now()
-where id;
-```
-
-Every activity snapshots its expiration at creation. Access stops at expiration. The dedicated daily cron invokes the gateway with a private server-only cleanup credential, deletes its private storage PDF through the Storage API first, then deletes the activity and cascading participants/report. Failures retain references for the next retry. Inspiration cleanup never touches pairing data.
+Access stops at the deadline. The dedicated daily cron runs at 21:00 UTC (midnight in Israel at the July deadline), invokes the gateway with a private server-only cleanup credential, deletes its private storage PDF through the Storage API first, then deletes the activity and cascading participants/report. Failures retain references for the next retry. Inspiration cleanup never touches pairing data.
 
 ## Deployment order / release gates
 
-1. Confirm the organizational retention period before frontend cutover. The owner has confirmed there are no active legacy activities.
+1. The owner has confirmed there are no active legacy activities and approved the fixed July 1, 2027 retention deadline.
 2. Run focused tests below. Review migration and Edge changes.
-3. Apply the additive migration to Dashboard (`szinlhjuwyiyszdpsdop`); existing systems remain untouched. Configure approved retention. Verify the bucket is private and SQL grants are restricted.
+3. Apply the additive migration to Dashboard (`szinlhjuwyiyszdpsdop`); existing systems remain untouched. Verify the approved fixed retention deadline. Verify the bucket is private and SQL grants are restricted.
 4. Deploy `pairing-groups` with platform `verify_jwt=false` because the body verifies staff JWTs itself and participants use separate tokens. All existing function configurations stay unchanged.
 5. Check existing Graph identity readiness. Authenticate through the real dashboard, run one synthetic end-to-end activity and at most one explicitly marked live test mail to the office. Verify Hebrew PDF visually and provider acceptance.
 6. Merge the frontend PR and verify GitHub Pages serves the new HTML/JS/service worker (`v185`). New pairing pages bypass cache/precache. No personal API response is cached.

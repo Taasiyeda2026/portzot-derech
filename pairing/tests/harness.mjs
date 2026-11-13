@@ -6,7 +6,6 @@ import { regular,bold,logo } from '../../supabase/functions/pairing-groups/asset
 export const pdfDependencies={PDFDocument,rgb,fontkit,bidi:bidiFactory(),regularBytes:Uint8Array.from(atob(regular),c=>c.charCodeAt(0)),boldBytes:Uint8Array.from(atob(bold),c=>c.charCodeAt(0)),logoBytes:Uint8Array.from(atob(logo),c=>c.charCodeAt(0))};
 export async function harness(){
  const {db,rpc}=await database();
- await db.exec("update public.pairing_policy set retention_days=30,approved_by='TEST ONLY',approved_at=now()");
  const files=new Map();let sends=0,mailStatus=202,mailPayload,authStatus=200;
  const client={
   auth:{getUser:async(token)=>({data:{user:{id:({a:ACTOR_A,b:ACTOR_B,admin:ADMIN,disabled:DISABLED})[token]||null}}})},

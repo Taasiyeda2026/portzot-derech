@@ -16,6 +16,7 @@ const ERRORS = {
  invalid_phase:'הפעולה אינה זמינה בשלב הזה. לאחר פרסום החלוקה נעולה לעריכה.',
  not_published:'יש לפרסם תחילה את החלוקה הסופית.', busy:'הדוח נמצא בהכנה או בשליחה. המתיני ורענני לפני ניסיון נוסף.',
  mail_not_configured:'שליחת המייל אינה זמינה כרגע. הדוח נשמר וניתן לנסות שוב בהמשך.',
+ retention_expired:'תקופת השמירה המאושרת הסתיימה. לא ניתן לפתוח פעילות חדשה.',
  retention_not_configured:'טרם הוגדרה מדיניות שמירת דוחות מאושרת. יש לפנות למנהלת המערכת.',
  rate_limited:'בוצעו בקשות רבות מדי. המתיני ונסי שוב מאוחר יותר.',
  storage_unavailable:'אחסון הדוחות אינו זמין בבטחה. הדוח לא נשלח.',
@@ -98,7 +99,7 @@ export function createHandler({client,buildPdf,readEnv=()=>undefined,fetcher=fet
    if(action==='admin.readiness'){
     await privateBucket();await graphAccess(readEnv,fetcher);
     const me=await rpc('teacher.me',actor,null);
-    return json({storage:true,mail_identity:true,retention_days:me.retention_days});
+    return json({storage:true,mail_identity:true,retention_until:me.retention_until});
    }
    if(action==='admin.cleanup'){
     // Delete only expired Pairing data and its exact private PDFs. A failure

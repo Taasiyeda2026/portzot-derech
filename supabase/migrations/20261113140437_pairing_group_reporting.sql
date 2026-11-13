@@ -5,12 +5,15 @@ revoke all on schema pairing_private from public,anon,authenticated;
 grant usage on schema pairing_private to service_role;
 create table public.pairing_policy (
  id boolean primary key default true check(id),
- retention_days integer check(retention_days between 1 and 3650),
+ retention_until timestamptz,
  approved_by text,
  approved_at timestamptz,
- check(retention_days is null or (approved_by is not null and approved_at is not null))
+ check(retention_until is null or (approved_by is not null and approved_at is not null))
 );
-insert into public.pairing_policy(id) values(true);
+-- Fixed deadline explicitly approved by the task owner in chat on 2026-11-13.
+-- Access ends at the start of July 1 in Israel, not N days after each activity.
+insert into public.pairing_policy(id,retention_until,approved_by,approved_at)
+values(true,timestamptz '2027-07-01 00:00:00 Asia/Jerusalem','Task owner: chat approval 2026-11-13',now());
 create table public.pairing_activities (
  id uuid primary key default gen_random_uuid(),
  owner_id uuid not null references auth.users(id),
@@ -113,7 +116,7 @@ $$;
 create function public.pairing_rpc(p_action text,p_actor uuid default null,p_token text default null,p_payload jsonb default '{}') returns jsonb
 language plpgsql set search_path='' as $$
 declare a public.pairing_activities; p public.pairing_participants; r public.pairing_reports;
- staff public.users; n integer; days integer; g jsonb; snap jsonb; request_claim uuid; path text; entry jsonb;
+ staff public.users; n integer; cutoff timestamptz; g jsonb; snap jsonb; request_claim uuid; path text; entry jsonb;
 begin
  if p_action like 'teacher.%' or p_action like 'admin.%' then
   if (select count(*) from public.users where auth_user_id=p_actor and is_active=true)<>1 then raise exception 'forbidden'; end if;
@@ -121,20 +124,21 @@ begin
   if p_action like 'admin.%' and staff.role<>'admin' then raise exception 'forbidden'; end if;
  end if;
  if p_action='teacher.me' then
-  return jsonb_build_object('name',coalesce(nullif(staff.full_name,''),staff.name),'is_admin',staff.role='admin','can_manage',true,'retention_days',(select retention_days from public.pairing_policy where id));
+  return jsonb_build_object('name',coalesce(nullif(staff.full_name,''),staff.name),'is_admin',staff.role='admin','can_manage',true,'retention_until',(select retention_until from public.pairing_policy where id));
  elsif p_action='teacher.schools' then
   return jsonb_build_object('schools',coalesce((select jsonb_agg(s) from (select id,school_name,city from public.schools where school_name ilike '%'||left(coalesce(p_payload->>'query',''),80)||'%' order by school_name limit 50) s),'[]'));
  elsif p_action='teacher.activities' then
   return jsonb_build_object('activities',coalesce((select jsonb_agg(pairing_private.activity_json(id) order by created_at desc) from public.pairing_activities where (owner_id=p_actor or staff.role='admin') and retain_until>now()),'[]'));
  elsif p_action='teacher.create' then
-  select retention_days into days from public.pairing_policy where id;
-  if days is null then raise exception 'retention_not_configured'; end if;
+  select retention_until into cutoff from public.pairing_policy where id;
+  if cutoff is null then raise exception 'retention_not_configured'; end if;
+  if cutoff<=now() then raise exception 'retention_expired'; end if;
   n:=(p_payload->>'expected')::integer;
   if n not between 2 and 40 or length(trim(p_payload->>'school')) not between 1 and 200 or length(trim(p_payload->>'class_name')) not between 1 and 40 then raise exception 'invalid_request'; end if;
   insert into public.pairing_activities(owner_id,instructor_name,school_id,school,class_name,expected,retain_until)
   values(p_actor,coalesce(nullif(staff.full_name,''),staff.name),nullif(p_payload->>'school_id','')::bigint,
    case when nullif(p_payload->>'school_id','') is not null then (select school_name from public.schools where id=(p_payload->>'school_id')::bigint) else trim(p_payload->>'school') end,
-   trim(p_payload->>'class_name'),n,now()+make_interval(days=>days)) returning * into a;
+   trim(p_payload->>'class_name'),n,cutoff) returning * into a;
   return pairing_private.activity_json(a.id);
  elsif p_action='participant.join' then
   if p_token is null or p_token !~ '^[0-9a-f]{64}$' then raise exception 'invalid_token'; end if;
@@ -266,4 +270,5 @@ begin
  delete from pairing_private.rate_limits where window_start<now()-interval '1 day';
 end $$;
 revoke all on function pairing_private.cleanup_tick() from public,anon,authenticated;
-select cron.schedule('pairing-private-retention','35 2 * * *','select pairing_private.cleanup_tick()');
+-- 21:00 UTC is midnight in Asia/Jerusalem at the approved July deadline.
+select cron.schedule('pairing-private-retention','0 21 * * *','select pairing_private.cleanup_tick()');

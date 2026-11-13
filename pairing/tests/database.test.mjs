@@ -9,11 +9,16 @@ test('database authorization, isolated concurrent activities, idempotency, lifec
   assert.equal((await rpc('teacher.me',ACTOR_A)).can_manage,true);
   await assert.rejects(()=>rpc('teacher.me',DISABLED),/forbidden/);
   await assert.rejects(()=>rpc('teacher.me'),/forbidden/);
+  await db.exec('update public.pairing_policy set retention_until=null');
   await assert.rejects(()=>rpc('teacher.create',ACTOR_A,null,{school:'בדיקה',class_name:'ח׳1',expected:5}),/retention_not_configured/);
-  await db.exec("update public.pairing_policy set retention_days=30,approved_by='TEST ONLY',approved_at=now()");
+  await db.exec("update public.pairing_policy set retention_until=now()-interval '1 second'");
+  await assert.rejects(()=>rpc('teacher.create',ACTOR_A,null,{school:'בדיקה',class_name:'ח׳1',expected:5}),/retention_expired/);
+  await db.exec("update public.pairing_policy set retention_until=timestamptz '2027-07-01 00:00:00 Asia/Jerusalem'");
   const create=(actor,klass)=>rpc('teacher.create',actor,null,{school:'בדיקה',class_name:klass,expected:5});
   const a=await create(ACTOR_A,'ח׳1'),b=await create(ACTOR_B,'ט׳2');
   assert.notEqual(a.code,b.code);
+  assert.equal(a.retain_until,b.retain_until);
+  assert.equal(new Date(a.retain_until).toISOString(),'2027-06-30T21:00:00.000Z');
   await assert.rejects(()=>rpc('teacher.state',ACTOR_B,null,{activity_id:a.id}),/forbidden/);
   assert.equal((await rpc('teacher.activities',ACTOR_A)).activities.length,1);
   assert.equal((await rpc('teacher.activities',ADMIN)).activities.length,2);
@@ -57,6 +62,12 @@ test('database authorization, isolated concurrent activities, idempotency, lifec
   await rpc('teacher.close',ACTOR_A,null,{activity_id:a.id});
   assert.equal((await rpc('teacher.report.get',ACTOR_A,null,{activity_id:a.id})).status,'sent');
   assert.equal((await rpc('participant.state',null,tokens[0])).group.memberNames.length,2);
+  // At the fixed deadline, history and all owner/participant report access close.
+  await db.query("update public.pairing_activities set retain_until=now()-interval '1 second' where id=$1",[a.id]);
+  await assert.rejects(()=>rpc('participant.state',null,tokens[0]),/room_unavailable/);
+  await assert.rejects(()=>rpc('teacher.report.get',ACTOR_A,null,{activity_id:a.id}),/room_unavailable/);
+  assert.equal((await rpc('teacher.activities',ACTOR_A)).activities.length,0);
+  assert.equal((await rpc('teacher.activities',ADMIN)).activities.length,1);
   await db.exec('set role anon');
   await assert.rejects(()=>db.query('select * from public.pairing_participants'),/permission denied/);
   await assert.rejects(()=>db.query("select public.pairing_rpc('teacher.me')"),/permission denied/);
