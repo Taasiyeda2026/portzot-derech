@@ -62,3 +62,5 @@ body.reader-open{overflow:hidden}
 @media(max-width:420px){.bar{gap:8px}.tools{justify-content:space-between;width:100%}.brand{margin:auto}.chapter-nav{gap:8px 15px}.reader-nav button{font-size:12px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
 @media print{header.masthead,.chapter-nav,.cards,.bottom-nav,dialog{display:none}.main-article{border:0;padding:0}.hero{grid-template-columns:1fr;background:none}.hero figure{display:none}body{background:white}main{max-width:none}.reflection{break-inside:avoid}}
+
+.domain-icon{flex:0 0 32px;width:32px;display:grid;place-items:center;font-size:23px;line-height:1;align-self:center}@media(max-width:380px){.domain-icon{flex-basis:26px;width:26px;font-size:20px}.domain-link{gap:8px}}
