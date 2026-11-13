@@ -607,6 +607,14 @@
       #quizWrapper .options { gap: 6px; }
       #quizWrapper .option { padding: 8px 14px; line-height: 1.4; }
     }
+
+    /* Lightweight question transitions use only opacity and transform. */
+    #questionScreen.active { animation: none; }
+    #optionsContainer .option { transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease; }
+    #optionsContainer .option.selected { background: #E6E4F2; border-color: #8A85C6; color: #2F3A5F; }
+    @media (prefers-reduced-motion: reduce) {
+      #optionsContainer .option { transition: none; }
+    }
   </style>
 </head>
 <body>
@@ -1231,6 +1239,7 @@
     let primaryCounts = {};
     let acceptingAnswer = false;
     let transitionTimer;
+    let questionAnimation;
 
     function startQuiz() {
       clearTimeout(transitionTimer);
@@ -1251,6 +1260,7 @@
       const textEl = document.getElementById('questionText');
       const optionsEl = document.getElementById('optionsContainer');
       const questionIndex = currentQuestion;
+      if (questionAnimation) questionAnimation.cancel();
       screen.classList.remove('active');
       textEl.textContent = q.text;
       optionsEl.replaceChildren();
@@ -1263,6 +1273,12 @@
         optionsEl.appendChild(button);
       });
       screen.classList.add('active');
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        questionAnimation = screen.animate(
+          [{ opacity: 0, transform: 'translateY(6px)' }, { opacity: 1, transform: 'translateY(0)' }],
+          { duration: 150, easing: 'ease-out' }
+        );
+      }
       updateProgress();
       acceptingAnswer = true;
       textEl.focus({ preventScroll: true });
@@ -1290,11 +1306,24 @@
       if (opt.secondary !== null) scores[opt.secondary] += 1;
       document.querySelector('.progress-fill').style.width = (answers.length / questions.length * 100) + '%';
       document.querySelector('.progress-bar').setAttribute('aria-valuenow', answers.length);
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const screen = document.getElementById('questionScreen');
+      // Briefly retain the selected answer, then fade out before replacing it.
       transitionTimer = setTimeout(() => {
-        currentQuestion++;
-        if (currentQuestion < questions.length) showQuestion();
-        else showLoading();
-      }, 600);
+        if (questionAnimation) questionAnimation.cancel();
+        if (!reduceMotion) {
+          questionAnimation = screen.animate(
+            [{ opacity: 1, transform: 'translateY(0)' }, { opacity: 0, transform: 'translateY(-6px)' }],
+            { duration: 150, easing: 'ease-in', fill: 'forwards' }
+          );
+        }
+        transitionTimer = setTimeout(() => {
+          if (questionAnimation) questionAnimation.cancel();
+          currentQuestion++;
+          if (currentQuestion < questions.length) showQuestion();
+          else showLoading();
+        }, reduceMotion ? 0 : 150);
+      }, 150);
     }
 
     function rankDomains(rawScores, counts, random = Math.random) {
