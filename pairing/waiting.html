@@ -383,20 +383,31 @@
     <script type="module">
 import { api, code, credential, watchRoom } from './common.js';
 const roomCode=code();
-if(!/^[0-9a-f]{32}$/.test(roomCode)) location.replace('pairing.html');
+const arabic=new URLSearchParams(location.search).get('lang')==='ar';
+const tr=(he,ar)=>arabic?ar:he;
+if(arabic){
+ document.documentElement.lang='ar';document.title='بانتظار تقسيم المجموعات | פורצות דרך';
+ document.querySelector('#waitingScreen h1').textContent='شكرًا لكِ! 🎉';
+ document.querySelector('#waitingScreen .message').innerHTML='تمّ حفظ إجاباتكِ بنجاح!<br><strong>بانتظار بقية المشاركات<span class="dots"></span></strong>';
+ document.querySelector('.stats-label').textContent='تمّ حفظ إجاباتكِ';
+ document.querySelector('#waitingScreen .message:last-child').textContent='💝 ستقسّم المرشدة المجموعات قريبًا';
+ document.querySelector('#resultTitle').textContent='وجدنا لكِ مجموعة!';
+ document.querySelector('#partnerLabel').textContent='مجموعتكِ هي:';
+}
+if(!/^[0-9a-f]{32}$/.test(roomCode)) location.replace('pairing.html?lang='+(arabic?'ar':'he'));
 const token=credential(roomCode);
 let stop;
 async function refresh(){
  const data=await api('participant.state',{},token);
- if(!data.participant.completed&&!data.participant.manual){location.replace('questionnaire.html?room='+roomCode);return;}
+ if(!data.participant.completed&&!data.participant.manual){location.replace('questionnaire.html?room='+roomCode+'&lang='+(arabic?'ar':'he'));return;}
  document.getElementById('completedCount').textContent='✓';
  if(data.group){
   document.getElementById('waitingScreen').classList.add('hide');
   document.getElementById('resultScreen').classList.add('show');
   document.getElementById('partnerName').textContent=data.group.memberNames.join(' • ');
-  document.getElementById('positiveMessage').textContent='יש לכן בסיס טוב לעבודה משותפת. עכשיו תוכלו לחשוב יחד, לחלק תפקידים ולהתקדם לרעיון משותף.';
+  document.getElementById('positiveMessage').textContent=tr('יש לכן בסיס טוב לעבודה משותפת. עכשיו תוכלו לחשוב יחד, לחלק תפקידים ולהתקדם לרעיון משותף.','لديكنّ أساس جيد للعمل معًا. الآن يمكنكُنّ التفكير معًا، وتوزيع الأدوار، والتقدّم نحو فكرة مشتركة.');
  }else if(data.room.phase==='closed'){
-  document.querySelector('#waitingScreen .message').textContent='הפעילות הסתיימה. פני למדריכה לקבלת הקבוצה שלך.';
+  document.querySelector('#waitingScreen .message').textContent=tr('הפעילות הסתיימה. פני למדריכה לקבלת הקבוצה שלך.','انتهى النشاط. توجّهي إلى المرشدة لمعرفة مجموعتكِ.');
  }
  return data;
 }
@@ -406,7 +417,7 @@ async function update(){
  try{
   const data=await refresh();status.textContent='';
   if(data&&data.room.topic!==topic){topic=data.room.topic;stop?.();stop=watchRoom(topic,update);}
- }catch(error){status.textContent=error.message;throw error;}
+ }catch(error){status.textContent=tr(error.message,'تعذّر الاتصال بالنشاط. تحقّقي من الاتصال أو توجّهي إلى المرشدة.');throw error;}
 }
 stop=watchRoom(null,update);
 update().catch(()=>{});

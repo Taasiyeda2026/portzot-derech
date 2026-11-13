@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+<script>(function(){const p=new URLSearchParams(location.search);if(p.has('session')&&!p.has('room'))return;const room=p.get('room');const valid=/^[0-9a-f]{32}$/.test(room||'');const u=new URL(valid?'../../pairing/waiting.html':'../../pairing/pairing.html',location.href);if(valid)u.searchParams.set('room',room);u.searchParams.set('lang','ar');location.replace(u.href);})();</script>
 <script src="../../js/course-language.js"></script>
 
   <link rel="icon" type="image/png" href="../../icon/favicon.png">
