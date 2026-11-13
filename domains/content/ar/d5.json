@@ -188,7 +188,9 @@
         "main",
         "03"
       ],
-      "status": "checked_relevant_source"
+      "status": "checked_relevant_source",
+      "language": "en",
+      "language_verified": true
     },
     {
       "id": "05-unicef-money",
@@ -199,7 +201,9 @@
         "main",
         "04"
       ],
-      "status": "checked_relevant_source"
+      "status": "checked_relevant_source",
+      "language": "en",
+      "language_verified": true
     },
     {
       "id": "05-ftc",
@@ -210,7 +214,9 @@
         "main",
         "04"
       ],
-      "status": "checked_relevant_source"
+      "status": "checked_relevant_source",
+      "language": "en",
+      "language_verified": true
     },
     {
       "id": "05-fda",
@@ -220,8 +226,10 @@
       "applies_to": [
         "06"
       ],
-      "status": "checked_relevant_source"
+      "status": "checked_relevant_source",
+      "language": "en",
+      "language_verified": true
     }
   ],
-  "qa_status": "editorial_review_completed; final_publication_review_pending"
+  "qa_status": "reviewed_against_pedagogical_spec_2026-11-13"
 }

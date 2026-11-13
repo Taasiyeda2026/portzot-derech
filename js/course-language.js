@@ -37,6 +37,11 @@
     return;
   }
   document.addEventListener('DOMContentLoaded', function () {
+    // Branding is Hebrew in every course language; never alter image geometry.
+    document.querySelectorAll('.brand,.brand-title,.site-name,img[src$="/logo.png"]').forEach(function (element) {
+      element.setAttribute('translate', 'no');
+      element.setAttribute('lang', 'he');
+    });
     document.querySelectorAll('[data-course-language]').forEach(function (link) {
       link.href = destination(page, link.dataset.courseLanguage, new URL(location.href)).href;
       if (link.dataset.courseLanguage === language) link.setAttribute('aria-current', 'true');

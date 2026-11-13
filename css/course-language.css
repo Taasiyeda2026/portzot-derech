@@ -17,3 +17,9 @@ body:has(>.course-lang-floating){padding-bottom:64px}
 .topbar:has(>.course-lang-switch){flex-wrap:wrap}
 @media(max-width:640px){.course-language-tools{flex-direction:column;align-items:flex-end;gap:4px}}
 .course-lang-inline{display:flex;justify-content:flex-end;margin-block-end:12px}
+
+/* Shared compact control: visual footprint is about half the previous area. */
+.course-lang-switch{gap:2px;padding:1px 3px;border-width:1px;box-shadow:none;font-size:11px;line-height:1.2;flex-wrap:nowrap;min-height:26px;background:var(--tint,#fff8fc);border-color:var(--line,#cba4c7);color:var(--accent,#69416d)}
+.course-lang-switch a{padding:5px 4px;min-width:38px;text-align:center;line-height:1.2}
+.course-lang-switch a[aria-current="true"]{background:var(--accent,#8d4c83);color:#fff}
+@media(max-width:600px){.course-lang-switch{font-size:11px;gap:2px;padding:1px 3px}}

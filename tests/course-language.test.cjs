@@ -50,16 +50,17 @@ test('both questionnaires retain IDs, answer codes, order and scores',()=>{
  const he=read('start/quiz.html'), ar=read('ar/start/quiz.html');
  assert.equal(he.match(/const normalization = (.*);/)[1],ar.match(/const normalization = (.*);/)[1]);
 });
-test('Arabic activity copy contains no Hebrew except language label and canonical matching metadata',()=>{
+test('Arabic activity copy contains no Hebrew except preserved Hebrew branding, language label and canonical metadata',()=>{
  for(const page of pages.filter(p=>p!=='strongermenu-2026.html')) {
   let html=read('ar/'+page).replace(/<!--[^]*?-->/g,'').replace(/<style[^]*?<\/style>/g,'').replace(/\/\/[^\n]*/g,'');
   html=html.replace(/<a[^>]*(?:data-course-language|data-reader-language)="he"[^>]*>עברית<\/a>/g,'');
   html=html.replace(/const groupDisplayText = .*;\n/,'');
+  html=html.replace(/פורצות דרך|תעשיידע/g,'');
   assert.doesNotMatch(html,/[\u0590-\u05ff]/,page);
  }
 });
 test('login, matching algorithm, and database configuration are unchanged',()=>{
  for(const file of ['index.html','js/pairing-algorithm.js','config/supabase-config.js','firestore.rules']) {
-  assert.equal(read(file),cp.execFileSync('git',['show',`HEAD:${file}`],{encoding:'utf8'}));
+  assert.equal(read(file),cp.execFileSync('git',['show',`HEAD:${file}`],{encoding:'utf8',cwd:path.join(__dirname,'..')}));
  }
 });
