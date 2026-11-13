@@ -31,3 +31,10 @@ jobs:
       - run: npm ci
       - run: node --test tests/course-language*.test.cjs
       - run: node tests/course-language-browser.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arabic-course-screenshots
+          path: /tmp/*-mobile.png
+          if-no-files-found: ignore
+          retention-days: 3

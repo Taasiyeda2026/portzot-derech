@@ -14,7 +14,7 @@ const server=http.createServer((req,res)=>{
 class Locator {
  constructor(p,s){this.p=p;this.s=s;this.firstOnly=false}
  first(){this.firstOnly=true;return this}
- async click(){await this.p.page.waitForSelector(this.s,{visible:true});await this.p.page.click(this.s)}
+ async click(){await this.p.page.waitForSelector(this.s,{visible:true});await this.p.page.waitForFunction(s=>{const e=document.querySelector(s);return e&&!e.disabled},{},this.s);await this.p.page.click(this.s)}
  async fill(value){await this.p.page.waitForSelector(this.s,{visible:true});await this.p.page.$eval(this.s,(e,v)=>{e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}))},value)}
  async count(){return (await this.p.page.$$(this.s)).length}
  async textContent(){return this.p.page.$eval(this.s,e=>e.textContent)}
@@ -28,7 +28,12 @@ class Page {
  locator(s){return new Locator(this,s)}
  on(...args){this.page.on(...args)}
  async goto(url){return this.page.goto(url,{waitUntil:'networkidle2'})}
- async waitForURL(pattern){const regex=typeof pattern==='string'?new RegExp('^'+pattern.split('**').map(s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('.*')+'$'):null;await this.page.waitForFunction(regex?src=>new RegExp(src).test(location.href):src=>eval('('+src+')')(new URL(location.href)),{},regex?regex.source:pattern.toString())}
+ async waitForURL(pattern){
+  const regex=typeof pattern==='string'?new RegExp('^'+pattern.split('**').map(s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('.*')+'$'):null;
+  const deadline=Date.now()+30000;
+  while(Date.now()<deadline){const url=this.page.url();if(regex?regex.test(url):pattern(new URL(url)))return;await new Promise(r=>setTimeout(r,25));}
+  throw new Error('URL did not match: '+this.page.url());
+ }
  async waitForTimeout(t){return new Promise(r=>setTimeout(r,t))}
  async evaluate(fn,arg){return this.page.evaluate(fn,arg)}
  async setViewportSize(v){return this.page.setViewport(v)}
@@ -102,7 +107,7 @@ export const onSnapshot=(ref,callback)=>{let active=true;const run=async()=>{con
  for(let i=0;i<4;i++){await p.locator('.option').first().click();await p.waitForTimeout(330);}
  await p.locator('[data-course-language="he"]').click();await p.waitForURL('**/start/quiz.html?lang=he&activity=42#intro');
  assert.match(await p.locator('#questionCounter').textContent(),/5/);
- await p.locator('[data-course-language="ar"]').click();
+ await p.locator('[data-course-language="ar"]').click();await p.waitForURL(u=>u.searchParams.get('lang')==='ar');
  for(let i=4;i<20;i++){await p.locator('.option').first().click();await p.waitForTimeout(330);}
  await p.locator('#resultScreen.active').waitFor();
  const results=await p.locator('#domainsResult a').evaluateAll(es=>es.map(e=>new URL(e.href).pathname));assert.equal(results.length,3);
@@ -118,9 +123,9 @@ export const onSnapshot=(ref,callback)=>{let active=true;const run=async()=>{con
    const he=await p.locator('body').evaluate(el=>{const clone=el.cloneNode(true);clone.querySelectorAll('script,style,.course-lang-switch').forEach(e=>e.remove());return /[\u0590-\u05ff]/.test(clone.textContent)});assert.equal(he,false,file);
    assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false,file+' overflow');
    if(file!=='alldomains'){
-    await p.locator('[data-unlock-content]').click();assert.equal(await p.locator('body').evaluate(el=>el.classList.contains('scroll-unlocked')),true);
-    const h=await p.evaluate(()=>location.hash);
-    await p.locator('[data-course-language="he"]').click();assert.equal(new URL(p.url()).searchParams.get('session'),'domain-test');assert.equal(new URL(p.url()).hash,h);
+    const h=await p.locator('[data-unlock-content]').getAttribute('href');
+    await p.locator('[data-unlock-content]').click();await p.waitForURL('**'+h);assert.equal(await p.locator('body').evaluate(el=>el.classList.contains('scroll-unlocked')),true);
+    await p.locator('[data-course-language="he"]').click();await p.waitForURL(u=>u.searchParams.get('lang')==='he');assert.equal(new URL(p.url()).searchParams.get('session'),'domain-test');assert.equal(new URL(p.url()).hash,h);
    }
    if(viewport.width===390&&['alldomains','d1'].includes(file))await p.screenshot({path:`/tmp/${file}-mobile.png`,fullPage:false});
   }
