@@ -63,10 +63,12 @@
       .domain-option { min-height: 92px; }
     }
     @media (prefers-reduced-motion: reduce) { .progress-fill { transition: none; } .question-enter { animation: none; } }
+    .pairing-languages{display:flex;justify-content:flex-end;align-items:center;gap:8px;font-size:.82rem;margin-bottom:8px}.pairing-languages a{color:#fff;text-decoration:none;padding:4px 8px;border-radius:12px}.pairing-languages a[aria-current=true]{background:#ffffff35;font-weight:700}
   </style>
 </head>
 <body>
   <main class="card">
+    <nav class="pairing-languages" aria-label="בחירת שפה / اختيار اللغة"><a data-pairing-lang="he" href="?lang=he" lang="he">עברית</a><span aria-hidden="true"> | </span><a data-pairing-lang="ar" href="?lang=ar" lang="ar">العربية</a></nav>
     <div class="top">
       <h1 class="title">מי את בקבוצה? 💜</h1>
       <p class="subtitle">בחרי את התשובה שהכי מתאימה לך.</p>
@@ -295,6 +297,16 @@ const questions = [
   }
 ];
 
+if(new URLSearchParams(location.search).get('lang')==='ar'){
+ document.documentElement.lang='ar';document.title='من أنتِ في المجموعة؟ — פורצות דרך';
+ document.querySelector('.title').textContent='من أنتِ في المجموعة؟ 💜';
+ document.querySelector('.subtitle').textContent='اختاري الإجابة الأقرب إليكِ.';
+ document.querySelector('#stepLabel').textContent='السؤال 1 من 15';
+ const input=document.querySelector('#textAnswer');input.setAttribute('aria-label','بأيّ اسم نناديكِ في المجموعة؟');input.placeholder='يكفي اسمكِ الأول';
+ const back=document.querySelector('#backBtn');back.setAttribute('aria-label','العودة إلى السؤال السابق');back.title='العودة إلى السؤال السابق';
+ document.querySelector('#nextBtn').textContent='ابدئي';document.querySelector('#retryBtn').textContent='حاولي الحفظ مجددًا';
+ document.querySelector('#savingMessage').innerHTML='وصلتنا إجاباتكِ ✨<span class="saving-sub">لحظات وننتقل إلى مجموعتكِ…</span>';
+}
 mountQuestionnaire(questions);
 </script>
 </body>
