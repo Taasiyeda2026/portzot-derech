@@ -388,7 +388,7 @@ const token=credential(roomCode);
 let stop;
 async function refresh(){
  const data=await api('participant.state',{},token);
- if(!data.participant.completed){location.replace('questionnaire.html?room='+roomCode);return;}
+ if(!data.participant.completed&&!data.participant.manual){location.replace('questionnaire.html?room='+roomCode);return;}
  document.getElementById('completedCount').textContent='✓';
  if(data.group){
   document.getElementById('waitingScreen').classList.add('hide');

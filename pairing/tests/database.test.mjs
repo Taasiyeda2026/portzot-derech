@@ -27,8 +27,8 @@ test('database authorization, isolated concurrent activities, idempotency, lifec
   for(const t of tokens){const p=await rpc('participant.join',null,t,{code:a.code,name:'אותו שם'});participants.push(p);assert.equal((await rpc('participant.join',null,t,{code:a.code,name:'אותו שם'})).id,p.id);}
   assert.equal(new Set(participants.map(p=>p.id)).size,5);
   const foreign=await rpc('participant.join',null,token(),{code:b.code,name:'זרה'});
-  await assert.rejects(()=>rpc('participant.join',null,token(),{code:a.code,name:'עוד אחת'}),/room_full/);
-  await assert.rejects(()=>rpc('teacher.resize',ACTOR_A,null,{activity_id:a.id,expected:4}),/invalid_count/);
+  // Expected count is monitoring only; reducing it never removes respondents.
+  assert.equal((await rpc('teacher.resize',ACTOR_A,null,{activity_id:a.id,expected:4})).participants.length,5);
   await assert.rejects(()=>rpc('teacher.match_input',ACTOR_A,null,{activity_id:a.id}),/incomplete/);
   for(const t of tokens){await rpc('participant.submit',null,t,{answers:answers('אותו שם')});await rpc('participant.submit',null,t,{answers:answers('אותו שם')});}
   let state=await rpc('teacher.state',ACTOR_A,null,{activity_id:a.id});assert.equal(state.participants.length,5);assert.equal(state.participants.filter(p=>p.completed).length,5);

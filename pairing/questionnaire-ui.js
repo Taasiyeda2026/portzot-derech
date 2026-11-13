@@ -20,7 +20,7 @@ export function mountQuestionnaire(questions) {
     if (joined) return true;
     joining ||= api('participant.join', { code: roomCode, name: answers.displayName }, token)
       .then(result => {
-        if (result.completed) {
+        if (result.completed || result.manual) {
           sessionStorage.removeItem(draftKey);
           location.replace('waiting.html?room=' + roomCode);
           return false;
@@ -78,7 +78,13 @@ export function mountQuestionnaire(questions) {
       options.append(button);
     });
     lock(false);
-    if (focus) (isName ? input : get('questionText')).focus({ preventScroll: true });
+    if (focus) {
+      const card = get('questionCard');
+      card.classList.remove('question-enter');
+      void card.offsetWidth;
+      card.classList.add('question-enter');
+      (isName ? input : get('questionText')).focus({ preventScroll: true });
+    }
   }
 
   async function submit() {

@@ -2,17 +2,17 @@ import { generateGroups } from './algorithm.mjs';
 import { validName, validatedAnswers, partition, personalProjection, fileName } from './domain.mjs';
 import { graphAccess, mailPayload, sendGraph } from './mail.mjs';
 const ORIGINS = ['https://portzot-derech.org', 'https://taasiyeda2026.github.io'];
-const ACTIONS = new Set(['teacher.me','teacher.schools','teacher.activities','teacher.create','teacher.state','teacher.resize','teacher.match','teacher.save','teacher.publish','teacher.close','teacher.report','teacher.download','admin.report.resolve','admin.readiness','admin.cleanup','participant.join','participant.submit','participant.state']);
+const ACTIONS = new Set(['teacher.me','teacher.schools','teacher.activities','teacher.create','teacher.state','teacher.resize','teacher.manual.add','teacher.match','teacher.save','teacher.publish','teacher.close','teacher.report','teacher.download','admin.report.resolve','admin.readiness','admin.cleanup','participant.join','participant.submit','participant.state']);
 const ERRORS = {
  forbidden:'אין הרשאה לפעולה זו.', unauthorized:'ההתחברות פגה. יש להתחבר שוב דרך הדשבורד.',
  invalid_request:'הפרטים אינם תקינים. בדקי ונסי שוב.', invalid_answers:'יש להשלים את כל התשובות ולנסות שוב.',
- invalid_groups:'יש לשייך כל משתתפת פעם אחת לקבוצה של 2–4, ולהמתין להשלמת כל השאלונים.',
- incomplete:'יש להמתין להשלמת כל השאלונים. נדרשות לפחות שתי משתתפות.',
+ invalid_groups:'לפני הפרסום יש לשייך כל משתתפת פעם אחת לקבוצה של 2–4.',
+ incomplete:'נדרשות לפחות שתי משתתפות שהשלימו את השאלון.',
  stale_version:'החלוקה השתנתה בחלון אחר. רענני את הפעילות לפני שמירה.',
  room_closed:'הפעילות סגורה להצטרפות או שתוקפה הסתיים. פני למדריכה.',
  room_full:'כל המקומות בפעילות תפוסים. פני למדריכה.', room_unavailable:'הפעילות אינה זמינה. בדקי את הקישור עם המדריכה.',
  invalid_token:'ההשתתפות אינה זמינה. יש להיכנס מהקישור של המדריכה.',
- invalid_count:'מספר המשתתפות צריך להיות 2–40 ולא פחות ממספר המצטרפות.',
+ invalid_count:'מספר המשתתפות הצפוי צריך להיות 2–40.',
  invalid_phase:'הפעולה אינה זמינה בשלב הזה. לאחר פרסום החלוקה נעולה לעריכה.',
  not_published:'יש לפרסם תחילה את החלוקה הסופית.', busy:'הדוח נמצא בהכנה או בשליחה. המתיני ורענני לפני ניסיון נוסף.',
  mail_not_configured:'שליחת המייל אינה זמינה כרגע. הדוח נשמר וניתן לנסות שוב בהמשך.',
@@ -87,6 +87,7 @@ export function createHandler({client,buildPdf,readEnv=()=>undefined,fetcher=fet
    }
    if(action==='participant.submit')payload={answers:validatedAnswers(payload.answers)};
    if(action==='teacher.create'&&(!validName(payload.school,200)||!validName(payload.class_name,40)||!Number.isInteger(payload.expected)||payload.expected<2||payload.expected>40))throw error('invalid_request',400);
+   if(action==='teacher.manual.add'&&(!Number.isInteger(payload.group_number)||(!payload.participant_id&&!validName(payload.name))))throw error('invalid_request',400);
    if(action==='teacher.match'){
     const input=await rpc('teacher.match_input',actor,null,{activity_id:payload.activity_id});
     const groups=partition(generateGroups(input.responses),input.responses.map(r=>r.id));
@@ -94,7 +95,7 @@ export function createHandler({client,buildPdf,readEnv=()=>undefined,fetcher=fet
    }
    if(action==='teacher.save'){
     const state=await rpc('teacher.state',actor,null,{activity_id:payload.activity_id});
-    payload={activity_id:payload.activity_id,version:payload.version,groups:partition(payload.groups,state.participants.filter(p=>p.completed).map(p=>p.id))};
+    payload={activity_id:payload.activity_id,version:payload.version,groups:partition(payload.groups,state.participants.filter(p=>p.completed||p.manual).map(p=>p.id),1)};
    }
    if(action==='admin.readiness'){
     await privateBucket();await graphAccess(readEnv,fetcher);

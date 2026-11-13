@@ -7,13 +7,13 @@ The canonical questionnaire contract (15 question fields, original option values
 - `pairing/admin.html`, `teacher.js`: one responsive RTL manager and personal group history; admin can view/filter all owners.
 - `pairing/common.js`: gateway transport; reuses the existing cross-origin dashboard SSO bridge and invalidation watcher without modifying Inspiration.
 - `supabase/functions/pairing-groups`: staff JWT verification via Auth.getUser; independent participant bearer tokens; authoritative matching; private PDF; Graph delivery.
-- `20261113140437_pairing_group_reporting.sql`: four domain tables (`pairing_activities`, `pairing_participants`, `pairing_reports`, `pairing_policy`); service-only RPCs; private helper/rate/runtime tables; daily retention cleanup; private `pairing-reports` bucket.
+- `20261113140437_pairing_group_reporting.sql` plus the additive `pairing_early_close_manual_groups` migration: four domain tables (`pairing_activities`, `pairing_participants`, `pairing_reports`, `pairing_policy`); service-only RPCs; private helper/rate/runtime tables; daily retention cleanup; private `pairing-reports` bucket.
 
 RLS is enabled and table access revoked from anon/authenticated. The gateway is the sole data boundary; every staff RPC rechecks the current active dashboard user and the activity owner/admin role. Participant tokens are 256-bit random credentials, hashed in the database, scoped to a single participation; same-name participants remain distinct. Public Realtime broadcasts contain invalidation only. Private participant responses explicitly project only the participant and her published group names. No participant responses/scores enter the PDF or mail.
 
 ## Lifecycle and concurrency
 
-Collecting → draft → published → closed. Join/submission use an activity row lock. First matching closes registration; it requires all joined participants to finish and at least two. Draft edits validate an exact partition into groups of 2–4 and use optimistic version checks. Publication is an explicit finalization that freezes editing. Closing expires participation entry, not report retention. Room codes expire after 8 hours. Local bearer recovery expires after 8 hours; questionnaire drafts stay in sessionStorage until successful submission.
+Collecting → draft → published → closed. Join/submission use an activity row lock. The instructor explicitly ends the questionnaire with at least two completed submissions, even when others have not finished or the expected count has not been reached. This locks registration and further submissions before matching only completed responses. Expected count is monitoring only; the independent safety cap stays 40. Draft edits and manual inclusion use the same activity lock and optimistic version checks. Unfinished participants stay outside the partition unless explicitly included by the owner/admin; new manual participants can also be added, without inventing answers or marking them completed. Draft groups may temporarily contain one member; final publication and reporting still require an exact partition into groups of 2–4 of all completed or manually included participants. Publication is an explicit finalization that freezes editing. Closing expires participation entry, not report retention. Room codes expire after 8 hours. Local bearer recovery expires after 8 hours; questionnaire drafts stay in sessionStorage until successful submission.
 
 PDF generation happens only from the frozen server snapshot and uses packaged Alef fonts, fontkit, bidi-js and the approved Taasiyeda logo, following the payroll implementation. Reports wrap names, paginate A4, and repeat table headings. PDF access requires the same active-owner/admin permission even after activity closure.
 
@@ -43,6 +43,8 @@ Do not merge the frontend while backend, retention, mail or real SSO gates remai
 npm run test:pairing
 npm run test:pairing:browser
 npm run test:pairing:questionnaire
+npm run test:pairing:management
+node --test pairing/tests/early-close.test.mjs
 node --test inspiration/tests/edge.test.mjs inspiration/tests/service-worker.test.mjs
 ```
 

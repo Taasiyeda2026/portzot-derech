@@ -19,12 +19,12 @@ export function validatedAnswers(input) {
   }
   return result;
 }
-export function partition(groups, ids) {
+export function partition(groups, ids, minimumSize = 2) {
   if (!Array.isArray(groups) || !Array.isArray(ids) || ids.length < 2 || groups.length < 1) throw new Error('invalid_groups');
   const expected = new Set(ids), seen = new Set();
   if (expected.size !== ids.length) throw new Error('invalid_groups');
   const result = groups.map((group, index) => {
-    if (!Array.isArray(group.members) || group.members.length < 2 || group.members.length > 4) throw new Error('invalid_groups');
+    if (!Array.isArray(group.members) || group.members.length < minimumSize || group.members.length > 4) throw new Error('invalid_groups');
     for (const id of group.members) {
       if (!expected.has(id) || seen.has(id)) throw new Error('invalid_groups');
       seen.add(id);
@@ -37,7 +37,7 @@ export function partition(groups, ids) {
 export function personalProjection(data) {
   return {
     room: { id: data.room.id, phase: data.room.phase, topic: data.room.topic },
-    participant: { id: data.participant.id, name: data.participant.name, completed: data.participant.completed },
+    participant: { id: data.participant.id, name: data.participant.name, completed: data.participant.completed, manual: data.participant.manual === true },
     group: data.group ? { groupNumber: data.group.groupNumber, memberNames: data.group.memberNames } : null,
   };
 }

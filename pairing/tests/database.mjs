@@ -1,5 +1,5 @@
 import { PGlite } from '@electric-sql/pglite';
-import { readFile } from 'node:fs/promises';
+import { readFile, readdir } from 'node:fs/promises';
 export const ACTOR_A='11111111-1111-4111-8111-111111111111';
 export const ACTOR_B='22222222-2222-4222-8222-222222222222';
 export const ADMIN='33333333-3333-4333-8333-333333333333';
@@ -22,6 +22,7 @@ export async function database(){
   insert into public.schools values(1,'בית ספר בדיקה','עיר בדיקה');
  `);
  await db.exec(await readFile(new URL('../../supabase/migrations/20261113140437_pairing_group_reporting.sql',import.meta.url),'utf8'));
+ for(const name of (await readdir(new URL('../../supabase/migrations/',import.meta.url))).filter(n=>n.endsWith('_pairing_early_close_manual_groups.sql')).sort())await db.exec(await readFile(new URL('../../supabase/migrations/'+name,import.meta.url),'utf8'));
  const rpc=async(action,actor=null,token=null,payload={})=>(await db.query('select public.pairing_rpc($1,$2,$3,$4) as value',[action,actor,token,JSON.stringify(payload)])).rows[0].value;
  return {db,rpc};
 }

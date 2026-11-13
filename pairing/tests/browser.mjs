@@ -50,7 +50,7 @@ try{
   await p.waitForFunction(()=>location.pathname.endsWith('/waiting.html'));
  }
  await teacher.reload();await teacher.waitForFunction(()=>document.querySelector('#activity-panel').textContent.includes('סיימו: 5'));
- await click(teacher,'יצירת חלוקה אוטומטית');await teacher.waitForSelector('#activity-panel select');
+ await click(teacher,'סיום השאלון וחלוקה לקבוצות');await click(teacher,'המשך לחלוקה');await teacher.waitForSelector('#activity-panel select');
  assert.equal((await h.call('teacher.state',{activity_id:activity})).body.participants.length,5);
  await teacher.select('#activity-panel select','1');await click(teacher,'שמירת השינויים');await teacher.waitForFunction(()=>document.querySelector('#activity-panel').textContent.includes('חלוקת קבוצות'));
  teacher.once('dialog',d=>d.accept());await click(teacher,'פרסום החלוקה הסופית');await teacher.waitForFunction(()=>!document.querySelector('#activity-panel select'));
