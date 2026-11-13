@@ -9,6 +9,6 @@
 import {dashboardLogin,api} from '../../pairing/common.js';
 const room=new URLSearchParams(location.search).get('room');
 const target=new URL('../../pairing/admin.html',location.href);
-if(room&&/^[0-9a-f]{32}$/.test(room)){const url=new URL('../../pairing/questionnaire.html',location.href);url.searchParams.set('room',room);location.replace(url.href);}
+if(room&&/^[0-9a-f]{32}$/.test(room)){const url=new URL('../../pairing/questionnaire.html',location.href);url.searchParams.set('room',room);url.searchParams.set('lang','ar');location.replace(url.href);}
 else {const button=document.querySelector('#start'),notice=document.querySelector('#notice');button.addEventListener('click',async()=>{button.disabled=true;notice.textContent='';try{await dashboardLogin();await api('teacher.me');location.assign(target.href);}catch(error){notice.textContent="تعذّر تسجيل الدخول. حاولي مجددًا عبر لوحة التحكّم."||error.message;button.disabled=false;}});}
 </script></body></html>
