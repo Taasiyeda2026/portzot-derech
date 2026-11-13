@@ -2,7 +2,7 @@ import { generateGroups } from './algorithm.mjs';
 import { validName, validatedAnswers, partition, personalProjection, fileName } from './domain.mjs';
 import { graphAccess, mailPayload, sendGraph } from './mail.mjs';
 const ORIGINS = ['https://portzot-derech.org', 'https://taasiyeda2026.github.io'];
-const ACTIONS = new Set(['teacher.me','teacher.schools','teacher.activities','teacher.create','teacher.state','teacher.resize','teacher.manual.add','teacher.match','teacher.save','teacher.publish','teacher.close','teacher.report','teacher.download','admin.report.resolve','admin.readiness','admin.cleanup','participant.join','participant.submit','participant.state']);
+const ACTIONS = new Set(['teacher.delete','admin.answers','teacher.me','teacher.schools','teacher.activities','teacher.create','teacher.state','teacher.resize','teacher.manual.add','teacher.match','teacher.save','teacher.publish','teacher.close','teacher.report','teacher.download','admin.report.resolve','admin.readiness','admin.cleanup','participant.join','participant.submit','participant.state']);
 const ERRORS = {
  forbidden:'אין הרשאה לפעולה זו.', unauthorized:'ההתחברות פגה. יש להתחבר שוב דרך הדשבורד.',
  invalid_request:'הפרטים אינם תקינים. בדקי ונסי שוב.', invalid_answers:'יש להשלים את כל התשובות ולנסות שוב.',
