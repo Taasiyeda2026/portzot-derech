@@ -1,9 +1,14 @@
 import { api, code, credential } from './common.js';
 import { copy, domains } from './questionnaire-copy.js';
+import { arabicQuestions, arabicDomains } from './questionnaire-ar.js';
+const arabic = new URLSearchParams(location.search).get('lang') === 'ar';
+const tr = (he, ar) => arabic ? ar : he;
+const roomQuery = room => '?room=' + encodeURIComponent(room) + '&lang=' + (arabic ? 'ar' : 'he');
+const arabicByField = new Map(arabicQuestions.map(q => [q.field,q]));
 
 export function mountQuestionnaire(questions) {
   const roomCode = code();
-  if (!/^[0-9a-f]{32}$/.test(roomCode)) { location.replace('pairing.html'); return; }
+  if (!/^[0-9a-f]{32}$/.test(roomCode)) { location.replace('pairing.html?lang=' + (arabic ? 'ar' : 'he')); return; }
   const token = credential(roomCode);
   const draftKey = 'pairing-draft:' + roomCode;
   let draft = {};
@@ -22,7 +27,7 @@ export function mountQuestionnaire(questions) {
       .then(result => {
         if (result.completed || result.manual) {
           sessionStorage.removeItem(draftKey);
-          location.replace('waiting.html?room=' + roomCode);
+          location.replace('waiting.html' + roomQuery(roomCode));
           return false;
         }
         joined = true;
@@ -33,6 +38,7 @@ export function mountQuestionnaire(questions) {
 
   function lock(value) {
     busy = value;
+    window.courseLanguageBusy = value;
     get('questionCard').setAttribute('aria-busy', String(value));
     options.querySelectorAll('button').forEach(button => { button.disabled = value; });
     back.disabled = value || step === 0;
@@ -42,9 +48,9 @@ export function mountQuestionnaire(questions) {
   }
 
   function render(focus = false) {
-    const q = questions[step], view = copy[q.field];
-    get('questionText').textContent = view?.text || q.text;
-    get('stepLabel').textContent = `שאלה ${step + 1} מתוך ${questions.length}`;
+    const q = questions[step], view = copy[q.field], translated = arabicByField.get(q.field);
+    get('questionText').textContent = arabic ? translated.text : (view?.text || q.text);
+    get('stepLabel').textContent = tr(`שאלה ${step + 1} מתוך ${questions.length}`, `السؤال ${step + 1} من ${questions.length}`);
     const progress = Math.round((step + 1) / questions.length * 100);
     get('progressText').textContent = progress + '%';
     get('progressFill').style.width = progress + '%';
@@ -72,9 +78,9 @@ export function mountQuestionnaire(questions) {
         icon.className = 'domain-icon';
         icon.setAttribute('aria-hidden', 'true');
         icon.textContent = domains[index][0];
-        label.textContent = domains[index][1];
+        label.textContent = arabic ? arabicDomains[index] : domains[index][1];
         button.append(icon, label);
-      } else button.textContent = view?.options?.[index] || option.label;
+      } else button.textContent = arabic ? translated.options.find(o => o.code === option.code).label : (view?.options?.[index] || option.label);
       options.append(button);
     });
     lock(false);
@@ -90,7 +96,7 @@ export function mountQuestionnaire(questions) {
   async function submit() {
     lock(true);
     retry.hidden = true;
-    hint.textContent = 'שומרות את התשובות…';
+    hint.textContent = tr('שומרות את התשובות…','جارٍ حفظ إجاباتكِ…');
     try {
       persist();
       if (!await ensureJoined()) return;
@@ -101,13 +107,13 @@ export function mountQuestionnaire(questions) {
         if (q.options.length) payload[q.field + 'Code'] = codes[q.field];
       }
       const result = await api('participant.submit', { answers: payload }, token);
-      if (!result.completed) throw new Error('השמירה לא אושרה. נסי שוב.');
+      if (!result.completed) throw new Error(tr('השמירה לא אושרה. נסי שוב.','لم يتم تأكيد الحفظ. حاولي مجددًا.'));
       sessionStorage.removeItem(draftKey);
       get('questionCard').hidden = true;
       get('savingMessage').hidden = false;
-      location.assign('waiting.html?room=' + roomCode);
+      location.assign('waiting.html' + roomQuery(roomCode));
     } catch (error) {
-      hint.textContent = `${error.message} התשובות נשמרו בכרטיסייה. אפשר לנסות לשמור שוב.`;
+      hint.textContent = tr(`${error.message} התשובות נשמרו בכרטיסייה. אפשר לנסות לשמור שוב.`, 'تعذّر حفظ الإجابات. إجاباتكِ محفوظة في هذه الصفحة؛ حاولي مجددًا.');
       retry.hidden = false;
       lock(false);
     }
@@ -145,7 +151,7 @@ export function mountQuestionnaire(questions) {
   start.addEventListener('click', async () => {
     if (busy || step !== 0) return;
     answers.displayName = input.value.trim();
-    if (!answers.displayName) { hint.textContent = 'איך לקרוא לך? כתבי שם כדי להתחיל.'; input.focus(); return; }
+    if (!answers.displayName) { hint.textContent = tr('איך לקרוא לך? כתבי שם כדי להתחיל.','اكتبي اسمكِ لنبدأ.'); input.focus(); return; }
     persist();
     lock(true);
     try {
@@ -153,14 +159,15 @@ export function mountQuestionnaire(questions) {
       step = 1;
       persist();
       render(true);
-    } catch (error) { hint.textContent = error.message; lock(false); }
+    } catch (error) { hint.textContent = tr(error.message,'تعذّر الاتصال بالنشاط. تحقّقي من الرابط والاتصال وحاولي مجددًا.'); lock(false); }
   });
   input.addEventListener('input', () => { answers.displayName = input.value; persist(); });
+  document.querySelectorAll('[data-pairing-lang]').forEach(link => { link.href = '?room=' + encodeURIComponent(roomCode) + '&lang=' + link.dataset.pairingLang; link.setAttribute('aria-current', String(link.dataset.pairingLang === (arabic?'ar':'he'))); link.addEventListener('click', e => { if (busy) e.preventDefault(); else persist(); }); });
   input.addEventListener('keydown', event => {
     if (event.key === 'Enter') { event.preventDefault(); start.click(); }
   });
   retry.addEventListener('click', () => { if (!busy) void submit(); });
   render();
   // A reload revalidates the existing participation, using its original token.
-  if (answers.displayName) void ensureJoined().catch(error => { hint.textContent = error.message; });
+  if (answers.displayName) void ensureJoined().catch(error => { hint.textContent = tr(error.message,'تعذّر الاتصال بالنشاط. تحقّقي من الرابط والاتصال وحاولي مجددًا.'); });
 }
