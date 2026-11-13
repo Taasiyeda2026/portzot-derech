@@ -30,6 +30,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: node --test tests/course-language*.test.cjs
+      - run: node --test pairing/tests/domain.test.mjs pairing/tests/early-close.test.mjs
       - run: node tests/course-language-browser.cjs
       - uses: actions/upload-artifact@v4
         if: always()

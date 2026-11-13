@@ -42,17 +42,17 @@ test('opening quiz resumes across languages, finishes and preserves tie-ranked r
  const results=JSON.stringify(b.ctx.quizTest.getResults());assert.equal(JSON.parse(results).length,3);
  let c=load('start/quiz.html',{...opts,session:b.session});assert.equal(JSON.stringify(c.ctx.quizTest.getResults()),results);assert.equal(c.get('resultScreen').classList.contains('active'),true);
 });
-test('mixed language participants use one meeting and identical answer codes; instructor and participant resume',async()=>{
+test('legacy Arabic pairing retains mixed-script names, answer codes and meeting recovery',async()=>{
  const db=firestore(),opts={firebase:db.api};
- let admin=load('pairing/admin.html',opts);admin.get('instructorCode').value='test';admin.get('participantCount').value='3';await admin.ctx.startActivity();
+ let admin=load('ar/pairing/admin.html',opts);admin.get('instructorCode').value='test';admin.get('participantCount').value='3';await admin.ctx.startActivity();
  const id=Object.keys(db.data.sessions)[0];assert.ok(id);admin.pagehide();
  admin=load('ar/pairing/admin.html',{...opts,session:admin.session});assert.equal(admin.get('trackingScreen').classList.contains('active'),true);assert.equal(Object.keys(db.data.sessions).length,1);
  const responseLocals=[];
- for(const [file,name]of [['pairing/questionnaire.html','נועה'],['ar/pairing/questionnaire.html','ليان'],['ar/pairing/questionnaire.html','سارة']]){
+ for(const [file,name]of [['ar/pairing/questionnaire.html','נועה'],['ar/pairing/questionnaire.html','ليان'],['ar/pairing/questionnaire.html','سارة']]){
   let a=load(file,{...opts,search:'?session='+id});a.get('textAnswer').value=name;await a.get('nextBtn').handlers.click();
   for(let i=1;i<15;i++){
    const option=a.get('options').children[0];a.get('options').handlers.click({target:option});
-   if(i===4){a.pagehide();a=load(file.startsWith('ar/')?'pairing/questionnaire.html':'ar/pairing/questionnaire.html',{...opts,session:a.session,local:a.local,search:'?session='+id});assert.equal(a.get('options').children[0].classList.contains('active'),true);}
+   if(i===4){a.pagehide();a=load(file,{...opts,session:a.session,local:a.local,search:'?session='+id});assert.equal(a.get('options').children[0].classList.contains('active'),true);}
    await a.get('nextBtn').handlers.click();
   }
   a.flush();assert.equal(a.ctx.location.href,'waiting.html?session='+id);responseLocals.push(a.local);
@@ -66,7 +66,7 @@ test('mixed language participants use one meeting and identical answer codes; in
  const groups=db.data.pairings[id].groups;assert.equal(groups.length,1);assert.equal(groups[0].members.length,3);
  assert.match(m.get('results').innerHTML,/المجموعات/);assert.doesNotMatch(m.get('results').innerHTML,/יש לכן|גבוהה|טובה/);
  for(let i=0;i<3;i++){
-  const waiting=load(i===0?'pairing/waiting.html':'ar/pairing/waiting.html',{...opts,search:'?session='+id,local:responseLocals[i]});
+  const waiting=load('ar/pairing/waiting.html',{...opts,search:'?session='+id,local:responseLocals[i]});
   assert.equal(waiting.get('resultScreen').classList.contains('show'),true);assert.match(waiting.get('partnerName').innerHTML,/נועה/);assert.match(waiting.get('partnerName').innerHTML,/ليان/);
  }
 });
