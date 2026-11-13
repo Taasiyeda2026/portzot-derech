@@ -154,17 +154,17 @@
           "asset_id": "digital"
         },
         "d2-a02": {
-          "path": "domains/images/2027/camera.webp",
-          "alt": "מצלמה על שולחן",
-          "alt_ar": "كاميرا على طاولة",
-          "credit": "Howard Bouchevereau / Unsplash",
-          "source_url": "https://unsplash.com/photos/a-camera-on-a-table-68AfHGvombw",
+          "path": "domains/images/2027/digital.webp",
+          "alt": "טלפון חכם על מחברת",
+          "alt_ar": "هاتف ذكي على دفتر",
+          "credit": "Swello / Unsplash",
+          "source_url": "https://unsplash.com/photos/smartphone-on-notebook-and-laptop-on-table-CGvC8yWgC-g",
           "license": "Unsplash License",
           "license_url": "https://unsplash.com/license",
-          "download_url": "https://images.unsplash.com/photo-1657897808147-3e8f47d99332",
+          "download_url": "https://images.unsplash.com/photo-1759215524630-a6572b3cfb86",
           "verified_on": "2026-11-13",
           "usage": "צילום המחשה; אינו מתעד את המקרה המתואר בכתבה",
-          "asset_id": "camera"
+          "asset_id": "digital"
         },
         "d2-a03": {
           "path": "domains/images/2027/digital.webp",
@@ -396,17 +396,17 @@
           "asset_id": "friends"
         },
         "d4-a02": {
-          "path": "domains/images/2027/together.webp",
-          "alt": "קבוצת צעירות אוחזות ידיים",
-          "alt_ar": "مجموعة شابات يمسكن بأيدي بعضهن",
-          "credit": "Andrew Rivera / Unsplash",
-          "source_url": "https://unsplash.com/photos/a-group-of-women-standing-next-to-each-other-holding-hands-LzidwJFDAMg",
+          "path": "domains/images/2027/friends.webp",
+          "alt": "צעירות משוחחות יחד",
+          "alt_ar": "شابات يتحدثن معًا",
+          "credit": "Timur Shakerzianov / Unsplash",
+          "source_url": "https://unsplash.com/photos/young-women-talking-in-a-casual-setting-q19hWugG0MU",
           "license": "Unsplash License",
           "license_url": "https://unsplash.com/license",
-          "download_url": "https://images.unsplash.com/photo-1643061754988-d8198b7a4c38",
+          "download_url": "https://images.unsplash.com/photo-1770563182251-fd272c89ae74",
           "verified_on": "2026-11-13",
           "usage": "צילום המחשה; אינו מתעד את המקרה המתואר בכתבה",
-          "asset_id": "together"
+          "asset_id": "friends"
         },
         "d4-a03": {
           "path": "domains/images/2027/friends.webp",
@@ -422,17 +422,17 @@
           "asset_id": "friends"
         },
         "d4-a04": {
-          "path": "domains/images/2027/friends.webp",
-          "alt": "צעירות משוחחות יחד",
-          "alt_ar": "شابات يتحدثن معًا",
-          "credit": "Timur Shakerzianov / Unsplash",
-          "source_url": "https://unsplash.com/photos/young-women-talking-in-a-casual-setting-q19hWugG0MU",
+          "path": "domains/images/2027/digital.webp",
+          "alt": "טלפון חכם על מחברת",
+          "alt_ar": "هاتف ذكي على دفتر",
+          "credit": "Swello / Unsplash",
+          "source_url": "https://unsplash.com/photos/smartphone-on-notebook-and-laptop-on-table-CGvC8yWgC-g",
           "license": "Unsplash License",
           "license_url": "https://unsplash.com/license",
-          "download_url": "https://images.unsplash.com/photo-1770563182251-fd272c89ae74",
+          "download_url": "https://images.unsplash.com/photo-1759215524630-a6572b3cfb86",
           "verified_on": "2026-11-13",
           "usage": "צילום המחשה; אינו מתעד את המקרה המתואר בכתבה",
-          "asset_id": "friends"
+          "asset_id": "digital"
         },
         "d4-a05": {
           "path": "domains/images/2027/together.webp",
@@ -448,17 +448,17 @@
           "asset_id": "together"
         },
         "d4-a06": {
-          "path": "domains/images/2027/classroom.webp",
-          "alt": "תלמידות ותלמידים בכיתה",
-          "alt_ar": "طالبات وطلاب في غرفة صفية",
-          "credit": "Fajar Herlambang STUDIO / Unsplash",
-          "source_url": "https://unsplash.com/photos/students-are-taking-a-test-in-a-classroom-TmdrCRVDOnQ",
+          "path": "domains/images/2027/together.webp",
+          "alt": "קבוצת צעירות אוחזות ידיים",
+          "alt_ar": "مجموعة شابات يمسكن بأيدي بعضهن",
+          "credit": "Andrew Rivera / Unsplash",
+          "source_url": "https://unsplash.com/photos/a-group-of-women-standing-next-to-each-other-holding-hands-LzidwJFDAMg",
           "license": "Unsplash License",
           "license_url": "https://unsplash.com/license",
-          "download_url": "https://images.unsplash.com/photo-1742549586702-c23994895082",
+          "download_url": "https://images.unsplash.com/photo-1643061754988-d8198b7a4c38",
           "verified_on": "2026-11-13",
           "usage": "צילום המחשה; אינו מתעד את המקרה המתואר בכתבה",
-          "asset_id": "classroom"
+          "asset_id": "together"
         },
         "d4-a07": {
           "path": "domains/images/2027/digital.webp",
@@ -990,17 +990,17 @@
       },
       "articles": {
         "d9-a01": {
-          "path": "domains/images/2027/park.webp",
-          "alt": "שביל בין צמחים ועצים בפארק",
-          "alt_ar": "ممر بين الأشجار والنباتات في حديقة",
-          "credit": "Sebastian Bjune / Unsplash",
-          "source_url": "https://unsplash.com/photos/green-plants-and-trees-during-daytime-Q440MWabsoU",
+          "path": "domains/images/2027/friends.webp",
+          "alt": "צעירות משוחחות יחד",
+          "alt_ar": "شابات يتحدثن معًا",
+          "credit": "Timur Shakerzianov / Unsplash",
+          "source_url": "https://unsplash.com/photos/young-women-talking-in-a-casual-setting-q19hWugG0MU",
           "license": "Unsplash License",
           "license_url": "https://unsplash.com/license",
-          "download_url": "https://images.unsplash.com/photo-1601040629486-d40e5e8b39d5",
+          "download_url": "https://images.unsplash.com/photo-1770563182251-fd272c89ae74",
           "verified_on": "2026-11-13",
           "usage": "צילום המחשה; אינו מתעד את המקרה המתואר בכתבה",
-          "asset_id": "park"
+          "asset_id": "friends"
         },
         "d9-a02": {
           "path": "domains/images/2027/controller.webp",
@@ -1029,17 +1029,17 @@
           "asset_id": "notebook"
         },
         "d9-a04": {
-          "path": "domains/images/2027/coins.webp",
-          "alt": "מטבעות מסוגים שונים",
-          "alt_ar": "عملات معدنية متنوعة",
-          "credit": "engin akyurt / Unsplash",
-          "source_url": "https://unsplash.com/photos/a-large-pile-of-various-coins-nQPiflvKFbE",
+          "path": "domains/images/2027/camera.webp",
+          "alt": "מצלמה על שולחן",
+          "alt_ar": "كاميرا على طاولة",
+          "credit": "Howard Bouchevereau / Unsplash",
+          "source_url": "https://unsplash.com/photos/a-camera-on-a-table-68AfHGvombw",
           "license": "Unsplash License",
           "license_url": "https://unsplash.com/license",
-          "download_url": "https://images.unsplash.com/photo-1749800816848-993197b05fc3",
+          "download_url": "https://images.unsplash.com/photo-1657897808147-3e8f47d99332",
           "verified_on": "2026-11-13",
           "usage": "צילום המחשה; אינו מתעד את המקרה המתואר בכתבה",
-          "asset_id": "coins"
+          "asset_id": "camera"
         },
         "d9-a05": {
           "path": "domains/images/2027/camera.webp",
@@ -1068,17 +1068,17 @@
           "asset_id": "guitar"
         },
         "d9-a07": {
-          "path": "domains/images/2027/friends.webp",
-          "alt": "צעירות משוחחות יחד",
-          "alt_ar": "شابات يتحدثن معًا",
-          "credit": "Timur Shakerzianov / Unsplash",
-          "source_url": "https://unsplash.com/photos/young-women-talking-in-a-casual-setting-q19hWugG0MU",
+          "path": "domains/images/2027/together.webp",
+          "alt": "קבוצת צעירות אוחזות ידיים",
+          "alt_ar": "مجموعة شابات يمسكن بأيدي بعضهن",
+          "credit": "Andrew Rivera / Unsplash",
+          "source_url": "https://unsplash.com/photos/a-group-of-women-standing-next-to-each-other-holding-hands-LzidwJFDAMg",
           "license": "Unsplash License",
           "license_url": "https://unsplash.com/license",
-          "download_url": "https://images.unsplash.com/photo-1770563182251-fd272c89ae74",
+          "download_url": "https://images.unsplash.com/photo-1643061754988-d8198b7a4c38",
           "verified_on": "2026-11-13",
           "usage": "צילום המחשה; אינו מתעד את המקרה המתואר בכתבה",
-          "asset_id": "friends"
+          "asset_id": "together"
         },
         "d9-a08": {
           "path": "domains/images/2027/controller.webp",
