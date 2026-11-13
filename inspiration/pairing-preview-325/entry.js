@@ -5,5 +5,5 @@ document.querySelector('#secretLogo')?.addEventListener('click',()=>location.ass
 document.querySelector('#startActivityBtn').addEventListener('click',()=>{
  const code=input.value.trim();
  if(!/^[0-9a-f]{32}$/.test(code)){document.querySelector('#joinError').textContent='יש להזין את קוד הפעילות מהמדריכה או לסרוק את ה־QR.';return;}
- location.assign('questionnaire.html?room='+encodeURIComponent(code));
+ location.assign('questionnaire.html?v=f505500&room='+encodeURIComponent(code));
 });

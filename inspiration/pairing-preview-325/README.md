@@ -1,11 +1,14 @@
 # Temporary pairing preview for PR #325
 
-Base preview: codex/pairing-group-reporting at 90c0834e21bb126b48fb5f25b0ed63242f89ab2d.
-Questionnaire UI updated from 0b7e0be: original domain cards, balanced display copy, 300 ms guarded auto-advance, draft recovery. Canonical payload and backend unchanged.
-Published at /inspiration/pairing-preview-325/admin.html for owner-led production acceptance checks.
-Only parent-relative asset/import paths, noindex metadata and a manager test banner differ from the source.
-Existing /inspiration/ service-worker exclusion also covers this directory. No cache or security settings changed.
-Uses the already-deployed Dashboard pairing-groups backend and existing dashboard SSO.
-Test school names must begin with [בדיקה] so the existing mailer marks the subject as a test.
-Delete this entire directory after PR #325 is approved, merged, and verified at /pairing/admin.html.
-Do not merge PR #325 until the owner confirms real SSO, group creation, PDF, and the one live test mail.
+Source: codex/pairing-group-reporting at f505500 (instructor-controlled closure and manual inclusion).
+URLs:
+- /inspiration/pairing-preview-325/pairing.html (participant entry; individual questionnaire URL/QR created per activity)
+- /inspiration/pairing-preview-325/admin.html?view=manage
+- /inspiration/pairing-preview-325/admin.html?view=groups
+
+Preview-only adjustments: parent-relative asset paths, noindex metadata, and cache-version query strings for updated assets and invitation/waiting URLs. No preview banner in the normal UI.
+Existing /inspiration/ service-worker exclusion covers this directory; no service-worker/security/hosting settings changed.
+Uses the already-deployed Dashboard pairing-groups backend (version 2) and unchanged dashboard SSO.
+Use synthetic data and prefix test school names with [בדיקה] so the existing mailer marks the subject as a test.
+Remove this whole directory only after owner approval, final PR merge and production verification.
+Do not merge PR #325 until the owner approves the preview, real SSO and the one live test email.

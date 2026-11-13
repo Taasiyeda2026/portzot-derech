@@ -1,5 +1,5 @@
-import { api, code, credential } from './common.js';
-import { copy, domains } from './questionnaire-copy.js';
+import { api, code, credential } from './common.js?v=f505500';
+import { copy, domains } from './questionnaire-copy.js?v=f505500';
 
 export function mountQuestionnaire(questions) {
   const roomCode = code();
@@ -20,9 +20,9 @@ export function mountQuestionnaire(questions) {
     if (joined) return true;
     joining ||= api('participant.join', { code: roomCode, name: answers.displayName }, token)
       .then(result => {
-        if (result.completed) {
+        if (result.completed || result.manual) {
           sessionStorage.removeItem(draftKey);
-          location.replace('waiting.html?room=' + roomCode);
+          location.replace('waiting.html?v=f505500&room=' + roomCode);
           return false;
         }
         joined = true;
@@ -78,7 +78,13 @@ export function mountQuestionnaire(questions) {
       options.append(button);
     });
     lock(false);
-    if (focus) (isName ? input : get('questionText')).focus({ preventScroll: true });
+    if (focus) {
+      const card = get('questionCard');
+      card.classList.remove('question-enter');
+      void card.offsetWidth;
+      card.classList.add('question-enter');
+      (isName ? input : get('questionText')).focus({ preventScroll: true });
+    }
   }
 
   async function submit() {
@@ -99,7 +105,7 @@ export function mountQuestionnaire(questions) {
       sessionStorage.removeItem(draftKey);
       get('questionCard').hidden = true;
       get('savingMessage').hidden = false;
-      location.assign('waiting.html?room=' + roomCode);
+      location.assign('waiting.html?v=f505500&room=' + roomCode);
     } catch (error) {
       hint.textContent = `${error.message} התשובות נשמרו בכרטיסייה. אפשר לנסות לשמור שוב.`;
       retry.hidden = false;

@@ -1,4 +1,4 @@
-import { dashboardLogin, el, clear, button, field, watchRoom } from '../../inspiration/common.js';
+import { dashboardLogin, el, clear, button, field, watchRoom } from '../../inspiration/common.js?v=f505500';
 export { dashboardLogin, el, clear, button, field, watchRoom };
 export const ENDPOINT='https://szinlhjuwyiyszdpsdop.supabase.co/functions/v1/pairing-groups';
 export const KEY='sb_publishable_k0IbDJlgPA9KTVuDWrCyFw_Zsa5kZIM';
