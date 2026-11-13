@@ -13,14 +13,15 @@ async function perform(fn){
  const buttons=new Map([...document.querySelectorAll('button')].map(b=>[b,b.disabled]));buttons.forEach((_,b)=>b.disabled=true);
  try{await fn();}catch(error){message(error.message);}finally{working=false;app.setAttribute('aria-busy','false');buttons.forEach((disabled,b)=>{if(b.isConnected)b.disabled=disabled;});}
 }
-function login(){document.querySelector('#user-area').replaceChildren();clear(app).append(el('section',{class:'panel login-panel'},el('h2',{},'כניסה לניהול הפעילות'),button('כניסה דרך דשבורד תעשיידע',()=>perform(async()=>{await dashboardLogin();await boot();}),{class:'primary'})));}
+const homeUrl = new URL('../strongermenu-2026.html', location.href).href;
+function login(){document.querySelector('#user-area').replaceChildren();clear(app).append(el('section',{class:'panel login-panel'},el('h2',{},'כניסה לניהול הפעילות'),button('כניסה דרך דשבורד תעשיידע',()=>perform(async()=>{await dashboardLogin();await boot();}),{class:'primary'}),el('div',{class:'actions'},el('a',{href:homeUrl,target:embedded?'_top':'_self'},'חזרה לדף הבית'))));}
 function updateAddress(){const params=new URLSearchParams({view,...(embedded?{embed:'dashboard'}:{})});if(selected)params.set('activity',selected.id);history.replaceState(null,'','?'+params);}
 function showView(next){if(dirty&&next!==view){message('יש לשמור את השינויים לפני מעבר בין האזורים.');return;}view=next;document.querySelector('#manage-view').hidden=view!=='manage';document.querySelector('#groups-view').hidden=view!=='groups';document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-current',String(b.dataset.view===view)));updateAddress();if(selected)renderRoom();}
 function table(headings,rows){return el('div',{class:'table-wrap'},el('table',{},el('thead',{},el('tr',{},headings.map(h=>el('th',{scope:'col'},h)))),el('tbody',{},rows)));}
 async function boot(){
  try{if(embedded)await embeddedDashboardLogin();me=await api('teacher.me');}catch{login();return;}
  if(embedded)document.body.classList.add('dashboard-embedded');
- document.querySelector('#user-area').replaceChildren(el('span',{class:'user-name'},me.name),button('יציאה',()=>{sessionStorage.removeItem('inspiration-teacher-access');stopWatching?.();stopHistory?.();selected=null;login();},{class:'quiet'}));
+ document.querySelector('#user-area').replaceChildren(el('span',{class:'user-name'},me.name),button('יציאה',()=>{sessionStorage.removeItem('inspiration-teacher-access');stopWatching?.();stopHistory?.();selected=null;location.replace(homeUrl);},{class:'quiet'}));
  clear(app);
  const nav=el('nav',{class:'view-tabs','aria-label':'ניהול מציאת שותפות'},...['manage','groups'].map(v=>button(v==='manage'?'ניהול פעילות':me.is_admin?'כל הפעילויות':'הקבוצות שלי',()=>showView(v),{'data-view':v,class:'quiet'})));
  const manage=el('section',{id:'manage-view'}),groups=el('section',{id:'groups-view'});
