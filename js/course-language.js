@@ -49,7 +49,7 @@
       });
     });
     // Rewrite only the explicit allowlist. Other course sections keep their original URLs.
-    document.querySelectorAll('a[href]:not([data-course-language])').forEach(function (link) {
+    document.querySelectorAll('a[href]:not([data-course-language]):not([data-reader-language])').forEach(function (link) {
       var url = new URL(link.href, location.href);
       if (url.origin !== root.origin || !url.pathname.startsWith(root.pathname)) return;
       var path = url.pathname.slice(root.pathname.length).replace(/^ar\//, '');

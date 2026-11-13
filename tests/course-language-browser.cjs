@@ -124,18 +124,21 @@ export const onSnapshot=(ref,callback)=>{let active=true;const run=async()=>{con
   for(const file of ['alldomains',...Array.from({length:10},(_,i)=>'d'+(i+1))]){
    await p.goto(base+`ar/domains/${file}.html?lang=ar&session=domain-test`);
    await p.locator('.course-lang-switch').waitFor();
-   const he=await p.locator('body').evaluate(el=>{const clone=el.cloneNode(true);clone.querySelectorAll('script,style,.course-lang-switch').forEach(e=>e.remove());return /[\u0590-\u05ff]/.test(clone.textContent)});assert.equal(he,false,file);
+   const he=await p.locator('body').evaluate(el=>{const clone=el.cloneNode(true);clone.querySelectorAll('script,style,.course-lang-switch,[data-reader-language]').forEach(e=>e.remove());return /[\u0590-\u05ff]/.test(clone.textContent)});assert.equal(he,false,file);
    assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false,file+' overflow');
    if(file!=='alldomains'){
-    const h=await p.locator('[data-unlock-content]').getAttribute('href');
-    await p.locator('[data-unlock-content]').click();await p.waitForURL('**'+h);assert.equal(await p.locator('body').evaluate(el=>el.classList.contains('scroll-unlocked')),true);
+    assert.equal(await p.locator('.main-article').count(),1);
+    assert.equal(await p.locator('[data-open-article]').count(),8);
+    await p.locator('[data-open-article]').first().click();
+    const h=new URL(p.url()).hash;
+    assert.equal(await p.locator('dialog[open]').count(),1);
     if(viewport.width===390&&file==='d1')await p.screenshot({path:'/tmp/d1-mobile.png'});
-    await p.locator('[data-course-language="he"]').click();await p.waitForURL(u=>u.searchParams.get('lang')==='he');assert.equal(new URL(p.url()).searchParams.get('session'),'domain-test');assert.equal(new URL(p.url()).hash,h);
+    await p.locator('dialog[open] [data-reader-language="he"]').click();await p.waitForURL(u=>u.searchParams.get('lang')==='he');assert.equal(new URL(p.url()).searchParams.get('session'),'domain-test');assert.equal(new URL(p.url()).hash,h);
    }
    if(viewport.width===390&&file==='alldomains')await p.screenshot({path:`/tmp/${file}-mobile.png`,fullPage:false});
   }
  }
- console.log('PASS 11 domain pages desktop/mobile, chapter unlock, hashes and parameters');
+ console.log('PASS 11 domain pages desktop/mobile, expanded article, reader hashes and parameters');
  const admin=await context('ar');
  await admin.p.goto(base+'ar/pairing/admin.html?lang=ar');
  await admin.p.locator('#instructorCode').fill('test');await admin.p.locator('#participantCount').fill('3');await admin.p.locator('button[onclick="startActivity()"]').click();
