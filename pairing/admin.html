@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
+<script src="../js/course-language.js"></script>
+
   <link rel="icon" type="image/png" href="../icon/favicon.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -373,8 +375,10 @@
             .button-group { grid-template-columns: 1fr; }
         }
     </style>
+<link rel="stylesheet" href="../css/course-language.css">
 </head>
 <body>
+<div class="course-lang-floating"><nav class="course-lang-switch" aria-label="בחירת שפה"><a href="admin.html?lang=he" lang="he" data-course-language="he" aria-current="true">עברית</a><span class="lang-separator" aria-hidden="true">|</span><a href="../ar/pairing/admin.html?lang=ar" lang="ar" data-course-language="ar">العربية</a></nav></div>
     <!-- Home Button -->
     <a href="../strongermenu-2026.html" class="home-button" title="חזרה לדף הבית">
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -460,7 +464,10 @@
         db._settings.experimentalForceLongPolling = true;
         console.log("✅ Firestore connection: OK");
 
-        let currentSessionId = null;
+        const adminDraftKey = 'portzot-pairing-admin-v1';
+        let adminDraft = {};
+        try { adminDraft = JSON.parse(sessionStorage.getItem(adminDraftKey)) || {}; } catch (_) {}
+        let currentSessionId = adminDraft.sessionId || null;
         let refreshInterval = null;
         let timerInterval = null;
         let nextRefreshTime = 45;
@@ -469,7 +476,10 @@
         // שעון עצר
         let stopwatchInterval = null;
         let stopwatchStartTime = null;
-        let stopwatchElapsed = 0;
+        let stopwatchElapsed = adminDraft.elapsed || 0;
+        window.addEventListener('pagehide', () => {
+            try { sessionStorage.setItem(adminDraftKey, JSON.stringify({ sessionId: currentSessionId, elapsed: stopwatchElapsed, running: !!stopwatchInterval, savedAt: Date.now(), instructorCode: document.getElementById('instructorCode').value, participantCount: document.getElementById('participantCount').value })); } catch (_) {}
+        });
 
         function startStopwatch() {
             stopwatchStartTime = Date.now() - stopwatchElapsed;
@@ -696,6 +706,22 @@
             window.location.href = `matching.html?session=${currentSessionId}`;
         };
 
+        if (currentSessionId) {
+            document.getElementById('setupScreen').style.display = 'none';
+            document.getElementById('trackingScreen').classList.add('active');
+            if (adminDraft.running) {
+                stopwatchElapsed += Math.max(0, Date.now() - (adminDraft.savedAt || Date.now()));
+                startStopwatch();
+            } else updateStopwatchFromDraft();
+            startTracking();
+        } else {
+            document.getElementById('instructorCode').value = adminDraft.instructorCode || '';
+            document.getElementById('participantCount').value = adminDraft.participantCount || '';
+        }
+        function updateStopwatchFromDraft() {
+            stopwatchStartTime = Date.now() - stopwatchElapsed;
+            updateStopwatch();
+        }
         function showError(elementId, message) {
             const errorDiv = document.getElementById(elementId);
             errorDiv.textContent = message;

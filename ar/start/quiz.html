@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<script src="../../js/course-language.js"></script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="manifest" href="../../manifest.json">
+  <meta name="theme-color" content="#ec4899">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="apple-touch-icon" href="../../icon/favicon.png">
+  <title>استبيان البداية | رائدات الطريق</title>
+  <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet" />
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Varela Round', sans-serif;
+      background: linear-gradient(135deg, #f8f7fc 0%, #fef9fb 25%, #f7fbfe 50%, #fefbf7 75%, #f9f7fc 100%);
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* ── INTRO SECTION ─────────────────────────────────── */
+
+    .site-header {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 28px 24px 20px;
+    }
+
+    .site-header .logo {
+      width: 52px;
+      height: 52px;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 10px rgba(138, 133, 198, 0.22));
+    }
+
+    .site-header .site-name {
+      font-size: 1.5em;
+      font-weight: 700;
+      color: #2F3A5F;
+      letter-spacing: 0.01em;
+    }
+
+    .back-btn {
+      position: absolute;
+      left: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #8A85C6;
+      font-size: 0.9em;
+      font-weight: 600;
+      text-decoration: none;
+      background: rgba(138, 133, 198, 0.1);
+      border: 1px solid rgba(138, 133, 198, 0.25);
+      border-radius: 20px;
+      padding: 7px 14px;
+      transition: background 0.2s ease;
+      cursor: pointer;
+    }
+
+    .back-btn:hover {
+      background: rgba(138, 133, 198, 0.18);
+    }
+
+    .intro-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 20px 48px;
+    }
+
+    .intro-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 680px;
+      width: 100%;
+      margin-bottom: 28px;
+    }
+
+    .intro-card {
+      border-radius: 18px;
+      padding: 26px 28px;
+      font-size: 1.05em;
+      line-height: 1.85;
+    }
+
+    .intro-card.card-1 {
+      background: linear-gradient(135deg, #f0effe, #ede9fb);
+      border: 1px solid rgba(138, 133, 198, 0.35);
+      box-shadow: 0 4px 20px rgba(138, 133, 198, 0.15);
+      color: #3d3575;
+    }
+
+    .intro-card.card-2 {
+      background: linear-gradient(135deg, #fde8f4, #fce0ef);
+      border: 1px solid rgba(236, 72, 153, 0.3);
+      box-shadow: 0 4px 20px rgba(236, 72, 153, 0.12);
+      color: #8b2460;
+    }
+
+    .intro-card.card-3 {
+      background: linear-gradient(135deg, #e6faf4, #ddf5ec);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      box-shadow: 0 4px 20px rgba(16, 185, 129, 0.12);
+      color: #0d5c40;
+    }
+
+    .cta-card {
+      background: #fff;
+      border-radius: 18px;
+      padding: 30px 32px;
+      box-shadow: 0 6px 28px rgba(138, 133, 198, 0.16);
+      border: 1.5px solid rgba(138, 133, 198, 0.22);
+      max-width: 680px;
+      width: 100%;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .cta-how {
+      font-size: 1em;
+      color: #8A85C6;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .cta-icon {
+      font-size: 2em;
+      line-height: 1;
+    }
+
+    .cta-title {
+      font-size: 1.3em;
+      font-weight: 700;
+      color: #2F3A5F;
+    }
+
+    .cta-desc {
+      color: #666;
+      font-size: 0.97em;
+      line-height: 1.7;
+      max-width: 360px;
+    }
+
+    .cta-btn {
+      background: linear-gradient(135deg, #8A85C6, #A5A0D6);
+      color: #fff;
+      border: none;
+      border-radius: 30px;
+      padding: 15px 44px;
+      font-size: 1.1em;
+      font-family: inherit;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      margin-top: 6px;
+    }
+
+    .cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(138, 133, 198, 0.35);
+    }
+
+    .cta-note {
+      font-size: 0.88em;
+      color: #999;
+      margin-top: 4px;
+    }
+
+    /* ── QUIZ WRAPPER ────────────────────────────────────── */
+
+    #quizWrapper {
+      display: none;
+      flex: 1;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: #fff;
+      border-radius: 24px;
+      max-width: 680px;
+      width: 100%;
+      padding: 48px 42px;
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
+      min-height: 420px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .progress-bar {
+      height: 4px;
+      background: #E5E7EB;
+      border-radius: 4px;
+      margin-bottom: 40px;
+      overflow: hidden;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .progress-bar.visible {
+      opacity: 1;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, #8A85C6, #A5A0D6);
+      border-radius: 4px;
+      transition: width 0.4s ease;
+    }
+
+    .start-screen {
+      text-align: center;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .start-screen h1 {
+      font-size: 1.8em;
+      color: #2F3A5F;
+      margin-bottom: 16px;
+    }
+
+    .start-screen p {
+      color: #555;
+      line-height: 1.8;
+      margin-bottom: 32px;
+      max-width: 420px;
+    }
+
+    .start-btn {
+      background: linear-gradient(135deg, #8A85C6, #A5A0D6);
+      color: #fff;
+      border: none;
+      border-radius: 30px;
+      padding: 16px 48px;
+      font-size: 1.1em;
+      font-family: inherit;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .start-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(138, 133, 198, 0.3);
+    }
+
+    .question-screen {
+      display: none;
+      flex: 1;
+      flex-direction: column;
+    }
+
+    .question-screen.active {
+      display: flex;
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateX(-15px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .question-card {
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .question-card-header {
+      background: linear-gradient(135deg, #ec4899, #db2777);
+      padding: 24px 28px;
+      border-radius: 16px 16px 0 0;
+    }
+
+    .question-text {
+      font-size: 1.3em;
+      font-weight: 600;
+      color: #fff;
+      line-height: 1.5;
+      text-align: center;
+      margin: 0;
+    }
+
+    .question-card-body {
+      padding: 28px 32px 32px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #fff;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      flex: 1;
+    }
+
+    .option {
+      padding: 18px 22px;
+      border-radius: 14px;
+      background: #fff;
+      border: 2px solid #E0E0E0;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      font-size: 1.05em;
+      color: #333;
+    }
+
+    .option:hover {
+      background: #F0F1F5;
+      border-color: #C5C3E0;
+    }
+
+    .option.selected {
+      background: #E6E4F2;
+      border-color: #8A85C6;
+      color: #2F3A5F;
+    }
+
+    .result-screen {
+      display: none;
+      text-align: center;
+      flex: 1;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px 0;
+    }
+
+    .result-screen.active {
+      display: flex;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .result-intro {
+      font-size: 1.3em;
+      font-weight: 600;
+      color: #2F3A5F;
+      margin-bottom: 24px;
+      line-height: 1.7;
+    }
+
+    .domains-result {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+
+    .domain-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 120px;
+      height: 120px;
+      padding: 14px;
+      border-radius: 18px;
+      background: #ffffff;
+      box-shadow:
+        0 6px 0 rgba(0, 0, 0, 0.05),
+        0 10px 25px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .domain-card:hover {
+      transform: translateY(-4px);
+      box-shadow:
+        0 10px 0 rgba(0, 0, 0, 0.05),
+        0 16px 35px rgba(0, 0, 0, 0.12);
+    }
+
+    .domain-card .icon {
+      font-size: 1.8rem;
+      margin-bottom: 6px;
+      filter: drop-shadow(0 3px 5px rgba(0,0,0,0.1));
+    }
+
+    .domain-card .name {
+      font-size: 13px;
+      font-weight: 900;
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    .result-note {
+      color: #666;
+      font-size: 0.95em;
+      line-height: 1.7;
+      max-width: 400px;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 28px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 28px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #8A85C6, #A5A0D6);
+      color: #fff;
+      text-decoration: none;
+      font-size: 1em;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(138, 133, 198, 0.3);
+    }
+
+    .btn.secondary {
+      background: #f5f5f5;
+      color: #555;
+    }
+
+    .btn.secondary:hover {
+      background: #eee;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .loading-screen {
+      display: none;
+      text-align: center;
+      flex: 1;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .loading-screen.active {
+      display: flex;
+    }
+
+    .loading-dots {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .loading-dots span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #8A85C6;
+      animation: pulse 1.4s infinite;
+    }
+
+    .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.3; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1); }
+    }
+
+    .loading-text {
+      color: #666;
+      font-size: 1em;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 32px 24px;
+      }
+
+      .question-text {
+        font-size: 1.2em;
+      }
+
+      .option {
+        padding: 16px 18px;
+        font-size: 1em;
+      }
+
+      .domains-result {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .domain-card {
+        width: 100%;
+        max-width: 200px;
+      }
+    }
+
+    .intro-title { margin: 12px 0 28px; text-align: center; font-size: 1.8em; }
+    .intro-card { text-align: center; }
+    .option { font-family: inherit; text-align: right; width: 100%; line-height: 1.6; }
+    .option:disabled { cursor: default; opacity: 1; color: #333; }
+    .option:focus-visible, .domain-card:focus-visible, .cta-btn:focus-visible { outline: 3px solid #8A85C6; outline-offset: 4px; }
+    .domain-card { text-decoration: none; }
+    .question-counter { color: #666; text-align: center; margin-bottom: 12px; font-size: .9em; }
+    .result-description { color: #555; line-height: 1.8; margin-bottom: 24px; }
+    @media (max-width: 600px) {
+      .site-header { flex-wrap: wrap; padding-top: 20px; }
+      .back-btn { position: static; transform: none; order: 3; margin-inline-start: auto; }
+      .site-header .site-name { font-size: 1.2em; }
+      .site-header .logo { width: 40px; height: 40px; }
+      .container { padding: 24px 14px; }
+      .question-card-header { padding: 20px 16px; }
+      .question-card-body { padding: 20px 12px; }
+      .intro-card { padding: 20px; }
+      .intro-title { font-size: 1.5em; }
+      .domains-result { width: 100%; }
+    }
+
+    /* Opening card only; quiz questions, scoring and results are unchanged. */
+    #introSection { min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; }
+    #introSection .site-header { flex-shrink: 0; }
+    #introSection .intro-section { flex: 1; justify-content: center; padding: 16px 20px 48px; }
+    #introSection .intro-welcome {
+      background: #fff1f6;
+      border: 1px solid #f4d8e5;
+      border-radius: 24px;
+      box-shadow: 0 8px 30px rgba(157, 23, 77, 0.07);
+      padding: 36px 40px;
+      gap: 20px;
+    }
+    #introSection .intro-heading { color: #9d174d; font-size: 1.7em; line-height: 1.4; }
+    #introSection .intro-copy { max-width: 540px; color: #574651; font-size: 1.03em; line-height: 1.85; }
+    #introSection .intro-copy p + p { margin-top: 14px; }
+    #introSection .cta-btn { margin-top: 0; }
+    #introSection .cta-note { color: #796674; line-height: 1.6; margin-top: 0; }
+    @media (min-width: 601px) and (max-height: 650px) {
+      #introSection .site-header { padding-top: 16px; padding-bottom: 12px; }
+      #introSection .intro-section { padding-top: 8px; padding-bottom: 20px; }
+      #introSection .intro-welcome { padding: 24px 36px; gap: 14px; }
+      #introSection .intro-copy p + p { margin-top: 10px; }
+    }
+    @media (max-width: 600px) {
+      #introSection .intro-section { padding: 12px 16px 28px; }
+      #introSection .intro-welcome { padding: 28px 22px; gap: 20px; }
+      #introSection .intro-heading { font-size: 1.5em; }
+      #introSection .intro-copy { font-size: 1em; line-height: 1.8; }
+      #introSection .cta-btn { padding: 14px 36px; }
+    }
+
+    /* Keep all four answers visible on laptop screens and enlarged displays. */
+    @media (min-width: 601px) {
+      #quizWrapper:has(.question-screen.active) { padding: 16px; }
+      #quizWrapper .container:has(.question-screen.active) { max-width: 600px; min-height: 0; padding: 24px 28px; }
+      #quizWrapper:has(.question-screen.active) .question-counter { margin-bottom: 8px; }
+      #quizWrapper:has(.question-screen.active) .progress-bar { margin-bottom: 18px; flex-shrink: 0; }
+      #quizWrapper .question-card-header { padding: 16px 20px; }
+      #quizWrapper .question-card-body { padding: 18px 20px; }
+      #quizWrapper .options { gap: 10px; }
+      #quizWrapper .option { padding: 12px 16px; min-height: 44px; font-size: 1em; line-height: 1.45; }
+    }
+    @media (min-width: 601px) and (max-height: 650px) {
+      #quizWrapper:has(.question-screen.active) { padding: 8px; }
+      #quizWrapper .container:has(.question-screen.active) { padding: 12px 20px; }
+      #quizWrapper:has(.question-screen.active) .question-counter { margin-bottom: 6px; font-size: .85em; }
+      #quizWrapper:has(.question-screen.active) .progress-bar { margin-bottom: 10px; }
+      #quizWrapper .question-card-header { padding: 10px 16px; }
+      #quizWrapper .question-text { font-size: 1.1em; line-height: 1.35; }
+      #quizWrapper .question-card-body { padding: 10px 14px; }
+      #quizWrapper .options { gap: 6px; }
+      #quizWrapper .option { padding: 8px 14px; line-height: 1.4; }
+    }
+
+    /* Lightweight question transitions use only opacity and transform. */
+    #questionScreen.active { animation: none; }
+    #optionsContainer .option { transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease; }
+    #optionsContainer .option.selected { background: #E6E4F2; border-color: #8A85C6; color: #2F3A5F; }
+    @media (prefers-reduced-motion: reduce) {
+      #optionsContainer .option { transition: none; }
+    }
+  </style>
+<link rel="stylesheet" href="../../css/course-language.css">
+</head>
+<body>
+<div class="course-lang-floating"><nav class="course-lang-switch" aria-label="اختيار اللغة"><a href="../../start/quiz.html?lang=he" lang="he" data-course-language="he">עברית</a><span class="lang-separator" aria-hidden="true">|</span><a href="quiz.html?lang=ar" lang="ar" data-course-language="ar" aria-current="true">العربية</a></nav></div>
+
+  <!-- ── INTRO ─────────────────────────────────────────── -->
+  <div id="introSection">
+    <header class="site-header">
+      <button class="back-btn" onclick="history.back()">&#8592; رجوع</button>
+      <img class="logo" src="../../icon/logo.png" alt="رائدات الطريق" />
+      <span class="site-name">رائدات الطريق</span>
+    </header>
+
+    <section class="intro-section">
+      <div class="cta-card intro-welcome">
+        <h1 class="intro-heading">كيف نبدأ؟</h1>
+        <div class="intro-copy">
+          <p>أحيانًا تكشف اختياراتنا الصغيرة عمّا يثير فضولنا فعلًا.</p>
+          <p>أعددنا لكِ استبيانًا قصيرًا بأسئلة مفاجئة ومواقف قد تعرفينها من حياتكِ اليومية.</p>
+          <p>اختاري الإجابات الأقرب إليكِ واكتشفي نقطة بدايتكِ.</p>
+        </div>
+        <button class="cta-btn" onclick="showQuiz()">هيا نبدأ</button>
+        <p class="cta-note">هذا مجرّد اقتراح. في النهاية، الاختيار لكِ 💜</p>
+      </div>
+    </section>
+  </div>
+
+  <!-- ── QUIZ ──────────────────────────────────────────── -->
+  <div id="quizWrapper">
+  <div class="container">
+    <div class="question-counter" id="questionCounter" aria-live="polite"></div>
+    <div class="progress-bar" role="progressbar" aria-label="التقدّم في الاستبيان" aria-valuemin="0" aria-valuemax="20" aria-valuenow="0">
+      <div class="progress-fill"></div>
+    </div>
+
+    <div class="question-screen" id="questionScreen">
+      <div class="question-card">
+        <div class="question-card-header">
+          <h2 class="question-text" id="questionText" tabindex="-1"></h2>
+        </div>
+        <div class="question-card-body">
+          <div class="options" id="optionsContainer"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="loading-screen" id="loadingScreen">
+      <div class="loading-dots">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div class="loading-text">نعالج إجاباتكِ...</div>
+    </div>
+
+    <div class="result-screen" id="resultScreen">
+      <h2 class="result-intro" id="resultTitle" tabindex="-1">
+        لحظة، يبدو أنّنا اكتشفنا ما يهمّكِ!
+      </h2>
+      <p class="result-description">بناءً على اختياراتكِ، اكتشفنا ثلاثة عوالم قد تثير اهتمامكِ بشكل خاص.<br>من يدري؟ ربما تختبئ فكرتكِ القادمة هناك.</p>
+      <div class="domains-result" id="domainsResult"></div>
+      <div class="result-note">
+        هذا مجرّد اقتراح. الاختيار دائمًا لكِ!
+      </div>
+      <div class="btn-row">
+        <a class="btn" href="../domains/alldomains.html">جميع المجالات</a>
+      </div>
+    </div>
+  </div>
+  </div><!-- /quizWrapper -->
+
+  <script>
+
+    function showQuiz() {
+      document.getElementById('introSection').style.display = 'none';
+      document.getElementById('quizWrapper').style.display = 'flex';
+      startQuiz();
+    }
+    const domains = [
+      { id: 1, name: 'الإحساس بالجسم', icon: '🧘‍♀️', color: '#8b5cf6' },
+      { id: 2, name: 'الحياة الرقمية', icon: '📱', color: '#0ea5e9' },
+      { id: 3, name: 'التعلّم تحت الضغط', icon: '👩‍🏫', color: '#f59e0b' },
+      { id: 4, name: 'الحياة الاجتماعية', icon: '👩‍❤️‍👩', color: '#ec4899' },
+      { id: 5, name: 'اختيارات يومية', icon: '💸', color: '#10b981' },
+      { id: 6, name: 'المكان والحركة', icon: '🏃‍♀️', color: '#f97316' },
+      { id: 7, name: 'المساحة الشخصية', icon: '🏠', color: '#6366f1' },
+      { id: 8, name: 'بيئة حيّة', icon: '🌿', color: '#22c55e' },
+      { id: 9, name: 'وقت الفراغ والإبداع', icon: '🎨', color: '#f43f5e' },
+      { id: 10, name: 'نظرة إلى الأمام', icon: '🔮', color: '#8b5cf6' }
+    ];
+    const questions = [
+  {
+    "id": 1,
+    "text": "حصلتِ على قوّة خارقة ليوم واحد. ماذا اخترتِ؟",
+    "options": [
+      {
+        "text": "قراءة الأفكار. خصوصًا أفكار من يقولون «كل شيء بخير».",
+        "primary": 4,
+        "secondary": null
+      },
+      {
+        "text": "إيقاف الزمن والنوم ساعتين إضافيتين.",
+        "primary": 1,
+        "secondary": null
+      },
+      {
+        "text": "التحدّث مع الحيوانات ومعرفة رأيها فينا.",
+        "primary": 8,
+        "secondary": null
+      },
+      {
+        "text": "الانتقال فورًا إلى أيّ مكان دون انتظار الحافلة.",
+        "primary": 6,
+        "secondary": null
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "text": "ابتكرتِ روبوتًا شخصيًا. ما مهمّته الأولى؟",
+    "options": [
+      {
+        "text": "ترتيب الغرفة، بما فيها الكرسي الذي تحوّل إلى خزانة.",
+        "primary": 7,
+        "secondary": null
+      },
+      {
+        "text": "حلّ الواجبات المدرسية بخطّ يدي.",
+        "primary": 3,
+        "secondary": null
+      },
+      {
+        "text": "تحضير الطعام لي تمامًا حين أشتهيه.",
+        "primary": 1,
+        "secondary": null
+      },
+      {
+        "text": "تصويري حتى تظهر صورة واحدة جيّدة.",
+        "primary": 2,
+        "secondary": 1
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "text": "ربحتِ مليون شيكل. ما أوّل شيء تفعلينه؟",
+    "options": [
+      {
+        "text": "أطلب كلّ ما ينتظرني في سلّة التسوّق.",
+        "primary": 5,
+        "secondary": null
+      },
+      {
+        "text": "أحوّل غرفتي إلى جناح في فندق.",
+        "primary": 7,
+        "secondary": 9
+      },
+      {
+        "text": "أسافر حول العالم دون تذكرة عودة.",
+        "primary": 6,
+        "secondary": 10
+      },
+      {
+        "text": "أفتح مشروعًا وأحوّل المليون إلى مليونين.",
+        "primary": 5,
+        "secondary": 10
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "text": "اختفى هاتفكِ لساعتين. ماذا يحدث؟",
+    "options": [
+      {
+        "text": "يتشكّل فريق بحث خاص.",
+        "primary": 2,
+        "secondary": null
+      },
+      {
+        "text": "أكتشف عائلتي من جديد.",
+        "primary": 7,
+        "secondary": 4
+      },
+      {
+        "text": "أنهي أخيرًا شيئًا بدأتُه.",
+        "primary": 9,
+        "secondary": 2
+      },
+      {
+        "text": "أخرج لأتأكّد أنّ العالم ما زال موجودًا.",
+        "primary": 6,
+        "secondary": 2
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "text": "أيّ زرّ كنتِ ستضيفين إلى الحياة؟",
+    "options": [
+      {
+        "text": "زرّ يمحو اللحظات المحرجة.",
+        "primary": 4,
+        "secondary": null
+      },
+      {
+        "text": "زرّ يشحنني بالطاقة.",
+        "primary": 1,
+        "secondary": null
+      },
+      {
+        "text": "زرّ يلغي الامتحانات المفاجئة.",
+        "primary": 3,
+        "secondary": null
+      },
+      {
+        "text": "زرّ يجد كلّ ما أضعتُه.",
+        "primary": 7,
+        "secondary": null
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "text": "أنتِ عالقة على جزيرة نائية. ما أكثر ما تفتقدينه؟",
+    "options": [
+      {
+        "text": "الواي فاي. هل يحتاج هذا إلى سؤال؟",
+        "primary": 2,
+        "secondary": null
+      },
+      {
+        "text": "صديقتي المقرّبة.",
+        "primary": 4,
+        "secondary": null
+      },
+      {
+        "text": "سريري. مع بطّانيتي.",
+        "primary": 7,
+        "secondary": 1
+      },
+      {
+        "text": "شيئًا ممتعًا أفعله قبل أن أبدأ الحديث مع جوز الهند.",
+        "primary": 9,
+        "secondary": null
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "text": "هبطت كائنات فضائية على الأرض. ماذا تفعلين؟",
+    "options": [
+      {
+        "text": "أصوّر وأنشر قبل أن تسبقني إحداهنّ.",
+        "primary": 2,
+        "secondary": null
+      },
+      {
+        "text": "أسألهم كيف تبدو المدرسة على كوكبهم.",
+        "primary": 3,
+        "secondary": null
+      },
+      {
+        "text": "أفحص إن كان بإمكاني مرافقتهم إلى الفضاء.",
+        "primary": 6,
+        "secondary": null
+      },
+      {
+        "text": "أسأل إن كانت لديهم كلاب أيضًا.",
+        "primary": 8,
+        "secondary": null
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "text": "حصلتِ على يوم إجازة مفاجئ. ما الخطّة؟",
+    "options": [
+      {
+        "text": "أنام حتى يقرّر جسمي أنّ الليل انتهى.",
+        "primary": 1,
+        "secondary": null
+      },
+      {
+        "text": "أخرج مع صديقاتي دون أن نعرف إلى أين.",
+        "primary": 4,
+        "secondary": 6
+      },
+      {
+        "text": "أبدأ مشروعًا إبداعيًا وأنسى الوقت.",
+        "primary": 9,
+        "secondary": null
+      },
+      {
+        "text": "أذهب في رحلة إلى مكان لم أزره من قبل.",
+        "primary": 6,
+        "secondary": 9
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "text": "لو استطاعت غرفتكِ الكلام، ماذا كانت ستقول؟",
+    "options": [
+      {
+        "text": "«أنا غرفة، ولستُ مستودعًا».",
+        "primary": 7,
+        "secondary": null
+      },
+      {
+        "text": "«هل يمكن إطفاء الشاشة لخمس دقائق؟»",
+        "primary": 2,
+        "secondary": null
+      },
+      {
+        "text": "«كم ساعة يمكنكِ أن تنامي؟!»",
+        "primary": 1,
+        "secondary": null
+      },
+      {
+        "text": "«هل تنوين إنهاء كلّ الأعمال الإبداعية التي بدأتِها؟»",
+        "primary": 9,
+        "secondary": null
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "text": "ماذا كنتِ ستمنعين بقانون؟",
+    "options": [
+      {
+        "text": "الامتحانات يوم الأحد.",
+        "primary": 3,
+        "secondary": null
+      },
+      {
+        "text": "إرسال رسالة صوتية بطول حلقة بودكاست.",
+        "primary": 2,
+        "secondary": 4
+      },
+      {
+        "text": "رمي القمامة في الشارع وهناك سلّة على بُعد مترين.",
+        "primary": 8,
+        "secondary": null
+      },
+      {
+        "text": "الإعلان عن عرض يتبيّن عند الدفع أنّه ليس عرضًا فعلًا.",
+        "primary": 5,
+        "secondary": null
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "text": "دخلتِ المصعد مع امرأة مشهورة. ماذا تفعلين؟",
+    "options": [
+      {
+        "text": "أطلب صورة سيلفي وأتمنّى ألّا تفسد الكاميرا الأمامية كلّ شيء.",
+        "primary": 2,
+        "secondary": 1
+      },
+      {
+        "text": "أسألها كيف نجحت في الوصول إلى ما وصلت إليه.",
+        "primary": 10,
+        "secondary": null
+      },
+      {
+        "text": "أبدأ الحديث وكأنّنا صديقتان منذ سنوات.",
+        "primary": 4,
+        "secondary": null
+      },
+      {
+        "text": "أصمت، ثمّ أفكّر بجملة رائعة بعد ساعة.",
+        "primary": 4,
+        "secondary": null
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "text": "أيّ تطبيق يجب ابتكاره على وجه السرعة؟",
+    "options": [
+      {
+        "text": "تطبيق يجد ملابس تناسبني من خزانتي.",
+        "primary": 5,
+        "secondary": 9
+      },
+      {
+        "text": "تطبيق يشرح الدرس بلغة مفهومة.",
+        "primary": 3,
+        "secondary": null
+      },
+      {
+        "text": "تطبيق يخبرني أين أجد مكانًا هادئًا.",
+        "primary": 7,
+        "secondary": null
+      },
+      {
+        "text": "تطبيق يعرف متى تصل الحافلة فعلًا.",
+        "primary": 6,
+        "secondary": null
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "text": "أصبح لكِ برنامج تلفزيوني خاص. ما اسمه؟",
+    "options": [
+      {
+        "text": "«كيف وصلتُ إلى هذا الموقف؟»",
+        "primary": 4,
+        "secondary": null
+      },
+      {
+        "text": "«اشتريتُه لأنّه كان ضمن عرض».",
+        "primary": 5,
+        "secondary": null
+      },
+      {
+        "text": "«الحياة السرّية لحيوانات الحيّ».",
+        "primary": 8,
+        "secondary": null
+      },
+      {
+        "text": "«أفكار عبقرية في الثالثة ليلًا».",
+        "primary": 9,
+        "secondary": null
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "text": "ما أكثر ما يزعجكِ في الصباح؟",
+    "options": [
+      {
+        "text": "المنبّه والشخص الذي اخترعه.",
+        "primary": 1,
+        "secondary": null
+      },
+      {
+        "text": "ألّا أجد ما أرتديه رغم الخزانة الممتلئة.",
+        "primary": 5,
+        "secondary": null
+      },
+      {
+        "text": "ألّا تجيب أيّ واحدة من صديقاتي.",
+        "primary": 4,
+        "secondary": null
+      },
+      {
+        "text": "أن تصل الحافلة وأنا ما زلتُ في البيت.",
+        "primary": 6,
+        "secondary": null
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "text": "آلة زمن تنتظركِ في الخارج. إلى أين تسافرين؟",
+    "options": [
+      {
+        "text": "إلى المستقبل، لأعرف ماذا أصبحتُ.",
+        "primary": 10,
+        "secondary": null
+      },
+      {
+        "text": "إلى عصر الديناصورات. من بعيد، اتّفقنا؟",
+        "primary": 8,
+        "secondary": null
+      },
+      {
+        "text": "إلى الأمس، لأصلح شيئًا محرجًا قلتُه.",
+        "primary": 4,
+        "secondary": null
+      },
+      {
+        "text": "إلى الأسبوع القادم، لأعرف أسئلة الامتحان.",
+        "primary": 3,
+        "secondary": null
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "text": "طلبوا منكِ إعادة تصميم المدرسة. ماذا تضيفين؟",
+    "options": [
+      {
+        "text": "غرفة نوم للحصّة الأولى.",
+        "primary": 1,
+        "secondary": 3
+      },
+      {
+        "text": "زحاليق بدلًا من الدرج.",
+        "primary": 6,
+        "secondary": 9
+      },
+      {
+        "text": "مساحة إبداع ضخمة فيها كلّ المواد الممكنة.",
+        "primary": 9,
+        "secondary": 3
+      },
+      {
+        "text": "حديقة فيها حيوانات بدلًا من ساحة إسمنتية أخرى.",
+        "primary": 8,
+        "secondary": 3
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "text": "ماذا كنتِ ستأخذين إلى مهمّة في الفضاء؟",
+    "options": [
+      {
+        "text": "الكثير من الوجبات الخفيفة. لا أثق بالطعام هناك.",
+        "primary": 1,
+        "secondary": null
+      },
+      {
+        "text": "كاميرا لتوثيق كلّ شيء.",
+        "primary": 9,
+        "secondary": null
+      },
+      {
+        "text": "أدوات للأعمال الإبداعية، فهذه الرحلة ستكون طويلة.",
+        "primary": 9,
+        "secondary": null
+      },
+      {
+        "text": "صديقة مقرّبة، ليكون هناك من أضحك معها.",
+        "primary": 4,
+        "secondary": null
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "text": "ماذا تتمنّين أن يحدث تلقائيًا؟",
+    "options": [
+      {
+        "text": "أن ترتّب الغرفة نفسها.",
+        "primary": 7,
+        "secondary": null
+      },
+      {
+        "text": "أن يتجدّد المال في محفظتي كلّ صباح.",
+        "primary": 5,
+        "secondary": null
+      },
+      {
+        "text": "أن يستعيد جسمي نشاطه بعد ليلة دون نوم.",
+        "primary": 1,
+        "secondary": null
+      },
+      {
+        "text": "أن تُحذف كلّ رسالة محرجة قبل قراءتها.",
+        "primary": 2,
+        "secondary": 4
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "text": "افتتحوا مدينة ملاهٍ خصّيصًا لكِ. ما لعبتها الرئيسية؟",
+    "options": [
+      {
+        "text": "أفعوانية تمرّ بين الغيوم.",
+        "primary": 6,
+        "secondary": 9
+      },
+      {
+        "text": "غرفة واقع افتراضي أستطيع فيها أن أكون أيّ شيء.",
+        "primary": 9,
+        "secondary": 2
+      },
+      {
+        "text": "مساحة أستطيع فيها ابتكار أشياء مذهلة وبناءها.",
+        "primary": 9,
+        "secondary": null
+      },
+      {
+        "text": "سفاري تتجوّل فيه الحيوانات بحرّية ونكون نحن في الأقفاص.",
+        "primary": 8,
+        "secondary": null
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "text": "أيّ عبارة كنتِ ستطبعين على قميص؟",
+    "options": [
+      {
+        "text": "«أنا لا أتأخّر، أنا أصل في توقيتي الخاص».",
+        "primary": 6,
+        "secondary": null
+      },
+      {
+        "text": "«لديّ فكرة. استعدّوا جيّدًا».",
+        "primary": 9,
+        "secondary": null
+      },
+      {
+        "text": "«الرجاء عدم الإزعاج، أنا قيد الشحن».",
+        "primary": 1,
+        "secondary": null
+      },
+      {
+        "text": "«جئتُ للمتعة، وبقيتُ من أجل الصديقات».",
+        "primary": 4,
+        "secondary": 9
+      }
+    ]
+  }
+];
+
+    // Every answer gives exactly 2 primary points and, where relevant, 1 secondary.
+    // Unequal content coverage is normalized per domain, never per question.
+    // Centers/scales start from the exact uniform-answer mean and variance;
+    // centers are calibrated on 200,000 samples and checked on 100,000 unseen ones.
+    // No technology flags, answer bonuses, or question weights are used.
+    const normalization = {"centers": [5.58478602, 4.75933865, 3.89377104, 6.18062443, 3.36502942, 5.21710342, 3.80453378, 3.334738, 7.22008795, 1.61429315], "scales": [2.79508497, 2.43669859, 2.16506351, 2.88314065, 2.17944947, 2.72717803, 2.44948974, 2.29128785, 2.66926956, 1.32287566]};
+    let currentQuestion = 0;
+    let answers = [];
+    let scores = {};
+    let primaryCounts = {};
+    let acceptingAnswer = false;
+    let transitionTimer;
+    let questionAnimation;
+
+    const quizDraftKey = 'portzot-start-draft-v1';
+    function saveQuizDraft(results) {
+      try { sessionStorage.setItem(quizDraftKey, JSON.stringify({ answers, results: results || null })); } catch (_) {}
+    }
+    function restoreQuizDraft() {
+      let draft;
+      try { draft = JSON.parse(sessionStorage.getItem(quizDraftKey)); } catch (_) { return; }
+      if (!draft || !Array.isArray(draft.answers) || !draft.answers.length || draft.answers.length > questions.length) return;
+      if (!draft.answers.every((a, i) => a.questionId === questions[i].id && questions[i].options[a.optionIndex])) return;
+      document.getElementById('introSection').style.display = 'none';
+      document.getElementById('quizWrapper').style.display = 'flex';
+      document.querySelector('.progress-bar').classList.add('visible');
+      scores = Object.fromEntries(domains.map(d => [d.id, 0]));
+      primaryCounts = Object.fromEntries(domains.map(d => [d.id, 0]));
+      answers = draft.answers;
+      answers.forEach((a, i) => {
+        const opt = questions[i].options[a.optionIndex];
+        scores[opt.primary] += 2;
+        primaryCounts[opt.primary] += 1;
+        if (opt.secondary !== null) scores[opt.secondary] += 1;
+      });
+      currentQuestion = answers.length;
+      if (currentQuestion < questions.length) showQuestion();
+      else if (Array.isArray(draft.results) && draft.results.length === 3 && draft.results.every(r => domains.some(d => d.id === r.id))) showResults(draft.results);
+      else calculateResults();
+    }
+    function startQuiz() {
+      clearTimeout(transitionTimer);
+      document.getElementById('resultScreen').classList.remove('active');
+      document.getElementById('loadingScreen').classList.remove('active');
+      document.querySelector('.progress-bar').classList.add('visible');
+      scores = Object.fromEntries(domains.map(d => [d.id, 0]));
+      primaryCounts = Object.fromEntries(domains.map(d => [d.id, 0]));
+      currentQuestion = 0;
+      answers = [];
+      saveQuizDraft();
+      showQuestion();
+    }
+
+    function showQuestion() {
+      acceptingAnswer = false;
+      const q = questions[currentQuestion];
+      const screen = document.getElementById('questionScreen');
+      const textEl = document.getElementById('questionText');
+      const optionsEl = document.getElementById('optionsContainer');
+      const questionIndex = currentQuestion;
+      if (questionAnimation) questionAnimation.cancel();
+      screen.classList.remove('active');
+      textEl.textContent = q.text;
+      optionsEl.replaceChildren();
+      q.options.forEach((opt, idx) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'option';
+        button.textContent = opt.text;
+        button.onclick = () => selectOption(idx, questionIndex);
+        optionsEl.appendChild(button);
+      });
+      screen.classList.add('active');
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        questionAnimation = screen.animate(
+          [{ opacity: 0, transform: 'translateY(6px)' }, { opacity: 1, transform: 'translateY(0)' }],
+          { duration: 150, easing: 'ease-out' }
+        );
+      }
+      updateProgress();
+      acceptingAnswer = true;
+      textEl.focus({ preventScroll: true });
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+
+    function updateProgress() {
+      document.querySelector('.progress-fill').style.width = (answers.length / questions.length * 100) + '%';
+      document.querySelector('.progress-bar').setAttribute('aria-valuenow', answers.length);
+      document.getElementById('questionCounter').textContent = 'السؤال ' + (currentQuestion + 1) + ' من ' + questions.length;
+    }
+
+    function selectOption(idx, questionIndex = currentQuestion) {
+      if (!acceptingAnswer || questionIndex !== currentQuestion || answers[currentQuestion]) return;
+      const opt = questions[currentQuestion]?.options[idx];
+      if (!opt) return;
+      acceptingAnswer = false;
+      document.querySelectorAll('.option').forEach((button, i) => {
+        button.disabled = true;
+        button.classList.toggle('selected', i === idx);
+      });
+      answers[currentQuestion] = { questionId: questions[currentQuestion].id, optionIndex: idx };
+      scores[opt.primary] += 2;
+      primaryCounts[opt.primary] += 1;
+      if (opt.secondary !== null) scores[opt.secondary] += 1;
+      document.querySelector('.progress-fill').style.width = (answers.length / questions.length * 100) + '%';
+      document.querySelector('.progress-bar').setAttribute('aria-valuenow', answers.length);
+      saveQuizDraft();
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const screen = document.getElementById('questionScreen');
+      // Briefly retain the selected answer, then fade out before replacing it.
+      transitionTimer = setTimeout(() => {
+        if (questionAnimation) questionAnimation.cancel();
+        if (!reduceMotion) {
+          questionAnimation = screen.animate(
+            [{ opacity: 1, transform: 'translateY(0)' }, { opacity: 0, transform: 'translateY(-6px)' }],
+            { duration: 150, easing: 'ease-in', fill: 'forwards' }
+          );
+        }
+        transitionTimer = setTimeout(() => {
+          if (questionAnimation) questionAnimation.cancel();
+          currentQuestion++;
+          if (currentQuestion < questions.length) showQuestion();
+          else showLoading();
+        }, reduceMotion ? 0 : 150);
+      }, 150);
+    }
+
+    function rankDomains(rawScores, counts, random = Math.random) {
+      // Shuffle first with Fisher–Yates: no fixed domain/array-order preference.
+      const ranked = domains.map((d, i) => ({
+        id: d.id,
+        score: (rawScores[d.id] - normalization.centers[i]) / normalization.scales[i],
+        primary: counts[d.id]
+      }));
+      for (let i = ranked.length - 1; i > 0; i--) {
+        const j = Math.floor(random() * (i + 1));
+        [ranked[i], ranked[j]] = [ranked[j], ranked[i]];
+      }
+      return ranked.sort((a, b) => Math.abs(b.score - a.score) > 1e-10
+        ? b.score - a.score : b.primary - a.primary).slice(0, 3);
+    }
+
+    function showLoading() {
+      document.getElementById('questionScreen').classList.remove('active');
+      document.getElementById('questionCounter').textContent = '';
+      document.getElementById('loadingScreen').classList.add('active');
+      transitionTimer = setTimeout(calculateResults, 900);
+    }
+
+    function calculateResults() {
+      showResults(rankDomains(scores, primaryCounts));
+    }
+
+    function showResults(results) {
+      saveQuizDraft(results);
+      document.getElementById('loadingScreen').classList.remove('active');
+      const container = document.getElementById('domainsResult');
+      container.replaceChildren();
+      results.forEach(r => {
+        const domain = domains.find(d => d.id === r.id);
+        const card = document.createElement('a');
+        card.className = 'domain-card';
+        card.href = '../domains/d' + domain.id + '.html';
+        card.innerHTML = `<span class="icon" aria-hidden="true">${domain.icon}</span><span class="name" style="color: ${domain.color}">${domain.name}</span>`;
+        container.appendChild(card);
+      });
+      document.getElementById('resultScreen').classList.add('active');
+      document.getElementById('resultTitle').focus({ preventScroll: true });
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+
+    restoreQuizDraft();
+  </script>
+
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function() {
+      navigator.serviceWorker.register("../../service-worker.js", { updateViaCache: "none" }).catch(function(error) {
+        console.error("Service worker registration failed:", error);
+      });
+    });
+  }
+</script>
+
+</body>
+</html>

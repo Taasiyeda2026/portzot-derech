@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<script src="../js/course-language.js"></script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="manifest" href="../manifest.json">
+  <meta name="theme-color" content="#ec4899">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="apple-touch-icon" href="../icon/favicon.png">
+  <title>פורצות דרך - ניווט</title>
+
+  <script>
+    const SESSION_KEY = "stronger_gate_2026";
+    if (sessionStorage.getItem(SESSION_KEY) !== "ok") {
+      window.location.replace("../index.html");
+    }
+  </script>
+
+  <style>
+    @font-face {
+      font-family: "Choco";
+      src: url("../fonts/Choco.otf") format("opentype");
+      font-weight: 400;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: "Alef";
+      src: url("../fonts/Alef-regular.woff") format("woff");
+      font-weight: 400;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: "Alef";
+      src: url("../fonts/Alef-bold.woff") format("woff");
+      font-weight: 700;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: "FtPilKahol2";
+      src: url("../fonts/FtPilKahol2.ttf") format("truetype");
+      font-weight: 400;
+      font-style: normal;
+    }
+
+    :root{
+      --bg-dark:#0f1738;
+      --bg-dark-2:#1a2555;
+      --bg-bottom:#0a1028;
+      --page-top:#efd3df;
+      --page-main:#f8f8fb;
+      --pink:#d94c95;
+      --pink-dark:#c73f88;
+      --purple:#7c4c91;
+      --text:#616274;
+      --shadow-main:0 22px 54px rgba(0,0,0,0.20);
+      --radius:28px;
+      --title-start-offset:58px;
+    }
+
+    *{
+      box-sizing:border-box;
+    }
+
+    html, body{
+      margin:0;
+      width:100%;
+      height:100%;
+      overflow:hidden;
+    }
+
+    body{
+      font-family:"Alef", Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top, var(--bg-dark-2) 0%, var(--bg-dark) 48%, var(--bg-bottom) 100%);
+    }
+
+    img{
+      display:block;
+      max-width:100%;
+    }
+
+    .page{
+      width:100%;
+      height:100svh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:10px;
+      overflow:hidden;
+    }
+
+    .frame{
+      width:min(1120px, 100%);
+      height:min(96svh, 900px);
+      display:flex;
+      flex-direction:column;
+      overflow:hidden;
+      position:relative;
+      border-radius:var(--radius);
+      border:1px solid rgba(255,255,255,0.20);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.20) 0%, rgba(255,255,255,0.05) 12%, rgba(255,255,255,0) 22%),
+        linear-gradient(to bottom, var(--page-top) 0 170px, var(--page-main) 170px 100%);
+      box-shadow:
+        var(--shadow-main),
+        inset 0 1px 0 rgba(255,255,255,0.5);
+    }
+
+    .topbar{
+      flex:0 0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      padding:16px 22px 12px;
+      border-bottom:4px solid rgba(217,76,149,0.18);
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
+    }
+
+    .brand img{
+      width:46px;
+      height:46px;
+      object-fit:contain;
+      filter:drop-shadow(0 8px 16px rgba(122,76,145,0.14));
+      flex:0 0 auto;
+    }
+
+    .brand-title{
+      margin:0;
+      font-family:"Choco", Arial, sans-serif;
+      font-size:33px;
+      line-height:1.05;
+      font-weight:700;
+      color:var(--pink-dark);
+    }
+
+    .logout-btn{
+      border:none;
+      border-radius:999px;
+      padding:9px 16px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(249,245,249,0.96) 100%);
+      color:var(--purple);
+      font-family:"Alef", Arial, sans-serif;
+      font-size:14px;
+      font-weight:700;
+      cursor:pointer;
+      box-shadow:
+        0 10px 18px rgba(24,27,54,0.10),
+        0 3px 8px rgba(217,76,149,0.06),
+        inset 0 1px 0 rgba(255,255,255,0.92),
+        inset 0 -1px 0 rgba(223,210,224,0.75);
+      transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;
+      flex:0 0 auto;
+    }
+
+    .logout-btn:hover{
+      transform:translateY(-1px);
+      filter:saturate(1.02);
+    }
+
+    .logout-btn:active{
+      transform:translateY(1px);
+    }
+
+    .hero{
+      flex:1 1 auto;
+      min-height:0;
+      display:grid;
+      grid-template-rows:auto auto auto auto;
+      gap:12px;
+      padding:14px 18px 12px;
+      overflow-y:auto;
+    }
+
+    .intro-wrap{
+      width:100%;
+      display:flex;
+      justify-content:flex-end;
+      align-items:flex-start;
+    }
+
+    .intro{
+      width:min(760px, 100%);
+      margin-left:auto;
+      padding-right:var(--title-start-offset);
+      text-align:right;
+    }
+
+    .intro p{
+      margin:0;
+      color:#7e3255;
+      font-size:22px;
+      line-height:1.72;
+      font-weight:400;
+      text-align:right;
+    }
+
+    .menu-grid{
+      min-height:0;
+      display:grid;
+      grid-template-columns:repeat(7, 1fr);
+      gap:4px;
+      max-width:100%;
+      width:100%;
+      margin:-2px auto 0;
+      align-content:start;
+      justify-items:center;
+      padding:0 4px 10px;
+      overflow:visible;
+    }
+
+    .menu-item{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:space-between;
+      width:100%;
+      max-width:132px;
+      aspect-ratio:1 / 1;
+      padding:5px 6px 8px;
+      text-align:center;
+      text-decoration:none;
+      color:inherit;
+      position:relative;
+      overflow:hidden;
+      border-radius:17px;
+      border:1px solid rgba(255,255,255,0.34);
+      background:linear-gradient(180deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.12) 100%);
+      box-shadow:
+        0 18px 36px rgba(32,33,61,0.14),
+        0 6px 16px rgba(217,76,149,0.09),
+        0 2px 4px rgba(32,33,61,0.06),
+        inset 0 1px 0 rgba(255,255,255,0.6),
+        inset 0 -2px 0 rgba(0,0,0,0.04);
+      transition:transform .18s ease, filter .18s ease, box-shadow .18s ease;
+    }
+
+    .menu-item::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0) 42%);
+      pointer-events:none;
+    }
+
+    .menu-item:hover{
+      transform:translateY(-3px);
+      filter:saturate(1.02);
+      box-shadow:
+        0 18px 30px rgba(32,33,61,0.12),
+        0 8px 14px rgba(217,76,149,0.08),
+        inset 0 1px 0 rgba(255,255,255,0.5);
+    }
+
+    .menu-item h4{
+      margin:0;
+      min-height:22px;
+      display:flex;
+      align-items:flex-end;
+      justify-content:center;
+      position:relative;
+      z-index:1;
+      color:var(--pink);
+      font-family:"Choco", Arial, sans-serif;
+      font-size:14px;
+      line-height:1.08;
+      font-weight:700;
+    }
+
+    .menu-item p{
+      margin:0;
+      min-height:14px;
+      position:relative;
+      z-index:1;
+      color:#75788b;
+      font-size:9px;
+      line-height:1.32;
+      font-weight:400;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+    }
+
+    .icon-box{
+      width:78px;
+      height:78px;
+      margin:0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+      z-index:1;
+      overflow:visible;
+      border:none;
+      background:transparent;
+      box-shadow:none;
+      padding:0;
+    }
+
+    .icon-box::before{
+      display:none;
+    }
+
+    .icon-box img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      filter:none;
+      background:transparent;
+      border:none;
+      box-shadow:none;
+    }
+
+    .closing-wrap{
+      display:flex;
+      justify-content:center;
+      width:100%;
+      flex:0 0 auto;
+      margin-top:0;
+    }
+
+    .closing{
+      width:min(640px, 100%);
+      margin-left:110px;
+      margin-right:auto;
+      padding:0 2px;
+      text-align:right;
+    }
+
+    .closing p{
+      margin:0;
+      color:#0a7380;
+      font-family:"FtPilKahol2", "Alef", Arial, sans-serif;
+      font-size:28px;
+      line-height:1.5;
+      font-weight:400;
+      text-align:right;
+      text-shadow:0 1px 0 rgba(255,255,255,0.45);
+    }
+
+    .footer{
+      width:100%;
+      text-align:center;
+      font-size:13px;
+      line-height:1.2;
+      color:var(--pink-dark);
+      padding-top:14px;
+    }
+
+    /* ── process-arrows row ───────────────────────────────── */
+    .proc-row{
+      display:flex;
+      justify-content:space-between;
+      padding:0 calc(100% / 14);
+      width:100%;
+      max-width:100%;
+      margin:2px auto 0;
+      pointer-events:none;
+      user-select:none;
+    }
+
+    .proc-arr{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:rgba(175,105,155,0.62);
+      line-height:1;
+    }
+
+    @media (max-width:980px){
+      :root{
+        --title-start-offset:44px;
+      }
+
+      .frame{
+        background:
+          linear-gradient(180deg, rgba(255,255,255,0.20) 0%, rgba(255,255,255,0.05) 12%, rgba(255,255,255,0) 22%),
+          linear-gradient(to bottom, var(--page-top) 0 195px, var(--page-main) 195px 100%);
+      }
+
+      .intro{
+        width:100%;
+      }
+
+      .intro p{
+        font-size:20px;
+      }
+
+      .menu-grid{
+        gap:7px;
+        margin:0 auto;
+      }
+
+      .closing{
+        width:min(560px, 100%);
+        margin-left:60px;
+      }
+
+      .closing p{
+        font-size:25px;
+      }
+    }
+
+    @media (max-width:640px){
+      :root{
+        --title-start-offset:0px;
+      }
+      .proc-row{ display:none; }
+
+      .page{
+        padding:8px;
+      }
+
+      .frame{
+        height:96svh;
+        border-radius:20px;
+        background:
+          linear-gradient(180deg, rgba(255,255,255,0.20) 0%, rgba(255,255,255,0.05) 12%, rgba(255,255,255,0) 22%),
+          linear-gradient(to bottom, var(--page-top) 0 200px, var(--page-main) 200px 100%);
+      }
+
+      .topbar{
+        padding:12px 14px 10px;
+      }
+
+      .brand img{
+        width:38px;
+        height:38px;
+      }
+
+      .brand-title{
+        font-size:25px;
+      }
+
+      .logout-btn{
+        font-size:12px;
+        padding:7px 12px;
+      }
+
+      .hero{
+        display:flex;
+        flex-direction:column;
+        padding:10px 10px 10px;
+        gap:10px;
+      }
+
+      .intro{
+        padding-right:0;
+      }
+
+      .intro p{
+        font-size:17px;
+        line-height:1.7;
+      }
+
+      .menu-grid{
+        grid-template-columns:repeat(3, 1fr);
+        gap:8px;
+        max-width:100%;
+      }
+
+      .menu-item{
+        max-width:none;
+        border-radius:14px;
+        padding:5px 6px 8px;
+      }
+
+      .menu-item h4{
+        font-size:13px;
+        min-height:20px;
+      }
+
+      .menu-item p{
+        font-size:9px;
+        min-height:13px;
+      }
+
+      .icon-box{
+        width:66px;
+        height:66px;
+      }
+
+      .closing{
+        width:min(460px, 100%);
+        margin-left:20px;
+      }
+
+      .closing p{
+        font-size:21px;
+        line-height:1.55;
+      }
+
+      .footer{
+        font-size:12px;
+        line-height:1.4;
+      }
+    }
+
+    @media (max-height:760px){
+      .topbar{
+        padding:10px 16px 8px;
+      }
+
+      .brand-title{
+        font-size:30px;
+      }
+
+      .hero{
+        gap:10px;
+        padding:10px 14px 10px;
+      }
+
+      .intro p{
+        font-size:18px;
+        line-height:1.58;
+      }
+
+      .menu-grid{
+        gap:7px;
+        max-width:100%;
+      }
+
+      .menu-item{
+        max-width:125px;
+        padding:5px 6px 8px;
+      }
+
+      .menu-item h4{
+        font-size:13px;
+        min-height:20px;
+      }
+
+      .menu-item p{
+        font-size:9px;
+        min-height:13px;
+      }
+
+      .icon-box{
+        width:72px;
+        height:72px;
+      }
+
+      .closing{
+        width:min(560px, 100%);
+        margin-left:80px;
+      }
+
+      .closing p{
+        font-size:23px;
+        line-height:1.45;
+      }
+    }
+
+    /* Instructor game entry */
+    .menu-item:is(button){font:inherit;cursor:pointer}
+    #inspiration-dialog{
+      box-sizing:border-box;border:1px solid #ead8e5;border-radius:24px;padding:0;
+      width:min(500px,calc(100vw - 28px));max-height:min(92vh,780px);
+      background:#fffafd;color:#442c46;box-shadow:0 26px 80px #260f314e
+    }
+    #inspiration-dialog::backdrop{background:#1a1239b0;backdrop-filter:blur(3px)}
+    .inspiration-dialog-inner{padding:clamp(22px,4vw,34px);display:grid;gap:20px;font-family:"Alef",Arial,sans-serif;text-align:right}
+    .inspiration-dialog-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:14px;border-bottom:1px solid #f0e1eb}
+    .inspiration-dialog-heading{display:grid;gap:5px}
+    .inspiration-dialog-eyebrow{font-size:.78rem;color:#946d8c}
+    .inspiration-dialog-top h2{margin:0;font-size:1.7rem;line-height:1.25;color:#5c2852}
+    .inspiration-dialog-close{flex:0 0 38px;border:0;border-radius:50%;background:#f7e8f0;color:#5c2852;width:38px;height:38px;cursor:pointer;font-size:1.4rem}
+    .inspiration-dialog-inner p{margin:0;color:#775c73;font-size:.94rem;line-height:1.55}
+    .inspiration-dialog-submit{box-sizing:border-box;border:0;border-radius:12px;background:#682f63;color:#fff;font:inherit;font-weight:700;min-height:50px;cursor:pointer;padding:12px 16px;text-align:center}
+    .inspiration-dialog-submit:hover{background:#4f2550}
+    .inspiration-dialog-submit:disabled{opacity:.6;cursor:progress}
+    .inspiration-dialog-error{color:#9e3448!important;font-weight:700}
+    .inspiration-dialog-error[hidden],.inspiration-dialog-inner [hidden]{display:none!important}
+    #inspiration-teacher-auth{display:grid;gap:16px}
+  </style>
+<link rel="stylesheet" href="../css/course-language.css">
+</head>
+<body>
+  <div class="page">
+    <div class="frame">
+      <header class="topbar">
+        <div class="brand">
+          <img src="../icon/logo.png" alt="פורצות דרך" />
+          <h1 class="brand-title">פורצות דרך</h1>
+        </div>
+
+        <nav class="course-lang-switch" aria-label="اختيار اللغة"><a href="../strongermenu-2026.html?lang=he" lang="he" data-course-language="he">עברית</a><span class="lang-separator" aria-hidden="true">|</span><a href="strongermenu-2026.html?lang=ar" lang="ar" data-course-language="ar" aria-current="true">العربية</a></nav>
+<button class="logout-btn" id="logoutBtn" type="button">יציאה</button>
+      </header>
+
+      <main class="hero">
+        <div class="intro-wrap">
+          <section class="intro">
+            <p>
+              המסע של פורצות דרך מתחיל כאן, באתר הקורס שילווה אותנו לאורך כל הדרך.
+              בכל שלב בתהליך נצמח, נתחזק, נאמין בעצמנו, נלמד, נחקור וניצור
+              ונגלה איך טכנולוגיה יכולה להפוך לכלי לביטוי עצמי, ליוזמה ולהשפעה חברתית.
+            </p>
+          </section>
+        </div>
+
+        <section class="menu-grid">
+          <a class="menu-item" href="start/quiz.html">
+            <h4>ننطلق</h4>
+            <p>نقطة بدايتكِ في المسار</p>
+            <div class="icon-box">
+              <img src="../icon/start.svg" alt="ننطلق" />
+            </div>
+          </a>
+          <button type="button" class="menu-item" id="inspiration-entry" aria-haspopup="dialog" aria-controls="inspiration-dialog">
+            <h4>נושמות השראה</h4>
+            <p>משחק הקלפים הקבוצתי</p>
+            <div class="icon-box">
+              <img src="../icon/inspiration-cards.svg" alt="קלפי השראה" />
+            </div>
+          </button>
+
+
+          <a class="menu-item" href="domains/alldomains.html">
+            <h4>نكتشف تحدّيًا</h4>
+            <p>نكتشف ما يثير اهتمامكِ</p>
+            <div class="icon-box">
+              <img src="../icon/sub.svg" alt="نكتشف تحدّيًا" />
+            </div>
+          </a>
+
+          <a class="menu-item" href="pairing/pairing.html">
+            <h4>شريكة الطريق</h4>
+            <p>لا نسير وحدنا في المسار</p>
+            <div class="icon-box">
+              <img src="../icon/partner.svg" alt="شريكة الطريق" />
+            </div>
+          </a>
+
+          <a class="menu-item" href="../idea/idea-to-product.html">
+            <h4>מרעיון למוצר</h4>
+            <p>מחשבה ראשונה לכיוון יצירתי</p>
+            <div class="icon-box">
+              <img src="../icon/idea.svg" alt="מרעיון למוצר" />
+            </div>
+          </a>
+
+          <a class="menu-item" href="../steps/entrepreneurship-steps.html">
+            <h4>בונות טכנולוגיה</h4>
+            <p>מבינות איך רעיון הופך לפתרון</p>
+            <div class="icon-box">
+              <img src="../icon/stem.svg" alt="בונות טכנולוגיה" />
+            </div>
+          </a>
+
+          <a class="menu-item" href="../final/final.html">
+            <h4>מציגות ומשכנעות</h4>
+            <p>נותנות קול ברור לרעיון שלך</p>
+            <div class="icon-box">
+              <img src="../icon/brand.svg" alt="מציגות ומשכנעות" />
+            </div>
+          </a>
+
+        </section>
+
+        <div class="proc-row" aria-hidden="true">
+          <span class="proc-arr"><svg viewBox="0 0 14 22" width="13" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="proc-arr"><svg viewBox="0 0 14 22" width="13" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="proc-arr"><svg viewBox="0 0 14 22" width="13" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="proc-arr"><svg viewBox="0 0 14 22" width="13" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="proc-arr"><svg viewBox="0 0 14 22" width="13" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="proc-arr"><svg viewBox="0 0 14 22" width="13" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </div>
+
+        <div class="closing-wrap">
+          <section class="closing">
+            <p>
+              כל צעד בדרך הוא הזדמנות לפרוץ גבולות, להאמין בעצמך ולגלות כמה רחוק את יכולה להגיע.
+              הכוח שלך כבר נמצא בך — עכשיו זה הזמן לתת לו מקום, להשפיע ולהוביל.
+            </p>
+          </section>
+        </div>
+
+        <footer class="footer">© 2026 פורצות דרך</footer>
+      </main>
+    </div>
+  </div>
+
+
+    <dialog id="inspiration-dialog" aria-labelledby="inspiration-dialog-title">
+      <div class="inspiration-dialog-inner">
+        <div class="inspiration-dialog-top">
+          <div class="inspiration-dialog-heading">
+            <span class="inspiration-dialog-eyebrow">פורצות דרך · מרחב המדריכה</span>
+            <h2 id="inspiration-dialog-title">נושמות השראה</h2>
+          </div>
+          <button id="inspiration-dialog-close" class="inspiration-dialog-close" type="button" aria-label="סגירה">×</button>
+        </div>
+        <section id="inspiration-teacher-auth" aria-live="polite">
+          <p id="inspiration-auth-status" role="status">מתחברת לדשבורד תעשיידע…</p>
+          <button id="inspiration-teacher-entry" class="inspiration-dialog-submit" type="button" hidden>התחברות דרך דשבורד תעשיידע</button>
+        </section>
+        <p id="inspiration-entry-error" class="inspiration-dialog-error" role="alert" hidden></p>
+      </div>
+    </dialog>
+    <script type="module" src="../inspiration/teacher-entry.js"></script>
+  <script>
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    logoutBtn.addEventListener("click", function () {
+      const shouldLogout = confirm("האם לצאת מהאתר?");
+      if (!shouldLogout) return;
+
+      sessionStorage.removeItem(SESSION_KEY);
+      window.location.href = "strongermenu-2026.html";
+    });
+  </script>
+
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function() {
+      navigator.serviceWorker.register("../service-worker.js").catch(function(error) {
+        console.error("Service worker registration failed:", error);
+      });
+    });
+  }
+</script>
+
+</body>
+</html>

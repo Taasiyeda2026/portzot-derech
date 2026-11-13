@@ -1,0 +1,33 @@
+name: Course language checks
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'ar/**'
+      - 'start/quiz.html'
+      - 'domains/**'
+      - 'pairing/**'
+      - 'js/course-language.js'
+      - 'css/course-language.css'
+      - 'strongermenu-2026.html'
+      - 'tests/course-language*'
+      - '.github/workflows/course-language.yml'
+  workflow_dispatch:
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    env:
+      PUPPETEER_SKIP_DOWNLOAD: 'true'
+      CHROME_BIN: /usr/bin/google-chrome
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: node --test tests/course-language*.test.cjs
+      - run: node tests/course-language-browser.cjs
