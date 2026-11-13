@@ -153,7 +153,6 @@ export const onSnapshot=(ref,callback)=>{let active=true;const run=async()=>{con
   assert.equal(await a.p.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false,'questionnaire overflow');
   for(let i=1;i<15;i++){
    const before=await a.p.locator('#stepLabel').textContent();
-   console.log('PARTICIPANT',lang,i,'before',before);
    assert.equal(Number(before.match(/\d+/)[0]),i+1);
    await a.p.locator('.option-btn').first().click();
    if(i===3){
@@ -164,7 +163,6 @@ export const onSnapshot=(ref,callback)=>{let active=true;const run=async()=>{con
     await a.p.locator(`[data-course-language="${lang}"]`).click();await a.p.waitForURL(u=>u.searchParams.get('lang')===lang);
    }
    await a.p.locator('#nextBtn').click();
-   console.log('AFTER',await a.p.locator('#stepLabel').textContent(),'HINT',await a.p.locator('#hint').textContent());
    if(i<14){const after=await a.p.locator('#stepLabel').textContent();if(Number(after.match(/\d+/)[0])!==i+2){await a.p.screenshot({path:'/tmp/failed-question-mobile.png'});throw new Error('Question did not advance: '+after)}}
   }
   await a.p.waitForURL('**/waiting.html?session='+session);await a.p.locator('#completedCount').waitFor();

@@ -16,3 +16,4 @@ html[lang="ar"] .mag-domain .mag-hero__visual::after{content:"المجال " var
 body:has(>.course-lang-floating){padding-bottom:64px}
 .topbar:has(>.course-lang-switch){flex-wrap:wrap}
 @media(max-width:640px){.course-language-tools{flex-direction:column;align-items:flex-end;gap:4px}}
+.course-lang-inline{display:flex;justify-content:flex-end;margin-block-end:12px}

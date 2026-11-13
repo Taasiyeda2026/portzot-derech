@@ -34,6 +34,8 @@ function showSignedOut(message = 'יש להתחבר דרך דשבורד תעשי
 
 function openManagement() {
   const url = new URL('./inspiration/teacher.html', location.href);
+  // The partial Arabic course menu shares this unchanged Hebrew activity.
+  url.pathname = url.pathname.replace(/\/ar\/inspiration\//, '/inspiration/');
   location.assign(url.href);
 }
 
