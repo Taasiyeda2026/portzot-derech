@@ -49,7 +49,7 @@ const chromium={launch:async options=>{
    const page=await c.newPage();await page.setViewport(options.viewport);for(const i of init)await page.evaluateOnNewDocument(i.fn,i.arg);
    await page.setRequestInterception(true);page.on('request',async req=>{
     const route=routes.find(r=>r.pattern.includes('firebasejs')?req.url().includes('/firebasejs/'):req.url().endsWith('/__mock_db'));
-    if(route)await route.fn({request:()=>({postDataJSON:()=>JSON.parse(req.postData())}),fulfill:async x=>req.respond({status:200,contentType:x.contentType,body:x.body})});else await req.continue();
+    if(route)await route.fn({request:()=>({postDataJSON:()=>JSON.parse(req.postData())}),fulfill:async x=>req.respond({status:200,headers:{'access-control-allow-origin':'*'},contentType:x.contentType,body:x.body})});else await req.continue();
    });return new Page(page)
   }}
  },close:async()=>{await b.close();await new Promise(r=>server.close(r))}};
