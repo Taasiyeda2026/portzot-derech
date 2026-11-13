@@ -14,13 +14,13 @@ test('Hebrew PDF has two columns, each complete group on its own row, and pagina
  const long={...snapshot,participant_count:120,groups:Array.from({length:30},(_,i)=>({groupNumber:i+1,memberNames:Array.from({length:4},(_,j)=>`משתתפת בדיקה ${i+1} ${j+1} `+'שם משפחה ארוך במיוחד '.repeat(4))}))};
  const longFile=resolve(scratch,'long-two-column-report.pdf'),bytes=await buildPdf(long,pdfDependencies);await writeFile(longFile,bytes);const pages=(await pdfDependencies.PDFDocument.load(bytes)).getPageCount();assert(pages>1);const longText=text(longFile);assert.equal(longText.split('מספר קבוצה').length-1,pages);
 });
-test('download and mail use the new PDF layout, including a previously cached report, without changing delivery',async()=>{
+test('download and mail share the formatted frozen PDF without changing storage, report state or delivery',async()=>{
  const h=await harness();try{
   const room=(await h.call('teacher.create',{school:'[בדיקה] דוח שתי עמודות',class_name:'ח1',expected:2})).body;
   for(const name of ['נועה','מאיה']){const token=Array.from(crypto.getRandomValues(new Uint8Array(32)),n=>n.toString(16).padStart(2,'0')).join('');await h.call('participant.join',{code:room.code,name},token);const answers=Object.fromEntries(questions.flatMap(q=>q.options.length?[[q.field,q.options[0].label],[q.field+'Code',q.options[0].code]]:[[q.field,name]]));await h.call('participant.submit',{answers},token);}
   const draft=(await h.call('teacher.match',{activity_id:room.id})).body;await h.call('teacher.publish',{activity_id:room.id,version:draft.version});
   await h.call('teacher.download',{activity_id:room.id});assert.equal(h.sends,0);
-  const before=(await h.db.query('select * from public.pairing_reports where activity_id=$1',[room.id])).rows[0];h.files.set(before.pdf_path,new Blob(['old cached PDF']));
+  const before=(await h.db.query('select * from public.pairing_reports where activity_id=$1',[room.id])).rows[0];
   const downloaded=await h.call('teacher.download',{activity_id:room.id});assert.equal(downloaded.status,200);assert.equal(h.sends,0);
   const after=(await h.db.query('select * from public.pairing_reports where activity_id=$1',[room.id])).rows[0];assert.deepEqual(after,before);
   const downloadFile=resolve(scratch,'download.pdf');await writeFile(downloadFile,downloaded.bytes);assert(text(downloadFile).includes('שמות המשתתפות בקבוצה'));
