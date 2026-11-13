@@ -1097,18 +1097,17 @@
     },
     "10": {
       "hero": {
-        "path": "domains/images/2027/robot.webp",
-        "alt": "רובוט דמוי אדם",
-        "alt_ar": "روبوت يشبه الإنسان",
-        "credit": "Mathew Schwartz / Unsplash",
-        "source_url": "https://unsplash.com/photos/a-robot-that-is-standing-on-a-white-surface-c5sTal8LQyo",
+        "path": "domains/images/2027/space.webp",
+        "alt": "טלסקופ החלל האבל על רקע כדור הארץ",
+        "alt_ar": "تلسكوب هابل الفضائي أمام كوكب الأرض",
+        "credit": "STScI and NASA / NASA Hubble Space Telescope / Unsplash",
+        "source_url": "https://unsplash.com/photos/a-space-station-in-the-middle-of-the-earth-Qq-bHP95tWk",
         "license": "Unsplash License",
         "license_url": "https://unsplash.com/license",
-        "download_url": "https://images.unsplash.com/photo-1631882456892-54a30e92fe4f",
+        "download_url": "https://images.unsplash.com/photo-1711994872186-dc24d83ff99c",
         "verified_on": "2026-11-13",
         "usage": "צילום המחשה; אינו מתעד את המקרה המתואר בכתבה",
-        "asset_id": "robot",
-        "object_position": "50% 10%"
+        "asset_id": "space"
       },
       "articles": {
         "d10-a01": {
@@ -1139,17 +1138,17 @@
           "asset_id": "digital"
         },
         "d10-a03": {
-          "path": "domains/images/2027/bedroom.webp",
-          "alt": "חדר שינה עם מיטה ושולחן",
-          "alt_ar": "غرفة نوم فيها سرير ومكتب",
-          "credit": "Alex Tyson / Unsplash",
-          "source_url": "https://unsplash.com/photos/a-bedroom-with-a-bed-and-a-desk-zcXaCds-SZ4",
+          "path": "domains/images/2027/transit.webp",
+          "alt": "תחבורה ציבורית ברחוב עירוני",
+          "alt_ar": "وسائل نقل عام في شارع بمدينة",
+          "credit": "Tala Haramtan / Unsplash",
+          "source_url": "https://unsplash.com/photos/a-public-transit-bus-on-a-city-street-XK6x7MEudvM",
           "license": "Unsplash License",
           "license_url": "https://unsplash.com/license",
-          "download_url": "https://images.unsplash.com/photo-1722605904915-5698d12ec5c4",
+          "download_url": "https://images.unsplash.com/photo-1728929679926-af37faf2c123",
           "verified_on": "2026-11-13",
           "usage": "צילום המחשה; אינו מתעד את המקרה המתואר בכתבה",
-          "asset_id": "bedroom"
+          "asset_id": "transit"
         },
         "d10-a04": {
           "path": "domains/images/2027/space.webp",
@@ -1165,20 +1164,6 @@
           "asset_id": "space"
         },
         "d10-a05": {
-          "path": "domains/images/2027/robot.webp",
-          "alt": "רובוט דמוי אדם",
-          "alt_ar": "روبوت يشبه الإنسان",
-          "credit": "Mathew Schwartz / Unsplash",
-          "source_url": "https://unsplash.com/photos/a-robot-that-is-standing-on-a-white-surface-c5sTal8LQyo",
-          "license": "Unsplash License",
-          "license_url": "https://unsplash.com/license",
-          "download_url": "https://images.unsplash.com/photo-1631882456892-54a30e92fe4f",
-          "verified_on": "2026-11-13",
-          "usage": "צילום המחשה; אינו מתעד את המקרה המתואר בכתבה",
-          "asset_id": "robot",
-          "object_position": "50% 10%"
-        },
-        "d10-a06": {
           "path": "domains/images/2027/digital.webp",
           "alt": "טלפון חכם על מחברת",
           "alt_ar": "هاتف ذكي على دفتر",
@@ -1191,18 +1176,31 @@
           "usage": "צילום המחשה; אינו מתעד את המקרה המתואר בכתבה",
           "asset_id": "digital"
         },
-        "d10-a07": {
-          "path": "domains/images/2027/controller.webp",
-          "alt": "בקר משחקים",
-          "alt_ar": "وحدة تحكم بالألعاب",
-          "credit": "Branden Skeli / Unsplash",
-          "source_url": "https://unsplash.com/photos/a-video-game-controller-d69kT8Xu4L4",
+        "d10-a06": {
+          "path": "domains/images/2027/notebook.webp",
+          "alt": "מחברת ועפרונות על משטח ירוק",
+          "alt_ar": "دفتر وأقلام رصاص على سطح أخضر",
+          "credit": "The Design Lady / Unsplash",
+          "source_url": "https://unsplash.com/photos/a-notebook-and-pencils-on-a-green-surface--vEt5QioBcM",
           "license": "Unsplash License",
           "license_url": "https://unsplash.com/license",
-          "download_url": "https://images.unsplash.com/photo-1665041974623-d398d035023e",
+          "download_url": "https://images.unsplash.com/photo-1726726192155-fefdf941459a",
           "verified_on": "2026-11-13",
           "usage": "צילום המחשה; אינו מתעד את המקרה המתואר בכתבה",
-          "asset_id": "controller"
+          "asset_id": "notebook"
+        },
+        "d10-a07": {
+          "path": "domains/images/2027/guitar.webp",
+          "alt": "ידיים מנגנות בגיטרה",
+          "alt_ar": "يدان تعزفان على الغيتار",
+          "credit": "Adi Goldstein / Unsplash",
+          "source_url": "https://unsplash.com/photos/person-playing-guitar-indoors-WIDjSuv7zzU",
+          "license": "Unsplash License",
+          "license_url": "https://unsplash.com/license",
+          "download_url": "https://images.unsplash.com/photo-1530385782186-2e2a486de111",
+          "verified_on": "2026-11-13",
+          "usage": "צילום המחשה; אינו מתעד את המקרה המתואר בכתבה",
+          "asset_id": "guitar"
         },
         "d10-a08": {
           "path": "domains/images/2027/park.webp",
