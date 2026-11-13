@@ -139,46 +139,28 @@ export const onSnapshot=(ref,callback)=>{let active=true;const run=async()=>{con
   }
  }
  console.log('PASS 11 domain pages desktop/mobile, expanded article, reader hashes and parameters');
- const admin=await context('ar');
- await admin.p.goto(base+'ar/pairing/admin.html?lang=ar');
- await admin.p.locator('#instructorCode').fill('test');await admin.p.locator('#participantCount').fill('3');await admin.p.locator('button[onclick="startActivity()"]').click();
- await admin.p.locator('#trackingScreen.active').waitFor();
- const session=Object.keys(data.sessions)[0];assert.ok(session);
- await admin.p.page.reload({waitUntil:'networkidle2'});await admin.p.locator('#trackingScreen.active').waitFor();
- assert.equal(Object.keys(data.sessions).length,1);
- console.log('PASS legacy Arabic instructor session survives reload');
- const participants=[];
- for(const [lang,name]of [['ar','נועה'],['ar','ليان'],['ar','سارة']]){
-  const a=await context(lang,true);participants.push(a);
-  await a.p.goto(base+(lang==='ar'?'ar/':'')+'pairing/pairing.html?lang='+lang);
-  await a.p.locator('#startActivityBtn.show').waitFor();await a.p.locator('#startActivityBtn').click();await a.p.waitForURL('**/questionnaire.html?session='+session);
-  await a.p.locator('#textAnswer').fill(name);await a.p.locator('#nextBtn').click();
-  assert.equal(await a.p.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false,'questionnaire overflow');
-  for(let i=1;i<15;i++){
-   const before=await a.p.locator('#stepLabel').textContent();
-   assert.equal(Number(before.match(/\d+/)[0]),i+1);
-   await a.p.locator('.option-btn').first().click();
-   if(i===3){
-    await a.p.page.reload({waitUntil:'networkidle2'});
-    assert.equal(await a.p.locator('.option-btn.active').count(),1);
-   }
-   await a.p.locator('#nextBtn').click();
-   if(i<14){const after=await a.p.locator('#stepLabel').textContent();if(Number(after.match(/\d+/)[0])!==i+2){await a.p.screenshot({path:'/tmp/failed-question-mobile.png'});throw new Error('Question did not advance: '+after)}}
-  }
-  await a.p.waitForURL('**/waiting.html?session='+session);await a.p.locator('#completedCount').waitFor();
- }
- assert.equal(data.sessions[session].completedCount,3);assert.equal(Object.keys(data.responses).length,3);
- const codes=Object.values(data.responses).map(r=>Object.fromEntries(Object.entries(r).filter(([k])=>k.endsWith('Code'))));assert.deepEqual(codes[0],codes[1]);assert.deepEqual(codes[1],codes[2]);
- await admin.p.locator('#matchingButtonContainer').waitFor({state:'visible'});await admin.p.locator('#matchingButtonContainer button').click();await admin.p.waitForURL('**/matching.html?session='+session);
- await admin.p.locator('#runButton').click();await admin.p.locator('#results.show').waitFor();
- const grouping=data.pairings[session].groups.map(g=>g.members);assert.equal(grouping[0].length,3);
- // The separate Arabic legacy flow still translates reasons from the shared algorithm.
- await admin.p.page.reload({waitUntil:'networkidle2'});await admin.p.locator('#runButton').click();await admin.p.locator('#results.show').waitFor();
- assert.deepEqual(data.pairings[session].groups.map(g=>g.members),grouping);
- const resultText=await admin.p.locator('#results').textContent();assert.match(resultText,/مجموعة|المجموعات/);assert.doesNotMatch(resultText,/גבוהה|טובה|יש לכן|דרכי העבודה/);
- for(const a of participants){await a.p.locator('#resultScreen.show').waitFor();assert.match(await a.p.locator('#partnerName').textContent(),/נועה/);}
- await participants[1].p.screenshot({path:'/tmp/pairing-result-mobile.png'});
- console.log('PASS legacy Arabic meeting with mixed-script names, draft recovery, codes and stable matching/results');
+ // New Arabic pairing entry routes into the shared secure Hebrew Supabase flow.
+ // Legacy Firebase Arabic pages remain only for an existing ?session= continuation.
+ const routed=await context('ar');
+ await routed.p.goto(base+'ar/pairing/admin.html?lang=ar');
+ await routed.p.waitForURL(u=>/\/pairing\/admin\.html/.test(u.pathname)&&!u.pathname.includes('/ar/'));
+ assert.equal(await routed.p.locator('#instructorCode').count(),0);
+ await routed.p.goto(base+'ar/pairing/pairing.html?lang=ar');
+ await routed.p.locator('#start').waitFor({state:'visible'});
+ assert.equal(await routed.p.locator('[data-course-language="he"]').count(),1);
+ assert.equal(await routed.p.locator('[data-course-language="ar"]').count(),1);
+ console.log('PASS Arabic pairing entry routes to shared secure flow with language switcher');
+ // Continuation path: legacy Arabic questionnaire/waiting stay when session is present.
+ const session='s_browser_legacy_ar';
+ data.sessions[session]={instructorCode:'test',participantCount:1,completedCount:0,isActive:true,status:'active'};
+ const legacy=await context('ar',true);
+ await legacy.p.goto(base+'ar/pairing/questionnaire.html?session='+session+'&lang=ar');
+ await legacy.p.waitForURL(u=>u.pathname.includes('/ar/pairing/questionnaire.html')&&u.searchParams.get('session')===session);
+ await legacy.p.locator('#textAnswer').waitFor({state:'visible'});
+ assert.equal(await legacy.p.locator('[data-course-language="ar"]').count(),1);
+ assert.equal(await legacy.p.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false,'legacy questionnaire overflow');
+ await legacy.p.screenshot({path:'/tmp/pairing-result-mobile.png'});
+ console.log('PASS legacy Arabic questionnaire remains available for existing sessions');
  assert.deepEqual(errors,[]);console.log('PASS no browser script errors');
  await browser.close();
 })().catch(e=>{console.error(e);process.exit(1)});
