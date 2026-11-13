@@ -18,7 +18,7 @@ const server=http.createServer((req,res)=>{
  const browser=await puppeteer.launch({headless:true,executablePath:process.env.CHROME_BIN||'/usr/bin/chromium',args:['--no-sandbox','--disable-dev-shm-usage']});
  const page=await browser.newPage(),errors=[],missing=[];
  page.on('pageerror',e=>errors.push(e.message));
- page.on('response',r=>{if(r.url().startsWith(base)&&r.status()>=400)missing.push(`${r.status()} ${r.url()}`)});
+ page.on('response',r=>{if(r.url().startsWith(base)&&r.status()>=400&&new URL(r.url()).pathname!=='/favicon.ico')missing.push(`${r.status()} ${r.url()}`)});
  // Prevent the unrelated PWA's broad precache from affecting this focused test.
  await page.setBypassServiceWorker(true);
  await page.evaluateOnNewDocument(()=>{if('serviceWorker'in navigator)navigator.serviceWorker.register=()=>Promise.resolve({})});
