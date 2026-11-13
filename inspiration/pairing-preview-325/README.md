@@ -12,3 +12,5 @@ Uses the already-deployed Dashboard pairing-groups backend (version 2) and uncha
 Use synthetic data and prefix test school names with [בדיקה] so the existing mailer marks the subject as a test.
 Remove this whole directory only after owner approval, final PR merge and production verification.
 Do not merge PR #325 until the owner approves the preview, real SSO and the one live test email.
+
+Final three-fix review (PR head f534b9b): max-width 1000px and sent-status wording updated in the preview only. report-format-sample.pdf is a synthetic example of the new two-column PDF layout. Live pairing-groups remains version 2: automatic approval review rejected the production function replacement pending explicit deployment authorization, even after restricting its diff to pdf.mjs only. No cached report is regenerated and no storage/delivery workflow is changed. The sample is not an actual sent report.
