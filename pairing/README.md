@@ -1,6 +1,6 @@
 # מציאת שותפות — ניהול קבוצות ודיווח
 
-The existing questionnaire (15 exact questions/options/codes) and `js/pairing-algorithm.js` are unchanged. The Edge function's `algorithm.mjs` is an exact byte copy, enforced by a test. New activities never read/write Firebase. The owner confirmed that no activity is currently running, so no Firebase compatibility route is needed. Existing Firebase documents are never deleted or migrated.
+The canonical questionnaire contract (15 question fields, original option values/order/codes) and `js/pairing-algorithm.js` are unchanged. The participant UI uses `questionnaire-copy.js` for shorter display text and original course domain symbols; it still sends the canonical labels/codes accepted by the existing gateway. `questionnaire-ui.js` handles guarded 300 ms auto-advance, back navigation, draft recovery and confirmed-save completion. The Edge function's `algorithm.mjs` is an exact byte copy, enforced by a test. New activities never read/write Firebase. The owner confirmed that no activity is currently running, so no Firebase compatibility route is needed. Existing Firebase documents are never deleted or migrated.
 
 ## Components
 
@@ -42,6 +42,7 @@ Do not merge the frontend while backend, retention, mail or real SSO gates remai
 ```sh
 npm run test:pairing
 npm run test:pairing:browser
+npm run test:pairing:questionnaire
 node --test inspiration/tests/edge.test.mjs inspiration/tests/service-worker.test.mjs
 ```
 

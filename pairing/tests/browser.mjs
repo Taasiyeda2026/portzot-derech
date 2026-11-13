@@ -41,11 +41,11 @@ try{
  const link=await teacher.$eval('#invite',n=>n.href),activity=new URL(teacher.url()).searchParams.get('activity');assert.match(link,/room=[0-9a-f]{32}$/);
  const students=[];
  for(let i=0;i<5;i++){
-  const p=await page();students.push(p);await p.goto(link);await p.waitForSelector('#textAnswer');await p.type('#textAnswer',i<2?'שם זהה':'תלמידת בדיקה '+i);await click(p,'קדימה');
+  const p=await page();students.push(p);await p.goto(link);await p.waitForSelector('#textAnswer');await p.type('#textAnswer',i<2?'שם זהה':'תלמידת בדיקה '+i);await click(p,'התחלה');
   for(let step=2;step<=15;step++){
    await p.waitForFunction(step=>document.querySelector('#stepLabel').textContent===`שאלה ${step} מתוך 15`,{},step);
    if(i===0&&step===5){await p.reload();await p.waitForFunction(()=>document.querySelector('#stepLabel').textContent==='שאלה 5 מתוך 15');}
-   await p.click('.option-btn');await click(p,step===15?'סיימתי — אפשר להמשיך 💜':'קדימה');
+   await p.click('.option-btn');
   }
   await p.waitForFunction(()=>location.pathname.endsWith('/waiting.html'));
  }

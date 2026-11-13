@@ -10,7 +10,8 @@
     "test:inspiration:db": "node inspiration/tests/db-integration.mjs",
     "test:inspiration:browser": "node inspiration/tests/browser-integration.mjs",
     "test:pairing": "node --test pairing/tests/*.test.mjs",
-    "test:pairing:browser": "node pairing/tests/browser.mjs"
+    "test:pairing:browser": "node pairing/tests/browser.mjs",
+    "test:pairing:questionnaire": "node pairing/tests/questionnaire-browser.mjs"
   },
   "dependencies": {
     "puppeteer": "^25.12.0"

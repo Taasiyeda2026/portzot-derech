@@ -6,7 +6,7 @@ import { generateGroups,getPreferredGroupSizes } from '../../supabase/functions/
 import { partition,validatedAnswers,validName,personalProjection } from '../../supabase/functions/pairing-groups/domain.mjs';
 import { sendGraph,mailPayload,graphAccess } from '../../supabase/functions/pairing-groups/mail.mjs';
 export function answers(name='משתתפת בדיקה'){return Object.fromEntries(questions.flatMap(q=>q.options.length?[[q.field,q.options[0].label],[q.field+'Code',q.options[0].code]]:[[q.field,name]]));}
-test('the 15 questions, exact wording/options/order/codes, and algorithm are unchanged',async()=>{
+test('the 15 canonical questions, payload labels/options/order/codes, and algorithm are unchanged',async()=>{
  const original=await readFile(new URL('../../js/pairing-algorithm.js',import.meta.url),'utf8');
  assert.equal(await readFile(new URL('../../supabase/functions/pairing-groups/algorithm.mjs',import.meta.url),'utf8'),original);
  const html=await readFile(new URL('../questionnaire.html',import.meta.url),'utf8');
