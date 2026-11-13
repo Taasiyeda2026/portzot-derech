@@ -53,7 +53,7 @@ test('both questionnaires retain IDs, answer codes, order and scores',()=>{
 test('Arabic activity copy contains no Hebrew except language label and canonical matching metadata',()=>{
  for(const page of pages.filter(p=>p!=='strongermenu-2026.html')) {
   let html=read('ar/'+page).replace(/<!--[^]*?-->/g,'').replace(/<style[^]*?<\/style>/g,'').replace(/\/\/[^\n]*/g,'');
-  html=html.replace(/<a[^>]*data-course-language="he"[^>]*>עברית<\/a>/g,'');
+  html=html.replace(/<a[^>]*(?:data-course-language|data-reader-language)="he"[^>]*>עברית<\/a>/g,'');
   html=html.replace(/const groupDisplayText = .*;\n/,'');
   assert.doesNotMatch(html,/[\u0590-\u05ff]/,page);
  }

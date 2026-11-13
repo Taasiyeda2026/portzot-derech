@@ -9,8 +9,12 @@ on:
       - 'pairing/**'
       - 'js/course-language.js'
       - 'css/course-language.css'
+      - 'css/domains-2027.css'
+      - 'js/domains-2027.js'
+      - 'scripts/build-domains.py'
       - 'strongermenu-2026.html'
       - 'tests/course-language*'
+      - 'tests/domains-2027*'
       - '.github/workflows/course-language.yml'
   workflow_dispatch:
 jobs:
@@ -30,12 +34,16 @@ jobs:
           cache: npm
       - run: npm ci
       - run: node --test tests/course-language*.test.cjs
+      - run: node --test tests/domains-2027.test.cjs
+      - run: node tests/domains-2027-browser.cjs
       - run: node --test pairing/tests/domain.test.mjs pairing/tests/early-close.test.mjs
       - run: node tests/course-language-browser.cjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: arabic-course-screenshots
-          path: /tmp/*-mobile.png
+          path: |
+            /tmp/*-mobile.png
+            /tmp/portzot-2027/*.png
           if-no-files-found: ignore
           retention-days: 3
