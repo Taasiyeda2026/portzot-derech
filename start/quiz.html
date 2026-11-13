@@ -532,6 +532,27 @@
         max-width: 200px;
       }
     }
+
+    .intro-title { margin: 12px 0 28px; text-align: center; font-size: 1.8em; }
+    .intro-card { text-align: center; }
+    .option { font-family: inherit; text-align: right; width: 100%; line-height: 1.6; }
+    .option:disabled { cursor: default; opacity: 1; color: #333; }
+    .option:focus-visible, .domain-card:focus-visible, .cta-btn:focus-visible { outline: 3px solid #8A85C6; outline-offset: 4px; }
+    .domain-card { text-decoration: none; }
+    .question-counter { color: #666; text-align: center; margin-bottom: 12px; font-size: .9em; }
+    .result-description { color: #555; line-height: 1.8; margin-bottom: 24px; }
+    @media (max-width: 600px) {
+      .site-header { flex-wrap: wrap; padding-top: 20px; }
+      .back-btn { position: static; transform: none; order: 3; margin-inline-start: auto; }
+      .site-header .site-name { font-size: 1.2em; }
+      .site-header .logo { width: 40px; height: 40px; }
+      .container { padding: 24px 14px; }
+      .question-card-header { padding: 20px 16px; }
+      .question-card-body { padding: 20px 12px; }
+      .intro-card { padding: 20px; }
+      .intro-title { font-size: 1.5em; }
+      .domains-result { width: 100%; }
+    }
   </style>
 </head>
 <body>
@@ -545,32 +566,15 @@
     </header>
 
     <section class="intro-section">
+      <h1 class="cta-title intro-title">בואי נראה מה הקטע שלך!</h1>
       <div class="intro-cards">
-        <div class="intro-card card-1">
-          יש ימים שאת קמה ומרגישה טוב ויש ימים שאת קמה ומרגישה פחות טוב.<br>
-          יש ימים שאת עצבנית, רגישה, או סתם ככה — בלי סיבה ברורה. אלה דברים שקורים לנו כל יום, גם כשלא תמיד מדברות על זה.
-        </div>
-        <div class="intro-card card-2">
-          זה פוגש אותנו בכל תחום בחיים.<br>
-          איך אנחנו מרגישות עם הגוף שלנו, איך אנחנו נראות בעיני עצמנו ואיך זה משפיע על הביטחון, על המצב רוח ועל היום כולו. רוב הזמן אנחנו פשוט ממשיכות, בלי לעצור רגע לשים לב.
-        </div>
-        <div class="intro-card card-3">
-          כתבנו את זה כדי לעצור רגע.<br>
-          להקשיב למה שקורה בפנים ולבדוק בשקט עם עצמך איפה זה פוגש אותך. כי כל שינוי גדול מתחיל ממשהו אישי. מכאן אפשר להתחיל לאט בדרך שלך ובבחירה שנכונה לך.
-        </div>
+        <div class="intro-card card-1">כוחות־על, חייזרים, מיליון שקל ורובוט שעושה שיעורי בית.</div>
+        <div class="intro-card card-2">20 שאלות, בחירות מפתיעות והרבה כיף.</div>
+        <div class="intro-card card-3">בחרי את התשובה שהכי מרגישה לך כמוך!</div>
       </div>
-
       <div class="cta-card">
-        <div class="cta-how">איך מתחילים?</div>
-        <div class="cta-icon">📋</div>
-        <div class="cta-title">שאלון פתיחה</div>
-        <p class="cta-desc">
-          היכנסי לשאלון הפתיחה,<br>
-          עני על השאלות בקפידה<br>
-          ותגלי את נקודת ההתחלה.
-        </p>
-        <button class="cta-btn" onclick="showQuiz()">בואי נתחיל</button>
-        <div class="cta-note">זו המלצה שלנו בלבד. בסוף, הבחירה היא שלך 💜</div>
+        <div class="cta-icon" aria-hidden="true">📋</div>
+        <button class="cta-btn" onclick="showQuiz()">יאללה, מתחילות!</button>
       </div>
     </section>
   </div>
@@ -578,24 +582,15 @@
   <!-- ── QUIZ ──────────────────────────────────────────── -->
   <div id="quizWrapper">
   <div class="container">
-    <div class="progress-bar">
+    <div class="question-counter" id="questionCounter" aria-live="polite"></div>
+    <div class="progress-bar" role="progressbar" aria-label="התקדמות השאלון" aria-valuemin="0" aria-valuemax="20" aria-valuenow="0">
       <div class="progress-fill"></div>
-    </div>
-
-    <div class="start-screen" id="startScreen" style="display:none;">
-      <h1>שאלון פתיחה</h1>
-      <p>
-        השאלון הזה יעזור לך לגלות אילו תחומים מדברים אלייך עכשיו.
-        <br><br>
-        אין תשובות נכונות או לא נכונות – פשוט בחרי את מה שמרגיש הכי קרוב.
-      </p>
-      <button class="start-btn" onclick="startQuiz()">בואי נתחיל</button>
     </div>
 
     <div class="question-screen" id="questionScreen">
       <div class="question-card">
         <div class="question-card-header">
-          <div class="question-text" id="questionText"></div>
+          <h2 class="question-text" id="questionText" tabindex="-1"></h2>
         </div>
         <div class="question-card-body">
           <div class="options" id="optionsContainer"></div>
@@ -613,28 +608,28 @@
     </div>
 
     <div class="result-screen" id="resultScreen">
-      <div class="result-intro">
-        לפי התשובות שלך, נראה ששני תחומים מדברים אלייך במיוחד:
-      </div>
+      <h2 class="result-intro" id="resultTitle" tabindex="-1">
+        רגע, יש מצב שעלינו על הקטע שלך!
+      </h2>
+      <p class="result-description">לפי הבחירות שלך, גילינו שלושה עולמות שאולי יעניינו אותך במיוחד.<br>מי יודעת? אולי דווקא שם מסתתר הרעיון הבא שלך.</p>
       <div class="domains-result" id="domainsResult"></div>
       <div class="result-note">
-        זו רק המלצה. הבחירה הסופית תמיד שלך.
+        זו רק המלצה. הבחירה תמיד שלך!
       </div>
       <div class="btn-row">
-        <a class="btn" href="/domains/alldomains.html">לעמוד התחומים</a>
+        <a class="btn" href="/domains/alldomains.html">לכל התחומים</a>
       </div>
     </div>
   </div>
   </div><!-- /quizWrapper -->
 
   <script>
+
     function showQuiz() {
       document.getElementById('introSection').style.display = 'none';
-      const wrapper = document.getElementById('quizWrapper');
-      wrapper.style.display = 'flex';
+      document.getElementById('quizWrapper').style.display = 'flex';
       startQuiz();
     }
-
     const domains = [
       { id: 1, name: 'תחושת גוף', icon: '🧘‍♀️', color: '#8b5cf6' },
       { id: 2, name: 'חיים דיגיטליים', icon: '📱', color: '#0ea5e9' },
@@ -647,402 +642,656 @@
       { id: 9, name: 'פנאי ויצירה', icon: '🎨', color: '#f43f5e' },
       { id: 10, name: 'מבט קדימה', icon: '🔮', color: '#8b5cf6' }
     ];
-
     const questions = [
+  {
+    "id": 1,
+    "text": "קיבלת כוח־על ליום אחד. מה בחרת?",
+    "options": [
       {
-        id: 1,
-        text: 'כשאני עייפה או חסרת אנרגיה…',
-        weight: 1.0,
-        options: [
-          { text: 'זה מעצבן אותי ממש', primary: 1, secondary: 9 },
-          { text: 'זה מדאיג אותי קצת', primary: 1, secondary: 10 },
-          { text: 'אני מתעלמת וממשיכה', primary: 3, secondary: 5 },
-          { text: 'זה גורם לי לחשוב', primary: 1, secondary: 7 }
-        ]
+        "text": "לקרוא מחשבות. בעיקר של אנשים שאומרים ״הכול בסדר״.",
+        "primary": 4,
+        "secondary": null
       },
       {
-        id: 2,
-        text: 'כשאני גוללת ברשת ורואה אחרות…',
-        weight: 1.0,
-        options: [
-          { text: 'אני צוחקת וממשיכה', primary: 2, secondary: 9 },
-          { text: 'אני משווה את עצמי', primary: 2, secondary: 1 },
-          { text: 'אני מתעצבנת מבפנים', primary: 2, secondary: 4 },
-          { text: 'זה משפיע עליי', primary: 2, secondary: 1 }
-        ]
+        "text": "לעצור את הזמן ולישון עוד שעתיים.",
+        "primary": 1,
+        "secondary": null
       },
       {
-        id: 3,
-        text: 'כששיעור לא מעניין אותי…',
-        weight: 1.0,
-        options: [
-          { text: 'אני מתנתקת לגמרי', primary: 3, secondary: 2 },
-          { text: 'אני סופרת דקות', primary: 3, secondary: 9 },
-          { text: 'אני שואלת למה', primary: 3, secondary: 10 },
-          { text: 'אני מדמיינת אחרת', primary: 9, secondary: 10 }
-        ]
+        "text": "לדבר עם חיות ולגלות מה הן חושבות עלינו.",
+        "primary": 8,
+        "secondary": null
       },
       {
-        id: 4,
-        text: 'כשאני עם חברות…',
-        weight: 1.0,
-        options: [
-          { text: 'אני מרגישה בפנים', primary: 4, secondary: null },
-          { text: 'אני חצי בפנים', primary: 4, secondary: 7 },
-          { text: 'אני מרגישה בצד', primary: 4, secondary: 1 },
-          { text: 'זה מאוד משתנה', primary: 4, secondary: 10 }
-        ]
-      },
-      {
-        id: 5,
-        text: 'כשאני רוצה לקנות משהו…',
-        weight: 1.0,
-        options: [
-          { text: 'אני קונה בלי לחשוב', primary: 5, secondary: 2 },
-          { text: 'אני מתלבטת הרבה', primary: 5, secondary: 10 },
-          { text: 'אני מושפעת מסביבה', primary: 5, secondary: 4 },
-          { text: 'אני שואלת למה', primary: 5, secondary: 10 }
-        ]
-      },
-      {
-        id: 6,
-        text: 'כשאני הולכת לבד ברחוב…',
-        weight: 1.0,
-        options: [
-          { text: 'אני לא חושבת על זה', primary: 6, secondary: null },
-          { text: 'אני בודקת סביבי', primary: 6, secondary: 7 },
-          { text: 'אני דרוכה ושקטה', primary: 6, secondary: 1 },
-          { text: 'זה תלוי בזמן', primary: 6, secondary: 10 }
-        ]
-      },
-      {
-        id: 7,
-        text: 'בבית שלי…',
-        weight: 1.0,
-        options: [
-          { text: 'יש לי מקום משלי', primary: 7, secondary: null },
-          { text: 'לפעמים יש ולפעמים לא', primary: 7, secondary: 4 },
-          { text: 'קשה לי למצוא שקט', primary: 7, secondary: 1 },
-          { text: 'זה ממש חסר לי', primary: 7, secondary: 9 }
-        ]
-      },
-      {
-        id: 8,
-        text: 'כשאני רואה טבע או חיות בעיר…',
-        weight: 1.0,
-        options: [
-          { text: 'זה מרגש אותי', primary: 8, secondary: 9 },
-          { text: 'אני כמעט לא שמה לב', primary: 2, secondary: 3 },
-          { text: 'אני שואלת מה קורה', primary: 8, secondary: 10 },
-          { text: 'זה גורם לי לחשוב', primary: 8, secondary: 10 }
-        ]
-      },
-      {
-        id: 9,
-        text: 'כשיש לי זמן פנוי…',
-        weight: 1.0,
-        options: [
-          { text: 'אני שמחה ומרוצה', primary: 9, secondary: null },
-          { text: 'אני משתעממת מהר', primary: 9, secondary: 2 },
-          { text: 'אני בורחת למסך', primary: 2, secondary: 9 },
-          { text: 'אני רוצה ליצור', primary: 9, secondary: 10 }
-        ]
-      },
-      {
-        id: 10,
-        text: 'כשאני חושבת על העתיד…',
-        weight: 1.0,
-        options: [
-          { text: 'זה מרגש אותי', primary: 10, secondary: 9 },
-          { text: 'זה מלחיץ אותי', primary: 10, secondary: 3 },
-          { text: 'אני די מבולבלת', primary: 10, secondary: 5 },
-          { text: 'הכול ביחד', primary: 10, secondary: 1 }
-        ]
-      },
-      {
-        id: 11,
-        text: 'כשמשהו מפריע לי ביומיום…',
-        weight: 1.5,
-        options: [
-          { text: 'אני מתעלמת', primary: 5, secondary: 3 },
-          { text: 'אני מתלוננת', primary: 4, secondary: 7 },
-          { text: 'אני מדברת על זה', primary: 4, secondary: 10 },
-          { text: 'אני רוצה לשנות', primary: 10, secondary: 5 }
-        ]
-      },
-      {
-        id: 12,
-        text: 'המשפט שמתאים לי עכשיו…',
-        weight: 1.5,
-        options: [
-          { text: 'זה מה שיש', primary: 5, secondary: 3 },
-          { text: 'למה זה ככה', primary: 10, secondary: 3 },
-          { text: 'צריך לעשות משהו', primary: 10, secondary: 6 },
-          { text: 'אולי אני יכולה', primary: 10, secondary: 9 }
-        ]
-      },
-      {
-        id: 13,
-        text: 'כשאני רואה בעיה סביבי…',
-        weight: 1.5,
-        options: [
-          { text: 'אני עוברת הלאה', primary: 5, secondary: 2 },
-          { text: 'זה מעצבן אותי', primary: 4, secondary: 1 },
-          { text: 'זה לא הוגן', primary: 4, secondary: 10 },
-          { text: 'אני חושבת פתרון', primary: 10, secondary: 8 }
-        ]
-      },
-      {
-        id: 14,
-        text: 'אם הייתה לי אפשרות להשפיע…',
-        weight: 1.5,
-        options: [
-          { text: 'הייתי מתחילה בקטן', primary: 5, secondary: 7 },
-          { text: 'הייתי משנה קרוב', primary: 7, secondary: 4 },
-          { text: 'הייתי עוזרת לאחרות', primary: 4, secondary: 10 },
-          { text: 'הייתי רוצה הקשבה', primary: 4, secondary: 1 }
-        ]
-      },
-      {
-        id: 15,
-        text: 'כשאני מרגישה שלא רואים אותי…',
-        weight: 1.0,
-        options: [
-          { text: 'אני שותקת', primary: 1, secondary: 4 },
-          { text: 'אני מתרחקת', primary: 4, secondary: 7 },
-          { text: 'אני מתעצבנת', primary: 1, secondary: 4 },
-          { text: 'אני בונה לעצמי מקום', primary: 7, secondary: 9 }
-        ]
-      },
-      {
-        id: 16,
-        text: 'מהי טכנולוגיה בעינייך?',
-        weight: 2.0,
-        isTechPerception: true,
-        options: [
-          { text: 'דרך לפתור בעיות מהחיים', primary: 10, secondary: 5, broadPerception: true },
-          { text: 'כל מה שיש בו מסך', primary: 2, secondary: 9 },
-          { text: 'אפליקציות ורשתות', primary: 2, secondary: 4 },
-          { text: 'מחשבים ואינטרנט', primary: 2, secondary: 3 }
-        ]
-      },
-      {
-        id: 17,
-        text: 'האם טכנולוגיה נמצאת בכל מקום?',
-        weight: 2.0,
-        isTechScope: true,
-        options: [
-          { text: 'כן, כמעט בכל תחום', primary: 10, secondary: 2, broadScope: true },
-          { text: 'רק כשיש אינטרנט', primary: 2, secondary: null },
-          { text: 'בעיקר במסכים', primary: 2, secondary: 9 },
-          { text: 'רק בדברים מתקדמים', primary: 2, secondary: 3 }
-        ]
-      },
-      {
-        id: 18,
-        text: 'אם הייתי בוחרת פרויקט…',
-        weight: 1.5,
-        options: [
-          { text: 'הוא היה אישי', primary: 1, secondary: 7 },
-          { text: 'הוא היה חברתי', primary: 4, secondary: 10 },
-          { text: 'הוא היה יומיומי', primary: 5, secondary: 6 },
-          { text: 'הוא היה פותר בעיה', primary: 10, secondary: 8 }
-        ]
-      },
-      {
-        id: 19,
-        text: 'כשאני חושבת על שינוי…',
-        weight: 1.5,
-        options: [
-          { text: 'זה מרגש', primary: 10, secondary: 9 },
-          { text: 'זה מפחיד', primary: 10, secondary: 1 },
-          { text: 'זה מאתגר', primary: 10, secondary: 3 },
-          { text: 'זה נותן תקווה', primary: 10, secondary: 8 }
-        ]
-      },
-      {
-        id: 20,
-        text: 'המשפט שהכי מדבר אליי עכשיו…',
-        weight: 1.5,
-        options: [
-          { text: 'משהו צריך לזוז', primary: 6, secondary: 10 },
-          { text: 'אני רוצה להבין', primary: 3, secondary: 10 },
-          { text: 'אני לא היחידה', primary: 4, secondary: 10 },
-          { text: 'אני מוכנה להתחיל', primary: 10, secondary: 9 }
-        ]
-      },
-      {
-        id: 21,
-        text: 'כשאני מדמיינת את עצמי בעוד כמה שנים…',
-        weight: 1.5,
-        options: [
-          { text: 'אני רוצה ביטחון', primary: 5, secondary: 7 },
-          { text: 'אני רוצה משמעות', primary: 10, secondary: 4 },
-          { text: 'אני רוצה חופש', primary: 6, secondary: 9 },
-          { text: 'אני רוצה להשפיע', primary: 10, secondary: 4 }
-        ]
+        "text": "להשתגר לכל מקום בלי לחכות לאוטובוס.",
+        "primary": 6,
+        "secondary": null
       }
-    ];
+    ]
+  },
+  {
+    "id": 2,
+    "text": "המצאת רובוט אישי. מה התפקיד הראשון שלו?",
+    "options": [
+      {
+        "text": "לסדר את החדר, כולל הכיסא שהפך לארון.",
+        "primary": 7,
+        "secondary": null
+      },
+      {
+        "text": "לעשות שיעורי בית בכתב היד שלי.",
+        "primary": 3,
+        "secondary": null
+      },
+      {
+        "text": "להכין לי אוכל בדיוק כשמתחשק לי.",
+        "primary": 1,
+        "secondary": null
+      },
+      {
+        "text": "לצלם אותי עד שיוצאת תמונה אחת נורמלית.",
+        "primary": 2,
+        "secondary": 1
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "text": "זכית במיליון שקל. מה הדבר הראשון שאת עושה?",
+    "options": [
+      {
+        "text": "מזמינה את כל מה שמחכה לי בסל הקניות.",
+        "primary": 5,
+        "secondary": null
+      },
+      {
+        "text": "הופכת את החדר שלי לסוויטה במלון.",
+        "primary": 7,
+        "secondary": 9
+      },
+      {
+        "text": "טסה מסביב לעולם בלי כרטיס חזור.",
+        "primary": 6,
+        "secondary": 10
+      },
+      {
+        "text": "פותחת עסק והופכת את המיליון לשניים.",
+        "primary": 5,
+        "secondary": 10
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "text": "הטלפון שלך נעלם לשעתיים. מה קורה?",
+    "options": [
+      {
+        "text": "מוקם צוות חיפושים מיוחד.",
+        "primary": 2,
+        "secondary": null
+      },
+      {
+        "text": "אני מגלה מחדש את המשפחה שלי.",
+        "primary": 7,
+        "secondary": 4
+      },
+      {
+        "text": "אני סוף סוף מסיימת משהו שהתחלתי.",
+        "primary": 9,
+        "secondary": 2
+      },
+      {
+        "text": "אני יוצאת החוצה לבדוק אם העולם עדיין קיים.",
+        "primary": 6,
+        "secondary": 2
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "text": "איזה כפתור היית מוסיפה לחיים?",
+    "options": [
+      {
+        "text": "כפתור שמוחק רגעים מביכים.",
+        "primary": 4,
+        "secondary": null
+      },
+      {
+        "text": "כפתור שמטעין אותי באנרגיה.",
+        "primary": 1,
+        "secondary": null
+      },
+      {
+        "text": "כפתור שמבטל מבחנים בהפתעה.",
+        "primary": 3,
+        "secondary": null
+      },
+      {
+        "text": "כפתור שמוצא כל דבר שאיבדתי.",
+        "primary": 7,
+        "secondary": null
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "text": "את תקועה על אי בודד. מה הכי חסר לך?",
+    "options": [
+      {
+        "text": "וייפיי. איזו שאלה בכלל?",
+        "primary": 2,
+        "secondary": null
+      },
+      {
+        "text": "החברה הכי טובה שלי.",
+        "primary": 4,
+        "secondary": null
+      },
+      {
+        "text": "המיטה שלי. עם השמיכה שלי.",
+        "primary": 7,
+        "secondary": 1
+      },
+      {
+        "text": "משהו מעניין לעשות לפני שאני מתחילה לדבר עם קוקוסים.",
+        "primary": 9,
+        "secondary": null
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "text": "חייזרים נחתו בכדור הארץ. מה את עושה?",
+    "options": [
+      {
+        "text": "מצלמת ומעלה לפני שמישהי אחרת מספיקה.",
+        "primary": 2,
+        "secondary": null
+      },
+      {
+        "text": "שואלת אותם איך נראה בית ספר בכוכב שלהם.",
+        "primary": 3,
+        "secondary": null
+      },
+      {
+        "text": "בודקת אם אפשר לקבל טרמפ לחלל.",
+        "primary": 6,
+        "secondary": null
+      },
+      {
+        "text": "שואלת אם גם אצלם יש כלבים.",
+        "primary": 8,
+        "secondary": null
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "text": "קיבלת יום חופש בהפתעה. מה התוכנית?",
+    "options": [
+      {
+        "text": "לישון עד שהגוף מחליט שנגמר הלילה.",
+        "primary": 1,
+        "secondary": null
+      },
+      {
+        "text": "לצאת עם חברות בלי לדעת לאן.",
+        "primary": 4,
+        "secondary": 6
+      },
+      {
+        "text": "להתחיל פרויקט יצירתי ולשכוח מהשעה.",
+        "primary": 9,
+        "secondary": null
+      },
+      {
+        "text": "לצאת לטיול במקום שעוד לא הייתי בו.",
+        "primary": 6,
+        "secondary": 9
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "text": "אם החדר שלך היה יכול לדבר, מה הוא היה אומר?",
+    "options": [
+      {
+        "text": "״אני חדר, לא מחסן״.",
+        "primary": 7,
+        "secondary": null
+      },
+      {
+        "text": "״אפשר לכבות את המסך לחמש דקות?״",
+        "primary": 2,
+        "secondary": null
+      },
+      {
+        "text": "״כמה שעות אפשר לישון?!״",
+        "primary": 1,
+        "secondary": null
+      },
+      {
+        "text": "״את מתכוונת לסיים את כל היצירות שהתחלת?״",
+        "primary": 9,
+        "secondary": null
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "text": "מה היית אוסרת בחוק?",
+    "options": [
+      {
+        "text": "מבחנים ביום ראשון.",
+        "primary": 3,
+        "secondary": null
+      },
+      {
+        "text": "לשלוח הודעה קולית באורך פודקאסט.",
+        "primary": 2,
+        "secondary": 4
+      },
+      {
+        "text": "לזרוק זבל ברחוב כשיש פח במרחק שני מטרים.",
+        "primary": 8,
+        "secondary": null
+      },
+      {
+        "text": "לפרסם מבצע שמתגלה בקופה כלא באמת מבצע.",
+        "primary": 5,
+        "secondary": null
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "text": "את נכנסת למעלית עם מישהי מפורסמת. מה את עושה?",
+    "options": [
+      {
+        "text": "מבקשת סלפי ומתפללת שהמצלמה הקדמית לא תהרוס הכול.",
+        "primary": 2,
+        "secondary": 1
+      },
+      {
+        "text": "שואלת איך היא הצליחה להגיע לאן שהגיעה.",
+        "primary": 10,
+        "secondary": null
+      },
+      {
+        "text": "מתחילה לדבר כאילו אנחנו חברות כבר שנים.",
+        "primary": 4,
+        "secondary": null
+      },
+      {
+        "text": "שותקת ואז חושבת על משפט מושלם שעה אחרי.",
+        "primary": 4,
+        "secondary": null
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "text": "איזו אפליקציה חייבים להמציא בדחיפות?",
+    "options": [
+      {
+        "text": "אפליקציה שמוצאת בגדים שמתאימים לי מתוך הארון שלי.",
+        "primary": 5,
+        "secondary": 9
+      },
+      {
+        "text": "אפליקציה שמסבירה את השיעור בשפה של בני אדם.",
+        "primary": 3,
+        "secondary": null
+      },
+      {
+        "text": "אפליקציה שמודיעה לי איפה יש מקום שקט.",
+        "primary": 7,
+        "secondary": null
+      },
+      {
+        "text": "אפליקציה שיודעת מתי האוטובוס באמת מגיע.",
+        "primary": 6,
+        "secondary": null
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "text": "קיבלת תוכנית טלוויזיה משלך. איך קוראים לה?",
+    "options": [
+      {
+        "text": "״איך הגעתי למצב הזה?״",
+        "primary": 4,
+        "secondary": null
+      },
+      {
+        "text": "״קניתי את זה כי היה מבצע״.",
+        "primary": 5,
+        "secondary": null
+      },
+      {
+        "text": "״החיים הסודיים של החיות בשכונה״.",
+        "primary": 8,
+        "secondary": null
+      },
+      {
+        "text": "״רעיונות גאוניים בשלוש בלילה״.",
+        "primary": 9,
+        "secondary": null
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "text": "מה הכי מעצבן אותך בבוקר?",
+    "options": [
+      {
+        "text": "השעון המעורר והאדם שהמציא אותו.",
+        "primary": 1,
+        "secondary": null
+      },
+      {
+        "text": "שאין לי מה ללבוש למרות הארון המפוצץ.",
+        "primary": 5,
+        "secondary": null
+      },
+      {
+        "text": "שאף אחת מהחברות לא עונה.",
+        "primary": 4,
+        "secondary": null
+      },
+      {
+        "text": "שהאוטובוס מגיע בדיוק כשאני עדיין בבית.",
+        "primary": 6,
+        "secondary": null
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "text": "מכונת זמן מחכה לך בחוץ. לאן את נוסעת?",
+    "options": [
+      {
+        "text": "לעתיד, לבדוק מה יצא ממני.",
+        "primary": 10,
+        "secondary": null
+      },
+      {
+        "text": "לתקופת הדינוזאורים. מרחוק, כן?",
+        "primary": 8,
+        "secondary": null
+      },
+      {
+        "text": "לאתמול, לתקן משהו מביך שאמרתי.",
+        "primary": 4,
+        "secondary": null
+      },
+      {
+        "text": "לעוד שבוע, לבדוק מה יהיה במבחן.",
+        "primary": 3,
+        "secondary": null
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "text": "נתנו לך לעצב מחדש את בית הספר. מה את מוסיפה?",
+    "options": [
+      {
+        "text": "חדר שינה לשיעור הראשון.",
+        "primary": 1,
+        "secondary": 3
+      },
+      {
+        "text": "מגלשות במקום מדרגות.",
+        "primary": 6,
+        "secondary": 9
+      },
+      {
+        "text": "מתחם יצירה ענק עם כל החומרים בעולם.",
+        "primary": 9,
+        "secondary": 3
+      },
+      {
+        "text": "גינה עם חיות במקום עוד מגרש בטון.",
+        "primary": 8,
+        "secondary": 3
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "text": "מה היית לוקחת למשימה בחלל?",
+    "options": [
+      {
+        "text": "מלא חטיפים. אני לא סומכת על האוכל שם.",
+        "primary": 1,
+        "secondary": null
+      },
+      {
+        "text": "מצלמה כדי לתעד הכול.",
+        "primary": 9,
+        "secondary": null
+      },
+      {
+        "text": "ערכת יצירה, כי הטיסה הזאת הולכת להיות ארוכה.",
+        "primary": 9,
+        "secondary": null
+      },
+      {
+        "text": "חברה טובה, כדי שיהיה עם מי לצחוק.",
+        "primary": 4,
+        "secondary": null
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "text": "מה היית רוצה שיקרה באופן אוטומטי?",
+    "options": [
+      {
+        "text": "שהחדר יסדר את עצמו.",
+        "primary": 7,
+        "secondary": null
+      },
+      {
+        "text": "שהכסף בארנק יתחדש כל בוקר.",
+        "primary": 5,
+        "secondary": null
+      },
+      {
+        "text": "שהגוף יתאפס אחרי לילה בלי שינה.",
+        "primary": 1,
+        "secondary": null
+      },
+      {
+        "text": "שכל הודעה מביכה תימחק לפני שקוראים אותה.",
+        "primary": 2,
+        "secondary": 4
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "text": "פתחו פארק שעשועים במיוחד בשבילך. מה האטרקציה המרכזית?",
+    "options": [
+      {
+        "text": "רכבת הרים שעוברת בין עננים.",
+        "primary": 6,
+        "secondary": 9
+      },
+      {
+        "text": "חדר מציאות מדומה שאפשר להיות בו כל דבר.",
+        "primary": 9,
+        "secondary": 2
+      },
+      {
+        "text": "מתחם שבו אפשר להמציא ולבנות דברים מטורפים.",
+        "primary": 9,
+        "secondary": null
+      },
+      {
+        "text": "ספארי שבו החיות מסתובבות חופשי ואנחנו בכלובים.",
+        "primary": 8,
+        "secondary": null
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "text": "איזה משפט היית מדפיסה על חולצה?",
+    "options": [
+      {
+        "text": "״אני לא מאחרת, אני מגיעה בזמן שלי״.",
+        "primary": 6,
+        "secondary": null
+      },
+      {
+        "text": "״יש לי רעיון. תחזיקו חזק״.",
+        "primary": 9,
+        "secondary": null
+      },
+      {
+        "text": "״לא להפריע, אני בטעינה״.",
+        "primary": 1,
+        "secondary": null
+      },
+      {
+        "text": "״באתי בשביל הכיף, נשארתי בשביל החברות״.",
+        "primary": 4,
+        "secondary": 9
+      }
+    ]
+  }
+];
 
+    // Every answer gives exactly 2 primary points and, where relevant, 1 secondary.
+    // Unequal content coverage is normalized per domain, never per question.
+    // Centers/scales start from the exact uniform-answer mean and variance;
+    // centers are calibrated on 200,000 samples and checked on 100,000 unseen ones.
+    // No technology flags, answer bonuses, or question weights are used.
+    const normalization = {"centers": [5.58478602, 4.75933865, 3.89377104, 6.18062443, 3.36502942, 5.21710342, 3.80453378, 3.334738, 7.22008795, 1.61429315], "scales": [2.79508497, 2.43669859, 2.16506351, 2.88314065, 2.17944947, 2.72717803, 2.44948974, 2.29128785, 2.66926956, 1.32287566]};
     let currentQuestion = 0;
     let answers = [];
     let scores = {};
-    let hasBroadTechPerception = false;
-    let hasBroadTechScope = false;
-
-    function initScores() {
-      scores = {};
-      domains.forEach(d => scores[d.id] = 0);
-      hasBroadTechPerception = false;
-      hasBroadTechScope = false;
-    }
+    let primaryCounts = {};
+    let acceptingAnswer = false;
+    let transitionTimer;
 
     function startQuiz() {
-      document.getElementById('startScreen').style.display = 'none';
+      clearTimeout(transitionTimer);
+      document.getElementById('resultScreen').classList.remove('active');
+      document.getElementById('loadingScreen').classList.remove('active');
       document.querySelector('.progress-bar').classList.add('visible');
-      initScores();
+      scores = Object.fromEntries(domains.map(d => [d.id, 0]));
+      primaryCounts = Object.fromEntries(domains.map(d => [d.id, 0]));
       currentQuestion = 0;
       answers = [];
       showQuestion();
     }
 
     function showQuestion() {
+      acceptingAnswer = false;
       const q = questions[currentQuestion];
       const screen = document.getElementById('questionScreen');
       const textEl = document.getElementById('questionText');
       const optionsEl = document.getElementById('optionsContainer');
-
+      const questionIndex = currentQuestion;
       screen.classList.remove('active');
-
-      setTimeout(() => {
-        textEl.textContent = q.text;
-        optionsEl.innerHTML = '';
-
-        q.options.forEach((opt, idx) => {
-          const div = document.createElement('div');
-          div.className = 'option';
-          div.textContent = opt.text;
-          div.onclick = () => selectOption(idx);
-          optionsEl.appendChild(div);
-        });
-
-        screen.classList.add('active');
-        updateProgress();
-      }, 50);
+      textEl.textContent = q.text;
+      optionsEl.replaceChildren();
+      q.options.forEach((opt, idx) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'option';
+        button.textContent = opt.text;
+        button.onclick = () => selectOption(idx, questionIndex);
+        optionsEl.appendChild(button);
+      });
+      screen.classList.add('active');
+      updateProgress();
+      acceptingAnswer = true;
+      textEl.focus({ preventScroll: true });
+      window.scrollTo({ top: 0, behavior: 'instant' });
     }
 
     function updateProgress() {
-      const pct = ((currentQuestion + 1) / questions.length) * 100;
-      document.querySelector('.progress-fill').style.width = pct + '%';
+      document.querySelector('.progress-fill').style.width = (answers.length / questions.length * 100) + '%';
+      document.querySelector('.progress-bar').setAttribute('aria-valuenow', answers.length);
+      document.getElementById('questionCounter').textContent = 'שאלה ' + (currentQuestion + 1) + ' מתוך ' + questions.length;
     }
 
-    function selectOption(idx) {
-      const options = document.querySelectorAll('.option');
-      options.forEach(o => o.classList.remove('selected'));
-      options[idx].classList.add('selected');
-
-      const q = questions[currentQuestion];
-      const opt = q.options[idx];
-
-      answers.push({ questionId: q.id, optionIndex: idx });
-
-      if (opt.primary) {
-        scores[opt.primary] += q.weight;
-      }
-      if (opt.secondary) {
-        scores[opt.secondary] += q.weight * 0.5;
-      }
-
-      if (opt.broadPerception) {
-        hasBroadTechPerception = true;
-      }
-      if (opt.broadScope) {
-        hasBroadTechScope = true;
-      }
-
-      setTimeout(() => {
+    function selectOption(idx, questionIndex = currentQuestion) {
+      if (!acceptingAnswer || questionIndex !== currentQuestion || answers[currentQuestion]) return;
+      const opt = questions[currentQuestion]?.options[idx];
+      if (!opt) return;
+      acceptingAnswer = false;
+      document.querySelectorAll('.option').forEach((button, i) => {
+        button.disabled = true;
+        button.classList.toggle('selected', i === idx);
+      });
+      answers[currentQuestion] = { questionId: questions[currentQuestion].id, optionIndex: idx };
+      scores[opt.primary] += 2;
+      primaryCounts[opt.primary] += 1;
+      if (opt.secondary !== null) scores[opt.secondary] += 1;
+      document.querySelector('.progress-fill').style.width = (answers.length / questions.length * 100) + '%';
+      document.querySelector('.progress-bar').setAttribute('aria-valuenow', answers.length);
+      transitionTimer = setTimeout(() => {
         currentQuestion++;
-        if (currentQuestion < questions.length) {
-          showQuestion();
-        } else {
-          showLoading();
-        }
+        if (currentQuestion < questions.length) showQuestion();
+        else showLoading();
       }, 600);
+    }
+
+    function rankDomains(rawScores, counts, random = Math.random) {
+      // Shuffle first with Fisher–Yates: no fixed domain/array-order preference.
+      const ranked = domains.map((d, i) => ({
+        id: d.id,
+        score: (rawScores[d.id] - normalization.centers[i]) / normalization.scales[i],
+        primary: counts[d.id]
+      }));
+      for (let i = ranked.length - 1; i > 0; i--) {
+        const j = Math.floor(random() * (i + 1));
+        [ranked[i], ranked[j]] = [ranked[j], ranked[i]];
+      }
+      return ranked.sort((a, b) => Math.abs(b.score - a.score) > 1e-10
+        ? b.score - a.score : b.primary - a.primary).slice(0, 3);
     }
 
     function showLoading() {
       document.getElementById('questionScreen').classList.remove('active');
+      document.getElementById('questionCounter').textContent = '';
       document.getElementById('loadingScreen').classList.add('active');
-
-      setTimeout(() => {
-        calculateResults();
-      }, 1500);
+      transitionTimer = setTimeout(calculateResults, 900);
     }
 
     function calculateResults() {
-      const digitalDomains = [2, 3, 9];
-      
-      if (hasBroadTechPerception) {
-        Object.keys(scores).forEach(id => {
-          scores[id] += 0.5;
-        });
-      }
-
-      let sorted = Object.entries(scores)
-        .map(([id, score]) => ({ id: parseInt(id), score }))
-        .sort((a, b) => b.score - a.score);
-
-      if (!hasBroadTechScope) {
-        sorted = sorted.map(item => {
-          if (digitalDomains.includes(item.id)) {
-            return { ...item, score: item.score + 0.3 };
-          }
-          return item;
-        }).sort((a, b) => b.score - a.score);
-      }
-
-      const top1 = sorted[0];
-      const top2 = sorted[1];
-
-      const results = [top1, top2];
-
-      showResults(results);
+      showResults(rankDomains(scores, primaryCounts));
     }
 
     function showResults(results) {
       document.getElementById('loadingScreen').classList.remove('active');
-
       const container = document.getElementById('domainsResult');
-      container.innerHTML = '';
-
+      container.replaceChildren();
       results.forEach(r => {
         const domain = domains.find(d => d.id === r.id);
-        if (domain) {
-          const card = document.createElement('div');
-          card.className = 'domain-card';
-          card.innerHTML = `
-            <div class="icon">${domain.icon}</div>
-            <div class="name" style="color: ${domain.color};">${domain.name}</div>
-          `;
-          container.appendChild(card);
-        }
+        const card = document.createElement('a');
+        card.className = 'domain-card';
+        card.href = '../domains/d' + domain.id + '.html';
+        card.innerHTML = `<span class="icon" aria-hidden="true">${domain.icon}</span><span class="name" style="color: ${domain.color}">${domain.name}</span>`;
+        container.appendChild(card);
       });
-
       document.getElementById('resultScreen').classList.add('active');
+      document.getElementById('resultTitle').focus({ preventScroll: true });
+      window.scrollTo({ top: 0, behavior: 'instant' });
     }
 
-    function restartQuiz() {
-      document.getElementById('resultScreen').classList.remove('active');
-      document.querySelector('.progress-bar').classList.remove('visible');
-      document.querySelector('.progress-fill').style.width = '0%';
-      document.getElementById('startScreen').style.display = 'flex';
-    }
   </script>
 
 <script>
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", function() {
-      navigator.serviceWorker.register("../service-worker.js").catch(function(error) {
+      navigator.serviceWorker.register("../service-worker.js", { updateViaCache: "none" }).catch(function(error) {
         console.error("Service worker registration failed:", error);
       });
     });
