@@ -3,6 +3,27 @@ const CACHE_NAME = `portzot-derech-cache-${SW_VERSION}`;
 
 // ── נכסים שנשמרים ב-Cache בהתקנה ─────────────────────────────────────────
 const CORE_ASSETS = [
+  "./js/course-language.js",
+  "./css/course-language.css",
+  "./ar/strongermenu-2026.html",
+  "./ar/start/quiz.html",
+  "./ar/domains/alldomains.html",
+  "./ar/domains/d1.html",
+  "./ar/domains/d2.html",
+  "./ar/domains/d3.html",
+  "./ar/domains/d4.html",
+  "./ar/domains/d5.html",
+  "./ar/domains/d6.html",
+  "./ar/domains/d7.html",
+  "./ar/domains/d8.html",
+  "./ar/domains/d9.html",
+  "./ar/domains/d10.html",
+  "./ar/pairing/pairing.html",
+  "./ar/pairing/questionnaire.html",
+  "./ar/pairing/waiting.html",
+  "./ar/pairing/admin.html",
+  "./ar/pairing/matching.html",
+
   "./",
   "./index.html",
   "./strongermenu-2026.html",

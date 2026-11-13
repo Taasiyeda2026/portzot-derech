@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta name="robots" content="noindex,nofollow,noarchive">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="manifest" href="../../manifest.json">
+  <meta name="theme-color" content="#ec4899">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="apple-touch-icon" href="../../icon/favicon.png">
+    <title>חלוקה לקבוצות עבודה - פורצות דרך</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            font-size: 17px;
+        }
+
+        html,
+        body {
+            min-height: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000;
+            color: #fff;
+            min-height: 100vh;
+            padding: 40px 20px;
+            position: relative;
+            zoom: 0.8;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(255,20,147,0.15) 0%, transparent 70%);
+            pointer-events: none;
+            animation: pulseGlow 4s ease-in-out infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding-bottom: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ff1493;
+            text-shadow: 0 0 20px rgba(255,20,147,0.7);
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: rgba(20, 20, 20, 0.95);
+            border: 2px solid #ff1493;
+            border-radius: 16px;
+            padding: 24px;
+            margin: 0 auto 24px;
+            max-width: 500px;
+            box-shadow: 0 0 30px rgba(255,20,147,0.3);
+        }
+
+        button {
+            width: 100%;
+            margin: 0 auto;
+            display: block;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #ff1493, #ff69b4);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255,20,147,0.4);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255,20,147,0.6);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .results {
+            display: none;
+            max-width: 680px;
+            margin: 0 auto;
+            font-size: 1.05rem;
+        }
+
+        .results.show {
+            display: block;
+        }
+
+        .pair {
+            background: rgba(255,20,147,0.1);
+            border: 1px solid #ff1493;
+            border-radius: 12px;
+            padding: 13px;
+            margin-bottom: 10px;
+        }
+
+        .pair h3 {
+            color: #ff69b4;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .pair-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pair-names {
+            flex: 1;
+            font-size: 15px;
+        }
+
+        .score {
+            background: linear-gradient(135deg, #ff1493, #ff69b4);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            display: none;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .error {
+            background: rgba(255,50,50,0.2);
+            border: 1px solid #ff3232;
+            border-radius: 8px;
+            padding: 16px;
+            color: #ff6b6b;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .error.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 הצעת חלוקה לקבוצות 🎯</h1>
+
+        <div class="card">
+            <button id="runButton" onclick="runMatching()">💝 הציגי חלוקה לקבוצות</button>
+            <div class="error" id="error"></div>
+        </div>
+
+        <div class="loading" id="loading">
+            <p>⏳ יוצרות קבוצות עבודה מתאימות...</p>
+        </div>
+
+        <div class="results" id="results"></div>
+    </div>
+
+    <script type="module">
+const id=new URLSearchParams(location.search).get('activity');
+location.replace('admin.html'+(id?'?activity='+encodeURIComponent(id):''));
+</script>
+
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function() {
+      navigator.serviceWorker.register("../../service-worker.js").catch(function(error) {
+        console.error("Service worker registration failed:", error);
+      });
+    });
+  }
+</script>
+
+</body>
+</html>

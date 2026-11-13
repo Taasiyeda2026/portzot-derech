@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
+<script src="../js/course-language.js"></script>
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="manifest" href="../manifest.json">
@@ -588,7 +590,7 @@
     /* Keep all four answers visible on laptop screens and enlarged displays. */
     @media (min-width: 601px) {
       #quizWrapper:has(.question-screen.active) { padding: 16px; }
-      #quizWrapper .container:has(.question-screen.active) { max-width: 760px; min-height: 0; padding: 24px 28px; }
+      #quizWrapper .container:has(.question-screen.active) { max-width: 600px; min-height: 0; padding: 24px 28px; }
       #quizWrapper:has(.question-screen.active) .question-counter { margin-bottom: 8px; }
       #quizWrapper:has(.question-screen.active) .progress-bar { margin-bottom: 18px; flex-shrink: 0; }
       #quizWrapper .question-card-header { padding: 16px 20px; }
@@ -607,9 +609,19 @@
       #quizWrapper .options { gap: 6px; }
       #quizWrapper .option { padding: 8px 14px; line-height: 1.4; }
     }
+
+    /* Lightweight question transitions use only opacity and transform. */
+    #questionScreen.active { animation: none; }
+    #optionsContainer .option { transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease; }
+    #optionsContainer .option.selected { background: #E6E4F2; border-color: #8A85C6; color: #2F3A5F; }
+    @media (prefers-reduced-motion: reduce) {
+      #optionsContainer .option { transition: none; }
+    }
   </style>
+<link rel="stylesheet" href="../css/course-language.css">
 </head>
 <body>
+<div class="course-lang-floating"><nav class="course-lang-switch" aria-label="בחירת שפה"><a href="quiz.html?lang=he" lang="he" data-course-language="he" aria-current="true">עברית</a><span class="lang-separator" aria-hidden="true">|</span><a href="../ar/start/quiz.html?lang=ar" lang="ar" data-course-language="ar">العربية</a></nav></div>
 
   <!-- ── INTRO ─────────────────────────────────────────── -->
   <div id="introSection">
@@ -1231,7 +1243,34 @@
     let primaryCounts = {};
     let acceptingAnswer = false;
     let transitionTimer;
+    let questionAnimation;
 
+    const quizDraftKey = 'portzot-start-draft-v1';
+    function saveQuizDraft(results) {
+      try { sessionStorage.setItem(quizDraftKey, JSON.stringify({ answers, results: results || null })); } catch (_) {}
+    }
+    function restoreQuizDraft() {
+      let draft;
+      try { draft = JSON.parse(sessionStorage.getItem(quizDraftKey)); } catch (_) { return; }
+      if (!draft || !Array.isArray(draft.answers) || !draft.answers.length || draft.answers.length > questions.length) return;
+      if (!draft.answers.every((a, i) => a.questionId === questions[i].id && questions[i].options[a.optionIndex])) return;
+      document.getElementById('introSection').style.display = 'none';
+      document.getElementById('quizWrapper').style.display = 'flex';
+      document.querySelector('.progress-bar').classList.add('visible');
+      scores = Object.fromEntries(domains.map(d => [d.id, 0]));
+      primaryCounts = Object.fromEntries(domains.map(d => [d.id, 0]));
+      answers = draft.answers;
+      answers.forEach((a, i) => {
+        const opt = questions[i].options[a.optionIndex];
+        scores[opt.primary] += 2;
+        primaryCounts[opt.primary] += 1;
+        if (opt.secondary !== null) scores[opt.secondary] += 1;
+      });
+      currentQuestion = answers.length;
+      if (currentQuestion < questions.length) showQuestion();
+      else if (Array.isArray(draft.results) && draft.results.length === 3 && draft.results.every(r => domains.some(d => d.id === r.id))) showResults(draft.results);
+      else calculateResults();
+    }
     function startQuiz() {
       clearTimeout(transitionTimer);
       document.getElementById('resultScreen').classList.remove('active');
@@ -1241,6 +1280,7 @@
       primaryCounts = Object.fromEntries(domains.map(d => [d.id, 0]));
       currentQuestion = 0;
       answers = [];
+      saveQuizDraft();
       showQuestion();
     }
 
@@ -1251,6 +1291,7 @@
       const textEl = document.getElementById('questionText');
       const optionsEl = document.getElementById('optionsContainer');
       const questionIndex = currentQuestion;
+      if (questionAnimation) questionAnimation.cancel();
       screen.classList.remove('active');
       textEl.textContent = q.text;
       optionsEl.replaceChildren();
@@ -1263,6 +1304,12 @@
         optionsEl.appendChild(button);
       });
       screen.classList.add('active');
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        questionAnimation = screen.animate(
+          [{ opacity: 0, transform: 'translateY(6px)' }, { opacity: 1, transform: 'translateY(0)' }],
+          { duration: 150, easing: 'ease-out' }
+        );
+      }
       updateProgress();
       acceptingAnswer = true;
       textEl.focus({ preventScroll: true });
@@ -1290,11 +1337,25 @@
       if (opt.secondary !== null) scores[opt.secondary] += 1;
       document.querySelector('.progress-fill').style.width = (answers.length / questions.length * 100) + '%';
       document.querySelector('.progress-bar').setAttribute('aria-valuenow', answers.length);
+      saveQuizDraft();
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const screen = document.getElementById('questionScreen');
+      // Briefly retain the selected answer, then fade out before replacing it.
       transitionTimer = setTimeout(() => {
-        currentQuestion++;
-        if (currentQuestion < questions.length) showQuestion();
-        else showLoading();
-      }, 600);
+        if (questionAnimation) questionAnimation.cancel();
+        if (!reduceMotion) {
+          questionAnimation = screen.animate(
+            [{ opacity: 1, transform: 'translateY(0)' }, { opacity: 0, transform: 'translateY(-6px)' }],
+            { duration: 150, easing: 'ease-in', fill: 'forwards' }
+          );
+        }
+        transitionTimer = setTimeout(() => {
+          if (questionAnimation) questionAnimation.cancel();
+          currentQuestion++;
+          if (currentQuestion < questions.length) showQuestion();
+          else showLoading();
+        }, reduceMotion ? 0 : 150);
+      }, 150);
     }
 
     function rankDomains(rawScores, counts, random = Math.random) {
@@ -1324,6 +1385,7 @@
     }
 
     function showResults(results) {
+      saveQuizDraft(results);
       document.getElementById('loadingScreen').classList.remove('active');
       const container = document.getElementById('domainsResult');
       container.replaceChildren();
@@ -1340,6 +1402,7 @@
       window.scrollTo({ top: 0, behavior: 'instant' });
     }
 
+    restoreQuizDraft();
   </script>
 
 <script>

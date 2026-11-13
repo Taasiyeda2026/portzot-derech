@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<script src="../../js/course-language.js"></script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>من أنتِ في المجموعة؟ — رائدات الطريق</title>
+  <style>
+    * { box-sizing: border-box; }
+    :root { font-size: 17px; }
+    html, body { min-height: 100%; overflow-x: hidden; overflow-y: auto; }
+    body { margin: 0; font-family: "Segoe UI", Tahoma, sans-serif; background: linear-gradient(135deg, #1f1147, #4a2070 40%, #d73990 100%); color: #fff; min-height: 100vh; display: grid; place-items: center; padding: 20px; zoom: 0.8; }
+    .card { width: min(620px, 100%); max-width: 620px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); border-radius: 22px; padding: 20px; backdrop-filter: blur(8px); box-shadow: 0 20px 60px rgba(14,7,37,.35); }
+    .top { margin-bottom: 16px; }
+    .title { font-size: 1.8rem; margin: 0 0 8px; }
+    .subtitle { margin: 0 0 5px; opacity: .95; }
+    .subtitle-note { margin: 0; opacity: .72; font-size: .87rem; }
+    .meta { display:flex; justify-content:space-between; margin: 18px 0 10px; font-weight: 600; }
+    .progress-track { background: rgba(255,255,255,.2); height: 10px; border-radius: 999px; overflow: hidden; }
+    .progress-fill { height:100%; width:0; background: linear-gradient(90deg,#59d5ff,#ff7dc4); transition: width .25s ease; }
+    .question-card { background: rgba(0,0,0,.22); border-radius: 16px; padding: 17px; margin-top: 18px; }
+    .eyebrow { display: inline-block; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.22); border-radius: 20px; padding: 3px 11px; font-size: .81rem; margin-bottom: 9px; }
+    .question-text { font-size: 1.2rem; margin: 0 0 14px; }
+    #textAnswer { width: 100%; padding: 12px; border: 0; border-radius: 12px; font-size: 1rem; }
+    .options { display: grid; gap: 10px; }
+    .option-btn { width:100%; text-align:right; background: rgba(255,255,255,.12); color:#fff; border:1px solid rgba(255,255,255,.3); border-radius:12px; padding:10px 12px; cursor:pointer; font-size:1rem; line-height: 1.4; }
+    .option-btn:hover { background: rgba(255,255,255,.22); }
+    .option-btn.active { background: linear-gradient(135deg,#ff4aa2,#7b6dff); border-color: transparent; }
+    .hint { min-height: 22px; color: #ffd5ef; margin-top: 10px; font-size: .95rem; }
+    .actions { margin-top: 16px; display:flex; gap:10px; align-items: center; }
+    .btn { border:none; border-radius:12px; padding:9px 14px; font-size:.98rem; cursor:pointer; }
+    .btn-secondary { background: rgba(255,255,255,.18); color:#fff; }
+    .btn-primary { background: linear-gradient(135deg,#4ed7ff,#ff6eb8); color:#1e1240; font-weight:700; flex:0 0 auto; }
+    @media (max-width: 640px) { .actions { justify-content: space-between; } }
+    .saving { text-align:center; padding: 26px 8px; font-size:1.1rem; display:none; }
+    .saving-sub { font-size:.9rem; opacity:.82; display:block; margin-top:6px; }
+  </style>
+<link rel="stylesheet" href="../../css/course-language.css">
+</head>
+<body>
+
+  <main class="card">
+    <div class="course-lang-inline"><nav class="course-lang-switch" aria-label="اختيار اللغة"><a href="../../pairing/questionnaire.html?lang=he" lang="he" data-course-language="he">עברית</a><span class="lang-separator" aria-hidden="true">|</span><a href="questionnaire.html?lang=ar" lang="ar" data-course-language="ar" aria-current="true">العربية</a></nav></div>
+    <div class="top">
+      <h1 class="title">من أنتِ في المجموعة؟ 💜</h1>
+      <p class="subtitle">بعض الأسئلة الخفيفة والمضحكة قليلًا، والكثير ممّا يعبّر عنكِ.<br>لا توجد إجابة صحيحة أو خاطئة — اختاري فقط ما يشبهكِ أكثر.</p>
+      <p class="subtitle-note">ستساعد الإجابات في تكوين مجموعات عمل أكثر راحة وملاءمة.</p>
+    </div>
+
+    <div class="meta"><span id="stepLabel">السؤال 1 من 15</span><span id="progressText">7%</span></div>
+    <div class="progress-track"><div id="progressFill" class="progress-fill"></div></div>
+
+    <section class="question-card" id="questionCard">
+      <span class="eyebrow" id="eyebrow"></span>
+      <h2 class="question-text" id="questionText"></h2>
+      <input id="textAnswer" type="text" autocomplete="name" placeholder="اسمكِ الأوّل يكفي تمامًا" style="display:none;">
+      <div class="options" id="options"></div>
+      <div class="hint" id="hint"></div>
+      <div class="actions">
+        <button class="btn btn-secondary" id="backBtn" type="button">نعود لحظة</button>
+        <button class="btn btn-primary" id="nextBtn" type="button">إلى الأمام</button>
+      </div>
+    </section>
+
+    <div class="saving" id="savingMessage">
+      تمام، تعرّفنا عليكِ ✨
+      <span class="saving-sub">بعد لحظة نتابع إلى مجموعتكِ...</span>
+    </div>
+  </main>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+import { getFirestore, doc, setDoc, updateDoc, increment } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+const cfg={apiKey:"AIzaSyCFSq5b-HgkTxFNhBJIBdOe2ian5TZvMPE",authDomain:"portzot-derech.firebaseapp.com",projectId:"portzot-derech",storageBucket:"portzot-derech.firebasestorage.app",messagingSenderId:"236417614890",appId:"1:236417614890:web:587b0eb3c5eedfa352af53"};
+const db=getFirestore(initializeApp(cfg));
+const sessionId=new URLSearchParams(location.search).get('session');
+if(!sessionId) location.href='pairing.html';
+
+const questions = [
+  {
+    field: 'displayName',
+    eyebrow: 'لحظة، ما اسمكِ؟ ✨',
+    text: 'بأيّ اسم نناديكِ في المجموعة؟',
+    options: []
+  },
+  {
+    field: 'mainDomain',
+    eyebrow: 'ما الذي يثير فضولكِ؟ 🔎',
+    text: 'أيّ عالم ترغبين في استكشافه دون أن تشعري أنّكِ في درس؟',
+    options: [
+      { label: 'الحياة الرقمية والهواتف وكلّ ما يحدث لنا عبر الشاشة', code: 'digital_life' },
+      { label: 'الضغط والدراسة والتنظيم وكلّ شعور «لديّ أشياء كثيرة أفعلها»', code: 'learning_stress_organization' },
+      { label: 'الصديقات والرسائل والمحادثات وكلّ المواقف الصغيرة في الطريق', code: 'social_communication' },
+      { label: 'الطبيعة والحيوانات والبيئة وكلّ ما ينبغي الحفاظ عليه', code: 'environment_animals' },
+      { label: 'العادات والاختيارات اليومية والأشياء الصغيرة التي تؤثّر فينا', code: 'daily_choices_habits' },
+      { label: 'الإبداع والهوايات ووقت الفراغ وكلّ ما يضيف بعض المتعة', code: 'leisure_creativity_hobbies' },
+      { label: 'الجسم والصحّة والثقة والشعور بالرضا عن نفسي', code: 'health_wellbeing' },
+      { label: 'البيت والعائلة والبيئة القريبة', code: 'home_family' },
+      { label: 'الحركة والمكان والسلامة وكيف نتدبّر أمورنا في الطريق', code: 'space_mobility_safety' },
+      { label: 'المستقبل والأفكار الجديدة والأشياء التي لم توجد بعد', code: 'future_ideas' }
+    ]
+  },
+  {
+    field: 'problemType',
+    eyebrow: 'أيّ مشكلة تشدّ اهتمامكِ؟ 🧩',
+    text: 'أيّ نوع من المشكلات ترغبين أكثر في حلّه؟',
+    options: [
+      { label: 'شيء يزعجنا يوميًا وقد اعتاد الجميع عليه', code: 'daily_life_issue' },
+      { label: 'أمر اجتماعي بين الناس والرسائل والتفاهم وسوء الفهم', code: 'social_issue' },
+      { label: 'شيء يتعلّق بالتعلّم أو المدرسة أو كثرة الأعباء', code: 'learning_issue' },
+      { label: 'شيء يتعلّق بالسلامة أو الحذر', code: 'safety_issue' },
+      { label: 'شيء يتعلّق بالبيئة أو الطبيعة أو الحيوانات', code: 'environment_issue' },
+      { label: 'شيء يتعلّق بالوقت أو الترتيب أو الراحة أو «لماذا كلّ هذا التعقيد؟»', code: 'efficiency_issue' },
+      { label: 'شيء يتعلّق بالتواصل أو الارتباك أو عدم الفهم', code: 'communication_issue' },
+      { label: 'شيء يتعلّق بالثقة بالنفس أو الشجاعة أو الشعور بالقدرة', code: 'self_efficacy_issue' }
+    ]
+  },
+  {
+    field: 'infoProcessingStyle',
+    eyebrow: 'لحظة واتساب 💬',
+    text: 'امتلأت المجموعة بـ73 رسالة ولا تعرفين ما الذي جرى. أيّ ردّ يشبهكِ أكثر؟',
+    options: [
+      { label: 'أعود إلى البداية وأقرأ كلّ شيء كمحقّقة. لن تفوتني أيّ تفصيلة.', code: 'thorough_reader' },
+      { label: 'أكتب فورًا: «لحظة، ماذا قرّرتنّ في النهاية؟»', code: 'decision_focused' },
+      { label: 'أبحث فقط عن الرسالة المهمّة وأتجاوز كلّ الدراما.', code: 'key_info_finder' },
+      { label: 'أنتظر أن تلخّص إحداهنّ، فلهذا وُجدت الصديقات المقرّبات.', code: 'summary_dependent' },
+      { label: 'أتولّى التنظيم: «يا بنات، لحظة، سأرتّب الأمور».', code: 'organizer' },
+      { label: 'أكتم الإشعارات. إن كان الأمر مهمًا فسيجدنني 😅', code: 'selective_attention' }
+    ]
+  },
+  {
+    field: 'planningStyle',
+    eyebrow: 'الخروج من البيت ⏰',
+    text: 'بقيت لكِ 20 دقيقة للخروج ولستِ جاهزة فعلًا بعد. ما الأقرب إليكِ؟',
+    options: [
+      { label: 'كلّ شيء جاهز مسبقًا. طبعًا.', code: 'planner' },
+      { label: 'أستعدّ بسرعة وأتدبّر الأمور في أثناء ذلك.', code: 'quick_executor' },
+      { label: 'أبدأ ثمّ أتذكّر خمسة أشياء أخرى.', code: 'improviser' },
+      { label: 'أحتاج إلى قائمة، وإلّا سيبقى شيء في البيت بالتأكيد.', code: 'checklist_oriented' },
+      { label: 'أسأل صديقة عمّا يجب إحضاره.', code: 'collaborative_planner' },
+      { label: 'أرمي كلّ شيء في الحقيبة وآمل أن يحالفني الحظّ.', code: 'flexible' },
+      { label: 'أجلس على السرير «لألتقط أنفاسي لحظة»، ثمّ أكتشف أنّ 21 دقيقة مرّت.', code: 'needs_transition_time' }
+    ]
+  },
+  {
+    field: 'choiceDriver',
+    eyebrow: 'لحظة مسلسل 🎬',
+    text: 'حين تختارين ما تشاهدينه، ما أكثر ما يجذبكِ؟',
+    options: [
+      { label: 'أوصت به صديقة، وهذا يكفي لأعطيه فرصة.', code: 'social_influence' },
+      { label: 'الإعلان التشويقي يبدو جيّدًا، لذا سأشاهده.', code: 'visual_thinker' },
+      { label: 'تبدو القصّة مثيرة للاهتمام، وهذا ما يشدّني.', code: 'concept_oriented' },
+      { label: 'الشخصيات. إن تعلّقتُ بها فلا مجال للتراجع.', code: 'empathy_user_focus' },
+      { label: 'إن كانت الجميع تتحدّث عنه، فلا بدّ أن أفهم سبب الضجّة.', code: 'trend_sensitive' },
+      { label: 'أقرأ التقييمات أوّلًا. لا أُخدع بهذه السرعة.', code: 'researcher' }
+    ]
+  },
+  {
+    field: 'naturalTeamContribution',
+    eyebrow: 'تنظيم عيد ميلاد 🎉',
+    text: 'تخطّطن لعيد ميلاد صديقة. أيّ دور تتولّينه بطبيعتكِ؟',
+    options: [
+      { label: 'أطرح أفكارًا للفكرة العامّة وكأنّني وكالة إعلانات.', code: 'ideas' },
+      { label: 'أنظّم من تُحضر ماذا، وإلّا سننتهي بثلاث كعكات ودون أكواب.', code: 'organization' },
+      { label: 'أصمّم دعوة أو صورة أو شيئًا يبدو جميلًا.', code: 'design' },
+      { label: 'أتأكّد أنّنا لم ننسَ إحداهنّ، فهذا مهمّ فعلًا.', code: 'empathy_inclusion' },
+      { label: 'أحضّر نشاطًا أو لعبة، ليكون هناك ما هو أكثر من «هيا نأكل الكعكة».', code: 'experience_builder' },
+      { label: 'ألقي التهنئة أو أقدّم الفقرة أو أقود اللحظة.', code: 'presentation' },
+      { label: 'أنجز خلف الكواليس ما لا تلاحظه إحداهنّ، لكن من دونه لا يحدث شيء.', code: 'support' }
+    ]
+  },
+  {
+    field: 'problemSolvingStyle',
+    eyebrow: 'أزمة هاتف 📱',
+    text: 'قرّر الهاتف أن يعاندكِ. ما خطوتكِ الأولى؟',
+    options: [
+      { label: 'أحاول وحدي حتى يعمل. سأحلّ الأمر بيني وبين الهاتف.', code: 'persistence_trial_error' },
+      { label: 'أبحث عن حلّ في جوجل أو تيك توك. بالتأكيد عانت إحداهنّ من هذا قبلي.', code: 'independent_research' },
+      { label: 'أسأل من تفهم في الأمر. لا طاقة لي لإعادة اختراع العجلة.', code: 'asks_for_help' },
+      { label: 'أغلقه، أفتحه، وأدعو. الطريقة الكلاسيكية.', code: 'simple_reset' },
+      { label: 'أنزعج وأتركه قليلًا ثمّ أعود حين أكون أهدأ.', code: 'needs_pause' },
+      { label: 'أدخل إلى الإعدادات وأفحص ما الذي تغيّر.', code: 'technical_checking' }
+    ]
+  },
+  {
+    field: 'visualCommunicationStyle',
+    eyebrow: 'الستوري أمر جدّي 📸',
+    text: 'تنشرين ستوري. ما أهمّ شيء لا تريدين أن يفسد؟',
+    options: [
+      { label: 'أن يبدو جميلًا. مهلًا، لدينا معايير.', code: 'aesthetics' },
+      { label: 'أن ينقل الإحساس بدقّة.', code: 'emotional_message' },
+      { label: 'أن يكون مضحكًا أو مبتكرًا، لا ستوري مملًا آخر.', code: 'originality' },
+      { label: 'أن يكون واضحًا وغير مزدحم. يجب أن يفهم الناس بسرعة.', code: 'clarity' },
+      { label: 'أن يعبّر عمّا أردتُ قوله.', code: 'message_fit' },
+      { label: 'لا أبذل فيه جهدًا كبيرًا. الستوري يبقى ستوري.', code: 'practical_minimal' }
+    ]
+  },
+  {
+    field: 'groupBehaviorPattern',
+    eyebrow: 'العمل في مجموعة 🤝',
+    text: 'حين يبدأ العمل الجماعي فعلًا، أين تجدين دوركِ؟',
+    options: [
+      { label: 'أفهم أوّلًا ما ترغب الجميع في فعله ثمّ أشارك بذكاء.', code: 'listener' },
+      { label: 'أقترح فكرة للبداية، ليكون لدينا من أين ننطلق.', code: 'initiator' },
+      { label: 'أسأل «لحظة، من تفعل ماذا؟» فلا بدّ أن تنظّم إحدانا الأمور.', code: 'task_organizer' },
+      { label: 'أنتظر قليلًا لأرى أين تحتاجني المجموعة فعلًا.', code: 'adaptive' },
+      { label: 'أتولّى جزءًا واحدًا وأنجزه جيّدًا حتى النهاية.', code: 'focused_executor' },
+      { label: 'أربط بين الجميع حين تبدأ الأمور بالتشتّت.', code: 'connector' }
+    ]
+  },
+  {
+    field: 'conflictStyle',
+    eyebrow: 'حين تعمّ بعض الفوضى 🌀',
+    text: 'تختلف الآراء في المجموعة. ما الذي يساعدكِ عادةً؟',
+    options: [
+      { label: 'نتحدّث قليلًا ونجد حلًا وسطًا.', code: 'compromise' },
+      { label: 'نصوّت ونقرّر. فهذه هي الديمقراطية.', code: 'vote_decision' },
+      { label: 'نفحص ما يناسب الهدف أكثر، وليس من رفعت صوتها أكثر.', code: 'goal_oriented' },
+      { label: 'نمنح كلّ واحدة فرصة لتشرح رأيها.', code: 'inclusive_discussion' },
+      { label: 'ننادي المرشدة قبل أن يتحوّل الأمر إلى حلقة مسلسل.', code: 'facilitator_help' },
+      { label: 'آخذ لحظة للتفكير ثمّ أعود إلى النقاش.', code: 'reflection_pause' }
+    ]
+  },
+  {
+    field: 'groupNeed',
+    eyebrow: 'ماذا تحتاجين هناك؟ 💜',
+    text: 'ما دمتِ في مجموعة، ما أهمّ شعور بالنسبة لكِ فيها؟',
+    options: [
+      { label: 'أن تكون هناك مساحة لأفكاري.', code: 'voice_space' },
+      { label: 'أن يكون هناك ترتيب ووضوح، فالفوضى ليست هواية.', code: 'clarity_structure' },
+      { label: 'أن أستطيع السؤال دون خجل.', code: 'psychological_safety' },
+      { label: 'أن تشارك الجميع فعلًا.', code: 'participation' },
+      { label: 'أن نتقدّم ولا نتوقّف ساعة عند «ماذا سنفعل؟»', code: 'progress' },
+      { label: 'أن تكون الأجواء لطيفة.', code: 'positive_atmosphere' },
+      { label: 'أن أعرف دوري وألّا أشعر بأنّني تائهة.', code: 'role_clarity' }
+    ]
+  },
+  {
+    field: 'groupComfortLevel',
+    eyebrow: 'مجموعة جديدة ✨',
+    text: 'تنضمّين إلى مجموعة جديدة. كيف تشعرين عادةً؟',
+    options: [
+      { label: 'أشعر براحة كبيرة. أنضمّ وكأنّني معهنّ منذ البداية.', code: 'high_comfort' },
+      { label: 'أشعر براحة نسبيًا، أحتاج لحظة ثمّ تسير الأمور.', code: 'medium_high_comfort' },
+      { label: 'أحتاج بعض الوقت، لكنّني أندمج في النهاية.', code: 'gradual_comfort' },
+      { label: 'أحتاج إلى من تساعدني في الدخول في الأجواء.', code: 'needs_inclusion_support' },
+      { label: 'يتوقّف الأمر على المجموعة. مع بعضها أنطلق ومع بعضها أبقى هادئة.', code: 'context_dependent' }
+    ]
+  },
+  {
+    field: 'neededTeamSupport',
+    eyebrow: 'من تساعدكِ على الازدهار؟ 🌱',
+    text: 'أيّ نوع من الصديقات يساعدكِ أكثر على العمل جيّدًا؟',
+    options: [
+      { label: 'من تنظّم وترتّب.', code: 'needs_organization' },
+      { label: 'من تطرح الأفكار.', code: 'needs_ideas' },
+      { label: 'من تهدّئ الأجواء عند الضغط.', code: 'needs_calm' },
+      { label: 'من تقود القرارات حين تتردّد الجميع.', code: 'needs_decision_leader' },
+      { label: 'من تجيد العرض والتقديم.', code: 'needs_presentation' },
+      { label: 'من تجيد التنفيذ والبناء.', code: 'needs_execution' },
+      { label: 'من تستمع وتساعد الجميع على الاندماج.', code: 'needs_connector' }
+    ]
+  },
+  {
+    field: 'startStyle',
+    eyebrow: 'ننطلق 🚀',
+    text: 'هناك مهمّة جديدة. ما ردّكِ التلقائي الأوّل؟',
+    options: [
+      { label: 'أن أبدأ بسرعة وأحسّن في أثناء العمل.', code: 'prototype_fast' },
+      { label: 'أن أفهم الهدف أوّلًا.', code: 'goal_first' },
+      { label: 'أن أرى مثالًا ثمّ أجرّب.', code: 'example_based' },
+      { label: 'أن أتحدّث مع المجموعة ونحدّد اتّجاهًا.', code: 'collaborative_direction' },
+      { label: 'أن نوزّع المهامّ ونبدأ العمل.', code: 'task_execution' },
+      { label: 'أن أبحث عن أفكار قبل أن نقرّر.', code: 'inspiration_research' }
+    ]
+  }
+];
+
+const draftKey = 'portzot-pairing-draft-v1:' + sessionId;
+let draft = {};
+try { draft = JSON.parse(sessionStorage.getItem(draftKey)) || {}; } catch (_) {}
+const answers = {};
+const codes = draft.codes || {};
+if (typeof draft.displayName === 'string') answers.displayName = draft.displayName;
+questions.forEach(q => {
+  const option = q.options.find(o => o.code === codes[q.field]);
+  if (option) answers[q.field] = option.label;
+});
+let step = Number.isInteger(draft.step) ? Math.max(0, Math.min(draft.step, questions.length - 1)) : 0;
+function saveDraft() {
+  try { sessionStorage.setItem(draftKey, JSON.stringify({ codes, responseId: draft.responseId, displayName: textAnswer.style.display !== 'none' ? textAnswer.value : answers.displayName, step })); } catch (_) {}
+}
+window.addEventListener('pagehide', saveDraft);
+
+const eyebrowEl = document.getElementById('eyebrow');
+const questionText = document.getElementById('questionText');
+const optionsEl = document.getElementById('options');
+const textAnswer = document.getElementById('textAnswer');
+const hint = document.getElementById('hint');
+const stepLabel = document.getElementById('stepLabel');
+const progressText = document.getElementById('progressText');
+const progressFill = document.getElementById('progressFill');
+const backBtn = document.getElementById('backBtn');
+const nextBtn = document.getElementById('nextBtn');
+
+function renderQuestion() {
+  const q = questions[step];
+  eyebrowEl.textContent = q.eyebrow;
+  questionText.textContent = q.text;
+  stepLabel.textContent = 'السؤال ' + (step + 1) + ' من ' + questions.length;
+  const progress = Math.round(((step + 1) / questions.length) * 100);
+  progressText.textContent = progress + '%';
+  progressFill.style.width = progress + '%';
+  hint.textContent = '';
+  backBtn.disabled = step === 0;
+  nextBtn.textContent = step === questions.length - 1 ? 'انتهيتُ — يمكننا المتابعة 💜' : 'إلى الأمام';
+
+  if (!q.options.length) {
+    textAnswer.style.display = 'block';
+    optionsEl.style.display = 'none';
+    textAnswer.value = answers[q.field] || '';
+    textAnswer.focus();
+    return;
+  }
+
+  textAnswer.style.display = 'none';
+  optionsEl.style.display = 'grid';
+  optionsEl.innerHTML = '';
+  q.options.forEach(function(opt) {
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'option-btn' + (answers[q.field] === opt.label ? ' active' : '');
+    btn.textContent = opt.label;
+    btn.dataset.label = opt.label;
+    btn.dataset.code = opt.code;
+    optionsEl.appendChild(btn);
+  });
+}
+
+optionsEl.addEventListener('click', function(e) {
+  var btn = e.target.closest('.option-btn');
+  if (!btn) return;
+  var q = questions[step];
+  answers[q.field] = btn.dataset.label;
+  codes[q.field] = btn.dataset.code;
+  saveDraft();
+  renderQuestion();
+});
+
+backBtn.addEventListener('click', function() {
+  if (step > 0) { step--; saveDraft(); renderQuestion(); }
+});
+
+nextBtn.addEventListener('click', async function() {
+  var q = questions[step];
+  if (q.field === 'displayName') {
+    var v = textAnswer.value.trim();
+    if (!v) { hint.textContent = 'لحظة، عليكِ اختيار شيء قبل أن نتابع 🙂'; return; }
+    answers[q.field] = v;
+  }
+  if (!answers[q.field]) { hint.textContent = 'لحظة، عليكِ اختيار شيء قبل أن نتابع 🙂'; return; }
+  if (step < questions.length - 1) { step++; saveDraft(); renderQuestion(); return; }
+
+  nextBtn.disabled = true;
+  saveDraft();
+  var p = { id: draft.responseId || crypto.randomUUID(), sessionId: sessionId, submittedAt: new Date().toISOString() };
+  draft.responseId = p.id;
+  saveDraft();
+  window.courseLanguageBusy = true;
+  for (var i = 0; i < questions.length; i++) {
+    var field = questions[i].field;
+    p[field] = answers[field];
+    if (field !== 'displayName') p[field + 'Code'] = codes[field] || answers[field];
+  }
+  document.getElementById('questionCard').style.display = 'none';
+  document.getElementById('savingMessage').style.display = 'block';
+  try {
+  await setDoc(doc(db, 'responses', p.id), p);
+  await updateDoc(doc(db, 'sessions', sessionId), { completedCount: increment(1) });
+  localStorage.setItem('displayName', p.displayName);
+  localStorage.setItem('responseId', p.id);
+  sessionStorage.removeItem(draftKey);
+  window.removeEventListener('pagehide', saveDraft);
+  setTimeout(function() { location.href = 'waiting.html?session=' + sessionId; }, 700);
+  } catch (error) {
+    document.getElementById('questionCard').style.display = '';
+    document.getElementById('savingMessage').style.display = 'none';
+    hint.textContent = 'تعذّر الحفظ. تحقّقي من الاتّصال وحاولي مجدّدًا.';
+    nextBtn.disabled = false;
+    window.courseLanguageBusy = false;
+  }
+});
+
+textAnswer.addEventListener('input', saveDraft);
+renderQuestion();
+</script>
+</body>
+</html>

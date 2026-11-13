@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
+<script src="js/course-language.js"></script>
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="manifest" href="manifest.json">
@@ -583,6 +585,7 @@
     .inspiration-dialog-error[hidden],.inspiration-dialog-inner [hidden]{display:none!important}
     #inspiration-teacher-auth{display:grid;gap:16px}
   </style>
+<link rel="stylesheet" href="css/course-language.css">
 </head>
 <body>
   <div class="page">
@@ -593,7 +596,8 @@
           <h1 class="brand-title">פורצות דרך</h1>
         </div>
 
-        <button class="logout-btn" id="logoutBtn" type="button">יציאה</button>
+        <nav class="course-lang-switch" aria-label="בחירת שפה"><a href="strongermenu-2026.html?lang=he" lang="he" data-course-language="he" aria-current="true">עברית</a><span class="lang-separator" aria-hidden="true">|</span><a href="ar/strongermenu-2026.html?lang=ar" lang="ar" data-course-language="ar">العربية</a></nav>
+<button class="logout-btn" id="logoutBtn" type="button">יציאה</button>
       </header>
 
       <main class="hero">

@@ -1,0 +1,19 @@
+/* Compact link-and-separator switch, following the SPIN-OFF language control. */
+.course-lang-switch{display:inline-flex;align-items:center;justify-content:center;gap:5px;direction:rtl;flex:0 0 auto;white-space:nowrap;width:max-content;padding:4px 7px;border:1px solid #cba4c7;border-radius:999px;background:#fff8fc;color:#69416d;line-height:1.4;font:600 13px Tahoma,Arial,sans-serif;box-shadow:0 2px 8px #682b5810}
+.course-lang-switch a{color:inherit;text-decoration:none;padding:4px 5px;border-radius:999px}
+.course-lang-switch a[aria-current="true"]{color:#fff;background:#8d4c83}
+.course-lang-switch a:focus-visible{outline:2px solid #be185d;outline-offset:3px}
+.course-lang-switch .lang-separator{opacity:.5}
+.course-lang-floating{position:fixed;bottom:max(12px,env(safe-area-inset-bottom));left:12px;z-index:1000}
+.mag-header__inner,.mag-masthead__inner{flex-wrap:wrap}
+html[lang="ar"] body,html[lang="ar"] button,html[lang="ar"] input,html[lang="ar"] .mag-hero__title,html[lang="ar"] .mag-section h2,html[lang="ar"] .mag-header__title{font-family:Tahoma,'Segoe UI',Arial,sans-serif}
+html[lang="ar"] .question-text,html[lang="ar"] .option,html[lang="ar"] .option-btn{line-height:1.65}
+@media(max-width:600px){.course-lang-switch{font-size:12px;gap:3px;padding:3px 5px}.course-lang-floating{bottom:max(8px,env(safe-area-inset-bottom));left:8px}}
+.course-language-tools{grid-area:back;display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+@media(max-width:640px){.course-language-tools{gap:5px}.course-language-tools .mag-header__back{min-height:34px;padding:5px 8px}}
+html[lang="ar"] .mag-domain .mag-hero__visual::after{content:"المجال " var(--domain-number)}
+/* Leave room for the persistent switch below the existing activity controls. */
+body:has(>.course-lang-floating){padding-bottom:64px}
+.topbar:has(>.course-lang-switch){flex-wrap:wrap}
+@media(max-width:640px){.course-language-tools{flex-direction:column;align-items:flex-end;gap:4px}}
+.course-lang-inline{display:flex;justify-content:flex-end;margin-block-end:12px}

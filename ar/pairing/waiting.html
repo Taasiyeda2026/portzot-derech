@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<script src="../../js/course-language.js"></script>
+
+  <link rel="icon" type="image/png" href="../../icon/favicon.png">
+  <link rel="manifest" href="../../manifest.json">
+  <meta name="theme-color" content="#ec4899">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="apple-touch-icon" href="../../icon/favicon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بانتظار توزيع المجموعات | رائدات الطريق</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            font-size: 17px;
+        }
+
+        html,
+        body {
+            min-height: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff1493 0%, #ff69b4 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            zoom: 0.8;
+            padding-top: 24px;
+            padding-bottom: 24px;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.2) 0%, transparent 70%);
+            pointer-events: none;
+            animation: pulseGlow 4s ease-in-out infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+
+        .container {
+            text-align: center;
+            color: white;
+            z-index: 10;
+            padding: 34px 20px;
+            max-width: 600px;
+            margin: 24px auto;
+        }
+
+        .icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        h1 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .message {
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 40px;
+            opacity: 0.95;
+            line-height: 1.6;
+        }
+
+        .dots {
+            display: inline-block;
+            width: 60px;
+            text-align: left;
+        }
+
+        .dots::after {
+            content: '...';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: ''; }
+            40% { content: '.'; }
+            60% { content: '..'; }
+            80%, 100% { content: '...'; }
+        }
+
+        .stats {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px 50px;
+            display: inline-block;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            margin-top: 20px;
+        }
+
+        .stats-number {
+            font-size: 64px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .stats-label {
+            font-size: 20px;
+            opacity: 0.9;
+        }
+
+        .hearts {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 30px;
+            opacity: 0.6;
+            animation: float 10s ease-in infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .heart:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .heart:nth-child(2) { left: 25%; animation-delay: 2s; }
+        .heart:nth-child(3) { left: 40%; animation-delay: 4s; }
+        .heart:nth-child(4) { left: 55%; animation-delay: 1s; }
+        .heart:nth-child(5) { left: 70%; animation-delay: 3s; }
+        .heart:nth-child(6) { left: 85%; animation-delay: 5s; }
+
+        /* מסך תוצאה */
+        .waiting-screen {
+            display: block;
+            width: 100%;
+        }
+
+        .waiting-screen.hide {
+            display: none;
+        }
+
+        .result-screen {
+            display: none;
+            width: 100%;
+        }
+
+        .result-screen.show {
+            display: block;
+        }
+
+        .partner-card {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 36px 30px;
+            max-width: 620px;
+            margin: 20px auto 0;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .partner-name {
+            font-size: clamp(28px, 4vw, 42px);
+            font-weight: 700;
+            margin: 25px 0;
+            line-height: 1.3;
+            word-break: normal;
+            overflow-wrap: anywhere;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            animation: slideIn 0.8s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .match-percent {
+            font-size: 72px;
+            font-weight: 700;
+            color: #ffeb3b;
+            margin: 25px 0;
+            text-shadow: 0 4px 25px rgba(255,235,59,0.6);
+            animation: popIn 0.6s ease 0.3s backwards;
+        }
+
+        @keyframes popIn {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .positive-message {
+            font-size: 26px;
+            line-height: 1.7;
+            margin-top: 30px;
+            opacity: 0.95;
+            animation: fadeIn 0.8s ease 0.6s backwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 0.95;
+            }
+        }
+
+        .team-badge {
+            display: inline-block;
+            background: rgba(255,193,7,0.3);
+            border: 2px solid #ffc107;
+            border-radius: 15px;
+            padding: 12px 24px;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            animation: slideIn 0.8s ease;
+        }
+
+        .team-members {
+            font-size: 20px;
+            margin-top: 20px;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 32px;
+            }
+
+            .message {
+                font-size: 18px;
+            }
+
+            .icon {
+                font-size: 60px;
+            }
+
+            .stats {
+                padding: 20px 30px;
+            }
+
+            .stats-number {
+                font-size: 48px;
+            }
+
+            .stats-label {
+                font-size: 16px;
+            }
+
+            .partner-name {
+                font-size: 36px;
+            }
+
+            .match-percent {
+                font-size: 56px;
+            }
+
+            .positive-message {
+                font-size: 20px;
+            }
+
+            .partner-card {
+                padding: 35px 25px;
+            }
+        }
+    </style>
+<link rel="stylesheet" href="../../css/course-language.css">
+</head>
+<body>
+<div class="course-lang-floating"><nav class="course-lang-switch" aria-label="اختيار اللغة"><a href="../../pairing/waiting.html?lang=he" lang="he" data-course-language="he">עברית</a><span class="lang-separator" aria-hidden="true">|</span><a href="waiting.html?lang=ar" lang="ar" data-course-language="ar" aria-current="true">العربية</a></nav></div>
+    <div class="hearts">
+        <div class="heart">💕</div>
+        <div class="heart">💖</div>
+        <div class="heart">💗</div>
+        <div class="heart">💓</div>
+        <div class="heart">💝</div>
+        <div class="heart">💞</div>
+    </div>
+
+    <div class="container">
+        <!-- מסך המתנה -->
+        <div class="waiting-screen" id="waitingScreen">
+            <div class="icon">✨</div>
+            <h1>شكرًا جزيلًا! 🎉</h1>
+            <div class="message">
+                حُفظت إجاباتكِ بنجاح!<br>
+                <strong>بانتظار بقيّة المشاركات<span class="dots"></span></strong>
+            </div>
+
+            <div class="stats">
+                <div class="stats-number" id="completedCount">-</div>
+                <div class="stats-label">مشاركات انتهين</div>
+            </div>
+
+            <div class="message" style="margin-top: 40px; font-size: 18px; opacity: 0.8;">
+                💝 ستبدأ المرشدة توزيع المجموعات قريبًا
+            </div>
+        </div>
+
+        <!-- מסך תוצאה -->
+        <div class="result-screen" id="resultScreen">
+            <div class="icon">💕</div>
+            <h1 id="resultTitle">وجدنا لكِ مجموعة!</h1>
+            
+            <div class="partner-card">
+                <div id="teamBadge" class="team-badge" style="display: none;">
+                    👥 فريق من 3 مشاركات
+                </div>
+                
+                <div class="message" style="margin-bottom: 10px;">
+                    <span id="partnerLabel">مجموعتكِ هي:</span>
+                </div>
+                
+                <div class="partner-name" id="partnerName">...</div>
+                
+                <div id="teamMembers" class="team-members" style="display: none;"></div>
+                
+                
+                
+                <div class="positive-message" id="positiveMessage">...</div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+import { getFirestore, doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+const cfg={apiKey:"AIzaSyCFSq5b-HgkTxFNhBJIBdOe2ian5TZvMPE",authDomain:"portzot-derech.firebaseapp.com",projectId:"portzot-derech",storageBucket:"portzot-derech.firebasestorage.app",messagingSenderId:"236417614890",appId:"1:236417614890:web:587b0eb3c5eedfa352af53"};
+const db=getFirestore(initializeApp(cfg));
+const sessionId=new URLSearchParams(location.search).get('session');
+if(!sessionId){location.href='pairing.html';}
+const myName=localStorage.getItem('displayName');
+const myId=localStorage.getItem('responseId');
+
+onSnapshot(doc(db,'sessions',sessionId),(snap)=>{
+  if(!snap.exists()) return;
+  const count=snap.data().completedCount||0;
+  document.getElementById('completedCount').textContent=count;
+});
+
+onSnapshot(doc(db,'pairings',sessionId),(snap)=>{if(!snap.exists()) return;const data=snap.data();const groups=data.groups||data.pairs||[];const group=groups.find(g=> (myId && g.members?.includes(myId)) || (myName && g.memberNames?.includes(myName)));if(!group) return;
+document.getElementById('waitingScreen').classList.add('hide');document.getElementById('resultScreen').classList.add('show');
+document.getElementById('resultTitle').textContent='وجدنا لكِ مجموعة';document.getElementById('partnerLabel').textContent='أنتِ في مجموعة مع:';
+document.getElementById('partnerName').innerHTML=group.memberNames.join('<br>');
+let msg='لديكنّ مزيج جيّد من الاهتمامات وأساليب العمل والأدوار في المجموعة. يمكنكُنّ الآن البدء بالتفكير معًا وتوزيع الأدوار والتقدّم نحو فكرة مشتركة.';
+if(group.size===2) msg='أنتِ في مجموعة صغيرة من مشاركتين. إنّها مجموعة مركّزة تتيح لكما العمل عن قرب والتفكير معًا والتقدّم بوتيرة مريحة.';
+if(group.size===4) msg='أنتِ في مجموعة من 4 مشاركات. لديكنّ تنوّع أوسع في الأفكار والأدوار وأساليب العمل. يُفضّل توزيع الأدوار بوضوح كي تتمكّن كلّ واحدة من المشاركة.';
+document.getElementById('positiveMessage').textContent=msg;});
+</script>
+
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function() {
+      navigator.serviceWorker.register("../../service-worker.js").catch(function(error) {
+        console.error("Service worker registration failed:", error);
+      });
+    });
+  }
+</script>
+
+</body>
+</html>
