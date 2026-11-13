@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
+<script src="../js/course-language.js"></script>
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>מי את בקבוצה? — פורצות דרך</title>
@@ -34,9 +36,12 @@
     .saving { text-align:center; padding: 26px 8px; font-size:1.1rem; display:none; }
     .saving-sub { font-size:.9rem; opacity:.82; display:block; margin-top:6px; }
   </style>
+<link rel="stylesheet" href="../css/course-language.css">
 </head>
 <body>
+
   <main class="card">
+    <div class="course-lang-inline"><nav class="course-lang-switch" aria-label="בחירת שפה"><a href="questionnaire.html?lang=he" lang="he" data-course-language="he" aria-current="true">עברית</a><span class="lang-separator" aria-hidden="true">|</span><a href="../ar/pairing/questionnaire.html?lang=ar" lang="ar" data-course-language="ar">العربية</a></nav></div>
     <div class="top">
       <h1 class="title">מי את בקבוצה? 💜</h1>
       <p class="subtitle">כמה שאלות קלילות, קצת מצחיקות, והרבה את.<br>אין נכון או לא נכון — רק לבחור מה הכי דומה לך.</p>
@@ -273,9 +278,21 @@ const questions = [
   }
 ];
 
+const draftKey = 'portzot-pairing-draft-v1:' + sessionId;
+let draft = {};
+try { draft = JSON.parse(sessionStorage.getItem(draftKey)) || {}; } catch (_) {}
 const answers = {};
-const codes = {};
-let step = 0;
+const codes = draft.codes || {};
+if (typeof draft.displayName === 'string') answers.displayName = draft.displayName;
+questions.forEach(q => {
+  const option = q.options.find(o => o.code === codes[q.field]);
+  if (option) answers[q.field] = option.label;
+});
+let step = Number.isInteger(draft.step) ? Math.max(0, Math.min(draft.step, questions.length - 1)) : 0;
+function saveDraft() {
+  try { sessionStorage.setItem(draftKey, JSON.stringify({ codes, responseId: draft.responseId, displayName: textAnswer.style.display !== 'none' ? textAnswer.value : answers.displayName, step })); } catch (_) {}
+}
+window.addEventListener('pagehide', saveDraft);
 
 const eyebrowEl = document.getElementById('eyebrow');
 const questionText = document.getElementById('questionText');
@@ -328,11 +345,12 @@ optionsEl.addEventListener('click', function(e) {
   var q = questions[step];
   answers[q.field] = btn.dataset.label;
   codes[q.field] = btn.dataset.code;
+  saveDraft();
   renderQuestion();
 });
 
 backBtn.addEventListener('click', function() {
-  if (step > 0) { step--; renderQuestion(); }
+  if (step > 0) { step--; saveDraft(); renderQuestion(); }
 });
 
 nextBtn.addEventListener('click', async function() {
@@ -343,9 +361,14 @@ nextBtn.addEventListener('click', async function() {
     answers[q.field] = v;
   }
   if (!answers[q.field]) { hint.textContent = 'רגע, צריך לבחור משהו לפני שממשיכות 🙂'; return; }
-  if (step < questions.length - 1) { step++; renderQuestion(); return; }
+  if (step < questions.length - 1) { step++; saveDraft(); renderQuestion(); return; }
 
-  var p = { id: crypto.randomUUID(), sessionId: sessionId, submittedAt: new Date().toISOString() };
+  nextBtn.disabled = true;
+  saveDraft();
+  var p = { id: draft.responseId || crypto.randomUUID(), sessionId: sessionId, submittedAt: new Date().toISOString() };
+  draft.responseId = p.id;
+  saveDraft();
+  window.courseLanguageBusy = true;
   for (var i = 0; i < questions.length; i++) {
     var field = questions[i].field;
     p[field] = answers[field];
@@ -353,13 +376,24 @@ nextBtn.addEventListener('click', async function() {
   }
   document.getElementById('questionCard').style.display = 'none';
   document.getElementById('savingMessage').style.display = 'block';
+  try {
   await setDoc(doc(db, 'responses', p.id), p);
   await updateDoc(doc(db, 'sessions', sessionId), { completedCount: increment(1) });
   localStorage.setItem('displayName', p.displayName);
   localStorage.setItem('responseId', p.id);
+  sessionStorage.removeItem(draftKey);
+  window.removeEventListener('pagehide', saveDraft);
   setTimeout(function() { location.href = 'waiting.html?session=' + sessionId; }, 700);
+  } catch (error) {
+    document.getElementById('questionCard').style.display = '';
+    document.getElementById('savingMessage').style.display = 'none';
+    hint.textContent = 'השמירה לא הצליחה. בדקי את החיבור ונסי שוב.';
+    nextBtn.disabled = false;
+    window.courseLanguageBusy = false;
+  }
 });
 
+textAnswer.addEventListener('input', saveDraft);
 renderQuestion();
 </script>
 </body>
