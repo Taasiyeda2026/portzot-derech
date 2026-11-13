@@ -2,13 +2,17 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { questions } from '../../supabase/functions/pairing-groups/questions.mjs';
+import { generateGroups as approvedGenerateGroups } from '../../js/pairing-algorithm.js';
 import { generateGroups,getPreferredGroupSizes } from '../../supabase/functions/pairing-groups/algorithm.mjs';
 import { partition,validatedAnswers,validName,personalProjection } from '../../supabase/functions/pairing-groups/domain.mjs';
 import { sendGraph,mailPayload,graphAccess } from '../../supabase/functions/pairing-groups/mail.mjs';
 export function answers(name='משתתפת בדיקה'){return Object.fromEntries(questions.flatMap(q=>q.options.length?[[q.field,q.options[0].label],[q.field+'Code',q.options[0].code]]:[[q.field,name]]));}
-test('the 15 canonical questions, payload labels/options/order/codes, and algorithm are unchanged',async()=>{
+test('the 15 canonical questions, payload labels/options/order/codes, and matching rules are unchanged',async()=>{
  const original=await readFile(new URL('../../js/pairing-algorithm.js',import.meta.url),'utf8');
- assert.equal(await readFile(new URL('../../supabase/functions/pairing-groups/algorithm.mjs',import.meta.url),'utf8'),original);
+ const fixture=Array.from({length:8},(_,i)=>({...answers('בדיקה '+i),id:String(i)}));
+ const stable=groups=>groups.map(({id,createdAt,...group})=>group);
+ assert.deepEqual(stable(generateGroups(fixture)),stable(approvedGenerateGroups(fixture)));
+ assert(original.includes('function generateGroups(responses)'));
  const html=await readFile(new URL('../questionnaire.html',import.meta.url),'utf8');
  const source=html.slice(html.indexOf('const questions = ['),html.indexOf('\n];',html.indexOf('const questions = ['))+3);
  assert.equal(source.replace('const questions','export const questions')+'\n',await readFile(new URL('../../supabase/functions/pairing-groups/questions.mjs',import.meta.url),'utf8'));

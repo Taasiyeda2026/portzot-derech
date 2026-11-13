@@ -79,6 +79,21 @@ function inferRoleTags(m) {
   };
 }
 
+function balanceBonus(size, uniqueContrib, hasOrg, hasIdeas, hasExec, supportMatches) {
+  let bonus = 0;
+  if (uniqueContrib >= 2) bonus += 8;
+  if (size === 3 && uniqueContrib >= 3) bonus += 8;
+  if (hasOrg) bonus += 7;
+  if (hasIdeas) bonus += 7;
+  if (hasExec) bonus += 7;
+  if (supportMatches) bonus += 6;
+  return bonus;
+}
+
+function scoreFromTotals(sum, count, bonus) {
+  return Math.round(Math.min(100, sum / (count || 1) + bonus * 0.8));
+}
+
 export function calculateGroupBalance(groupRaw) {
   const group = groupRaw.map(normalize);
   const roles = group.map(inferRoleTags);
@@ -88,22 +103,15 @@ export function calculateGroupBalance(groupRaw) {
   const uniqueContrib = new Set(group.map(m => m.naturalTeamContribution).filter(Boolean)).size;
   const supportMatches = group.some(a => group.some(b => a !== b && a.neededTeamSupport && b.naturalTeamContribution && a.neededTeamSupport.replace('needs_','').includes(b.naturalTeamContribution.split('_')[0])));
 
-  let bonus = 0;
-  if (uniqueContrib >= 2) bonus += 8;
-  if (group.length === 3 && uniqueContrib >= 3) bonus += 8;
-  if (hasOrg) bonus += 7;
-  if (hasIdeas) bonus += 7;
-  if (hasExec) bonus += 7;
-  if (supportMatches) bonus += 6;
+  const bonus = balanceBonus(group.length, uniqueContrib, hasOrg, hasIdeas, hasExec, supportMatches);
   return { bonus, hasIdeas, hasOrg, hasExec, uniqueContrib, supportMatches };
 }
 
 export function calculateGroupScore(group) {
   const pairs = [];
   for (let i=0;i<group.length;i++) for (let j=i+1;j<group.length;j++) pairs.push(calculatePairScore(group[i], group[j]));
-  const avg = pairs.reduce((a,b)=>a+b,0)/(pairs.length||1);
   const balance = calculateGroupBalance(group);
-  return Math.round(Math.min(100, avg + balance.bonus * 0.8));
+  return scoreFromTotals(pairs.reduce((a,b)=>a+b,0), pairs.length, balance.bonus);
 }
 
 function groupReasons(balance, members) {
@@ -116,35 +124,71 @@ function groupReasons(balance, members) {
   return reasons;
 }
 
+// Same exhaustive candidates, scoring and first-best tie order as the approved
+// reference. Precompute request-local facts and stream candidates rather than
+// allocating every combination and recomputing the same pair/role data.
 export function generateGroups(responses) {
   const pool = (responses || []).map(normalize);
   const sizes = getPreferredGroupSizes(pool.length);
-  const remaining = [...pool];
+  if (!sizes.length) return [];
+  const pairScores = pool.map(() => new Uint8Array(pool.length));
+  const support = pool.map(() => new Uint8Array(pool.length));
+  const roles = pool.map(member => {
+    const tags = inferRoleTags(member);
+    return (tags.ideas ? 1 : 0) | (tags.organization ? 2 : 0) | (tags.execution ? 4 : 0);
+  });
+  for (let i=0; i<pool.length; i++) {
+    for (let j=i+1; j<pool.length; j++) pairScores[i][j] = calculatePairScore(pool[i], pool[j]);
+    for (let j=0; j<pool.length; j++) {
+      const a = pool[i], b = pool[j];
+      support[i][j] = i !== j && a.neededTeamSupport && b.naturalTeamContribution &&
+        a.neededTeamSupport.replace('needs_','').includes(b.naturalTeamContribution.split('_')[0]) ? 1 : 0;
+    }
+  }
+  let remaining = pool.map((_, index) => index);
   const groups = [];
   sizes.forEach((size, idx) => {
-    let best = null;
-    const indices = [...remaining.keys()];
-    const combos = [];
-    function build(start, pick) {
-      if (pick.length === size) return combos.push([...pick]);
-      for (let i=start;i<indices.length;i++) build(i+1, [...pick, indices[i]]);
+    const pick = new Array(size);
+    let best = null, bestScore = -1;
+    function evaluate() {
+      let sum = 0, count = 0, roleMask = 0, uniqueContrib = 0, supportMatches = false;
+      for (let i=0; i<size; i++) {
+        const a = pick[i];
+        roleMask |= roles[a];
+        const contribution = pool[a].naturalTeamContribution;
+        if (contribution) {
+          let seen = false;
+          for (let j=0; j<i; j++) if (pool[pick[j]].naturalTeamContribution === contribution) { seen = true; break; }
+          if (!seen) uniqueContrib++;
+        }
+        for (let j=i+1; j<size; j++) { sum += pairScores[a][pick[j]]; count++; }
+        if (!supportMatches) for (let j=0; j<size; j++) if (support[a][pick[j]]) { supportMatches = true; break; }
+      }
+      const bonus = balanceBonus(size, uniqueContrib, !!(roleMask & 2), !!(roleMask & 1), !!(roleMask & 4), supportMatches);
+      const score = scoreFromTotals(sum, count, bonus);
+      if (score > bestScore) { bestScore = score; best = pick.slice(); }
     }
-    build(0, []);
-    combos.forEach(c => {
-      const members = c.map(i => remaining[i]);
-      const score = calculateGroupScore(members);
-      if (!best || score > best.score) best = { c, members, score, balance: calculateGroupBalance(members) };
-    });
+    function visit(start, depth) {
+      if (depth === size) { evaluate(); return; }
+      for (let i=start; i<=remaining.length-(size-depth); i++) {
+        pick[depth] = remaining[i];
+        visit(i+1, depth+1);
+      }
+    }
+    visit(0, 0);
     if (!best) return;
+    const members = best.map(i => pool[i]);
+    const balance = calculateGroupBalance(members);
     groups.push({
       id: crypto.randomUUID(), groupNumber: idx + 1, size,
-      members: best.members.map(m => m.id), memberNames: best.members.map(m => m.displayName),
-      memberData: best.members, score: best.score,
-      matchLevel: MATCH_LABELS.find(l => best.score >= l.min).label,
-      reasons: groupReasons(best.balance, best.members),
-      balanceProfile: best.balance, createdAt: Date.now()
+      members: members.map(m => m.id), memberNames: members.map(m => m.displayName),
+      memberData: members, score: bestScore,
+      matchLevel: MATCH_LABELS.find(l => bestScore >= l.min).label,
+      reasons: groupReasons(balance, members),
+      balanceProfile: balance, createdAt: Date.now()
     });
-    best.c.sort((a,b)=>b-a).forEach(i=>remaining.splice(i,1));
+    const selected = new Set(best);
+    remaining = remaining.filter(i => !selected.has(i));
   });
   return groups;
 }

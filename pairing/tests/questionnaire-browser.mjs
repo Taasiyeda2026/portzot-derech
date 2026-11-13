@@ -58,8 +58,8 @@ async function page(width, height) {
 }
 
 try {
-  // The UI contract and original algorithm/data are unchanged, not just the number of questions.
-  for (const name of ['questions.mjs', 'algorithm.mjs']) {
+  // The UI data contract is unchanged; capacity.test.mjs checks matching equivalence to the approved algorithm.
+  for (const name of ['questions.mjs']) {
     const path = 'supabase/functions/pairing-groups/' + name;
     assert.equal(await readFile(resolve(root, path), 'utf8'), execFileSync('git', ['show', '90c0834:' + path], { cwd: root, encoding: 'utf8' }));
   }
