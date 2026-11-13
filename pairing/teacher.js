@@ -2,7 +2,7 @@ import { api, dashboardLogin, el, clear, button, field, watchRoom, message } fro
 const app=document.querySelector('#app');
 let me,activities=[],selected=null,stopWatching,stopHistory,dirty=false,working=false;
 const phaseText={collecting:'השאלון פתוח',draft:'עריכת הקבוצות',published:'החלוקה פורסמה',closed:'הפעילות הסתיימה'};
-const reportText={preparing:'הדוח בהכנה',ready:'טרם דווח',sending:'הדיווח בשליחה',sent:'דווח בהצלחה',failed:'השליחה נכשלה',unknown:'סטטוס השליחה אינו ידוע'};
+const reportText={preparing:'הדוח בהכנה',ready:'טרם דווח',sending:'הדיווח בשליחה',sent:'נשלח אל מנהל הפעילות',failed:'השליחה נכשלה',unknown:'סטטוס השליחה אינו ידוע'};
 const date=value=>/^\d{4}-\d{2}-\d{2}$/.test(value)?value.split('-').reverse().join('/'):'—';
 let view=new URLSearchParams(location.search).get('view')==='groups'?'groups':'manage';
 async function perform(fn){
@@ -121,7 +121,7 @@ function renderGroups(a,content){
  }
 }
 function renderReporting(a,content){
- content.append(el('div',{class:'report-actions'},el('p',{role:'status'},reportText[a.report?.status]||'טרם דווח'),el('div',{class:'actions'},button('הורדת PDF',()=>perform(async()=>{const blob=await api('teacher.download',{activity_id:a.id},null,true);const url=URL.createObjectURL(blob),link=el('a',{href:url,download:`פורצות דרך_${a.school}_${a.class_name}_${a.activity_date}.pdf`});link.click();setTimeout(()=>URL.revokeObjectURL(url),10000);}),{class:'secondary'}),button('דיווח הקבוצות',()=>perform(async()=>{const result=await api('teacher.report',{activity_id:a.id});message(result.status==='sent'?'השליחה למשרד אושרה.':reportText[result.status]||'הדוח נשמר.');selected=await api('teacher.state',{activity_id:a.id});renderRoom();await reloadList();}),{class:'primary',disabled:['sent','sending','unknown'].includes(a.report?.status)}))));
+ content.append(el('div',{class:'report-actions'},el('p',{role:'status'},reportText[a.report?.status]||'טרם דווח'),el('div',{class:'actions'},button('הורדת PDF',()=>perform(async()=>{const blob=await api('teacher.download',{activity_id:a.id},null,true);const url=URL.createObjectURL(blob),link=el('a',{href:url,download:`פורצות דרך_${a.school}_${a.class_name}_${a.activity_date}.pdf`});link.click();setTimeout(()=>URL.revokeObjectURL(url),10000);}),{class:'secondary'}),button('דיווח הקבוצות',()=>perform(async()=>{const result=await api('teacher.report',{activity_id:a.id});message(result.status==='sent'?'נשלח אל מנהל הפעילות':reportText[result.status]||'הדוח נשמר.');selected=await api('teacher.state',{activity_id:a.id});renderRoom();await reloadList();}),{class:'primary',disabled:['sent','sending','unknown'].includes(a.report?.status)}))));
  if(me.is_admin&&a.report?.status==='unknown')content.append(button('תיעוד בירור סטטוס שליחה',()=>perform(async()=>{const verification=prompt('לאחר בדיקה בתיבת המשרד: מה נבדק ומה נמצא? (לפחות 10 תווים)');if(!verification)return;const sent=confirm('אושרה קבלת הדוח במשרד? אישור = התקבל; ביטול = נבדק ואושר שלא נשלח.');await api('admin.report.resolve',{activity_id:a.id,status:sent?'sent':'failed',verification});selected=await api('teacher.state',{activity_id:a.id});renderRoom();await reloadList();}),{class:'quiet'}));
 }
 function mutate(action,payload={}){return perform(async()=>{selected=await api(action,{activity_id:selected.id,...payload});dirty=false;renderRoom();await reloadList();});}

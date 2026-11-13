@@ -38,15 +38,16 @@ export function createHandler({client,buildPdf,readEnv=()=>undefined,fetcher=fet
   return data;
  }
  async function privateBucket(){const {data,error:e}=await client.storage.getBucket('pairing-reports');if(e||data?.public!==false)throw error('storage_unavailable',503);}
- async function prepare(actor,payload){
+ async function prepare(actor,payload,download=false){
   await privateBucket();
   const claim=crypto.randomUUID();
   let report=await rpc('teacher.report.prepare',actor,null,{activity_id:payload.activity_id,claim});
-  if(report.status==='preparing'){
+  // Re-render the frozen snapshot so previously cached reports also use the current PDF layout.
+  if(report.status==='preparing'||(report.pdf_path&&(download||['ready','failed'].includes(report.status)))){
    const bytes=await buildPdf(report.snapshot),path=`${report.activity_id}/${report.id}.pdf`;
    const {error:e}=await client.storage.from('pairing-reports').upload(path,bytes,{contentType:'application/pdf',upsert:true,cacheControl:'0'});
    if(e)throw error('storage_unavailable',503);
-   report=await rpc('teacher.report.ready',actor,null,{activity_id:payload.activity_id,claim});
+   if(report.status==='preparing')report=await rpc('teacher.report.ready',actor,null,{activity_id:payload.activity_id,claim});
   }
   return report;
  }
@@ -118,7 +119,7 @@ export function createHandler({client,buildPdf,readEnv=()=>undefined,fetcher=fet
     return json({removed});
    }
    if(action==='teacher.report'||action==='teacher.download'){
-    const report=await prepare(actor,payload);
+    const report=await prepare(actor,payload,action==='teacher.download');
     if(action==='teacher.download'){
      const {data,error:e}=await client.storage.from('pairing-reports').download(report.pdf_path);
      if(e)throw error('storage_unavailable',503);

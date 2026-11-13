@@ -56,19 +56,23 @@ export async function buildPdf(snapshot, { PDFDocument, rgb, fontkit, bidi, regu
       y -= 12;
     }
     page.drawRectangle({ x: 38, y: y - 8, width: 519, height: 28, color: rgb(.93, .89, .97) });
-    draw('קבוצה', 550, y, 11, bold); draw('שמות המשתתפות', 490, y, 11, bold); draw('מספר', 88, y, 11, bold);
-    y -= 32;
+    draw('מספר קבוצה', 545, y, 11, bold);
+    draw('שמות המשתתפות בקבוצה', 440, y, 11, bold);
+    page.drawLine({ start: { x: 452, y: y - 8 }, end: { x: 452, y: y + 20 }, thickness: .5, color: rgb(.8, .8, .85) });
+    y -= 28;
   }
   newPage(true);
   for (const group of snapshot.groups) {
-    const lines = group.memberNames.flatMap(name => wrap(name, 370));
-    const height = Math.max(30, lines.length * 17 + 12);
-    if (y - height < 55) newPage();
-    draw(String(group.groupNumber), 545, y, 12, bold);
-    draw(String(group.memberNames.length), 80, y, 12);
-    for (const line of lines) { draw(line, 490, y); y -= 17; }
-    y -= 12;
-    page.drawLine({ start: { x: 38, y: y + 15 }, end: { x: 557, y: y + 15 }, thickness: .5, color: rgb(.8, .8, .85) });
+    // One table row per group; names share a single wide cell and wrap together.
+    const lines = wrap(group.memberNames.join(', '), 390);
+    const height = Math.max(34, lines.length * 17 + 18);
+    if (y + 20 - height < 55) newPage();
+    const top = y + 20, bottom = top - height;
+    draw(`קבוצה ${group.groupNumber}`, 545, y, 11, bold);
+    lines.forEach((line, index) => draw(line, 440, y - index * 17));
+    for (const x of [38, 452, 557]) page.drawLine({ start: { x, y: top }, end: { x, y: bottom }, thickness: .5, color: rgb(.8, .8, .85) });
+    page.drawLine({ start: { x: 38, y: bottom }, end: { x: 557, y: bottom }, thickness: .5, color: rgb(.8, .8, .85) });
+    y -= height;
   }
   pdf.getPages().forEach((p, i, pages) => { page = p; draw(`${i + 1} / ${pages.length}`, 310, 27, 9); });
   pdf.setTitle('פורצות דרך – דוח חלוקת קבוצות');
