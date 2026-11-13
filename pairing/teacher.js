@@ -42,7 +42,7 @@ async function boot(){
  const scope=el('select',{'aria-label':'היקף הפעילויות'},el('option',{value:'mine'},'הפעילויות שלי'),el('option',{value:'all'},'כל פעילויות המדריכים'));
  if(me.is_admin&&embedded)scope.value='all';
  const rows=el('div',{id:'history'});
- const filters=el('div',{class:'filters'},schoolFilter,classFilter,field('תאריך',dateFilter),...(me.is_admin?[scope,teacherFilter]:[]),button('ניקוי סינון',()=>{for(const input of [schoolFilter,classFilter,dateFilter,teacherFilter])input.value='';renderHistory();},{class:'quiet'}));
+ const filters=el('div',{class:'filters'},schoolFilter,classFilter,dateFilter,...(me.is_admin?[scope,teacherFilter]:[]),button('ניקוי סינון',()=>{for(const input of [schoolFilter,classFilter,dateFilter,teacherFilter])input.value='';renderHistory();},{class:'quiet'}));
  groups.append(el('section',{class:'panel'},el('h2',{},me.is_admin?'פעילויות וקבוצות':'הקבוצות שלי'),filters,rows),el('div',{id:'history-activity-panel'}));
  function renderHistory(){
   const matching=activities.filter(a=>a.school.includes(schoolFilter.value)&&a.class_name.includes(classFilter.value)&&(!dateFilter.value||a.activity_date===dateFilter.value)&&(!me.is_admin||((scope.value==='all'||a.owner_id===me.user_id)&&a.instructor_name.includes(teacherFilter.value))));
