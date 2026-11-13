@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-<script src="../js/course-language.js"></script>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="manifest" href="../manifest.json">
@@ -174,10 +172,8 @@
             display: block;
         }
     </style>
-<link rel="stylesheet" href="../css/course-language.css">
 </head>
 <body>
-<div class="course-lang-floating"><nav class="course-lang-switch" aria-label="בחירת שפה"><a href="matching.html?lang=he" lang="he" data-course-language="he" aria-current="true">עברית</a><span class="lang-separator" aria-hidden="true">|</span><a href="../ar/pairing/matching.html?lang=ar" lang="ar" data-course-language="ar">العربية</a></nav></div>
     <div class="container">
         <h1>🎯 הצעת חלוקה לקבוצות 🎯</h1>
 
@@ -194,16 +190,8 @@
     </div>
 
     <script type="module">
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-import { getFirestore, collection, query, where, getDocs, doc, setDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-import { generateGroups, getGroupStats } from '../js/pairing-algorithm.js';
-const firebaseConfig={apiKey:"AIzaSyCFSq5b-HgkTxFNhBJIBdOe2ian5TZvMPE",authDomain:"portzot-derech.firebaseapp.com",projectId:"portzot-derech",storageBucket:"portzot-derech.firebasestorage.app",messagingSenderId:"236417614890",appId:"1:236417614890:web:587b0eb3c5eedfa352af53"};
-const db=getFirestore(initializeApp(firebaseConfig));
-window.runMatching=async()=>{const sessionId=new URLSearchParams(location.search).get('session');if(!sessionId)return showError('שגיאה: לא נמצא קוד פעילות. נא לגשת דרך admin.html');runButton.disabled=true;loading.classList.add('show');error.classList.remove('show');results.classList.remove('show');try{const snapshot=await getDocs(query(collection(db,'responses'),where('sessionId','==',sessionId)));if(snapshot.empty)return showError('לא נמצאו תשובות לפעילות זו');const responses=[];snapshot.forEach(d=>responses.push({id:d.id,...d.data()}));const groups=generateGroups(responses);const groupStats=getGroupStats(groups);await setDoc(doc(db,'pairings',sessionId),{sessionId,groups,pairs:groups,totalParticipants:responses.length,groupStats,createdAt:new Date().toISOString()});displayResults(groups,groupStats);}catch(e){showError('שגיאה ביצירת קבוצות: '+e.message);}finally{loading.classList.remove('show');runButton.disabled=false;}};
-const runButton=document.getElementById('runButton'),loading=document.getElementById('loading'),error=document.getElementById('error'),results=document.getElementById('results');
-function showError(m){error.textContent=m;error.classList.add('show');loading.classList.remove('show');runButton.disabled=false;}
-function scoreToLabel(score){if(score>=74) return 'גבוהה';if(score>=58) return 'טובה';return 'מאוזנת';}
-function displayResults(groups,stats){results.innerHTML=`<div class="pair"><h3>סה״כ קבוצות: ${stats.totalGroups}</h3><div class="pair-names">קבוצות של 2: ${stats.groupsOf2} | קבוצות של 3: ${stats.groupsOf3} | קבוצות של 4: ${stats.groupsOf4} | משתתפות: ${stats.participants} | רמת התאמה ממוצעת: ${scoreToLabel(stats.averageMatchLevel)}</div></div>`+groups.map(g=>`<div class="pair"><h3>קבוצה ${g.groupNumber} — ${g.size} משתתפות</h3><div class="pair-names">${g.memberNames.join(' • ')}</div><div class="pair-info"><span>רמת התאמה קבוצתית: ${g.matchLevel}</span></div><ul>${g.reasons.map(r=>`<li>${r}</li>`).join('')}</ul></div>`).join('');results.classList.add('show');}
+const id=new URLSearchParams(location.search).get('activity');
+location.replace('admin.html'+(id?'?activity='+encodeURIComponent(id):''));
 </script>
 
 <script>

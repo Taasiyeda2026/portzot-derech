@@ -114,11 +114,6 @@ const CORE_ASSETS = [
   "./domains/d10.html",
   "./domains/d1-dev.html",
   "./domains/d1-master.html",
-  "./pairing/pairing.html",
-  "./pairing/questionnaire.html",
-  "./pairing/matching.html",
-  "./pairing/waiting.html",
-  "./pairing/admin.html",
   "./idea/idea-to-product.html",
   "./steps/entrepreneurship-steps.html",
   "./steps/flow.html",
@@ -388,7 +383,7 @@ self.addEventListener("fetch", function (event) {
 
   // Inspiration has authenticated room state and private media. Never cache it,
   // or substitute an unrelated course page when a participant is offline.
-  if (url.pathname.includes("/inspiration/")) return;
+  if (url.pathname.includes("/inspiration/") || url.pathname.includes("/pairing/")) return;
 
   // /api/* — תמיד ישירות לשרת
   if (url.pathname.startsWith("/api/")) return;

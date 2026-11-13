@@ -15,8 +15,14 @@ test('pretranslated counterparts, bootstrap, shared assets, and script syntax',(
   for (const lang of ['', 'ar/']) {
    const file = lang+page, html=read(file);
    assert.match(html,new RegExp(`<html lang="${lang?'ar':'he'}" dir="rtl">`));
-   assert.equal((html.match(/data-course-language="ar"/g)||[]).length,1,file);
-   assert.equal((html.match(/data-course-language="he"/g)||[]).length,1,file);
+   if (!lang && page.startsWith('pairing/')) {
+    // PR #325 replaces only the Hebrew pairing flow with the approved Supabase UI.
+    // Do not redirect its room tokens into the independent legacy Firebase flow.
+    assert.doesNotMatch(html,/course-language\.js|www\.gstatic\.com\/firebasejs/);
+   } else {
+    assert.equal((html.match(/data-course-language="ar"/g)||[]).length,1,file);
+    assert.equal((html.match(/data-course-language="he"/g)||[]).length,1,file);
+   }
    for(const m of html.matchAll(/<(?:script|link|img)\b[^>]*?\b(?:src|href)="([^"?#]+)(?:[^\"]*)"/g)) {
     if (/^(https?:|data:|\/\/)/.test(m[1])) continue;
     // Media may be omitted by sparse checkouts; validate against git's tracked tree.

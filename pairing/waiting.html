@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-<script src="../js/course-language.js"></script>
-
   <link rel="icon" type="image/png" href="../icon/favicon.png">
   <link rel="manifest" href="../manifest.json">
   <meta name="theme-color" content="#ec4899">
@@ -10,7 +8,9 @@
   <link rel="apple-touch-icon" href="../icon/favicon.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ממתינות לחלוקה לקבוצה | פורצות דרך</title>
+    <meta name="referrer" content="no-referrer">
+  <script src="../inspiration/vendor/supabase.js" defer></script>
+  <title>ממתינות לחלוקה לקבוצה | פורצות דרך</title>
     <style>
         * {
             margin: 0;
@@ -324,10 +324,8 @@
             }
         }
     </style>
-<link rel="stylesheet" href="../css/course-language.css">
 </head>
 <body>
-<div class="course-lang-floating"><nav class="course-lang-switch" aria-label="בחירת שפה"><a href="waiting.html?lang=he" lang="he" data-course-language="he" aria-current="true">עברית</a><span class="lang-separator" aria-hidden="true">|</span><a href="../ar/pairing/waiting.html?lang=ar" lang="ar" data-course-language="ar">العربية</a></nav></div>
     <div class="hearts">
         <div class="heart">💕</div>
         <div class="heart">💖</div>
@@ -349,7 +347,7 @@
 
             <div class="stats">
                 <div class="stats-number" id="completedCount">-</div>
-                <div class="stats-label">משתתפות סיימו</div>
+                <div class="stats-label">התשובות שלך נשמרו</div>
             </div>
 
             <div class="message" style="margin-top: 40px; font-size: 18px; opacity: 0.8;">
@@ -383,29 +381,36 @@
     </div>
 
     <script type="module">
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-import { getFirestore, doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-const cfg={apiKey:"AIzaSyCFSq5b-HgkTxFNhBJIBdOe2ian5TZvMPE",authDomain:"portzot-derech.firebaseapp.com",projectId:"portzot-derech",storageBucket:"portzot-derech.firebasestorage.app",messagingSenderId:"236417614890",appId:"1:236417614890:web:587b0eb3c5eedfa352af53"};
-const db=getFirestore(initializeApp(cfg));
-const sessionId=new URLSearchParams(location.search).get('session');
-if(!sessionId){location.href='pairing.html';}
-const myName=localStorage.getItem('displayName');
-const myId=localStorage.getItem('responseId');
-
-onSnapshot(doc(db,'sessions',sessionId),(snap)=>{
-  if(!snap.exists()) return;
-  const count=snap.data().completedCount||0;
-  document.getElementById('completedCount').textContent=count;
-});
-
-onSnapshot(doc(db,'pairings',sessionId),(snap)=>{if(!snap.exists()) return;const data=snap.data();const groups=data.groups||data.pairs||[];const group=groups.find(g=> (myId && g.members?.includes(myId)) || (myName && g.memberNames?.includes(myName)));if(!group) return;
-document.getElementById('waitingScreen').classList.add('hide');document.getElementById('resultScreen').classList.add('show');
-document.getElementById('resultTitle').textContent='מצאנו לך קבוצה';document.getElementById('partnerLabel').textContent='את בקבוצה עם:';
-document.getElementById('partnerName').innerHTML=group.memberNames.join('<br>');
-let msg='יש לכן שילוב טוב של תחומי עניין, דרך עבודה ותפקידים בקבוצה. עכשיו תוכלו להתחיל לחשוב יחד, לחלק תפקידים ולהתקדם לרעיון משותף.';
-if(group.size===2) msg='את בקבוצה קטנה של 2. זו קבוצה ממוקדת שתוכל לעבוד מקרוב, לחשוב יחד ולהתקדם בקצב נוח.';
-if(group.size===4) msg='את בקבוצה של 4. יש לכן מגוון רחב יותר של רעיונות, תפקידים ודרכי עבודה. כדאי לחלק תפקידים בצורה ברורה כדי שכל אחת תוכל להשתתף.';
-document.getElementById('positiveMessage').textContent=msg;});
+import { api, code, credential, watchRoom } from './common.js';
+const roomCode=code();
+if(!/^[0-9a-f]{32}$/.test(roomCode)) location.replace('pairing.html');
+const token=credential(roomCode);
+let stop;
+async function refresh(){
+ const data=await api('participant.state',{},token);
+ if(!data.participant.completed&&!data.participant.manual){location.replace('questionnaire.html?room='+roomCode);return;}
+ document.getElementById('completedCount').textContent='✓';
+ if(data.group){
+  document.getElementById('waitingScreen').classList.add('hide');
+  document.getElementById('resultScreen').classList.add('show');
+  document.getElementById('partnerName').textContent=data.group.memberNames.join(' • ');
+  document.getElementById('positiveMessage').textContent='יש לכן בסיס טוב לעבודה משותפת. עכשיו תוכלו לחשוב יחד, לחלק תפקידים ולהתקדם לרעיון משותף.';
+ }else if(data.room.phase==='closed'){
+  document.querySelector('#waitingScreen .message').textContent='הפעילות הסתיימה. פני למדריכה לקבלת הקבוצה שלך.';
+ }
+ return data;
+}
+const status=document.createElement('p');status.setAttribute('role','status');document.querySelector('.container').prepend(status);
+let topic=null;
+async function update(){
+ try{
+  const data=await refresh();status.textContent='';
+  if(data&&data.room.topic!==topic){topic=data.room.topic;stop?.();stop=watchRoom(topic,update);}
+ }catch(error){status.textContent=error.message;throw error;}
+}
+stop=watchRoom(null,update);
+update().catch(()=>{});
+window.addEventListener('pagehide',()=>stop?.());
 </script>
 
 <script>

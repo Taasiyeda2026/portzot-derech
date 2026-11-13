@@ -1,0 +1,62 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import { harness } from './harness.mjs';
+import { questions } from '../../supabase/functions/pairing-groups/questions.mjs';
+const answers=name=>Object.fromEntries(questions.flatMap(q=>q.options.length?[[q.field,q.options[0].label],[q.field+'Code',q.options[0].code]]:[[q.field,name]]));
+const token=()=>Array.from(crypto.getRandomValues(new Uint8Array(32)),b=>b.toString(16).padStart(2,'0')).join('');
+test('early closure, manual inclusion, grouping permissions and exact report membership',async()=>{
+ const h=await harness();
+ try{
+  const room=(await h.call('teacher.create',{school:'[בדיקה] סיום מוקדם',class_name:'ח1',expected:2})).body;
+  const foreign=(await h.call('teacher.create',{school:'[בדיקה] זרה',class_name:'ח2',expected:2},null,'b')).body;
+  const foreignToken=token(),outsider=(await h.call('participant.join',{code:foreign.code,name:'זרה'},foreignToken)).body;
+  const tokens=Array.from({length:5},token),people=[];
+  for(let i=0;i<5;i++){const response=await h.call('participant.join',{code:room.code,name:'משתתפת '+i},tokens[i]);assert.equal(response.status,200);people.push(response.body);}
+  let state=(await h.call('teacher.resize',{activity_id:room.id,expected:15})).body;assert.equal(state.participants.length,5);
+  await h.call('participant.submit',{answers:answers('משתתפת 0')},tokens[0]);
+  assert.equal((await h.call('teacher.match',{activity_id:room.id})).body.error.code,'incomplete');
+  assert.equal((await h.call('teacher.state',{activity_id:room.id})).body.phase,'collecting');
+  for(let i=1;i<3;i++)assert.equal((await h.call('participant.submit',{answers:answers('משתתפת '+i)},tokens[i])).status,200);
+  assert.equal((await h.call('teacher.match',{activity_id:room.id},null,'b')).status,403);
+  state=(await h.call('teacher.match',{activity_id:room.id})).body;
+  assert.equal(state.phase,'draft');assert.equal(state.groups.flatMap(g=>g.members).length,3);assert.equal(state.participants.length,5);
+  assert.equal((await h.call('participant.submit',{answers:answers('מאחרת')},tokens[3])).body.error.code,'room_closed');
+  assert.equal((await h.call('participant.join',{code:room.code,name:'חדשה'},token())).body.error.code,'room_closed');
+  const add=payload=>h.call('teacher.manual.add',{activity_id:room.id,version:state.version,group_number:1,...payload});
+  assert.equal((await h.call('teacher.manual.add',{activity_id:room.id,version:state.version,group_number:1,name:'זרה'},null,'b')).status,403);
+  assert.equal((await h.call('teacher.manual.add',{activity_id:room.id,version:state.version,group_number:1,name:'מושבת'},null,'disabled')).status,403);
+  assert.equal((await add({participant_id:outsider.id})).body.error.code,'invalid_request');
+  assert.equal((await add({name:'<script>bad</script>'})).body.error.code,'invalid_request');
+  state=(await add({participant_id:people[3].id})).body;
+  assert.equal(state.participants.filter(p=>p.manual).length,1);assert.equal(state.participants.filter(p=>p.completed).length,3);assert.equal(state.groups[0].members.length,4);
+  assert.equal((await h.call('teacher.manual.add',{activity_id:room.id,version:state.version-1,group_number:2,name:'ניסיון כפול'})).body.error.code,'stale_version');
+  state=(await h.call('teacher.manual.add',{activity_id:room.id,version:state.version,group_number:2,name:'ידנית חדשה א'})).body;
+  assert.equal((await h.call('teacher.publish',{activity_id:room.id,version:state.version})).body.error.code,'invalid_groups');
+  const save={activity_id:room.id,version:state.version,groups:state.groups};
+  state=(await h.call('teacher.save',save)).body;assert.equal(state.groups[1].members.length,1);
+  const before=state.version;
+  const concurrent=await Promise.all(['ידנית חדשה ב','לחיצה כפולה'].map(name=>h.call('teacher.manual.add',{activity_id:room.id,version:before,group_number:2,name})));
+  assert.equal(concurrent.filter(r=>r.status===200).length,1);assert.equal(concurrent.filter(r=>r.body.error?.code==='stale_version').length,1);
+  state=(await h.call('teacher.state',{activity_id:room.id})).body;
+  const groups=state.groups.map(g=>({members:[...g.members]}));groups[1].members.push(groups[0].members.pop());
+  state=(await h.call('teacher.save',{activity_id:room.id,version:state.version,groups})).body;
+  assert.deepEqual(state.groups.map(g=>g.members.length),[3,3]);
+  state=(await h.call('teacher.publish',{activity_id:room.id,version:state.version})).body;
+  assert.equal(state.phase,'published');
+  assert.equal((await h.call('teacher.manual.add',{activity_id:room.id,version:state.version,group_number:1,name:'מאוחר'})).body.error.code,'invalid_phase');
+  const own=(await h.call('participant.state',{},tokens[3])).body;
+  assert.equal(own.participant.manual,true);assert.equal(own.participant.completed,false);assert.equal(own.group.memberNames.length,3);assert.equal(own.group.members,undefined);
+  assert.equal((await h.call('participant.state',{},tokens[4])).body.group,null);
+  const download=await h.call('teacher.download',{activity_id:room.id});assert.equal(download.status,200);assert(download.bytes.length>1000);assert.equal(h.sends,0);
+  const report=(await h.db.query('select snapshot from public.pairing_reports where activity_id=$1',[room.id])).rows[0].snapshot;
+  assert.equal(report.participant_count,6);assert.equal(report.groups.flatMap(g=>g.memberNames).length,6);assert(!report.groups.flatMap(g=>g.memberNames).includes('משתתפת 4'));assert(report.groups.flatMap(g=>g.memberNames).includes('ידנית חדשה א'));
+  assert.equal((await h.call('teacher.report',{activity_id:room.id})).body.status,'sent');await h.call('teacher.report',{activity_id:room.id});assert.equal(h.sends,1);
+  const stored=(await h.db.query('select completed_at,answers from public.pairing_participants where manual')).rows;
+  assert(stored.every(p=>p.completed_at===null&&p.answers===null));
+  assert.equal((await h.call('teacher.activities',{},null,'b')).body.activities.length,1);assert.equal((await h.call('teacher.activities',{},null,'admin')).body.activities.length,2);
+  const completeRoom=(await h.call('teacher.create',{school:'[בדיקה] כולן סיימו',class_name:'ח3',expected:2})).body;
+  for(const name of ['אחת','שתיים']){const t=token();await h.call('participant.join',{code:completeRoom.code,name},t);await h.call('participant.submit',{answers:answers(name)},t);}
+  const completeState=(await h.call('teacher.match',{activity_id:completeRoom.id})).body;
+  assert.equal(completeState.groups[0].members.length,2);assert.equal((await h.call('teacher.publish',{activity_id:completeRoom.id,version:completeState.version})).body.phase,'published');
+  await h.db.exec('set role anon');await assert.rejects(()=>h.db.query('select pairing_private.validate_draft_groups(null,null)'),/permission denied/);await h.db.exec('reset role');
+ }finally{await h.db.close();}
+});

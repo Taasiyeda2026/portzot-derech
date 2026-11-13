@@ -1,0 +1,76 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {database,ACTOR_A,ACTOR_B,ADMIN,DISABLED} from './database.mjs';
+import {questions} from '../../supabase/functions/pairing-groups/questions.mjs';
+const answers=name=>Object.fromEntries(questions.flatMap(q=>q.options.length?[[q.field,q.options[0].label],[q.field+'Code',q.options[0].code]]:[[q.field,name]]));
+const token=()=>Array.from(crypto.getRandomValues(new Uint8Array(32)),b=>b.toString(16).padStart(2,'0')).join('');
+test('database authorization, isolated concurrent activities, idempotency, lifecycle and reporting',async()=>{
+ const {db,rpc}=await database();
+ try{
+  assert.equal((await rpc('teacher.me',ACTOR_A)).can_manage,true);
+  await assert.rejects(()=>rpc('teacher.me',DISABLED),/forbidden/);
+  await assert.rejects(()=>rpc('teacher.me'),/forbidden/);
+  await db.exec('update public.pairing_policy set retention_until=null');
+  await assert.rejects(()=>rpc('teacher.create',ACTOR_A,null,{school:'בדיקה',class_name:'ח׳1',expected:5}),/retention_not_configured/);
+  await db.exec("update public.pairing_policy set retention_until=now()-interval '1 second'");
+  await assert.rejects(()=>rpc('teacher.create',ACTOR_A,null,{school:'בדיקה',class_name:'ח׳1',expected:5}),/retention_expired/);
+  await db.exec("update public.pairing_policy set retention_until=timestamptz '2027-07-01 00:00:00 Asia/Jerusalem'");
+  const create=(actor,klass)=>rpc('teacher.create',actor,null,{school:'בדיקה',class_name:klass,expected:5});
+  const a=await create(ACTOR_A,'ח׳1'),b=await create(ACTOR_B,'ט׳2');
+  assert.notEqual(a.code,b.code);
+  assert.equal(a.retain_until,b.retain_until);
+  assert.equal(new Date(a.retain_until).toISOString(),'2027-06-30T21:00:00.000Z');
+  await assert.rejects(()=>rpc('teacher.state',ACTOR_B,null,{activity_id:a.id}),/forbidden/);
+  assert.equal((await rpc('teacher.activities',ACTOR_A)).activities.length,1);
+  assert.equal((await rpc('teacher.activities',ADMIN)).activities.length,2);
+  const tokens=[token(),token(),token(),token(),token()];
+  const participants=[];
+  for(const t of tokens){const p=await rpc('participant.join',null,t,{code:a.code,name:'אותו שם'});participants.push(p);assert.equal((await rpc('participant.join',null,t,{code:a.code,name:'אותו שם'})).id,p.id);}
+  assert.equal(new Set(participants.map(p=>p.id)).size,5);
+  const foreign=await rpc('participant.join',null,token(),{code:b.code,name:'זרה'});
+  // Expected count is monitoring only; reducing it never removes respondents.
+  assert.equal((await rpc('teacher.resize',ACTOR_A,null,{activity_id:a.id,expected:4})).participants.length,5);
+  await assert.rejects(()=>rpc('teacher.match_input',ACTOR_A,null,{activity_id:a.id}),/incomplete/);
+  for(const t of tokens){await rpc('participant.submit',null,t,{answers:answers('אותו שם')});await rpc('participant.submit',null,t,{answers:answers('אותו שם')});}
+  let state=await rpc('teacher.state',ACTOR_A,null,{activity_id:a.id});assert.equal(state.participants.length,5);assert.equal(state.participants.filter(p=>p.completed).length,5);
+  let input=await rpc('teacher.match_input',ACTOR_A,null,{activity_id:a.id});assert.equal(input.responses.length,5);
+  await assert.rejects(()=>rpc('teacher.save',ACTOR_A,null,{activity_id:a.id,groups:[]}),/stale_version/);
+  const ids=participants.map(p=>p.id),groups=[{members:ids.slice(0,3)},{members:ids.slice(3)}];
+  await assert.rejects(()=>rpc('teacher.save',ACTOR_A,null,{activity_id:a.id,version:0,groups:[{members:[ids[0],ids[0]]},{members:ids.slice(2)}]}),/invalid_groups/);
+  await assert.rejects(()=>rpc('teacher.save',ACTOR_A,null,{activity_id:a.id,version:0,groups:[{members:[foreign.id,...ids.slice(1,3)]},{members:ids.slice(3)}]}),/invalid_groups/);
+  state=await rpc('teacher.save',ACTOR_A,null,{activity_id:a.id,version:0,groups});
+  await assert.rejects(()=>rpc('teacher.save',ACTOR_A,null,{activity_id:a.id,version:0,groups}),/stale_version/);
+  assert.equal((await rpc('participant.state',null,tokens[0])).group,null);
+  const edited=[{members:[ids[0],ids[3]]},{members:[ids[1],ids[2],ids[4]]}];
+  state=await rpc('teacher.save',ACTOR_A,null,{activity_id:a.id,version:1,groups:edited});
+  state=await rpc('teacher.publish',ACTOR_A,null,{activity_id:a.id,version:state.version});
+  const personal=await rpc('participant.state',null,tokens[0]);assert.equal(personal.group.memberNames.length,2);assert.equal(personal.group.members,undefined);
+  await assert.rejects(()=>rpc('teacher.save',ACTOR_A,null,{activity_id:a.id,version:state.version,groups}),/invalid_phase/);
+  const claim=crypto.randomUUID(),params={activity_id:a.id,claim};
+  const report=await rpc('teacher.report.prepare',ACTOR_A,null,params);assert.equal(report.snapshot.groups[0].memberNames.length,2);assert.equal(report.version,2);
+  await assert.rejects(()=>rpc('teacher.report.prepare',ACTOR_A,null,{...params,claim:crypto.randomUUID()}),/busy/);
+  await rpc('teacher.report.ready',ACTOR_A,null,params);
+  assert.equal((await rpc('teacher.report.claim_send',ACTOR_A,null,params)).claimed,true);
+  assert.equal((await rpc('teacher.report.claim_send',ACTOR_A,null,{...params,claim:crypto.randomUUID()})).claimed,false);
+  await rpc('teacher.report.finish',ACTOR_A,null,{...params,status:'unknown'});
+  assert.equal((await rpc('teacher.report.claim_send',ACTOR_A,null,params)).claimed,false);
+  await assert.rejects(()=>rpc('admin.report.resolve',ACTOR_A,null,{...params,status:'failed',verification:'בדיקה לא נשלח למשרד'}),/forbidden/);
+  await db.query("update public.pairing_reports set updated_at=now()-interval '3 minutes' where id=$1",[report.id]);
+  await rpc('admin.report.resolve',ADMIN,null,{...params,status:'failed',verification:'נבדק עם המשרד ולא התקבל דוח'});
+  assert.equal((await rpc('teacher.report.claim_send',ACTOR_A,null,params)).claimed,true);
+  await rpc('teacher.report.finish',ACTOR_A,null,{...params,status:'sent'});
+  assert.equal((await rpc('teacher.report.claim_send',ACTOR_A,null,params)).claimed,false);
+  await rpc('teacher.close',ACTOR_A,null,{activity_id:a.id});
+  assert.equal((await rpc('teacher.report.get',ACTOR_A,null,{activity_id:a.id})).status,'sent');
+  assert.equal((await rpc('participant.state',null,tokens[0])).group.memberNames.length,2);
+  // At the fixed deadline, history and all owner/participant report access close.
+  await db.query("update public.pairing_activities set retain_until=now()-interval '1 second' where id=$1",[a.id]);
+  await assert.rejects(()=>rpc('participant.state',null,tokens[0]),/room_unavailable/);
+  await assert.rejects(()=>rpc('teacher.report.get',ACTOR_A,null,{activity_id:a.id}),/room_unavailable/);
+  assert.equal((await rpc('teacher.activities',ACTOR_A)).activities.length,0);
+  assert.equal((await rpc('teacher.activities',ADMIN)).activities.length,1);
+  await db.exec('set role anon');
+  await assert.rejects(()=>db.query('select * from public.pairing_participants'),/permission denied/);
+  await assert.rejects(()=>db.query("select public.pairing_rpc('teacher.me')"),/permission denied/);
+  await db.exec('reset role');
+ }finally{await db.close();}
+});
