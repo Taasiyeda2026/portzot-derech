@@ -111,17 +111,17 @@
           "asset_id": "clock"
         },
         "d1-a08": {
-          "path": "domains/images/2027/watch.webp",
-          "alt": "שעון חכם על פרק כף היד",
-          "alt_ar": "ساعة ذكية على المعصم",
-          "credit": "Marcin Kempa / Unsplash",
-          "source_url": "https://unsplash.com/photos/a-person-in-a-green-sweater-with-a-smart-watch-on-their-wrist-h0nH78psQ74",
+          "path": "domains/images/2027/camera.webp",
+          "alt": "מצלמה על שולחן",
+          "alt_ar": "كاميرا على طاولة",
+          "credit": "Howard Bouchevereau / Unsplash",
+          "source_url": "https://unsplash.com/photos/a-camera-on-a-table-68AfHGvombw",
           "license": "Unsplash License",
           "license_url": "https://unsplash.com/license",
-          "download_url": "https://images.unsplash.com/photo-1739287700815-7eef4abaab4d",
+          "download_url": "https://images.unsplash.com/photo-1657897808147-3e8f47d99332",
           "verified_on": "2026-11-13",
           "usage": "צילום המחשה; אינו מתעד את המקרה המתואר בכתבה",
-          "asset_id": "watch"
+          "asset_id": "camera"
         }
       }
     },
@@ -747,17 +747,17 @@
       },
       "articles": {
         "d7-a01": {
-          "path": "domains/images/2027/backpack.webp",
-          "alt": "תיק לימודים מחברת ומחשב נייד",
-          "alt_ar": "حقيبة دراسة ودفتر وحاسوب محمول",
-          "credit": "Matt Ragland / Unsplash",
-          "source_url": "https://unsplash.com/photos/flat-lay-photography-of-blue-backpack-beside-book-and-silver-macbook-02z1I7gv4ao",
+          "path": "domains/images/2027/notebook.webp",
+          "alt": "מחברת ועפרונות על משטח ירוק",
+          "alt_ar": "دفتر وأقلام رصاص على سطح أخضر",
+          "credit": "The Design Lady / Unsplash",
+          "source_url": "https://unsplash.com/photos/a-notebook-and-pencils-on-a-green-surface--vEt5QioBcM",
           "license": "Unsplash License",
           "license_url": "https://unsplash.com/license",
-          "download_url": "https://images.unsplash.com/photo-1535982330050-f1c2fb79ff78",
+          "download_url": "https://images.unsplash.com/photo-1726726192155-fefdf941459a",
           "verified_on": "2026-11-13",
           "usage": "צילום המחשה; אינו מתעד את המקרה המתואר בכתבה",
-          "asset_id": "backpack"
+          "asset_id": "notebook"
         },
         "d7-a02": {
           "path": "domains/images/2027/bedroom.webp",
@@ -825,17 +825,17 @@
           "asset_id": "bedroom"
         },
         "d7-a07": {
-          "path": "domains/images/2027/digital.webp",
-          "alt": "טלפון חכם על מחברת",
-          "alt_ar": "هاتف ذكي على دفتر",
-          "credit": "Swello / Unsplash",
-          "source_url": "https://unsplash.com/photos/smartphone-on-notebook-and-laptop-on-table-CGvC8yWgC-g",
+          "path": "domains/images/2027/bedroom.webp",
+          "alt": "חדר שינה עם מיטה ושולחן",
+          "alt_ar": "غرفة نوم فيها سرير ومكتب",
+          "credit": "Alex Tyson / Unsplash",
+          "source_url": "https://unsplash.com/photos/a-bedroom-with-a-bed-and-a-desk-zcXaCds-SZ4",
           "license": "Unsplash License",
           "license_url": "https://unsplash.com/license",
-          "download_url": "https://images.unsplash.com/photo-1759215524630-a6572b3cfb86",
+          "download_url": "https://images.unsplash.com/photo-1722605904915-5698d12ec5c4",
           "verified_on": "2026-11-13",
           "usage": "צילום המחשה; אינו מתעד את המקרה המתואר בכתבה",
-          "asset_id": "digital"
+          "asset_id": "bedroom"
         },
         "d7-a08": {
           "path": "domains/images/2027/bedroom.webp",
@@ -934,17 +934,17 @@
           "asset_id": "bottle"
         },
         "d8-a06": {
-          "path": "domains/images/2027/park.webp",
-          "alt": "שביל בין צמחים ועצים בפארק",
-          "alt_ar": "ممر بين الأشجار والنباتات في حديقة",
-          "credit": "Sebastian Bjune / Unsplash",
-          "source_url": "https://unsplash.com/photos/green-plants-and-trees-during-daytime-Q440MWabsoU",
+          "path": "domains/images/2027/bedroom.webp",
+          "alt": "חדר שינה עם מיטה ושולחן",
+          "alt_ar": "غرفة نوم فيها سرير ومكتب",
+          "credit": "Alex Tyson / Unsplash",
+          "source_url": "https://unsplash.com/photos/a-bedroom-with-a-bed-and-a-desk-zcXaCds-SZ4",
           "license": "Unsplash License",
           "license_url": "https://unsplash.com/license",
-          "download_url": "https://images.unsplash.com/photo-1601040629486-d40e5e8b39d5",
+          "download_url": "https://images.unsplash.com/photo-1722605904915-5698d12ec5c4",
           "verified_on": "2026-11-13",
           "usage": "צילום המחשה; אינו מתעד את המקרה המתואר בכתבה",
-          "asset_id": "park"
+          "asset_id": "bedroom"
         },
         "d8-a07": {
           "path": "domains/images/2027/park.webp",
