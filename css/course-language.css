@@ -12,3 +12,6 @@ html[lang="ar"] .question-text,html[lang="ar"] .option,html[lang="ar"] .option-b
 .course-language-tools{grid-area:back;display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}
 @media(max-width:640px){.course-language-tools{gap:5px}.course-language-tools .mag-header__back{min-height:34px;padding:5px 8px}}
 html[lang="ar"] .mag-domain .mag-hero__visual::after{content:"المجال " var(--domain-number)}
+/* Leave room for the persistent switch below the existing activity controls. */
+body:has(>.course-lang-floating){padding-bottom:64px}
+.topbar:has(>.course-lang-switch){flex-wrap:wrap}

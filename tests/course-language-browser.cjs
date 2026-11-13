@@ -101,6 +101,10 @@ export const onSnapshot=(ref,callback)=>{let active=true;const run=async()=>{con
  await p.locator('[data-course-language="ar"]').click();await p.waitForURL('**/ar/strongermenu-2026.html?lang=ar');
  assert.equal(await p.evaluate(()=>sessionStorage.getItem('stronger_gate_2026')),'ok');
  assert.equal(await p.locator('a[href*="ar/start/quiz"]').count(),1);
+ await p.setViewportSize({width:390,height:844});
+ assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false,'menu overflow');
+ await p.screenshot({path:'/tmp/menu-mobile.png'});
+ await p.setViewportSize({width:1440,height:1000});
  assert.match(await p.locator('a[href*="idea-to-product"]').getAttribute('href'),/\/idea\/idea-to-product.html$/);
  await p.goto(base+'ar/start/quiz.html?lang=ar&activity=42#intro');
  await p.locator('.cta-btn').click();
@@ -145,6 +149,7 @@ export const onSnapshot=(ref,callback)=>{let active=true;const run=async()=>{con
   await a.p.goto(base+(lang==='ar'?'ar/':'')+'pairing/pairing.html?lang='+lang);
   await a.p.locator('#startActivityBtn.show').waitFor();await a.p.locator('#startActivityBtn').click();await a.p.waitForURL('**/questionnaire.html?session='+session);
   await a.p.locator('#textAnswer').fill(name);await a.p.locator('#nextBtn').click();
+  assert.equal(await a.p.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false,'questionnaire overflow');
   for(let i=1;i<15;i++){
    await a.p.locator('.option-btn').first().click();
    if(i===3){
