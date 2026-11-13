@@ -10,9 +10,15 @@ const json=p=>JSON.parse(read(p));
 const he=Array.from({length:10},(_,i)=>json(`domains/content/he/d${i+1}.json`));
 const ar=Array.from({length:10},(_,i)=>json(`domains/content/ar/d${i+1}.json`));
 const esc=s=>s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#x27;');
-test('all Hebrew source content is preserved byte-for-byte at the data level',()=>{
- const hash=crypto.createHash('sha256').update(JSON.stringify(he)).digest('hex');
- assert.equal(hash,'62068c2a85e6003f7cc73410ad43c1bed4ac5eafd5bb6541d767ee15dcc3d5ec');
+test('the editorial audit covers 90 articles with preserved IDs and bounded lengths',()=>{
+ const audit=json('audit/domains-editorial-review-2026-11-13.json');
+ assert.equal(audit.articles.length,90);
+ assert.equal(new Set(audit.articles.map(a=>a.id)).size,90);
+ for(const d of he){
+  const main=d.main_article.sections.flatMap(s=>s.paragraphs).join(' ');
+  assert(main.length>=2500&&main.length<=3500);
+  for(const a of d.short_articles)assert(a.paragraphs.join(' ').length>=450&&a.paragraphs.join(' ').length<=850,a.id);
+ }
  assert.equal(he.flatMap(d=>d.short_articles).length,80);
  assert.equal(he.flatMap(d=>d.reflection_questions).length,40);
 });
@@ -57,7 +63,7 @@ test('every hero and article has a verified local image and license attribution'
  }
 });
 test('opening quiz changes only displayed domain names/colors',()=>{
- const strip=s=>s.replace(/const domains = \[[\s\S]*?\n    \];/,'const domains = [];').trim();
+ const strip=s=>s.replace(/const domains = \[[\s\S]*?\n    \];/,'const domains = [];').replaceAll('رائدات الطريق','פורצות דרך').replace(/ translate="no" lang="he" dir="rtl"/g,'').trim();
  for(const p of ['start/quiz.html','ar/start/quiz.html']){
   const before=cp.execFileSync('git',['show',`HEAD:${p}`],{cwd:root,encoding:'utf8'});
   assert.equal(strip(read(p)),strip(before),p);
@@ -66,4 +72,17 @@ test('opening quiz changes only displayed domain names/colors',()=>{
 test('rendering is reproducible and does not change unrelated files',()=>{
  const pages=['domains/alldomains.html','ar/domains/alldomains.html',...he.flatMap(d=>[`domains/${d.slug}.html`,`ar/domains/${d.slug}.html`])];
  const before=pages.map(read);cp.execFileSync('python3',['scripts/build-domains.py'],{cwd:root});assert.deepEqual(pages.map(read),before);
+});
+
+test('public sources are verified in the exact page language, with originals retained',()=>{
+ for(const [lang,ds] of [['he',he],['ar',ar]])for(const d of ds){
+  const html=read(`${lang==='ar'?'ar/':''}domains/d${d.id}.html`);
+  const allowed=d.sources.filter(s=>s.language===lang&&s.language_verified===true);
+  assert.equal(html.includes('class="sources"'),allowed.length>0);
+  const block=html.match(/<details class="sources">[\s\S]*?<\/details>/)?.[0]||'';
+  for(const s of d.sources)assert.equal(block.includes(esc(s.url)),allowed.includes(s),`${lang} ${s.id}`);
+  for(const a of [d.main_article,...d.short_articles])for(const id of a.source_ids)assert(d.sources.some(s=>s.id===id),id);
+  assert.match(html,/<a class="brand" translate="no" lang="he" dir="rtl"/);
+  assert(!html.includes('رائدات الطريق'));
+ }
 });

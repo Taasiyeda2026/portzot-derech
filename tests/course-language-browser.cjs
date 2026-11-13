@@ -124,7 +124,7 @@ export const onSnapshot=(ref,callback)=>{let active=true;const run=async()=>{con
   for(const file of ['alldomains',...Array.from({length:10},(_,i)=>'d'+(i+1))]){
    await p.goto(base+`ar/domains/${file}.html?lang=ar&session=domain-test`);
    await p.locator('.course-lang-switch').waitFor();
-   const he=await p.locator('body').evaluate(el=>{const clone=el.cloneNode(true);clone.querySelectorAll('script,style,.course-lang-switch,[data-reader-language]').forEach(e=>e.remove());return /[\u0590-\u05ff]/.test(clone.textContent)});assert.equal(he,false,file);
+   const he=await p.locator('body').evaluate(el=>{const clone=el.cloneNode(true);clone.querySelectorAll('script,style,.course-lang-switch,[data-reader-language]').forEach(e=>e.remove());return /[\u0590-\u05ff]/.test(clone.textContent.replace(/פורצות דרך|תעשיידע/g,''))});assert.equal(he,false,file);
    assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false,file+' overflow');
    if(file!=='alldomains'){
     assert.equal(await p.locator('.main-article').count(),1);

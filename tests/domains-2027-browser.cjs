@@ -42,7 +42,13 @@ const server=http.createServer((req,res)=>{
      assert.equal(layout.cards.length,8);assert.equal(layout.cards.filter(c=>c.top===layout.cards[0].top).length,width===1440?4:2);
      assert(Math.max(...layout.cards.map(c=>c.height))-Math.min(...layout.cards.map(c=>c.height))<1,'card heights');
      assert(Math.max(...layout.cards.map(c=>c.width))-Math.min(...layout.cards.map(c=>c.width))<1,'card widths');
-     if(lang==='ar')assert.equal(await page.evaluate(()=>{const c=document.body.cloneNode(true);c.querySelectorAll('script,style,.course-lang-switch,[data-reader-language]').forEach(e=>e.remove());return /[\u0590-\u05ff]/.test(c.textContent)}),false);
+     if(lang==='ar')assert.equal(await page.evaluate(()=>{const c=document.body.cloneNode(true);c.querySelectorAll('script,style,.course-lang-switch,[data-reader-language]').forEach(e=>e.remove());return /[\u0590-\u05ff]/.test(c.textContent.replace(/פורצות דרך|תעשיידע/g,''))}),false);
+     assert.equal(await page.$eval('.brand',e=>e.textContent.trim()),'פורצות דרך');
+     const switchLayout=await page.$eval('.course-lang-switch',e=>({w:e.offsetWidth,h:e.offsetHeight,wrap:getComputedStyle(e).flexWrap}));
+     assert(switchLayout.w<125&&switchLayout.h<34);assert.equal(switchLayout.wrap,'nowrap');
+     const questions=await page.$$eval('.questions p',es=>es.map(e=>({top:e.offsetTop,border:getComputedStyle(e).borderInlineStartWidth})));
+     if(width===1440)assert.equal(questions.filter(q=>q.top===questions[0].top).length,2);
+     assert(questions.every(q=>q.border==='1px'));
      const localLinks=await page.$$eval('a[href]',es=>es.map(a=>a.href).filter(h=>h.startsWith(location.origin)&&!h.includes('#')));
      for(const url of localLinks){const p=new URL(url).pathname;assert(fs.existsSync(path.join(root,p)),p)}
      // Exercise all eight readers once per language; both layouts also test navigation and focus.

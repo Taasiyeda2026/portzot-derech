@@ -195,7 +195,10 @@
         "main",
         "03"
       ],
-      "status": "checked_relevant_source"
+      "status": "checked_relevant_source",
+      "language": "he",
+      "language_verified": true,
+      "display_title": "המשרד להגנת הסביבה — נתוני הפסולת בישראל"
     },
     {
       "id": "08-heat",
@@ -207,7 +210,9 @@
         "04",
         "08"
       ],
-      "status": "checked_relevant_source"
+      "status": "checked_relevant_source",
+      "language": "en",
+      "language_verified": true
     },
     {
       "id": "08-air",
@@ -218,7 +223,10 @@
         "main",
         "07"
       ],
-      "status": "checked_relevant_source"
+      "status": "checked_relevant_source",
+      "language": "he",
+      "language_verified": true,
+      "display_title": "המשרד להגנת הסביבה — ניטור אוויר בישראל"
     },
     {
       "id": "08-sorting",
@@ -229,7 +237,9 @@
         "main",
         "03"
       ],
-      "status": "checked_relevant_source"
+      "status": "checked_relevant_source",
+      "language": "en",
+      "language_verified": true
     },
     {
       "id": "08-water",
@@ -241,8 +251,10 @@
         "05",
         "06"
       ],
-      "status": "checked_relevant_source"
+      "status": "checked_relevant_source",
+      "language": "en",
+      "language_verified": true
     }
   ],
-  "qa_status": "editorial_review_completed; final_publication_review_pending"
+  "qa_status": "reviewed_against_pedagogical_spec_2026-11-13"
 }

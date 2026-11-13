@@ -15,12 +15,12 @@ COPY = {
    source='מקורות לקריאה נוספת', photo='צילום', license='רישיון שימוש', illustration='צילום להמחשה',
    index_title='איפה זה פוגש אותך?', index_intro='עברו על התחומים, הרגישו מה מדבר אליכן עכשיו ובחרו מאיפה להתחיל. אין כאן סדר נכון, יש את המקום שנכון לכן כרגע.',
    domain='תחום', counter='{n} מתוך 8', footer='פורצות דרך · תעשיידע', nojs='לקריאת הכתבות הקצרות ללא JavaScript'),
- 'ar': dict(brand='رائدات الطريق', home='الصفحة الرئيسية', all='كلّ المجالات', language='اختيار اللغة',
+ 'ar': dict(brand='פורצות דרך', home='الصفحة الرئيسية', all='كلّ المجالات', language='اختيار اللغة',
    main='المقال الرئيسي', closeup='نظرة عن قرب', thoughts='لحظة للتفكير...', count='8 مقالات قصيرة للقراءة الحرّة',
    read='لمتابعة القراءة ←', close='إغلاق', prev='المقال السابق', next='المقال التالي',
    source='مصادر لقراءة إضافية', photo='تصوير', license='ترخيص الاستخدام', illustration='صورة توضيحية',
    index_title='أين تلتقين بهذه العوالم؟', index_intro='تصفّحن المجالات، وفكّرن فيما يهمّكنّ الآن، واخترن من أين تبدأن. لا يوجد ترتيب صحيح، بل المكان المناسب لكنّ في هذه اللحظة.',
-   domain='المجال', counter='{n} من 8', footer='رائدات الطريق · تعسيداع', nojs='لقراءة المقالات القصيرة دون JavaScript')
+   domain='المجال', counter='{n} من 8', footer='פורצות דרך · תעשיידע', nojs='لقراءة المقالات القصيرة دون JavaScript')
 }
 
 def e(text):
@@ -44,7 +44,7 @@ def header(lang, page, prefix):
     he = prefix + page
     ar = prefix + 'ar/' + page
     return f'''<header class="masthead"><div class="bar">
-<a class="brand" href="{prefix}{'ar/' if lang == 'ar' else ''}strongermenu-2026.html"><img src="{prefix}icon/logo.png" alt=""><span>{c['brand']}</span></a>
+<a class="brand" translate="no" lang="he" dir="rtl" href="{prefix}{'ar/' if lang == 'ar' else ''}strongermenu-2026.html"><img src="{prefix}icon/logo.png" alt="פורצות דרך"><span>{c['brand']}</span></a>
 <div class="tools"><nav class="course-lang-switch" aria-label="{c['language']}"><a href="{he}?lang=he" lang="he" data-course-language="he"{' aria-current="true"' if lang=='he' else ''}>עברית</a><span aria-hidden="true">|</span><a href="{ar}?lang=ar" lang="ar" data-course-language="ar"{' aria-current="true"' if lang=='ar' else ''}>العربية</a></nav><a class="home" href="{'../../' if lang=='ar' else '../'}strongermenu-2026.html">{c['home']}</a></div>
 </div></header>'''
 
@@ -58,7 +58,8 @@ def shell(lang, title, body, prefix, domain=None):
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{e(title)} | {c['brand']}</title>
 <link rel="icon" href="{prefix}icon/favicon.png">
-<link rel="stylesheet" href="{prefix}css/domains-2027.css?v=2027-1">
+<link rel="stylesheet" href="{prefix}css/domains-2027.css?v=2027-2">
+<link rel="stylesheet" href="{prefix}css/course-language.css?v=2027-2">
 <script defer src="{prefix}js/domains-2027.js?v=2027-1"></script>
 </head><body{tag}>{body}</body></html>'''
 
@@ -100,16 +101,18 @@ def domain_page(d, lang, manifest, teasers):
     for a in d['short_articles']:
         body += '<article><h3>' + e(a['title']) + '</h3>' + paragraphs(a['paragraphs']) + '</article>'
     body += '</details></noscript></section>'
-    body += f'''<section id="thoughts" class="reflection" aria-labelledby="thoughts-title"><h2 id="thoughts-title">{c['thoughts']}</h2><div class="questions">{paragraphs(d['reflection_questions'])}</div></section>'''
+    body += f'''<section id="thoughts" class="reflection" aria-labelledby="thoughts-title"><h2 id="thoughts-title"><svg class="thought-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 16c0-2-3-3-3-7a7 7 0 0 1 14 0c0 4-3 5-3 7M8 17h8M9 20h6M11 23h2"/></svg>{c['thoughts']}</h2><div class="questions">{paragraphs(d['reflection_questions'])}</div></section>'''
     body += f'''<nav class="bottom-nav" aria-label="{c['brand']}"><a href="alldomains.html">{c['all']}</a><a href="#domain-name">↑ {e(d['name'])}</a></nav>'''
-    body += f'<details class="sources"><summary>{c["source"]}</summary><ul>'
-    for s in d['sources']:
-        label = s['title']
-        if lang == 'ar' and re.search(r'[\u0590-\u05ff]', label):
-            from urllib.parse import urlparse
-            label = urlparse(s['url']).hostname
-        body += f'<li><a href="{e(s["url"])}" target="_blank" rel="noopener noreferrer">{e(label)}</a></li>'
-    body += f'</ul></details><footer>{c["footer"]}</footer></main>{readers}'
+    # Fail closed: a translated label does not establish the linked page's language.
+    # All original verification sources remain in the content JSON and audit file.
+    public_sources = [s for s in d['sources'] if s.get('language') == lang
+                      and s.get('language_verified') is True]
+    if public_sources:
+        body += f'<details class="sources"><summary>{c["source"]}</summary><ul>'
+        for s in public_sources:
+            body += f'<li><a href="{e(s["url"])}" hreflang="{lang}" target="_blank" rel="noopener noreferrer">{e(s.get("display_title", s["title"]))}</a></li>'
+        body += '</ul></details>'
+    body += f'<footer translate="no" lang="he">{c["footer"]}</footer></main>{readers}'
     dest = ('ar/' if lang == 'ar' else '') + f'domains/d{i}.html'
     write(dest, shell(lang,d['name'],body,prefix,i))
 
@@ -121,17 +124,8 @@ def index_page(domains, lang):
     for d in domains:
         i = d['id']
         body += f'''<li><a class="domain-link" data-domain="{i}" style="{theme(i)}" href="d{i}.html"><span class="domain-num">{i:02}</span><span class="domain-copy"><strong>{e(d['name'])}</strong><small>{e(d['main_article']['title'])}</small></span><span class="domain-arrow" aria-hidden="true">←</span></a></li>'''
-    body += f'</ol></nav><footer>{c["footer"]}</footer></main>'
+    body += f'</ol></nav><footer translate="no" lang="he">{c["footer"]}</footer></main>'
     write(('ar/' if lang == 'ar' else '')+'domains/alldomains.html',shell(lang,c['all'],body,prefix))
-
-def update_quiz(domains,lang):
-    path = ('ar/' if lang == 'ar' else '') + 'start/quiz.html'
-    text = (ROOT / path).read_text()
-    def replace(m):
-        i = int(m[1])
-        return re.sub(r"color: '[^']+'", f"color: 'hsl({HUES[i-1]} 38% 35%)'", m[0].replace(m[2], domains[i-1]['name'], 1))
-    text = re.sub(r"\{ id: (\d+), name: '([^']+)'[^}]+\}", replace, text)
-    write(path,text.rstrip())
 
 def main():
     manifest = assets()
@@ -140,10 +134,9 @@ def main():
         domains = [load(f'domains/content/{lang}/d{i}.json') for i in range(1,11)]
         for d in domains: domain_page(d,lang,manifest,teasers)
         index_page(domains,lang)
-        update_quiz(domains,lang)
     if not manifest:
         print('Preparation build only: verified image manifest is not ready.')
     else:
-        print('Rendered 20 domain pages, two indexes and questionnaire domain names.')
+        print('Rendered 20 domain pages and two indexes; activity mechanisms untouched.')
 
 if __name__ == '__main__': main()
