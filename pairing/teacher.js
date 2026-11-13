@@ -1,9 +1,12 @@
+import { embeddedDashboardLogin } from './dashboard-session.js';
+import { questions } from '../supabase/functions/pairing-groups/questions.mjs';
 import { api, dashboardLogin, el, clear, button, field, watchRoom, message } from './common.js';
 const app=document.querySelector('#app');
 let me,activities=[],selected=null,stopWatching,stopHistory,dirty=false,working=false;
 const phaseText={collecting:'השאלון פתוח',draft:'עריכת הקבוצות',published:'החלוקה פורסמה',closed:'הפעילות הסתיימה'};
 const reportText={preparing:'הדוח בהכנה',ready:'טרם דווח',sending:'הדיווח בשליחה',sent:'נשלח אל מנהל הפעילות',failed:'השליחה נכשלה',unknown:'סטטוס השליחה אינו ידוע'};
 const date=value=>/^\d{4}-\d{2}-\d{2}$/.test(value)?value.split('-').reverse().join('/'):'—';
+const embedded=new URLSearchParams(location.search).get('embed')==='dashboard';
 let view=new URLSearchParams(location.search).get('view')==='groups'?'groups':'manage';
 async function perform(fn){
  if(working)return;working=true;message('');app.setAttribute('aria-busy','true');
@@ -11,14 +14,15 @@ async function perform(fn){
  try{await fn();}catch(error){message(error.message);}finally{working=false;app.setAttribute('aria-busy','false');buttons.forEach((disabled,b)=>{if(b.isConnected)b.disabled=disabled;});}
 }
 function login(){document.querySelector('#user-area').replaceChildren();clear(app).append(el('section',{class:'panel login-panel'},el('h2',{},'כניסה לניהול הפעילות'),button('כניסה דרך דשבורד תעשיידע',()=>perform(async()=>{await dashboardLogin();await boot();}),{class:'primary'})));}
-function updateAddress(){const params=new URLSearchParams({view});if(selected)params.set('activity',selected.id);history.replaceState(null,'','?'+params);}
+function updateAddress(){const params=new URLSearchParams({view,...(embedded?{embed:'dashboard'}:{})});if(selected)params.set('activity',selected.id);history.replaceState(null,'','?'+params);}
 function showView(next){if(dirty&&next!==view){message('יש לשמור את השינויים לפני מעבר בין האזורים.');return;}view=next;document.querySelector('#manage-view').hidden=view!=='manage';document.querySelector('#groups-view').hidden=view!=='groups';document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-current',String(b.dataset.view===view)));updateAddress();if(selected)renderRoom();}
 function table(headings,rows){return el('div',{class:'table-wrap'},el('table',{},el('thead',{},el('tr',{},headings.map(h=>el('th',{scope:'col'},h)))),el('tbody',{},rows)));}
 async function boot(){
- try{me=await api('teacher.me');}catch{login();return;}
+ try{if(embedded)await embeddedDashboardLogin();me=await api('teacher.me');}catch{login();return;}
+ if(embedded)document.body.classList.add('dashboard-embedded');
  document.querySelector('#user-area').replaceChildren(el('span',{class:'user-name'},me.name),button('יציאה',()=>{sessionStorage.removeItem('inspiration-teacher-access');stopWatching?.();stopHistory?.();selected=null;login();},{class:'quiet'}));
  clear(app);
- const nav=el('nav',{class:'view-tabs','aria-label':'ניהול מציאת שותפות'},...['manage','groups'].map(v=>button(v==='manage'?'ניהול פעילות':'הקבוצות שלי',()=>showView(v),{'data-view':v,class:'quiet'})));
+ const nav=el('nav',{class:'view-tabs','aria-label':'ניהול מציאת שותפות'},...['manage','groups'].map(v=>button(v==='manage'?'ניהול פעילות':me.is_admin?'כל הפעילויות':'הקבוצות שלי',()=>showView(v),{'data-view':v,class:'quiet'})));
  const manage=el('section',{id:'manage-view'}),groups=el('section',{id:'groups-view'});
  app.append(nav,manage,groups);
  const canCreate=Date.parse(me.retention_until)>Date.now();
@@ -36,9 +40,10 @@ async function boot(){
  manage.append(el('section',{class:'panel create-panel'},el('h2',{},'פתיחת פעילות'),...(!canCreate?[el('p',{role:'alert'},'לא ניתן לפתוח פעילות חדשה לאחר תום תקופת השמירה.')]:[]),form),el('div',{id:'activity-panel'}));
  const schoolFilter=el('input',{placeholder:'בית ספר','aria-label':'סינון לפי בית ספר'}),classFilter=el('input',{placeholder:'כיתה','aria-label':'סינון לפי כיתה'}),dateFilter=el('input',{type:'date','aria-label':'סינון לפי תאריך'}),teacherFilter=el('input',{placeholder:'מדריך/ה','aria-label':'סינון לפי מדריך'});
  const scope=el('select',{'aria-label':'היקף הפעילויות'},el('option',{value:'mine'},'הפעילויות שלי'),el('option',{value:'all'},'כל פעילויות המדריכים'));
+ if(me.is_admin&&embedded)scope.value='all';
  const rows=el('div',{id:'history'});
  const filters=el('div',{class:'filters'},schoolFilter,classFilter,field('תאריך',dateFilter),...(me.is_admin?[scope,teacherFilter]:[]),button('ניקוי סינון',()=>{for(const input of [schoolFilter,classFilter,dateFilter,teacherFilter])input.value='';renderHistory();},{class:'quiet'}));
- groups.append(el('section',{class:'panel'},el('h2',{},'הקבוצות שלי'),filters,rows),el('div',{id:'history-activity-panel'}));
+ groups.append(el('section',{class:'panel'},el('h2',{},me.is_admin?'פעילויות וקבוצות':'הקבוצות שלי'),filters,rows),el('div',{id:'history-activity-panel'}));
  function renderHistory(){
   const matching=activities.filter(a=>a.school.includes(schoolFilter.value)&&a.class_name.includes(classFilter.value)&&(!dateFilter.value||a.activity_date===dateFilter.value)&&(!me.is_admin||((scope.value==='all'||a.owner_id===me.user_id)&&a.instructor_name.includes(teacherFilter.value))));
   clear(rows).append(matching.length?table(['תאריך','בית ספר','כיתה',...(me.is_admin?['מדריך/ה']:[]),'משתתפות','קבוצות','סטטוס פעילות','דיווח',''],matching.map(a=>el('tr',{},el('td',{},date(a.activity_date)),el('td',{},a.school),el('td',{},a.class_name),...(me.is_admin?[el('td',{},a.instructor_name)]:[]),el('td',{},a.participants.filter(p=>p.completed||p.manual).length),el('td',{},a.groups.length),el('td',{},phaseText[a.phase]),el('td',{},reportText[a.report?.status]||'טרם דווח'),el('td',{},button('צפייה',()=>perform(()=>openActivity(a.id,'groups')),{class:'quiet'}))))):el('p',{class:'empty'},'אין פעילויות להצגה בסינון הזה.'));
@@ -55,7 +60,7 @@ async function openActivity(id,next='manage'){
  if(dirty&&!confirm('יש שינויים שלא נשמרו. לעבור לפעילות אחרת?'))return;
  stopWatching?.();dirty=false;selected=await api('teacher.state',{activity_id:id});
  view=next;document.querySelector('#manage-view').hidden=view!=='manage';document.querySelector('#groups-view').hidden=view!=='groups';document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-current',String(b.dataset.view===view)));updateAddress();renderRoom();
- stopWatching=watchRoom(selected.topic,async()=>{if(working||dirty)return;const state=await api('teacher.state',{activity_id:id});if(JSON.stringify(state)!==JSON.stringify(selected)){selected=state;renderRoom();await reloadList();}});
+ stopWatching=watchRoom(selected.topic,async()=>{if(working||dirty)return;let state;try{state=await api('teacher.state',{activity_id:id});}catch(error){selected=null;stopWatching?.();renderRoom();await reloadList();message(error.message);return;}if(JSON.stringify(state)!==JSON.stringify(selected)){selected=state;renderRoom();await reloadList();}});
 }
 function makeQR(target,url){const generator=globalThis.qrcode(0,'M');generator.addData(url);generator.make();const doc=new DOMParser().parseFromString(generator.createSvgTag({scalable:true,margin:2}),'image/svg+xml');target.append(document.importNode(doc.documentElement,true));}
 function projectQR(url){
@@ -92,14 +97,29 @@ function renderRoom(){
  if(a.phase==='draft'&&!a.groups.length)content.append(button('המשך חלוקה לקבוצות',()=>mutate('teacher.match'),{class:'primary'}));
  if(a.groups.length)renderGroups(a,content);
  if(a.published_at)renderReporting(a,content);
+ if(me.is_admin)renderAnswers(a,content);
+ content.append(el('div',{class:'actions'},button('מחיקת פעילות',()=>confirmDeleteActivity(a),{class:'danger'})));
  document.querySelector(view==='groups'?'#history-activity-panel':'#activity-panel').append(content);
 }
 function renderGroups(a,content){
  const editable=a.phase==='draft',draft=a.groups.map(g=>({...g,members:[...g.members]}));
  const names=new Map(a.participants.map(p=>[p.id,p.name])),cards=el('div',{class:'group-grid'}),warning=el('p',{class:'muted'});
  const publish=button('פרסום החלוקה הסופית',()=>{if(dirty){message('יש לשמור את השינויים לפני הפרסום.');return;}if(confirm('לפרסם את החלוקה? לאחר הפרסום לא ניתן לערוך אותה.'))void mutate('teacher.publish',{version:a.version});},{class:'primary'});
+ function removeGroup(index){
+  const source=draft[index],choices=[];
+  const dialog=el('dialog',{class:'confirm-dialog'},el('h2',{},`מחיקת קבוצה ${index+1}`),el('p',{},'בחרו קבוצה אחרת לכל משתתפת. התשובות נשמרות. השינוי יישמר עם שמירת החלוקה.'));
+  for(const id of source.members){const select=el('select',{'aria-label':`קבוצה חדשה עבור ${names.get(id)}`},el('option',{value:''},'בחירת קבוצה'),...draft.flatMap((g,i)=>i===index?[]:[el('option',{value:i},`קבוצה ${i+1}`)]));choices.push({id,select});dialog.append(field(names.get(id),select));}
+  const warning=el('p',{role:'alert'});dialog.append(warning,el('div',{class:'actions'},button('מחיקת הקבוצה',()=>{
+   const counts=draft.map(g=>g.members.length);
+   for(const {select} of choices){if(select.value===''){warning.textContent='יש לבחור קבוצה לכל משתתפת.';return;}counts[Number(select.value)]++;}
+   if(counts.some((n,i)=>i!==index&&n>4)){warning.textContent='בקבוצה יכולות להיות עד ארבע משתתפות. העבירו משתתפות בין הקבוצות תחילה.';return;}
+   for(const {id,select} of choices)draft[Number(select.value)].members.push(id);
+   draft.splice(index,1);dirty=true;dialog.close();render();
+  },{class:'danger'}),button('ביטול',()=>dialog.close(),{class:'quiet'})));
+  dialog.addEventListener('close',()=>dialog.remove());document.body.append(dialog);dialog.showModal();
+ }
  function render(){
-  cards.replaceChildren(...draft.map((g,index)=>el('section',{class:'group-card'},el('header',{},el('h3',{},`קבוצה ${index+1}`),el('span',{class:'group-count'},`${g.members.length} משתתפות`)),el('ul',{},g.members.map(id=>{
+  cards.replaceChildren(...draft.map((g,index)=>el('section',{class:'group-card'},el('header',{},el('h3',{},`קבוצה ${index+1}`),el('span',{class:'group-count'},`${g.members.length} משתתפות`),...(editable?[button('מחיקת קבוצה',()=>removeGroup(index),{class:'danger',disabled:draft.length<2})]:[])),el('ul',{},g.members.map(id=>{
    const member=el('li',{class:'member'},el('span',{},names.get(id)));
    if(editable){const target=el('select',{'aria-label':`העברת ${names.get(id)} לקבוצה`},draft.map((_,i)=>el('option',{value:i},`קבוצה ${i+1}`)));target.value=String(index);target.addEventListener('change',()=>{const destination=draft[Number(target.value)];if(destination.members.length>=4){message('בקבוצה יכולות להיות עד ארבע משתתפות.');target.value=String(index);return;}g.members.splice(g.members.indexOf(id),1);destination.members.push(id);dirty=true;render();});member.append(target);}return member;
   })))));
@@ -123,6 +143,19 @@ function renderGroups(a,content){
 function renderReporting(a,content){
  content.append(el('div',{class:'report-actions'},el('p',{role:'status'},reportText[a.report?.status]||'טרם דווח'),el('div',{class:'actions'},button('הורדת PDF',()=>perform(async()=>{const blob=await api('teacher.download',{activity_id:a.id},null,true);const url=URL.createObjectURL(blob),link=el('a',{href:url,download:`פורצות דרך_${a.school}_${a.class_name}_${a.activity_date}.pdf`});link.click();setTimeout(()=>URL.revokeObjectURL(url),10000);}),{class:'secondary'}),button('דיווח הקבוצות',()=>perform(async()=>{const result=await api('teacher.report',{activity_id:a.id});message(result.status==='sent'?'נשלח אל מנהל הפעילות':reportText[result.status]||'הדוח נשמר.');selected=await api('teacher.state',{activity_id:a.id});renderRoom();await reloadList();}),{class:'primary',disabled:['sent','sending','unknown'].includes(a.report?.status)}))));
  if(me.is_admin&&a.report?.status==='unknown')content.append(button('תיעוד בירור סטטוס שליחה',()=>perform(async()=>{const verification=prompt('לאחר בדיקה בתיבת המשרד: מה נבדק ומה נמצא? (לפחות 10 תווים)');if(!verification)return;const sent=confirm('אושרה קבלת הדוח במשרד? אישור = התקבל; ביטול = נבדק ואושר שלא נשלח.');await api('admin.report.resolve',{activity_id:a.id,status:sent?'sent':'failed',verification});selected=await api('teacher.state',{activity_id:a.id});renderRoom();await reloadList();}),{class:'quiet'}));
+}
+function confirmDeleteActivity(a){
+ if(document.querySelector('#delete-activity-dialog'))return;
+ const dialog=el('dialog',{id:'delete-activity-dialog',class:'confirm-dialog'},el('h2',{},'מחיקת פעילות'),el('p',{},`למחוק את הפעילות של ${a.school}, ${a.class_name}? הפעילות, התשובות והקבוצות יוסרו מהתצוגה והקישור למשתתפות ייסגר.`),el('div',{class:'actions'},button('מחיקת הפעילות',()=>{dialog.close();void perform(async()=>{await api('teacher.delete',{activity_id:a.id,version:a.version});stopWatching?.();selected=null;dirty=false;renderRoom();await reloadList();showView('groups');message('הפעילות נמחקה.');});},{class:'danger'}),button('ביטול',()=>dialog.close(),{class:'quiet'})));
+ dialog.addEventListener('close',()=>dialog.remove());document.body.append(dialog);dialog.showModal();
+}
+function renderAnswers(a,content){
+ const results=el('div'),details=el('details',{class:'answers-panel'},el('summary',{},'תשובות המשתתפות'),results);let loaded=false;
+ details.addEventListener('toggle',()=>{if(!details.open||loaded)return;void perform(async()=>{
+  const data=await api('admin.answers',{activity_id:a.id});
+  results.replaceChildren(...data.participants.map(p=>el('details',{class:'participant-answers'},el('summary',{},p.name),...(p.completed_at?questions.filter(q=>q.field!=='displayName').map(q=>el('div',{class:'answer-row'},el('strong',{},q.text),el('p',{},p.answers?.[q.field]||'—'))):[el('p',{},p.manual?'צורפה ידנית — ללא תשובות לשאלון':'טרם השלימה את השאלון')]))));
+  if(!data.participants.length)results.append(el('p',{},'אין עדיין משתתפות.'));loaded=true;
+ });});content.append(details);
 }
 function mutate(action,payload={}){return perform(async()=>{selected=await api(action,{activity_id:selected.id,...payload});dirty=false;renderRoom();await reloadList();});}
 window.addEventListener('beforeunload',event=>{if(dirty){event.preventDefault();event.returnValue='';}});

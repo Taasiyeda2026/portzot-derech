@@ -49,3 +49,13 @@ node --test inspiration/tests/edge.test.mjs inspiration/tests/service-worker.tes
 ```
 
 Database tests use real PostgreSQL semantics via PGlite with minimal Auth/Realtime/Storage/cron stubs, and entirely synthetic identities. Handler tests exercise that database through the actual gateway, real PDF generation and fake Graph transport. Browser tests drive actual manager/questionnaire/results pages against that gateway/database and test refresh recovery, same-name participants, manual editing, publication and mobile layout. A five-page synthetic Hebrew PDF was rendered with Poppler and visually checked for RTL, long names, numerals and repeated table headings. They do not establish live Supabase Auth, Graph or production availability. Temporary PDFs/screenshots go to `../work/pairing-validation`.
+
+## Dashboard administration and removal
+
+The owner's existing course-results tile embeds `pairing/admin.html?view=groups&embed=dashboard`, defaults to all instructor activities and exposes participant answers through `admin.answers` only. The parent sends a verified short-lived access token only to the exact course frame, origin and random nonce; refresh tokens never leave the dashboard. Expired access can be renewed through the same verified exchange.
+
+Instructors may delete their own activities; admins may delete any activity. Deletion requires confirmation and an optimistic version, immediately closes access and hides the activity from every list. `deleted_at`/`deleted_by` retain an audit marker; existing answers and private reports remain inaccessible until the previously approved retention cleanup removes them. Deletion is blocked during report preparation, delivery or unresolved delivery status. No existing activity is removed by deploying this feature.
+
+In draft group editing, “מחיקת קבוצה” requires selecting a destination for every member and respects the four-person cap. The normal save validates exact membership, so no response or participant is discarded. Published group compositions retain their existing freeze.
+
+Focused checks: `node --test pairing/tests/admin-delete.test.mjs pairing/tests/admin-ui.test.mjs`. Dashboard bridge tests live in `dashboard_system/tests/pairing-dashboard-frame.test.mjs`.

@@ -22,7 +22,7 @@ export async function database(){
   insert into public.schools values(1,'בית ספר בדיקה','עיר בדיקה');
  `);
  await db.exec(await readFile(new URL('../../supabase/migrations/20261113140437_pairing_group_reporting.sql',import.meta.url),'utf8'));
- for(const name of (await readdir(new URL('../../supabase/migrations/',import.meta.url))).filter(n=>n.endsWith('_pairing_early_close_manual_groups.sql')).sort())await db.exec(await readFile(new URL('../../supabase/migrations/'+name,import.meta.url),'utf8'));
+ for(const name of (await readdir(new URL('../../supabase/migrations/',import.meta.url))).filter(n=>(/_pairing_(early_close_manual_groups|admin_dashboard_delete)\.sql$/).test(n)).sort())await db.exec(await readFile(new URL('../../supabase/migrations/'+name,import.meta.url),'utf8'));
  const rpc=async(action,actor=null,token=null,payload={})=>(await db.query('select public.pairing_rpc($1,$2,$3,$4) as value',[action,actor,token,JSON.stringify(payload)])).rows[0].value;
  return {db,rpc};
 }
