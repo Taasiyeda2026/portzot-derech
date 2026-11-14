@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "files": [
     "Agatha.png",
     "Amelia.png",
@@ -12,18 +12,27 @@
     "Marin.png",
     "Misty.png",
     "Reem.png",
+    "Rosalind.png",
+    "Stacey.png",
     "Virginia.png",
     "ada.png",
+    "adayonat.png",
     "beyonce.png",
     "dolly.png",
     "frida.png",
     "gaga.png",
     "hedy.png",
     "joy.png",
+    "kira.png",
+    "lisa.png",
     "mae.png",
     "maya.png",
+    "mira.png",
+    "ruth.png",
     "serena.png",
+    "shirin.png",
     "simone.png",
+    "yael.png",
     "zahaa.png"
   ]
 }

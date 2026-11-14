@@ -51,8 +51,6 @@ function displayCards() {
     } else {
       artwork.append(text('span', 'התמונה אינה זמינה כרגע', 'gallery-missing'));
     }
-    if(globalThis.InspirationLanguage?.language==='ar'&&src&&!src.includes('/cards/ar/'))
-      artwork.append(text('span',globalThis.InspirationLanguage.text('הכרטיס טרם הועלה בערבית; מוצגת הגרסה בעברית.'),'gallery-missing'));
     const details = document.createElement('div');
     details.className = 'gallery-details';
     details.append(text('h2', card.woman_name, 'gallery-name'));

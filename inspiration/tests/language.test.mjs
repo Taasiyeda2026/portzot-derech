@@ -49,14 +49,14 @@ test('every Arabic mapping exists, matches Hebrew filename case exactly, and unk
   const {dom,w,language:l}=await harness('index.html','?lang=ar');
   try{
     const files=JSON.parse(await read('cards/ar/manifest.json')).files;
-    assert.equal(files.length,24);
+    assert.equal(files.length,33);
     for(const filename of files){
       assert.ok((await stat(new URL('../cards/ar/'+filename,import.meta.url))).size>1000);
       assert.ok((await stat(new URL('../cards/women/'+filename,import.meta.url))).size>1000);
       assert.equal(l.assetUrl(filename),'https://portzot-derech.org/inspiration/cards/ar/'+filename);
     }
-    assert.equal(l.assetFilename('adayonat.png'),'women/adayonat.png');
-    assert.equal(l.hasArabic('adayonat.png'),false);
+    assert.equal(l.assetFilename('adayonat.png'),'ar/adayonat.png');
+    assert.equal(l.hasArabic('adayonat.png'),true);
     l.setLanguage('he');assert.equal(l.assetFilename('ada.png'),'women/ada.png');
   }finally{w.dispatchEvent(new w.Event('pagehide'));dom.window.close();}
 });
@@ -99,8 +99,9 @@ test('authorized participant flow switches artwork without repeating join, claim
     assert.equal(w.localStorage.getItem('inspiration:participant:ABCD'),saved);
     for(const action of ['join','claim','verify_match','confirm_activity'])assert.equal(calls.filter(c=>c.action==='participant.'+action).length,1);
     filename='adayonat.png';l.setLanguage('ar');await tick();
-    assert.ok(images.at(-1).endsWith('/cards/women/adayonat.png'));
-    assert.match(d.querySelector('.viewer-status').textContent,/النسخة العبرية/);
+    assert.ok(images.at(-1).endsWith('/cards/ar/adayonat.png'));
+    assert.equal(d.querySelector('.viewer-status').textContent,'الوجه الأمامي للبطاقة');
+    assert.doesNotMatch(d.querySelector('#app').textContent,/טרם הועלה|لم تُرفع/);
     l.setLanguage('he');await tick();assert.equal(d.querySelector('.viewer-status').textContent,'הצד הקדמי של הקלף');
     filename='../secret.png';const before=images.length;l.setLanguage('ar');await tick();
     assert.equal(images.length,before);assert.match(d.querySelector('.error-inline').textContent,/تعذّر تحميل/);
