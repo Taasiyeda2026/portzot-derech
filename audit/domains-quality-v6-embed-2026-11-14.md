@@ -13,6 +13,7 @@ v6 גובר על ניסוחים קודמים. לא נגע בפריטים מחו�
 - מקורות `q6-enrich-*` + תקצירי כרטיסים + התאמת תמונות
 
 ## בדיקות
-- `domains-2027.test.cjs`
-- `domains-2027-browser.cjs` (`CHROME_BIN=/usr/bin/google-chrome`)
+- `domains-2027.test.cjs` 8/8
+- `domains-2027-browser.cjs` PASS (`CHROME_BIN=/usr/bin/google-chrome`)
+- `course-language*.test.cjs` 7/7
 - השוואת עברית מדויקת לדלתא v6
