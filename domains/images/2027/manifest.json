@@ -275,17 +275,17 @@
           "asset_id": "backpack"
         },
         "d3-a02": {
-          "path": "domains/images/2027/classroom.webp",
-          "alt": "תלמידות ותלמידים בכיתה",
-          "alt_ar": "طالبات وطلاب في غرفة صفية",
-          "credit": "Fajar Herlambang STUDIO / Unsplash",
-          "source_url": "https://unsplash.com/photos/students-are-taking-a-test-in-a-classroom-TmdrCRVDOnQ",
+          "path": "domains/images/2027/notebook.webp",
+          "alt": "מחברת ועפרונות על שולחן לימודים",
+          "alt_ar": "دفتر وأقلام على طاولة دراسة",
+          "credit": "The Design Lady / Unsplash",
+          "source_url": "https://unsplash.com/photos/a-notebook-and-pencils-on-a-green-surface--vEt5QioBcM",
           "license": "Unsplash License",
           "license_url": "https://unsplash.com/license",
-          "download_url": "https://images.unsplash.com/photo-1742549586702-c23994895082",
-          "verified_on": "2026-11-13",
+          "download_url": "https://images.unsplash.com/photo-1726726192155-fefdf941459a",
+          "verified_on": "2026-11-14",
           "usage": "צילום המחשה; אינו מתעד את המקרה המתואר בכתבה",
-          "asset_id": "classroom"
+          "asset_id": "notebook"
         },
         "d3-a03": {
           "path": "domains/images/2027/notebook.webp",
@@ -327,17 +327,18 @@
           "asset_id": "park"
         },
         "d3-a06": {
-          "path": "domains/images/2027/classroom.webp",
-          "alt": "תלמידות ותלמידים בכיתה",
-          "alt_ar": "طالبات وطلاب في غرفة صفية",
-          "credit": "Fajar Herlambang STUDIO / Unsplash",
-          "source_url": "https://unsplash.com/photos/students-are-taking-a-test-in-a-classroom-TmdrCRVDOnQ",
+          "path": "domains/images/2027/robot.webp",
+          "alt": "רובוט במעבדה בבית ספר חדשני",
+          "alt_ar": "روبوت في مختبر بمدرسة مبتكرة",
+          "credit": "Mathew Schwartz / Unsplash",
+          "source_url": "https://unsplash.com/photos/a-robot-that-is-standing-on-a-white-surface-c5sTal8LQyo",
           "license": "Unsplash License",
           "license_url": "https://unsplash.com/license",
-          "download_url": "https://images.unsplash.com/photo-1742549586702-c23994895082",
-          "verified_on": "2026-11-13",
+          "download_url": "https://images.unsplash.com/photo-1631882456892-54a30e92fe4f",
+          "verified_on": "2026-11-14",
           "usage": "צילום המחשה; אינו מתעד את המקרה המתואר בכתבה",
-          "asset_id": "classroom"
+          "asset_id": "robot",
+          "object_position": "50% 10%"
         },
         "d3-a07": {
           "path": "domains/images/2027/notebook.webp",
@@ -396,17 +397,17 @@
           "asset_id": "friends"
         },
         "d4-a02": {
-          "path": "domains/images/2027/friends.webp",
-          "alt": "צעירות משוחחות יחד",
-          "alt_ar": "شابات يتحدثن معًا",
-          "credit": "Timur Shakerzianov / Unsplash",
-          "source_url": "https://unsplash.com/photos/young-women-talking-in-a-casual-setting-q19hWugG0MU",
+          "path": "domains/images/2027/guitar.webp",
+          "alt": "ידיים מנגנות ומגע עם מוזיקה",
+          "alt_ar": "يدان تعزفان وتلمسان الموسيقى",
+          "credit": "Adi Goldstein / Unsplash",
+          "source_url": "https://unsplash.com/photos/person-playing-guitar-indoors-WIDjSuv7zzU",
           "license": "Unsplash License",
           "license_url": "https://unsplash.com/license",
-          "download_url": "https://images.unsplash.com/photo-1770563182251-fd272c89ae74",
-          "verified_on": "2026-11-13",
+          "download_url": "https://images.unsplash.com/photo-1530385782186-2e2a486de111",
+          "verified_on": "2026-11-14",
           "usage": "צילום המחשה; אינו מתעד את המקרה המתואר בכתבה",
-          "asset_id": "friends"
+          "asset_id": "guitar"
         },
         "d4-a03": {
           "path": "domains/images/2027/friends.webp",
@@ -422,17 +423,17 @@
           "asset_id": "friends"
         },
         "d4-a04": {
-          "path": "domains/images/2027/friends.webp",
-          "alt": "חברות מדברות וצוחקות יחד",
-          "alt_ar": "صديقات يتحدّثن ويضحكن معًا",
-          "credit": "Timur Shakerzianov / Unsplash",
-          "source_url": "https://unsplash.com/photos/young-women-talking-in-a-casual-setting-q19hWugG0MU",
+          "path": "domains/images/2027/digital.webp",
+          "alt": "טלפון חכם על מחברת לתקשורת",
+          "alt_ar": "هاتف ذكي على دفتر للتواصل",
+          "credit": "Swello / Unsplash",
+          "source_url": "https://unsplash.com/photos/smartphone-on-notebook-and-laptop-on-table-CGvC8yWgC-g",
           "license": "Unsplash License",
           "license_url": "https://unsplash.com/license",
-          "download_url": "https://images.unsplash.com/photo-1770563182251-fd272c89ae74",
-          "verified_on": "2026-11-13",
+          "download_url": "https://images.unsplash.com/photo-1759215524630-a6572b3cfb86",
+          "verified_on": "2026-11-14",
           "usage": "צילום המחשה; אינו מתעד את המקרה המתואר בכתבה",
-          "asset_id": "friends"
+          "asset_id": "digital"
         },
         "d4-a05": {
           "path": "domains/images/2027/together.webp",
@@ -761,14 +762,14 @@
         },
         "d7-a02": {
           "path": "domains/images/2027/bedroom.webp",
-          "alt": "חדר שינה עם מיטה ושולחן",
-          "alt_ar": "غرفة نوم فيها سرير ومكتب",
+          "alt": "חדר עם מיטה ושולחן שמשנה שימוש",
+          "alt_ar": "غرفة فيها سرير ومكتب يتغيّر استخدامه",
           "credit": "Alex Tyson / Unsplash",
           "source_url": "https://unsplash.com/photos/a-bedroom-with-a-bed-and-a-desk-zcXaCds-SZ4",
           "license": "Unsplash License",
           "license_url": "https://unsplash.com/license",
           "download_url": "https://images.unsplash.com/photo-1722605904915-5698d12ec5c4",
-          "verified_on": "2026-11-13",
+          "verified_on": "2026-11-14",
           "usage": "צילום המחשה; אינו מתעד את המקרה המתואר בכתבה",
           "asset_id": "bedroom"
         },
@@ -825,17 +826,17 @@
           "asset_id": "bedroom"
         },
         "d7-a07": {
-          "path": "domains/images/2027/bedroom.webp",
-          "alt": "חדר שינה עם מיטה ושולחן",
-          "alt_ar": "غرفة نوم فيها سرير ومكتب",
-          "credit": "Alex Tyson / Unsplash",
-          "source_url": "https://unsplash.com/photos/a-bedroom-with-a-bed-and-a-desk-zcXaCds-SZ4",
+          "path": "domains/images/2027/park.webp",
+          "alt": "צמחייה וטבע כהשראה לעיצוב",
+          "alt_ar": "نباتات وطبيعة كإلهام للتصميم",
+          "credit": "Sebastian Bjune / Unsplash",
+          "source_url": "https://unsplash.com/photos/green-plants-and-trees-during-daytime-Q440MWabsoU",
           "license": "Unsplash License",
           "license_url": "https://unsplash.com/license",
-          "download_url": "https://images.unsplash.com/photo-1722605904915-5698d12ec5c4",
-          "verified_on": "2026-11-13",
+          "download_url": "https://images.unsplash.com/photo-1601040629486-d40e5e8b39d5",
+          "verified_on": "2026-11-14",
           "usage": "צילום המחשה; אינו מתעד את המקרה המתואר בכתבה",
-          "asset_id": "bedroom"
+          "asset_id": "park"
         },
         "d7-a08": {
           "path": "domains/images/2027/bedroom.webp",
