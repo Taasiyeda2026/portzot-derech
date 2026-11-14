@@ -279,9 +279,6 @@ export function cardViewer(card,token,teacherContext=null) {
           if(wowUrl)artwork.append(wowHotspot(wowUrl));
         }
         clear(body).append(artwork);status.textContent=currentSide==='front'?'הצד הקדמי של הקלף':'הצד האחורי של הקלף';
-        const filename=authorizedCardFilename.get(blob);
-        if(currentSide==='front'&&globalThis.InspirationLanguage?.language==='ar'&&filename&&!globalThis.InspirationLanguage.hasArabic(filename))
-          status.textContent='הכרטיס טרם הועלה בערבית; מוצגת הגרסה בעברית.';
         controlsState();
       }else throw new Error('unsupported');
     }catch(error){if(!destroyed&&version===loadVersion){clear(body).append(el('p',{class:'error-inline'},errorText(error)),button('ניסיון נוסף',()=>load(currentSide),{class:'secondary'}));controlsState();}}

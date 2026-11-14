@@ -111,7 +111,6 @@
   "טוענות את הקלף שלך…": "جارٍ تحميل بطاقتكِ…",
   "הצד הקדמי של הקלף": "الوجه الأمامي للبطاقة",
   "הצד האחורי של הקלף": "الوجه الخلفي للبطاقة",
-  "הכרטיס טרם הועלה בערבית; מוצגת הגרסה בעברית.": "لم تُرفع هذه البطاقة بالعربية بعد؛ تُعرض النسخة العبرية.",
   "מכינות מקום להשראה": "نهيّئ مساحة للإلهام",
   "בודקות את ההתחברות שלך…": "جارٍ التحقّق من دخولكِ…",
   "ניווט מדריכה": "تنقّل المرشدة",
@@ -257,7 +256,7 @@
     'מדעי המחשב':'علوم الحاسوب','בינה מלאכותית':'الذكاء الاصطناعي','ביולוגיה':'علم الأحياء','מדעי החיים':'علوم الحياة',
     'חקר הטבע':'دراسة الطبيعة','חינוך':'التعليم','קולנוע':'السينما','ניצוח':'قيادة الأوركسترا','מנהיגות':'القيادة'};
   Object.assign(dictionary,names,fields);
-  const arabicFiles = new Set(["Agatha.png", "Amelia.png", "Christina.png", "Jane.png", "Katalin.png", "Katherine.png", "Kylie.png", "Malala.png", "Marin.png", "Misty.png", "Reem.png", "Virginia.png", "ada.png", "beyonce.png", "dolly.png", "frida.png", "gaga.png", "hedy.png", "joy.png", "mae.png", "maya.png", "serena.png", "simone.png", "zahaa.png"]);
+  const arabicFiles = new Set(["Agatha.png","Amelia.png","Christina.png","Jane.png","Katalin.png","Katherine.png","Kylie.png","Malala.png","Marin.png","Misty.png","Reem.png","Rosalind.png","Stacey.png","Virginia.png","ada.png","adayonat.png","beyonce.png","dolly.png","frida.png","gaga.png","hedy.png","joy.png","kira.png","lisa.png","mae.png","maya.png","mira.png","ruth.png","serena.png","shirin.png","simone.png","yael.png","zahaa.png"]);
   const KEY = 'portzot-derech-course-language';
   const explicit = new URL(location.href).searchParams.get('lang');
   let language = 'he';
