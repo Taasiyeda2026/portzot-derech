@@ -46,17 +46,17 @@
           "asset_id": "bedroom"
         },
         "d1-a03": {
-          "path": "domains/images/2027/clothes.webp",
-          "alt": "בגדים תלויים בחנות",
-          "alt_ar": "ملابس معلقة في متجر",
-          "credit": "Ivona Rož / Unsplash",
-          "source_url": "https://unsplash.com/photos/clothes-are-hanging-on-a-rack-Iawbgbj7jmU",
+          "path": "domains/images/2027/digital.webp",
+          "alt": "אוזניות וטלפון על שולחן",
+          "alt_ar": "سمّاعات وهاتف على طاولة",
+          "credit": "Swello / Unsplash",
+          "source_url": "https://unsplash.com/photos/smartphone-on-notebook-and-laptop-on-table-CGvC8yWgC-g",
           "license": "Unsplash License",
           "license_url": "https://unsplash.com/license",
-          "download_url": "https://images.unsplash.com/photo-1743877428895-fd3aabd06528",
+          "download_url": "https://images.unsplash.com/photo-1759215524630-a6572b3cfb86",
           "verified_on": "2026-11-13",
           "usage": "צילום המחשה; אינו מתעד את המקרה המתואר בכתבה",
-          "asset_id": "clothes"
+          "asset_id": "digital"
         },
         "d1-a04": {
           "path": "domains/images/2027/watch.webp",
@@ -111,17 +111,17 @@
           "asset_id": "clock"
         },
         "d1-a08": {
-          "path": "domains/images/2027/camera.webp",
-          "alt": "מצלמה על שולחן",
-          "alt_ar": "كاميرا على طاولة",
-          "credit": "Howard Bouchevereau / Unsplash",
-          "source_url": "https://unsplash.com/photos/a-camera-on-a-table-68AfHGvombw",
+          "path": "domains/images/2027/together.webp",
+          "alt": "שתי ספורטאיות זוכות יחד",
+          "alt_ar": "رياضيّتان تفوزان معًا",
+          "credit": "Andrew Rivera / Unsplash",
+          "source_url": "https://unsplash.com/photos/a-group-of-women-standing-next-to-each-other-holding-hands-LzidwJFDAMg",
           "license": "Unsplash License",
           "license_url": "https://unsplash.com/license",
-          "download_url": "https://images.unsplash.com/photo-1657897808147-3e8f47d99332",
+          "download_url": "https://images.unsplash.com/photo-1643061754988-d8198b7a4c38",
           "verified_on": "2026-11-13",
           "usage": "צילום המחשה; אינו מתעד את המקרה המתואר בכתבה",
-          "asset_id": "camera"
+          "asset_id": "together"
         }
       }
     },
@@ -154,17 +154,17 @@
           "asset_id": "digital"
         },
         "d2-a02": {
-          "path": "domains/images/2027/digital.webp",
-          "alt": "טלפון חכם על מחברת",
-          "alt_ar": "هاتف ذكي على دفتر",
-          "credit": "Swello / Unsplash",
-          "source_url": "https://unsplash.com/photos/smartphone-on-notebook-and-laptop-on-table-CGvC8yWgC-g",
+          "path": "domains/images/2027/camera.webp",
+          "alt": "מצלמה בידיים בזמן יצירה",
+          "alt_ar": "كاميرا بين اليدين أثناء الإبداع",
+          "credit": "Howard Bouchevereau / Unsplash",
+          "source_url": "https://unsplash.com/photos/a-camera-on-a-table-68AfHGvombw",
           "license": "Unsplash License",
           "license_url": "https://unsplash.com/license",
-          "download_url": "https://images.unsplash.com/photo-1759215524630-a6572b3cfb86",
+          "download_url": "https://images.unsplash.com/photo-1657897808147-3e8f47d99332",
           "verified_on": "2026-11-13",
           "usage": "צילום המחשה; אינו מתעד את המקרה המתואר בכתבה",
-          "asset_id": "digital"
+          "asset_id": "camera"
         },
         "d2-a03": {
           "path": "domains/images/2027/digital.webp",
@@ -422,17 +422,17 @@
           "asset_id": "friends"
         },
         "d4-a04": {
-          "path": "domains/images/2027/digital.webp",
-          "alt": "טלפון חכם על מחברת",
-          "alt_ar": "هاتف ذكي على دفتر",
-          "credit": "Swello / Unsplash",
-          "source_url": "https://unsplash.com/photos/smartphone-on-notebook-and-laptop-on-table-CGvC8yWgC-g",
+          "path": "domains/images/2027/friends.webp",
+          "alt": "חברות מדברות וצוחקות יחד",
+          "alt_ar": "صديقات يتحدّثن ويضحكن معًا",
+          "credit": "Timur Shakerzianov / Unsplash",
+          "source_url": "https://unsplash.com/photos/young-women-talking-in-a-casual-setting-q19hWugG0MU",
           "license": "Unsplash License",
           "license_url": "https://unsplash.com/license",
-          "download_url": "https://images.unsplash.com/photo-1759215524630-a6572b3cfb86",
+          "download_url": "https://images.unsplash.com/photo-1770563182251-fd272c89ae74",
           "verified_on": "2026-11-13",
           "usage": "צילום המחשה; אינו מתעד את המקרה המתואר בכתבה",
-          "asset_id": "digital"
+          "asset_id": "friends"
         },
         "d4-a05": {
           "path": "domains/images/2027/together.webp",
@@ -461,17 +461,17 @@
           "asset_id": "together"
         },
         "d4-a07": {
-          "path": "domains/images/2027/digital.webp",
-          "alt": "טלפון חכם על מחברת",
-          "alt_ar": "هاتف ذكي على دفتر",
-          "credit": "Swello / Unsplash",
-          "source_url": "https://unsplash.com/photos/smartphone-on-notebook-and-laptop-on-table-CGvC8yWgC-g",
+          "path": "domains/images/2027/friends.webp",
+          "alt": "שיחה בין חברות במפגש",
+          "alt_ar": "حديث بين صديقات في لقاء",
+          "credit": "Timur Shakerzianov / Unsplash",
+          "source_url": "https://unsplash.com/photos/young-women-talking-in-a-casual-setting-q19hWugG0MU",
           "license": "Unsplash License",
           "license_url": "https://unsplash.com/license",
-          "download_url": "https://images.unsplash.com/photo-1759215524630-a6572b3cfb86",
+          "download_url": "https://images.unsplash.com/photo-1770563182251-fd272c89ae74",
           "verified_on": "2026-11-13",
           "usage": "צילום המחשה; אינו מתעד את המקרה המתואר בכתבה",
-          "asset_id": "digital"
+          "asset_id": "friends"
         },
         "d4-a08": {
           "path": "domains/images/2027/park.webp",
@@ -717,17 +717,17 @@
           "asset_id": "transit"
         },
         "d6-a08": {
-          "path": "domains/images/2027/backpack.webp",
-          "alt": "תיק לימודים מחברת ומחשב נייד",
-          "alt_ar": "حقيبة دراسة ودفتر وحاسوب محمول",
-          "credit": "Matt Ragland / Unsplash",
-          "source_url": "https://unsplash.com/photos/flat-lay-photography-of-blue-backpack-beside-book-and-silver-macbook-02z1I7gv4ao",
+          "path": "domains/images/2027/park.webp",
+          "alt": "שביל בפארק בשכונה",
+          "alt_ar": "ممر في حديقة الحيّ",
+          "credit": "Sebastian Bjune / Unsplash",
+          "source_url": "https://unsplash.com/photos/green-plants-and-trees-during-daytime-Q440MWabsoU",
           "license": "Unsplash License",
           "license_url": "https://unsplash.com/license",
-          "download_url": "https://images.unsplash.com/photo-1535982330050-f1c2fb79ff78",
+          "download_url": "https://images.unsplash.com/photo-1601040629486-d40e5e8b39d5",
           "verified_on": "2026-11-13",
           "usage": "צילום המחשה; אינו מתעד את המקרה המתואר בכתבה",
-          "asset_id": "backpack"
+          "asset_id": "park"
         }
       }
     },
@@ -1016,17 +1016,17 @@
           "asset_id": "controller"
         },
         "d9-a03": {
-          "path": "domains/images/2027/notebook.webp",
-          "alt": "מחברת ועפרונות על משטח ירוק",
-          "alt_ar": "دفتر وأقلام رصاص على سطح أخضر",
-          "credit": "The Design Lady / Unsplash",
-          "source_url": "https://unsplash.com/photos/a-notebook-and-pencils-on-a-green-surface--vEt5QioBcM",
+          "path": "domains/images/2027/camera.webp",
+          "alt": "מצלמה מוכנה לצילום סרטון",
+          "alt_ar": "كاميرا جاهزة لتصوير فيديو",
+          "credit": "Howard Bouchevereau / Unsplash",
+          "source_url": "https://unsplash.com/photos/a-camera-on-a-table-68AfHGvombw",
           "license": "Unsplash License",
           "license_url": "https://unsplash.com/license",
-          "download_url": "https://images.unsplash.com/photo-1726726192155-fefdf941459a",
+          "download_url": "https://images.unsplash.com/photo-1657897808147-3e8f47d99332",
           "verified_on": "2026-11-13",
           "usage": "צילום המחשה; אינו מתעד את המקרה המתואר בכתבה",
-          "asset_id": "notebook"
+          "asset_id": "camera"
         },
         "d9-a04": {
           "path": "domains/images/2027/camera.webp",
