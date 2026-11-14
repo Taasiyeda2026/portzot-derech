@@ -10,7 +10,7 @@ let cards = [];
 function previewUrl(path) {
   if (typeof path !== 'string') return null;
   const match = /^site:women\/([A-Za-z0-9_-]+\.(?:png|jpg|jpeg|webp))$/.exec(path);
-  return match ? new URL(match[1], imageBase).href : null;
+  return match ? (globalThis.InspirationLanguage?.assetUrl(match[1]) || new URL(match[1], imageBase).href) : null;
 }
 
 function text(tag, value, className) {
@@ -29,7 +29,7 @@ function fieldDescription(value) {
 function displayCards() {
   const term = search.value.trim().toLocaleLowerCase('he');
   const matching = term
-    ? cards.filter(card => [card.woman_name,card.field].join(' ').toLocaleLowerCase('he').includes(term))
+    ? cards.filter(card => [card.woman_name,card.field,globalThis.InspirationLanguage?.text(card.woman_name),globalThis.InspirationLanguage?.text(card.field)].join(' ').toLocaleLowerCase('he').includes(term))
     : cards;
   gallery.replaceChildren();
   count.textContent = term ? `${matching.length} מתוך ${cards.length} כרטיסים` : `${cards.length} כרטיסים`;
@@ -51,6 +51,8 @@ function displayCards() {
     } else {
       artwork.append(text('span', 'התמונה אינה זמינה כרגע', 'gallery-missing'));
     }
+    if(globalThis.InspirationLanguage?.language==='ar'&&src&&!src.includes('/cards/ar/'))
+      artwork.append(text('span',globalThis.InspirationLanguage.text('הכרטיס טרם הועלה בערבית; מוצגת הגרסה בעברית.'),'gallery-missing'));
     const details = document.createElement('div');
     details.className = 'gallery-details';
     details.append(text('h2', card.woman_name, 'gallery-name'));
@@ -84,4 +86,5 @@ async function init() {
 }
 
 search.addEventListener('input', displayCards);
+document.addEventListener('inspirationlanguagechange',()=>{if(cards.length)displayCards();});
 init();
