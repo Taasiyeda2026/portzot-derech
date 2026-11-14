@@ -12,7 +12,7 @@ async function action(name,payload={},message){
 }
 function stat(value,label){return el('div',{class:'stat'},el('b',{},value??0),el('span',{},label));}
 function textInput(value='',attrs={}){return el('input',{value,...attrs});}
-function roomLink(room){const url=new URL('index.html',location.href);url.searchParams.set('code',room.code);return url.href;}
+function roomLink(room){const url=new URL('index.html',location.href);url.searchParams.set('code',room.code);url.searchParams.set('lang',globalThis.InspirationLanguage?.language||'he');return url.href;}
 function stop(){stopWatching?.();stopWatching=null;lastState='';mapExpanded=null;}
 
 async function home(){
@@ -144,7 +144,7 @@ function renderRoom(){
       {disabled:chosen!==room.expected}));
   if(room.phase!=='ended')
     controls.append(button('סיום המשחק',()=>{
-      if(confirm('לסיים את המשחק? ההצטרפות ובחירת הקלפים יינעלו.'))
+      if(confirm(globalThis.InspirationLanguage?.text('לסיים את המשחק? ההצטרפות ובחירת הקלפים יינעלו.')||'לסיים את המשחק? ההצטרפות ובחירת הקלפים יינעלו.'))
         action('teacher.phase',{phase:'ended'});
     },{class:'danger'}));
   if(controls.childNodes.length)header.append(controls);
@@ -166,7 +166,7 @@ function renderRoom(){
         el('button',{type:'submit',class:'secondary'},'עדכון'));
       resize.addEventListener('submit',async event=>{
         event.preventDefault();
-        if(resize.reportValidity()&&confirm('לעדכן את מספר המשתתפות לפני הבחירה הראשונה?'))
+        if(resize.reportValidity()&&confirm(globalThis.InspirationLanguage?.text('לעדכן את מספר המשתתפות לפני הבחירה הראשונה?')||'לעדכן את מספר המשתתפות לפני הבחירה הראשונה?'))
           await action('teacher.resize',{expected:Number(expected.value)});
       });
       management.append(el('details',{class:'teacher-settings-details'},
@@ -215,8 +215,8 @@ function roster(players,cards,room){
   for(const player of players){
     const controls=el('div',{class:'actions'});
     if(room.phase==='waiting'){
-      controls.append(button('תיקון שם',async()=>{const name=prompt('השם המעודכן של המשתתפת:',player.name);if(name?.trim())await action('teacher.player_update',{player_id:player.id,name:name.trim()});},{class:'text-button'}));
-      if(!chosen)controls.append(button('הסרת רישום',async()=>{if(confirm(`להסיר את הרישום של ${player.name}?`))await action('teacher.player_remove',{player_id:player.id});},{class:'text-button'}));
+      controls.append(button('תיקון שם',async()=>{const name=prompt(globalThis.InspirationLanguage?.text('השם המעודכן של המשתתפת:')||'השם המעודכן של המשתתפת:',player.name);if(name?.trim())await action('teacher.player_update',{player_id:player.id,name:name.trim()});},{class:'text-button'}));
+      if(!chosen)controls.append(button('הסרת רישום',async()=>{if(confirm(globalThis.InspirationLanguage?.text(`להסיר את הרישום של ${player.name}?`)||`להסיר את הרישום של ${player.name}?`))await action('teacher.player_remove',{player_id:player.id});},{class:'text-button'}));
     }
     if(player.number&&room.phase!=='ended'){
       controls.append(button('הצגת קלף',()=>{
@@ -228,11 +228,15 @@ function roster(players,cards,room){
     }
     const lastSeen=player.last_seen?new Date(player.last_seen):null;
     const stale=lastSeen&&Date.now()-lastSeen.getTime()>90000;
-    body.append(el('tr',{},el('td',{},player.name),el('td',{},player.number||'—'),el('td',{},player.woman_name||'—'),el('td',{},player.symbol?symbolIcon(player.symbol,true):'—'),el('td',{},el('span',{class:`badge ${player.number?'success':''}`},player.number?'הקלף נשמר':'טרם בחרה'),stale?el('small',{},' · החיבור לא עודכן לאחרונה'):null),el('td',{},controls)));
+    body.append(el('tr',{},el('td',{translate:'no'},player.name),el('td',{},player.number||'—'),el('td',{},player.woman_name||'—'),el('td',{},player.symbol?symbolIcon(player.symbol,true):'—'),el('td',{},el('span',{class:`badge ${player.number?'success':''}`},player.number?'הקלף נשמר':'טרם בחרה'),stale?el('small',{},' · החיבור לא עודכן לאחרונה'):null),el('td',{},controls)));
   }
   table.append(body);
   return el('section',{class:'teacher-roster'},el('h2',{},'משתתפות בחדר'),players.length?el('div',{class:'table-wrap'},table):el('p',{class:'teacher-roster-empty'},'ממתינות להצטרפות המשתתפות'));
 }
 
 async function start(){me=await requireTeacher();if(!me)return;if(roomId)await openRoom(roomId);else await home();}
+document.addEventListener('inspirationlanguagechange',()=>{
+  const qr=document.querySelector('.qr-wrap');
+  if(qr&&state?.room){clear(qr);try{qr.append(createInviteTools(roomLink(state.room),message=>notify(message)));}catch{qr.append(el('p',{},'לא ניתן להציג QR כרגע.'));}}
+});
 window.addEventListener('pagehide',stop);start();

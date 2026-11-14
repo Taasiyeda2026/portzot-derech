@@ -372,3 +372,8 @@
   .personal-card-number-label{font-size:.95rem}
   .board .card-back .card-number{font-size:2.8rem}
 }
+
+/* Shared course switch stays in the header, away from card artwork. */
+.masthead:has(>[data-inspiration-language-switch]){flex-wrap:wrap}
+.masthead>.course-lang-switch{margin-inline-start:auto;gap:2px;font-size:11px;flex-wrap:nowrap}
+html[lang="ar"] .participant{line-height:1.7}

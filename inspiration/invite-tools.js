@@ -94,11 +94,11 @@ export function createInviteTools(inviteUrl,onError=()=>{}) {
   actions.append(control('הורדת QR','download',()=>downloadQR(svgMarkup)));
 
   const mail=new URL('mailto:');
-  mail.searchParams.set('subject','נושמות השראה – קישור למשחק');
+  mail.searchParams.set('subject',globalThis.InspirationLanguage?.text('נושמות השראה – קישור למשחק')||'נושמות השראה – קישור למשחק');
   mail.searchParams.set('body',inviteUrl);
   actions.append(linkControl('שליחה במייל','mail',mail.href));
 
-  const whatsapp='https://wa.me/?text='+encodeURIComponent('נושמות השראה – קישור למשחק:\n'+inviteUrl);
+  const whatsapp='https://wa.me/?text='+encodeURIComponent((globalThis.InspirationLanguage?.text('נושמות השראה – קישור למשחק')||'נושמות השראה – קישור למשחק')+':\n'+inviteUrl);
   actions.append(linkControl('שליחה ב־WhatsApp','whatsapp',whatsapp,true));
 
   const copy=control('העתקת קישור','copy',async()=>{

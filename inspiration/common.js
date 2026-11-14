@@ -64,7 +64,7 @@ async function readResponse(response,binary=false) {
     if (typeof filename !== 'string' ||
         !/^[A-Za-z0-9_-]+\.(?:png|jpg|jpeg|webp|pdf)$/.test(filename))
       throw new Error('לא ניתן לטעון את תמונת הקלף כרגע.');
-    const url = new URL('./cards/women/' + filename, import.meta.url);
+    const url = new URL(globalThis.InspirationLanguage?.assetUrl(filename) || new URL('./cards/women/' + filename, import.meta.url));
     const imageResponse = await fetch(url.href,{
       method:'GET',mode:'same-origin',credentials:'omit',cache:'force-cache'
     }).catch(()=>{throw new Error('לא ניתן לטעון את תמונת הקלף. בדקי את החיבור ונסי שוב.');});
@@ -194,6 +194,7 @@ export function wowImageUrl(card, loadedFilename=null) {
 }
 
 export function cardViewer(card,token,teacherContext=null) {
+  let loadVersion=0;
   let destroyed=false,currentSide=card.has_front?'front':'back',pageNumber=1,pages=1,pdfDocument=null,currentBlobUrl=null,pdfModule,wowDialog=null;
   const body=el('div',{class:'card-viewer reveal'});
   const status=el('p',{class:'viewer-status',role:'status'});
@@ -258,6 +259,7 @@ export function cardViewer(card,token,teacherContext=null) {
     }catch{status.textContent='לא ניתן להציג את הקלף כרגע. נסי שוב כשיש חיבור.';controlsState();}
   }
   async function load(side){
+    const version=++loadVersion;
     closeWow();
     currentSide=side;pageNumber=1;pdfDocument?.destroy();pdfDocument=null;if(currentBlobUrl){URL.revokeObjectURL(currentBlobUrl);currentBlobUrl=null;}
     sideButton.disabled=true;zoom.disabled=true;clear(body).append(el('p',{class:'info'},'טוענות את הקלף שלך…'));status.textContent='';controlsState();
@@ -265,7 +267,7 @@ export function cardViewer(card,token,teacherContext=null) {
       const blob=teacherContext
         ? await api('teacher.asset',{...teacherContext,side},{binary:true})
         : await api('participant.asset',{side},{token,binary:true});
-      if(destroyed)return;
+      if(destroyed||version!==loadVersion)return;
       if(blob.type==='application/pdf'){
         pdfModule ||= await import('./vendor/pdf.mjs');pdfModule.GlobalWorkerOptions.workerSrc=new URL('./vendor/pdf.worker.mjs',import.meta.url).href;
         pdfDocument=await pdfModule.getDocument({data:new Uint8Array(await blob.arrayBuffer()),isEvalSupported:false}).promise;pages=pdfDocument.numPages;await renderPdf();
@@ -276,10 +278,16 @@ export function cardViewer(card,token,teacherContext=null) {
           const wowUrl=wowImageUrl(card,authorizedCardFilename.get(blob));
           if(wowUrl)artwork.append(wowHotspot(wowUrl));
         }
-        clear(body).append(artwork);status.textContent=currentSide==='front'?'הצד הקדמי של הקלף':'הצד האחורי של הקלף';controlsState();
+        clear(body).append(artwork);status.textContent=currentSide==='front'?'הצד הקדמי של הקלף':'הצד האחורי של הקלף';
+        const filename=authorizedCardFilename.get(blob);
+        if(currentSide==='front'&&globalThis.InspirationLanguage?.language==='ar'&&filename&&!globalThis.InspirationLanguage.hasArabic(filename))
+          status.textContent='הכרטיס טרם הועלה בערבית; מוצגת הגרסה בעברית.';
+        controlsState();
       }else throw new Error('unsupported');
-    }catch(error){if(!destroyed){clear(body).append(el('p',{class:'error-inline'},errorText(error)),button('ניסיון נוסף',()=>load(currentSide),{class:'secondary'}));controlsState();}}
+    }catch(error){if(!destroyed&&version===loadVersion){clear(body).append(el('p',{class:'error-inline'},errorText(error)),button('ניסיון נוסף',()=>load(currentSide),{class:'secondary'}));controlsState();}}
   }
+  const changeLanguage=()=>load(currentSide);
+  document.addEventListener('inspirationlanguagechange',changeLanguage);
   load(currentSide);
-  return {node:outer,destroy(){destroyed=true;closeWow();pdfDocument?.destroy();if(currentBlobUrl)URL.revokeObjectURL(currentBlobUrl);}};
+  return {node:outer,destroy(){document.removeEventListener('inspirationlanguagechange',changeLanguage);destroyed=true;closeWow();pdfDocument?.destroy();if(currentBlobUrl)URL.revokeObjectURL(currentBlobUrl);}};
 }
