@@ -69,6 +69,15 @@ test('opening quiz changes only displayed domain names/colors',()=>{
   assert.equal(strip(read(p)),strip(before),p);
  }
 });
+test('alldomains keeps the ten original domain icons from the build template',()=>{
+ const icons=['🧘‍♀️','📱','👩‍🏫','👩‍❤️‍👩','💸','🏃‍♀️','🏠','🌿','🎨','🔮'];
+ for(const page of ['domains/alldomains.html','ar/domains/alldomains.html']){
+  const html=read(page);
+  const found=[...html.matchAll(/<span class="domain-icon" aria-hidden="true">([^<]*)<\/span>/g)].map(m=>m[1]);
+  assert.deepEqual(found,icons,page);
+  assert.equal(html.match(/style="--hue:\d+"/g).length,10,page);
+ }
+});
 test('rendering is reproducible and does not change unrelated files',()=>{
  const pages=['domains/alldomains.html','ar/domains/alldomains.html',...he.flatMap(d=>[`domains/${d.slug}.html`,`ar/domains/${d.slug}.html`])];
  const before=pages.map(read);cp.execFileSync('python3',['scripts/build-domains.py'],{cwd:root});assert.deepEqual(pages.map(read),before);

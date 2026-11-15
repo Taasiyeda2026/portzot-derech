@@ -34,16 +34,6 @@
   document.querySelectorAll('[data-open-article]').forEach(button => {
     button.addEventListener('click', () => open(byId(button.dataset.openArticle), button));
   });
-  document.querySelectorAll('[data-reader-language]').forEach(link => {
-    link.addEventListener('click', () => {
-      const target = document.querySelector(`[data-course-language="${link.dataset.readerLanguage}"]`);
-      const url = new URL(target ? target.href : link.href);
-      url.search = location.search;
-      url.searchParams.set('lang', link.dataset.readerLanguage);
-      url.hash = location.hash;
-      link.href = url.href;
-    });
-  });
   dialogs.forEach((dialog, index) => {
     dialog.querySelector('[data-close]').addEventListener('click', close);
     dialog.querySelector('[data-prev]').addEventListener('click', () => open(dialogs[index-1]));

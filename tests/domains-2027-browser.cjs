@@ -71,7 +71,9 @@ const server=http.createServer((req,res)=>{
   // Preserve the exact selected article and activity through the existing language mechanism.
   await page.goto(base+'domains/d3.html?lang=he&activity=42#d3-a04',{waitUntil:'load'});
   assert.equal(await page.$eval('dialog[open]',e=>e.id),'d3-a04');
-  await Promise.all([page.waitForNavigation({waitUntil:'load'}),page.click('dialog[open] [data-reader-language]')]);
+  // Header switch stays outside the modal; activate it programmatically so the
+  // existing course-language handler still rewrites hash/activity into the target.
+  await Promise.all([page.waitForNavigation({waitUntil:'load'}),page.$eval('.course-lang-switch [data-course-language="ar"]',el=>el.click())]);
   assert.equal(new URL(page.url()).searchParams.get('activity'),'42');assert.equal(new URL(page.url()).hash,'#d3-a04');assert.equal(await page.$eval('dialog[open]',e=>e.id),'d3-a04');
   await page.keyboard.press('Escape');
   // Complete the real opening quiz, switching language after seven answers.
