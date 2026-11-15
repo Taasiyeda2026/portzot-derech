@@ -1,6 +1,54 @@
 /* Shared article reader. Content remains in static HTML in both languages. */
 (() => {
   'use strict';
+
+  // The chapter bar belongs to the sticky header, not the article content.
+  // Highlight the currently visible section; the domain index is an exit link.
+  const chapterNav = document.querySelector('.chapter-nav');
+  const masthead = document.querySelector('.masthead');
+  if (chapterNav && masthead) {
+    const bar = masthead.querySelector('.bar');
+    const tools = bar?.querySelector('.tools');
+    if (tools) bar.insertBefore(chapterNav, tools);
+    const sections = ['main-article', 'closeup', 'thoughts'].map(id => ({
+      element: document.getElementById(id),
+      link: chapterNav.querySelector('a[href="#' + id + '"]')
+    })).filter(item => item.element && item.link);
+    let framePending = false;
+    const headerOffset = () => Math.ceil(masthead.getBoundingClientRect().height) + 12;
+    function highlightSection() {
+      framePending = false;
+      if (!sections.length) return;
+      let current = sections[0];
+      const threshold = headerOffset() + 28;
+      for (const section of sections) {
+        if (section.element.getBoundingClientRect().top <= threshold) current = section;
+      }
+      const root = document.documentElement;
+      if (window.scrollY > 0 && window.scrollY + window.innerHeight >= root.scrollHeight - 4) current = sections[sections.length - 1];
+      for (const section of sections) {
+        if (section === current) section.link.setAttribute('aria-current', 'location');
+        else section.link.removeAttribute('aria-current');
+      }
+    }
+    function scheduleHighlight() {
+      if (!framePending) {
+        framePending = true;
+        requestAnimationFrame(highlightSection);
+      }
+    }
+    function updateOffset() {
+      document.documentElement.style.scrollPaddingTop = headerOffset() + 'px';
+      scheduleHighlight();
+    }
+    window.addEventListener('scroll', scheduleHighlight, {passive:true});
+    window.addEventListener('resize', updateOffset);
+    window.addEventListener('hashchange', scheduleHighlight);
+    if ('ResizeObserver' in window) new ResizeObserver(updateOffset).observe(masthead);
+    updateOffset();
+    highlightSection();
+  }
+
   const dialogs = [...document.querySelectorAll('dialog[data-article]')];
   let active = null;
   let returnFocus = null;

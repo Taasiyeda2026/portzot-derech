@@ -44,8 +44,18 @@ const server=http.createServer((req,res)=>{
      assert(Math.max(...layout.cards.map(c=>c.width))-Math.min(...layout.cards.map(c=>c.width))<1,'card widths');
      if(lang==='ar')assert.equal(await page.evaluate(()=>{const c=document.body.cloneNode(true);c.querySelectorAll('script,style,.course-lang-switch,[data-reader-language]').forEach(e=>e.remove());return /[\u0590-\u05ff]/.test(c.textContent.replace(/פורצות דרך|תעשיידע/g,''))}),false);
      assert.equal(await page.$eval('.brand',e=>e.textContent.trim()),'פורצות דרך');
+     assert.equal(await page.$eval('.chapter-nav',e=>!!e.closest('.masthead')),true);
+     assert.equal(await page.$eval('.chapter-nav [aria-current="location"]',e=>e.getAttribute('href')),'#main-article');
+     if(id===1){
+      for(const hash of ['#main-article','#closeup','#thoughts']){
+       await page.evaluate(hash=>document.querySelector(hash).scrollIntoView({behavior:'instant'}),hash);
+       await page.waitForFunction(hash=>document.querySelector('.chapter-nav [aria-current="location"]')?.getAttribute('href')===hash,{},hash);
+      }
+      await page.evaluate(()=>window.scrollTo({top:0,behavior:'instant'}));
+      await page.waitForFunction(()=>document.querySelector('.chapter-nav [aria-current="location"]')?.getAttribute('href')==='#main-article');
+     }
      const switchLayout=await page.$eval('.course-lang-switch',e=>({w:e.offsetWidth,h:e.offsetHeight,wrap:getComputedStyle(e).flexWrap}));
-     assert(switchLayout.w<125&&switchLayout.h<34);assert.equal(switchLayout.wrap,'nowrap');
+     assert(switchLayout.w<100&&switchLayout.h<=26);assert.equal(switchLayout.wrap,'nowrap');
      const questions=await page.$$eval('.questions p',es=>es.map(e=>({top:e.offsetTop,border:getComputedStyle(e).borderInlineStartWidth})));
      if(width===1440)assert.equal(questions.filter(q=>q.top===questions[0].top).length,2);
      assert(questions.every(q=>q.border==='1px'));
