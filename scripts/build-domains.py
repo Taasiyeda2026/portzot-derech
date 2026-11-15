@@ -21,6 +21,8 @@ ICONS = [
  '<path d="m16 2 4 10 10 4-10 4-4 10-4-10-10-4 10-4 4-10ZM26 2v5M24 4h5"/>'
 ]
 
+INDEX_ICONS = ["🧘‍♀️","📱","👩‍🏫","👩‍❤️‍👩","💸","🏃‍♀️","🏠","🌿","🎨","🔮"]
+
 def icon(i):
     return '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICONS[i-1] + '</svg>'
 
@@ -67,6 +69,7 @@ def header(lang, page, prefix):
 def shell(lang, title, body, prefix, domain=None):
     c = COPY[lang]
     tag = f' data-domain="{domain}" style="{theme(domain)}"' if domain else ''
+    stylesheet = "domains-2027.css?v=2027-7" if domain else "domains-index-2027.css?v=1"
     return f'''<!doctype html>
 <html lang="{lang}" dir="rtl">
 <head>
@@ -74,7 +77,7 @@ def shell(lang, title, body, prefix, domain=None):
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{e(title)} | {c['brand']}</title>
 <link rel="icon" href="{prefix}icon/favicon.png">
-<link rel="stylesheet" href="{prefix}css/domains-2027.css?v=2027-7">
+<link rel="stylesheet" href="{prefix}css/{stylesheet}">
 <link rel="stylesheet" href="{prefix}css/course-language.css?v=2027-2">
 <script defer src="{prefix}js/domains-2027.js?v=2027-2"></script>
 </head><body{tag}>{body}</body></html>'''
@@ -157,7 +160,7 @@ def index_page(domains, lang, manifest):
     body += f'<main><section class="index-intro"><h1>{c["index_title"]}</h1><p>{c["index_intro"]}</p></section><nav aria-label="{c["all"]}"><ol class="domain-list">'
     for d in domains:
         i = d['id']
-        body += f'''<li><a class="domain-link" data-domain="{i}" style="{theme(i)}" href="d{i}.html"><span class="domain-cover">{photo(manifest.get(str(i), {}).get('hero'),lang,prefix,d['name'],True)}<span class="domain-num">{i:02}</span></span><span class="domain-info"><span class="domain-icon" aria-hidden="true">{icon(i)}</span><span class="domain-copy"><strong>{e(d['name'])}</strong><small>{e(d['main_article']['title'])}</small></span><span class="domain-arrow" aria-hidden="true">←</span></span></a></li>'''
+        body += f'''<li><a class="domain-link" data-domain="{i}" style="{theme(i)}" href="d{i}.html"><span class="domain-num">{i:02}</span><span class="domain-icon" aria-hidden="true">{INDEX_ICONS[i-1]}</span><span class="domain-copy"><strong>{e(d['name'])}</strong><small>{e(d['main_article']['title'])}</small></span><span class="domain-arrow" aria-hidden="true">←</span></a></li>'''
     body += f'</ol></nav><footer translate="no" lang="he">{c["footer"]}</footer></main>'
     write(('ar/' if lang == 'ar' else '')+'domains/alldomains.html',shell(lang,c['all'],body,prefix))
 

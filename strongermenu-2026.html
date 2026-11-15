@@ -146,14 +146,23 @@
       color:var(--pink-dark);
     }
 
+    .topbar-actions{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      flex:0 0 auto;
+    }
+
     .logout-btn{
       border:none;
       border-radius:999px;
-      padding:9px 16px;
+      height:26px;
+      padding:0 10px;
       background:linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(249,245,249,0.96) 100%);
       color:var(--purple);
       font-family:"Alef", Arial, sans-serif;
-      font-size:14px;
+      font-size:11px;
+      line-height:1.2;
       font-weight:700;
       cursor:pointer;
       box-shadow:
@@ -444,9 +453,13 @@
         font-size:25px;
       }
 
-      .logout-btn{
-        font-size:12px;
-        padding:7px 12px;
+      .topbar-actions{
+        gap:5px;
+      }
+
+      .topbar{
+        gap:8px;
+        flex-wrap:wrap;
       }
 
       .hero{
@@ -596,8 +609,10 @@
           <h1 class="brand-title">פורצות דרך</h1>
         </div>
 
-        <nav class="course-lang-switch" aria-label="בחירת שפה"><a href="strongermenu-2026.html?lang=he" lang="he" data-course-language="he" aria-current="true">עברית</a><span class="lang-separator" aria-hidden="true">|</span><a href="ar/strongermenu-2026.html?lang=ar" lang="ar" data-course-language="ar">العربية</a></nav>
-<button class="logout-btn" id="logoutBtn" type="button">יציאה</button>
+        <div class="topbar-actions">
+          <nav class="course-lang-switch" aria-label="בחירת שפה"><a href="strongermenu-2026.html?lang=he" lang="he" data-course-language="he" aria-current="true">עברית</a><span class="lang-separator" aria-hidden="true">|</span><a href="ar/strongermenu-2026.html?lang=ar" lang="ar" data-course-language="ar">العربية</a></nav>
+          <button class="logout-btn" id="logoutBtn" type="button">יציאה</button>
+        </div>
       </header>
 
       <main class="hero">
