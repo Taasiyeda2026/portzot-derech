@@ -56,12 +56,18 @@ const server=http.createServer((req,res)=>{
      for(const n of indexes){
       await page.click(`[data-open-article="d${id}-a${String(n+1).padStart(2,'0')}"]`);
       assert.equal(await page.$eval('dialog[open] h2',e=>e.textContent),d.short_articles[n].title);
-      const actual=await page.$$eval('dialog[open] .reader-body>p',es=>es.map(e=>e.textContent));assert.deepEqual(actual,d.short_articles[n].paragraphs);
+      const article=d.short_articles[n];
+      const actual=await page.$eval(article.sections?'dialog[open] .reader-body>section>p':'dialog[open] .reader-body>p',es=>es.map(e=>e.textContent));assert.deepEqual(actual,article.paragraphs);
+      if(article.sections){
+       assert.deepEqual(await page.$eval('dialog[open] .reader-body>section>h3',es=>es.map(e=>e.textContent)),article.sections.map(s=>s.heading));
+       assert.equal(await page.$eval('dialog[open] .reader-body>p',e=>e.textContent),article.teaser);
+       if(n===0)await page.screenshot({path:path.join(shots,`${lang}-d1-reader-${width}.png`)});
+      }
       if(n===0){await page.click('dialog[open] [data-next]');assert.equal(new URL(page.url()).hash,`#d${id}-a02`);await page.click('dialog[open] [data-prev]');}
       await page.keyboard.press('Escape');await page.waitForSelector('body:not(.reader-open)');assert.equal(await page.$('dialog[open]'),null);
       assert.equal(await page.evaluate(()=>document.activeElement.dataset.openArticle),`d${id}-a${String(n+1).padStart(2,'0')}`);
      }
-     if(id===3||id===9||id===10)await page.screenshot({path:path.join(shots,`${lang}-d${id}-${width}.png`),fullPage:true});
+     if(id===1||id===3||id===9||id===10)await page.screenshot({path:path.join(shots,`${lang}-d${id}-${width}.png`),fullPage:true});
     }
     await page.goto(`${base}${lang==='ar'?'ar/':''}domains/alldomains.html?lang=${lang}`,{waitUntil:'load'});
     assert.equal(await page.$$eval('.domain-link',es=>es.length),10);assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false);
