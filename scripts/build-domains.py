@@ -157,11 +157,35 @@ def index_page(domains, lang, manifest):
     body += f'</ol></nav><footer translate="no" lang="he">{c["footer"]}</footer></main>'
     write(('ar/' if lang == 'ar' else '')+'domains/alldomains.html',shell(lang,c['all'],body,prefix))
 
+def validate_expanded_domain(d, lang):
+    """Reject partial editorial updates before replacing any public page."""
+    def words(values):
+        return len(' '.join(values).split())
+    main_words = words([p for s in d['main_article']['sections'] for p in s['paragraphs']])
+    if not 600 <= main_words <= 800:
+        raise ValueError(f"{lang} d{d['id']}: main article has {main_words} words")
+    if len(d['short_articles']) != 8 or len(d['reflection_questions']) != 4:
+        raise ValueError(f"{lang} d{d['id']}: incomplete articles or questions")
+    for article in d['short_articles']:
+        sections = article.get('sections', [])
+        if not 3 <= len(sections) <= 4:
+            raise ValueError(f"{lang} {article['id']}: expected 3–4 sections")
+        if [p for section in sections for p in section['paragraphs']] != article['paragraphs']:
+            raise ValueError(f"{lang} {article['id']}: section and body mismatch")
+        count = words(article['paragraphs'])
+        if not 300 <= count <= 450:
+            raise ValueError(f"{lang} {article['id']}: article has {count} words")
+
 def main():
     manifest = assets()
     teasers = load('domains/content/card-teasers.he.json')
-    for lang in ('he','ar'):
-        domains = [load(f'domains/content/{lang}/d{i}.json') for i in range(1,11)]
+    languages = {lang: [load(f'domains/content/{lang}/d{i}.json') for i in range(1,11)]
+                 for lang in ('he', 'ar')}
+    # Validate the complete bilingual set before writing any generated output.
+    for lang, domains in languages.items():
+        for d in domains:
+            validate_expanded_domain(d, lang)
+    for lang, domains in languages.items():
         for d in domains: domain_page(d,lang,manifest,teasers)
         index_page(domains,lang,manifest)
     if not manifest:

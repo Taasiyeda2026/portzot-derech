@@ -1,0 +1,55 @@
+{
+  "articles_reviewed": [
+    "d4-main",
+    "d4-a01",
+    "d4-a02",
+    "d4-a03",
+    "d4-a04",
+    "d4-a05",
+    "d4-a06",
+    "d4-a07",
+    "d4-a08",
+    "d5-main",
+    "d5-a01",
+    "d5-a02",
+    "d5-a03",
+    "d5-a04",
+    "d5-a05",
+    "d5-a06",
+    "d5-a07",
+    "d5-a08",
+    "d6-main",
+    "d6-a01",
+    "d6-a02",
+    "d6-a03",
+    "d6-a04",
+    "d6-a05",
+    "d6-a06",
+    "d6-a07",
+    "d6-a08"
+  ],
+  "translation_review": "All 27 pairs read in full by independent reviewer; main meanings, distinct angles and endings passed. Root verified applied corrections after reviewer usage limit interruption.",
+  "findings": [
+    {
+      "id": "d5-a02",
+      "status": "corrected",
+      "detail": "Unavailable Smithsonian reference removed from article evidence; full-text primary NHM source added. Unsupported brown-pigment statement removed in both languages; structural-layer explanation verified by root."
+    },
+    {
+      "id": "d5 introductions",
+      "status": "corrected",
+      "detail": "Varied repetitive imagine openings in both languages."
+    },
+    {
+      "id": "d5-a08",
+      "status": "corrected",
+      "detail": "Arabic full teaser repaired; Hebrew card teaser now within39–49 characters."
+    },
+    {
+      "id": "d4-a03",
+      "status": "corrected",
+      "detail": "Minor accurate Arabic phrasing; no change to body meaning or subject."
+    }
+  ],
+  "remaining_issues": []
+}

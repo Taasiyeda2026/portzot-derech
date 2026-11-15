@@ -1,0 +1,1701 @@
+{
+  "schema_version": 1,
+  "reviewed_on": "2026-11-15",
+  "baseline_commit": "2dd1ab598eb93026dc817b12acf8ac562e829532",
+  "reference_pr": 345,
+  "source_document": {
+    "name": "portzot-derech-2027-domains-02-10.docx",
+    "library_file_id": "libfile_b328935af87081919ccd7aa3cee1ce40"
+  },
+  "rewritten_domains": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "preserved_domain_01": true,
+  "preserved_design_and_behavior": true,
+  "articles": [
+    {
+      "id": "d1-main",
+      "domain": 1,
+      "titles": {
+        "he": "כל מה שהגוף שלנו מרגיש",
+        "ar": "كل ما يشعر به جسدنا"
+      },
+      "body_words": {
+        "he": 613,
+        "ar": 617
+      },
+      "section_counts": {
+        "he": 5,
+        "ar": 5
+      },
+      "source_ids": [
+        "01-ergonomics",
+        "01-sleep"
+      ]
+    },
+    {
+      "id": "d1-a01",
+      "domain": 1,
+      "titles": {
+        "he": "עוד חמש דקות",
+        "ar": "خمس دقائق أخرى"
+      },
+      "body_words": {
+        "he": 318,
+        "ar": 322
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "01-sleep"
+      ]
+    },
+    {
+      "id": "d1-a02",
+      "domain": 1,
+      "titles": {
+        "he": "הסוללה שלי על 1%",
+        "ar": "بطّاريتي عند 1%"
+      },
+      "body_words": {
+        "he": 348,
+        "ar": 348
+      },
+      "section_counts": {
+        "he": 4,
+        "ar": 4
+      },
+      "source_ids": []
+    },
+    {
+      "id": "d1-a03",
+      "domain": 1,
+      "titles": {
+        "he": "מה קורה כשאנחנו מפסיקות לשמוע את השיר?",
+        "ar": "ماذا يحدث حين نتوقّف عن سماع الأغنية؟"
+      },
+      "body_words": {
+        "he": 311,
+        "ar": 321
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "01-glennie",
+        "01-glennie-museum"
+      ]
+    },
+    {
+      "id": "d1-a04",
+      "domain": 1,
+      "titles": {
+        "he": "הרגע שבו הרגליים מפתיעות אותי",
+        "ar": "اللحظة التي تفاجئني فيها قدماي"
+      },
+      "body_words": {
+        "he": 327,
+        "ar": 320
+      },
+      "section_counts": {
+        "he": 4,
+        "ar": 4
+      },
+      "source_ids": []
+    },
+    {
+      "id": "d1-a05",
+      "domain": 1,
+      "titles": {
+        "he": "מים? שכחתי שוב",
+        "ar": "ماء؟ نسيتُ مرّة أخرى"
+      },
+      "body_words": {
+        "he": 325,
+        "ar": 321
+      },
+      "section_counts": {
+        "he": 4,
+        "ar": 4
+      },
+      "source_ids": []
+    },
+    {
+      "id": "d1-a06",
+      "domain": 1,
+      "titles": {
+        "he": "רציתי רק לשחק",
+        "ar": "أردتُ فقط أن ألعب"
+      },
+      "body_words": {
+        "he": 336,
+        "ar": 342
+      },
+      "section_counts": {
+        "he": 4,
+        "ar": 4
+      },
+      "source_ids": [
+        "q5-enrich-d1-a06"
+      ]
+    },
+    {
+      "id": "d1-a07",
+      "domain": 1,
+      "titles": {
+        "he": "הטיול שחיכינו לו כל השנה",
+        "ar": "الرحلة التي انتظرناها طوال العام"
+      },
+      "body_words": {
+        "he": 374,
+        "ar": 404
+      },
+      "section_counts": {
+        "he": 4,
+        "ar": 4
+      },
+      "source_ids": [
+        "01-oky",
+        "01-oky-inclusion"
+      ]
+    },
+    {
+      "id": "d1-a08",
+      "domain": 1,
+      "titles": {
+        "he": "החץ ששינה את מה שחשבנו על הגוף",
+        "ar": "السهم الذي غيّر ما ظننّاه عن الجسد"
+      },
+      "body_words": {
+        "he": 379,
+        "ar": 360
+      },
+      "section_counts": {
+        "he": 4,
+        "ar": 4
+      },
+      "source_ids": [
+        "q1-archery"
+      ]
+    },
+    {
+      "id": "d2-main",
+      "domain": 2,
+      "titles": {
+        "he": "החיים שלנו משני צדי המסך",
+        "ar": "حياتنا من جانبي الشاشة"
+      },
+      "body_words": {
+        "he": 662,
+        "ar": 708
+      },
+      "section_counts": {
+        "he": 4,
+        "ar": 4
+      },
+      "source_ids": [
+        "02-ftc",
+        "02-c2pa",
+        "02-online-tracking",
+        "02-voice-cloning"
+      ]
+    },
+    {
+      "id": "d2-a01",
+      "domain": 2,
+      "titles": {
+        "he": "רק עוד סרטון אחד",
+        "ar": "فيديو واحد فقط إضافي"
+      },
+      "body_words": {
+        "he": 350,
+        "ar": 363
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": []
+    },
+    {
+      "id": "d2-a02",
+      "domain": 2,
+      "titles": {
+        "he": "הצילום שהפך לעולם שלא היה קיים",
+        "ar": "التصوير الذي صار عالمًا لم يكن موجودًا"
+      },
+      "body_words": {
+        "he": 331,
+        "ar": 343
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "02-c2pa"
+      ]
+    },
+    {
+      "id": "d2-a03",
+      "domain": 2,
+      "titles": {
+        "he": "איך היא ידעה שזה בדיוק מה שחיפשתי?",
+        "ar": "كيف عرفت أن هذا بالضبط ما كنت أبحث عنه؟"
+      },
+      "body_words": {
+        "he": 344,
+        "ar": 349
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "02-online-tracking",
+        "02-ftc"
+      ]
+    },
+    {
+      "id": "d2-a04",
+      "domain": 2,
+      "titles": {
+        "he": "הודעה אחת בין מאתיים הודעות",
+        "ar": "رسالة واحدة بين مئتي رسالة"
+      },
+      "body_words": {
+        "he": 332,
+        "ar": 331
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": []
+    },
+    {
+      "id": "d2-a05",
+      "domain": 2,
+      "titles": {
+        "he": "הזיכרונות שנשארו מאחורי המסך",
+        "ar": "الذكريات التي بقيت خلف الشاشة"
+      },
+      "body_words": {
+        "he": 335,
+        "ar": 345
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": []
+    },
+    {
+      "id": "d2-a06",
+      "domain": 2,
+      "titles": {
+        "he": "כשהרשת הייתה אתר אחד",
+        "ar": "حين كانت الشبكة موقعًا واحدًا"
+      },
+      "body_words": {
+        "he": 349,
+        "ar": 346
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "q2-web"
+      ]
+    },
+    {
+      "id": "d2-a07",
+      "domain": 2,
+      "titles": {
+        "he": "שלחתי רק לחברה אחת",
+        "ar": "أرسلتُها فقط لصديقة واحدة"
+      },
+      "body_words": {
+        "he": 345,
+        "ar": 331
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": []
+    },
+    {
+      "id": "d2-a08",
+      "domain": 2,
+      "titles": {
+        "he": "הקול ששמעתי היה כל כך מוכר",
+        "ar": "الصوت الذي سمعته كان مألوفًا جدًا"
+      },
+      "body_words": {
+        "he": 337,
+        "ar": 331
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "02-voice-cloning"
+      ]
+    },
+    {
+      "id": "d3-main",
+      "domain": 3,
+      "titles": {
+        "he": "בית ספר אחד, אלף סיפורים",
+        "ar": "مدرسة واحدة، ألف قصة"
+      },
+      "body_words": {
+        "he": 679,
+        "ar": 705
+      },
+      "section_counts": {
+        "he": 4,
+        "ar": 4
+      },
+      "source_ids": [
+        "03-asha-acoustics"
+      ]
+    },
+    {
+      "id": "d3-a01",
+      "domain": 3,
+      "titles": {
+        "he": "כל היום שלי על הכתפיים",
+        "ar": "يومي كله على كتفيّ"
+      },
+      "body_words": {
+        "he": 317,
+        "ar": 322
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": []
+    },
+    {
+      "id": "d3-a02",
+      "domain": 3,
+      "titles": {
+        "he": "המוח שלי יודע יותר ממה שנדמה לי",
+        "ar": "دماغي يعرف أكثر ممّا يبدو لي"
+      },
+      "body_words": {
+        "he": 330,
+        "ar": 345
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "03-retrieval-original"
+      ]
+    },
+    {
+      "id": "d3-a03",
+      "domain": 3,
+      "titles": {
+        "he": "הכול באותו השבוע",
+        "ar": "كل شيء في الأسبوع نفسه"
+      },
+      "body_words": {
+        "he": 324,
+        "ar": 325
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": []
+    },
+    {
+      "id": "d3-a04",
+      "domain": 3,
+      "titles": {
+        "he": "שקט, מנסות להתרכז",
+        "ar": "هدوء، نحاول التركيز"
+      },
+      "body_words": {
+        "he": 330,
+        "ar": 336
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "03-asha-acoustics"
+      ]
+    },
+    {
+      "id": "d3-a05",
+      "domain": 3,
+      "titles": {
+        "he": "הפסקה אחת, כל כך הרבה סיפורים",
+        "ar": "استراحة واحدة، قصص كثيرة جدًا"
+      },
+      "body_words": {
+        "he": 324,
+        "ar": 321
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": []
+    },
+    {
+      "id": "d3-a06",
+      "domain": 3,
+      "titles": {
+        "he": "בית הספר שבו לומדים על קרחון",
+        "ar": "المدرسة التي يتعلّمون فيها على جبل جليدي"
+      },
+      "body_words": {
+        "he": 325,
+        "ar": 337
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "q6-enrich-d3-a06"
+      ]
+    },
+    {
+      "id": "d3-a07",
+      "domain": 3,
+      "titles": {
+        "he": "המחברת שנראית כמו יצירת אמנות",
+        "ar": "الدفتر الذي يبدو كعمل فنّي"
+      },
+      "body_words": {
+        "he": 321,
+        "ar": 317
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": []
+    },
+    {
+      "id": "d3-a08",
+      "domain": 3,
+      "titles": {
+        "he": "הנערה שלא הסכימה לוותר על הכיתה",
+        "ar": "الفتاة التي رفضت التنازل عن الصف"
+      },
+      "body_words": {
+        "he": 326,
+        "ar": 344
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "q3-malala",
+        "03-malala-first-person"
+      ]
+    },
+    {
+      "id": "d4-main",
+      "domain": 4,
+      "titles": {
+        "he": "מי נשארת מחוץ לתמונה?",
+        "ar": "من تبقى خارج الصورة؟"
+      },
+      "body_words": {
+        "he": 634,
+        "ar": 650
+      },
+      "section_counts": {
+        "he": 5,
+        "ar": 5
+      },
+      "source_ids": []
+    },
+    {
+      "id": "d4-a01",
+      "domain": 4,
+      "titles": {
+        "he": "כולם יודעים לאן ללכת. חוץ ממני",
+        "ar": "الجميع يعرفون إلى أين يذهبون. إلّا أنا"
+      },
+      "body_words": {
+        "he": 331,
+        "ar": 343
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": []
+    },
+    {
+      "id": "d4-a02",
+      "domain": 4,
+      "titles": {
+        "he": "כשהמוזיקה עוברת דרך כפות הרגליים",
+        "ar": "حين تمرّ الموسيقى عبر باطن القدمين"
+      },
+      "body_words": {
+        "he": 357,
+        "ar": 369
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "expanded-d4-access-glasto",
+        "expanded-d4-access-southbank"
+      ]
+    },
+    {
+      "id": "d4-a03",
+      "domain": 4,
+      "titles": {
+        "he": "זה התחיל משמועה",
+        "ar": "بدأ الأمر من إشاعة"
+      },
+      "body_words": {
+        "he": 334,
+        "ar": 366
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": []
+    },
+    {
+      "id": "d4-a04",
+      "domain": 4,
+      "titles": {
+        "he": "מישהי בצד השני מבינה את השפה שלי",
+        "ar": "هناك من في الطرف الآخر تفهم لغتي"
+      },
+      "body_words": {
+        "he": 335,
+        "ar": 360
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "q6-enrich-d4-a04",
+        "expanded-d4-tarjimly-name"
+      ]
+    },
+    {
+      "id": "d4-a05",
+      "domain": 4,
+      "titles": {
+        "he": "רציתי לבקש עזרה, אבל שתקתי",
+        "ar": "أردتُ أن أطلب المساعدة، لكنّني صمتّ"
+      },
+      "body_words": {
+        "he": 328,
+        "ar": 366
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": []
+    },
+    {
+      "id": "d4-a06",
+      "domain": 4,
+      "titles": {
+        "he": "לא לכולנו יש אותה הזדמנות",
+        "ar": "ليس لنا جميعًا الفرصة نفسها"
+      },
+      "body_words": {
+        "he": 325,
+        "ar": 357
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": []
+    },
+    {
+      "id": "d4-a07",
+      "domain": 4,
+      "titles": {
+        "he": "שלוש מאות דרכים לדבר בלי קול",
+        "ar": "ثلاثمئة طريقة للكلام بلا صوت"
+      },
+      "body_words": {
+        "he": 322,
+        "ar": 362
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "q4-sign"
+      ]
+    },
+    {
+      "id": "d4-a08",
+      "domain": 4,
+      "titles": {
+        "he": "הגינה שאסור היה לשכוח",
+        "ar": "الحديقة التي كان يجب ألا تُنسى"
+      },
+      "body_words": {
+        "he": 329,
+        "ar": 378
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": []
+    },
+    {
+      "id": "d5-main",
+      "domain": 5,
+      "titles": {
+        "he": "כל הדברים שאנחנו רוצות וכל מה שמאחוריהם",
+        "ar": "كل الأشياء التي نريدها، وكل ما وراءها"
+      },
+      "body_words": {
+        "he": 643,
+        "ar": 674
+      },
+      "section_counts": {
+        "he": 5,
+        "ar": 5
+      },
+      "source_ids": []
+    },
+    {
+      "id": "d5-a01",
+      "domain": 5,
+      "titles": {
+        "he": "אותה מידה, שלושה גדלים",
+        "ar": "المقاس نفسه، ثلاثة أحجام"
+      },
+      "body_words": {
+        "he": 331,
+        "ar": 352
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": []
+    },
+    {
+      "id": "d5-a02",
+      "domain": 5,
+      "titles": {
+        "he": "הכחול שלא הגיע מקופסת צבע",
+        "ar": "الأزرق الذي لم يأتِ من علبة ألوان"
+      },
+      "body_words": {
+        "he": 333,
+        "ar": 364
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "review-d5-nhm-morpho"
+      ]
+    },
+    {
+      "id": "d5-a03",
+      "domain": 5,
+      "titles": {
+        "he": "המתנה שחסכתי לה כל הקיץ",
+        "ar": "الهديّة التي ادّخرت لها طوال الصيف"
+      },
+      "body_words": {
+        "he": 330,
+        "ar": 357
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": []
+    },
+    {
+      "id": "d5-a04",
+      "domain": 5,
+      "titles": {
+        "he": "באמת צריך את זה?",
+        "ar": "هل أحتاج هذا حقًا؟"
+      },
+      "body_words": {
+        "he": 336,
+        "ar": 365
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "05-ftc"
+      ]
+    },
+    {
+      "id": "d5-a05",
+      "domain": 5,
+      "titles": {
+        "he": "הכיס הסודי של הנשים לפני שלוש מאות שנה",
+        "ar": "الجيب السرّي للنساء قبل ثلاثمئة سنة"
+      },
+      "body_words": {
+        "he": 343,
+        "ar": 367
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "q5-pockets"
+      ]
+    },
+    {
+      "id": "d5-a06",
+      "domain": 5,
+      "titles": {
+        "he": "מה באמת יש באוכל שלי?",
+        "ar": "ما الذي يوجد حقًا في طعامي؟"
+      },
+      "body_words": {
+        "he": 331,
+        "ar": 364
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "05-fda"
+      ]
+    },
+    {
+      "id": "d5-a07",
+      "domain": 5,
+      "titles": {
+        "he": "זה נשבר, אבל אני לא רוצה לוותר עליו",
+        "ar": "انكسر، لكنني لا أريد التخلّي عنه"
+      },
+      "body_words": {
+        "he": 329,
+        "ar": 355
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": []
+    },
+    {
+      "id": "d5-a08",
+      "domain": 5,
+      "titles": {
+        "he": "מה אפשר לעשות עם קופסה ריקה?",
+        "ar": "ماذا يمكن فعله بصندوق فارغ؟"
+      },
+      "body_words": {
+        "he": 333,
+        "ar": 361
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": []
+    },
+    {
+      "id": "d6-main",
+      "domain": 6,
+      "titles": {
+        "he": "כמה רחוק זה באמת מהבית?",
+        "ar": "كم يبعد ذلك عن البيت حقاً؟"
+      },
+      "body_words": {
+        "he": 647,
+        "ar": 702
+      },
+      "section_counts": {
+        "he": 5,
+        "ar": 5
+      },
+      "source_ids": []
+    },
+    {
+      "id": "d6-a01",
+      "domain": 6,
+      "titles": {
+        "he": "האוטובוס כבר עבר?",
+        "ar": "هل مرّت الحافلة أصلًا؟"
+      },
+      "body_words": {
+        "he": 340,
+        "ar": 400
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "06-gtfs"
+      ]
+    },
+    {
+      "id": "d6-a02",
+      "domain": 6,
+      "titles": {
+        "he": "ההופעה מתחילה בעוד חמש דקות",
+        "ar": "العرض يبدأ بعد خمس دقائق"
+      },
+      "body_words": {
+        "he": 327,
+        "ar": 386
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": []
+    },
+    {
+      "id": "d6-a03",
+      "domain": 6,
+      "titles": {
+        "he": "המפה אומרת שמאלה. אני הולכת ימינה",
+        "ar": "الخريطة تقول يساراً. أنا أمشي يميناً"
+      },
+      "body_words": {
+        "he": 332,
+        "ar": 380
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "06-monash"
+      ]
+    },
+    {
+      "id": "d6-a04",
+      "domain": 6,
+      "titles": {
+        "he": "הרחוב שאפשר לקרוא בכפות הרגליים",
+        "ar": "الشارع الذي يمكن قراءته بباطن القدمين"
+      },
+      "body_words": {
+        "he": 328,
+        "ar": 389
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "q6-tactile",
+        "06-okayama"
+      ]
+    },
+    {
+      "id": "d6-a05",
+      "domain": 6,
+      "titles": {
+        "he": "הפעם הראשונה שהגעתי לבד",
+        "ar": "المرّة الأولى التي وصلت فيها وحدي"
+      },
+      "body_words": {
+        "he": 331,
+        "ar": 388
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "06-gps"
+      ]
+    },
+    {
+      "id": "d6-a06",
+      "domain": 6,
+      "titles": {
+        "he": "הגענו כמעט עד הסוף",
+        "ar": "وصلنا تقريباً إلى النهاية"
+      },
+      "body_words": {
+        "he": 338,
+        "ar": 396
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": []
+    },
+    {
+      "id": "d6-a07",
+      "domain": 6,
+      "titles": {
+        "he": "רחוק מדי בשביל להגיע",
+        "ar": "بعيد جدًا كي نصل"
+      },
+      "body_words": {
+        "he": 333,
+        "ar": 396
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": []
+    },
+    {
+      "id": "d6-a08",
+      "domain": 6,
+      "titles": {
+        "he": "הדרך שבה העיר הופכת למגרש משחקים",
+        "ar": "الطريق التي تتحوّل بها المدينة إلى ملعب"
+      },
+      "body_words": {
+        "he": 333,
+        "ar": 398
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": []
+    },
+    {
+      "id": "d7-main",
+      "domain": 7,
+      "titles": {
+        "he": "מקום קטן להיות בו בדיוק מי שאני",
+        "ar": "مساحة صغيرة لأكون فيها أنا تماماً"
+      },
+      "body_words": {
+        "he": 618,
+        "ar": 654
+      },
+      "section_counts": {
+        "he": 5,
+        "ar": 5
+      },
+      "source_ids": []
+    },
+    {
+      "id": "d7-a01",
+      "domain": 7,
+      "titles": {
+        "he": "האוצרות הקטנים של החדר שלי",
+        "ar": "الكنوز الصغيرة في غرفتي"
+      },
+      "body_words": {
+        "he": 357,
+        "ar": 404
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": []
+    },
+    {
+      "id": "d7-a02",
+      "domain": 7,
+      "titles": {
+        "he": "החדר שמשנה צורה במהלך היום",
+        "ar": "الغرفة التي تغيّر شكلها خلال اليوم"
+      },
+      "body_words": {
+        "he": 338,
+        "ar": 402
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "q6-enrich-d7-a02"
+      ]
+    },
+    {
+      "id": "d7-a03",
+      "domain": 7,
+      "titles": {
+        "he": "הצלילים שמספרים לי שאני בבית",
+        "ar": "الأصوات التي تخبرني أنني في البيت"
+      },
+      "body_words": {
+        "he": 336,
+        "ar": 409
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": []
+    },
+    {
+      "id": "d7-a04",
+      "domain": 7,
+      "titles": {
+        "he": "אפשר רגע רק לעצמי?",
+        "ar": "أيمكن لحظة لنفسي فقط؟"
+      },
+      "body_words": {
+        "he": 353,
+        "ar": 411
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": []
+    },
+    {
+      "id": "d7-a05",
+      "domain": 7,
+      "titles": {
+        "he": "כשהחדר משנה את מצב הרוח",
+        "ar": "حين تغيّر الغرفة المزاج"
+      },
+      "body_words": {
+        "he": 348,
+        "ar": 407
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": []
+    },
+    {
+      "id": "d7-a06",
+      "domain": 7,
+      "titles": {
+        "he": "שישים ושמונה חדרים שאי אפשר להיכנס אליהם",
+        "ar": "ثمانية وستون غرفة لا يمكن الدخول إليها"
+      },
+      "body_words": {
+        "he": 348,
+        "ar": 409
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "q7-rooms"
+      ]
+    },
+    {
+      "id": "d7-a07",
+      "domain": 7,
+      "titles": {
+        "he": "הבניין שקיבל השראה מקן טרמיטים",
+        "ar": "المبنى الذي استلهم عشّ النمل الأبيض"
+      },
+      "body_words": {
+        "he": 360,
+        "ar": 419
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "q6-enrich-d7-a07",
+        "07-turner",
+        "07-pearce"
+      ]
+    },
+    {
+      "id": "d7-a08",
+      "domain": 7,
+      "titles": {
+        "he": "המתכון של סבתא והמטבח שלה",
+        "ar": "وصفة الجدّة ومطبخها"
+      },
+      "body_words": {
+        "he": 355,
+        "ar": 419
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "07-access"
+      ]
+    },
+    {
+      "id": "d8-main",
+      "domain": 8,
+      "titles": {
+        "he": "כל מה שקורה כשאנחנו לא מסתכלות",
+        "ar": "كل ما يحدث حين لا ننظر"
+      },
+      "body_words": {
+        "he": 651,
+        "ar": 678
+      },
+      "section_counts": {
+        "he": 5,
+        "ar": 5
+      },
+      "source_ids": [
+        "08-heat-2026",
+        "08-noaa-plastic",
+        "08-water-lead",
+        "08-air-pm"
+      ]
+    },
+    {
+      "id": "d8-a01",
+      "domain": 8,
+      "titles": {
+        "he": "מה עבר עליך היום?",
+        "ar": "ماذا مرّ بك اليوم؟"
+      },
+      "body_words": {
+        "he": 337,
+        "ar": 334
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "08-dog-language",
+        "08-dog-home"
+      ]
+    },
+    {
+      "id": "d8-a02",
+      "domain": 8,
+      "titles": {
+        "he": "חיות בלי בית",
+        "ar": "حيوانات بلا بيت"
+      },
+      "body_words": {
+        "he": 337,
+        "ar": 341
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "08-cat-senses"
+      ]
+    },
+    {
+      "id": "d8-a03",
+      "domain": 8,
+      "titles": {
+        "he": "זה נשאר כאן גם אחרי שהלכנו",
+        "ar": "هذا يبقى هنا حتى بعد رحيلنا"
+      },
+      "body_words": {
+        "he": 335,
+        "ar": 330
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "08-noaa-plastic"
+      ]
+    },
+    {
+      "id": "d8-a04",
+      "domain": 8,
+      "titles": {
+        "he": "למה כל כך חם פה?",
+        "ar": "لماذا الحرّ شديد هنا؟"
+      },
+      "body_words": {
+        "he": 329,
+        "ar": 336
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "08-heat-2026",
+        "08-heat-basics"
+      ]
+    },
+    {
+      "id": "d8-a05",
+      "domain": 8,
+      "titles": {
+        "he": "הנערה שלא הסתפקה במים שקופים",
+        "ar": "الفتاة التي لم تكتفِ بماء شفاف"
+      },
+      "body_words": {
+        "he": 336,
+        "ar": 342
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "08-rao-primary",
+        "08-rao-profile",
+        "08-water-lead"
+      ]
+    },
+    {
+      "id": "d8-a06",
+      "domain": 8,
+      "titles": {
+        "he": "העלה החדש שחיכיתי לו",
+        "ar": "الورقة الجديدة التي انتظرتها"
+      },
+      "body_words": {
+        "he": 332,
+        "ar": 344
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "08-nasa-veggie"
+      ]
+    },
+    {
+      "id": "d8-a07",
+      "domain": 8,
+      "titles": {
+        "he": "האוויר שלא רואים בתמונה",
+        "ar": "الهواء الذي لا يظهر في الصورة"
+      },
+      "body_words": {
+        "he": 331,
+        "ar": 335
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "08-air-network",
+        "08-air-pm",
+        "08-air-pm-effects"
+      ]
+    },
+    {
+      "id": "d8-a08",
+      "domain": 8,
+      "titles": {
+        "he": "היצור שיש לו שלושה לבבות",
+        "ar": "المخلوق الذي له ثلاثة قلوب"
+      },
+      "body_words": {
+        "he": 331,
+        "ar": 351
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "08-octopus-biology",
+        "08-octopus-touch",
+        "08-octopus-robot"
+      ]
+    },
+    {
+      "id": "d9-main",
+      "domain": 9,
+      "titles": {
+        "he": "הרגע הזה שבו שוכחים מה השעה",
+        "ar": "تلك اللحظة التي ننسى فيها كم الساعة"
+      },
+      "body_words": {
+        "he": 623,
+        "ar": 665
+      },
+      "section_counts": {
+        "he": 5,
+        "ar": 5
+      },
+      "source_ids": [
+        "09-scratch"
+      ]
+    },
+    {
+      "id": "d9-a01",
+      "domain": 9,
+      "titles": {
+        "he": "אין מה לעשות פה",
+        "ar": "لا شيء لنفعله هنا"
+      },
+      "body_words": {
+        "he": 322,
+        "ar": 383
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": []
+    },
+    {
+      "id": "d9-a02",
+      "domain": 9,
+      "titles": {
+        "he": "הילדה שהפכה משחק לרעיון אמיתי",
+        "ar": "الطفلة التي حوّلت لعبة إلى فكرة حقيقية"
+      },
+      "body_words": {
+        "he": 320,
+        "ar": 399
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "q9-game",
+        "09-scratch"
+      ]
+    },
+    {
+      "id": "d9-a03",
+      "domain": 9,
+      "titles": {
+        "he": "בראש שלי זה נראה מדהים",
+        "ar": "في رأسي يبدو هذا مذهلًا"
+      },
+      "body_words": {
+        "he": 317,
+        "ar": 372
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": []
+    },
+    {
+      "id": "d9-a04",
+      "domain": 9,
+      "titles": {
+        "he": "למה זה עולה כל כך הרבה?",
+        "ar": "لماذا يكلف هذا الكثير؟"
+      },
+      "body_words": {
+        "he": 301,
+        "ar": 375
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": []
+    },
+    {
+      "id": "d9-a05",
+      "domain": 9,
+      "titles": {
+        "he": "תמונה אחת, אלף סיפורים",
+        "ar": "صورة واحدة، ألف قصّة"
+      },
+      "body_words": {
+        "he": 313,
+        "ar": 376
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": []
+    },
+    {
+      "id": "d9-a06",
+      "domain": 9,
+      "titles": {
+        "he": "איך נראה שיר כשאפשר לראות אותו?",
+        "ar": "كيف تبدو أغنية حين يمكن رؤيتها؟"
+      },
+      "body_words": {
+        "he": 327,
+        "ar": 386
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "q5-enrich-d9-a06"
+      ]
+    },
+    {
+      "id": "d9-a07",
+      "domain": 9,
+      "titles": {
+        "he": "מי רוצה להצטרף?",
+        "ar": "من تريد الانضمام؟"
+      },
+      "body_words": {
+        "he": 325,
+        "ar": 390
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": []
+    },
+    {
+      "id": "d9-a08",
+      "domain": 9,
+      "titles": {
+        "he": "המשחק כבר התחיל בלעדיי",
+        "ar": "اللعبة بدأت من دوني"
+      },
+      "body_words": {
+        "he": 327,
+        "ar": 391
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "q5-enrich-d9-a08"
+      ]
+    },
+    {
+      "id": "d10-main",
+      "domain": 10,
+      "titles": {
+        "he": "העולם שעוד לא ראינו",
+        "ar": "العالم الذي لم نره بعد"
+      },
+      "body_words": {
+        "he": 658,
+        "ar": 743
+      },
+      "section_counts": {
+        "he": 5,
+        "ar": 5
+      },
+      "source_ids": [
+        "10-ingenuity",
+        "10-webb"
+      ]
+    },
+    {
+      "id": "d10-a01",
+      "domain": 10,
+      "titles": {
+        "he": "החברה שלא נבהלת מהחושך",
+        "ar": "الصديقة التي لا تفزع من الظلام"
+      },
+      "body_words": {
+        "he": 337,
+        "ar": 400
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "10-caves",
+        "10-cave-mapping"
+      ]
+    },
+    {
+      "id": "d10-a02",
+      "domain": 10,
+      "titles": {
+        "he": "הקול שלי נשמע אחרת",
+        "ar": "صوتي يبدو مختلفًا"
+      },
+      "body_words": {
+        "he": 342,
+        "ar": 412
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "10-commonvoice"
+      ]
+    },
+    {
+      "id": "d10-a03",
+      "domain": 10,
+      "titles": {
+        "he": "הרחוב שהייתי רוצה לגדול בו",
+        "ar": "الشارع الذي أودّ أن أكبر فيه"
+      },
+      "body_words": {
+        "he": 331,
+        "ar": 413
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "10-child-city"
+      ]
+    },
+    {
+      "id": "d10-a04",
+      "domain": 10,
+      "titles": {
+        "he": "מה הייתי לוקחת איתי למאדים?",
+        "ar": "ماذا كنت سآخذ معي إلى المرّيخ؟"
+      },
+      "body_words": {
+        "he": 334,
+        "ar": 426
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "10-nasa",
+        "10-mars-communications",
+        "10-humans-mars"
+      ]
+    },
+    {
+      "id": "d10-a05",
+      "domain": 10,
+      "titles": {
+        "he": "פעם זה היה רק בדמיון",
+        "ar": "ذات يوم كان هذا خيالًا فقط"
+      },
+      "body_words": {
+        "he": 333,
+        "ar": 427
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "10-webb"
+      ]
+    },
+    {
+      "id": "d10-a06",
+      "domain": 10,
+      "titles": {
+        "he": "האישה שהאסטרונאוט ביקש שתבדוק את המחשב",
+        "ar": "المرأة التي طلب رائد الفضاء أن تفحص الحاسوب"
+      },
+      "body_words": {
+        "he": 330,
+        "ar": 409
+      },
+      "section_counts": {
+        "he": 4,
+        "ar": 4
+      },
+      "source_ids": [
+        "q10-johnson"
+      ]
+    },
+    {
+      "id": "d10-a07",
+      "domain": 10,
+      "titles": {
+        "he": "הפעם היא מופיעה על הבמה",
+        "ar": "هذه المرّة تظهر على المسرح"
+      },
+      "body_words": {
+        "he": 337,
+        "ar": 422
+      },
+      "section_counts": {
+        "he": 3,
+        "ar": 3
+      },
+      "source_ids": [
+        "10-girl-advisory"
+      ]
+    },
+    {
+      "id": "d10-a08",
+      "domain": 10,
+      "titles": {
+        "he": "מכתב ממישהי שעוד לא נולדה",
+        "ar": "رسالة من فتاة لم تولد بعد"
+      },
+      "body_words": {
+        "he": 339,
+        "ar": 416
+      },
+      "section_counts": {
+        "he": 4,
+        "ar": 4
+      },
+      "source_ids": []
+    }
+  ],
+  "editorial_reviews": [
+    "audit/final-editorial-review-01-03-cross-2026-11-15.json",
+    "audit/final-editorial-review-04-06-2026-11-15.json",
+    "audit/final-editorial-review-07-10-2026-11-15.json"
+  ],
+  "major_changes": {
+    "d4-a02": "השתתפות משותפת בקהל באירועי תרבות; סיפור גלני הוסר",
+    "d7-a06": "דגמי חדרים וההבדל בין המחשת מרחב לחוויית השימוש בו",
+    "d7-a07": "הפרדה בין השראה מטרמיטים לבין מיתוס חיקוי מזגן הקן",
+    "d8-a08": "יכולות בעלי חיים והנדסה רכה בהשראת התמנון; מחקר לעומת מוצר",
+    "d10-a07": "מקומן של נערות בהחלטות המעצבות את העתיד, מעבר לנראות על במה",
+    "d2-a06": "דיוק הכותרת: רשת עולמית ולא האינטרנט"
+  }
+}
