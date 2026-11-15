@@ -89,12 +89,13 @@ test('opening quiz changes only displayed domain names/colors',()=>{
   assert.equal(strip(read(p)),strip(before),p);
  }
 });
-test('alldomains keeps the ten original domain icons from the build template',()=>{
- const icons=['🧘‍♀️','📱','👩‍🏫','👩‍❤️‍👩','💸','🏃‍♀️','🏠','🌿','🎨','🔮'];
+test('all ten original line icons and approved hero photos are built in both indexes',()=>{
  for(const page of ['domains/alldomains.html','ar/domains/alldomains.html']){
   const html=read(page);
-  const found=[...html.matchAll(/<span class="domain-icon" aria-hidden="true">([^<]*)<\/span>/g)].map(m=>m[1]);
-  assert.deepEqual(found,icons,page);
+  assert.equal((html.match(/class="domain-icon"/g)||[]).length,10);
+  assert.equal((html.match(/viewBox="0 0 32 32"/g)||[]).length,10);
+  assert.equal(new Set([...html.matchAll(/<svg[^>]*>(.*?)<\/svg>/g)].map(m=>m[1])).size,10);
+  assert.equal((html.match(/class="domain-cover"/g)||[]).length,10);
   assert.equal(html.match(/style="--hue:\d+"/g).length,10,page);
  }
 });
