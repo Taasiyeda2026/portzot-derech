@@ -66,6 +66,7 @@ test('all articles, questions and eight readers are rendered in both languages',
 test('complete natural card summaries have similar lengths',()=>{
  const summaries=json('domains/content/card-teasers.he.json');
  assert.equal(summaries.length,10);
+ for(const d of he.slice(1))assert.deepEqual(summaries[d.id-1],d.short_articles.map(a=>a.card_teaser),`d${d.id} summary source mismatch`);
  for(const row of summaries){assert.equal(row.length,8);for(const t of row){assert(t.length>=39&&t.length<=49,`${t.length}: ${t}`);assert.doesNotMatch(t,/…|\.\.\./)}}
  for(const d of ar)for(const a of d.short_articles){const t=a.card_teaser||a.teaser;assert(t.length>=39&&t.length<=49,`${a.id}: ${t.length}`);assert.doesNotMatch(t,/…|\.\.\./)}
 });

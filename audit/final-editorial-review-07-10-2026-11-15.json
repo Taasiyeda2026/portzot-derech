@@ -1,0 +1,96 @@
+{
+  "articles_reviewed": [
+    "d7-main",
+    "d7-a01",
+    "d7-a02",
+    "d7-a03",
+    "d7-a04",
+    "d7-a05",
+    "d7-a06",
+    "d7-a07",
+    "d7-a08",
+    "d8-main",
+    "d8-a01",
+    "d8-a02",
+    "d8-a03",
+    "d8-a04",
+    "d8-a05",
+    "d8-a06",
+    "d8-a07",
+    "d8-a08",
+    "d9-main",
+    "d9-a01",
+    "d9-a02",
+    "d9-a03",
+    "d9-a04",
+    "d9-a05",
+    "d9-a06",
+    "d9-a07",
+    "d9-a08",
+    "d10-main",
+    "d10-a01",
+    "d10-a02",
+    "d10-a03",
+    "d10-a04",
+    "d10-a05",
+    "d10-a06",
+    "d10-a07",
+    "d10-a08"
+  ],
+  "translation_review": {
+    "d7": "All nine pairs read in full. Same headings, scene sequence and factual meaning; natural Arabic expansions preserve meaning. No material mismatch.",
+    "d8": "All nine pairs read in full. Meanings and facts match; the octopus teaser was jointly clarified in both languages to keep chemotactile sensing distinct from robotic grasping.",
+    "d9": "All nine pairs read in full. Meaning and factual examples match. Corrected Arabic a06 title from melody to song to match Hebrew and corrected a07 teaser grammar; body paragraphs unchanged.",
+    "d10": "All nine Hebrew/Arabic pairs read in full by root. Faithful meanings, factual stage distinctions and open endings; one Arabic collective-subject grammar correction in a05."
+  },
+  "findings": [
+    {
+      "scope": "d7-a06",
+      "status": "passed",
+      "detail": "The 68-room Thorne collection remains a scale model; article distinguishes overview from lived use, handles, sightlines and drawer movement. No claim that all rooms duplicate specific real homes."
+    },
+    {
+      "scope": "d7-a07",
+      "status": "passed",
+      "detail": "Eastgate is described as architectural inspiration, with thermal mass and mechanical night ventilation; Turner research explicitly counters the termite-mound-air-conditioner myth."
+    },
+    {
+      "scope": "domain7 angle",
+      "status": "passed",
+      "detail": "Personal space, privacy and independent operation at home remain distinct from bodily ability, urban heat and artistic music."
+    },
+    {
+      "scope": "d8-a08 teaser",
+      "status": "corrected",
+      "detail": "Removed possible implication that the tasting arm capability had been reproduced in robotics; now explicitly says researchers learn grasping from octopus. Body already correctly distinguished sensory biology from the soft robot."
+    },
+    {
+      "scope": "domain8 angles",
+      "status": "passed",
+      "detail": "Urban heat is about surfaces, shade, retention and everyday public-space use. Plant growth, environmental monitoring and animals retain distinct angles. Rao device is explicitly a development, not a certified universal safety test."
+    },
+    {
+      "scope": "domain9 angles",
+      "status": "passed",
+      "detail": "Photography treats framing and personal creative expression; musical Chladni-type plate response is explicitly distinct from arbitrary artistic responses or a diagnosis of synaesthesia. Shared interests and learning/play access remain distinct from general social belonging and physical mobility."
+    },
+    {
+      "scope": "d9 Arabic copy",
+      "status": "corrected",
+      "detail": "Two small objective corrections: a06 song title equivalence and a07 teaser grammar."
+    },
+    {
+      "scope": "d10",
+      "status": "passed_with_minor_correction",
+      "detail": "Root completed the pending independent review after usage interruption. NASA Ingenuity/Johnson and UNICEF advisory facts confirmed against primary full-text pages; one Arabic collective-subject phrase repaired."
+    }
+  ],
+  "remaining_issues": [],
+  "completed_domains": [
+    7,
+    8,
+    9,
+    10
+  ],
+  "pending": []
+}

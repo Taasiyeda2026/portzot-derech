@@ -1,0 +1,49 @@
+{
+  "articles_reviewed": [
+    "d1-main",
+    "d1-a01",
+    "d1-a02",
+    "d1-a03",
+    "d1-a04",
+    "d1-a05",
+    "d1-a06",
+    "d1-a07",
+    "d1-a08",
+    "d2-main",
+    "d2-a01",
+    "d2-a02",
+    "d2-a03",
+    "d2-a04",
+    "d2-a05",
+    "d2-a06",
+    "d2-a07",
+    "d2-a08",
+    "d3-main",
+    "d3-a01",
+    "d3-a02",
+    "d3-a03",
+    "d3-a04",
+    "d3-a05",
+    "d3-a06",
+    "d3-a07",
+    "d3-a08"
+  ],
+  "translation_review": "All 27 pairs read in full by independent reviewer; confirmed matching meanings and structures.",
+  "consolidated_by": "Root after parallel-review usage limit interruption",
+  "findings": [
+    {
+      "id": "d3-a04",
+      "status": "corrected",
+      "detail": "Arabic reverberation term corrected from frequency to الارتداد الصوتي in both flat body and sections."
+    }
+  ],
+  "cross_domain_findings": [
+    {
+      "domain": 5,
+      "status": "corrected",
+      "detail": "Repeated imagine openings reduced from eight of nine articles to three varied scene introductions, synchronized in Arabic."
+    }
+  ],
+  "baseline_observation": "Domain01 unchanged as approved. Three short-article source_ids arrays were already empty; reviewer found no factual error and made no change.",
+  "remaining_issues": []
+}
