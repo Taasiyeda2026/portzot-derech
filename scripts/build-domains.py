@@ -12,13 +12,13 @@ COPY = {
  'he': dict(brand='פורצות דרך', home='עמוד הבית', all='לכל התחומים', language='בחירת שפה',
    main='כתבה מרכזית', closeup='מבט מקרוב', thoughts='רגע למחשבה...', count='8 כתבות קצרות לקריאה חופשית',
    read='להמשך קריאה ←', close='סגירה', prev='לכתבה הקודמת', next='לכתבה הבאה',
-   source='מקורות לקריאה נוספת', photo='צילום', license='רישיון שימוש', illustration='צילום להמחשה',
+   source='מקורות לקריאה נוספת', photo='צילום', license='רישיון שימוש', illustration='המחשה',
    index_title='איפה זה פוגש אותך?', index_intro='עברו על התחומים, הרגישו מה מדבר אליכן עכשיו ובחרו מאיפה להתחיל. אין כאן סדר נכון, יש את המקום שנכון לכן כרגע.',
    domain='תחום', counter='{n} מתוך 8', footer='פורצות דרך · תעשיידע', nojs='לקריאת הכתבות הקצרות ללא JavaScript'),
  'ar': dict(brand='פורצות דרך', home='الصفحة الرئيسية', all='كلّ المجالات', language='اختيار اللغة',
    main='المقال الرئيسي', closeup='نظرة عن قرب', thoughts='لحظة للتفكير...', count='8 مقالات قصيرة للقراءة الحرّة',
    read='لمتابعة القراءة ←', close='إغلاق', prev='المقال السابق', next='المقال التالي',
-   source='مصادر لقراءة إضافية', photo='تصوير', license='ترخيص الاستخدام', illustration='صورة توضيحية',
+   source='مصادر لقراءة إضافية', photo='تصوير', license='ترخيص الاستخدام', illustration='توضيح',
    index_title='أين تلتقين بهذه العوالم؟', index_intro='تصفّحن المجالات، وفكّرن فيما يهمّكنّ الآن، واخترن من أين تبدأن. لا يوجد ترتيب صحيح، بل المكان المناسب لكنّ في هذه اللحظة.',
    domain='المجال', counter='{n} من 8', footer='פורצות דרך · תעשיידע', nojs='لقراءة المقالات القصيرة دون JavaScript')
 }
@@ -58,7 +58,7 @@ def shell(lang, title, body, prefix, domain=None):
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{e(title)} | {c['brand']}</title>
 <link rel="icon" href="{prefix}icon/favicon.png">
-<link rel="stylesheet" href="{prefix}css/domains-2027.css?v=2027-2">
+<link rel="stylesheet" href="{prefix}css/domains-2027.css?v=2027-3">
 <link rel="stylesheet" href="{prefix}css/course-language.css?v=2027-2">
 <script defer src="{prefix}js/domains-2027.js?v=2027-1"></script>
 </head><body{tag}>{body}</body></html>'''
@@ -69,10 +69,16 @@ def photo(item, lang, prefix, title, card=False):
         return ''
     position = e(item.get('object_position', '50% 50%'))
     alt = item.get('alt', '') if lang == 'he' else item.get('alt_ar', COPY[lang]['illustration'] + ': ' + title)
-    img = f'<img src="{prefix}{e(item["path"])}" alt="{e(alt)}" loading="{"lazy" if card else "eager"}" width="960" height="540" style="object-position:{position}">'
+    # Match intrinsic ratios of the final 2027 assets (heroes 16:9, articles 3:2).
+    size = item.get('width_height') or (
+        (1600, 900) if item.get('role') == 'hero' else (1200, 800)
+    )
+    img = f'<img src="{prefix}{e(item["path"])}" alt="{e(alt)}" loading="{"lazy" if card else "eager"}" width="{size[0]}" height="{size[1]}" style="object-position:{position}">'
     if card:
         return img
-    credit = f'''<figcaption class="photo-credit">{COPY[lang]['photo']}: <a href="{e(item['source_url'])}" target="_blank" rel="noopener noreferrer">{e(item['credit'])}</a> · <a href="{e(item['license_url'])}" target="_blank" rel="noopener noreferrer">{COPY[lang]['license']}</a></figcaption>'''
+    label = COPY[lang]['illustration'] if item.get('media_kind') == 'ai_illustration' else COPY[lang]['photo']
+    credit_text = item.get('credit_ar' if lang == 'ar' else 'credit', item['credit'])
+    credit = f'''<figcaption class="photo-credit">{label}: <a href="{e(item['source_url'])}" target="_blank" rel="noopener noreferrer">{e(credit_text)}</a> · <a href="{e(item['license_url'])}" target="_blank" rel="noopener noreferrer">{COPY[lang]['license']}</a></figcaption>'''
     return '<figure>' + img + credit + '</figure>'
 
 def paragraphs(values):
