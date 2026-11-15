@@ -39,3 +39,13 @@ footer{text-align:center;color:var(--muted);font-size:12px;margin-top:20px}
   .masthead .home{display:inline-grid;place-items:center;flex:0 0 auto;width:34px;height:34px;padding:0;border-radius:999px;font-size:0;line-height:0;color:var(--accent);background:#fff}
   .masthead .home::before{content:"";display:block;width:19px;height:19px;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m3 10 9-7 9 7M5 9v11h5v-6h4v6h5V9'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m3 10 9-7 9 7M5 9v11h5v-6h4v6h5V9'/%3E%3C/svg%3E") center/contain no-repeat}
 }
+
+/* Domain-only compact header controls. */
+.masthead .tools{gap:6px}
+.masthead .tools .course-lang-switch{min-height:24px;font-size:10px;padding:1px 2px;gap:1px}
+.masthead .tools .course-lang-switch a{min-width:0;padding:3px 4px;line-height:1.2}
+@supports (mask-image:url("")) or (-webkit-mask-image:url("")){
+  .masthead .home{position:relative;display:flex;align-items:center;justify-content:center;width:24px;height:24px}
+  .masthead .home::before{position:absolute;inset:0;margin:auto;width:15px;height:15px}
+}
+@media(max-width:420px){.masthead .tools{width:auto;justify-content:flex-end}.masthead .brand{margin:0}}
