@@ -33,3 +33,9 @@ footer{text-align:center;color:var(--muted);font-size:12px;margin-top:20px}
 @media(max-width:420px){.bar{gap:8px}.tools{justify-content:space-between;width:100%}.brand{margin:auto}}
 @media(max-width:380px){.domain-icon{flex-basis:28px;width:28px;height:28px;font-size:21px}.domain-link{gap:8px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+
+/* Home navigation: retain the accessible link text, display the original home symbol. */
+@supports (mask-image:url("")) or (-webkit-mask-image:url("")){
+  .masthead .home{display:inline-grid;place-items:center;flex:0 0 auto;width:34px;height:34px;padding:0;border-radius:999px;font-size:0;line-height:0;color:var(--accent);background:#fff}
+  .masthead .home::before{content:"";display:block;width:19px;height:19px;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m3 10 9-7 9 7M5 9v11h5v-6h4v6h5V9'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m3 10 9-7 9 7M5 9v11h5v-6h4v6h5V9'/%3E%3C/svg%3E") center/contain no-repeat}
+}
