@@ -66,3 +66,8 @@ body.reader-open{overflow:hidden}
 @media(max-width:380px){.domain-icon{flex-basis:28px;width:28px;height:28px;font-size:21px}.domain-link{gap:8px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
 @media print{header.masthead,.chapter-nav,.cards,.bottom-nav,dialog{display:none}.main-article{border:0;padding:0}.hero{grid-template-columns:1fr;background:none;box-shadow:none}.hero figure{display:none}body{background:white}main{max-width:none}.reflection{break-inside:avoid}}
+/* Domain 01 expanded magazine: preserve existing layouts in domains 02–10. */
+body[data-domain="1"] .main-article>p{margin-top:12px;color:var(--muted)}
+body[data-domain="1"] .reader-body>section{margin-top:24px}
+body[data-domain="1"] .reader-body>section>h3{margin-bottom:9px}
+body[data-domain="1"] .reader-body>p{color:var(--muted)}
