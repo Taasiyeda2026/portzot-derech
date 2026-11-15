@@ -61,7 +61,7 @@ const server=http.createServer((req,res)=>{
       if(article.sections){
        assert.deepEqual(await page.$$eval('dialog[open] .reader-body>section>h3',es=>es.map(e=>e.textContent)),article.sections.map(s=>s.heading));
        assert.equal(await page.$eval('dialog[open] .reader-body>p',e=>e.textContent),article.teaser);
-       if(n===0)await page.screenshot({path:path.join(shots,`${lang}-d1-reader-${width}.png`)});
+       if(n===0)await page.screenshot({path:path.join(shots,`${lang}-d${id}-reader-${width}.png`)});
       }
       if(n===0){await page.click('dialog[open] [data-next]');assert.equal(new URL(page.url()).hash,`#d${id}-a02`);await page.click('dialog[open] [data-prev]');}
       await page.keyboard.press('Escape');await page.waitForSelector('body:not(.reader-open)');assert.equal(await page.$('dialog[open]'),null);

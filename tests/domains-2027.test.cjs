@@ -10,28 +10,26 @@ const json=p=>JSON.parse(read(p));
 const he=Array.from({length:10},(_,i)=>json(`domains/content/he/d${i+1}.json`));
 const ar=Array.from({length:10},(_,i)=>json(`domains/content/ar/d${i+1}.json`));
 const esc=s=>s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#x27;');
-test('the editorial audit covers 90 articles with preserved IDs and bounded lengths',()=>{
- const audit=json('audit/domains-editorial-review-2026-11-13.json');
+test('the editorial audit covers 90 bilingual articles with complete expanded bodies',()=>{
+ const audit=json('audit/domains-expanded-editorial-2026-11-15.json');
  assert.equal(audit.articles.length,90);
  assert.equal(new Set(audit.articles.map(a=>a.id)).size,90);
- for(const d of he){
+ const words=t=>t.trim().split(/\s+/u).length;
+ for(const [lang,domains] of [['he',he],['ar',ar]])for(const d of domains){
   const main=d.main_article.sections.flatMap(s=>s.paragraphs).join(' ');
-  if(d.id===1){
-   const words=t=>t.trim().split(/\s+/).length;
-   assert(words(main)>=600&&words(main)<=800);
-   assert(d.main_article.subtitle);
-   for(const a of d.short_articles){
-    assert(words(a.paragraphs.join(' '))>=300&&words(a.paragraphs.join(' '))<=450,a.id);
-    assert(a.sections.length>=3&&a.sections.length<=4,a.id);
-    assert.deepEqual(a.sections.flatMap(s=>s.paragraphs),a.paragraphs);
-   }
-  }else{
-   assert(main.length>=2500&&main.length<=3500);
-   for(const a of d.short_articles)assert(a.paragraphs.join(' ').length>=450&&a.paragraphs.join(' ').length<=850,a.id);
+  assert(words(main)>=600&&words(main)<=800,`${lang} d${d.id} main: ${words(main)} words`);
+  assert(d.main_article.subtitle,`${lang} d${d.id} subtitle`);
+  for(const a of d.short_articles){
+   const n=words(a.paragraphs.join(' '));
+   assert(n>=300&&n<=450,`${lang} ${a.id}: ${n} words`);
+   assert(a.sections.length>=3&&a.sections.length<=4,`${lang} ${a.id} section count`);
+   assert.deepEqual(a.sections.flatMap(s=>s.paragraphs),a.paragraphs);
   }
  }
  assert.equal(he.flatMap(d=>d.short_articles).length,80);
+ assert.equal(ar.flatMap(d=>d.short_articles).length,80);
  assert.equal(he.flatMap(d=>d.reflection_questions).length,40);
+ assert.equal(ar.flatMap(d=>d.reflection_questions).length,40);
 });
 test('Arabic has complete matching structure, IDs and source references',()=>{
  const ids=new Set();
@@ -42,7 +40,7 @@ test('Arabic has complete matching structure, IDs and source references',()=>{
   assert.equal(a.short_articles.length,8);assert.equal(a.reflection_questions.length,4);
   a.main_article.sections.forEach((s,n)=>assert.equal(s.paragraphs.length,d.main_article.sections[n].paragraphs.length));
   a.short_articles.forEach((s,n)=>{assert.equal(s.id,d.short_articles[n].id);assert.deepEqual(s.source_ids,d.short_articles[n].source_ids);assert.equal(s.paragraphs.length,d.short_articles[n].paragraphs.length);assert(!ids.has(s.id));ids.add(s.id)});
-  if(d.id===1){
+  {
    assert(a.main_article.subtitle);
    a.short_articles.forEach((article,n)=>{
     assert.equal(article.sections.length,d.short_articles[n].sections.length);
@@ -51,14 +49,14 @@ test('Arabic has complete matching structure, IDs and source references',()=>{
     assert.match(article.teaser,/[\u0600-\u06ff]/);
    });
   }
-  const texts=[a.name,a.intro,a.main_article.title,...a.main_article.sections.flatMap(s=>[s.heading,...s.paragraphs]),...a.short_articles.flatMap(s=>[s.title,s.teaser,...s.paragraphs]),...a.reflection_questions];
+  const texts=[a.name,a.intro,a.main_article.title,...a.main_article.sections.flatMap(s=>[s.heading,...s.paragraphs]),...a.short_articles.flatMap(s=>[s.title,s.teaser,...s.sections.map(x=>x.heading),...s.paragraphs]),...a.reflection_questions];
   for(const t of texts){assert.match(t,/[\u0600-\u06ff]/);assert.doesNotMatch(t,/[\u0590-\u05ff]/)}
  });
 });
 test('all articles, questions and eight readers are rendered in both languages',()=>{
  for(const [lang,ds]of [['he',he],['ar',ar]])for(const d of ds){
   const html=read(`${lang==='ar'?'ar/':''}domains/d${d.id}.html`);
-  for(const text of [d.name,d.intro,d.main_article.title,...d.main_article.sections.flatMap(s=>[s.heading,...s.paragraphs]),...d.short_articles.flatMap(a=>[a.title,...a.paragraphs]),...d.reflection_questions])assert(html.includes(esc(text)),`${lang} ${d.slug}: missing content`);
+  for(const text of [d.name,d.intro,d.main_article.title,...d.main_article.sections.flatMap(s=>[s.heading,...s.paragraphs]),...d.short_articles.flatMap(a=>[a.title,a.teaser,...a.sections.map(s=>s.heading),...a.paragraphs]),...d.reflection_questions])assert(html.includes(esc(text)),`${lang} ${d.slug}: missing content`);
   assert.equal((html.match(/data-open-article=/g)||[]).length,8);
   assert.equal((html.match(/<dialog /g)||[]).length,8);
   assert.equal((html.match(/class="reflection"/g)||[]).length,1);
@@ -114,5 +112,26 @@ test('public sources are verified in the exact page language, with originals ret
   for(const a of [d.main_article,...d.short_articles])for(const id of a.source_ids)assert(d.sources.some(s=>s.id===id),id);
   assert.match(html,/<a class="brand" translate="no" lang="he" dir="rtl"/);
   assert(!html.includes('رائدات الطريق'));
+ }
+});
+
+test('long body paragraphs are original across articles, and readers contain no language controls or captions',()=>{
+ for(const [lang,ds] of [['he',he],['ar',ar]]){
+  const seen=new Map();
+  for(const d of ds){
+   for(const a of [{...d.main_article,id:`d${d.id}-main`,paragraphs:d.main_article.sections.flatMap(s=>s.paragraphs)},...d.short_articles]){
+    for(const p of a.paragraphs){
+     if(p.trim().split(/\s+/u).length<24)continue;
+     const normalized=p.normalize('NFKC').replace(/[\p{P}\p{S}\s]/gu,'').toLowerCase();
+     assert(!seen.has(normalized),`${lang} duplicate paragraph in ${a.id} and ${seen.get(normalized)}`);
+     seen.set(normalized,a.id);
+    }
+   }
+   const html=read(`${lang==='ar'?'ar/':''}domains/d${d.id}.html`);
+   assert.doesNotMatch(html,/<figcaption/i);
+   const readers=html.slice(html.indexOf('<dialog '));
+   assert(!readers.includes('course-lang-switch'));
+   assert(!readers.includes('data-reader-language'));
+  }
  }
 });
