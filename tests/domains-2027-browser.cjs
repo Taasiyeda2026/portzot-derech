@@ -57,9 +57,9 @@ const server=http.createServer((req,res)=>{
       await page.click(`[data-open-article="d${id}-a${String(n+1).padStart(2,'0')}"]`);
       assert.equal(await page.$eval('dialog[open] h2',e=>e.textContent),d.short_articles[n].title);
       const article=d.short_articles[n];
-      const actual=await page.$eval(article.sections?'dialog[open] .reader-body>section>p':'dialog[open] .reader-body>p',es=>es.map(e=>e.textContent));assert.deepEqual(actual,article.paragraphs);
+      const actual=await page.$$eval(article.sections?'dialog[open] .reader-body>section>p':'dialog[open] .reader-body>p',es=>es.map(e=>e.textContent));assert.deepEqual(actual,article.paragraphs);
       if(article.sections){
-       assert.deepEqual(await page.$eval('dialog[open] .reader-body>section>h3',es=>es.map(e=>e.textContent)),article.sections.map(s=>s.heading));
+       assert.deepEqual(await page.$$eval('dialog[open] .reader-body>section>h3',es=>es.map(e=>e.textContent)),article.sections.map(s=>s.heading));
        assert.equal(await page.$eval('dialog[open] .reader-body>p',e=>e.textContent),article.teaser);
        if(n===0)await page.screenshot({path:path.join(shots,`${lang}-d1-reader-${width}.png`)});
       }
