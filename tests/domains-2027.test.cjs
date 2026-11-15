@@ -16,8 +16,19 @@ test('the editorial audit covers 90 articles with preserved IDs and bounded leng
  assert.equal(new Set(audit.articles.map(a=>a.id)).size,90);
  for(const d of he){
   const main=d.main_article.sections.flatMap(s=>s.paragraphs).join(' ');
-  assert(main.length>=2500&&main.length<=3500);
-  for(const a of d.short_articles)assert(a.paragraphs.join(' ').length>=450&&a.paragraphs.join(' ').length<=850,a.id);
+  if(d.id===1){
+   const words=t=>t.trim().split(/\s+/).length;
+   assert(words(main)>=600&&words(main)<=800);
+   assert(d.main_article.subtitle);
+   for(const a of d.short_articles){
+    assert(words(a.paragraphs.join(' '))>=300&&words(a.paragraphs.join(' '))<=450,a.id);
+    assert(a.sections.length>=3&&a.sections.length<=4,a.id);
+    assert.deepEqual(a.sections.flatMap(s=>s.paragraphs),a.paragraphs);
+   }
+  }else{
+   assert(main.length>=2500&&main.length<=3500);
+   for(const a of d.short_articles)assert(a.paragraphs.join(' ').length>=450&&a.paragraphs.join(' ').length<=850,a.id);
+  }
  }
  assert.equal(he.flatMap(d=>d.short_articles).length,80);
  assert.equal(he.flatMap(d=>d.reflection_questions).length,40);
@@ -31,6 +42,15 @@ test('Arabic has complete matching structure, IDs and source references',()=>{
   assert.equal(a.short_articles.length,8);assert.equal(a.reflection_questions.length,4);
   a.main_article.sections.forEach((s,n)=>assert.equal(s.paragraphs.length,d.main_article.sections[n].paragraphs.length));
   a.short_articles.forEach((s,n)=>{assert.equal(s.id,d.short_articles[n].id);assert.deepEqual(s.source_ids,d.short_articles[n].source_ids);assert.equal(s.paragraphs.length,d.short_articles[n].paragraphs.length);assert(!ids.has(s.id));ids.add(s.id)});
+  if(d.id===1){
+   assert(a.main_article.subtitle);
+   a.short_articles.forEach((article,n)=>{
+    assert.equal(article.sections.length,d.short_articles[n].sections.length);
+    assert.deepEqual(article.sections.flatMap(s=>s.paragraphs),article.paragraphs);
+    article.sections.forEach((section,i)=>assert.equal(section.paragraphs.length,d.short_articles[n].sections[i].paragraphs.length));
+    assert.match(article.teaser,/[\u0600-\u06ff]/);
+   });
+  }
   const texts=[a.name,a.intro,a.main_article.title,...a.main_article.sections.flatMap(s=>[s.heading,...s.paragraphs]),...a.short_articles.flatMap(s=>[s.title,s.teaser,...s.paragraphs]),...a.reflection_questions];
   for(const t of texts){assert.match(t,/[\u0600-\u06ff]/);assert.doesNotMatch(t,/[\u0590-\u05ff]/)}
  });

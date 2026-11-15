@@ -58,7 +58,7 @@ def shell(lang, title, body, prefix, domain=None):
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{e(title)} | {c['brand']}</title>
 <link rel="icon" href="{prefix}icon/favicon.png">
-<link rel="stylesheet" href="{prefix}css/domains-2027.css?v=2027-5">
+<link rel="stylesheet" href="{prefix}css/domains-2027.css?v=2027-{6 if domain == 1 else 5}">
 <link rel="stylesheet" href="{prefix}css/course-language.css?v=2027-2">
 <script defer src="{prefix}js/domains-2027.js?v=2027-2"></script>
 </head><body{tag}>{body}</body></html>'''
@@ -82,6 +82,14 @@ def photo(item, lang, prefix, title, card=False):
 def paragraphs(values):
     return ''.join('<p>' + e(p) + '</p>' for p in values)
 
+def article_content(a, heading_tag='h3'):
+    if not a.get('sections'):
+        return paragraphs(a['paragraphs'])
+    result = '<p><strong>' + e(a['teaser']) + '</strong></p>'
+    for s in a['sections']:
+        result += f'<section><{heading_tag}>' + e(s['heading']) + f'</{heading_tag}>' + paragraphs(s['paragraphs']) + '</section>'
+    return result
+
 def domain_page(d, lang, manifest, teasers):
     i = d['id']
     prefix = '../../' if lang == 'ar' else '../'
@@ -92,6 +100,8 @@ def domain_page(d, lang, manifest, teasers):
     body += f'''<nav class="chapter-nav" aria-label="{c['brand']}"><a href="alldomains.html">{c['all']}</a><a href="#main-article">{c['main']}</a><a href="#closeup">{c['closeup']}</a><a href="#thoughts">{c['thoughts']}</a></nav>
 <section class="hero" aria-labelledby="domain-name"><div><p class="eyebrow">{c['brand']} · {c['domain']} {i:02}</p><h1 id="domain-name">{e(d['name'])}</h1><p class="intro">{e(d['intro'])}</p></div>{photo(hero_photo,lang,prefix,d['name'])}</section>
 <article id="main-article" class="main-article"><h2>{e(d['main_article']['title'])}</h2>'''
+    if d['main_article'].get('subtitle'):
+        body += '<p><strong>' + e(d['main_article']['subtitle']) + '</strong></p>'
     for s in d['main_article']['sections']:
         body += '<section><h3>' + e(s['heading']) + '</h3>' + paragraphs(s['paragraphs']) + '</section>'
     body += f'''</article><section id="closeup" aria-labelledby="closeup-title"><div class="sectionhead"><h2 id="closeup-title">{c['closeup']}</h2><span>{c['count']}</span></div><div class="cards">'''
@@ -100,10 +110,10 @@ def domain_page(d, lang, manifest, teasers):
         ap = photos.get('articles', {}).get(a['id'])
         teaser = teasers[i-1][n] if lang == 'he' else a.get('card_teaser', a['teaser'])
         body += f'''<button type="button" class="card" data-open-article="{a['id']}" aria-haspopup="dialog" aria-controls="{a['id']}">{photo(ap,lang,prefix,a['title'],True)}<span class="card-copy"><strong class="card-title">{e(a['title'])}</strong><span class="card-teaser">{e(teaser)}</span><span class="read-more">{c['read']}</span></span></button>'''
-        readers += f'''<dialog id="{a['id']}" data-article aria-labelledby="{a['id']}-title"><div class="reader-body"><div class="reader-bar"><span class="eyebrow">{c['closeup']} · {c['counter'].format(n=n+1)}</span><button type="button" class="reader-close" data-close aria-label="{c['close']}" autofocus>×</button></div>{photo(ap,lang,prefix,a['title'])}<h2 id="{a['id']}-title">{e(a['title'])}</h2>{paragraphs(a['paragraphs'])}<nav class="reader-nav" aria-label="{c['closeup']}"><button type="button" data-prev{' disabled' if n==0 else ''}>{c['prev']}</button><button type="button" data-next{' disabled' if n==7 else ''}>{c['next']}</button></nav></div></dialog>'''
+        readers += f'''<dialog id="{a['id']}" data-article aria-labelledby="{a['id']}-title"><div class="reader-body"><div class="reader-bar"><span class="eyebrow">{c['closeup']} · {c['counter'].format(n=n+1)}</span><button type="button" class="reader-close" data-close aria-label="{c['close']}" autofocus>×</button></div>{photo(ap,lang,prefix,a['title'])}<h2 id="{a['id']}-title">{e(a['title'])}</h2>{article_content(a)}<nav class="reader-nav" aria-label="{c['closeup']}"><button type="button" data-prev{' disabled' if n==0 else ''}>{c['prev']}</button><button type="button" data-next{' disabled' if n==7 else ''}>{c['next']}</button></nav></div></dialog>'''
     body += f'''</div><noscript><details><summary>{c['nojs']}</summary>'''
     for a in d['short_articles']:
-        body += '<article><h3>' + e(a['title']) + '</h3>' + paragraphs(a['paragraphs']) + '</article>'
+        body += '<article><h3>' + e(a['title']) + '</h3>' + article_content(a, 'h4') + '</article>'
     body += '</details></noscript></section>'
     body += f'''<section id="thoughts" class="reflection" aria-labelledby="thoughts-title"><h2 id="thoughts-title"><svg class="thought-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 16c0-2-3-3-3-7a7 7 0 0 1 14 0c0 4-3 5-3 7M8 17h8M9 20h6M11 23h2"/></svg>{c['thoughts']}</h2><div class="questions">{paragraphs(d['reflection_questions'])}</div></section>'''
     body += f'''<nav class="bottom-nav" aria-label="{c['brand']}"><a href="alldomains.html">{c['all']}</a><a href="#domain-name">↑ {e(d['name'])}</a></nav>'''
