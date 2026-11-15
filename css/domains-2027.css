@@ -122,3 +122,71 @@ body.reader-open{overflow:hidden}
 @media(max-width:380px){.masthead .chapter-nav{font-size:10px}.masthead .chapter-nav a{padding-inline:4px}}
 /* Short disclosure only for selected AI illustrations. */
 .ai-disclosure{font-size:.78rem;line-height:1.5;color:#555;text-align:start;margin-top:6px}
+
+/* Editorial reading refinement: scoped to the ten content domains, not the selection index. */
+body[data-domain] .main-article{background:linear-gradient(165deg,#fff 0%,#fff 50%,var(--tint) 100%)}
+body[data-domain] .main-article::before{margin-inline:auto}
+body[data-domain] .main-article>h2,body[data-domain] .main-article>p{max-width:68ch;margin-inline:auto}
+body[data-domain] .main-article>section{position:relative;padding:22px 26px;margin:20px auto 0;max-width:76ch;border:1px solid transparent;border-radius:15px}
+body[data-domain] .main-article>section:nth-of-type(odd){background:linear-gradient(115deg,hsl(var(--hue) 48% 96%),hsl(var(--hue) 42% 98%));border-color:hsl(var(--hue) 28% 89%)}
+body[data-domain] .main-article>section:nth-of-type(even){border-block-start-color:var(--line);border-radius:0}
+body[data-domain] .main-article>section>h3{position:relative;padding-inline-start:13px}
+body[data-domain] .main-article>section>h3::before{content:'';position:absolute;inset-inline-start:0;top:.17em;bottom:.17em;width:3px;background:var(--accent);border-radius:3px;opacity:.65}
+body[data-domain] .main-article section p,body[data-domain] .reader-body section p{max-width:none}
+body[data-domain] .main-article p,body[data-domain] .reader-body p{margin-inline:auto}
+body[data-domain] .reader-body{padding:0 34px 28px}
+body[data-domain] dialog{width:min(748px,calc(100% - 28px));max-height:90dvh;overflow:auto;scrollbar-width:thin;scrollbar-color:var(--line) transparent;scrollbar-gutter:stable;border-radius:22px}
+body[data-domain] dialog::-webkit-scrollbar{width:7px}
+body[data-domain] dialog::-webkit-scrollbar-thumb{background:var(--line);border-radius:8px}
+body[data-domain] .reader-bar{margin:0 -12px 22px;padding:9px 12px;min-height:51px;gap:12px;box-shadow:0 3px 12px var(--glow);background:hsl(var(--hue) 36% 98% / .97);backdrop-filter:blur(14px)}
+.reader-meta{min-width:0;display:flex;flex-direction:column;gap:1px;line-height:1.35}
+.reader-current{font-size:13px;font-weight:700;color:var(--ink);overflow-wrap:anywhere}
+.reader-count{font-size:11px;color:var(--muted);font-weight:700}
+body[data-domain] .reader-close{width:32px;height:32px;line-height:1;font-size:21px;box-shadow:0 2px 5px var(--glow)}
+body[data-domain] .reader-body>h2{font-size:clamp(29px,3.1vw,40px);line-height:1.28;letter-spacing:-.025em;margin:0 0 14px;padding-block-start:17px;position:relative}
+body[data-domain] .reader-body>h2::before{content:'';position:absolute;inset-inline-start:0;top:0;width:44px;height:4px;background:var(--accent);border-radius:4px}
+body[data-domain] .reader-body>p:has(>strong){font-size:18px;line-height:1.65;color:var(--accent);max-width:none;margin:0 0 23px}
+body[data-domain] .reader-body>section{display:flow-root;margin:22px 0 0}
+body[data-domain] .reader-body>section>h3{font-size:21px;margin-bottom:10px}
+body[data-domain] .reader-body>section>figure{float:inline-end;width:43%;margin:12px 0 10px;margin-inline-start:20px;padding:5px;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 5px 18px var(--glow)}
+body[data-domain] .reader-body>section>figure img{width:100%;height:auto;border-radius:10px}
+body[data-domain] .reader-body .ai-disclosure{font-size:11px;margin:4px 3px 1px}
+body[data-domain] .reader-nav{margin-top:22px;padding-top:14px;gap:12px}
+body[data-domain] .reader-nav button{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:34px;padding:5px 13px;border-radius:10px;font-size:13px;line-height:1.4;border:1px solid var(--line);background:linear-gradient(160deg,#fff,var(--soft));box-shadow:0 2px 0 var(--line),0 5px 11px var(--glow);transition:transform .15s,box-shadow .15s,background .15s}
+body[data-domain] .reader-nav [data-prev]::before{content:'→';font-size:15px}
+body[data-domain] .reader-nav [data-next]::after{content:'←';font-size:15px}
+body[data-domain] .reader-nav [data-next]:not(:disabled){color:#fff;border-color:var(--accent);background:linear-gradient(155deg,hsl(var(--hue) 43% 43%),var(--accent));box-shadow:0 2px 0 hsl(var(--hue) 44% 25%),0 5px 12px var(--glow)}
+body[data-domain] .reader-nav button:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 3px 0 var(--line),0 7px 14px var(--glow)}
+body[data-domain] .reader-nav button:active:not(:disabled){transform:translateY(1px)}
+body[data-domain] .reader-nav button:disabled{opacity:.35;box-shadow:none}
+body[data-domain] .concept-emphasis{font-weight:700;color:var(--accent);background:transparent;border-radius:0;text-decoration:underline;text-decoration-color:hsl(var(--hue) 45% 69% / .52);text-decoration-thickness:.1em;text-underline-offset:.22em}
+@media(min-width:821px){
+ body[data-domain]{font-size:16px}
+ body[data-domain] main,body[data-domain] .bar{max-width:1068px}
+ body[data-domain] main{padding:24px 24px 44px}
+ body[data-domain] .hero{padding:32px;gap:32px;margin-bottom:34px}
+ body[data-domain] .hero h1{font-size:clamp(34px,3.8vw,53px)}
+ body[data-domain] .intro{font-size:16px}
+ body[data-domain] .hero-icon{width:53px;height:53px;margin-bottom:18px}
+ body[data-domain] .main-article{max-width:866px;padding:36px 48px;margin-bottom:48px}
+ body[data-domain] .main-article h2{font-size:35px}
+ body[data-domain] .main-article>p{font-size:18px}
+ body[data-domain] .sectionhead h2{font-size:29px}
+ body[data-domain] .cards{gap:18px}
+ body[data-domain] .card-copy{padding:17px 16px 16px;gap:10px}
+ body[data-domain] .card-title{font-size:18px}
+ body[data-domain] .card-teaser{font-size:13.5px}
+ body[data-domain] .reflection{padding:32px;margin-top:50px}
+ body[data-domain] .questions p{font-size:15px;padding-block:22px}
+}
+@media(max-width:760px){
+ body[data-domain] .main-article>section{padding:17px 14px;margin-top:17px}
+ body[data-domain] .reader-body{padding:0 21px 23px}
+ body[data-domain] .reader-bar{margin-inline:-7px;padding-inline:7px}
+ body[data-domain] .reader-body>section>figure{float:none;width:min(100%,390px);margin:15px auto}
+ body[data-domain] .reader-body>h2{font-size:29px}
+ body[data-domain] .reader-body>p:has(>strong){font-size:17px}
+ body[data-domain] .reader-nav button{min-height:40px}
+}
+@media(prefers-reduced-motion:reduce){body[data-domain] .reader-nav button{transition:none}}
+@media print{body[data-domain] .main-article>section{background:none;border:0;padding:0}}

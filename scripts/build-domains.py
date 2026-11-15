@@ -69,7 +69,8 @@ def header(lang, page, prefix):
 def shell(lang, title, body, prefix, domain=None):
     c = COPY[lang]
     tag = f' data-domain="{domain}" style="{theme(domain)}"' if domain else ''
-    stylesheet = "domains-2027.css?v=2027-7" if domain else "domains-index-2027.css?v=1"
+    stylesheet = "domains-2027.css?v=2027-8" if domain else "domains-index-2027.css?v=1"
+    reader_script = "2027-3" if domain else "2027-2"
     return f'''<!doctype html>
 <html lang="{lang}" dir="rtl">
 <head>
@@ -79,7 +80,7 @@ def shell(lang, title, body, prefix, domain=None):
 <link rel="icon" href="{prefix}icon/favicon.png">
 <link rel="stylesheet" href="{prefix}css/{stylesheet}">
 <link rel="stylesheet" href="{prefix}css/course-language.css?v=2027-2">
-<script defer src="{prefix}js/domains-2027.js?v=2027-2"></script>
+<script defer src="{prefix}js/domains-2027.js?v={reader_script}"></script>
 </head><body{tag}>{body}</body></html>'''
 
 def photo(item, lang, prefix, title, card=False):
@@ -105,12 +106,15 @@ def photo(item, lang, prefix, title, card=False):
 def paragraphs(values):
     return ''.join('<p>' + e(p) + '</p>' for p in values)
 
-def article_content(a, heading_tag='h3'):
+def article_content(a, heading_tag='h3', inline_photo=''):
     if not a.get('sections'):
         return paragraphs(a['paragraphs'])
     result = '<p><strong>' + e(a['teaser']) + '</strong></p>'
-    for s in a['sections']:
-        result += f'<section><{heading_tag}>' + e(s['heading']) + f'</{heading_tag}>' + paragraphs(s['paragraphs']) + '</section>'
+    for n, s in enumerate(a['sections']):
+        content = paragraphs(s['paragraphs'])
+        if n == 0 and inline_photo and s['paragraphs']:
+            content = paragraphs(s['paragraphs'][:1]) + inline_photo + paragraphs(s['paragraphs'][1:])
+        result += f'<section><{heading_tag}>' + e(s['heading']) + f'</{heading_tag}>' + content + '</section>'
     return result
 
 def domain_page(d, lang, manifest, teasers):
@@ -133,7 +137,7 @@ def domain_page(d, lang, manifest, teasers):
         ap = photos.get('articles', {}).get(a['id'])
         teaser = teasers[i-1][n] if lang == 'he' else a.get('card_teaser', a['teaser'])
         body += f'''<button type="button" class="card" data-open-article="{a['id']}" aria-haspopup="dialog" aria-controls="{a['id']}">{photo(ap,lang,prefix,a['title'],True)}<span class="card-copy"><strong class="card-title">{e(a['title'])}</strong><span class="card-teaser">{e(teaser)}</span><span class="read-more">{c['read']}</span></span></button>'''
-        readers += f'''<dialog id="{a['id']}" data-article aria-labelledby="{a['id']}-title"><div class="reader-body"><div class="reader-bar"><span class="eyebrow">{c['closeup']} · {c['counter'].format(n=n+1)}</span><button type="button" class="reader-close" data-close aria-label="{c['close']}" autofocus>×</button></div>{photo(ap,lang,prefix,a['title'])}<h2 id="{a['id']}-title">{e(a['title'])}</h2>{article_content(a)}<nav class="reader-nav" aria-label="{c['closeup']}"><button type="button" data-prev{' disabled' if n==0 else ''}>{c['prev']}</button><button type="button" data-next{' disabled' if n==7 else ''}>{c['next']}</button></nav></div></dialog>'''
+        readers += f'''<dialog id="{a['id']}" data-article aria-labelledby="{a['id']}-title"><div class="reader-body"><div class="reader-bar"><div class="reader-meta"><span class="reader-current">{e(a['title'])}</span><span class="reader-count">{'כתבה' if lang == 'he' else 'المقال'} {c['counter'].format(n=n+1)}</span></div><button type="button" class="reader-close" data-close aria-label="{c['close']}" autofocus>×</button></div><h2 id="{a['id']}-title">{e(a['title'])}</h2>{article_content(a, inline_photo=photo(ap,lang,prefix,a['title']))}<nav class="reader-nav" aria-label="{c['closeup']}"><button type="button" data-prev{' disabled' if n==0 else ''}>{c['prev']}</button><button type="button" data-next{' disabled' if n==7 else ''}>{c['next']}</button></nav></div></dialog>'''
     body += f'''</div><noscript><details><summary>{c['nojs']}</summary>'''
     for a in d['short_articles']:
         body += '<article><h3>' + e(a['title']) + '</h3>' + article_content(a, 'h4') + '</article>'
