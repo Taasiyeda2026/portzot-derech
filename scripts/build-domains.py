@@ -7,7 +7,23 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 HUES = [335, 205, 38, 270, 165, 18, 230, 125, 355, 185]
-ICONS = ['🧘‍♀️', '📱', '👩‍🏫', '👩‍❤️‍👩', '💸', '🏃‍♀️', '🏠', '🌿', '🎨', '🔮']
+# Original line icons, shared by the index and domain mastheads.
+ICONS = [
+ '<path d="M16 28c-8-5-10-9-10-14a6 6 0 0 1 10-4 6 6 0 0 1 10 4c0 5-2 9-10 14Z"/><path d="m8 17 5 0 2-5 3 10 2-5h5"/>',
+ '<rect x="9" y="3" width="15" height="26" rx="4"/><path d="M14 7h5M15 25h3M4 10l-2 5 3 4M28 8l2 5-3 4"/>',
+ '<path d="m2 12 14-8 14 8-14 8-14-8ZM7 16v8c6 5 12 5 18 0v-8M29 13v10"/>',
+ '<circle cx="11" cy="10" r="5"/><circle cx="24" cy="12" r="4"/><path d="M2 28v-4c0-8 18-8 18 0v4M22 20c6-1 8 3 8 7"/>',
+ '<rect x="3" y="8" width="26" height="19" rx="4"/><path d="m7 8 16-5v5M21 16h8v7h-8a3.5 3.5 0 0 1 0-7Z"/><circle cx="23" cy="19.5" r=".7"/>',
+ '<path d="m3 24 7-2 4-9 6 4 4-3M13 14l-5-1-4 5M16 20l-2 9M21 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>',
+ '<path d="m3 15 13-11 13 11M6 13v15h20V13M12 28v-9h8v9M23 4v6"/>',
+ '<path d="M8 24C-1 7 17 2 28 4c1 16-9 28-20 20ZM5 29 23 10M10 23l1-9M16 17h9"/>',
+ '<path d="M17 3C8 3 2 9 2 17s6 12 11 12c7 0 1-7 7-7h4c9 0 8-19-7-19Z"/><circle cx="10" cy="12" r="1.5"/><circle cx="18" cy="8" r="1.5"/><circle cx="24" cy="14" r="1.5"/>',
+ '<path d="m16 2 4 10 10 4-10 4-4 10-4-10-10-4 10-4 4-10ZM26 2v5M24 4h5"/>'
+]
+
+def icon(i):
+    return '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICONS[i-1] + '</svg>'
+
 COPY = {
  'he': dict(brand='פורצות דרך', home='עמוד הבית', all='לכל התחומים', language='בחירת שפה',
    main='כתבה מרכזית', closeup='מבט מקרוב', thoughts='רגע למחשבה...', count='8 כתבות קצרות לקריאה חופשית',
@@ -58,7 +74,7 @@ def shell(lang, title, body, prefix, domain=None):
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{e(title)} | {c['brand']}</title>
 <link rel="icon" href="{prefix}icon/favicon.png">
-<link rel="stylesheet" href="{prefix}css/domains-2027.css?v=2027-{6 if domain == 1 else 5}">
+<link rel="stylesheet" href="{prefix}css/domains-2027.css?v=2027-7">
 <link rel="stylesheet" href="{prefix}css/course-language.css?v=2027-2">
 <script defer src="{prefix}js/domains-2027.js?v=2027-2"></script>
 </head><body{tag}>{body}</body></html>'''
@@ -98,7 +114,7 @@ def domain_page(d, lang, manifest, teasers):
     hero_photo = photos.get('hero')
     body = header(lang, f'domains/d{i}.html', prefix) + '<main>'
     body += f'''<nav class="chapter-nav" aria-label="{c['brand']}"><a href="alldomains.html">{c['all']}</a><a href="#main-article">{c['main']}</a><a href="#closeup">{c['closeup']}</a><a href="#thoughts">{c['thoughts']}</a></nav>
-<section class="hero" aria-labelledby="domain-name"><div><p class="eyebrow">{c['brand']} · {c['domain']} {i:02}</p><h1 id="domain-name">{e(d['name'])}</h1><p class="intro">{e(d['intro'])}</p></div>{photo(hero_photo,lang,prefix,d['name'])}</section>
+<section class="hero" aria-labelledby="domain-name"><div><span class="hero-icon" aria-hidden="true">{icon(i)}</span><p class="eyebrow">{c['brand']} · {c['domain']} {i:02}</p><h1 id="domain-name">{e(d['name'])}</h1><p class="intro">{e(d['intro'])}</p></div>{photo(hero_photo,lang,prefix,d['name'])}</section>
 <article id="main-article" class="main-article"><h2>{e(d['main_article']['title'])}</h2>'''
     if d['main_article'].get('subtitle'):
         body += '<p><strong>' + e(d['main_article']['subtitle']) + '</strong></p>'
@@ -130,14 +146,14 @@ def domain_page(d, lang, manifest, teasers):
     dest = ('ar/' if lang == 'ar' else '') + f'domains/d{i}.html'
     write(dest, shell(lang,d['name'],body,prefix,i))
 
-def index_page(domains, lang):
+def index_page(domains, lang, manifest):
     c = COPY[lang]
     prefix = '../../' if lang == 'ar' else '../'
     body = header(lang,'domains/alldomains.html',prefix)
     body += f'<main><section class="index-intro"><h1>{c["index_title"]}</h1><p>{c["index_intro"]}</p></section><nav aria-label="{c["all"]}"><ol class="domain-list">'
     for d in domains:
         i = d['id']
-        body += f'''<li><a class="domain-link" data-domain="{i}" style="{theme(i)}" href="d{i}.html"><span class="domain-num">{i:02}</span><span class="domain-icon" aria-hidden="true">{ICONS[i-1]}</span><span class="domain-copy"><strong>{e(d['name'])}</strong><small>{e(d['main_article']['title'])}</small></span><span class="domain-arrow" aria-hidden="true">←</span></a></li>'''
+        body += f'''<li><a class="domain-link" data-domain="{i}" style="{theme(i)}" href="d{i}.html"><span class="domain-cover">{photo(manifest.get(str(i), {}).get('hero'),lang,prefix,d['name'],True)}<span class="domain-num">{i:02}</span></span><span class="domain-info"><span class="domain-icon" aria-hidden="true">{icon(i)}</span><span class="domain-copy"><strong>{e(d['name'])}</strong><small>{e(d['main_article']['title'])}</small></span><span class="domain-arrow" aria-hidden="true">←</span></span></a></li>'''
     body += f'</ol></nav><footer translate="no" lang="he">{c["footer"]}</footer></main>'
     write(('ar/' if lang == 'ar' else '')+'domains/alldomains.html',shell(lang,c['all'],body,prefix))
 
@@ -147,7 +163,7 @@ def main():
     for lang in ('he','ar'):
         domains = [load(f'domains/content/{lang}/d{i}.json') for i in range(1,11)]
         for d in domains: domain_page(d,lang,manifest,teasers)
-        index_page(domains,lang)
+        index_page(domains,lang,manifest)
     if not manifest:
         print('Preparation build only: verified image manifest is not ready.')
     else:

@@ -38,8 +38,8 @@ const server=http.createServer((req,res)=>{
       const cards=[...document.querySelectorAll('.card')].map(e=>{const r=e.getBoundingClientRect();return{width:r.width,height:r.height,top:r.top}});
       return{overflow:document.documentElement.scrollWidth>innerWidth+1,main:document.querySelector('main').getBoundingClientRect().width,cards,questions:document.querySelectorAll('.questions p').length,article:!!document.querySelector('.main-article'),loaded:[...document.images].every(i=>i.naturalWidth>0),accent:getComputedStyle(document.body).getPropertyValue('--accent')};
      });
-     assert.equal(layout.overflow,false,`${lang} d${id} ${width} overflow`);assert(layout.main<=900);assert.equal(layout.questions,4);assert(layout.article&&layout.loaded);
-     assert.equal(layout.cards.length,8);assert.equal(layout.cards.filter(c=>c.top===layout.cards[0].top).length,width===1440?4:2);
+     assert.equal(layout.overflow,false,`${lang} d${id} ${width} overflow`);assert(layout.main<=1160);assert.equal(layout.questions,4);assert(layout.article&&layout.loaded);
+     assert.equal(layout.cards.length,8);assert.equal(layout.cards.filter(c=>c.top===layout.cards[0].top).length,width===1440?4:1);
      assert(Math.max(...layout.cards.map(c=>c.height))-Math.min(...layout.cards.map(c=>c.height))<1,'card heights');
      assert(Math.max(...layout.cards.map(c=>c.width))-Math.min(...layout.cards.map(c=>c.width))<1,'card widths');
      if(lang==='ar')assert.equal(await page.evaluate(()=>{const c=document.body.cloneNode(true);c.querySelectorAll('script,style,.course-lang-switch,[data-reader-language]').forEach(e=>e.remove());return /[\u0590-\u05ff]/.test(c.textContent.replace(/פורצות דרך|תעשיידע/g,''))}),false);
