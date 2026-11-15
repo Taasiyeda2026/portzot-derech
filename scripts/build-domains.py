@@ -60,7 +60,7 @@ def shell(lang, title, body, prefix, domain=None):
 <link rel="icon" href="{prefix}icon/favicon.png">
 <link rel="stylesheet" href="{prefix}css/domains-2027.css?v=2027-4">
 <link rel="stylesheet" href="{prefix}css/course-language.css?v=2027-2">
-<script defer src="{prefix}js/domains-2027.js?v=2027-1"></script>
+<script defer src="{prefix}js/domains-2027.js?v=2027-2"></script>
 </head><body{tag}>{body}</body></html>'''
 
 def photo(item, lang, prefix, title, card=False):
@@ -100,7 +100,7 @@ def domain_page(d, lang, manifest, teasers):
         ap = photos.get('articles', {}).get(a['id'])
         teaser = teasers[i-1][n] if lang == 'he' else a.get('card_teaser', a['teaser'])
         body += f'''<button type="button" class="card" data-open-article="{a['id']}" aria-haspopup="dialog" aria-controls="{a['id']}">{photo(ap,lang,prefix,a['title'],True)}<span class="card-copy"><strong class="card-title">{e(a['title'])}</strong><span class="card-teaser">{e(teaser)}</span><span class="read-more">{c['read']}</span></span></button>'''
-        readers += f'''<dialog id="{a['id']}" data-article aria-labelledby="{a['id']}-title"><div class="reader-body"><div class="reader-bar"><span class="eyebrow">{c['closeup']} · {c['counter'].format(n=n+1)}</span><a class="reader-language" data-reader-language="{'he' if lang=='ar' else 'ar'}" href="{prefix}{'' if lang=='ar' else 'ar/'}domains/d{i}.html?lang={'he' if lang=='ar' else 'ar'}#{a['id']}" lang="{'he' if lang=='ar' else 'ar'}">{'עברית' if lang=='ar' else 'العربية'}</a><button type="button" class="reader-close" data-close aria-label="{c['close']}" autofocus>×</button></div>{photo(ap,lang,prefix,a['title'])}<h2 id="{a['id']}-title">{e(a['title'])}</h2>{paragraphs(a['paragraphs'])}<nav class="reader-nav" aria-label="{c['closeup']}"><button type="button" data-prev{' disabled' if n==0 else ''}>{c['prev']}</button><button type="button" data-next{' disabled' if n==7 else ''}>{c['next']}</button></nav></div></dialog>'''
+        readers += f'''<dialog id="{a['id']}" data-article aria-labelledby="{a['id']}-title"><div class="reader-body"><div class="reader-bar"><span class="eyebrow">{c['closeup']} · {c['counter'].format(n=n+1)}</span><button type="button" class="reader-close" data-close aria-label="{c['close']}" autofocus>×</button></div>{photo(ap,lang,prefix,a['title'])}<h2 id="{a['id']}-title">{e(a['title'])}</h2>{paragraphs(a['paragraphs'])}<nav class="reader-nav" aria-label="{c['closeup']}"><button type="button" data-prev{' disabled' if n==0 else ''}>{c['prev']}</button><button type="button" data-next{' disabled' if n==7 else ''}>{c['next']}</button></nav></div></dialog>'''
     body += f'''</div><noscript><details><summary>{c['nojs']}</summary>'''
     for a in d['short_articles']:
         body += '<article><h3>' + e(a['title']) + '</h3>' + paragraphs(a['paragraphs']) + '</article>'
@@ -127,7 +127,7 @@ def index_page(domains, lang):
     body += f'<main><section class="index-intro"><h1>{c["index_title"]}</h1><p>{c["index_intro"]}</p></section><nav aria-label="{c["all"]}"><ol class="domain-list">'
     for d in domains:
         i = d['id']
-        body += f'''<li><a class="domain-link" data-domain="{i}" style="{theme(i)}" href="d{i}.html"><span class="domain-num">{i:02}</span><span class="domain-copy"><strong>{e(d['name'])}</strong><small>{e(d['main_article']['title'])}</small></span><span class="domain-arrow" aria-hidden="true">←</span></a></li>'''
+        body += f'''<li><a class="domain-link" data-domain="{i}" style="{theme(i)}" href="d{i}.html"><span class="domain-num">{i:02}</span><span class="domain-icon" aria-hidden="true">{ICONS[i-1]}</span><span class="domain-copy"><strong>{e(d['name'])}</strong><small>{e(d['main_article']['title'])}</small></span><span class="domain-arrow" aria-hidden="true">←</span></a></li>'''
     body += f'</ol></nav><footer translate="no" lang="he">{c["footer"]}</footer></main>'
     write(('ar/' if lang == 'ar' else '')+'domains/alldomains.html',shell(lang,c['all'],body,prefix))
 

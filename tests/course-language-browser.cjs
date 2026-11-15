@@ -133,7 +133,7 @@ export const onSnapshot=(ref,callback)=>{let active=true;const run=async()=>{con
     const h=new URL(p.url()).hash;
     assert.equal(await p.locator('dialog[open]').count(),1);
     if(viewport.width===390&&file==='d1')await p.screenshot({path:'/tmp/d1-mobile.png'});
-    await p.locator('dialog[open] [data-reader-language="he"]').click();await p.waitForURL(u=>u.searchParams.get('lang')==='he');assert.equal(new URL(p.url()).searchParams.get('session'),'domain-test');assert.equal(new URL(p.url()).hash,h);
+    await p.locator('.course-lang-switch [data-course-language="he"]').evaluate(el=>el.click());await p.waitForURL(u=>u.searchParams.get('lang')==='he');assert.equal(new URL(p.url()).searchParams.get('session'),'domain-test');assert.equal(new URL(p.url()).hash,h);
    }
    if(viewport.width===390&&file==='alldomains')await p.screenshot({path:`/tmp/${file}-mobile.png`,fullPage:false});
   }
