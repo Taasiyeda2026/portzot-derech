@@ -58,7 +58,7 @@ def shell(lang, title, body, prefix, domain=None):
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{e(title)} | {c['brand']}</title>
 <link rel="icon" href="{prefix}icon/favicon.png">
-<link rel="stylesheet" href="{prefix}css/domains-2027.css?v=2027-5">
+<link rel="stylesheet" href="{prefix}css/domains-2027.css?v=2027-{6 if domain == 1 else 5}">
 <link rel="stylesheet" href="{prefix}css/course-language.css?v=2027-2">
 <script defer src="{prefix}js/domains-2027.js?v=2027-2"></script>
 </head><body{tag}>{body}</body></html>'''
