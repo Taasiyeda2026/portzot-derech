@@ -120,3 +120,5 @@ body.reader-open{overflow:hidden}
   .masthead .bar{padding-block:7px;row-gap:4px}
 }
 @media(max-width:380px){.masthead .chapter-nav{font-size:10px}.masthead .chapter-nav a{padding-inline:4px}}
+/* Short disclosure only for selected AI illustrations. */
+.ai-disclosure{font-size:.78rem;line-height:1.5;color:#555;text-align:start;margin-top:6px}

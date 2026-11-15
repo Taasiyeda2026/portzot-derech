@@ -95,8 +95,12 @@ def photo(item, lang, prefix, title, card=False):
     img = f'<img src="{prefix}{e(item["path"])}" alt="{e(alt)}" loading="{"lazy" if card else "eager"}" width="{size[0]}" height="{size[1]}" style="object-position:{position}">'
     if card:
         return img
-    # Image credits stay in manifest metadata only; nothing is rendered under photos.
-    return '<figure>' + img + '</figure>'
+    # Keep credits in metadata; distinguish selected AI illustrations from documentation.
+    caption = ''
+    if item.get('show_ai_disclosure'):
+        label = 'המחשה שנוצרה בבינה מלאכותית' if lang == 'he' else 'صورة توضيحية أُنشئت بالذكاء الاصطناعي'
+        caption = '<figcaption class="ai-disclosure">' + e(label) + '</figcaption>'
+    return '<figure>' + img + caption + '</figure>'
 
 def paragraphs(values):
     return ''.join('<p>' + e(p) + '</p>' for p in values)

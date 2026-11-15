@@ -137,7 +137,8 @@
           "width_height": [
             1200,
             800
-          ]
+          ],
+          "show_ai_disclosure": true
         },
         "d1-a07": {
           "path": "domains/images/2027/d1-a07.webp",
@@ -175,7 +176,8 @@
           "width_height": [
             1200,
             800
-          ]
+          ],
+          "show_ai_disclosure": true
         }
       }
     },
@@ -312,7 +314,8 @@
           "width_height": [
             1200,
             800
-          ]
+          ],
+          "show_ai_disclosure": true
         },
         "d2-a07": {
           "path": "domains/images/2027/d2-a07.webp",
@@ -487,7 +490,8 @@
           "width_height": [
             1200,
             800
-          ]
+          ],
+          "show_ai_disclosure": true
         },
         "d3-a07": {
           "path": "domains/images/2027/d3-a07.webp",
@@ -525,7 +529,8 @@
           "width_height": [
             1200,
             800
-          ]
+          ],
+          "show_ai_disclosure": true
         }
       }
     },
@@ -571,8 +576,8 @@
         },
         "d4-a02": {
           "path": "domains/images/2027/d4-a02.webp",
-          "alt": "המחשה: נערה מנגנת במרימבה על במת אולם קונצרטים ריק, תאורה חמה",
-          "alt_ar": "توضيح: فتاة تعزف على الماريمبا على خشبة مسرح في قاعة حفلات فارغة بإضاءة دافئة",
+          "alt": "המחשה: שתי נערות נהנות מהופעה חיה; זמרת ומתורגמנית לשפת הסימנים על הבמה.",
+          "alt_ar": "توضيح: فتاتان تستمتعان بحفل حي؛ مغنية ومترجمة للغة الإشارة على المنصة.",
           "credit": "בינה מלאכותית · פורצות דרך 2027",
           "credit_ar": "توضيح بالذكاء الاصطناعي · Portzot Derech 2027",
           "source_url": "https://portzot-derech.org/domains/images/2027/LICENSES.md",
@@ -586,7 +591,8 @@
           "width_height": [
             1200,
             800
-          ]
+          ],
+          "show_ai_disclosure": true
         },
         "d4-a03": {
           "path": "domains/images/2027/d4-a03.webp",
@@ -681,12 +687,13 @@
           "width_height": [
             1200,
             800
-          ]
+          ],
+          "show_ai_disclosure": true
         },
         "d4-a08": {
           "path": "domains/images/2027/d4-a08.webp",
-          "alt": "המחשה: ארבע נערות שותלות ומשקות בגינה קהילתית עירונית פורחת",
-          "alt_ar": "توضيح: أربع فتيات يزرعن ويسقين في حديقة مجتمعية حضرية مزهرة",
+          "alt": "המחשה: נערות בוחנות יחד תוכנית לשדרוג גינה ציבורית קיימת.",
+          "alt_ar": "توضيح: فتيات يدرسن معًا مخططًا لتطوير حديقة عامة قائمة.",
           "credit": "בינה מלאכותית · פורצות דרך 2027",
           "credit_ar": "توضيح بالذكاء الاصطناعي · Portzot Derech 2027",
           "source_url": "https://portzot-derech.org/domains/images/2027/LICENSES.md",
@@ -818,12 +825,13 @@
           "width_height": [
             1200,
             800
-          ]
+          ],
+          "show_ai_disclosure": true
         },
         "d5-a06": {
           "path": "domains/images/2027/d5-a06.webp",
-          "alt": "המחשה: מרכיבי ארוחת בוקר על קרש עץ: שיבולת שועל, פירות, אגוזים, יוגורט ודבש",
-          "alt_ar": "توضيح: مكونات فطور على لوح خشب: شوفان وفواكه ومكسرات ولبن وعسل",
+          "alt": "המחשה: נערה בוחנת את הכיתוב על אריזת מזון בסופרמרקט.",
+          "alt_ar": "توضيح: فتاة تفحص الكتابة على عبوة غذائية في متجر.",
           "credit": "בינה מלאכותית · פורצות דרך 2027",
           "credit_ar": "توضيح بالذكاء الاصطناعي · Portzot Derech 2027",
           "source_url": "https://portzot-derech.org/domains/images/2027/LICENSES.md",
@@ -974,7 +982,8 @@
           "width_height": [
             1200,
             800
-          ]
+          ],
+          "show_ai_disclosure": true
         },
         "d6-a05": {
           "path": "domains/images/2027/d6-a05.webp",
@@ -997,8 +1006,8 @@
         },
         "d6-a06": {
           "path": "domains/images/2027/d6-a06.webp",
-          "alt": "המחשה: נערה בכיסא גלגלים וחברה מול מדרגות אבן לכניסת בניין ללא רמפה",
-          "alt_ar": "توضيح: فتاة على كرسي متحرك وصديقة أمام درج حجري لمدخل مبنى بلا منحدر",
+          "alt": "המחשה: שתי נערות עומדות מול מדרכה חסומה בקורקינטים, פסולת ועבודות רחוב.",
+          "alt_ar": "توضيح: فتاتان أمام رصيف تعوقه دراجات سكوتر ونفايات وأعمال في الشارع.",
           "credit": "בינה מלאכותית · פורצות דרך 2027",
           "credit_ar": "توضيح بالذكاء الاصطناعي · Portzot Derech 2027",
           "source_url": "https://portzot-derech.org/domains/images/2027/LICENSES.md",
@@ -1016,8 +1025,8 @@
         },
         "d6-a07": {
           "path": "domains/images/2027/d6-a07.webp",
-          "alt": "המחשה: צעירה עם חיג'אב בתחנת אוטובוס כפרית עם נרתיק גיטרה ותיק",
-          "alt_ar": "توضيح: شابة ترتدي الحجاب عند محطة حافلات ريفية مع حقيبة غيتار وحقيبة سفر",
+          "alt": "המחשה: נערה ממתינה בתחנת אוטובוס עם תיק ונעלי ריקוד.",
+          "alt_ar": "توضيح: فتاة تنتظر في محطة حافلات مع حقيبة وحذاء للرقص.",
           "credit": "בינה מלאכותית · פורצות דרך 2027",
           "credit_ar": "توضيح بالذكاء الاصطناعي · Portzot Derech 2027",
           "source_url": "https://portzot-derech.org/domains/images/2027/LICENSES.md",
@@ -1035,8 +1044,8 @@
         },
         "d6-a08": {
           "path": "domains/images/2027/d6-a08.webp",
-          "alt": "המחשה: ארבע נערות מתאמנות וקופצות מעל מכשולי בטון בפארק ספורט עירוני",
-          "alt_ar": "توضيح: أربع فتيات يتدرّبن ويقفزن فوق عوائق خرسانية في حديقة رياضية حضرية",
+          "alt": "המחשה: נערות חוקרות מסלול עירוני ונעזרות בטלפון.",
+          "alt_ar": "توضيح: فتيات يستكشفن مسارًا في المدينة ويستعنّ بالهاتف.",
           "credit": "בינה מלאכותית · פורצות דרך 2027",
           "credit_ar": "توضيح بالذكاء الاصطناعي · Portzot Derech 2027",
           "source_url": "https://portzot-derech.org/domains/images/2027/LICENSES.md",
@@ -1077,8 +1086,8 @@
       "articles": {
         "d7-a01": {
           "path": "domains/images/2027/d7-a01.webp",
-          "alt": "המחשה: צעירה תולה תצלומים על קיר חדר שינה עם מיטה, שולחן עבודה וצמחי בית",
-          "alt_ar": "توضيح: شابة تعلق صوراً على جدار غرفة نوم مع سرير ومكتب ونباتات منزلية",
+          "alt": "המחשה: נערה בוחנת מגירה ובה מזכרות וחפצים אישיים.",
+          "alt_ar": "توضيح: فتاة تتأمل درجًا يحتوي على تذكارات وأغراض شخصية.",
           "credit": "בינה מלאכותית · פורצות דרך 2027",
           "credit_ar": "توضيح بالذكاء الاصطناعي · Portzot Derech 2027",
           "source_url": "https://portzot-derech.org/domains/images/2027/LICENSES.md",
@@ -1111,7 +1120,8 @@
           "width_height": [
             1200,
             800
-          ]
+          ],
+          "show_ai_disclosure": true
         },
         "d7-a03": {
           "path": "domains/images/2027/d7-a03.webp",
@@ -1134,8 +1144,8 @@
         },
         "d7-a04": {
           "path": "domains/images/2027/d7-a04.webp",
-          "alt": "המחשה: נערה עם אוזניות לומדת במיטה עם מחשב נייד, מחברות וחתול ישן",
-          "alt_ar": "توضيح: فتاة بسماعات تدرس على السرير مع حاسوب محمول ودفاتر وقطة نائمة",
+          "alt": "המחשה: שתי נערות עוסקות בפעילויות שונות בחדר שינה משותף.",
+          "alt_ar": "توضيح: فتاتان تمارسان نشاطين مختلفين في غرفة نوم مشتركة.",
           "credit": "בינה מלאכותית · פורצות דרך 2027",
           "credit_ar": "توضيح بالذكاء الاصطناعي · Portzot Derech 2027",
           "source_url": "https://portzot-derech.org/domains/images/2027/LICENSES.md",
@@ -1187,7 +1197,8 @@
           "width_height": [
             1200,
             800
-          ]
+          ],
+          "show_ai_disclosure": true
         },
         "d7-a07": {
           "path": "domains/images/2027/d7-a07.webp",
@@ -1206,7 +1217,8 @@
           "width_height": [
             1200,
             800
-          ]
+          ],
+          "show_ai_disclosure": true
         },
         "d7-a08": {
           "path": "domains/images/2027/d7-a08.webp",
@@ -1343,7 +1355,8 @@
           "width_height": [
             1200,
             800
-          ]
+          ],
+          "show_ai_disclosure": true
         },
         "d8-a06": {
           "path": "domains/images/2027/d8-a06.webp",
@@ -1362,7 +1375,8 @@
           "width_height": [
             1200,
             800
-          ]
+          ],
+          "show_ai_disclosure": true
         },
         "d8-a07": {
           "path": "domains/images/2027/d8-a07.webp",
@@ -1381,7 +1395,8 @@
           "width_height": [
             1200,
             800
-          ]
+          ],
+          "show_ai_disclosure": true
         },
         "d8-a08": {
           "path": "domains/images/2027/d8-a08.webp",
@@ -1461,7 +1476,8 @@
           "width_height": [
             1200,
             800
-          ]
+          ],
+          "show_ai_disclosure": true
         },
         "d9-a03": {
           "path": "domains/images/2027/d9-a03.webp",
@@ -1537,7 +1553,8 @@
           "width_height": [
             1200,
             800
-          ]
+          ],
+          "show_ai_disclosure": true
         },
         "d9-a07": {
           "path": "domains/images/2027/d9-a07.webp",
@@ -1560,8 +1577,8 @@
         },
         "d9-a08": {
           "path": "domains/images/2027/d9-a08.webp",
-          "alt": "המחשה: ידיים מסדרות אבני בנייה צבעוניות עם נקודות בכתב ברייל על שולחן",
-          "alt_ar": "توضيح: أيدٍ ترتب قوالب بناء ملونة بنقاط بطريقة برايل على طاولة",
+          "alt": "המחשה: ידיים משחקות בלבנים צבעוניות עם אותיות מודפסות ונקודות ברייל.",
+          "alt_ar": "توضيح: أيدٍ تلعب بقطع ملونة عليها حروف مطبوعة ونقاط برايل.",
           "credit": "בינה מלאכותית · פורצות דרך 2027",
           "credit_ar": "توضيح بالذكاء الاصطناعي · Portzot Derech 2027",
           "source_url": "https://portzot-derech.org/domains/images/2027/LICENSES.md",
@@ -1575,7 +1592,8 @@
           "width_height": [
             1200,
             800
-          ]
+          ],
+          "show_ai_disclosure": true
         }
       }
     },
@@ -1617,12 +1635,13 @@
           "width_height": [
             1200,
             800
-          ]
+          ],
+          "show_ai_disclosure": true
         },
         "d10-a02": {
           "path": "domains/images/2027/d10-a02.webp",
-          "alt": "המחשה: צעירה עם אוזניות מול מיקרופון בסטודיו הקלטות, גל קול סגול על המסך",
-          "alt_ar": "توضيح: شابة بسماعات أمام ميكروفون في استوديو تسجيل، موجة صوتية بنفسجية على الشاشة",
+          "alt": "המחשה: נערה מקליטה בטלפון סיפור שמספרת סבתה ליד שולחן משפחתי.",
+          "alt_ar": "توضيح: فتاة تسجل بهاتفها قصة ترويها جدتها على طاولة عائلية.",
           "credit": "בינה מלאכותית · פורצות דרך 2027",
           "credit_ar": "توضيح بالذكاء الاصطناعي · Portzot Derech 2027",
           "source_url": "https://portzot-derech.org/domains/images/2027/LICENSES.md",
@@ -1693,7 +1712,8 @@
           "width_height": [
             1200,
             800
-          ]
+          ],
+          "show_ai_disclosure": true
         },
         "d10-a06": {
           "path": "domains/images/2027/d10-a06.webp",
@@ -1712,7 +1732,8 @@
           "width_height": [
             1200,
             800
-          ]
+          ],
+          "show_ai_disclosure": true
         },
         "d10-a07": {
           "path": "domains/images/2027/d10-a07.webp",

@@ -116,7 +116,7 @@ test('public sources are verified in the exact page language, with originals ret
  }
 });
 
-test('long body paragraphs are original across articles, and readers contain no language controls or captions',()=>{
+test('long body paragraphs are original across articles, and readers contain no language controls or credit captions; AI notices match the manifest',()=>{
  for(const [lang,ds] of [['he',he],['ar',ar]]){
   const seen=new Map();
   for(const d of ds){
@@ -129,7 +129,18 @@ test('long body paragraphs are original across articles, and readers contain no 
     }
    }
    const html=read(`${lang==='ar'?'ar/':''}domains/d${d.id}.html`);
-   assert.doesNotMatch(html,/<figcaption/i);
+   const images=json('domains/images/2027/manifest.json').domains[d.id].articles;
+   const label=lang==='he'?'המחשה שנוצרה בבינה מלאכותית':'صورة توضيحية أُنشئت بالذكاء الاصطناعي';
+   for(const a of d.short_articles){
+    const start=html.indexOf('<dialog id="'+a.id+'"');
+    assert(start>=0,a.id);
+    const dialog=html.slice(start,html.indexOf('</dialog>',start));
+    const captions=[...dialog.matchAll(/<figcaption[^>]*>([\s\S]*?)<\/figcaption>/g)];
+    assert.equal(captions.length,images[a.id].show_ai_disclosure?1:0,a.id);
+    if(captions.length)assert.equal(captions[0][0],'<figcaption class="ai-disclosure">'+label+'</figcaption>',a.id);
+    assert(dialog.includes('alt="'+esc(lang==='he'?images[a.id].alt:images[a.id].alt_ar)+'"'),a.id);
+   }
+   assert.equal((html.match(/<figcaption/g)||[]).length,Object.values(images).filter(i=>i.show_ai_disclosure).length);
    const readers=html.slice(html.indexOf('<dialog '));
    assert(!readers.includes('course-lang-switch'));
    assert(!readers.includes('data-reader-language'));
