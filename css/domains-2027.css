@@ -89,3 +89,5 @@ body.reader-open{overflow:hidden}
 @media(max-width:420px){.bar{gap:8px}.tools{justify-content:space-between;width:100%}.brand{margin:auto}.questions p{padding:20px 48px 20px 16px}.questions p::before{right:16px;top:21px}.reflection{padding:24px 18px}.reflection h2{font-size:23px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important;animation:none!important}}
 @media print{.masthead,.chapter-nav,.cards,.bottom-nav,dialog{display:none}.main-article{border:0;padding:0;box-shadow:none}.hero{grid-template-columns:1fr;background:none;box-shadow:none}.hero::after,.hero figure,.hero-icon{display:none}body{background:white}main{max-width:none}.reflection{break-inside:avoid;background:#fff;color:#222;box-shadow:none}.reflection h2{color:#222}.questions p{border-color:#aaa}.questions p::before{color:#333}}
+/* Short disclosure only for selected AI illustrations. */
+.ai-disclosure{font-size:.78rem;line-height:1.5;color:#555;text-align:start;margin-top:6px}
