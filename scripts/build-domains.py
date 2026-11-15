@@ -58,7 +58,7 @@ def shell(lang, title, body, prefix, domain=None):
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{e(title)} | {c['brand']}</title>
 <link rel="icon" href="{prefix}icon/favicon.png">
-<link rel="stylesheet" href="{prefix}css/domains-2027.css?v=2027-3">
+<link rel="stylesheet" href="{prefix}css/domains-2027.css?v=2027-4">
 <link rel="stylesheet" href="{prefix}css/course-language.css?v=2027-2">
 <script defer src="{prefix}js/domains-2027.js?v=2027-1"></script>
 </head><body{tag}>{body}</body></html>'''
@@ -76,10 +76,8 @@ def photo(item, lang, prefix, title, card=False):
     img = f'<img src="{prefix}{e(item["path"])}" alt="{e(alt)}" loading="{"lazy" if card else "eager"}" width="{size[0]}" height="{size[1]}" style="object-position:{position}">'
     if card:
         return img
-    label = COPY[lang]['illustration'] if item.get('media_kind') == 'ai_illustration' else COPY[lang]['photo']
-    credit_text = item.get('credit_ar' if lang == 'ar' else 'credit', item['credit'])
-    credit = f'''<figcaption class="photo-credit">{label}: <a href="{e(item['source_url'])}" target="_blank" rel="noopener noreferrer">{e(credit_text)}</a> · <a href="{e(item['license_url'])}" target="_blank" rel="noopener noreferrer">{COPY[lang]['license']}</a></figcaption>'''
-    return '<figure>' + img + credit + '</figure>'
+    # Image credits stay in manifest metadata only; nothing is rendered under photos.
+    return '<figure>' + img + '</figure>'
 
 def paragraphs(values):
     return ''.join('<p>' + e(p) + '</p>' for p in values)
