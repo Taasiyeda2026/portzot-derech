@@ -33,10 +33,10 @@ test('download and mail share the formatted frozen PDF without changing storage,
 
 test('mixed Hebrew, Arabic and Latin names stay inside the names column with no missing glyphs',async()=>{
  const file=resolve(scratch,'multilingual-report.pdf');
- const names=['נועה 👑','سالي شومري','Hala (A)','إنعام نصرالدين','نور أحمد','נופר'.repeat(45)];
+ const names=['נועה 👑','سالي شومري','Hala (A)','𝗦𝗘𝗪𝗔𝗥','إنعام نصرالدين','نور أحمد','נופר'.repeat(45)];
  const sample={...snapshot,groups:names.map((name,i)=>({groupNumber:i+1,memberNames:[name]}))};
  const bytes=await buildPdf(sample,pdfDependencies);await writeFile(file,bytes);
- const content=text(file);assert(content.includes('נועה'));assert(content.includes('Hala'));assert(!content.includes('👑'));
+ const content=text(file);assert(content.includes('נועה'));assert(content.includes('Hala'));assert(content.includes('SEWAR'));assert(!content.includes('👑'));
  const bbox=execFileSync('pdftotext',['-bbox',file,'-'],{encoding:'utf8'});
  for(const m of bbox.matchAll(/<word xMin="([\d.]+)" yMin="([\d.]+)" xMax="([\d.]+)" yMax="([\d.]+)">([^<]+)<\/word>/g)){
   const x=+m[1],y=+m[2],right=+m[3];
