@@ -18,8 +18,8 @@ export async function buildPdf(snapshot, { PDFDocument, rgb, fontkit, bidi, regu
   const supported = new Set(font.getCharacterSet());
   const logo = await pdf.embedPng(logoBytes);
   // Ignore decorative emoji/control characters in the printed copy only.
-  const safe = value => Array.from(String(value ?? '').normalize('NFC'))
-    .filter(c => !/[\p{Extended_Pictographic}\p{Cf}\uFE0E\uFE0F]/u.test(c))
+  const safe = value => Array.from(String(value ?? '').normalize('NFKC'))
+    .filter(c => !/[\p{Extended_Pictographic}\p{S}\p{Cf}\uFE0E\uFE0F]/u.test(c))
     .map(c => /\s/u.test(c) ? ' ' : supported.has(c.codePointAt(0)) ? c : '?')
     .join('').replace(/\(\s*\)/g, '').replace(/\s+/g, ' ').trim();
   function runs(text, size, f = font) {
