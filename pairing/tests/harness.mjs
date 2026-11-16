@@ -2,7 +2,8 @@ import { database,ACTOR_A,ACTOR_B,ADMIN,DISABLED } from './database.mjs';
 import { createHandler } from '../../supabase/functions/pairing-groups/handler.mjs';
 import { buildPdf } from '../../supabase/functions/pairing-groups/pdf.mjs';
 import { PDFDocument,rgb } from 'pdf-lib';import fontkit from '@pdf-lib/fontkit';import bidiFactory from 'bidi-js';
-import { regular,bold,logo } from '../../supabase/functions/pairing-groups/assets.mjs';
+import { logo } from '../../supabase/functions/pairing-groups/assets.mjs';
+import { regular,bold } from '../../supabase/functions/pairing-groups/unicode-fonts.mjs';
 export const pdfDependencies={PDFDocument,rgb,fontkit,bidi:bidiFactory(),regularBytes:Uint8Array.from(atob(regular),c=>c.charCodeAt(0)),boldBytes:Uint8Array.from(atob(bold),c=>c.charCodeAt(0)),logoBytes:Uint8Array.from(atob(logo),c=>c.charCodeAt(0))};
 export async function harness(){
  const {db,rpc}=await database();

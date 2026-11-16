@@ -1,3 +1,4 @@
+import fontkit from '@pdf-lib/fontkit';
 import test from 'node:test';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';import {mkdir,writeFile} from 'node:fs/promises';import {resolve} from 'node:path';
 import {buildPdf} from '../../supabase/functions/pairing-groups/pdf.mjs';import {harness,pdfDependencies} from './harness.mjs';import {questions} from '../../supabase/functions/pairing-groups/questions.mjs';
 const scratch=resolve(new URL('../../../work/pairing-final-tweaks/',import.meta.url).pathname);await mkdir(scratch,{recursive:true});
@@ -28,4 +29,19 @@ test('download and mail share the formatted frozen PDF without changing storage,
   const attachment=Buffer.from(h.mail.message.attachments[0].contentBytes,'base64'),mailFile=resolve(scratch,'mail-attachment.pdf');await writeFile(mailFile,attachment);assert.equal(text(mailFile),text(downloadFile));
   await h.call('teacher.report',{activity_id:room.id});assert.equal(h.sends,1);
  }finally{await h.db.close();}
+});
+
+test('mixed Hebrew, Arabic and Latin names stay inside the names column with no missing glyphs',async()=>{
+ const file=resolve(scratch,'multilingual-report.pdf');
+ const names=['נועה 👑','سالي شومري','Hala (A)','إنعام نصرالدين','نور أحمد','נופר'.repeat(45)];
+ const sample={...snapshot,groups:names.map((name,i)=>({groupNumber:i+1,memberNames:[name]}))};
+ const bytes=await buildPdf(sample,pdfDependencies);await writeFile(file,bytes);
+ const content=text(file);assert(content.includes('נועה'));assert(content.includes('Hala'));assert(!content.includes('👑'));
+ const bbox=execFileSync('pdftotext',['-bbox',file,'-'],{encoding:'utf8'});
+ for(const m of bbox.matchAll(/<word xMin="([\d.]+)" yMin="([\d.]+)" xMax="([\d.]+)" yMax="([\d.]+)">([^<]+)<\/word>/g)){
+  const x=+m[1],y=+m[2],right=+m[3];
+  if(y>270&&y<785&&x<452)assert(x>=38&&right<=440.1,`name outside column: ${m[5]}`);
+ }
+ const font=fontkit.create(pdfDependencies.regularBytes);
+ for(const c of 'נועהساليشومريإنعامنصرالدينHala')assert(font.hasGlyphForCodePoint(c.codePointAt(0)));
 });

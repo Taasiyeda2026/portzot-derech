@@ -120,15 +120,13 @@ export function createHandler({client,buildPdf,readEnv=()=>undefined,fetcher=fet
    if(action==='teacher.report'||action==='teacher.download'){
     const report=await prepare(actor,payload);
     if(action==='teacher.download'){
-     const {data,error:e}=await client.storage.from('pairing-reports').download(report.pdf_path);
-     if(e)throw error('storage_unavailable',503);
-     return new Response(data,{headers:{...headers,'Content-Type':'application/pdf','Content-Disposition':`attachment; filename*=UTF-8''${encodeURIComponent(fileName(report.snapshot))}`}});
+     // Re-render the immutable snapshot so existing reports benefit from PDF fixes.
+     const bytes=await buildPdf(report.snapshot);
+     return new Response(bytes,{headers:{...headers,'Content-Type':'application/pdf','Content-Disposition':`attachment; filename*=UTF-8''${encodeURIComponent(fileName(report.snapshot))}`}});
     }
     if(['sending','sent','unknown'].includes(report.status))return json({status:report.status,report_id:report.id});
     const graphToken=await graphAccess(readEnv,fetcher);
-    const {data:blob,error:e}=await client.storage.from('pairing-reports').download(report.pdf_path);
-    if(e)throw error('storage_unavailable',503);
-    const bytes=new Uint8Array(await blob.arrayBuffer());
+    const bytes=await buildPdf(report.snapshot);
     const claim=crypto.randomUUID(),args={activity_id:payload.activity_id,claim};
     const result=await rpc('teacher.report.claim_send',actor,null,args);
     if(!result.claimed)return json({status:result.status,report_id:report.id});
@@ -141,3 +139,4 @@ export function createHandler({client,buildPdf,readEnv=()=>undefined,fetcher=fet
   }catch(e){const code=ERRORS[e.message]?e.message:'server_error';return json({error:{code,message:ERRORS[code]}},e.status||400);}
  };
 }
+
