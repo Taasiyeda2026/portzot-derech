@@ -33,11 +33,11 @@ label{display:block;font-weight:700;margin:10px 0 5px}input,textarea,select{font
 <body>
 <header class="masthead"><div class="bar"><a class="brand" href="../strongermenu-2026.html" translate="no"><img src="../icon/logo.png" alt=""><span>פורצות דרך</span></a><div class="tools"><a href="alldomains.html">תחומי העניין</a><a class="home" href="../strongermenu-2026.html">עמוד הבית</a></div></div></header>
 <main>
-<section class="hero"><div><p class="eyebrow">מפגש 4 · פעילות קבוצתית · 30 דקות</p><h1>מאתרות אתגר</h1><p>מה הייתן רוצות לשנות בעולם? הפעם אתן חוקרות יחד, מתבוננות בחיים שלכן ובוחרות בעיה שתהיה נקודת ההתחלה למיזם שלכן.</p></div><img src="../icon/sdg.png" alt="גלגל 17 יעדי הפיתוח של האו״ם"></section>
+<section class="hero"><div><p class="eyebrow">פעילות קבוצתית · 30 דקות</p><h1>מאתרות אתגר</h1><p>מה הייתן רוצות לשנות בעולם? הפעם אתן חוקרות יחד, מתבוננות בחיים שלכן ובוחרות בעיה שתהיה נקודת ההתחלה למיזם שלכן.</p></div><img src="../icon/sdg.png" alt="גלגל 17 יעדי הפיתוח של האו״ם"></section>
 <nav class="progress" aria-label="שלבי הפעילות" id="progress"></nav>
 <section class="stage" id="stage-1" aria-labelledby="title-1">
 <div class="time">שלב 1 מתוך 5 · 5 דקות</div><h2 id="title-1" tabindex="-1">מה הקשר בין התחום שלנו לעולם?</h2>
-<p>17 יעדי הפיתוח של האו״ם נועדו לקדם חיים טובים יותר לאנשים ולסביבה. הם יעזרו לכן לגלות בעיות שקשורות לתחום שכבר בחרתן במפגש הקודם.</p>
+<p>17 יעדי הפיתוח של האו״ם נועדו לקדם חיים טובים יותר לאנשים ולסביבה. הם יעזרו לכן לגלות בעיות שקשורות לתחום שכבר בחרתן.</p>
 <div class="two"><div><label for="domain">התחום המשותף של הצוות</label><select id="domain"><option value="">בחרו את התחום שכבר נקבע</option></select></div><div><label for="team">שם הצוות (לא חובה)</label><input id="team" maxlength="100" placeholder="שם הצוות שלכן"></div></div>
 <div id="recommendations" hidden><h3 style="margin-top:18px">יעדים שכדאי להכיר</h3><p class="note">זו הצעה לחיבורים אפשריים לתחום שלכן, לא בחירה מחייבת. אפשר לחקור גם כל יעד אחר.</p><div class="goal-list" id="recommended"></div></div>
 <div class="prompt"><strong>משימה לצוות:</strong> קראו את שמות היעדים המומלצים והסבירו זו לזו איזה קשר אתן רואות בין התחום שלכן ליעדים.</div>
@@ -151,7 +151,7 @@ for(let i=1;i<=5;i++)el('stage-'+i).hidden=i!==n;
 if(n===2){renderRecommendations();renderReading()}if(n===3)renderIdeas();if(n===4)renderComparison();if(n===5)renderFinal();renderProgress();save();
 if(scroll){el('title-'+n).focus({preventScroll:true});el('stage-'+n).scrollIntoView({block:'start'})}
 }
-function go(n){if(n>state.stage){for(let i=state.stage;i<n;i++){if(i===3)renderIdeas();if(i===4)renderComparison();if(!validateStage(i))return}}showStage(n)}
+function go(n){if(n>state.stage){for(let i=state.stage;i<n;i++){if(i!==state.stage)showStage(i,false);if(!validateStage(i)){el('stage-'+i).scrollIntoView({block:'start'});return}}}showStage(n)}
 document.querySelectorAll('[data-next]').forEach(b=>b.addEventListener('click',()=>go(Number(b.dataset.next))));
 document.querySelectorAll('[data-back]').forEach(b=>b.addEventListener('click',()=>go(Number(b.dataset.back))));
 el('domain').addEventListener('change',()=>{el('domain').setCustomValidity('');if(state.domain!==el('domain').value&&state.visited.length){state.visited=[];state.goal='';el('goal').value='';state.max=1;renderProgress()}state.domain=el('domain').value;renderRecommendations();save()});
