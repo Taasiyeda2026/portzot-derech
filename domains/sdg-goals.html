@@ -1,613 +1,150 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="he" dir="rtl">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>17 היעדים | פורצות דרך</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#d94c95">
+<title>מאתרות אתגר | פורצות דרך</title>
+<link rel="icon" href="../icon/favicon.png">
+<link rel="stylesheet" href="../css/domains-index-2027.css?v=1">
 <style>
-  * {
-    box-sizing: border-box;
-  }
-
-  body {
-    font-family: "Arial", "Heebo", sans-serif;
-    margin: 0;
-    background: linear-gradient(180deg, #fcf9fd 0%, #f7f1fa 100%);
-    color: #2b2b2b;
-    line-height: 1.7;
-  }
-
-  .site-header {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: rgba(255, 255, 255, 0.88);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(180, 152, 196, 0.22);
-    box-shadow: 0 8px 24px rgba(107, 45, 132, 0.08);
-  }
-
-  .header-inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 12px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-  }
-
-  .header-logo {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    text-decoration: none;
-    color: #6b2d84;
-    font-weight: 700;
-  }
-
-  .header-logo img {
-    width: 42px;
-    height: 42px;
-    object-fit: cover;
-    border-radius: 12px;
-    box-shadow: 0 6px 14px rgba(107, 45, 132, 0.16);
-    border: 1px solid rgba(227, 214, 234, 0.8);
-    background: #fff;
-  }
-
-  .home-link {
-    width: 44px;
-    height: 44px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    font-size: 1.25rem;
-    background: linear-gradient(180deg, #ffffff 0%, #f4ebf8 100%);
-    color: #6b2d84;
-    border: 1px solid rgba(227, 214, 234, 0.95);
-    border-radius: 14px;
-    box-shadow: 0 8px 18px rgba(107, 45, 132, 0.14);
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-
-  .home-link:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 24px rgba(107, 45, 132, 0.18);
-  }
-
-  .container {
-    max-width: 1400px;
-    margin: auto;
-    padding: 28px 24px 40px;
-  }
-
-  .page-title {
-    text-align: center;
-    margin: 4px 0 18px;
-    font-size: clamp(2rem, 4vw, 2.9rem);
-    font-weight: 800;
-    color: #6b2d84;
-    line-height: 1.15;
-    letter-spacing:0;
-    text-shadow: 0 1px 0 rgba(255,255,255,0.82);
-  }
-
-  .goal12-wrapper {
-    text-align: center;
-    margin: -4px 0 16px;
-  }
-
-  .goal12-btn {
-    display: inline-block;
-    padding: 8px 16px;
-    border-radius: 999px;
-    background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
-    color: #fff;
-    font-weight: 700;
-    text-decoration: none;
-    font-size: 0.9rem;
-    box-shadow: 0 8px 18px rgba(245, 158, 11, 0.3);
-    transition: opacity 0.2s, transform 0.2s;
-  }
-
-  .goal12-btn:hover {
-    opacity: 0.92;
-    transform: translateY(-1px);
-  }
-
-  .intro {
-    text-align: center;
-    max-width: 860px;
-    margin: 0 auto 24px;
-    font-size: 1.08rem;
-    color: #4f3b5f;
-    background: rgba(255, 255, 255, 0.72);
-    padding: 18px 22px;
-    border-radius: 20px;
-    border: 1px solid rgba(227, 214, 234, 0.95);
-    box-shadow: 0 12px 28px rgba(107, 45, 132, 0.08);
-  }
-
-  .goals-stage {
-    width: fit-content;
-    max-width: 100%;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 196px 196px 268px 196px 196px;
-    grid-template-rows: repeat(6, 74px);
-    column-gap: 28px;
-    row-gap: 18px;
-    align-items: center;
-    justify-items: center;
-  }
-
-  .hero-image {
-    grid-column: 3;
-    grid-row: 3 / span 3;
-    width: 268px;
-    height: 268px;
-    border-radius: 50%;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: radial-gradient(circle at center, #ffffff 0%, #f8effb 72%, #f1e3f7 100%);
-    box-shadow: 0 14px 34px rgba(107, 45, 132, 0.18);
-    border: 4px solid rgba(255, 255, 255, 0.96);
-    padding: 16px;
-  }
-
-  .hero-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    object-position: center center;
-    display: block;
-  }
-
-  .goal-btn {
-    width: 196px;
-    height: 74px;
-    background: linear-gradient(180deg, #ffffff 0%, #f7f0fa 100%);
-    border: 1px solid rgba(214, 190, 225, 0.95);
-    border-radius: 16px;
-    padding: 8px 10px;
-    cursor: pointer;
-    text-align: center;
-    font-weight: 700;
-    font-size: 0.82rem;
-    line-height: 1.22;
-    color: #6b2d84;
-    text-shadow: 0 1px 0 rgba(255,255,255,0.85);
-    box-shadow: 0 10px 22px rgba(107,45,132,0.09), inset 0 1px 0 rgba(255,255,255,0.9);
-    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-  }
-
-  .goal-btn:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 14px 26px rgba(107,45,132,0.15), inset 0 1px 0 rgba(255,255,255,0.95);
-    border-color: rgba(176, 128, 198, 0.95);
-  }
-
-  /* מיקומי הקלפים */
-  .g1  { grid-column: 3; grid-row: 1; }
-  .g2  { grid-column: 2; grid-row: 2; }
-  .g3  { grid-column: 4; grid-row: 2; }
-
-  .g4  { grid-column: 1; grid-row: 3; }
-  .g5  { grid-column: 2; grid-row: 3; }
-  .g6  { grid-column: 1; grid-row: 4; }
-  .g7  { grid-column: 2; grid-row: 4; }
-  .g8  { grid-column: 1; grid-row: 5; }
-  .g9  { grid-column: 2; grid-row: 5; }
-
-  .g10 { grid-column: 4; grid-row: 3; }
-  .g11 { grid-column: 5; grid-row: 3; }
-  .g12 { grid-column: 4; grid-row: 4; }
-  .g13 { grid-column: 5; grid-row: 4; }
-  .g14 { grid-column: 4; grid-row: 5; }
-  .g15 { grid-column: 5; grid-row: 5; }
-
-  .g16 { grid-column: 2; grid-row: 6; }
-  .g17 { grid-column: 4; grid-row: 6; }
-
-  .bottom-action {
-    display: flex;
-    justify-content: center;
-    margin-top: 22px;
-  }
-
-  .next-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 196px;
-    height: 74px;
-    padding: 0 24px;
-    text-decoration: none;
-    color: #ffffff;
-    font-weight: 700;
-    font-size: 0.98rem;
-    letter-spacing: 0.2px;
-    border-radius: 16px;
-    background: linear-gradient(135deg, #7b3696 0%, #c04aa6 100%);
-    box-shadow: 0 14px 28px rgba(127, 56, 151, 0.28);
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-
-  .next-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 18px 32px rgba(127, 56, 151, 0.34);
-  }
-
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(31, 16, 39, 0.56);
-    justify-content: center;
-    align-items: center;
-    z-index: 999;
-    padding: 20px;
-  }
-
-  .modal {
-    background: #fff;
-    max-width: 420px;
-    width: 100%;
-    border-radius: 20px;
-    padding: 24px;
-    position: relative;
-    box-shadow: 0 24px 50px rgba(30, 18, 40, 0.22);
-  }
-
-  .modal h2 {
-    color: #6b2d84;
-    margin-top: 0;
-    margin-bottom: 10px;
-  }
-
-  .modal p {
-    margin: 8px 0;
-  }
-
-  .close-btn {
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    background: none;
-    border: none;
-    font-size: 1.4rem;
-    cursor: pointer;
-    color: #6b2d84;
-  }
-
-  @media (max-width: 1180px) {
-    .goals-stage {
-      width: 100%;
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      grid-template-rows: auto;
-      gap: 12px;
-      justify-items: center;
-    }
-
-    .hero-image {
-      grid-column: 1 / -1;
-      grid-row: auto;
-      width: 220px;
-      height: 220px;
-      margin-bottom: 6px;
-    }
-
-    .g1, .g2, .g3, .g4, .g5, .g6, .g7, .g8, .g9,
-    .g10, .g11, .g12, .g13, .g14, .g15, .g16, .g17 {
-      grid-column: auto;
-      grid-row: auto;
-    }
-  }
-
-  @media (max-width: 640px) {
-    .header-inner {
-      padding: 10px 16px;
-    }
-
-    .header-logo span {
-      display: none;
-    }
-
-    .container {
-      padding: 20px 16px 32px;
-    }
-
-    .page-title {
-      margin-bottom: 14px;
-      font-size: 1.9rem;
-    }
-
-    .intro {
-      font-size: 1rem;
-      padding: 16px 18px;
-    }
-
-    .goals-stage {
-      grid-template-columns: 1fr;
-    }
-
-    .goal-btn,
-    .next-btn {
-      width: 100%;
-      max-width: 196px;
-    }
-  }
+:root{--accent:#7c4c91;--pink:#b62d76;--ink:#302940;--muted:#61586c;--tint:#faf5fa;--line:#e4d5e8}
+main{max-width:1120px}.bar{max-width:1120px}
+.hero{display:grid;grid-template-columns:1fr 150px;gap:24px;align-items:center;background:linear-gradient(125deg,#fff,#f5e7f3);border:1px solid var(--line);border-radius:22px;padding:24px;margin:8px 0 18px}
+.hero img{width:100%;max-width:150px;justify-self:center}.hero h1{color:var(--accent);font-size:clamp(28px,4vw,42px)}.eyebrow{color:var(--pink);font-size:13px;font-weight:700;margin-bottom:5px}.hero p{margin-top:9px;color:var(--muted);max-width:620px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 18px}.step{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 15px}.step strong{color:var(--pink);display:block}.step small{color:var(--muted)}
+.panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;margin:16px 0}.section-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.section-head h2{font-size:24px}.section-head p{font-size:14px;color:var(--muted)}
+label{display:block;font-weight:700;margin-bottom:5px}select,input,textarea{font:inherit;width:100%;color:var(--ink);background:#fff;border:1px solid #cab8d1;border-radius:10px;padding:9px 12px}textarea{resize:vertical;min-height:76px}select:focus,input:focus,textarea:focus{outline:2px solid var(--accent);outline-offset:2px}
+.filters{display:grid;grid-template-columns:1.2fr 1fr;gap:14px;align-items:end;margin-top:12px}.check{display:flex;gap:8px;align-items:center;font-size:14px;font-weight:400;margin:10px 0 0}.check input{width:auto;accent-color:var(--pink)}
+.goal-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:14px}.goal{display:flex;gap:10px;align-items:center;text-align:start;min-height:82px;background:#fff;border:1px solid var(--line);border-inline-start:5px solid var(--goal);border-radius:12px;padding:12px;transition:transform .15s,box-shadow .15s}.goal:hover{transform:translateY(-2px);box-shadow:0 5px 15px #30294014}.goal[aria-pressed=true]{outline:2px solid var(--goal);outline-offset:1px;background:#fdf7fc}.goal .number{flex:0 0 35px;width:35px;height:35px;display:grid;place-items:center;border-radius:9px;background:var(--goal);color:white;font-weight:700}.goal strong{display:block;line-height:1.35;font-size:15px}.goal small{display:block;color:var(--muted);font-size:12px;margin-top:3px}
+.goal-intro{border-inline-start:5px solid var(--goal);padding-inline-start:14px;margin:14px 0}.goal-intro p{color:var(--muted);margin-top:5px}.problem-grid,.compare-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.problem{background:linear-gradient(155deg,#fff,#fcf7fc);border:1px solid var(--line);border-radius:14px;padding:15px;display:flex;flex-direction:column;gap:10px}.problem h3{color:var(--ink);font-size:19px}.problem p{font-size:15px;flex:1}.problem.selected{border:2px solid var(--pink);padding:14px}.tag{font-size:12px;color:var(--muted);font-weight:700}
+.action,.secondary{display:inline-flex;justify-content:center;align-items:center;gap:5px;padding:9px 15px;border-radius:10px;font:inherit;font-weight:700;text-align:center;cursor:pointer;min-height:42px}.action{background:var(--pink);color:white;border:1px solid var(--pink)}.secondary{background:#fff;color:var(--accent);border:1px solid #cab8d1}.action:hover,.secondary:hover{filter:brightness(.96);text-decoration:none}.action:disabled,.secondary:disabled{opacity:.55;cursor:not-allowed}
+.shortlist{position:sticky;bottom:0;z-index:2;background:#fff;border:1px solid var(--line);border-radius:16px 16px 0 0;box-shadow:0 -6px 20px #30294014;padding:11px 14px;margin-top:16px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.short-items{display:flex;gap:6px;flex-wrap:wrap}.chip{background:#f6eaf5;border:1px solid #e5cfe5;color:var(--ink);border-radius:20px;padding:4px 9px;font-size:13px}.chip button{border:0;background:transparent;padding:0 5px;color:var(--pink);font-weight:700}.shortlist strong{color:var(--accent)}.short-actions{display:flex;gap:8px;flex-wrap:wrap}
+.compare-card{border:1px solid var(--line);border-radius:14px;padding:14px;background:#fcf9fc;min-width:0}.compare-card h3{color:var(--ink);margin:0 0 7px}.compare-card p{font-size:14px;margin:0 0 12px}.compare-card label{font-size:13px;margin-top:10px}.compare-card textarea{font-size:14px;min-height:62px}.compare-card .action{width:100%;margin-top:12px}
+.custom{margin-top:14px}.custom summary{cursor:pointer;color:var(--accent);font-weight:700}.custom .fields{display:grid;gap:10px;margin-top:12px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.wide{grid-column:1/-1}.note{color:var(--muted);font-size:14px;margin:10px 0}.status{color:var(--pink);font-size:14px;min-height:1.7em;margin-top:8px}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.empty{color:var(--muted);padding:18px 0;text-align:center}#final-panel{border-top:5px solid var(--pink)}#chosen-title{color:var(--accent);margin:9px 0}
+[hidden]{display:none!important}
+@media(max-width:850px){.goal-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.problem-grid,.compare-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:580px){.hero{grid-template-columns:1fr 76px;padding:16px;gap:10px}.hero h1{font-size:28px}.hero p{font-size:14px}.steps{gap:5px}.step{padding:8px;font-size:13px}.step small{display:block;font-size:11px;line-height:1.5}.panel{padding:13px}.filters,.form-grid{grid-template-columns:1fr}.goal-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.goal{min-height:76px;padding:9px;gap:7px}.goal .number{width:30px;height:30px;flex-basis:30px}.goal strong{font-size:14px}.goal small{font-size:11px}.problem-grid,.compare-grid{grid-template-columns:1fr}.shortlist{position:static}.short-actions{width:100%}.short-actions .action{flex:1}.section-head h2{font-size:21px}.wide{grid-column:auto}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+@media print{body{background:#fff}header,.hero,.steps,#discover,#compare-panel,.shortlist,footer,.actions,.status,.note.no-print{display:none!important}main{padding:0;max-width:none}#final-panel{border:0;padding:0;margin:0}textarea,input{border:1px solid #ddd}.form-grid{display:block}.form-grid>div{margin:10px 0}textarea{min-height:85px}}
 </style>
+<script defer src="sdg-data.js"></script>
 </head>
 <body>
-
-<header class="site-header">
-  <div class="header-inner">
-    <a class="header-logo" href="enter.html" aria-label="לוגו העמוד">
-      <img src="../icon/logo.png" alt="לוגו פורצות דרך">
-      <span>פורצות דרך</span>
-    </a>
-
-    <a class="home-link" href="../strongermenu-2026.html" aria-label="חזרה לדף הבית" title="דף הבית">🏠</a>
-  </div>
-</header>
-
-<div class="container">
-  <h1 class="page-title">17 היעדים</h1>
-  <div class="goal12-wrapper">
-    <a class="goal12-btn" href="yaad12.html">יעד 12</a>
-  </div>
-
-  <p class="intro">
-    עולם משתנה נבנה בידי מנהיגות שמחברת בין חזון לעשייה. 17 יעדי הפיתוח של האו״ם הם מסגרת לחשיבה ולעשייה ומשמשים נקודת פתיחה לזיהוי אתגרים, הבנת צרכים ופיתוח מיזמים שמבקשים ליצור שינוי.
-  </p>
-
-  <section class="goals-stage">
-    <button class="goal-btn g1" onclick="openModal(1)">יעד 1: מיגור העוני</button>
-    <button class="goal-btn g2" onclick="openModal(2)">יעד 2: אפס רעב / אי ביטחון תזונתי</button>
-    <button class="goal-btn g3" onclick="openModal(3)">יעד 3: בריאות טובה ורווחה אנושית</button>
-
-    <button class="goal-btn g4" onclick="openModal(4)">יעד 4: חינוך איכותי</button>
-    <button class="goal-btn g5" onclick="openModal(5)">יעד 5: שוויון מגדרי</button>
-    <button class="goal-btn g6" onclick="openModal(6)">יעד 6: מים נקיים ותברואה</button>
-    <button class="goal-btn g7" onclick="openModal(7)">יעד 7: אנרגיה זמינה ונקייה</button>
-    <button class="goal-btn g8" onclick="openModal(8)">יעד 8: עבודה הוגנת וצמיחה כלכלית</button>
-    <button class="goal-btn g9" onclick="openModal(9)">יעד 9: תעשייה, תשתיות וחדשנות</button>
-
-    <div class="hero-image">
-      <img src="../icon/sdg.png" alt="יעדי הפיתוח של האו״ם">
-    </div>
-
-    <button class="goal-btn g10" onclick="openModal(10)">יעד 10: צמצום אי השוויון</button>
-    <button class="goal-btn g11" onclick="openModal(11)">יעד 11: ערים וקהילות מקיימות</button>
-    <button class="goal-btn g12" onclick="openModal(12)">יעד 12: צריכה וייצור אחראים</button>
-    <button class="goal-btn g13" onclick="openModal(13)">יעד 13: שינויי אקלים</button>
-    <button class="goal-btn g14" onclick="openModal(14)">יעד 14: שימור המשאבים הימיים – חיים מתחת למים</button>
-    <button class="goal-btn g15" onclick="openModal(15)">יעד 15: חיים על פני האדמה</button>
-
-    <button class="goal-btn g16" onclick="openModal(16)">יעד 16: שלום, צדק וחוזק המוסדות</button>
-    <button class="goal-btn g17" onclick="openModal(17)">יעד 17: שותפות להשגת היעדים</button>
-  </section>
-
-  <div class="bottom-action">
-    <a class="next-btn" href="/p.nativ/game/index.html">לבחירת תחום</a>
-  </div>
+<header class="masthead"><div class="bar">
+<a class="brand" href="../strongermenu-2026.html" translate="no"><img src="../icon/logo.png" alt=""><span>פורצות דרך</span></a>
+<div class="tools"><a href="alldomains.html">תחומי העניין</a><a class="home" href="../strongermenu-2026.html" aria-label="עמוד הבית">עמוד הבית</a></div>
+</div></header>
+<main>
+<section class="hero"><div><p class="eyebrow">מפגש 4 · עבודת צוותי המיזם</p><h1>מאתרות אתגר</h1><p>מה הייתן רוצות לשנות? מאחורי כל יעד עולמי מסתתרות בעיות קטנות וגדולות מהחיים. גלו אותן, הקשיבו אחת לשנייה ובחרו בעיה אחת שתרצו לחקור יחד.</p></div><img src="../icon/sdg.png" alt="גלגל 17 יעדי הפיתוח של האו״ם"></section>
+<div class="steps" aria-label="שלבי הפעילות"><div class="step"><strong>01 · מגלות</strong><small>קוראות ומזהות מצבים מוכרים</small></div><div class="step"><strong>02 · משוות</strong><small>כל אחת משתפת מה משך אותה</small></div><div class="step"><strong>03 · בוחרות</strong><small>מסכימות על בעיה אחת ומנסחות אותה</small></div></div>
+<section id="discover" class="panel" aria-labelledby="goals-title">
+<div class="section-head"><h2 id="goals-title">17 יעדים, המון הזדמנויות</h2><p>בחרו יעד כדי לגלות את הבעיות שמסתתרות בו.</p></div>
+<div class="filters"><div><label for="domain">תחום העניין שכבר בחרתן במפגש 3</label><select id="domain"><option value="">הציגו את כל התחומים</option></select><label class="check"><input type="checkbox" id="related-only"> הציגו רק יעדים הקשורים לתחום שלנו</label></div><div><label for="search">חפשו נושא או בעיה</label><input id="search" type="search" placeholder="למשל: רעש, מים, תחבורה"></div></div>
+<div id="goals" class="goal-grid" aria-label="יעדי הפיתוח של האו״ם"></div>
+<div id="problems" hidden>
+<div class="goal-intro" id="goal-intro"><h2 id="goal-title" tabindex="-1"></h2><p id="goal-description"></p></div>
+<p class="note">כל כרטיס הוא נקודת פתיחה לחקר, לא עובדה שהוכחה ולא פתרון מוכן. קראו יחד: מה מוכר לכן? מה הפתיע אתכן? שמרו עד שלוש בעיות שמסקרנות את הצוות.</p>
+<div id="cards" class="problem-grid"></div>
 </div>
-
-<div id="modalOverlay" class="modal-overlay" role="dialog" aria-modal="true">
-  <div class="modal">
-    <button class="close-btn" aria-label="סגירה" onclick="closeModal()">×</button>
-    <h2 id="modalTitle"></h2>
-    <div id="modalContent"></div>
-  </div>
-</div>
-
+<details class="custom"><summary>יש לנו בעיה אחרת משלנו</summary><div class="fields"><div><label for="own-title">שם קצר לבעיה</label><input id="own-title" maxlength="90" placeholder="מה לא עובד?"></div><div><label for="own-description">תארו מצב אמיתי מהחיים, בלי להציע פתרון</label><textarea id="own-description" maxlength="500"></textarea></div><div><label for="own-goal">יעד קשור (לא חובה)</label><select id="own-goal"><option value="">עדיין לא החלטנו</option></select></div><div><button id="add-own" class="secondary" type="button">הוספת הבעיה לרשימה שלנו</button></div></div></details>
+<p id="status" class="status" role="status" aria-live="polite"></p>
+</section>
+<div class="shortlist" aria-label="הבעיות שבחרנו"><div><strong id="count">הבעיות שלנו (0/3)</strong><div id="short-items" class="short-items"></div></div><div class="short-actions"><button class="action" id="compare" disabled>בואו נשווה ונבחר</button></div></div>
+<section class="panel" id="compare-panel" hidden aria-labelledby="compare-title"><div class="section-head"><h2 id="compare-title" tabindex="-1">על איזו בעיה נרצה לעבוד?</h2><button class="secondary" id="back-discover">חזרה לגילוי</button></div><p class="note">כל אחת בוחרת איזו בעיה מדברת אליה ומסבירה למה. לפני ההחלטה, מלאו יחד את שלוש השאלות לכל אפשרות. אין ציון ואין תשובה נכונה.</p><div class="compare-grid" id="compare-cards"></div><p class="note">בחרו בעיה שהצוות רוצה לחקור, שמשפיעה על אנשים ושאפשר ללמוד עליה. לא צריך לדעת איך לפתור אותה עדיין.</p></section>
+<section class="panel" id="final-panel" hidden aria-labelledby="final-title"><div class="section-head"><h2 id="final-title" tabindex="-1">כרטיס האתגר שלנו</h2><button class="secondary" id="back-compare">חזרה להשוואה</button></div><h3 id="chosen-title"></h3><p id="chosen-description" class="note"></p><form id="challenge-form"><div class="form-grid">
+<div><label for="team">שם הצוות (לא חובה)</label><input id="team" maxlength="100" placeholder="שם הצוות שלכן"></div><div><label for="audience">מי מתמודדת עם הקושי?</label><input id="audience" maxlength="160" required placeholder="למי זה קורה?"></div>
+<div class="wide"><label for="problem">מה בדיוק קורה ומתי?</label><textarea id="problem" maxlength="600" required placeholder="תארו את הבעיה במילים שלכן, במקום או במצב מסוים."></textarea></div>
+<div class="wide"><label for="need">מה צריך להשתנות?</label><textarea id="need" maxlength="400" required placeholder="הצורך, לא המוצר או הפתרון."></textarea></div>
+<div><label for="why">למה בחרנו בבעיה הזאת?</label><textarea id="why" maxlength="400" required></textarea></div><div><label for="evidence">מה אנחנו יודעות? איך נבדוק עוד?</label><textarea id="evidence" maxlength="600" required placeholder="כתבה, תצפית, שיחה או שאלה לחקר בהמשך."></textarea></div>
+</div><p class="note no-print">התשובות נשמרות רק בלשונית זו, אם הדפדפן מאפשר זאת. הורידו את כרטיס האתגר לפני סגירה. אין צורך לשתף פרטים אישיים או רגישים.</p><div class="actions"><button class="action" type="submit">הורדת כרטיס האתגר</button><button class="secondary" type="button" id="print">הדפסה / שמירה כ־PDF</button><a class="secondary" href="../steps/persona.html">להמשך: פרסונה</a><button class="secondary" type="button" id="reset">התחלת פעילות חדשה</button></div><p id="final-status" class="status" role="status"></p></form><p class="note no-print">הקישור לפרסונה אינו מעביר את הנתונים אוטומטית. השתמשו בכרטיס ששמרתן.</p></section>
+<footer>פורצות דרך · תעשיידע · <a href="https://sdgs.un.org/goals" target="_blank" rel="noopener noreferrer">על 17 יעדי האו״ם</a></footer>
+<noscript><p class="panel">יש להפעיל JavaScript כדי להשתמש בפעילות.</p></noscript>
+</main>
 <script>
-  const goalsContent = {
-    1: {
-      title: "יעד 1: מיגור העוני",
-      text: [
-        "היעד מבקש להבטיח קיום בכבוד וללא מחסור בסיסי.",
-        "עוני פוגע ביציבות חברתית וביכולת של אנשים לממש פוטנציאל.",
-        "כלכלה הוגנת מצמיחה קהילות חזקות ועמידות.",
-        "מנהיגות נשית מעודדת פתרונות מערכתיים ורגישים לשטח.",
-        "כל יוזמה מודעת היא צעד קטן בדרך לשינוי גדול."
-      ]
-    },
-    2: {
-      title: "יעד 2: אפס רעב / אי ביטחון תזונתי",
-      text: [
-        "המטרה היא זמינות מזון בטוח ומזין לכולן ולכולם.",
-        "תזונה היא בסיס לבריאות, למידה ויציבות כלכלית.",
-        "מערכות מזון חכמות מחזקות חקלאות וסביבה.",
-        "נשים מובילות משפיעות על מדיניות מזון וחדשנות.",
-        "בחירה מודעת יוצרת ביטחון לדורות הבאים."
-      ]
-    },
-    3: {
-      title: "יעד 3: בריאות טובה ורווחה אנושית",
-      text: [
-        "היעד עוסק בבריאות פיזית ונפשית לאורך החיים.",
-        "בריאות חזקה מחזקת קהילות וכלכלה.",
-        "מערכות בריאות שוויוניות מצמצמות פערים.",
-        "מנהיגות נשית רואה את האדם במרכז.",
-        "דאגה לרווחה היא השקעה עתידית."
-      ]
-    },
-    4: {
-      title: "יעד 4: חינוך איכותי",
-      text: [
-        "חינוך איכותי פותח הזדמנויות אמיתיות.",
-        "למידה מצמצמת פערים ומקדמת צמיחה.",
-        "חברות משכילות חזקות וחדשניות יותר.",
-        "נשים מובילות יוצרות תרבות של ידע.",
-        "כל השקעה בחינוך משנה מסלול חיים."
-      ]
-    },
-    5: {
-      title: "יעד 5: שוויון מגדרי",
-      text: [
-        "שוויון מגדרי הוא מנוע לצמיחה וצדק.",
-        "העצמת נשים מחזקת משפחות וקהילות.",
-        "שוק שוויוני מייצר חדשנות ויציבות.",
-        "מנהיגות נשית שוברת תקרות זכוכית.",
-        "כל קול נשי הוא חלק מהשינוי."
-      ]
-    },
-    6: {
-      title: "יעד 6: מים נקיים ותברואה",
-      text: [
-        "מים נקיים הם זכות בסיסית.",
-        "תברואה מונעת מחלות ומצילה חיים.",
-        "ניהול מים חכם מגן על הסביבה.",
-        "נשים מובילות שינוי בקהילות מקומיות.",
-        "בחירה סביבתית היא אחריות משותפת."
-      ]
-    },
-    7: {
-      title: "יעד 7: אנרגיה זמינה ונקייה",
-      text: [
-        "אנרגיה נקייה תומכת בעתיד בר־קיימא.",
-        "גישה לאנרגיה מצמצמת פערים.",
-        "חדשנות ירוקה מחזקת כלכלה.",
-        "מנהיגות נשית מקדמת פתרונות נקיים.",
-        "מעבר לאנרגיה חכמה מתחיל בהחלטה."
-      ]
-    },
-    8: {
-      title: "יעד 8: עבודה הוגנת וצמיחה כלכלית",
-      text: [
-        "עבודה הוגנת מבטיחה כבוד וביטחון.",
-        "צמיחה כלכלית צריכה לכלול את כולם.",
-        "תנאי עבודה משפיעים על רווחה.",
-        "נשים מנהיגות תרבות ארגונית חדשה.",
-        "כל ארגון יכול לבחור אחרת."
-      ]
-    },
-    9: {
-      title: "יעד 9: תעשייה, תשתיות וחדשנות",
-      text: [
-        "תשתיות חזקות בונות עתיד.",
-        "חדשנות מניעה פתרונות חכמים.",
-        "כלכלה מתקדמת נשענת על יצירתיות.",
-        "מנהיגות נשית פורצת גבולות טכנולוגיים.",
-        "רעיון אחד יכול לשנות מערכת."
-      ]
-    },
-    10: {
-      title: "יעד 10: צמצום אי השוויון",
-      text: [
-        "צמצום פערים מחזק יציבות חברתית.",
-        "שוויון יוצר הזדמנויות הוגנות.",
-        "חברה מגוונת היא חברה חזקה.",
-        "נשים מובילות מדיניות מכלילה.",
-        "מודעות היא הצעד הראשון."
-      ]
-    },
-    11: {
-      title: "יעד 11: ערים וקהילות מקיימות",
-      text: [
-        "קהילות מקיימות משפרות איכות חיים.",
-        "תכנון חכם מחזק חוסן עירוני.",
-        "סביבה בטוחה מעודדת שייכות.",
-        "נשים מנהיגות מרחבים אנושיים.",
-        "כל שינוי מקומי משפיע גלובלית."
-      ]
-    },
-    12: {
-      title: "יעד 12: צריכה וייצור אחראים",
-      text: [
-        "צריכה מודעת מגינה על משאבים.",
-        "ייצור אחראי מצמצם נזק סביבתי.",
-        "כלכלה חכמה חושבת לטווח ארוך.",
-        "מנהיגות נשית משפיעה על בחירות.",
-        "כל החלטה יוצרת השפעה."
-      ]
-    },
-    13: {
-      title: "יעד 13: שינויי אקלים",
-      text: [
-        "פעולה אקלימית הכרחית לעתיד.",
-        "האקלים משפיע על כל תחום חיים.",
-        "פתרונות ירוקים מחזקים קהילות.",
-        "נשים מובילות מאבקים סביבתיים.",
-        "העשייה מתחילה היום."
-      ]
-    },
-    14: {
-      title: "יעד 14: שימור המשאבים הימיים – חיים מתחת למים",
-      text: [
-        "ימים בריאים הם מקור חיים.",
-        "הגנה ימית שומרת על מזון ותעסוקה.",
-        "מערכות ימיות קריטיות לאקלים.",
-        "נשים מובילות שימור וחדשנות.",
-        "מודעות יוצרת אחריות משותפת."
-      ]
-    },
-    15: {
-      title: "יעד 15: חיים על פני האדמה",
-      text: [
-        "שמירה על טבע מגינה על האנושות.",
-        "מערכות אקולוגיות מאזנות חיים.",
-        "פגיעה בטבע פוגעת בכולנו.",
-        "מנהיגות נשית שומרת על משאבים.",
-        "הגנה היום היא ביטחון מחר."
-      ]
-    },
-    16: {
-      title: "יעד 16: שלום, צדק וחוזק המוסדות",
-      text: [
-        "מוסדות חזקים יוצרים אמון.",
-        "צדק הוא בסיס לחברה מתפקדת.",
-        "שלום מאפשר פיתוח וצמיחה.",
-        "נשים מובילות תהליכי פיוס.",
-        "אחריות אזרחית מחזקת דמוקרטיה."
-      ]
-    },
-    17: {
-      title: "יעד 17: שותפות להשגת היעדים",
-      text: [
-        "שיתופי פעולה מגבירים השפעה.",
-        "אין שינוי ללא חיבור כוחות.",
-        "שותפות יוצרת פתרונות רחבים.",
-        "נשים מובילות רשתות עשייה.",
-        "יחד – השינוי אפשרי."
-      ]
-    }
-  };
-
-  function openModal(id) {
-    const overlay = document.getElementById("modalOverlay");
-    document.getElementById("modalTitle").innerText = goalsContent[id].title;
-    const contentDiv = document.getElementById("modalContent");
-    contentDiv.innerHTML = "";
-
-    goalsContent[id].text.forEach(sentence => {
-      const p = document.createElement("p");
-      p.innerText = sentence;
-      contentDiv.appendChild(p);
-    });
-
-    overlay.style.display = "flex";
-  }
-
-  function closeModal() {
-    document.getElementById("modalOverlay").style.display = "none";
-  }
-
-  document.getElementById("modalOverlay").addEventListener("click", function(e) {
-    if (e.target === this) closeModal();
-  });
+window.addEventListener('DOMContentLoaded',()=>{
+'use strict';
+const data=window.PORTZOT_SDG;
+const el=id=>document.getElementById(id);
+if(!data){el('status').textContent='לא ניתן לטעון את מאגר האתגרים. נסו לרענן את העמוד.';return;}
+const key='portzot-sdg-team-v1';
+const fields=['team','audience','problem','need','why','evidence'];
+let saved={};try{saved=JSON.parse(sessionStorage.getItem(key)||'{}')||{}}catch(_){}
+const state={domain:'',related:false,goal:0,short:[],custom:[],notes:{},chosen:'',form:{},...saved};
+state.short=Array.isArray(state.short)?state.short:[];state.custom=Array.isArray(state.custom)?state.custom:[];
+const all=()=>data.goals.flatMap(g=>g.problems.map(p=>({...p,goal:g.id}))).concat(state.custom);
+const lookup=id=>all().find(p=>p.id===id);
+state.short=[...new Set(state.short)].filter(id=>lookup(id)).slice(0,3);
+if(!state.short.includes(state.chosen))state.chosen='';
+const save=()=>{try{sessionStorage.setItem(key,JSON.stringify(state))}catch(_){}};
+const make=(tag,cls,txt)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(txt!=null)n.textContent=txt;return n};
+const button=(txt,cls,fn)=>{const b=make('button',cls,txt);b.type='button';b.addEventListener('click',fn);return b};
+const goalBy=id=>data.goals.find(g=>g.id===Number(id));
+const say=t=>{el('status').textContent=t};
+const show=(id,focus)=>{el(id).hidden=false;el(focus).focus({preventScroll:true});el(id).scrollIntoView({block:'start'})};
+data.domains.forEach((name,i)=>{const o=make('option','',name);o.value=String(i+1);el('domain').append(o)});
+data.goals.forEach(g=>{const o=make('option','',g.id+' · '+g.title);o.value=g.id;el('own-goal').append(o)});
+const queryDomain=new URLSearchParams(location.search).get('domain');
+if(queryDomain&&data.domains[Number(queryDomain)-1]&&!state.domain){state.domain=queryDomain;state.related=true}
+el('domain').value=state.domain;el('related-only').checked=!!state.related;
+const q=()=>el('search').value.trim().toLowerCase();
+const matches=(p,s)=>!s||(p.title+' '+p.description).toLowerCase().includes(s);
+function renderGoals(){
+const s=q(),d=Number(state.domain);
+const visible=data.goals.filter(g=>(!state.related||!d||g.related.includes(d))&&(!s||matches(g,s)||g.problems.some(p=>matches(p,s))));
+el('goals').replaceChildren();
+for(const g of visible){
+const b=button('','goal',()=>{state.goal=g.id;save();renderGoals();renderCards();show('problems','goal-title')});
+b.style.setProperty('--goal',g.color);b.setAttribute('aria-pressed',String(state.goal===g.id));
+const box=make('span');box.append(make('strong','',g.title),make('small','',g.problems.length+' אתגרים לגילוי'));
+b.append(make('span','number',g.id),box);el('goals').append(b);
+}
+if(!visible.length)el('goals').append(make('p','empty','לא נמצאו יעדים מתאימים. נסו חיפוש אחר או הציגו את כל היעדים.'));
+if(!visible.some(g=>g.id===state.goal)){state.goal=0;el('problems').hidden=true}
+}
+function renderCards(){
+const g=goalBy(state.goal);if(!g){el('problems').hidden=true;return}
+el('problems').hidden=false;el('goal-intro').style.setProperty('--goal',g.color);el('goal-title').textContent='יעד '+g.id+' · '+g.title;el('goal-description').textContent=g.description;
+const s=q(),items=all().filter(p=>p.goal===g.id&&(!s||matches(g,s)||matches(p,s)));
+el('cards').replaceChildren();
+for(const p of items){const selected=state.short.includes(p.id);const card=make('article','problem'+(selected?' selected':''));card.append(make('span','tag','מקרה לחקר'),make('h3','',p.title),make('p','',p.description));
+const b=button(selected?'✓ ברשימה שלנו':'מעניין אותנו +',selected?'secondary':'action',()=>toggle(p.id));b.setAttribute('aria-pressed',String(selected));card.append(b);el('cards').append(card)}
+if(!items.length)el('cards').append(make('p','empty','אין בעיות התואמות לחיפוש הזה.'));
+}
+function toggle(id){
+if(state.short.includes(id)){state.short=state.short.filter(x=>x!==id);if(state.chosen===id){state.chosen='';state.form={};el('final-panel').hidden=true}}
+else{if(state.short.length>=3){say('כבר בחרתן שלוש בעיות. הסירו אחת כדי להוסיף אחרת.');return false}state.short.push(id)}
+say('');save();renderCards();renderShort();return true
+}
+function renderShort(){
+el('count').textContent='הבעיות שלנו ('+state.short.length+'/3)';el('compare').disabled=!state.short.length;
+el('short-items').replaceChildren();
+if(!state.short.length)el('short-items').append(make('span','note','עדיין לא בחרתן בעיה.'));
+for(const id of state.short){const p=lookup(id);const c=make('span','chip',p.title);const b=button('×','',()=>toggle(id));b.setAttribute('aria-label','הסרת '+p.title);c.append(b);el('short-items').append(c)}
+if(!el('compare-panel').hidden){if(!state.short.length)el('compare-panel').hidden=true;else renderCompare()}
+}
+const prompts=[['known','מה אנחנו יודעות על הבעיה?'],['impact','על מי היא משפיעה ולמה זה חשוב?'],['curious','מה מסקרן אותנו ואיך נוכל לחקור?']];
+function renderCompare(){
+el('compare-cards').replaceChildren();
+for(const id of state.short){const p=lookup(id);const card=make('article','compare-card');card.append(make('span','tag',goalBy(p.goal)?.title||'בעיה משלנו'),make('h3','',p.title),make('p','',p.description));
+const notes=state.notes[id]||(state.notes[id]={});
+for(const [k,label] of prompts){const inputId='note-'+id+'-'+k;const l=make('label','',label);l.htmlFor=inputId;const a=make('textarea');a.id=inputId;a.maxLength=400;a.value=notes[k]||'';a.addEventListener('input',()=>{notes[k]=a.value;save()});card.append(l,a)}
+const b=button(state.chosen===id?'✓ האתגר שלנו':'זו הבעיה שנבחר לחקור','action',()=>{const missing=prompts.find(([k])=>!String(notes[k]||'').trim());if(missing){const a=el('note-'+id+'-'+missing[0]);a.focus();a.setCustomValidity('כתבו תשובה קצרה לפני הבחירה.');a.reportValidity();a.addEventListener('input',()=>a.setCustomValidity(''),{once:true});return}if(state.chosen!==id){state.chosen=id;state.form={why:notes.curious||'',evidence:notes.known||''};}save();renderCompare();renderFinal();show('final-panel','final-title')});card.append(b);el('compare-cards').append(card)}
+}
+function renderFinal(){const p=lookup(state.chosen);if(!p)return;el('final-panel').hidden=false;el('chosen-title').textContent=p.title;el('chosen-description').textContent=(goalBy(p.goal)?.title||'בעיה משלנו')+' · '+p.description;for(const f of fields)el(f).value=state.form[f]||''}
+el('domain').addEventListener('change',()=>{state.domain=el('domain').value;state.related=!!state.domain;el('related-only').checked=state.related;save();renderGoals();renderCards()});
+el('related-only').addEventListener('change',()=>{state.related=el('related-only').checked;save();renderGoals();renderCards()});
+el('search').addEventListener('input',()=>{renderGoals();renderCards()});
+el('add-own').addEventListener('click',()=>{const title=el('own-title').value.trim(),description=el('own-description').value.trim();if(!title||!description){say('כתבו שם ותיאור של הבעיה.');return}if(state.short.length>=3){say('הסירו בעיה מהרשימה לפני הוספת בעיה חדשה.');return}const id='own-'+Date.now();state.custom.push({id,title,description,goal:Number(el('own-goal').value)||0});toggle(id);el('own-title').value='';el('own-description').value='';el('own-goal').value='';say('הבעיה שלכן נוספה לרשימה.');});
+el('compare').addEventListener('click',()=>{renderCompare();show('compare-panel','compare-title')});
+el('back-discover').addEventListener('click',()=>{el('goals-title').scrollIntoView({block:'start'})});
+el('back-compare').addEventListener('click',()=>{renderCompare();show('compare-panel','compare-title')});
+for(const f of fields)el(f).addEventListener('input',()=>{state.form[f]=el(f).value;save()});
+const valid=()=>el('challenge-form').reportValidity();
+el('challenge-form').addEventListener('submit',e=>{e.preventDefault();if(!valid())return;const p=lookup(state.chosen);if(!p)return;const labels={team:'שם הצוות',audience:'קהל היעד הראשוני',problem:'הבעיה',need:'הצורך',why:'למה בחרנו',evidence:'מה ידוע ומה נבדוק'};const text=['פורצות דרך | כרטיס האתגר שלנו','תחום: '+(data.domains[Number(state.domain)-1]||'לא צוין'),'יעד: '+(goalBy(p.goal)?.title||'לא צוין'),'אתגר: '+p.title,...fields.map(f=>labels[f]+': '+(el(f).value.trim()||'לא צוין'))].join('\n\n');const url=URL.createObjectURL(new Blob(['\uFEFF'+text],{type:'text/plain;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='כרטיס-האתגר-פורצות-דרך.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);el('final-status').textContent='כרטיס האתגר הוכן להורדה.'});
+el('print').addEventListener('click',()=>{if(valid())window.print()});
+el('reset').addEventListener('click',()=>{if(!confirm('להתחיל מחדש? הבחירות והתשובות בלשונית זו יימחקו.'))return;try{sessionStorage.removeItem(key)}catch(_){}location.replace(location.pathname)});
+renderGoals();renderCards();renderShort();if(state.chosen){renderCompare();el('compare-panel').hidden=false;renderFinal()}save();
+});
 </script>
-
-</body>
-</html>
+</body></html>
