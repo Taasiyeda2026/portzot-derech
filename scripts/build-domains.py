@@ -157,7 +157,7 @@ def index_page(domains, lang, manifest):
     c = COPY[lang]
     prefix = '../../' if lang == 'ar' else '../'
     body = header(lang,'domains/alldomains.html',prefix)
-    challenge_entry = '''<a class="challenge-entry" href="sdg-goals.html"><img src="../icon/sdg.png" alt=""><span class="challenge-copy"><strong>כבר בחרתן תחום? מאתרות אתגר</strong><small>מפגש 4 · 17 יעדי האו״ם ופעילות קבוצתית לבחירת בעיה</small></span><span class="challenge-arrow" aria-hidden="true">←</span></a>''' if lang == 'he' else ''
+    challenge_entry = '''<a class="challenge-entry" href="sdg-goals.html"><img src="../icon/sdg.png" alt=""><span class="challenge-copy"><strong>כבר בחרתן תחום? מאתרות אתגר</strong><small>17 יעדי האו״ם ופעילות קבוצתית לבחירת בעיה</small></span><span class="challenge-arrow" aria-hidden="true">←</span></a>''' if lang == 'he' else ''
     body += f'<main><section class="index-intro"><h1>{c["index_title"]}</h1><p>{c["index_intro"]}</p></section>'
     if challenge_entry:
         body += challenge_entry + '\n'
