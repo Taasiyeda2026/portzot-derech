@@ -8,143 +8,166 @@
 <link rel="icon" href="../icon/favicon.png">
 <link rel="stylesheet" href="../css/domains-index-2027.css?v=1">
 <style>
-:root{--accent:#7c4c91;--pink:#b62d76;--ink:#302940;--muted:#61586c;--tint:#faf5fa;--line:#e4d5e8}
-main{max-width:1120px}.bar{max-width:1120px}
-.hero{display:grid;grid-template-columns:1fr 150px;gap:24px;align-items:center;background:linear-gradient(125deg,#fff,#f5e7f3);border:1px solid var(--line);border-radius:22px;padding:24px;margin:8px 0 18px}
-.hero img{width:100%;max-width:150px;justify-self:center}.hero h1{color:var(--accent);font-size:clamp(28px,4vw,42px)}.eyebrow{color:var(--pink);font-size:13px;font-weight:700;margin-bottom:5px}.hero p{margin-top:9px;color:var(--muted);max-width:620px}
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 18px}.step{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 15px}.step strong{color:var(--pink);display:block}.step small{color:var(--muted)}
-.panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;margin:16px 0}.section-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.section-head h2{font-size:24px}.section-head p{font-size:14px;color:var(--muted)}
-label{display:block;font-weight:700;margin-bottom:5px}select,input,textarea{font:inherit;width:100%;color:var(--ink);background:#fff;border:1px solid #cab8d1;border-radius:10px;padding:9px 12px}textarea{resize:vertical;min-height:76px}select:focus,input:focus,textarea:focus{outline:2px solid var(--accent);outline-offset:2px}
-.filters{display:grid;grid-template-columns:1.2fr 1fr;gap:14px;align-items:end;margin-top:12px}.check{display:flex;gap:8px;align-items:center;font-size:14px;font-weight:400;margin:10px 0 0}.check input{width:auto;accent-color:var(--pink)}
-.goal-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:14px}.goal{display:flex;gap:10px;align-items:center;text-align:start;min-height:82px;background:#fff;border:1px solid var(--line);border-inline-start:5px solid var(--goal);border-radius:12px;padding:12px;transition:transform .15s,box-shadow .15s}.goal:hover{transform:translateY(-2px);box-shadow:0 5px 15px #30294014}.goal[aria-pressed=true]{outline:2px solid var(--goal);outline-offset:1px;background:#fdf7fc}.goal .number{flex:0 0 35px;width:35px;height:35px;display:grid;place-items:center;border-radius:9px;background:var(--goal);color:white;font-weight:700}.goal strong{display:block;line-height:1.35;font-size:15px}.goal small{display:block;color:var(--muted);font-size:12px;margin-top:3px}
-.goal-intro{display:grid;grid-template-columns:1fr 190px;align-items:center;gap:16px;border-inline-start:5px solid var(--goal);padding:12px 14px;margin:16px 0;border-radius:12px;background:#fdf8fc}.goal-intro p{color:var(--muted);margin-top:5px}.goal-intro img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:10px;display:block}.goal-intro figure{margin:0}.goal-intro figcaption{font-size:11px;color:var(--muted)}.filter-info{font-size:13px;color:var(--muted);margin-top:7px}.group-prompt{border-inline-start:4px solid var(--pink);padding:10px 14px;background:#f9edf6;border-radius:8px;margin:12px 0;font-size:15px}@media(max-width:580px){.goal-intro{grid-template-columns:1fr 110px;gap:9px}.goal-intro h2{font-size:19px}.goal-intro figcaption{font-size:10px}}.problem-grid,.compare-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.problem{background:linear-gradient(155deg,#fff,#fcf7fc);border:1px solid var(--line);border-radius:14px;padding:15px;display:flex;flex-direction:column;gap:10px}.problem h3{color:var(--ink);font-size:19px}.problem p{font-size:15px;flex:1}.problem.selected{border:2px solid var(--pink);padding:14px}.tag{font-size:12px;color:var(--muted);font-weight:700}
-.action,.secondary{display:inline-flex;justify-content:center;align-items:center;gap:5px;padding:9px 15px;border-radius:10px;font:inherit;font-weight:700;text-align:center;cursor:pointer;min-height:42px}.action{background:var(--pink);color:white;border:1px solid var(--pink)}.secondary{background:#fff;color:var(--accent);border:1px solid #cab8d1}.action:hover,.secondary:hover{filter:brightness(.96);text-decoration:none}.action:disabled,.secondary:disabled{opacity:.55;cursor:not-allowed}
-.shortlist{position:sticky;bottom:0;z-index:2;background:#fff;border:1px solid var(--line);border-radius:16px 16px 0 0;box-shadow:0 -6px 20px #30294014;padding:11px 14px;margin-top:16px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.short-items{display:flex;gap:6px;flex-wrap:wrap}.chip{background:#f6eaf5;border:1px solid #e5cfe5;color:var(--ink);border-radius:20px;padding:4px 9px;font-size:13px}.chip button{border:0;background:transparent;padding:0 5px;color:var(--pink);font-weight:700}.shortlist strong{color:var(--accent)}.short-actions{display:flex;gap:8px;flex-wrap:wrap}
-.compare-card{border:1px solid var(--line);border-radius:14px;padding:14px;background:#fcf9fc;min-width:0}.compare-card h3{color:var(--ink);margin:0 0 7px}.compare-card p{font-size:14px;margin:0 0 12px}.compare-card label{font-size:13px;margin-top:10px}.compare-card textarea{font-size:14px;min-height:62px}.compare-card .action{width:100%;margin-top:12px}
-.custom{margin-top:14px}.custom summary{cursor:pointer;color:var(--accent);font-weight:700}.custom .fields{display:grid;gap:10px;margin-top:12px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.wide{grid-column:1/-1}.note{color:var(--muted);font-size:14px;margin:10px 0}.status{color:var(--pink);font-size:14px;min-height:1.7em;margin-top:8px}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.empty{color:var(--muted);padding:18px 0;text-align:center}#final-panel{border-top:5px solid var(--pink)}#chosen-title{color:var(--accent);margin:9px 0}
-[hidden]{display:none!important}
-@media(max-width:850px){.goal-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.problem-grid,.compare-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:580px){.hero{grid-template-columns:1fr 76px;padding:16px;gap:10px}.hero h1{font-size:28px}.hero p{font-size:14px}.steps{gap:5px}.step{padding:8px;font-size:13px}.step small{display:block;font-size:11px;line-height:1.5}.panel{padding:13px}.filters,.form-grid{grid-template-columns:1fr}.goal-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.goal{min-height:76px;padding:9px;gap:7px}.goal .number{width:30px;height:30px;flex-basis:30px}.goal strong{font-size:14px}.goal small{font-size:11px}.problem-grid,.compare-grid{grid-template-columns:1fr}.shortlist{position:static}.short-actions{width:100%}.short-actions .action{flex:1}.section-head h2{font-size:21px}.wide{grid-column:auto}}
-@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
-#print-summary{display:none}@media print{body{background:#fff}header,main>section,main>.steps,main>.shortlist,footer{display:none!important}main{padding:12px;max-width:none}#print-summary{display:block!important;color:#222}#print-summary p{white-space:pre-wrap;margin:6px 0 15px}#print-summary h3{margin-top:12px;color:#302940}}
+:root{--accent:#7c4c91;--pink:#a42c70;--ink:#302940;--muted:#61586c;--tint:#faf5fa;--line:#e4d5e8}
+main,.bar{max-width:1020px}
+.hero{display:grid;grid-template-columns:1fr 132px;gap:22px;align-items:center;background:linear-gradient(120deg,#fff,#f5e7f3);border:1px solid var(--line);border-radius:20px;padding:25px;margin:8px 0 16px}
+.hero img{width:100%;aspect-ratio:1;object-fit:contain;border-radius:50%;background:#fff;padding:4px}.hero h1{font-size:clamp(28px,4vw,42px);color:var(--accent)}.hero p{margin-top:8px;color:var(--muted)}.eyebrow{font-size:13px;font-weight:700;color:var(--pink);margin-bottom:5px}
+.progress{display:flex;flex-wrap:wrap;gap:6px;margin:16px 0}.progress button{border:1px solid var(--line);background:white;border-radius:9px;padding:8px 12px;flex:1;white-space:nowrap;font-size:13px}.progress button[aria-current=step]{background:var(--accent);color:white;border-color:var(--accent)}.progress button:disabled{opacity:.55;cursor:not-allowed}
+.stage{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px;margin:16px 0}.stage h2{font-size:clamp(23px,3vw,29px);color:var(--ink)}.stage h3{color:var(--accent)}.stage>p{margin:9px 0;color:var(--muted)}.time{font-size:12px;font-weight:700;color:var(--pink);margin-bottom:5px}
+.prompt{border-inline-start:4px solid var(--pink);padding:12px 16px;background:#faf0f7;border-radius:8px;margin:16px 0;font-size:16px}.prompt p+p{margin-top:5px}
+label{display:block;font-weight:700;margin:10px 0 5px}input,textarea,select{font:inherit;width:100%;color:var(--ink);background:#fff;border:1px solid #cbb9d2;border-radius:9px;padding:10px 12px;max-width:100%}textarea{resize:vertical;min-height:83px}input:focus,textarea:focus,select:focus{outline:2px solid var(--accent);outline-offset:2px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}.note{font-size:14px;color:var(--muted);margin:8px 0}.small-link{font-size:14px}.goal-list{display:flex;flex-direction:column;gap:5px;margin:12px 0}.goal-list a{padding:7px 12px;background:#fbf8fc;border-inline-start:4px solid var(--goal);border-radius:6px;display:block;color:var(--ink)}.goal-list strong{color:var(--accent)}.goal-list a[aria-current=true]{background:#f0e3f1}
+.goal-heading{display:grid;grid-template-columns:1fr 180px;align-items:center;gap:16px;margin:20px 0 6px;border-block:1px solid var(--line);padding:16px 0}.goal-heading img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:10px}.goal-heading figure{margin:0}.goal-heading figcaption{font-size:11px;color:var(--muted)}
+.goal-heading p{margin-top:5px;color:var(--muted)}
+.problem-list{counter-reset:problems}.reading{padding:18px 0;border-bottom:1px solid var(--line)}.reading:last-child{border-bottom:0}.reading h3{font-size:21px;margin:0 0 6px;color:var(--ink)}.reading h3:before{counter-increment:problems;content:counter(problems) ". ";color:var(--pink)}.reading p{margin:6px 0;max-width:780px}.reading .question{color:var(--accent);font-weight:700;font-size:14px}
+.team-ideas{display:grid;gap:18px;margin:16px 0}.idea{border-inline-start:3px solid #cba9d1;padding:0 14px 8px}.idea h3{font-size:18px}
+.compare-row{padding:18px 0;border-bottom:1px solid var(--line)}.compare-row:last-child{border-bottom:0}.compare-row h3{font-size:19px;color:var(--ink)}.compare-row p{white-space:pre-wrap;color:var(--muted);margin:6px 0}.compare-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}.compare-fields textarea{min-height:74px}.winner{margin-top:18px;padding:14px;border-radius:12px;background:#f8eff8}.winner label{margin-top:0}.winner select{background:#fff}
+.action,.secondary{display:inline-flex;align-items:center;justify-content:center;padding:10px 18px;border-radius:10px;min-height:43px;font:inherit;font-weight:700;cursor:pointer;text-align:center}.action{background:var(--pink);color:white;border:1px solid var(--pink)}.secondary{background:#fff;color:var(--accent);border:1px solid #cab8d1}.action:hover,.secondary:hover{text-decoration:none;filter:brightness(.96)}.actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:20px}.status{color:var(--pink);font-size:14px;margin:8px 0;min-height:1.5em}.wide{grid-column:1/-1}
+#selected-title{color:var(--accent);font-size:21px;margin:13px 0}#print-summary{display:none}[hidden]{display:none!important}
+@media(max-width:650px){.hero{grid-template-columns:1fr 76px;padding:15px;gap:10px}.hero p{font-size:14px}.stage{padding:15px}.progress{gap:5px}.progress button{padding:6px 8px;font-size:12px;flex:0 1 auto}.two,.compare-fields{grid-template-columns:1fr;gap:4px}.goal-heading{grid-template-columns:1fr 106px;gap:10px}.reading h3{font-size:19px}.actions .action{flex:1}.wide{grid-column:auto}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+@media print{body{background:#fff}header,main>section,main>.progress,main>footer{display:none!important}main{max-width:none;padding:12px}#print-summary{display:block!important;color:#222}#print-summary p{white-space:pre-wrap;margin:5px 0 12px}#print-summary h3{margin-top:13px;break-after:avoid}}
 </style>
-<script defer src="sdg-data.js"></script>
+<script defer src="sdg-data.js?v=2027-2"></script>
 </head>
 <body>
-<header class="masthead"><div class="bar">
-<a class="brand" href="../strongermenu-2026.html" translate="no"><img src="../icon/logo.png" alt=""><span>פורצות דרך</span></a>
-<div class="tools"><a href="alldomains.html">תחומי העניין</a><a class="home" href="../strongermenu-2026.html" aria-label="עמוד הבית">עמוד הבית</a></div>
-</div></header>
+<header class="masthead"><div class="bar"><a class="brand" href="../strongermenu-2026.html" translate="no"><img src="../icon/logo.png" alt=""><span>פורצות דרך</span></a><div class="tools"><a href="alldomains.html">תחומי העניין</a><a class="home" href="../strongermenu-2026.html">עמוד הבית</a></div></div></header>
 <main>
-<section class="hero"><div><p class="eyebrow">מפגש 4 · עבודת צוותי המיזם</p><h1>מאתרות אתגר</h1><p>מה הייתן רוצות לשנות? 17 יעדי הפיתוח של האו״ם עוסקים באתגרים שמשפיעים על החיים של כולנו. גלו איך הם מתחברים לעולם שלכן, הקשיבו אחת לשנייה ובחרו בעיה אחת שתרצו לחקור יחד.</p></div><img src="../icon/sdg.png" alt="גלגל 17 יעדי הפיתוח של האו״ם"></section>
-<div class="steps" aria-label="שלבי הפעילות"><div class="step"><strong>01 · מגלות</strong><small>קוראות ומזהות מצבים מוכרים</small></div><div class="step"><strong>02 · משוות</strong><small>כל אחת משתפת מה משך אותה</small></div><div class="step"><strong>03 · בוחרות</strong><small>מסכימות על בעיה אחת ומנסחות אותה</small></div></div>
-<section id="discover" class="panel" aria-labelledby="goals-title">
-<div class="section-head"><h2 id="goals-title">17 יעדים, המון הזדמנויות</h2><p>בחרו יעד כדי לגלות את הבעיות שמסתתרות בו.</p></div>
-<div class="filters"><div><label for="domain">תחום העניין שכבר בחרתן במפגש 3</label><select id="domain"><option value="">הציגו את כל התחומים</option></select><label class="check"><input type="checkbox" id="related-only"> הציגו רק יעדים הקשורים לתחום שלנו</label></div><div><label for="search">חפשו נושא או בעיה</label><input id="search" type="search" placeholder="למשל: רעש, מים, תחבורה"></div></div>
-<p class="filter-info" id="filter-info" aria-live="polite"></p><div id="goals" class="goal-grid" aria-label="יעדי הפיתוח של האו״ם"></div>
-<div id="problems" hidden>
-<div class="goal-intro" id="goal-intro"><div><h2 id="goal-title" tabindex="-1"></h2><p id="goal-description"></p></div><figure><img id="goal-image" alt="" loading="lazy"><figcaption>המחשה מתוך חומרי הקורס</figcaption></figure></div>
-<div class="group-prompt"><strong>רגע של הזדהות:</strong> כל אחת קוראת כמה כרטיסים ומשתפת מצב אחד שמוכר לה או הפתיע אותה. יחד בחרו עד שלוש בעיות שבא לכן להכיר מקרוב.</div><p class="note">הכרטיסים מציגים מצבים אפשריים לחקר. עוד לא קובעות שהם מתרחשים אצל קהל היעד שלנו, ועוד לא מחפשות פתרון.</p>
-<div id="cards" class="problem-grid"></div>
-</div>
-<details class="custom"><summary>יש לנו בעיה אחרת משלנו</summary><div class="fields"><div><label for="own-title">שם קצר לבעיה</label><input id="own-title" maxlength="90" placeholder="מה לא עובד?"></div><div><label for="own-description">תארו מצב אמיתי מהחיים, בלי להציע פתרון</label><textarea id="own-description" maxlength="500"></textarea></div><div><label for="own-goal">יעד קשור (לא חובה)</label><select id="own-goal"><option value="">עדיין לא החלטנו</option></select></div><div><button id="add-own" class="secondary" type="button">הוספת הבעיה לרשימה שלנו</button></div></div></details>
-<p id="status" class="status" role="status" aria-live="polite"></p>
+<section class="hero"><div><p class="eyebrow">מפגש 4 · פעילות קבוצתית · 30 דקות</p><h1>מאתרות אתגר</h1><p>מה הייתן רוצות לשנות בעולם? הפעם אתן חוקרות יחד, מתבוננות בחיים שלכן ובוחרות בעיה שתהיה נקודת ההתחלה למיזם שלכן.</p></div><img src="../icon/sdg.png" alt="גלגל 17 יעדי הפיתוח של האו״ם"></section>
+<nav class="progress" aria-label="שלבי הפעילות" id="progress"></nav>
+<section class="stage" id="stage-1" aria-labelledby="title-1">
+<div class="time">שלב 1 מתוך 5 · 5 דקות</div><h2 id="title-1" tabindex="-1">מה הקשר בין התחום שלנו לעולם?</h2>
+<p>17 יעדי הפיתוח של האו״ם נועדו לקדם חיים טובים יותר לאנשים ולסביבה. הם יעזרו לכן לגלות בעיות שקשורות לתחום שכבר בחרתן במפגש הקודם.</p>
+<div class="two"><div><label for="domain">התחום המשותף של הצוות</label><select id="domain"><option value="">בחרו את התחום שכבר נקבע</option></select></div><div><label for="team">שם הצוות (לא חובה)</label><input id="team" maxlength="100" placeholder="שם הצוות שלכן"></div></div>
+<div id="recommendations" hidden><h3 style="margin-top:18px">יעדים שכדאי להכיר</h3><p class="note">זו הצעה לחיבורים אפשריים לתחום שלכן, לא בחירה מחייבת. אפשר לחקור גם כל יעד אחר.</p><div class="goal-list" id="recommended"></div></div>
+<div class="prompt"><strong>משימה לצוות:</strong> קראו את שמות היעדים המומלצים והסבירו זו לזו איזה קשר אתן רואות בין התחום שלכן ליעדים.</div>
+<p class="note"><a href="https://sdgs.un.org/goals" target="_blank" rel="noopener noreferrer">מידע רשמי על 17 יעדי האו״ם</a> (באנגלית)</p>
+<div class="actions"><button type="button" class="action" data-next="2">ממשיכות לחקר הבעיות ←</button></div>
 </section>
-<div class="shortlist" aria-label="הבעיות שבחרנו"><div><strong id="count">הבעיות שלנו (0/3)</strong><div id="short-items" class="short-items"></div></div><div class="short-actions"><button class="action" id="compare" disabled>בואו נשווה ונבחר</button></div></div>
-<section class="panel" id="compare-panel" hidden aria-labelledby="compare-title"><div class="section-head"><h2 id="compare-title" tabindex="-1">על איזו בעיה נרצה לעבוד?</h2><button class="secondary" id="back-discover">חזרה לגילוי</button></div><p class="note">כל אחת בוחרת איזו בעיה מדברת אליה ומסבירה למה. לפני ההחלטה, כתבו יחד שתי תשובות קצרות לכל אפשרות. אין ציון ואין תשובה נכונה.</p><div class="compare-grid" id="compare-cards"></div><p class="note">בחרו בעיה שהצוות רוצה לחקור, שמשפיעה על אנשים ושאפשר ללמוד עליה. לא צריך לדעת איך לפתור אותה עדיין.</p></section>
-<section class="panel" id="final-panel" hidden aria-labelledby="final-title"><div class="section-head"><h2 id="final-title" tabindex="-1">כרטיס האתגר שלנו</h2><button class="secondary" id="back-compare">חזרה להשוואה</button></div><h3 id="chosen-title"></h3><p id="chosen-description" class="note"></p><form id="challenge-form"><div class="form-grid">
-<div><label for="team">שם הצוות (לא חובה)</label><input id="team" maxlength="100" placeholder="שם הצוות שלכן"></div><div><label for="audience">מי מתמודדת עם הקושי?</label><input id="audience" maxlength="160" required placeholder="למי זה קורה?"></div>
-<div class="wide"><label for="problem">מה בדיוק קורה ומתי?</label><textarea id="problem" maxlength="600" required placeholder="תארו את הבעיה במילים שלכן, במקום או במצב מסוים."></textarea></div>
-<div class="wide"><label for="need">מה צריך להשתנות?</label><textarea id="need" maxlength="400" required placeholder="הצורך, לא המוצר או הפתרון."></textarea></div>
-<div><label for="why">למה בחרנו בבעיה הזאת?</label><textarea id="why" maxlength="400" required></textarea></div><div><label for="evidence">מה אנחנו יודעות? איך נבדוק עוד?</label><textarea id="evidence" maxlength="600" required placeholder="כתבה, תצפית, שיחה או שאלה לחקר בהמשך."></textarea></div>
-</div><p class="note no-print">התשובות נשמרות רק בלשונית זו, אם הדפדפן מאפשר זאת. הורידו את כרטיס האתגר לפני סגירה. אין צורך לשתף פרטים אישיים או רגישים.</p><div class="actions"><button class="action" type="submit">הורדת כרטיס האתגר</button><button class="secondary" type="button" id="print">הדפסה / שמירה כ־PDF</button><a class="secondary" href="../steps/persona.html">להמשך: פרסונה</a><button class="secondary" type="button" id="reset">התחלת פעילות חדשה</button></div><p id="final-status" class="status" role="status"></p></form><p class="note no-print">הקישור לפרסונה אינו מעביר את הנתונים אוטומטית. השתמשו בכרטיס ששמרתן.</p></section>
-<article id="print-summary" aria-hidden="true"></article><footer>פורצות דרך · תעשיידע · <a href="https://sdgs.un.org/goals" target="_blank" rel="noopener noreferrer">על 17 יעדי האו״ם</a></footer>
-<noscript><p class="panel">יש להפעיל JavaScript כדי להשתמש בפעילות.</p></noscript>
+<section class="stage" id="stage-2" aria-labelledby="title-2" hidden>
+<div class="time">שלב 2 מתוך 5 · 8 דקות</div><h2 id="title-2" tabindex="-1">פותחות את העיניים</h2><p>קראו לפחות שני יעדים שמעניינים את הצוות. חלקו ביניכן את הקריאה: כל אחת תספר על מצב אחד שמוכר לה, הפתיע אותה או גרם לה לשאול שאלה.</p>
+<label for="goal">בחרו יעד לקריאה</label><select id="goal"><option value="">בחרו יעד מתוך 17 היעדים</option></select>
+<p id="goal-hint" class="note"></p>
+<div id="reading-area" hidden><div class="goal-heading" id="goal-heading"><div><h3 id="goal-title"></h3><p id="goal-description"></p></div><figure><img id="goal-image" alt="" loading="lazy"><figcaption>המחשה מתוך חומרי הקורס</figcaption></figure></div><p class="note">המצבים הבאים הם דוגמאות אפשריות מהחיים לצורך חקר; הם אינם ממצאים שנבדקו או פתרונות מוכנים.</p><div class="problem-list" id="reading-list"></div></div>
+<div class="prompt"><strong>רגע של שיתוף:</strong> מה הפתיע אתכן? מה קורה גם בסביבה שלכן? האם יש בעיה נוספת שלא הופיעה כאן?</div>
+<label for="discovery">תובנות מהקריאה ומהשיחה</label><textarea id="discovery" maxlength="1500" placeholder="כתבו נקודות מעניינות, שאלות או מצבים שעלו בשיחה..."></textarea>
+<div class="actions"><button class="secondary" type="button" data-back="1">חזרה</button><button class="action" type="button" data-next="3">למפת הבעיות שלנו ←</button></div>
+</section>
+<section class="stage" id="stage-3" aria-labelledby="title-3" hidden>
+<div class="time">שלב 3 מתוך 5 · 5 דקות</div><h2 id="title-3" tabindex="-1">מגלות בעיות משלנו</h2><p>כל אחת מציעה בעיה אחת או יותר. אפשר להיעזר במה שקראתן או להעלות בעיה אחרת מהתחום שלכן. הקשיבו לכל ההצעות, ואז בחרו שלוש בעיות לדיון.</p>
+<div class="prompt"><strong>לא כותבות פתרון.</strong> תארו מה לא עובד, למי זה קורה ובאיזה מצב. למשל, במקום ״אפליקציה לניהול זמן״ כתבו ״תלמידות מתקשות לדעת באיזו משימה להתחיל כשיש כמה מבחנים באותו שבוע״.</div>
+<div id="idea-fields" class="team-ideas"></div>
+<div class="actions"><button class="secondary" type="button" data-back="2">חזרה לקריאה</button><button class="action" type="button" data-next="4">בוחנות את שלוש הבעיות ←</button></div>
+</section>
+<section class="stage" id="stage-4" aria-labelledby="title-4" hidden>
+<div class="time">שלב 4 מתוך 5 · 7 דקות</div><h2 id="title-4" tabindex="-1">איזו בעיה שווה לחקור?</h2><p>התבוננו בשלוש הבעיות שהצעתן. כל אחת מסבירה מה מושך אותה באחת מהן. נסו להגיע להחלטה שמקובלת על כל חברות הצוות, לא לפי הצבעה מהירה.</p>
+<div class="prompt"><strong>מה מנחה אותנו?</strong> בעיה אמיתית שאפשר להכיר מקרוב, שיש לה משמעות לאנשים ושמסקרנת את הצוות. עוד לא צריך לדעת איך לפתור אותה.</div>
+<div id="comparison"></div>
+<div class="winner"><label for="winner">לאחר הדיון – איזו בעיה בחרנו לחקור?</label><select id="winner"><option value="">בחרו אחת משלוש הבעיות</option></select><label for="reason">למה דווקא היא?</label><textarea id="reason" maxlength="700" placeholder="מה שכנע את הצוות? למה היא מעניינת וחשובה?"></textarea></div>
+<div class="actions"><button class="secondary" type="button" data-back="3">חזרה למפת הבעיות</button><button class="action" type="button" data-next="5">מגדירות את האתגר ←</button></div>
+</section>
+<section class="stage" id="stage-5" aria-labelledby="title-5" hidden>
+<div class="time">שלב 5 מתוך 5 · 5 דקות</div><h2 id="title-5" tabindex="-1">האתגר שלנו</h2><p>הגעתן להחלטה משותפת. עכשיו דייקו את הבעיה במילים שלכן. זו נקודת הפתיחה לחקר ולהגדרת קהל היעד בהמשך המפגש.</p>
+<h3 id="selected-title"></h3><p id="selected-description" class="note"></p>
+<label for="problem">מה בדיוק קורה, למי ובאיזה מצב?</label><textarea id="problem" maxlength="700" placeholder="תארו קושי ממוקד, בלי להציע מוצר."></textarea>
+<label for="need">מה צריך להשתנות?</label><textarea id="need" maxlength="500" placeholder="מה חסר היום? מה היינו רוצות שיתאפשר?"></textarea>
+<label for="evidence">מה נרצה לבדוק לפני שנפתח פתרון?</label><textarea id="evidence" maxlength="700" placeholder="שאלה לחקר, תצפית או שיחה עם מי שמתמודדת עם הבעיה."></textarea>
+<div class="prompt"><strong>עצרו ובדקו:</strong> האם הגדרנו בעיה ולא פתרון? האם ברור באיזה מצב היא מתרחשת? האם כולן יודעות להסביר למה בחרנו בה?</div>
+<p class="note">התשובות נשמרות בלשונית זו בלבד, אם הדפדפן מאפשר. שמרו את סיכום הפעילות לפני סגירת הלשונית. אין להזין פרטים אישיים או רגישים.</p>
+<div class="actions"><button class="secondary" type="button" data-back="4">חזרה להשוואה</button><button class="action" id="download" type="button">הורדת סיכום הצוות</button><button class="secondary" id="print" type="button">הדפסה / שמירה כ־PDF</button><button class="secondary" id="persona" type="button">להמשך: הגדרת פרסונה ←</button></div><p class="note">הנתונים אינם עוברים אוטומטית לפרסונה; היעזרו בסיכום ששמרתן.</p>
+</section>
+<p class="status" id="status" role="status" aria-live="polite"></p>
+<section class="stage" id="reset-panel"><p class="note">עובדות עם צוות חדש? אפשר להתחיל מחדש לאחר שמירת הסיכום.</p><button type="button" class="secondary" id="reset">התחלת פעילות חדשה</button></section>
+<article id="print-summary"></article>
+<footer>פורצות דרך · תעשיידע</footer>
+<noscript><p class="stage">יש להפעיל JavaScript כדי להשתמש בפעילות.</p></noscript>
 </main>
 <script>
 window.addEventListener('DOMContentLoaded',()=>{
 'use strict';
-const data=window.PORTZOT_SDG;
-const el=id=>document.getElementById(id);
-if(!data){el('status').textContent='לא ניתן לטעון את מאגר האתגרים. נסו לרענן את העמוד.';return;}
-const key='portzot-sdg-team-v1';
-const fields=['team','audience','problem','need','why','evidence'];
-let saved={};try{saved=JSON.parse(sessionStorage.getItem(key)||'{}')||{}}catch(_){}
-const state={domain:'',related:false,goal:0,short:[],custom:[],notes:{},chosen:'',form:{},...saved};
-state.short=Array.isArray(state.short)?state.short:[];state.custom=Array.isArray(state.custom)?state.custom:[];
-const all=()=>data.goals.flatMap(g=>g.problems.map(p=>({...p,goal:g.id}))).concat(state.custom);
-const lookup=id=>all().find(p=>p.id===id);
-state.short=[...new Set(state.short)].filter(id=>lookup(id)).slice(0,3);
-if(!state.short.includes(state.chosen))state.chosen='';
+const data=window.PORTZOT_SDG,el=id=>document.getElementById(id);
+if(!data){el('status').textContent='מאגר הבעיות לא נטען. נסו לרענן את העמוד.';return}
+const key='portzot-sdg-workshop-he-v2', fields=['team','discovery','reason','problem','need','evidence'];
+const newIdea=()=>({title:'',description:'',goal:'',impact:'',research:''});
+const initial=()=>({stage:1,max:1,domain:'',goal:'',visited:[],winner:'',ideas:[newIdea(),newIdea(),newIdea()],form:{}});
+let state=initial();try{const stored=JSON.parse(sessionStorage.getItem(key)||'null');if(stored&&Array.isArray(stored.ideas)&&stored.ideas.length===3){state={...state,...stored};state.form=stored.form||{};state.visited=Array.isArray(stored.visited)?stored.visited:[];state.ideas=stored.ideas.map(i=>({...newIdea(),...i}));state.stage=Math.min(5,Math.max(1,Number(state.stage)||1));state.max=Math.min(5,Math.max(state.stage,Number(state.max)||1))}}catch(_){}
 const save=()=>{try{sessionStorage.setItem(key,JSON.stringify(state))}catch(_){}};
 const make=(tag,cls,txt)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(txt!=null)n.textContent=txt;return n};
-const button=(txt,cls,fn)=>{const b=make('button',cls,txt);b.type='button';b.addEventListener('click',fn);return b};
 const goalBy=id=>data.goals.find(g=>g.id===Number(id));
+const domainName=()=>data.domains[Number(state.domain)-1]||'לא צוין';
+const queryDomain=new URLSearchParams(location.search).get('domain');if(queryDomain&&data.domains[Number(queryDomain)-1]&&!state.domain)state.domain=queryDomain;
+const option=(v,t)=>{const o=make('option','',t);o.value=String(v);return o};
+data.domains.forEach((name,i)=>el('domain').append(option(i+1,name)));
+data.goals.forEach(g=>el('goal').append(option(g.id,g.id+' · '+g.title)));
+el('domain').value=state.domain;el('goal').value=state.goal;
+for(const id of fields){el(id).value=state.form[id]||'';el(id).addEventListener('input',()=>{state.form[id]=el(id).value;el(id).setCustomValidity('');save()})}
 const say=t=>{el('status').textContent=t};
-const show=(id,focus)=>{el(id).hidden=false;el(focus).focus({preventScroll:true});el(id).scrollIntoView({block:'start'})};
-data.domains.forEach((name,i)=>{const o=make('option','',name);o.value=String(i+1);el('domain').append(o)});
-data.goals.forEach(g=>{const o=make('option','',g.id+' · '+g.title);o.value=g.id;el('own-goal').append(o)});
-const queryDomain=new URLSearchParams(location.search).get('domain');
-if(queryDomain&&data.domains[Number(queryDomain)-1]&&!state.domain){state.domain=queryDomain;state.related=true}
-el('domain').value=state.domain;el('related-only').checked=!!state.related;
-const q=()=>el('search').value.trim().toLowerCase();
-const matches=(p,s)=>!s||(p.title+' '+p.description).toLowerCase().includes(s);
-function renderGoals(){
-const s=q(),d=Number(state.domain);
-const visible=data.goals.filter(g=>(!state.related||!d||g.related.includes(d))&&(!s||matches(g,s)||g.problems.some(p=>matches(p,s))));
-el('filter-info').textContent=state.related&&d?'מוצגים '+visible.length+' יעדים מומלצים לתחום שלכן. אפשר לבטל את הסינון ולגלות גם יעדים נוספים.':'מוצגים '+visible.length+' מתוך 17 יעדים.';el('goals').replaceChildren();
-for(const g of visible){
-const b=button('','goal',()=>{state.goal=g.id;save();renderGoals();renderCards();show('problems','goal-title')});
-b.style.setProperty('--goal',g.color);b.setAttribute('aria-pressed',String(state.goal===g.id));
-const box=make('span');box.append(make('strong','',g.title),make('small','',g.problems.length+' אתגרים לגילוי'));
-b.append(make('span','number',g.id),box);el('goals').append(b);
+function requireValue(n,msg){if(String(n.value).trim())return true;n.setCustomValidity(msg);n.reportValidity();n.focus();say(msg);return false}
+function renderRecommendations(){
+const goals=data.goals.filter(g=>g.related.includes(Number(state.domain)));
+el('recommendations').hidden=!state.domain;el('recommended').replaceChildren();
+for(const g of goals){const a=make('a','',g.id+' · '+g.title+' — '+g.description);a.href='#stage-2';a.style.setProperty('--goal',g.color);a.addEventListener('click',e=>{e.preventDefault();state.goal=String(g.id);el('goal').value=state.goal;go(2)});el('recommended').append(a)}
+el('goal-hint').textContent=state.domain?'יעדים מומלצים לתחום '+domainName()+': '+goals.map(g=>g.id+' – '+g.title).join(' · ')+'. כל 17 היעדים פתוחים לקריאה.':'כל 17 היעדים פתוחים לקריאה.';
 }
-if(!visible.length)el('goals').append(make('p','empty','לא נמצאו יעדים מתאימים. נסו חיפוש אחר או הציגו את כל היעדים.'));
-if(!visible.some(g=>g.id===state.goal)){state.goal=0;el('problems').hidden=true}
+function renderReading(){
+const g=goalBy(state.goal);el('reading-area').hidden=!g;if(!g)return;
+if(!state.visited.includes(g.id))state.visited.push(g.id);
+el('goal-title').textContent='יעד '+g.id+' · '+g.title;el('goal-description').textContent=g.description;el('goal-image').src=g.image.src;el('goal-image').alt=g.image.alt;
+const list=el('reading-list');list.replaceChildren();
+for(const p of g.problems){const a=make('article','reading');a.append(make('h3','',p.title),make('p','',p.description+' '+p.context),make('p','question','שאלה לחקר: '+p.question));list.append(a)}
+save()
 }
-function renderCards(){
-const g=goalBy(state.goal);if(!g){el('problems').hidden=true;return}
-el('problems').hidden=false;el('goal-intro').style.setProperty('--goal',g.color);el('goal-title').textContent='יעד '+g.id+' · '+g.title;el('goal-description').textContent=g.description;el('goal-image').src=g.image.src;el('goal-image').alt=g.image.alt;
-const s=q(),items=all().filter(p=>p.goal===g.id&&(!s||matches(g,s)||matches(p,s)));
-el('cards').replaceChildren();
-for(const p of items){const selected=state.short.includes(p.id);const card=make('article','problem'+(selected?' selected':''));card.append(make('span','tag','מקרה לחקר'),make('h3','',p.title),make('p','',p.description));
-const b=button(selected?'✓ ברשימה שלנו':'מעניין אותנו +',selected?'secondary':'action',()=>toggle(p.id));b.setAttribute('aria-pressed',String(selected));card.append(b);el('cards').append(card)}
-if(!items.length)el('cards').append(make('p','empty','אין בעיות התואמות לחיפוש הזה.'));
+function bindIdea(n,index,key){n.value=state.ideas[index][key]||'';n.addEventListener('input',()=>{state.ideas[index][key]=n.value;n.setCustomValidity('');save()})}
+function labelField(parent,id,label,n){const l=make('label','',label);l.htmlFor=id;n.id=id;parent.append(l,n)}
+function renderIdeas(){
+const box=el('idea-fields');box.replaceChildren();
+state.ideas.forEach((idea,i)=>{const a=make('div','idea');a.append(make('h3','','בעיה '+(i+1)));
+const title=make('input');title.maxLength=100;title.placeholder='שם קצר לבעיה';labelField(a,'idea-title-'+i,'מה הבעיה?',title);bindIdea(title,i,'title');
+const desc=make('textarea');desc.maxLength=700;desc.placeholder='מי מתמודדת איתה ומה קורה בפועל?';labelField(a,'idea-description-'+i,'תיאור המצב',desc);bindIdea(desc,i,'description');
+const sel=make('select');sel.append(option('','טרם החלטנו / בעיה אחרת'));for(const g of data.goals)sel.append(option(g.id,g.id+' · '+g.title));labelField(a,'idea-goal-'+i,'יעד קשור (לא חובה)',sel);bindIdea(sel,i,'goal');sel.addEventListener('change',()=>{state.ideas[i].goal=sel.value;save()});box.append(a)})
 }
-function toggle(id){
-if(state.short.includes(id)){if(state.chosen===id&&Object.values(state.form).some(v=>String(v).trim())&&!confirm('הסרת האתגר שנבחר תמחק את כרטיס האתגר שלו. להמשיך?'))return false;state.short=state.short.filter(x=>x!==id);if(state.chosen===id){state.chosen='';state.form={};el('final-panel').hidden=true}}
-else{if(state.short.length>=3){say('כבר בחרתן שלוש בעיות. הסירו אחת כדי להוסיף אחרת.');return false}state.short.push(id)}
-say('');save();renderCards();renderShort();return true
+function renderComparison(){
+const box=el('comparison');box.replaceChildren();el('winner').replaceChildren(option('','בחרו אחת משלוש הבעיות'));
+state.ideas.forEach((idea,i)=>{const a=make('div','compare-row');a.append(make('h3','','בעיה '+(i+1)+' · '+idea.title),make('p','',idea.description));const wrap=make('div','compare-fields');
+for(const [k,label] of [['impact','למי זה מפריע ולמה חשוב להתמודד עם זה?'],['research','מה מסקרן אותנו ואיך נוכל לחקור את הבעיה?']]){const b=make('div'),t=make('textarea');t.maxLength=600;labelField(b,'compare-'+i+'-'+k,label,t);bindIdea(t,i,k);wrap.append(b)}a.append(wrap);box.append(a);el('winner').append(option(i,idea.title))});
+el('winner').value=state.winner;
 }
-function renderShort(){
-el('count').textContent='הבעיות שלנו ('+state.short.length+'/3)';el('compare').disabled=!state.short.length;
-el('short-items').replaceChildren();
-if(!state.short.length)el('short-items').append(make('span','note','עדיין לא בחרתן בעיה.'));
-for(const id of state.short){const p=lookup(id);const c=make('span','chip',p.title);const b=button('×','',()=>toggle(id));b.setAttribute('aria-label','הסרת '+p.title);c.append(b);el('short-items').append(c)}
-if(!el('compare-panel').hidden){if(!state.short.length)el('compare-panel').hidden=true;else renderCompare()}
+function renderFinal(){const i=Number(state.winner),p=state.winner!==''?state.ideas[i]:null;el('selected-title').textContent=p?.title||'';el('selected-description').textContent=p?.description||''}
+function renderProgress(){
+const labels=['התחום שלנו','קוראות וחוקרות','מפת בעיות','משוות ובוחרות','האתגר שלנו'];const nav=el('progress');nav.replaceChildren();
+labels.forEach((label,i)=>{const b=make('button','',(i+1)+' · '+label);b.type='button';b.disabled=i+1>state.max;if(state.stage===i+1)b.setAttribute('aria-current','step');b.addEventListener('click',()=>go(i+1));nav.append(b)})
 }
-const prompts=[['known','מה אנחנו יודעות? למי זה מפריע ולמה זה חשוב?'],['curious','מה מסקרן אותנו? איך אפשר ללמוד על זה יותר?']];
-function renderCompare(){
-el('compare-cards').replaceChildren();
-for(const id of state.short){const p=lookup(id);const card=make('article','compare-card');card.append(make('span','tag',goalBy(p.goal)?.title||'בעיה משלנו'),make('h3','',p.title),make('p','',p.description));
-const notes=state.notes[id]||(state.notes[id]={});
-for(const [k,label] of prompts){const inputId='note-'+id+'-'+k;const l=make('label','',label);l.htmlFor=inputId;const a=make('textarea');a.id=inputId;a.maxLength=400;a.value=notes[k]||'';a.addEventListener('input',()=>{notes[k]=a.value;save()});card.append(l,a)}
-const b=button(state.chosen===id?'✓ האתגר שלנו':'זו הבעיה שנבחר לחקור','action',()=>{const incomplete=state.short.find(other=>prompts.some(([k])=>!String(state.notes[other]?.[k]||'').trim()));const missing=incomplete&&prompts.find(([k])=>!String(state.notes[incomplete]?.[k]||'').trim());if(missing){const a=el('note-'+incomplete+'-'+missing[0]);a.focus();a.setCustomValidity('כתבו תשובה קצרה לפני הבחירה.');a.reportValidity();a.addEventListener('input',()=>a.setCustomValidity(''),{once:true});return}if(state.chosen!==id){if(state.chosen&&Object.values(state.form).some(v=>String(v).trim())&&!confirm('בחירה באתגר אחר תחליף את כרטיס האתגר הנוכחי. להמשיך?'))return;state.chosen=id;state.form={why:notes.curious||'',evidence:notes.known||''};}save();renderCompare();renderFinal();show('final-panel','final-title')});card.append(b);el('compare-cards').append(card)}
+function validateStage(n){
+if(n===1)return requireValue(el('domain'),'בחרו את התחום שכבר קבעתן.');
+if(n===2){if(state.visited.length<2){say('קראו לפחות שני יעדים לפני שתמשיכו.');el('goal').focus();return false}return requireValue(el('discovery'),'כתבו לפחות תובנה אחת מהקריאה ומהדיון.')}
+if(n===3){const titles=state.ideas.map(i=>i.title.trim().replace(/\s+/g,' '));for(let i=0;i<3;i++){if(!requireValue(el('idea-title-'+i),'כתבו שם קצר לכל בעיה.')||!requireValue(el('idea-description-'+i),'תארו כל בעיה במילים שלכן.'))return false}if(new Set(titles).size!==3){say('נסחו שלוש בעיות שונות לפני ההשוואה.');return false}return true}
+if(n===4){for(let i=0;i<3;i++)for(const k of ['impact','research'])if(!requireValue(el('compare-'+i+'-'+k),'השלימו את הדיון בכל שלוש הבעיות.'))return false;return requireValue(el('winner'),'בחרו יחד בעיה אחת.')&&requireValue(el('reason'),'הסבירו למה בחרתן דווקא בבעיה הזאת.')}
+if(n===5)return ['problem','need','evidence'].every(id=>requireValue(el(id),'השלימו את הגדרת האתגר.'));
+return true
 }
-function renderFinal(){const p=lookup(state.chosen);if(!p)return;el('final-panel').hidden=false;el('chosen-title').textContent=p.title;el('chosen-description').textContent=(goalBy(p.goal)?.title||'בעיה משלנו')+' · '+p.description;for(const f of fields)el(f).value=state.form[f]||''}
-el('domain').addEventListener('change',()=>{state.domain=el('domain').value;state.related=!!state.domain;el('related-only').checked=state.related;save();renderGoals();renderCards()});
-el('related-only').addEventListener('change',()=>{state.related=el('related-only').checked;save();renderGoals();renderCards()});
-el('search').addEventListener('input',()=>{renderGoals();renderCards()});
-el('add-own').addEventListener('click',()=>{const title=el('own-title').value.trim(),description=el('own-description').value.trim();if(!title||!description){say('כתבו שם ותיאור של הבעיה.');return}if(state.short.length>=3){say('הסירו בעיה מהרשימה לפני הוספת בעיה חדשה.');return}const id='own-'+Date.now();state.custom.push({id,title,description,goal:Number(el('own-goal').value)||0});toggle(id);el('own-title').value='';el('own-description').value='';el('own-goal').value='';say('הבעיה שלכן נוספה לרשימה.');});
-el('compare').addEventListener('click',()=>{renderCompare();show('compare-panel','compare-title')});
-el('back-discover').addEventListener('click',()=>{el('goals-title').scrollIntoView({block:'start'})});
-el('back-compare').addEventListener('click',()=>{renderCompare();show('compare-panel','compare-title')});
-for(const f of fields)el(f).addEventListener('input',()=>{el(f).setCustomValidity('');state.form[f]=el(f).value;save()});
-const valid=()=>{for(const f of fields){const a=el(f);a.setCustomValidity(a.required&&!a.value.trim()?'כתבו תשובה קצרה.':'');}return el('challenge-form').reportValidity()};
-el('challenge-form').addEventListener('submit',e=>{e.preventDefault();if(!valid())return;const p=lookup(state.chosen);if(!p)return;const labels={team:'שם הצוות',audience:'קהל היעד הראשוני',problem:'הבעיה',need:'הצורך',why:'למה בחרנו',evidence:'מה ידוע ומה נבדוק'};const text=['פורצות דרך | כרטיס האתגר שלנו','תחום: '+(data.domains[Number(state.domain)-1]||'לא צוין'),'יעד: '+(goalBy(p.goal)?.title||'לא צוין'),'אתגר: '+p.title,...fields.map(f=>labels[f]+': '+(el(f).value.trim()||'לא צוין'))].join('\n\n');const url=URL.createObjectURL(new Blob(['\uFEFF'+text],{type:'text/plain;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='כרטיס-האתגר-פורצות-דרך.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);el('final-status').textContent='כרטיס האתגר הוכן להורדה.'});
-el('print').addEventListener('click',()=>{if(!valid())return;const p=lookup(state.chosen);if(!p)return;const output=el('print-summary');output.replaceChildren(make('h1','','פורצות דרך · כרטיס האתגר שלנו'),make('h2','',p.title),make('p','','תחום: '+(data.domains[Number(state.domain)-1]||'לא צוין')+' | יעד: '+(goalBy(p.goal)?.title||'לא צוין')));for(const [f,label] of [['team','שם הצוות'],['audience','קהל היעד הראשוני'],['problem','הבעיה'],['need','הצורך'],['why','למה בחרנו'],['evidence','מה ידוע ומה נבדוק']]){output.append(make('h3','',label),make('p','',el(f).value.trim()||'לא צוין'))}window.print()});
-el('reset').addEventListener('click',()=>{if(!confirm('להתחיל מחדש? הבחירות והתשובות בלשונית זו יימחקו.'))return;try{sessionStorage.removeItem(key)}catch(_){}location.replace(location.pathname)});
-renderGoals();renderCards();renderShort();if(state.chosen){renderCompare();el('compare-panel').hidden=false;renderFinal()}save();
+function showStage(n,scroll=true){
+state.stage=n;state.max=Math.max(state.max,n);say('');
+for(let i=1;i<=5;i++)el('stage-'+i).hidden=i!==n;
+if(n===2){renderRecommendations();renderReading()}if(n===3)renderIdeas();if(n===4)renderComparison();if(n===5)renderFinal();renderProgress();save();
+if(scroll){el('title-'+n).focus({preventScroll:true});el('stage-'+n).scrollIntoView({block:'start'})}
+}
+function go(n){if(n>state.stage){for(let i=state.stage;i<n;i++){if(i===3)renderIdeas();if(i===4)renderComparison();if(!validateStage(i))return}}showStage(n)}
+document.querySelectorAll('[data-next]').forEach(b=>b.addEventListener('click',()=>go(Number(b.dataset.next))));
+document.querySelectorAll('[data-back]').forEach(b=>b.addEventListener('click',()=>go(Number(b.dataset.back))));
+el('domain').addEventListener('change',()=>{el('domain').setCustomValidity('');if(state.domain!==el('domain').value&&state.visited.length){state.visited=[];state.goal='';el('goal').value='';state.max=1;renderProgress()}state.domain=el('domain').value;renderRecommendations();save()});
+el('goal').addEventListener('change',()=>{state.goal=el('goal').value;renderReading();say('');save()});
+el('winner').addEventListener('change',()=>{el('winner').setCustomValidity('');if(state.winner!==el('winner').value){state.form.problem='';state.form.need='';state.form.evidence='';for(const f of ['problem','need','evidence'])el(f).value='';}state.winner=el('winner').value;save()});
+function summary(){
+const p=state.ideas[Number(state.winner)];return [['שם הצוות',state.form.team||'לא צוין'],['תחום העניין',domainName()],['יעדים שקראנו',state.visited.map(id=>id+' · '+goalBy(id)?.title).join(', ')],['תובנות מהקריאה',state.form.discovery],...state.ideas.flatMap((i,n)=>[['בעיה '+(n+1)+' · '+i.title,i.description+(i.goal?'\nיעד: '+goalBy(i.goal)?.title:'')],['השפעה',i.impact],['אפשרות לחקר',i.research]]),['הבעיה שנבחרה',p.title],['למה בחרנו בה',state.form.reason],['הגדרת הבעיה',state.form.problem],['הצורך',state.form.need],['מה נרצה לבדוק',state.form.evidence]]
+}
+function validSummary(){if(!validateStage(5))return false;return true}
+el('download').addEventListener('click',()=>{if(!validSummary())return;const text=['פורצות דרך · מאתרות אתגר · סיכום הצוות',...summary().map(([k,v])=>k+':\n'+(v||''))].join('\n\n');const url=URL.createObjectURL(new Blob(['\uFEFF'+text],{type:'text/plain;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='סיכום-מאתרות-אתגר.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);say('הסיכום מוכן להורדה. שמרו אותו בתיקיית המיזם.')});
+function renderPrint(){const a=el('print-summary');a.replaceChildren(make('h1','','פורצות דרך · מאתרות אתגר'));for(const [k,v] of summary())a.append(make('h3','',k),make('p','',v||''))}
+el('print').addEventListener('click',()=>{if(validSummary()){renderPrint();window.print()}});
+el('persona').addEventListener('click',()=>{if(validSummary()&&confirm('שמרתן את סיכום הצוות? אפשר להמשיך להגדרת פרסונה.'))location.href='../steps/persona.html'});
+el('reset').addEventListener('click',()=>{if(!confirm('האם שמרתן את התוצר? התחלה מחדש תמחק את הטיוטה בלשונית זו.'))return;try{sessionStorage.removeItem(key)}catch(_){}location.replace(location.pathname)});
+renderRecommendations();renderReading();renderIdeas();renderComparison();showStage(state.stage,false);
 });
 </script>
-</body></html>
+</body>
+</html>
