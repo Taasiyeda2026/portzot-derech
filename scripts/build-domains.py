@@ -157,12 +157,31 @@ def index_page(domains, lang, manifest):
     c = COPY[lang]
     prefix = '../../' if lang == 'ar' else '../'
     body = header(lang,'domains/alldomains.html',prefix)
-    body += f'<main><section class="index-intro"><h1>{c["index_title"]}</h1><p>{c["index_intro"]}</p></section><nav aria-label="{c["all"]}"><ol class="domain-list">'
+    challenge_entry = '''<a class="challenge-entry" href="sdg-goals.html"><img src="../icon/sdg.png" alt=""><span class="challenge-copy"><strong>כבר בחרתן תחום? מאתרות אתגר</strong><small>מפגש 4 · 17 יעדי האו״ם ופעילות קבוצתית לבחירת בעיה</small></span><span class="challenge-arrow" aria-hidden="true">←</span></a>''' if lang == 'he' else ''
+    body += f'<main><section class="index-intro"><h1>{c["index_title"]}</h1><p>{c["index_intro"]}</p></section>'
+    if challenge_entry:
+        body += challenge_entry + '\n'
+    body += f'<nav aria-label="{c["all"]}"><ol class="domain-list">'
     for d in domains:
         i = d['id']
         body += f'''<li><a class="domain-link" data-domain="{i}" style="{theme(i)}" href="d{i}.html"><span class="domain-num">{i:02}</span><span class="domain-icon" aria-hidden="true">{INDEX_ICONS[i-1]}</span><span class="domain-copy"><strong>{e(d['name'])}</strong><small>{e(d['main_article']['title'])}</small></span><span class="domain-arrow" aria-hidden="true">←</span></a></li>'''
-    body += f'</ol></nav><footer translate="no" lang="he">{c["footer"]}</footer></main>'
-    write(('ar/' if lang == 'ar' else '')+'domains/alldomains.html',shell(lang,c['all'],body,prefix))
+    body += '</ol></nav>'
+    if challenge_entry:
+        body += '\n' + challenge_entry + '\n'
+    body += f'<footer translate="no" lang="he">{c["footer"]}</footer></main>'
+    page = shell(lang,c['all'],body,prefix)
+    if challenge_entry:
+        challenge_style = '''<style>
+.challenge-entry{display:flex;align-items:center;gap:14px;padding:15px 18px;margin:16px 0 20px;border:1px solid #e5d0e6;border-inline-start:5px solid #b62d76;border-radius:14px;background:linear-gradient(105deg,#fff,#f9eaf5);color:#442650}
+.challenge-entry:hover{text-decoration:none;box-shadow:0 8px 20px #7c4c911a}
+.challenge-entry img{display:block;width:60px;height:60px;aspect-ratio:1;object-fit:contain;object-position:center;flex:0 0 60px;border-radius:50%;background:#fff;padding:3px}
+.challenge-entry .challenge-copy{flex:1;min-width:0}.challenge-entry strong{display:block;font-size:19px;color:#932b70;line-height:1.35}.challenge-entry small{display:block;font-size:13px;color:#61586c;line-height:1.5;margin-top:3px}
+.challenge-entry .challenge-arrow{font-size:20px;color:#932b70}
+@media(max-width:760px){.challenge-entry{padding:12px;gap:10px}.challenge-entry strong{font-size:18px}.challenge-entry img{width:48px;height:48px;flex-basis:48px}}
+</style>
+'''
+        page = page.replace('</head>', challenge_style + '</head>', 1)
+    write(('ar/' if lang == 'ar' else '')+'domains/alldomains.html',page)
 
 def validate_expanded_domain(d, lang):
     """Reject partial editorial updates before replacing any public page."""
