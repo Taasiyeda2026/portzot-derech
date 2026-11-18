@@ -128,7 +128,7 @@ const server=http.createServer((req,res)=>{
    assert.equal(await page.$eval('#goal',e=>e.options.length),18);
    await action('[data-next="3"]');assert.equal(await page.evaluate(()=>document.activeElement.id),'goal');
    await field('goal','4','change');
-   assert.equal(await page.$eval('#reading-list .reading',es=>es.length),6);
+   assert.equal(await page.$$eval('#reading-list .reading',es=>es.length),6);
    await page.$eval('#goal-image',e=>{e.loading='eager';return e.decode()});
    await action('#another-goal');assert.equal(await page.evaluate(()=>document.activeElement.id),'goal');
    await action('[data-next="3"]');await stage(3);
