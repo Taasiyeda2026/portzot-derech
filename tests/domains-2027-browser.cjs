@@ -103,6 +103,55 @@ const server=http.createServer((req,res)=>{
   assert.equal(results.length,3);for(const r of results){const id=r.path.match(/d(\d+)\.html/)[1];assert.equal(r.name,read(`domains/content/ar/d${id}.json`).name)}
   await Promise.all([page.waitForNavigation({waitUntil:'load'}),page.click('[data-course-language="he"]')]);await page.waitForSelector('#resultScreen.active');
   assert.deepEqual(await page.$$eval('#domainsResult a',es=>es.map(e=>new URL(e.href).pathname)),results.map(r=>r.path.replace('/ar/','/')));
+
+  // Focused regression for the actual SDG workshop: all five stages, both layouts,
+  // local field feedback, choice-specific drafts, and reload persistence.
+  await page.emulateMediaFeatures([{name:'prefers-reduced-motion',value:'reduce'}]);
+  const workshopKey='portzot-sdg-workshop-he-v2';
+  const field=async(id,value,event='input')=>page.$eval('#'+id,(e,v,ev)=>{e.value=v;e.dispatchEvent(new Event(ev,{bubbles:true}))},value,event);
+  const action=async(selector)=>page.$eval(selector,e=>e.click());
+  const stage=async(n)=>{
+   assert.equal(await page.$eval('#stage-'+n,e=>e.hidden),false,'workshop stage '+n);
+   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false,'workshop horizontal overflow '+n);
+  };
+  for(const width of [1440,390]){
+   await page.setViewport({width,height:850,isMobile:width===390,hasTouch:width===390});
+   await page.goto(base+'domains/sdg-goals.html',{waitUntil:'load'});
+   await page.evaluate(k=>sessionStorage.removeItem(k),workshopKey);
+   await page.reload({waitUntil:'load'});await stage(1);
+   assert.equal(await page.$eval('body',e=>Number(getComputedStyle(e).zoom)),width===1440?.75:1);
+   await action('[data-next="2"]');
+   assert.equal(await page.evaluate(()=>document.activeElement.id),'domain');
+   assert.equal(await page.$eval('#domain',e=>e.getAttribute('aria-invalid')),'true');
+   await field('domain','3','change');await field('personal','עומס לימודי');await field('shared','תלמידות נוספות');
+   await action('[data-next="2"]');await stage(2);
+   assert.equal(await page.$eval('#goal',e=>e.options.length),18);
+   await action('[data-next="3"]');assert.equal(await page.evaluate(()=>document.activeElement.id),'goal');
+   await field('goal','4','change');
+   assert.equal(await page.$eval('#reading-list .reading',es=>es.length),6);
+   await page.$eval('#goal-image',e=>{e.loading='eager';return e.decode()});
+   await action('#another-goal');assert.equal(await page.evaluate(()=>document.activeElement.id),'goal');
+   await action('[data-next="3"]');await stage(3);
+   await field('idea-statement-0','עומס מבחנים');await field('idea-statement-1','רעש בכיתה');await field('idea-statement-2','קושי לבקש עזרה');
+   await action('[data-next="4"]');await stage(4);
+   for(let i=0;i<3;i++)await field('compare-note-'+i,'חשוב לתלמידות ואפשר לחקור בבית הספר');
+   await field('winner','0','change');await field('reason','בחרנו בעיה שמוכרת לנו');
+   await action('[data-next="5"]');await stage(5);
+   assert.equal(await page.$eval('#problem',e=>e.value),'עומס מבחנים');
+   await field('problem','תלמידות מתקשות להתארגן בעומס מבחנים');await field('need','התארגנות נוחה');
+   await action('[data-back="4"]');await field('winner','1','change');await field('reason','בעיה נוספת');
+   await action('[data-next="5"]');await stage(5);assert.equal(await page.$eval('#problem',e=>e.value),'רעש בכיתה');await field('need','ריכוז בכיתה');
+   await action('[data-back="4"]');await field('winner','0','change');await action('[data-next="5"]');
+   assert.equal(await page.$eval('#need',e=>e.value),'התארגנות נוחה');
+   await page.reload({waitUntil:'load'});await stage(5);
+   assert.equal(await page.$eval('#problem',e=>e.value),'תלמידות מתקשות להתארגן בעומס מבחנים');
+   await page.evaluate(()=>{window.print=()=>{window.__workshopPrinted=true}});
+   await action('#print');assert.equal(await page.evaluate(()=>window.__workshopPrinted),true);
+   assert.match(await page.$eval('#print-summary',e=>e.textContent),/התארגנות נוחה/);
+   await page.screenshot({path:path.join(shots,'sdg-workshop-'+width+'.png'),fullPage:true});
+  }
+  console.log('PASS SDG workshop: desktop 75%, mobile layout, all stages, validation focus, draft restore, print summary.');
+
   assert.deepEqual(errors,[]);assert.deepEqual(missing,[]);
   console.log('PASS 20 domain pages and two indexes at desktop/mobile sizes; 160 readers, photos, links, focus, language/hash preservation; real quiz switch/resume/completion.');
  }finally{await browser.close();await new Promise(r=>server.close(r))}
