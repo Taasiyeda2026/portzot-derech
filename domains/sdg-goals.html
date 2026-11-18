@@ -86,7 +86,7 @@ label{display:block;font-weight:700;margin:10px 0 5px}input,textarea,select{font
 </section>
 <section class="stage" id="stage-5" aria-labelledby="title-5" hidden>
 <div class="time">שלב 5 מתוך 5 · 5 דקות</div><h2 id="title-5" tabindex="-1">האתגר שלנו</h2><p>זו הבעיה שבחרתן. עברו על הניסוח שכבר כתבתן, דייקו אותו במידת הצורך והגדירו מה תרצו שישתנה. זהו הבסיס להגדרת קהל היעד ולבניית הפרסונה.</p>
-<p class="note selected-reason" id="selected-description"></p><h3 id="selected-title" class="sr-only">הבעיה שנבחרה</h3>
+<p class="note selected-reason" id="selected-description"></p><h3 id="selected-title" class="sr-only">הבעיה שנבחרה</h3><p id="final-original" class="note" hidden></p>
 <label for="problem">ניסוח הבעיה שבחרנו</label><textarea id="problem" maxlength="700" placeholder="למי זה קורה, מתי ומה הקושי? בלי להציע מוצר."></textarea>
 <label for="need">מה נרצה שיתאפשר?</label><textarea id="need" maxlength="500" placeholder="למשל: לאפשר לתלמידות ללמוד בכיתה בלי שהרעש יפריע להן."></textarea>
 <label for="evidence">מה עדיין איננו יודעות על הבעיה? (לא חובה)</label><textarea id="evidence" maxlength="700" placeholder="למשל: באילו שעות הרעש מפריע במיוחד? נבדוק זאת בשלב החקר."></textarea>
@@ -125,7 +125,7 @@ try{
   state.goal=goalBy(state.goal)?String(state.goal):'';
   state.visited=Array.isArray(stored.visited)?[...new Set(stored.visited.map(Number).filter(goalBy))]:[];
   state.winner=['0','1','2'].includes(String(stored.winner))?String(stored.winner):'';
-  state.ideas=stored.ideas.map(raw=>{const i=raw||{};return {...newIdea(),...i,statement:clean(i.statement)||[clean(i.title),clean(i.description)].filter(Boolean).join(i.title&&i.description?' — ':'') ,note:clean(i.note)||[clean(i.impact),clean(i.research)].filter(Boolean).join('\n')}});
+  state.ideas=stored.ideas.map(raw=>{const i=raw||{};return {...newIdea(),...i,statement:typeof i.statement==='string'?i.statement:[clean(i.title),clean(i.description)].filter(Boolean).join(i.title&&i.description?' — ':''),note:typeof i.note==='string'?i.note:[clean(i.impact),clean(i.research)].filter(Boolean).join('\n')}});
   state.drafts=stored.drafts&&typeof stored.drafts==='object'?stored.drafts:{};
   state.reasons=stored.reasons&&typeof stored.reasons==='object'?stored.reasons:{};
   state.review=stored.review&&typeof stored.review==='object'?stored.review:{};
@@ -145,10 +145,10 @@ function save(){
  try{sessionStorage.setItem(key,JSON.stringify(state));el('save-indicator').textContent='הטיוטה נשמרת אוטומטית בלשונית זו.'}
  catch(_){el('save-indicator').textContent='לא ניתן לשמור טיוטה בדפדפן הזה. הורידו את הסיכום לפני היציאה.'}
 }
-function clearError(n){n.removeAttribute('aria-invalid');n.setCustomValidity('');say('')}
+function clearError(n){n.removeAttribute('aria-invalid');n.removeAttribute('aria-describedby');n.setCustomValidity('');say('')}
 function requireValue(n,msg){
- if(filled(n.value)){n.removeAttribute('aria-invalid');return true}
- n.setAttribute('aria-invalid','true');say(msg);n.focus({preventScroll:true});n.scrollIntoView({block:'center'});return false
+ if(filled(n.value)){n.removeAttribute('aria-invalid');n.removeAttribute('aria-describedby');return true}
+ n.setAttribute('aria-invalid','true');n.setAttribute('aria-describedby','status');n.after(status);say(msg);n.focus({preventScroll:true});n.scrollIntoView({block:'center'});return false
 }
 function setForm(k,v){state.form[k]=clean(v);el(k).value=state.form[k]}
 function saveCurrentDraft(){
@@ -225,7 +225,11 @@ function renderIdeas(){
   labelField(a,'idea-statement-'+i,'בעיה '+(i+1)+' – תארו מצב וקושי',t);t.value=idea.statement;
   t.addEventListener('input',()=>{
    const before=idea.statement;idea.statement=t.value;clearError(t);
-   if(before!==idea.statement){state.review[i]=true;markChanged(3)}
+   if(before!==idea.statement){
+    state.review[i]=true;markChanged(3);
+    const d=state.drafts[i];
+    if(d&&(!filled(d.problem)||d.problem===before)){d.problem=idea.statement;if(state.winner===String(i))setForm('problem',d.problem)}
+   }
    renderProgress();save()
   });
   box.append(a)
@@ -246,6 +250,8 @@ function renderComparison(){
 }
 function renderFinal(){
  const i=selected();el('selected-description').textContent=i?'בחרנו בבעיה '+(Number(state.winner)+1)+'. למה? '+clean(state.form.reason):'';
+ el('final-original').textContent=i&&filled(state.form.problem)&&state.form.problem!==i.statement?'הניסוח במפת הבעיות: '+i.statement:'';
+ el('final-original').hidden=!el('final-original').textContent;
  if(i&&!filled(state.form.problem)){setForm('problem',i.statement);draftFor(state.winner).problem=state.form.problem}
 }
 function renderProgress(){
@@ -260,10 +266,10 @@ function renderProgress(){
 const normalize=s=>clean(s).trim().replace(/\s+/g,' ');
 function validateStage(n){
  if(n===1)return requireValue(el('domain'),'בחרו את תחום העניין המשותף.')&&requireValue(el('personal'),'כתבו לפחות מצב אחד שמפריע לכן.')&&requireValue(el('shared'),'כתבו למי עוד זה עשוי להפריע, או ציינו שאינכן בטוחות עדיין.');
- if(n===2){if(!state.visited.length){say('פתחו לפחות יעד אחד ועיינו בדוגמאות.');el('goal').focus({preventScroll:true});el('goal').scrollIntoView({block:'center'});return false}return true}
+ if(n===2){if(!state.visited.length){el('goal').after(status);say('פתחו לפחות יעד אחד ועיינו בדוגמאות.');el('goal').focus({preventScroll:true});el('goal').scrollIntoView({block:'center'});return false}return true}
  if(n===3){
   const seen=new Set();
-  for(let i=0;i<3;i++){const t=el('idea-statement-'+i);if(!requireValue(t,'נסחו את בעיה '+(i+1)+' לפני שתמשיכו.'))return false;const s=normalize(t.value);if(seen.has(s)){t.setAttribute('aria-invalid','true');say('נסחו שלוש בעיות שונות.');t.focus({preventScroll:true});t.scrollIntoView({block:'center'});return false}seen.add(s)}
+  for(let i=0;i<3;i++){const t=el('idea-statement-'+i);if(!requireValue(t,'נסחו את בעיה '+(i+1)+' לפני שתמשיכו.'))return false;const s=normalize(t.value);if(seen.has(s)){t.setAttribute('aria-invalid','true');t.setAttribute('aria-describedby','status');t.after(status);say('נסחו שלוש בעיות שונות.');t.focus({preventScroll:true});t.scrollIntoView({block:'center'});return false}seen.add(s)}
   return true
  }
  if(n===4){
@@ -299,7 +305,7 @@ document.querySelectorAll('[data-next]').forEach(b=>b.addEventListener('click',(
 document.querySelectorAll('[data-back]').forEach(b=>b.addEventListener('click',()=>go(Number(b.dataset.back))));
 el('domain').addEventListener('change',()=>{
  const value=el('domain').value;clearError(el('domain'));
- if(state.domain!==value){state.domain=value;state.goal='';state.visited=[];markChanged(1)}
+ if(state.domain!==value){const hadDomain=!!state.domain;state.domain=value;state.goal='';state.visited=[];markChanged(1);if(hadDomain&&filled(state.form.personal)){el('domain').after(status);say('תחום העניין השתנה. התשובות נשמרו; בדקו אם הן עדיין מתאימות לתחום החדש.')}}
  renderProgress();save()
 });
 el('goal').addEventListener('change',()=>{state.goal=el('goal').value;say('');renderReading(true)});
@@ -324,7 +330,7 @@ el('download').addEventListener('click',()=>{
  if(!validSummary())return;
  const text=['פורצות דרך · מאתרות אתגר · סיכום הצוות',...summary().map(([k,v])=>k+':\n'+v)].join('\n\n');
  const url=URL.createObjectURL(new Blob(['\uFEFF'+text],{type:'text/plain;charset=utf-8'})),a=document.createElement('a');
- a.href=url;a.download='סיכום-מאתרות-אתגר.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);say('הסיכום מוכן להורדה. שמרו אותו בתיקיית המיזם.')
+ a.href=url;a.download='סיכום-מאתרות-אתגר.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);el('stage-5').querySelector(':scope > .actions').before(status);say('הסיכום מוכן להורדה. שמרו אותו בתיקיית המיזם.')
 });
 function renderPrint(){const a=el('print-summary');a.replaceChildren(make('h1','','פורצות דרך · מאתרות אתגר'));for(const [k,v] of summary())a.append(make('h3','',k),make('p','',v))}
 el('print').addEventListener('click',()=>{if(validSummary()){renderPrint();window.print()}});
