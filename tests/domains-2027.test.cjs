@@ -147,3 +147,11 @@ test('long body paragraphs are original across articles, and readers contain no 
   }
  }
 });
+
+test('SDG workshop entry appears once, after the ten interest domains',()=>{
+ const html=read('domains/alldomains.html');
+ assert.equal((html.match(/class="challenge-entry"/g)||[]).length,1);
+ assert.match(html,/<\/ol><\/nav>\s*<a class="challenge-entry" href="sdg-goals.html">/);
+ assert.equal((html.match(/class="domain-link"/g)||[]).length,10);
+ assert.doesNotMatch(read('ar/domains/alldomains.html'),/class="challenge-entry"/);
+});
