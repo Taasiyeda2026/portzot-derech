@@ -46,7 +46,7 @@ header{background:linear-gradient(110deg,#fff 15%,#f3eaf7 80%);border-bottom:1px
 <div class="field"><label class="required" for="participants">أسماء عضوات الفريق</label><input id="participants" placeholder="اكتبن أسماء جميع المشاركات وافصلن بينها بفواصل" ><p class="helper">ستظهر الأسماء في الملخّص وفي ملف PDF.</p></div>
 <div class="field"><label for="team">اسم الفريق <span class="smallnote">(اختياري)</span></label><input id="team" placeholder="اسم الفريق" ></div>
 </div></section>
-<section class="panel"><div class="panelhead"><div class="number">02</div><div><h2>نتعرّف إلى شخصية المستخدم</h2><p>ننشىء شخصية واحدة تمثّل مستخدمة من الفئة المستهدفة.</p></div></div><div class="fields">
+<section class="panel"><div class="panelhead"><div class="number">02</div><div><h2>نتعرّف إلى شخصية المستخدم</h2><p>نُنشئ شخصية واحدة تمثّل مستخدمة من الفئة المستهدفة.</p></div></div><div class="fields">
 <div class="double"><div class="field"><label class="required" for="personaName">ما اسمها؟</label><input id="personaName"  placeholder="مثال: مايا"></div><div class="field"><label for="age">كم عمرها؟ <span class="smallnote">(إذا كان ذلك مناسبًا)</span></label><input id="age"  placeholder="العمر أو الفئة العمرية"></div></div>
 <div class="field"><label class="required" for="routine">ما الذي يميّز حياتها اليومية فيما يتعلّق بالمشكلة؟</label><textarea id="routine" rows="2" placeholder="اكتبن فقط التفاصيل التي تساعد على فهم المشكلة"></textarea></div>
 </div></section>
@@ -66,11 +66,11 @@ header{background:linear-gradient(110deg,#fff 15%,#f3eaf7 80%);border-bottom:1px
 <div class="data"><span class="key">أسماء عضوات الفريق</span><span class="value" data-out="participants"></span></div>
 <div class="data"><span class="key">المشكلة التي اخترناها</span><span class="value" data-out="problem"></span></div>
 <div class="data"><span class="key">الفئة المستهدفة</span><span class="value" data-out="audience"></span></div>
-<div class="data"><span class="key">הشخصية المستخدم</span><span class="value" id="identity"></span></div>
+<div class="data"><span class="key">شخصية المستخدم</span><span class="value" id="identity"></span></div>
 <div class="data"><span class="key">حياتها اليومية</span><span class="value" data-out="routine"></span></div>
 <div class="data"><span class="key">متى تظهر المشكلة</span><span class="value" data-out="moment"></span></div>
 <div class="data"><span class="key">ما الذي يصعّب الأمر عليها</span><span class="value" data-out="barrier"></span></div>
-<div class="data"><span class="key">איך הבעיה משפיעה עליה</span><span class="value" data-out="impact"></span></div>
+<div class="data"><span class="key">كيف تؤثّر المشكلة عليها</span><span class="value" data-out="impact"></span></div>
 <div class="data"><span class="key">ما الذي تتمنّى أن تتمكّن من فعله</span><span class="value" data-out="wish"></span></div>
 <div class="data"><span class="key">هدف المشروع</span><span class="value" data-out="objective"></span></div>
 <div class="actions"><button class="btn primary" type="button" id="print">تنزيل ملف PDF ملوّن</button><button class="btn" type="button" id="clear">مسح الإجابات</button></div><p id="formStatus" role="status" aria-live="polite" class="form-status"></p><p id="saveState" class="footnote">تُحفَظ المسوّدة في علامة التبويب هذه فقط.</p><p class="footnote">تُحفَظ المسوّدة تلقائيًا في علامة التبويب هذه فقط. احفظن ملف PDF في مجلّد المشروع. لا تُرسَل البيانات إلى الخادم.</p></aside></div>
@@ -183,7 +183,7 @@ function downloadColorPdf(){
     ensure(h+12);
     round(M,y,W-2*M,h,15,'#f0f9f8','#b9e3e1');
     round(R-8,y+8,8,h-16,4,col.teal);
-    txt('חברות הצוות',R-32,y+29,23,col.teal,700);
+    txt('عضوات الفريق',R-32,y+29,23,col.teal,700);
     members.forEach((line,i)=>txt(line,R-32,y+57+i*28,24,col.ink,600));
     y+=h+12;
   }
@@ -213,7 +213,7 @@ function downloadColorPdf(){
   card('متى وأين تواجه المشكلة؟',d.moment,'teal');
   card('ما الذي تحاول القيام به؟ وما الذي يصعّب الأمر عليها؟',d.barrier);
   card('كيف تؤثّر المشكلة عليها؟',d.impact);
-  if(d.feeling)card('מה היא מרגישה?',d.feeling);
+  if(d.feeling)card('كيف تشعر?',d.feeling);
   card('ما الذي تتمنّى أن تتمكّن من فعله?',d.wish);
   card('هدف المشروع',d.objective,'target');
   // Stamp each footer after all cards have been placed; pages may have split.
@@ -223,7 +223,7 @@ function downloadColorPdf(){
   const blob=new Blob([bytes],{type:'application/pdf'});
   const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;
   const safe=(d.personaName||'شخصية المستخدم').replace(/[\\/:*?"<>|]/g,'_').slice(0,40);
-  a.download=`פורצות_דרך_شخصية_المستخدم_${safe}.pdf`;document.body.append(a);a.click();
+  a.download=`رائدات_الطريق_شخصية_المستخدم_${safe}.pdf`;document.body.append(a);a.click();
   setTimeout(()=>{URL.revokeObjectURL(url);a.remove()},10000);
  }catch(err){alert('تعذّر إنشاء ملف PDF: '+err.message)}
  finally{button.textContent=oldText;button.disabled=false}
@@ -281,7 +281,7 @@ function pdfFromJpegPages(pages){
  }
  function update(){for(const el of document.querySelectorAll('[data-out]')){const v=vals[el.dataset.out].value.trim();el.textContent=v||'لم يُملأ بعد'}
   for(const el of document.querySelectorAll('[data-print]')){const v=vals[el.dataset.print].value.trim();el.textContent=v||'لم يُذكَر'}
-  const n=vals.personaName.value.trim(),age=vals.age.value.trim();document.getElementById('identity').textContent=(n||'بلا اسم')+(age?' · גיל '+age:'');
+  const n=vals.personaName.value.trim(),age=vals.age.value.trim();document.getElementById('identity').textContent=(n||'بلا اسم')+(age?' · العمر '+age:'');
   const count=required.filter(id=>vals[id].value.trim()).length;
   document.getElementById('progress').textContent=`اكتملت ${count} من أصل ${required.length} حقول أساسية`;
   document.getElementById('fill').style.width=(count/required.length*100)+'%';
