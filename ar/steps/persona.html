@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<script src="../../js/course-language.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>פורצות דרך | بناء شخصية المستخدمة</title>
+<style>
+:root {--ink:#33284a;--muted:#6e667a;--pink:#b72b78;--violet:#6a4ca1;--teal:#008f9b;--bg:#f9f7fb;--line:#e9e2ee;--shadow:0 10px 35px rgba(53,31,72,.07)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--ink);font-family:Arial,Tahoma,'Noto Sans Arabic',Arial,sans-serif;background:var(--bg);line-height:1.55}button,input,textarea{font:inherit}button{cursor:pointer}
+header{background:linear-gradient(110deg,#fff 15%,#f3eaf7 80%);border-bottom:1px solid #e6dbea}.topbar{max-width:1200px;margin:auto;display:flex;align-items:center;justify-content:space-between;padding:14px 24px;gap:16px}.brand{font-weight:900;color:var(--pink);font-size:22px;letter-spacing:-.6px}.persona-languages{display:flex;align-items:center;gap:8px;font-size:13px;margin-inline-start:auto}.persona-languages a{color:var(--violet);text-decoration:none;border-radius:6px;padding:2px 5px}.persona-languages a[aria-current=true]{font-weight:800;background:#f1dce9}.mode{text-decoration:none;font-size:12px;color:#735f7d;background:#fff;padding:6px 11px;border:1px solid #e7d6e4;border-radius:50px}.intro{max-width:1200px;margin:auto;padding:29px 24px 34px}.eyebrow{font-size:13px;color:var(--pink);font-weight:700;letter-spacing:.2px}.intro h1{font-size:clamp(31px,4vw,45px);letter-spacing:-1.1px;line-height:1.15;margin:8px 0 12px}.intro p{max-width:760px;color:#62596b;font-size:15px;margin:0}.steps{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}.step{background:#fff;border:1px solid #e6deeb;border-radius:11px;padding:9px 13px;font-size:13px;color:#59496c}.step b{color:var(--pink);margin-left:5px}
+.layout{max-width:1200px;margin:24px auto 55px;padding:0 24px;display:grid;grid-template-columns:minmax(0,1.6fr) minmax(300px,.8fr);align-items:start;gap:20px}.main{display:grid;gap:18px}.panel,.summary{background:#fff;border-radius:18px;border:1px solid var(--line);box-shadow:var(--shadow);padding:25px}.panelhead{display:flex;align-items:start;gap:13px;margin-bottom:21px}.number{flex:none;width:37px;height:37px;border-radius:12px;background:#fae6f0;color:var(--pink);font-weight:800;display:grid;place-items:center}.panel h2,.summary h2{font-size:19px;margin:0 0 5px;letter-spacing:-.2px}.panelhead p{font-size:13px;color:var(--muted);margin:0}.fields{display:grid;gap:18px}.double{display:grid;grid-template-columns:1fr 1fr;gap:15px}.field label{display:block;font-weight:700;font-size:14px;margin-bottom:6px}.smallnote{font-weight:400;font-size:12px;color:#867b8d}.field input,.field textarea{display:block;width:100%;color:#342747;background:#fff;border:1px solid #dcd5e2;border-radius:10px;padding:12px 13px;font-size:15px;outline:0;transition:border .15s,box-shadow .15s}.field input:focus,.field textarea:focus{border-color:var(--violet);box-shadow:0 0 0 3px #e9e2f9}.field textarea{resize:vertical;min-height:76px}.field input[readonly],.field textarea[readonly]{background:#f8f5fa;border-style:dashed;color:#514759}.helper{color:var(--muted);font-size:12px;margin:5px 0 0}.flowhint{background:#edf9f8;border:1px solid #caeae7;border-radius:11px;padding:12px 14px;color:#34625d;font-size:13px}.summary{position:sticky;top:18px;border-top:5px solid var(--pink)}.summary h2{margin-bottom:8px}.summary .sub{color:var(--muted);font-size:12px;margin:0 0 15px}.progress-track{background:#eee8f1;height:7px;border-radius:9px;overflow:hidden}.progress-fill{background:var(--pink);height:100%;width:0;transition:width .2s}.progress-label{font-size:12px;color:var(--muted);margin:7px 0 17px}.data{padding:11px 0;border-bottom:1px solid #eee8f1}.data .key{display:block;color:var(--muted);font-size:12px;margin-bottom:3px}.data .value{font-weight:600;font-size:14px;overflow-wrap:anywhere;white-space:pre-wrap}.data:last-of-type{border-bottom:0}.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}.btn{border:1px solid #e0d4e7;color:var(--violet);font-weight:700;background:#fff;border-radius:10px;padding:10px 15px}.btn.primary{background:var(--pink);color:#fff;border-color:var(--pink)}.btn:hover{filter:brightness(.96)}.summary .actions{display:grid;grid-template-columns:1fr 1fr}.summary .btn{font-size:13px}.footnote{font-size:12px;line-height:1.5;color:var(--muted);margin:15px 0 0}.note {font-size:12px;color:#7a6d84;text-align:center;padding:10px 20px 32px}.required:after{content:' *';color:var(--pink)}[aria-invalid=true]{border-color:#b42355!important;box-shadow:0 0 0 2px #f9d5e1!important}.form-status{font-size:13px;color:#a72154;min-height:1em;margin:12px 0 0;font-weight:700}.print-only{display:none}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.summary{position:static;grid-row:2}.intro{padding-bottom:27px}}@media(max-width:520px){.topbar{flex-wrap:wrap}.persona-languages{margin-inline-start:0}.layout{padding:0 12px}.topbar{padding:12px}.intro{padding:24px 14px}.panel,.summary{padding:18px}.double{grid-template-columns:1fr}.step{font-size:12px}.summary .actions{display:flex}.summary .btn{flex:1}}
+/* The form is for working; the dedicated print sheet is for the final persona document. */
+.print-sheet{display:none}
+@page{size:A4 portrait;margin:12mm}
+@media print{
+  html,body{margin:0!important;padding:0!important;background:#fff!important;color:#20243a!important;font-family:Arial,'Noto Sans Hebrew',sans-serif!important;font-size:10.5pt;line-height:1.4;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  header,.layout,.note{display:none!important}
+  .print-sheet{display:block!important;width:100%;max-width:100%;margin:0;padding:0;direction:rtl}
+  .print-top{display:flex;justify-content:space-between;align-items:center;gap:10mm;padding:5mm 6mm;border-radius:11px;background:linear-gradient(115deg,#f9dce9,#eee6fa 56%,#def6f7);border:1px solid #dbc6e5;margin-bottom:4mm}
+  .print-brand{font-weight:900;font-size:21pt;color:#912d74;line-height:1.15}.print-brand small{display:block;color:#614c79;font-size:9pt;font-weight:600;margin-top:2mm}
+  .print-meta{font-size:9pt;color:#4a4660;text-align:left;line-height:1.7}
+  .print-identity{display:flex;justify-content:space-between;align-items:center;gap:8mm;border:1px solid #e8d9ef;border-right:5px solid #bf357c;background:#fff7fc;border-radius:10px;padding:3.5mm 5mm;margin-bottom:3.5mm}
+  .print-identity strong{font-size:17pt;color:#45275b}.print-identity .print-age{font-size:10pt;color:#605771}
+  .print-title{font-size:11pt;color:#9c2e79;font-weight:800;line-height:1.35;margin:0 0 1.5mm}
+  .print-card{border:1px solid #e1d8e8;border-right:3px solid #a26bb8;border-radius:9px;padding:3.1mm 4.5mm;margin:0 0 3.3mm;background:#fff;break-inside:avoid;page-break-inside:avoid}
+  .print-card.accent{background:#fbf5fb;border-right-color:#d24b8b}.print-card.teal{background:#f1faf9;border-right-color:#299aa2}.print-card.target{background:#f9eaf4;border-right-color:#bc287b;border-width:1px 4px 1px 1px}
+  .print-value{white-space:pre-wrap;overflow-wrap:anywhere;color:#342e40;font-size:10pt}
+  .print-grid{display:grid;grid-template-columns:1fr 1fr;gap:3.5mm;align-items:stretch}
+  .print-grid .print-card{margin:0 0 3.3mm}
+  .print-card.target .print-value{font-size:11.1pt;font-weight:700;color:#3d2d51}
+  .print-footer{font-size:8.3pt;color:#625971;border-top:1px solid #e3d8e8;padding-top:2.5mm;margin-top:1mm;display:flex;justify-content:space-between;gap:4mm}
+}
+
+</style>
+</head>
+<body>
+<header><div class="topbar"><div class="brand" translate="no" lang="he">פורצות דרך</div><nav class="persona-languages" aria-label="اختيار اللغة"><a href="../../steps/persona.html?lang=he" lang="he" data-course-language="he">עברית</a><span aria-hidden="true">|</span><a href="persona.html?lang=ar" lang="ar" data-course-language="ar" aria-current="true">العربية</a></nav><a class="mode" href="../strongermenu-2026.html">العودة إلى موقع البرنامج</a></div>
+<div class="intro"><span class="eyebrow">نشاط جماعي · نحو 15 دقيقة</span><h1>نبني شخصية المستخدمة الخاصة بمشروعنا</h1><p><strong>شخصية المستخدمة</strong> هي شخصية افتراضية تمثّل مستخدمة نموذجية من الفئة المستهدفة، وتساعدنا على فهم احتياجاتها وعاداتها وأهدافها والصعوبات التي تواجهها.</p>
+<div class="steps"><div class="step"><b>01</b> نقطة الانطلاق</div><div class="step"><b>02</b> نتعرّف إليها</div><div class="step"><b>03</b> نفهم الصعوبة</div><div class="step"><b>04</b> نحدّد هدفًا</div></div></div></header>
+<div class="layout"><main class="main" id="form">
+<section class="panel"><div class="panelhead"><div class="number">01</div><div><h2>نقطة انطلاقنا</h2><p>نربط شخصية المستخدمة بالمشكلة التي اخترناها، دون أن نبدأ من جديد.</p></div></div><div class="fields">
+<div class="field"><label for="problem">المشكلة التي اخترناها <span class="smallnote">(تُنقل من نشاط «نكتشف التحدّي» إذا أُنجز)</span></label><textarea id="problem" rows="2" placeholder="لمن تحدث المشكلة؟ ومتى؟ وما الصعوبة؟ دون اقتراح حلّ"></textarea><p class="helper">إذا أنهيتن نشاط «نكتشف التحدّي» في علامة التبويب نفسها، فستظهر المشكلة هنا. وإلا فاكتبنها بأنفسكن.</p></div>
+<div class="field"><label class="required" for="audience">من هي الفئة المستهدفة في مشروعنا؟</label><input id="audience" placeholder="مجموعة الأشخاص الذين يواجهون المشكلة" ></div>
+<div class="field"><label class="required" for="participants">أسماء عضوات الفريق</label><input id="participants" placeholder="اكتبن أسماء جميع المشاركات وافصلن بينها بفواصل" ><p class="helper">ستظهر الأسماء في الملخّص وفي ملف PDF.</p></div>
+<div class="field"><label for="team">اسم الفريق <span class="smallnote">(اختياري)</span></label><input id="team" placeholder="اسم الفريق" ></div>
+</div></section>
+<section class="panel"><div class="panelhead"><div class="number">02</div><div><h2>نتعرّف إلى شخصية المستخدمة</h2><p>نُنشئ شخصية واحدة تمثّل مستخدمة من الفئة المستهدفة.</p></div></div><div class="fields">
+<div class="double"><div class="field"><label class="required" for="personaName">ما اسمها؟</label><input id="personaName"  placeholder="مثال: مايا"></div><div class="field"><label for="age">كم عمرها؟ <span class="smallnote">(إذا كان ذلك مناسبًا)</span></label><input id="age"  placeholder="العمر أو الفئة العمرية"></div></div>
+<div class="field"><label class="required" for="routine">ما الذي يميّز حياتها اليومية فيما يتعلّق بالمشكلة؟</label><textarea id="routine" rows="2" placeholder="اكتبن فقط التفاصيل التي تساعد على فهم المشكلة"></textarea></div>
+</div></section>
+<section class="panel"><div class="panelhead"><div class="number">03</div><div><h2>نرى المشكلة من منظورها</h2><p>نصف موقفًا محددًا تواجه فيه شخصية المستخدمة المشكلة.</p></div></div><div class="fields">
+<div class="field"><label class="required" for="moment">متى وأين تواجه المشكلة؟</label><textarea id="moment" rows="2" placeholder="وقت ومكان وموقف محدّد"></textarea></div>
+<div class="field"><label class="required" for="barrier">ما الذي تحاول القيام به؟ وما الذي يصعّب الأمر عليها؟</label><textarea id="barrier" rows="2" placeholder="ماذا تريد أن تفعل؟ وما الذي لا يسير كما ينبغي؟"></textarea></div>
+<div class="field"><label class="required" for="impact">كيف تؤثّر المشكلة عليها؟</label><textarea id="impact" rows="2" placeholder="مثلًا: الوقت أو الأنشطة اليومية أو المشاركة أو الرفاه"></textarea></div>
+<div class="field"><label for="feeling">بماذا تشعر في تلك اللحظة؟ <span class="smallnote">(اختياري)</span></label><input id="feeling" placeholder="شعور واحد أو شعوران" ></div>
+<div class="field"><label class="required" for="wish">ما الذي تتمنّى أن تتمكّن من فعله؟</label><textarea id="wish" rows="2" placeholder="أيّ تغيير سيساعدها؟ دون اقتراح منتج"></textarea></div>
+</div></section>
+<section class="panel"><div class="panelhead"><div class="number">04</div><div><h2>نصوغ هدف المشروع</h2><p>نحدّد التغيير المنشود، وليس الحلّ التكنولوجي بعد.</p></div></div><div class="fields">
+<div class="field"><label class="required" for="objective">ما هدف مشروعنا؟</label><textarea id="objective" rows="2" placeholder="تمكين ... من ..."></textarea></div>
+<div class="flowhint"><strong>قبل الانتهاء:</strong> تأكّدن من أنّ الهدف يصف تغييرًا يفيد الفئة المستهدفة، لا تطبيقًا أو منتجًا أو حلًّا قرّرتن تطويره مسبقًا. هذه شخصية أولية، وسنتحقّق من افتراضاتنا خلال البحث لاحقًا.</div>
+</div></section>
+</main>
+<aside class="summary" id="summary"><h2>ملخّص شخصية المستخدمة</h2><p class="sub">يتحدّث هذا الملخّص تلقائيًا وفق إجاباتكنّ.</p><div class="progress-track"><div class="progress-fill" id="fill"></div></div><p class="progress-label" id="progress"></p>
+<div class="data"><span class="key">أسماء عضوات الفريق</span><span class="value" data-out="participants"></span></div>
+<div class="data"><span class="key">المشكلة التي اخترناها</span><span class="value" data-out="problem"></span></div>
+<div class="data"><span class="key">الفئة المستهدفة</span><span class="value" data-out="audience"></span></div>
+<div class="data"><span class="key">شخصية المستخدمة</span><span class="value" id="identity"></span></div>
+<div class="data"><span class="key">حياتها اليومية</span><span class="value" data-out="routine"></span></div>
+<div class="data"><span class="key">متى تظهر المشكلة</span><span class="value" data-out="moment"></span></div>
+<div class="data"><span class="key">ما الذي يصعّب الأمر عليها</span><span class="value" data-out="barrier"></span></div>
+<div class="data"><span class="key">كيف تؤثّر المشكلة عليها</span><span class="value" data-out="impact"></span></div>
+<div class="data"><span class="key">ما الذي تتمنّى أن تتمكّن من فعله</span><span class="value" data-out="wish"></span></div>
+<div class="data"><span class="key">هدف المشروع</span><span class="value" data-out="objective"></span></div>
+<div class="actions"><button class="btn primary" type="button" id="print">تنزيل ملف PDF ملوّن</button><button class="btn" type="button" id="clear">مسح الإجابات</button></div><p id="formStatus" role="status" aria-live="polite" class="form-status"></p><p id="saveState" class="footnote">تُحفَظ المسوّدة في علامة التبويب هذه فقط.</p><p class="footnote">تُحفَظ المسوّدة تلقائيًا في علامة التبويب هذه فقط. احفظن ملف PDF في مجلّد المشروع. لا تُرسَل البيانات إلى الخادم.</p></aside></div>
+<p class="note">פורצות דרך · תעשיידע · شخصية مستخدمة أولية استعدادًا لبحث المشكلة</p>
+<!-- A separate print layout: not the interactive form and not the narrow side preview. -->
+<section class="print-sheet" id="printSheet" aria-label="صفحة شخصية المستخدمة للطباعة">
+  <div class="print-top"><div class="print-brand">פורצות דרך<small>شخصية المستخدمة – وثيقة مشروع جماعي</small></div><div class="print-meta">תעשיידע<br><strong>الفريق:</strong> <span data-print="team"></span><br><strong>عضوات الفريق:</strong> <span data-print="participants"></span></div></div>
+  <div class="print-identity"><div><div class="print-title">شخصية المستخدمة الخاصة بنا</div><strong data-print="personaName"></strong></div><div class="print-age"><strong>العمر:</strong> <span data-print="age"></span></div></div>
+  <div class="print-card accent"><div class="print-title">المشكلة التي اخترناها</div><div class="print-value" data-print="problem"></div></div>
+  <div class="print-card"><div class="print-title">الفئة المستهدفة</div><div class="print-value" data-print="audience"></div></div>
+  <div class="print-card"><div class="print-title">حياتها اليومية</div><div class="print-value" data-print="routine"></div></div>
+  <div class="print-card teal"><div class="print-title">متى وأين تواجه المشكلة؟</div><div class="print-value" data-print="moment"></div></div>
+  <div class="print-card"><div class="print-title">ما الذي تحاول القيام به؟ وما الذي يصعّب الأمر عليها؟</div><div class="print-value" data-print="barrier"></div></div>
+  <div class="print-grid"><div class="print-card"><div class="print-title">أثر المشكلة عليها</div><div class="print-value" data-print="impact"></div></div><div class="print-card"><div class="print-title">كيف تشعر؟</div><div class="print-value" data-print="feeling"></div></div></div>
+  <div class="print-card"><div class="print-title">ما الذي تتمنّى أن تتمكّن من فعله?</div><div class="print-value" data-print="wish"></div></div>
+  <div class="print-card target"><div class="print-title">هدف المشروع</div><div class="print-value" data-print="objective"></div></div>
+  <div class="print-footer"><span>شخصية مستخدمة أولية قائمة على افتراضات؛ سنتحقّق منها خلال البحث لاحقًا.</span><span>פורצות דרך · תעשיידע</span></div>
+</section>
+
+
+<script>
+/* Self-contained colored PDF export. Each page is drawn on a high-resolution
+   canvas and included as a JPEG image in a standard A4 PDF. This does not use
+   window.print(), external APIs, or the browser's 'background graphics' option. */
+function validatePersona(){
+ const required=['problem','audience','participants','personaName','routine','moment','barrier','impact','wish','objective'];
+ const status=document.getElementById('formStatus');
+ for(const id of required){
+  const el=document.getElementById(id);
+  if(!el.value.trim()){
+   el.setAttribute('aria-invalid','true');
+   status.textContent='لإعداد الملخّص، يُرجى إكمال الحقل: '+document.querySelector('label[for="'+id+'"]').textContent.replace('*','').trim();
+   el.focus({preventScroll:true});el.scrollIntoView({block:'center',behavior:'smooth'});return false;
+  }
+  el.removeAttribute('aria-invalid');
+ }
+ status.textContent='';return true;
+}
+function downloadColorPdf(){
+ if(!validatePersona())return;
+ const button=document.getElementById('print');
+ const oldText=button.textContent;
+ button.disabled=true;button.textContent='يجري إعداد ملف PDF ملوّن…';
+ try {
+  const W=1240,H=1754,M=65,R=W-M;
+  const fields=['problem','audience','team','participants','personaName','age','routine','moment','barrier','impact','feeling','wish','objective'];
+  const d=Object.fromEntries(fields.map(id=>[id,(document.getElementById(id).value||'').trim()]));
+  const cv=[];
+  let canvas,ctx,y,pageIndex=0;
+  const col={ink:'#352344',muted:'#685874',violet:'#654395',purple:'#9d2c7a',pink:'#c02a7c',teal:'#168e98',line:'#dfd4e8'};
+  function round(x,Y,w,h,r,fill,stroke){ctx.beginPath();ctx.roundRect(x,Y,w,h,r);if(fill){ctx.fillStyle=fill;ctx.fill()}if(stroke){ctx.lineWidth=2;ctx.strokeStyle=stroke;ctx.stroke()}}
+  function txt(str,x,Y,size,color=col.ink,weight=400){ctx.fillStyle=color;ctx.font=`${weight} ${size}px Arial, sans-serif`;ctx.textAlign='right';ctx.textBaseline='alphabetic';ctx.direction='rtl';ctx.fillText(str,x,Y)}
+  function lines(text,maxWidth,size,weight=400){
+    const t=(text||'لم يُذكَر').trim().replace(/\r/g,'');
+    ctx.font=`${weight} ${size}px Arial, sans-serif`;
+    const out=[];
+    for(const para of t.split('\n')){
+      let acc='';
+      for(const word of para.split(/\s+/).filter(Boolean)){
+        const next=acc?acc+' '+word:word;
+        if(acc&&ctx.measureText(next).width>maxWidth){out.push(acc);acc=word}
+        else acc=next;
+        if(ctx.measureText(acc).width>maxWidth){
+          let seg='';
+          for(const ch of acc){const n=seg+ch;if(seg&&ctx.measureText(n).width>maxWidth){out.push(seg);seg=ch}else seg=n}
+          acc=seg;
+        }
+      }
+      out.push(acc||' ');
+    }
+    return out;
+  }
+  function freshPage(){
+    canvas=document.createElement('canvas');canvas.width=W;canvas.height=H;
+    ctx=canvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);
+    cv.push(canvas);pageIndex++;y=65;
+    if(pageIndex>1){
+      const g=ctx.createLinearGradient(M,y,R,y);g.addColorStop(0,'#f9e2ee');g.addColorStop(1,'#e9f7f6');
+      round(M,y,W-2*M,92,18,g,'#e6cbdf');
+      txt('פורצות דרך',R-28,y+47,38,col.purple,800);
+      txt('شخصية المستخدمة – تتمّة',R-28,y+74,20,col.violet,600);
+      y+=116;
+    }
+  }
+  function ensure(h){if(y+h>H-120)freshPage()}
+  function header(){
+    const h=152;
+    const g=ctx.createLinearGradient(M,y,R,y);g.addColorStop(0,'#f9d8e8');g.addColorStop(.52,'#eee3f8');g.addColorStop(1,'#dcf5f4');
+    round(M,y,W-2*M,h,23,g,'#e3c5df');
+    round(M+15,y+18,14,h-36,7,col.pink);
+    txt('פורצות דרך',R-32,y+70,56,col.purple,800);
+    txt('شخصية المستخدمة | وثيقة مشروع جماعي',R-33,y+112,25,col.violet,700);
+    ctx.direction='rtl';ctx.textAlign='left';ctx.fillStyle=col.muted;ctx.font='21px Arial';
+    ctx.fillText('תעשיידע',M+42,y+58);
+    ctx.fillText('الفريق: '+(d.team||'لم يُذكَر'),M+42,y+101);
+    y+=h+24;
+  }
+  function identity(){
+    ensure(138);
+    round(M,y,W-2*M,121,18,'#fff7fc','#e7d5e8');
+    round(R-9,y+9,9,103,5,col.pink);
+    txt('شخصية المستخدمة الخاصة بنا',R-38,y+38,25,col.pink,700);
+    txt(d.personaName||'لم يُدخَل اسم بعد',R-38,y+92,43,col.ink,800);
+    txt('العمر: '+(d.age||'لم يُذكَر'),M+255,y+78,25,col.muted,600);
+    y+=141;
+  }
+  function participantStrip(){
+    const members=lines(d.participants,W-2*M-70,24);
+    const h=57+members.length*28;
+    ensure(h+12);
+    round(M,y,W-2*M,h,15,'#f0f9f8','#b9e3e1');
+    round(R-8,y+8,8,h-16,4,col.teal);
+    txt('عضوات الفريق',R-32,y+29,23,col.teal,700);
+    members.forEach((line,i)=>txt(line,R-32,y+57+i*28,24,col.ink,600));
+    y+=h+12;
+  }
+  function card(title,value,kind='default'){
+    const sz=26,lineHeight=33;
+    const valueLines=lines(value,W-2*M-90,sz);
+    const h=Math.max(106,78+valueLines.length*lineHeight);
+    ensure(h+15);
+    const bg={default:'#ffffff',accent:'#fcf2f8',teal:'#effaf9',target:'#fbeaf3'}[kind];
+    const stripe={default:'#9469b2',accent:col.pink,teal:col.teal,target:'#b82277'}[kind];
+    round(M,y,W-2*M,h,16,bg,'#e4d8eb');
+    round(R-8,y+8,8,h-16,4,stripe);
+    txt(title,R-31,y+35,24,col.purple,700);
+    for(let j=0;j<valueLines.length;j++)txt(valueLines[j],R-31,y+74+j*lineHeight,sz,col.ink,kind==='target'?700:400);
+    y+=h+15;
+  }
+  function footer(){
+    const fy=H-89;ctx.strokeStyle='#decfe5';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(M,fy);ctx.lineTo(R,fy);ctx.stroke();
+    txt('شخصية مستخدمة أولية قائمة على افتراضات؛ سنتحقّق منها خلال البحث لاحقًا.',R,fy+33,18,col.muted);
+    ctx.textAlign='left';ctx.direction='ltr';ctx.font='18px Arial';ctx.fillStyle=col.purple;ctx.fillText('פורצות דרך · תעשיידע',M,fy+33);
+    const num=`الصفحة ${pageIndex}`;txt(num,R,fy+62,15,col.muted);
+  }
+  freshPage();header();identity();participantStrip();
+  card('المشكلة التي اخترناها',d.problem,'accent');
+  card('الفئة المستهدفة',d.audience);
+  card('حياتها اليومية',d.routine);
+  card('متى وأين تواجه المشكلة؟',d.moment,'teal');
+  card('ما الذي تحاول القيام به؟ وما الذي يصعّب الأمر عليها؟',d.barrier);
+  card('كيف تؤثّر المشكلة عليها؟',d.impact);
+  if(d.feeling)card('كيف تشعر?',d.feeling);
+  card('ما الذي تتمنّى أن تتمكّن من فعله?',d.wish);
+  card('هدف المشروع',d.objective,'target');
+  // Stamp each footer after all cards have been placed; pages may have split.
+  cv.forEach((c,i)=>{ctx=c.getContext('2d');pageIndex=i+1;footer()});
+  const pages=cv.map(c=>({jpeg:Uint8Array.from(atob(c.toDataURL('image/jpeg',.94).split(',')[1]),x=>x.charCodeAt(0)),w:c.width,h:c.height}));
+  const bytes=pdfFromJpegPages(pages);
+  const blob=new Blob([bytes],{type:'application/pdf'});
+  const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;
+  const safe=(d.personaName||'شخصية المستخدمة').replace(/[\\/:*?"<>|]/g,'_').slice(0,40);
+  a.download=`رائدات_الطريق_شخصية_المستخدم_${safe}.pdf`;document.body.append(a);a.click();
+  setTimeout(()=>{URL.revokeObjectURL(url);a.remove()},10000);
+ }catch(err){alert('تعذّر إنشاء ملف PDF: '+err.message)}
+ finally{button.textContent=oldText;button.disabled=false}
+}
+function pdfFromJpegPages(pages){
+ const enc=new TextEncoder();let parts=[],n=0,offsets=[0];
+ function push(x){const bytes=typeof x==='string'?enc.encode(x):x;parts.push(bytes);n+=bytes.length}
+ function obj(id,body){offsets[id]=n;push(`${id} 0 obj\n`);push(body);push('\nendobj\n')}
+ push('%PDF-1.4\n');push(new Uint8Array([0x25,0xe2,0xe3,0xcf,0xd3,0x0a]));
+ obj(1,'<< /Type /Catalog /Pages 2 0 R >>');
+ obj(2,`<< /Type /Pages /Kids [${pages.map((_,i)=>`${3+i*3} 0 R`).join(' ')}] /Count ${pages.length} >>`);
+ pages.forEach((p,i)=>{
+  const page=3+i*3,img=page+1,content=page+2;
+  obj(page,`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /XObject << /Im0 ${img} 0 R >> >> /Contents ${content} 0 R >>`);
+  offsets[img]=n;push(`${img} 0 obj\n<< /Type /XObject /Subtype /Image /Width ${p.w} /Height ${p.h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${p.jpeg.length} >>\nstream\n`);push(p.jpeg);push('\nendstream\nendobj\n');
+  const draw='q\n595.28 0 0 841.89 0 0 cm\n/Im0 Do\nQ\n';
+  obj(content,`<< /Length ${enc.encode(draw).length} >>\nstream\n${draw}endstream`);
+ });
+ const xref=n,total=3+pages.length*3;
+ push(`xref\n0 ${total}\n0000000000 65535 f \n`);
+ for(let i=1;i<total;i++)push(`${String(offsets[i]).padStart(10,'0')} 00000 n \n`);
+ push(`trailer\n<< /Size ${total} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF`);
+ const out=new Uint8Array(n);let pos=0;for(const part of parts){out.set(part,pos);pos+=part.length}return out;
+}
+</script>
+
+<script>
+(function(){
+ const ids=['problem','audience','team','participants','personaName','age','routine','moment','barrier','impact','feeling','wish','objective'];
+ const required=['participants','audience','personaName','routine','moment','barrier','impact','wish','objective'];
+ const vals=Object.fromEntries(ids.map(id=>[id,document.getElementById(id)]));
+
+ const draftKey='portzot-persona-2027-v1'; // Shared draft survives switching languages
+ const workshopKey='portzot-sdg-workshop-he-v2';
+ const saveState=document.getElementById('saveState');
+ let savedDraft=null,workshop=null;
+ try{savedDraft=JSON.parse(sessionStorage.getItem(draftKey)||'null')}catch(_){}
+ try{workshop=JSON.parse(sessionStorage.getItem(workshopKey)||'null')}catch(_){}
+ const loadDraft=savedDraft&&savedDraft.version===1&&savedDraft.fields&&typeof savedDraft.fields==='object';
+ if(loadDraft){
+   for(const id of ids)if(typeof savedDraft.fields[id]==='string')vals[id].value=savedDraft.fields[id];
+ }else if(workshop&&Number(workshop.max)>=5&&workshop.form&&typeof workshop.form==='object'){
+   const f=workshop.form;
+   if(typeof f.problem==='string')vals.problem.value=f.problem;
+   if(typeof f.need==='string')vals.objective.value=f.need;
+   if(typeof f.team==='string')vals.team.value=f.team;
+ }
+ function saveDraft(){
+  try{
+   sessionStorage.setItem(draftKey,JSON.stringify({version:1,fields:Object.fromEntries(ids.map(id=>[id,vals[id].value]))}));
+   saveState.textContent='حُفظت المسوّدة في علامة التبويب هذه. نزّلن ملف PDF قبل إغلاق المتصفّح.';
+  }catch(_){
+   saveState.textContent='لا يمكن الحفظ التلقائي في هذا المتصفّح. نزّلن ملف PDF قبل المغادرة.';
+  }
+ }
+ function update(){for(const el of document.querySelectorAll('[data-out]')){const v=vals[el.dataset.out].value.trim();el.textContent=v||'لم يُملأ بعد'}
+  for(const el of document.querySelectorAll('[data-print]')){const v=vals[el.dataset.print].value.trim();el.textContent=v||'لم يُذكَر'}
+  const n=vals.personaName.value.trim(),age=vals.age.value.trim();document.getElementById('identity').textContent=(n||'بلا اسم')+(age?' · العمر '+age:'');
+  const count=required.filter(id=>vals[id].value.trim()).length;
+  document.getElementById('progress').textContent=`اكتملت ${count} من أصل ${required.length} حقول أساسية`;
+  document.getElementById('fill').style.width=(count/required.length*100)+'%';
+ }
+ document.querySelectorAll('input,textarea').forEach(x=>x.addEventListener('input',()=>{x.removeAttribute('aria-invalid');document.getElementById('formStatus').textContent='';update();saveDraft()}));
+ document.getElementById('clear').addEventListener('click',()=>{if(!confirm('هل تريدن مسح جميع الإجابات في صفحة شخصية المستخدمة؟'))return;ids.forEach(id=>{vals[id].value='';vals[id].removeAttribute('aria-invalid')});try{sessionStorage.removeItem(draftKey)}catch(_){}update();saveState.textContent='مُسحت الإجابات. ستُحفَظ المسوّدة الجديدة عند بدء الكتابة.';document.getElementById('formStatus').textContent='';vals.problem.focus();window.scrollTo({top:0,behavior:'smooth'});});
+ document.getElementById('print').addEventListener('click',downloadColorPdf);
+ update();
+})();
+</script>
+</body></html>

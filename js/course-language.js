@@ -7,7 +7,7 @@
   var pages = ['strongermenu-2026.html', 'start/quiz.html', 'domains/alldomains.html',
     'domains/d1.html', 'domains/d2.html', 'domains/d3.html', 'domains/d4.html',
     'domains/d5.html', 'domains/d6.html', 'domains/d7.html', 'domains/d8.html',
-    'domains/d9.html', 'domains/d10.html', 'pairing/pairing.html',
+    'domains/d9.html', 'domains/d10.html', 'steps/persona.html', 'pairing/pairing.html',
     'pairing/questionnaire.html', 'pairing/waiting.html', 'pairing/admin.html', 'pairing/matching.html'];
   var relative = location.pathname.slice(root.pathname.length);
   var isArabic = relative.indexOf('ar/') === 0;
