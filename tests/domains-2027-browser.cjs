@@ -199,7 +199,7 @@ const server=http.createServer((req,res)=>{
      const clone=document.body.cloneNode(true);
      clone.querySelectorAll('script,style').forEach(e=>e.remove());
      const text=clone.textContent.replaceAll('פורצות דרך','').replaceAll('תעשיידע','').replaceAll('עברית','');
-     return /[\\u0590-\\u05ff]/.test(text);
+     return [...text].some(ch=>ch.codePointAt(0)>=0x590&&ch.codePointAt(0)<=0x5ff);
    }),false,'Arabic visible content must not contain Hebrew beyond course brand / language option');
 
    await field('participants','مريم، نور، سلمى');
