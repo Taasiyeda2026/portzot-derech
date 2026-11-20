@@ -1,414 +1,294 @@
-<!DOCTYPE html>
-<html lang="he">
-<head>
-<meta charset="UTF-8">
-<title>פורצות דרך – בניית פרסונה</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600;700&family=Assistant:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../css/print.css" media="print">
-
-<style>
-body {
-    font-family: 'Assistant', sans-serif;
-    direction: rtl;
-    margin: 0;
-    background: #f3f4f6;
-    padding: 20px;
-}
-
-#formArea {
-    max-width: 850px;
-    margin: 0 auto;
-    background: white;
-    padding: 40px;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
-
-h1 { color: #e91e63; font-family: 'Rubik'; text-align: center; }
-h2 { color: #00a7b5; border-bottom: 2px solid #eee; padding-bottom: 5px; margin-top: 30px; }
-
-label { display: block; font-weight: 600; margin-bottom: 8px; margin-top: 15px; }
-
-input[type="text"], textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 16px;
-    box-sizing: border-box;
-}
-
-textarea {
-    min-height: 80px;
-    resize: vertical;
-}
-
-.checkbox-list {
-    background: #f9f9f9;
-    padding: 15px;
-    border-radius: 8px;
-    margin-top: 5px;
-}
-
-.checkbox-list label {
-    font-weight: normal;
-    display: block;
-    cursor: pointer;
-    margin: 5px 0;
-}
-
-button {
-    background: linear-gradient(90deg, #e91e63, #00a7b5);
-    color: white;
-    border: none;
-    padding: 18px;
-    font-size: 20px;
-    border-radius: 50px;
-    cursor: pointer;
-    font-weight: 700;
-    width: 100%;
-    margin-top: 30px;
-}
-
-button:hover {
-    opacity: 0.9;
-}
-</style>
-</head>
-
-<body>
-
-<div id="formArea">
-<h1>בניית פרסונה – פורצות דרך 🎀</h1>
-
-<div style="background: #fff0f5; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-<label>שמות חברות הצוות:</label>
-<input type="text" id="teamNames" placeholder="רשמו את שמות חברות הצוות">
-</div>
-
-<h2>חלק א' – מי היא?</h2>
-<div style="display:flex; gap:10px;">
-<div style="flex:2;">
-<label>שם הפרסונה:</label>
-<input type="text" id="name" placeholder="לדוגמה: נועה">
-</div>
-<div style="flex:1;">
-<label>גיל:</label>
-<input type="text" id="age" placeholder="16">
-</div>
-</div>
-
-<label>מה מאפיין את שגרת החיים שלה?</label>
-<div class="checkbox-list">
-<label><input type="checkbox" class="routine" value="תלמידה שמתמקדת בעיקר בלימודים"> תלמידה שמתמקדת בעיקר בלימודים</label>
-<label><input type="checkbox" class="routine" value="משלבת לימודים עם חוגים / אימונים"> משלבת לימודים עם חוגים / אימונים</label>
-<label><input type="checkbox" class="routine" value="פעילה בתנועת נוער / מסגרת חברתית"> פעילה בתנועת נוער / מסגרת חברתית</label>
-<label><input type="checkbox" class="routine" value="עובדת אחרי שעות הלימודים"> עובדת אחרי שעות הלימודים</label>
-<label><input type="checkbox" class="routine" value="לוקחת אחריות בבית (אחים / מטלות קבועות)"> לוקחת אחריות בבית (אחים / מטלות קבועות)</label>
-<div style="display:flex; align-items:center; gap:5px; margin-top:5px;">
-<span>אחר:</span>
-<input type="text" id="routineOther" style="margin:0; height:30px;">
-</div>
-</div>
-
-<label>כך נראית השגרה שלה בקצרה:</label>
-<textarea id="routineText" placeholder="תארו את היום שלה..."></textarea>
-
-<h2>חלק ב' – הסיטואציה שבה מופיעה הבעיה</h2>
-<label>איפה היא נמצאת רוב היום?</label>
-<div class="checkbox-list">
-<label><input type="checkbox" class="location" value="בבית הספר"> בבית הספר</label>
-<label><input type="checkbox" class="location" value="בבית"> בבית</label>
-<label><input type="checkbox" class="location" value="בתחבורה ציבורית"> בתחבורה ציבורית</label>
-<label><input type="checkbox" class="location" value="באימון / חוג"> באימון / חוג</label>
-<label><input type="checkbox" class="location" value="עם חברים"> עם חברים</label>
-<div style="display:flex; align-items:center; gap:5px; margin-top:5px;">
-<span>אחר:</span>
-<input type="text" id="locationOther" style="margin:0; height:30px;">
-</div>
-</div>
-
-<label>מתי הבעיה מופיעה? (זמן + מקום + מצב)</label>
-<textarea id="moment" placeholder="לדוגמה: כל בוקר בדרך לבית הספר..."></textarea>
-
-<label>מה קורה בפועל באותו רגע? (תיאור התנהגותי)</label>
-<textarea id="action" placeholder="תארו מה קורה..."></textarea>
-
-<h2>חלק ג' – עומק רגשי ותפקודי</h2>
-<label>מה היא מרגישה בסיטואציה הזו?</label>
-<textarea id="emotion" placeholder="לדוגמה: מתוסכלת, מבוישת..."></textarea>
-
-<label>איך זה משפיע עליה?</label>
-<div class="checkbox-list" style="display:flex; flex-wrap:wrap; gap:15px;">
-<label><input type="checkbox" class="impactType" value="לימודית"> לימודית</label>
-<label><input type="checkbox" class="impactType" value="חברתית"> חברתית</label>
-<label><input type="checkbox" class="impactType" value="רגשית"> רגשית</label>
-<label><input type="checkbox" class="impactType" value="ניהול זמן"> ניהול זמן</label>
-<div style="display:flex; align-items:center; gap:5px;">
-<span>אחר:</span>
-<input type="text" id="impactOther" style="margin:0; width:150px; height:30px;">
-</div>
-</div>
-
-<label>הסבר קצר על ההשפעה:</label>
-<textarea id="impactText" placeholder="הסבירו כיצד הבעיה משפיעה..."></textarea>
-
-<h2>חלק ד' – ניסוח יזמי מדויק</h2>
-<label>ציטוט שמייצג אותה:</label>
-<input type="text" id="quote" placeholder='"אני תמיד מאחרת..."'>
-
-<label>משפט הבעיה:</label>
-<div style="background:#f0f0f0; padding:15px; border-radius:8px;">
-נערות בגיל <input type="text" id="pAge" style="width:50px; margin:0;" placeholder="16"> אשר <input type="text" id="pWho" style="width:200px; margin:0;" placeholder="לומדות בתיכון"> <br><br>
-מתקשות ב-<input type="text" id="pDifficulty" style="width:200px; margin:0;" placeholder="ניהול זמן"> כאשר <input type="text" id="pWhen" style="width:200px; margin:0;" placeholder="משלבות פעילויות רבות">.
-</div>
-
-<button onclick="generatePDF()">🎀 הורדת PDF</button>
-</div>
-
-<script>
-const SUPABASE_URL = window.SUPABASE_URL || 'https://YOUR-PROJECT.supabase.co';
-const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || 'YOUR_SUPABASE_ANON_KEY';
-let personaSentSuccessfully = false;
-
-function getValues(className, otherId) {
-    let vals = Array.from(document.querySelectorAll('.' + className + ':checked')).map(cb => cb.value);
-    let other = document.getElementById(otherId).value.trim();
-    if (other) vals.push(other);
-    return vals.length > 0 ? vals.join(', ') : 'לא צוין';
-}
-
-async function generatePDF() {
-    const team = document.getElementById('teamNames').value.trim() || 'לא צוין';
-    const name = document.getElementById('name').value.trim() || 'לא צוין';
-    const age = document.getElementById('age').value.trim() || 'לא צוין';
-    const routine = getValues('routine', 'routineOther');
-    const routineText = document.getElementById('routineText').value.trim() || 'לא צוין';
-    const location = getValues('location', 'locationOther');
-    const moment = document.getElementById('moment').value.trim() || 'לא צוין';
-    const action = document.getElementById('action').value.trim() || 'לא צוין';
-    const emotion = document.getElementById('emotion').value.trim() || 'לא צוין';
-    const impactType = getValues('impactType', 'impactOther');
-    const impactText = document.getElementById('impactText').value.trim() || 'לא צוין';
-    const quote = document.getElementById('quote').value.trim() || 'לא צוין';
-
-    const pAge = document.getElementById('pAge').value.trim() || '___';
-    const pWho = document.getElementById('pWho').value.trim() || '___';
-    const pDifficulty = document.getElementById('pDifficulty').value.trim() || '___';
-    const pWhen = document.getElementById('pWhen').value.trim() || '___';
-
-    const problemSentence = `נערות בגיל ${pAge} אשר ${pWho} מתקשות ב-${pDifficulty} כאשר ${pWhen}.`;
-    const origin = location.origin || window.location.origin;
-
-    const html = `<!DOCTYPE html>
+<!doctype html>
 <html lang="he" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<title>פרסונה – ${name}</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>פורצות דרך | בניית פרסונה</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&display=swap');
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Assistant', Arial, sans-serif; direction: rtl; color: #1f2937; font-size: 14px; line-height: 1.55; padding: 28px 32px; background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  h1 { font-size: 22px; font-weight: 800; color: #1e3a8a; margin-bottom: 4px; }
-  h2 { font-size: 16px; font-weight: 700; color: #c026d3; }
-  .header { background: linear-gradient(135deg,#fbcfe8,#f5d0fe 45%,#bae6fd); border: 1px solid #d8b4fe; border-radius: 10px; padding: 12px 14px; margin-bottom: 12px; }
-  .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-  .brand { font-size: 22px; font-weight: 800; color: #1e3a8a; }
-  .brand-sub { font-size: 13px; font-weight: 700; color: #c026d3; }
-  .meta { background: rgba(255,255,255,.85); border: 1px solid #f9a8d4; border-radius: 8px; padding: 8px 10px; color: #334155; font-size: 12px; }
-  .title-box { border: 1px solid #fbcfe8; border-right: 5px solid #ec4899; border-radius: 10px; padding: 12px 14px; margin-bottom: 12px; }
-  .info-box { border-radius: 10px; padding: 12px; margin-bottom: 10px; }
-  .blue { background: #e0f2fe; border: 1px solid #cbd5e1; border-right: 4px solid #38bdf8; }
-  .pink { background: #fdf4ff; border: 1px solid #cbd5e1; border-right: 4px solid #c026d3; }
-  .gray { background: #f8fafc; border: 1.5px solid #94a3b8; min-height: 60px; }
-  .orange { background: #ffedd5; border: 1px solid #fdba74; border-right: 4px solid #fb923c; }
-  .box-title { color: #ec4899; font-weight: 700; margin-bottom: 6px; }
-  .footer { text-align: center; color: #64748b; font-size: 11px; margin-top: 16px; padding-top: 8px; border-top: 1px solid #e2e8f0; }
-  @media print { body { padding: 18px 24px; } }
+:root {--ink:#33284a;--muted:#6e667a;--pink:#b72b78;--violet:#6a4ca1;--teal:#008f9b;--bg:#f9f7fb;--line:#e9e2ee;--shadow:0 10px 35px rgba(53,31,72,.07)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--ink);font-family:Arial,'Noto Sans Hebrew',sans-serif;background:var(--bg);line-height:1.55}button,input,textarea{font:inherit}button{cursor:pointer}
+header{background:linear-gradient(110deg,#fff 15%,#f3eaf7 80%);border-bottom:1px solid #e6dbea}.topbar{max-width:1200px;margin:auto;display:flex;align-items:center;justify-content:space-between;padding:14px 24px;gap:16px}.brand{font-weight:900;color:var(--pink);font-size:22px;letter-spacing:-.6px}.mode{text-decoration:none;font-size:12px;color:#735f7d;background:#fff;padding:6px 11px;border:1px solid #e7d6e4;border-radius:50px}.intro{max-width:1200px;margin:auto;padding:29px 24px 34px}.eyebrow{font-size:13px;color:var(--pink);font-weight:700;letter-spacing:.2px}.intro h1{font-size:clamp(31px,4vw,45px);letter-spacing:-1.1px;line-height:1.15;margin:8px 0 12px}.intro p{max-width:760px;color:#62596b;font-size:15px;margin:0}.steps{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}.step{background:#fff;border:1px solid #e6deeb;border-radius:11px;padding:9px 13px;font-size:13px;color:#59496c}.step b{color:var(--pink);margin-left:5px}
+.layout{max-width:1200px;margin:24px auto 55px;padding:0 24px;display:grid;grid-template-columns:minmax(0,1.6fr) minmax(300px,.8fr);align-items:start;gap:20px}.main{display:grid;gap:18px}.panel,.summary{background:#fff;border-radius:18px;border:1px solid var(--line);box-shadow:var(--shadow);padding:25px}.panelhead{display:flex;align-items:start;gap:13px;margin-bottom:21px}.number{flex:none;width:37px;height:37px;border-radius:12px;background:#fae6f0;color:var(--pink);font-weight:800;display:grid;place-items:center}.panel h2,.summary h2{font-size:19px;margin:0 0 5px;letter-spacing:-.2px}.panelhead p{font-size:13px;color:var(--muted);margin:0}.fields{display:grid;gap:18px}.double{display:grid;grid-template-columns:1fr 1fr;gap:15px}.field label{display:block;font-weight:700;font-size:14px;margin-bottom:6px}.smallnote{font-weight:400;font-size:12px;color:#867b8d}.field input,.field textarea{display:block;width:100%;color:#342747;background:#fff;border:1px solid #dcd5e2;border-radius:10px;padding:12px 13px;font-size:15px;outline:0;transition:border .15s,box-shadow .15s}.field input:focus,.field textarea:focus{border-color:var(--violet);box-shadow:0 0 0 3px #e9e2f9}.field textarea{resize:vertical;min-height:76px}.field input[readonly],.field textarea[readonly]{background:#f8f5fa;border-style:dashed;color:#514759}.helper{color:var(--muted);font-size:12px;margin:5px 0 0}.flowhint{background:#edf9f8;border:1px solid #caeae7;border-radius:11px;padding:12px 14px;color:#34625d;font-size:13px}.summary{position:sticky;top:18px;border-top:5px solid var(--pink)}.summary h2{margin-bottom:8px}.summary .sub{color:var(--muted);font-size:12px;margin:0 0 15px}.progress-track{background:#eee8f1;height:7px;border-radius:9px;overflow:hidden}.progress-fill{background:var(--pink);height:100%;width:0;transition:width .2s}.progress-label{font-size:12px;color:var(--muted);margin:7px 0 17px}.data{padding:11px 0;border-bottom:1px solid #eee8f1}.data .key{display:block;color:var(--muted);font-size:12px;margin-bottom:3px}.data .value{font-weight:600;font-size:14px;overflow-wrap:anywhere;white-space:pre-wrap}.data:last-of-type{border-bottom:0}.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}.btn{border:1px solid #e0d4e7;color:var(--violet);font-weight:700;background:#fff;border-radius:10px;padding:10px 15px}.btn.primary{background:var(--pink);color:#fff;border-color:var(--pink)}.btn:hover{filter:brightness(.96)}.summary .actions{display:grid;grid-template-columns:1fr 1fr}.summary .btn{font-size:13px}.footnote{font-size:12px;line-height:1.5;color:var(--muted);margin:15px 0 0}.note {font-size:12px;color:#7a6d84;text-align:center;padding:10px 20px 32px}.required:after{content:' *';color:var(--pink)}[aria-invalid=true]{border-color:#b42355!important;box-shadow:0 0 0 2px #f9d5e1!important}.form-status{font-size:13px;color:#a72154;min-height:1em;margin:12px 0 0;font-weight:700}.print-only{display:none}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.summary{position:static;grid-row:2}.intro{padding-bottom:27px}}@media(max-width:520px){.layout{padding:0 12px}.topbar{padding:12px}.intro{padding:24px 14px}.panel,.summary{padding:18px}.double{grid-template-columns:1fr}.step{font-size:12px}.summary .actions{display:flex}.summary .btn{flex:1}}
+/* The form is for working; the dedicated print sheet is for the final persona document. */
+.print-sheet{display:none}
+@page{size:A4 portrait;margin:12mm}
+@media print{
+  html,body{margin:0!important;padding:0!important;background:#fff!important;color:#20243a!important;font-family:Arial,'Noto Sans Hebrew',sans-serif!important;font-size:10.5pt;line-height:1.4;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  header,.layout,.note{display:none!important}
+  .print-sheet{display:block!important;width:100%;max-width:100%;margin:0;padding:0;direction:rtl}
+  .print-top{display:flex;justify-content:space-between;align-items:center;gap:10mm;padding:5mm 6mm;border-radius:11px;background:linear-gradient(115deg,#f9dce9,#eee6fa 56%,#def6f7);border:1px solid #dbc6e5;margin-bottom:4mm}
+  .print-brand{font-weight:900;font-size:21pt;color:#912d74;line-height:1.15}.print-brand small{display:block;color:#614c79;font-size:9pt;font-weight:600;margin-top:2mm}
+  .print-meta{font-size:9pt;color:#4a4660;text-align:left;line-height:1.7}
+  .print-identity{display:flex;justify-content:space-between;align-items:center;gap:8mm;border:1px solid #e8d9ef;border-right:5px solid #bf357c;background:#fff7fc;border-radius:10px;padding:3.5mm 5mm;margin-bottom:3.5mm}
+  .print-identity strong{font-size:17pt;color:#45275b}.print-identity .print-age{font-size:10pt;color:#605771}
+  .print-title{font-size:11pt;color:#9c2e79;font-weight:800;line-height:1.35;margin:0 0 1.5mm}
+  .print-card{border:1px solid #e1d8e8;border-right:3px solid #a26bb8;border-radius:9px;padding:3.1mm 4.5mm;margin:0 0 3.3mm;background:#fff;break-inside:avoid;page-break-inside:avoid}
+  .print-card.accent{background:#fbf5fb;border-right-color:#d24b8b}.print-card.teal{background:#f1faf9;border-right-color:#299aa2}.print-card.target{background:#f9eaf4;border-right-color:#bc287b;border-width:1px 4px 1px 1px}
+  .print-value{white-space:pre-wrap;overflow-wrap:anywhere;color:#342e40;font-size:10pt}
+  .print-grid{display:grid;grid-template-columns:1fr 1fr;gap:3.5mm;align-items:stretch}
+  .print-grid .print-card{margin:0 0 3.3mm}
+  .print-card.target .print-value{font-size:11.1pt;font-weight:700;color:#3d2d51}
+  .print-footer{font-size:8.3pt;color:#625971;border-top:1px solid #e3d8e8;padding-top:2.5mm;margin-top:1mm;display:flex;justify-content:space-between;gap:4mm}
+}
+
 </style>
 </head>
 <body>
-  <div class="header">
-    <div class="header-top">
-      <div><div class="brand">פורצות דרך</div><div class="brand-sub">פרסונה — דף עבודה</div></div>
-    </div>
-    <div class="meta">
-      <div><strong>משתתפות:</strong> ${team}</div>
-    </div>
-  </div>
+<header><div class="topbar"><div class="brand">פורצות דרך</div><a class="mode" href="../strongermenu-2026.html">חזרה לאתר הקורס</a></div>
+<div class="intro"><span class="eyebrow">פעילות קבוצתית · כ־15 דקות</span><h1>בונות את הפרסונה שלנו</h1><p><strong>פרסונה</strong> היא דמות דמיונית המייצגת משתמשת טיפוסית מתוך קהל היעד ומסייעת לנו להבין את צרכיה, הרגליה, מטרותיה והקשיים שאיתם היא מתמודדת.</p>
+<div class="steps"><div class="step"><b>01</b> נקודת המוצא</div><div class="step"><b>02</b> מכירות אותה</div><div class="step"><b>03</b> מבינות את הקושי</div><div class="step"><b>04</b> מגדירות מטרה</div></div></div></header>
+<div class="layout"><main class="main" id="form">
+<section class="panel"><div class="panelhead"><div class="number">01</div><div><h2>נקודת המוצא שלנו</h2><p>מחברות את הפרסונה לבעיה שכבר בחרנו, בלי להתחיל מחדש.</p></div></div><div class="fields">
+<div class="field"><label for="problem">הבעיה שבחרנו <span class="smallnote">(תועבר מפעילות מאתרות אתגר, אם הושלמה)</span></label><textarea id="problem" rows="2" placeholder="למי זה קורה, מתי ומה הקושי? ללא פתרון מוצע"></textarea><p class="helper">אם סיימתן את פעילות ״מאתרות אתגר״ באותה לשונית, הבעיה תופיע כאן. אחרת הזינו אותה בעצמכן.</p></div>
+<div class="field"><label class="required" for="audience">מי קהל היעד שלנו?</label><input id="audience" placeholder="קבוצת האנשים שמתמודדת עם הבעיה" ></div>
+<div class="field"><label class="required" for="participants">שמות חברות הצוות</label><input id="participants" placeholder="כתבו את שמות כל המשתתפות, מופרדים בפסיקים" ><p class="helper">השמות יופיעו בסיכום ובקובץ ה־PDF.</p></div>
+<div class="field"><label for="team">שם הצוות <span class="smallnote">(לא חובה)</span></label><input id="team" placeholder="שם הצוות" ></div>
+</div></section>
+<section class="panel"><div class="panelhead"><div class="number">02</div><div><h2>מכירות את הפרסונה</h2><p>יוצרות דמות אחת שמייצגת משתמשת מתוך קהל היעד.</p></div></div><div class="fields">
+<div class="double"><div class="field"><label class="required" for="personaName">מה שמה?</label><input id="personaName"  placeholder="לדוגמה: מאיה"></div><div class="field"><label for="age">בת כמה היא? <span class="smallnote">(אם רלוונטי)</span></label><input id="age"  placeholder="גיל או טווח גילאים"></div></div>
+<div class="field"><label class="required" for="routine">מה מאפיין את שגרת החיים שלה בהקשר לבעיה?</label><textarea id="routine" rows="2" placeholder="רק פרטים שעוזרים להבין את הבעיה"></textarea></div>
+</div></section>
+<section class="panel"><div class="panelhead"><div class="number">03</div><div><h2>נכנסות לנעליים שלה</h2><p>מתארות מצב אחד ברור שבו הפרסונה מתמודדת עם הבעיה.</p></div></div><div class="fields">
+<div class="field"><label class="required" for="moment">מתי והיכן היא נתקלת בבעיה?</label><textarea id="moment" rows="2" placeholder="זמן, מקום ומצב מסוים"></textarea></div>
+<div class="field"><label class="required" for="barrier">מה היא מנסה לעשות ומה מקשה עליה?</label><textarea id="barrier" rows="2" placeholder="מה היא רוצה לעשות? מה בדיוק לא מצליח?"></textarea></div>
+<div class="field"><label class="required" for="impact">איך הבעיה משפיעה עליה?</label><textarea id="impact" rows="2" placeholder="למשל: זמן, התנהלות, השתתפות או רווחה"></textarea></div>
+<div class="field"><label for="feeling">מה היא מרגישה ברגע הזה? <span class="smallnote">(לא חובה)</span></label><input id="feeling" placeholder="רגש אחד או שניים" ></div>
+<div class="field"><label class="required" for="wish">מה היא הייתה רוצה שיתאפשר לה?</label><textarea id="wish" rows="2" placeholder="איזה שינוי יעזור לה, בלי להציע מוצר"></textarea></div>
+</div></section>
+<section class="panel"><div class="panelhead"><div class="number">04</div><div><h2>מנסחות את מטרת המיזם</h2><p>מגדירות את השינוי הרצוי — עדיין לא את הפתרון הטכנולוגי.</p></div></div><div class="fields">
+<div class="field"><label class="required" for="objective">מה מטרת המיזם שלנו?</label><textarea id="objective" rows="2" placeholder="לאפשר ל... לעשות..."></textarea></div>
+<div class="flowhint"><strong>לפני שמסיימות:</strong> בדקו שהמטרה מתארת שינוי עבור קהל היעד, ולא אפליקציה, מוצר או פתרון שכבר החלטתן לפתח. זו פרסונה ראשונית; נבדוק את ההשערות שלנו בהמשך החקר.</div>
+</div></section>
+</main>
+<aside class="summary" id="summary"><h2>סיכום הפרסונה</h2><p class="sub">התצוגה מתעדכנת אוטומטית לפי התשובות שלכן.</p><div class="progress-track"><div class="progress-fill" id="fill"></div></div><p class="progress-label" id="progress"></p>
+<div class="data"><span class="key">שמות חברות הצוות</span><span class="value" data-out="participants"></span></div>
+<div class="data"><span class="key">הבעיה שבחרנו</span><span class="value" data-out="problem"></span></div>
+<div class="data"><span class="key">קהל יעד</span><span class="value" data-out="audience"></span></div>
+<div class="data"><span class="key">הפרסונה</span><span class="value" id="identity"></span></div>
+<div class="data"><span class="key">שגרת החיים שלה</span><span class="value" data-out="routine"></span></div>
+<div class="data"><span class="key">מתי מופיעה הבעיה</span><span class="value" data-out="moment"></span></div>
+<div class="data"><span class="key">מה מקשה עליה</span><span class="value" data-out="barrier"></span></div>
+<div class="data"><span class="key">איך הבעיה משפיעה עליה</span><span class="value" data-out="impact"></span></div>
+<div class="data"><span class="key">מה היא רוצה שיתאפשר לה</span><span class="value" data-out="wish"></span></div>
+<div class="data"><span class="key">מטרת המיזם</span><span class="value" data-out="objective"></span></div>
+<div class="actions"><button class="btn primary" type="button" id="print">הורדת PDF צבעוני</button><button class="btn" type="button" id="clear">ניקוי התשובות</button></div><p id="formStatus" role="status" aria-live="polite" class="form-status"></p><p id="saveState" class="footnote">הטיוטה נשמרת בלשונית זו בלבד.</p><p class="footnote">הטיוטה נשמרת אוטומטית בלשונית זו בלבד. שמרו את קובץ ה־PDF בתיקיית המיזם. הפרטים אינם נשלחים לשרת.</p></aside></div>
+<p class="note">פורצות דרך · תעשיידע · פרסונה ראשונית לקראת חקר הבעיה</p>
+<!-- A separate print layout: not the interactive form and not the narrow side preview. -->
+<section class="print-sheet" id="printSheet" aria-label="דף פרסונה להדפסה">
+  <div class="print-top"><div class="print-brand">פורצות דרך<small>פרסונה – מסמך מיזם קבוצתי</small></div><div class="print-meta">תעשיידע<br><strong>צוות:</strong> <span data-print="team"></span><br><strong>חברות הצוות:</strong> <span data-print="participants"></span></div></div>
+  <div class="print-identity"><div><div class="print-title">הפרסונה שלנו</div><strong data-print="personaName"></strong></div><div class="print-age"><strong>גיל:</strong> <span data-print="age"></span></div></div>
+  <div class="print-card accent"><div class="print-title">הבעיה שבחרנו</div><div class="print-value" data-print="problem"></div></div>
+  <div class="print-card"><div class="print-title">קהל היעד</div><div class="print-value" data-print="audience"></div></div>
+  <div class="print-card"><div class="print-title">שגרת החיים שלה</div><div class="print-value" data-print="routine"></div></div>
+  <div class="print-card teal"><div class="print-title">מתי והיכן היא נתקלת בבעיה?</div><div class="print-value" data-print="moment"></div></div>
+  <div class="print-card"><div class="print-title">מה היא מנסה לעשות ומה מקשה עליה?</div><div class="print-value" data-print="barrier"></div></div>
+  <div class="print-grid"><div class="print-card"><div class="print-title">השפעת הבעיה עליה</div><div class="print-value" data-print="impact"></div></div><div class="print-card"><div class="print-title">איך היא מרגישה?</div><div class="print-value" data-print="feeling"></div></div></div>
+  <div class="print-card"><div class="print-title">מה היא רוצה שיתאפשר לה?</div><div class="print-value" data-print="wish"></div></div>
+  <div class="print-card target"><div class="print-title">מטרת המיזם</div><div class="print-value" data-print="objective"></div></div>
+  <div class="print-footer"><span>פרסונה ראשונית המבוססת על השערות; נבדוק אותן בהמשך החקר.</span><span>פורצות דרך · תעשיידע</span></div>
+</section>
 
-  <div class="title-box">
-    <h1>הגדרת פרסונה</h1>
-    <h2>${name} | גיל: ${age}</h2>
-  </div>
 
-  <div class="info-box blue">
-    <strong style="color:#1e3a8a;">הסבר:</strong> מחדדות מי המשתמשת שלנו, מה הקושי שלה, ומה המשפט היזמי המדויק שמכוון לפתרון.
-  </div>
-
-  <div class="info-box pink">
-    <div class="box-title">שגרה ואתגר</div>
-    <p><strong>שגרת חיים:</strong> ${routine}</p>
-    <p style="margin-top:4px;">${routineText}</p>
-  </div>
-
-  <div class="info-box pink">
-    <div class="box-title">הקשר הבעיה</div>
-    <p><strong>מיקומים:</strong> ${location}</p>
-    <p style="margin-top:4px;"><strong>מתי:</strong> ${moment}</p>
-    <p style="margin-top:4px;"><strong>מה קורה בפועל:</strong> ${action}</p>
-  </div>
-
-  <div class="info-box gray">
-    <div class="box-title">תשובה קצרה</div>
-    <p><strong>רגש:</strong> ${emotion} | <strong>השפעה:</strong> ${impactType}</p>
-  </div>
-
-  <div class="info-box gray">
-    <div class="box-title">תשובה ארוכה</div>
-    <p>${impactText}</p>
-    <p style="margin-top:6px;font-style:italic;">"${quote}"</p>
-  </div>
-
-  <div class="info-box orange">
-    <strong style="color:#1e3a8a;">מסר חשוב:</strong> ${problemSentence}
-  </div>
-
-  <div class="footer">© 2026 פורצות דרך</div>
-</body>
-</html>`;
-
-    const btn = document.querySelector('button[onclick="generatePDF()"]');
-    const origText = btn ? btn.textContent : '';
-    if (btn) { btn.textContent = '⏳ מכינה PDF...'; btn.disabled = true; }
-
-    try {
-        const res = await fetch('/api/export-pdf', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ html, filename: `persona_${name}.pdf` })
-        });
-        if (!res.ok) throw new Error(await res.text());
-        const blob = await res.blob();
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `persona_${name}.pdf`;
-        document.body.appendChild(a);
-        a.click();
-        setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 2000);
-    } catch (err) {
-        alert('שגיאה ביצירת PDF: ' + err.message);
-    } finally {
-        if (btn) { btn.textContent = origText; btn.disabled = false; }
-    }
+<script>
+/* Self-contained colored PDF export. Each page is drawn on a high-resolution
+   canvas and included as a JPEG image in a standard A4 PDF. This does not use
+   window.print(), external APIs, or the browser's 'background graphics' option. */
+function validatePersona(){
+ const required=['problem','audience','participants','personaName','routine','moment','barrier','impact','wish','objective'];
+ const status=document.getElementById('formStatus');
+ for(const id of required){
+  const el=document.getElementById(id);
+  if(!el.value.trim()){
+   el.setAttribute('aria-invalid','true');
+   status.textContent='כדי להפיק את הסיכום, השלימו את השדה: '+document.querySelector('label[for="'+id+'"]').textContent.replace('*','').trim();
+   el.focus({preventScroll:true});el.scrollIntoView({block:'center',behavior:'smooth'});return false;
+  }
+  el.removeAttribute('aria-invalid');
+ }
+ status.textContent='';return true;
 }
-
-function collectPersonaData() {
-    const teamNames = document.getElementById('teamNames').value.trim();
-    const personaName = document.getElementById('name').value.trim();
-    const personaAge = document.getElementById('age').value.trim();
-    const routine = getValues('routine', 'routineOther');
-    const routineText = document.getElementById('routineText').value.trim();
-    const location = getValues('location', 'locationOther');
-    const moment = document.getElementById('moment').value.trim();
-    const action = document.getElementById('action').value.trim();
-    const emotion = document.getElementById('emotion').value.trim();
-    const impactType = getValues('impactType', 'impactOther');
-    const impactText = document.getElementById('impactText').value.trim();
-    const quote = document.getElementById('quote').value.trim();
-    const pAge = document.getElementById('pAge').value.trim();
-    const pWho = document.getElementById('pWho').value.trim();
-    const pDifficulty = document.getElementById('pDifficulty').value.trim();
-    const pWhen = document.getElementById('pWhen').value.trim();
-    const problemStatement = `נערות בגיל ${pAge || '___'} אשר ${pWho || '___'} מתקשות ב-${pDifficulty || '___'} כאשר ${pWhen || '___'}.`;
-
-    const allFields = {};
-    document.querySelectorAll('input, textarea, select').forEach((el) => {
-        if (!el.id && !el.name) return;
-        const key = el.id || el.name;
-        if (el.type === 'checkbox') {
-            if (!allFields[key]) allFields[key] = [];
-            if (el.checked) allFields[key].push(el.value);
-            return;
+function downloadColorPdf(){
+ if(!validatePersona())return;
+ const button=document.getElementById('print');
+ const oldText=button.textContent;
+ button.disabled=true;button.textContent='מכינה PDF צבעוני…';
+ try {
+  const W=1240,H=1754,M=65,R=W-M;
+  const fields=['problem','audience','team','participants','personaName','age','routine','moment','barrier','impact','feeling','wish','objective'];
+  const d=Object.fromEntries(fields.map(id=>[id,(document.getElementById(id).value||'').trim()]));
+  const cv=[];
+  let canvas,ctx,y,pageIndex=0;
+  const col={ink:'#352344',muted:'#685874',violet:'#654395',purple:'#9d2c7a',pink:'#c02a7c',teal:'#168e98',line:'#dfd4e8'};
+  function round(x,Y,w,h,r,fill,stroke){ctx.beginPath();ctx.roundRect(x,Y,w,h,r);if(fill){ctx.fillStyle=fill;ctx.fill()}if(stroke){ctx.lineWidth=2;ctx.strokeStyle=stroke;ctx.stroke()}}
+  function txt(str,x,Y,size,color=col.ink,weight=400){ctx.fillStyle=color;ctx.font=`${weight} ${size}px Arial, sans-serif`;ctx.textAlign='right';ctx.textBaseline='alphabetic';ctx.direction='rtl';ctx.fillText(str,x,Y)}
+  function lines(text,maxWidth,size,weight=400){
+    const t=(text||'לא צוין').trim().replace(/\r/g,'');
+    ctx.font=`${weight} ${size}px Arial, sans-serif`;
+    const out=[];
+    for(const para of t.split('\n')){
+      let acc='';
+      for(const word of para.split(/\s+/).filter(Boolean)){
+        const next=acc?acc+' '+word:word;
+        if(acc&&ctx.measureText(next).width>maxWidth){out.push(acc);acc=word}
+        else acc=next;
+        if(ctx.measureText(acc).width>maxWidth){
+          let seg='';
+          for(const ch of acc){const n=seg+ch;if(seg&&ctx.measureText(n).width>maxWidth){out.push(seg);seg=ch}else seg=n}
+          acc=seg;
         }
-        allFields[key] = el.value;
-    });
-
-    return {
-        activity_type: 'persona',
-        team_names: teamNames || null,
-        persona_name: personaName || null,
-        persona_age: personaAge || null,
-        background: `${routine || ''}${routineText ? ' | ' + routineText : ''}`.trim() || null,
-        situation: `${location || ''}${moment ? ' | ' + moment : ''}${action ? ' | ' + action : ''}`.trim() || null,
-        emotions: emotion || null,
-        needs: impactText || null,
-        difficulties: `${impactType || ''}${pDifficulty ? ' | ' + pDifficulty : ''}`.trim() || null,
-        problem_statement: problemStatement,
-        full_payload: {
-            teamNames,
-            personaName,
-            personaAge,
-            routine,
-            routineText,
-            location,
-            moment,
-            action,
-            emotion,
-            impactType,
-            impactText,
-            quote,
-            pAge,
-            pWho,
-            pDifficulty,
-            pWhen,
-            problemStatement,
-            allFields
-        }
-    };
-}
-
-async function submitPersonaActivity() {
-    if (personaSentSuccessfully) return;
-    const submitBtn = document.getElementById('submitActivityBtn');
-    const statusEl = document.getElementById('submitStatus');
-    if (!submitBtn || !statusEl) return;
-
-    submitBtn.disabled = true;
-    submitBtn.textContent = '⏳ שולחות...';
-    statusEl.textContent = '';
-
-    try {
-        if (!window.supabase || !window.supabase.createClient) {
-            throw new Error('Supabase client is unavailable');
-        }
-        if (SUPABASE_URL.includes('YOUR-PROJECT') || SUPABASE_ANON_KEY.includes('YOUR_SUPABASE_ANON_KEY')) {
-            throw new Error('Supabase credentials are missing');
-        }
-
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        const payload = collectPersonaData();
-        const { error } = await supabase.from('persona_submissions').insert([payload]);
-        if (error) throw error;
-
-        personaSentSuccessfully = true;
-        submitBtn.textContent = '✅ הפעילות נשלחה';
-        statusEl.textContent = 'הפעילות נשלחה בהצלחה';
-    } catch (err) {
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'שליחת הפעילות';
-        statusEl.textContent = 'לא הצלחנו לשלוח את הפעילות. נסו שוב.';
+      }
+      out.push(acc||' ');
     }
+    return out;
+  }
+  function freshPage(){
+    canvas=document.createElement('canvas');canvas.width=W;canvas.height=H;
+    ctx=canvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);
+    cv.push(canvas);pageIndex++;y=65;
+    if(pageIndex>1){
+      const g=ctx.createLinearGradient(M,y,R,y);g.addColorStop(0,'#f9e2ee');g.addColorStop(1,'#e9f7f6');
+      round(M,y,W-2*M,92,18,g,'#e6cbdf');
+      txt('פורצות דרך',R-28,y+47,38,col.purple,800);
+      txt('פרסונה – המשך',R-28,y+74,20,col.violet,600);
+      y+=116;
+    }
+  }
+  function ensure(h){if(y+h>H-120)freshPage()}
+  function header(){
+    const h=152;
+    const g=ctx.createLinearGradient(M,y,R,y);g.addColorStop(0,'#f9d8e8');g.addColorStop(.52,'#eee3f8');g.addColorStop(1,'#dcf5f4');
+    round(M,y,W-2*M,h,23,g,'#e3c5df');
+    round(M+15,y+18,14,h-36,7,col.pink);
+    txt('פורצות דרך',R-32,y+70,56,col.purple,800);
+    txt('פרסונה  |  מסמך מיזם קבוצתי',R-33,y+112,25,col.violet,700);
+    ctx.direction='rtl';ctx.textAlign='left';ctx.fillStyle=col.muted;ctx.font='21px Arial';
+    ctx.fillText('תעשיידע',M+42,y+58);
+    ctx.fillText('צוות: '+(d.team||'לא צוין'),M+42,y+101);
+    y+=h+24;
+  }
+  function identity(){
+    ensure(138);
+    round(M,y,W-2*M,121,18,'#fff7fc','#e7d5e8');
+    round(R-9,y+9,9,103,5,col.pink);
+    txt('הפרסונה שלנו',R-38,y+38,25,col.pink,700);
+    txt(d.personaName||'טרם הוזן שם',R-38,y+92,43,col.ink,800);
+    txt('גיל: '+(d.age||'לא צוין'),M+255,y+78,25,col.muted,600);
+    y+=141;
+  }
+  function participantStrip(){
+    const members=lines(d.participants,W-2*M-70,24);
+    const h=57+members.length*28;
+    ensure(h+12);
+    round(M,y,W-2*M,h,15,'#f0f9f8','#b9e3e1');
+    round(R-8,y+8,8,h-16,4,col.teal);
+    txt('חברות הצוות',R-32,y+29,23,col.teal,700);
+    members.forEach((line,i)=>txt(line,R-32,y+57+i*28,24,col.ink,600));
+    y+=h+12;
+  }
+  function card(title,value,kind='default'){
+    const sz=26,lineHeight=33;
+    const valueLines=lines(value,W-2*M-90,sz);
+    const h=Math.max(106,78+valueLines.length*lineHeight);
+    ensure(h+15);
+    const bg={default:'#ffffff',accent:'#fcf2f8',teal:'#effaf9',target:'#fbeaf3'}[kind];
+    const stripe={default:'#9469b2',accent:col.pink,teal:col.teal,target:'#b82277'}[kind];
+    round(M,y,W-2*M,h,16,bg,'#e4d8eb');
+    round(R-8,y+8,8,h-16,4,stripe);
+    txt(title,R-31,y+35,24,col.purple,700);
+    for(let j=0;j<valueLines.length;j++)txt(valueLines[j],R-31,y+74+j*lineHeight,sz,col.ink,kind==='target'?700:400);
+    y+=h+15;
+  }
+  function footer(){
+    const fy=H-89;ctx.strokeStyle='#decfe5';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(M,fy);ctx.lineTo(R,fy);ctx.stroke();
+    txt('פרסונה ראשונית המבוססת על השערות – נבדוק אותן בהמשך החקר.',R,fy+33,18,col.muted);
+    ctx.textAlign='left';ctx.direction='ltr';ctx.font='18px Arial';ctx.fillStyle=col.purple;ctx.fillText('פורצות דרך · תעשיידע',M,fy+33);
+    const num=`עמוד ${pageIndex}`;txt(num,R,fy+62,15,col.muted);
+  }
+  freshPage();header();identity();participantStrip();
+  card('הבעיה שבחרנו',d.problem,'accent');
+  card('קהל היעד',d.audience);
+  card('שגרת החיים שלה',d.routine);
+  card('מתי והיכן היא נתקלת בבעיה?',d.moment,'teal');
+  card('מה היא מנסה לעשות ומה מקשה עליה?',d.barrier);
+  card('איך הבעיה משפיעה עליה?',d.impact);
+  if(d.feeling)card('מה היא מרגישה?',d.feeling);
+  card('מה היא רוצה שיתאפשר לה?',d.wish);
+  card('מטרת המיזם',d.objective,'target');
+  // Stamp each footer after all cards have been placed; pages may have split.
+  cv.forEach((c,i)=>{ctx=c.getContext('2d');pageIndex=i+1;footer()});
+  const pages=cv.map(c=>({jpeg:Uint8Array.from(atob(c.toDataURL('image/jpeg',.94).split(',')[1]),x=>x.charCodeAt(0)),w:c.width,h:c.height}));
+  const bytes=pdfFromJpegPages(pages);
+  const blob=new Blob([bytes],{type:'application/pdf'});
+  const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;
+  const safe=(d.personaName||'פרסונה').replace(/[\\/:*?"<>|]/g,'_').slice(0,40);
+  a.download=`פורצות_דרך_פרסונה_${safe}.pdf`;document.body.append(a);a.click();
+  setTimeout(()=>{URL.revokeObjectURL(url);a.remove()},10000);
+ }catch(err){alert('לא הצלחנו ליצור את קובץ ה-PDF: '+err.message)}
+ finally{button.textContent=oldText;button.disabled=false}
+}
+function pdfFromJpegPages(pages){
+ const enc=new TextEncoder();let parts=[],n=0,offsets=[0];
+ function push(x){const bytes=typeof x==='string'?enc.encode(x):x;parts.push(bytes);n+=bytes.length}
+ function obj(id,body){offsets[id]=n;push(`${id} 0 obj\n`);push(body);push('\nendobj\n')}
+ push('%PDF-1.4\n');push(new Uint8Array([0x25,0xe2,0xe3,0xcf,0xd3,0x0a]));
+ obj(1,'<< /Type /Catalog /Pages 2 0 R >>');
+ obj(2,`<< /Type /Pages /Kids [${pages.map((_,i)=>`${3+i*3} 0 R`).join(' ')}] /Count ${pages.length} >>`);
+ pages.forEach((p,i)=>{
+  const page=3+i*3,img=page+1,content=page+2;
+  obj(page,`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /XObject << /Im0 ${img} 0 R >> >> /Contents ${content} 0 R >>`);
+  offsets[img]=n;push(`${img} 0 obj\n<< /Type /XObject /Subtype /Image /Width ${p.w} /Height ${p.h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${p.jpeg.length} >>\nstream\n`);push(p.jpeg);push('\nendstream\nendobj\n');
+  const draw='q\n595.28 0 0 841.89 0 0 cm\n/Im0 Do\nQ\n';
+  obj(content,`<< /Length ${enc.encode(draw).length} >>\nstream\n${draw}endstream`);
+ });
+ const xref=n,total=3+pages.length*3;
+ push(`xref\n0 ${total}\n0000000000 65535 f \n`);
+ for(let i=1;i<total;i++)push(`${String(offsets[i]).padStart(10,'0')} 00000 n \n`);
+ push(`trailer\n<< /Size ${total} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF`);
+ const out=new Uint8Array(n);let pos=0;for(const part of parts){out.set(part,pos);pos+=part.length}return out;
 }
 </script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<div id="submitArea" style="max-width:850px; margin: 10px auto 0;">
-  <button id="submitActivityBtn" onclick="submitPersonaActivity()">שליחת הפעילות</button>
-  <div id="submitStatus" style="text-align:center; margin-top:10px; font-weight:600;"></div>
-</div>
+<script>
+(function(){
+ const ids=['problem','audience','team','participants','personaName','age','routine','moment','barrier','impact','feeling','wish','objective'];
+ const required=['participants','audience','personaName','routine','moment','barrier','impact','wish','objective'];
+ const vals=Object.fromEntries(ids.map(id=>[id,document.getElementById(id)]));
 
-</body>
-</html>
+ const draftKey='portzot-persona-2027-v1';
+ const workshopKey='portzot-sdg-workshop-he-v2';
+ const saveState=document.getElementById('saveState');
+ let savedDraft=null,workshop=null;
+ try{savedDraft=JSON.parse(sessionStorage.getItem(draftKey)||'null')}catch(_){}
+ try{workshop=JSON.parse(sessionStorage.getItem(workshopKey)||'null')}catch(_){}
+ const loadDraft=savedDraft&&savedDraft.version===1&&savedDraft.fields&&typeof savedDraft.fields==='object';
+ if(loadDraft){
+   for(const id of ids)if(typeof savedDraft.fields[id]==='string')vals[id].value=savedDraft.fields[id];
+ }else if(workshop&&Number(workshop.max)>=5&&workshop.form&&typeof workshop.form==='object'){
+   const f=workshop.form;
+   if(typeof f.problem==='string')vals.problem.value=f.problem;
+   if(typeof f.need==='string')vals.objective.value=f.need;
+   if(typeof f.team==='string')vals.team.value=f.team;
+ }
+ function saveDraft(){
+  try{
+   sessionStorage.setItem(draftKey,JSON.stringify({version:1,fields:Object.fromEntries(ids.map(id=>[id,vals[id].value]))}));
+   saveState.textContent='הטיוטה נשמרה בלשונית זו. הורידו את ה־PDF לפני סגירת הדפדפן.';
+  }catch(_){
+   saveState.textContent='לא ניתן לשמור אוטומטית בדפדפן הזה. הורידו את ה־PDF לפני היציאה.';
+  }
+ }
+ function update(){for(const el of document.querySelectorAll('[data-out]')){const v=vals[el.dataset.out].value.trim();el.textContent=v||'טרם מולא'}
+  for(const el of document.querySelectorAll('[data-print]')){const v=vals[el.dataset.print].value.trim();el.textContent=v||'לא צוין'}
+  const n=vals.personaName.value.trim(),age=vals.age.value.trim();document.getElementById('identity').textContent=(n||'ללא שם')+(age?' · גיל '+age:'');
+  const count=required.filter(id=>vals[id].value.trim()).length;
+  document.getElementById('progress').textContent=`הושלמו ${count} מתוך ${required.length} שדות מרכזיים`;
+  document.getElementById('fill').style.width=(count/required.length*100)+'%';
+ }
+ document.querySelectorAll('input,textarea').forEach(x=>x.addEventListener('input',()=>{x.removeAttribute('aria-invalid');document.getElementById('formStatus').textContent='';update();saveDraft()}));
+ document.getElementById('clear').addEventListener('click',()=>{if(!confirm('לנקות את כל התשובות בעמוד הפרסונה?'))return;ids.forEach(id=>{vals[id].value='';vals[id].removeAttribute('aria-invalid')});try{sessionStorage.removeItem(draftKey)}catch(_){}update();saveState.textContent='התשובות נוקו. הטיוטה החדשה תישמר עם תחילת ההקלדה.';document.getElementById('formStatus').textContent='';vals.problem.focus();window.scrollTo({top:0,behavior:'smooth'});});
+ document.getElementById('print').addEventListener('click',downloadColorPdf);
+ update();
+})();
+</script>
+</body></html>
