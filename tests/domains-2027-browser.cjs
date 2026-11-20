@@ -38,7 +38,7 @@ const server=http.createServer((req,res)=>{
       const cards=[...document.querySelectorAll('.card')].map(e=>{const r=e.getBoundingClientRect();return{width:r.width,height:r.height,top:r.top}});
       return{overflow:document.documentElement.scrollWidth>innerWidth+1,main:document.querySelector('main').getBoundingClientRect().width,cards,questions:document.querySelectorAll('.questions p').length,article:!!document.querySelector('.main-article'),loaded:[...document.images].every(i=>i.naturalWidth>0),accent:getComputedStyle(document.body).getPropertyValue('--accent')};
      });
-     assert.equal(layout.overflow,false,`${lang} d${id} ${width} overflow`);assert(layout.main<=1160);assert.equal(layout.questions,4);assert(layout.article&&layout.loaded);
+     assert.equal(layout.overflow,false,`${lang} d${id} ${width} overflow`);assert(layout.main<=(width===1440?1068:1160));assert.equal(layout.questions,4);assert(layout.article&&layout.loaded);
      assert.equal(layout.cards.length,8);assert.equal(layout.cards.filter(c=>c.top===layout.cards[0].top).length,width===1440?4:1);
      assert(Math.max(...layout.cards.map(c=>c.height))-Math.min(...layout.cards.map(c=>c.height))<1,'card heights');
      assert(Math.max(...layout.cards.map(c=>c.width))-Math.min(...layout.cards.map(c=>c.width))<1,'card widths');
@@ -67,6 +67,11 @@ const server=http.createServer((req,res)=>{
       await page.click(`[data-open-article="d${id}-a${String(n+1).padStart(2,'0')}"]`);
       assert.equal(await page.$eval('dialog[open] h2',e=>e.textContent),d.short_articles[n].title);
       const article=d.short_articles[n];
+      const reader=await page.$eval('dialog[open]',e=>{
+       const b=e.querySelector('.reader-body'),title=b.querySelector(':scope > h2'),f=b.querySelector(':scope > section > figure');
+       return {current:b.querySelector('.reader-current')?.textContent,count:b.querySelector('.reader-count')?.textContent,inside:!!f,order:!!f&&!!(title.compareDocumentPosition(f)&Node.DOCUMENT_POSITION_FOLLOWING),previous:f?.previousElementSibling?.tagName,highlights:b.querySelectorAll('.concept-emphasis').length,width:e.getBoundingClientRect().width,overflow:e.scrollWidth>e.clientWidth+1};
+      });
+      assert.equal(reader.current,article.title);assert(reader.count.includes(String(n+1)));assert(reader.inside&&reader.order);assert.equal(reader.previous,'P');assert(!reader.overflow);assert(reader.width<=748);assert(reader.highlights<=article.sections.length);
       const actual=await page.$$eval(article.sections?'dialog[open] .reader-body>section>p':'dialog[open] .reader-body>p',es=>es.map(e=>e.textContent));assert.deepEqual(actual,article.paragraphs);
       if(article.sections){
        assert.deepEqual(await page.$$eval('dialog[open] .reader-body>section>h3',es=>es.map(e=>e.textContent)),article.sections.map(s=>s.heading));
