@@ -149,7 +149,45 @@ const server=http.createServer((req,res)=>{
    await action('#print');assert.equal(await page.evaluate(()=>window.__workshopPrinted),true);
    assert.match(await page.$eval('#print-summary',e=>e.textContent),/התארגנות נוחה/);
    await page.screenshot({path:path.join(shots,'sdg-workshop-'+width+'.png'),fullPage:true});
+
+   // The persona page receives the completed challenge and its intended change
+   // without prefilled example answers, then saves real participant inputs.
+   await page.evaluate(()=>sessionStorage.removeItem('portzot-persona-2027-v1'));
+   await page.goto(base+'steps/persona.html',{waitUntil:'load'});
+   assert.equal(await page.$eval('#problem',e=>e.value),'תלמידות מתקשות להתארגן בעומס מבחנים');
+   assert.equal(await page.$eval('#objective',e=>e.value),'התארגנות נוחה');
+   for(const id of ['audience','participants','personaName'])assert.equal(await page.$eval('#'+id,e=>e.value),'',id+' must start blank');
+   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false,'persona horizontal overflow '+width);
+   assert.doesNotMatch(await page.$eval('body',e=>e.textContent),/שיעור\s*4|מפגש\s*4/);
+   await action('#print');
+   assert.equal(await page.evaluate(()=>document.activeElement.id),'audience');
+   await field('audience','תלמידות חטיבת הביניים');
+   await field('participants','מיה, נועה, שירה');
+   await field('personaName','מאיה');
+   await field('age','15');
+   await field('routine','לומדת ומשתתפת בחוגים');
+   await field('moment','לקראת מבחנים');
+   await field('barrier','לא יודעת מה ללמוד קודם');
+   await field('impact','קשה לה להתכונן');
+   await field('feeling','לחוצה');
+   await field('wish','להתארגן בזמן');
+   await page.evaluate(()=>{
+     const old=URL.createObjectURL.bind(URL);
+     URL.createObjectURL=(blob)=>{window.__pdfInfo={type:blob.type,size:blob.size};return old(blob)};
+   });
+   await action('#print');
+   await page.waitForFunction(()=>window.__pdfInfo&&window.__pdfInfo.size>30000);
+   assert.equal(await page.evaluate(()=>window.__pdfInfo.type),'application/pdf');
+   assert.match(await page.$eval('[data-out="participants"]',e=>e.textContent),/מיה, נועה, שירה/);
+   await page.screenshot({path:path.join(shots,'persona-'+width+'.png'),fullPage:true});
+   await page.reload({waitUntil:'load'});
+   assert.equal(await page.$eval('#participants',e=>e.value),'מיה, נועה, שירה');
+   page.once('dialog',d=>d.accept());
+   await action('#clear');
+   assert.equal(await page.$eval('#participants',e=>e.value),'');
+   assert.equal(await page.$eval('#problem',e=>e.value),'');
   }
+  console.log('PASS persona: SDG handoff, participant names, no lesson number, desktop/mobile, draft, validation and colored PDF.');
   console.log('PASS SDG workshop: desktop 75%, mobile layout, all stages, validation focus, draft restore, print summary.');
 
   assert.deepEqual(errors,[]);assert.deepEqual(missing,[]);
