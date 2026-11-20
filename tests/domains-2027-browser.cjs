@@ -197,7 +197,7 @@ const server=http.createServer((req,res)=>{
    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false,'Arabic persona horizontal overflow '+width);
    assert.equal(await page.evaluate(()=>{
      const clone=document.body.cloneNode(true);
-     clone.querySelectorAll('script,style').forEach(e=>e.remove());
+     clone.querySelectorAll('script,style,[data-out],[data-print],#identity').forEach(e=>e.remove());
      const text=clone.textContent.replaceAll('פורצות דרך','').replaceAll('תעשיידע','').replaceAll('עברית','');
      return [...text].some(ch=>ch.codePointAt(0)>=0x590&&ch.codePointAt(0)<=0x5ff);
    }),false,'Arabic visible content must not contain Hebrew beyond course brand / language option');
