@@ -186,7 +186,53 @@ const server=http.createServer((req,res)=>{
    await action('#clear');
    assert.equal(await page.$eval('#participants',e=>e.value),'');
    assert.equal(await page.$eval('#problem',e=>e.value),'');
+
+   // The same persona workflow is fully usable in Modern Standard Arabic:
+   // labels, input validation, responsive view, PDF, and persistent draft across locales.
+   await page.goto(base+'ar/steps/persona.html?lang=ar',{waitUntil:'load'});
+   assert.equal(await page.$eval('html',e=>e.lang),'ar');
+   assert.equal(await page.$eval('html',e=>e.dir),'rtl');
+   assert.match(await page.$eval('h1',e=>e.textContent),/شخصية المستخدم/);
+   assert.match(await page.$eval('label[for="participants"]',e=>e.textContent),/عضوات الفريق/);
+   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false,'Arabic persona horizontal overflow '+width);
+   assert.equal(await page.evaluate(()=>{
+     const clone=document.body.cloneNode(true);
+     clone.querySelectorAll('script,style').forEach(e=>e.remove());
+     const text=clone.textContent.replaceAll('פורצות דרך','').replaceAll('תעשיידע','').replaceAll('עברית','');
+     return /[\\u0590-\\u05ff]/.test(text);
+   }),false,'Arabic visible content must not contain Hebrew beyond course brand / language option');
+
+   await field('participants','مريم، نور، سلمى');
+   await field('audience','طالبات المرحلة الإعدادية');
+   await field('personaName','ليلى');
+   await field('age','15');
+   await field('routine','تدرس وتشارك في نشاط رياضي');
+   await field('moment','عشية الامتحان');
+   await field('barrier','لا تعرف كيف ترتب الأولويات');
+   await field('impact','تتأخر في إنجاز الواجبات');
+   await field('wish','تنظيم وقتها بوضوح');
+   await field('objective','تمكين الطالبات من تنظيم الوقت');
+   await page.evaluate(()=>{
+     const original=URL.createObjectURL.bind(URL);
+     URL.createObjectURL=blob=>{window.__arabicPdf={type:blob.type,size:blob.size};return original(blob)};
+   });
+   await action('#print');
+   await page.waitForFunction(()=>window.__arabicPdf&&window.__arabicPdf.size>30000);
+   assert.equal(await page.evaluate(()=>window.__arabicPdf.type),'application/pdf');
+   assert.match(await page.$eval('[data-out="participants"]',e=>e.textContent),/مريم، نور، سلمى/);
+   await page.screenshot({path:path.join(shots,'persona-arabic-'+width+'.png'),fullPage:true});
+   // Switching back to Hebrew must preserve the existing draft, and vice versa.
+   await Promise.all([page.waitForNavigation({waitUntil:'load'}),action('[data-course-language="he"]')]);
+   assert.equal(await page.$eval('#participants',e=>e.value),'مريم، نور، سلمى');
+   assert.equal(await page.$eval('html',e=>e.lang),'he');
+   assert.equal(new URL(page.url()).searchParams.get('lang'),'he');
+   await Promise.all([page.waitForNavigation({waitUntil:'load'}),action('[data-course-language="ar"]')]);
+   assert.equal(await page.$eval('#personaName',e=>e.value),'ليلى');
+   assert.equal(await page.$eval('html',e=>e.lang),'ar');
+   // Start the next iteration with the Hebrew language preference.
+   await page.goto(base+'steps/persona.html?lang=he',{waitUntil:'load'});
   }
+  console.log('PASS Arabic persona: RTL translation, responsive layout, PDF, and shared language draft.');
   console.log('PASS persona: SDG handoff, participant names, no lesson number, desktop/mobile, draft, validation and colored PDF.');
   console.log('PASS SDG workshop: desktop 75%, mobile layout, all stages, validation focus, draft restore, print summary.');
 
