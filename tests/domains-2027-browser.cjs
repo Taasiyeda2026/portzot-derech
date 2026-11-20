@@ -192,7 +192,7 @@ const server=http.createServer((req,res)=>{
    await page.goto(base+'ar/steps/persona.html?lang=ar',{waitUntil:'load'});
    assert.equal(await page.$eval('html',e=>e.lang),'ar');
    assert.equal(await page.$eval('html',e=>e.dir),'rtl');
-   assert.match(await page.$eval('h1',e=>e.textContent),/شخصية المستخدم/);
+   assert.match(await page.$eval('h1',e=>e.textContent),/شخصية المستخدمة/);
    assert.match(await page.$eval('label[for="participants"]',e=>e.textContent),/عضوات الفريق/);
    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false,'Arabic persona horizontal overflow '+width);
    assert.equal(await page.evaluate(()=>{
