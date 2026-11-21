@@ -54,6 +54,8 @@ header{background:linear-gradient(110deg,#fff 15%,#f3eaf7 80%);border-bottom:1px
 @media screen and (max-width:900px){.layout{grid-template-columns:1fr}.summary{grid-row:2;position:static}}
 @media screen and (max-width:520px){.intro{padding:14px 14px 18px}.layout{padding:0 12px}.panel,.summary{padding:16px}.double{grid-template-columns:1fr}}
 
+
+.persona-choice-group{border:0;padding:0;margin:0 0 8px;min-width:0}.persona-choice-group legend{color:#62536c;font-size:12px;margin-bottom:7px}.persona-choice-options{display:flex;flex-wrap:wrap;gap:7px}.persona-choice{display:inline-flex;align-items:center;gap:6px;border:1px solid #e3d6e8;background:#faf7fc;border-radius:9px;padding:7px 10px;font-weight:500;font-size:13px;cursor:pointer}.persona-choice:has(input:checked){background:#fceaf3;border-color:#ba307b;color:#7f2056}.persona-choice input{width:15px;height:15px;accent-color:var(--pink);margin:0}.field:has(.persona-choice-group) textarea{min-height:58px}
 </style>
 </head>
 <body>
@@ -69,14 +71,14 @@ header{background:linear-gradient(110deg,#fff 15%,#f3eaf7 80%);border-bottom:1px
 </div></section>
 <section class="panel"><div class="panelhead"><div class="number">02</div><div><h2>نتعرّف إلى شخصية المستخدمة</h2><p>نُنشئ شخصية واحدة تمثّل مستخدمة من الفئة المستهدفة.</p></div></div><div class="fields">
 <div class="double"><div class="field"><label class="required" for="personaName">ما اسمها؟</label><input id="personaName"  placeholder="مثال: مايا"></div><div class="field"><label for="age">كم عمرها؟ <span class="smallnote">(إذا كان ذلك مناسبًا)</span></label><input id="age"  placeholder="العمر أو الفئة العمرية"></div></div>
-<div class="field"><label class="required" for="routine">ما الذي يميّز حياتها اليومية فيما يتعلّق بالمشكلة؟</label><textarea id="routine" rows="2" placeholder="اكتبن فقط التفاصيل التي تساعد على فهم المشكلة"></textarea></div>
+<div class="field"><label class="required" for="routine">ما الذي يميّز حياتها اليومية فيما يتعلّق بالمشكلة؟</label><textarea id="routine" rows="2" placeholder="اكتبن فقط التفاصيل التي تساعد على فهم المشكلة"></textarea><fieldset class="persona-choice-group" data-choices-for="routine"><legend>حدّدن الخيارات المناسبة أو اكتبن إجابتكنّ</legend><div class="persona-choice-options"><label class="persona-choice"><input type="checkbox" value="الدراسة"><span>الدراسة</span></label><label class="persona-choice"><input type="checkbox" value="البيت والأسرة"><span>البيت والأسرة</span></label><label class="persona-choice"><input type="checkbox" value="الصديقات وأوقات الفراغ"><span>الصديقات وأوقات الفراغ</span></label><label class="persona-choice"><input type="checkbox" value="أنشطة خارج المنزل"><span>أنشطة خارج المنزل</span></label></div></fieldset></div>
 </div></section>
 <section class="panel"><div class="panelhead"><div class="number">03</div><div><h2>نرى المشكلة من منظورها</h2><p>نصف موقفًا محددًا تواجه فيه شخصية المستخدمة المشكلة.</p></div></div><div class="fields">
-<div class="field"><label class="required" for="moment">متى وأين تواجه المشكلة؟</label><textarea id="moment" rows="2" placeholder="وقت ومكان وموقف محدّد"></textarea></div>
+<div class="field"><label class="required" for="moment">متى وأين تواجه المشكلة؟</label><textarea id="moment" rows="2" placeholder="وقت ومكان وموقف محدّد"></textarea><fieldset class="persona-choice-group" data-choices-for="moment"><legend>حدّدن الخيارات المناسبة أو اكتبن إجابتكنّ</legend><div class="persona-choice-options"><label class="persona-choice"><input type="checkbox" value="في البيت"><span>في البيت</span></label><label class="persona-choice"><input type="checkbox" value="في المدرسة"><span>في المدرسة</span></label><label class="persona-choice"><input type="checkbox" value="في الطريق"><span>في الطريق</span></label><label class="persona-choice"><input type="checkbox" value="في الأماكن العامة"><span>في الأماكن العامة</span></label></div></fieldset></div>
 <div class="field"><label class="required" for="barrier">ما الذي تحاول القيام به؟ وما الذي يصعّب الأمر عليها؟</label><textarea id="barrier" rows="2" placeholder="ماذا تريد أن تفعل؟ وما الذي لا يسير كما ينبغي؟"></textarea></div>
-<div class="field"><label class="required" for="impact">كيف تؤثّر المشكلة عليها؟</label><textarea id="impact" rows="2" placeholder="مثلًا: الوقت أو الأنشطة اليومية أو المشاركة أو الرفاه"></textarea></div>
+<div class="field"><label class="required" for="impact">كيف تؤثّر المشكلة عليها؟</label><textarea id="impact" rows="2" placeholder="مثلًا: الوقت أو الأنشطة اليومية أو المشاركة أو الرفاه"></textarea><fieldset class="persona-choice-group" data-choices-for="impact"><legend>حدّدن الخيارات المناسبة أو اكتبن إجابتكنّ</legend><div class="persona-choice-options"><label class="persona-choice"><input type="checkbox" value="إهدار الوقت"><span>إهدار الوقت</span></label><label class="persona-choice"><input type="checkbox" value="صعوبة إنجاز مهمة"><span>صعوبة إنجاز مهمة</span></label><label class="persona-choice"><input type="checkbox" value="الحدّ من المشاركة"><span>الحدّ من المشاركة</span></label><label class="persona-choice"><input type="checkbox" value="الانزعاج أو الإحباط"><span>الانزعاج أو الإحباط</span></label><label class="persona-choice"><input type="checkbox" value="مشكلة تتعلّق بالسلامة"><span>مشكلة تتعلّق بالسلامة</span></label></div></fieldset></div>
 <div class="field"><label for="feeling">بماذا تشعر في تلك اللحظة؟ <span class="smallnote">(اختياري)</span></label><input id="feeling" placeholder="شعور واحد أو شعوران" ></div>
-<div class="field"><label class="required" for="wish">ما الذي تتمنّى أن تتمكّن من فعله؟</label><textarea id="wish" rows="2" placeholder="أيّ تغيير سيساعدها؟ دون اقتراح منتج"></textarea></div>
+<div class="field"><label class="required" for="wish">ما الذي تتمنّى أن تتمكّن من فعله؟</label><textarea id="wish" rows="2" placeholder="أيّ تغيير سيساعدها؟ دون اقتراح منتج"></textarea><fieldset class="persona-choice-group" data-choices-for="feeling"><legend>حدّدن الخيارات المناسبة أو اكتبن إجابتكنّ</legend><div class="persona-choice-options"><label class="persona-choice"><input type="checkbox" value="الإحباط"><span>الإحباط</span></label><label class="persona-choice"><input type="checkbox" value="القلق"><span>القلق</span></label><label class="persona-choice"><input type="checkbox" value="الإحراج"><span>الإحراج</span></label><label class="persona-choice"><input type="checkbox" value="الغضب"><span>الغضب</span></label><label class="persona-choice"><input type="checkbox" value="العجز"><span>العجز</span></label><label class="persona-choice"><input type="checkbox" value="خيبة الأمل"><span>خيبة الأمل</span></label></div></fieldset></div>
 </div></section>
 <section class="panel"><div class="panelhead"><div class="number">04</div><div><h2>نصوغ هدف المشروع</h2><p>نحدّد التغيير المنشود، وليس الحلّ التكنولوجي بعد.</p></div></div><div class="fields">
 <div class="field"><label class="required" for="objective">ما هدف مشروعنا؟</label><textarea id="objective" rows="2" placeholder="تمكين ... من ..."></textarea></div>
@@ -107,7 +109,7 @@ header{background:linear-gradient(110deg,#fff 15%,#f3eaf7 80%);border-bottom:1px
   <div class="print-grid"><div class="print-card"><div class="print-title">أثر المشكلة عليها</div><div class="print-value" data-print="impact"></div></div><div class="print-card"><div class="print-title">كيف تشعر؟</div><div class="print-value" data-print="feeling"></div></div></div>
   <div class="print-card"><div class="print-title">ما الذي تتمنّى أن تتمكّن من فعله؟</div><div class="print-value" data-print="wish"></div></div>
   <div class="print-card target"><div class="print-title">هدف المشروع</div><div class="print-value" data-print="objective"></div></div>
-  <div class="print-footer"><span>شخصية مستخدمة أولية قائمة على افتراضات؛ سنتحقّق منها خلال البحث لاحقًا.</span><span>رائدات الطريق · تعسيدا</span></div>
+  
 </section>
 
 
@@ -129,7 +131,7 @@ function validatePersona(){
  }
  status.textContent='';return true;
 }
-function downloadColorPdf(){
+async function downloadColorPdf(){
  if(!validatePersona())return;
  const button=document.getElementById('print');
  const oldText=button.textContent;
@@ -177,65 +179,52 @@ function downloadColorPdf(){
   }
   function ensure(h){if(y+h>H-120)freshPage()}
   function header(){
-    const h=152;
-    const g=ctx.createLinearGradient(M,y,R,y);g.addColorStop(0,'#f9d8e8');g.addColorStop(.52,'#eee3f8');g.addColorStop(1,'#dcf5f4');
-    round(M,y,W-2*M,h,23,g,'#e3c5df');
-    round(M+15,y+18,14,h-36,7,col.pink);
-    txt('رائدات الطريق',R-32,y+70,56,col.purple,800);
-    txt('شخصية المستخدمة | وثيقة مشروع جماعي',R-33,y+112,25,col.violet,700);
-    ctx.direction='rtl';ctx.textAlign='left';ctx.fillStyle=col.muted;ctx.font='21px Arial';
-    ctx.fillText('تعسيدا',M+42,y+58);
-    ctx.fillText('الفريق: '+(d.team||'لم يُذكَر'),M+42,y+101);
-    y+=h+24;
+    const h=140,g=ctx.createLinearGradient(M,y,R,y);g.addColorStop(0,'#f8e7f1');g.addColorStop(1,'#e5f7f7');
+    round(M,y,W-2*M,h,18,g,'#e7d8ed');
+    if(brandLogo){const boxH=102,boxW=330,scale=Math.min(boxW/brandLogo.naturalWidth,boxH/brandLogo.naturalHeight);const iw=brandLogo.naturalWidth*scale,ih=brandLogo.naturalHeight*scale;ctx.drawImage(brandLogo,R-30-iw,y+(h-ih)/2,iw,ih);}
+    txt("بطاقة شخصية المستخدمة",R-360,y+62,34,col.purple,800);
+    txt("الفريق"+': '+(d.team||"لم يُذكر"),R-360,y+107,22,col.muted,600);
+    y+=h+16;
   }
   function identity(){
-    ensure(138);
-    round(M,y,W-2*M,121,18,'#fff7fc','#e7d5e8');
-    round(R-9,y+9,9,103,5,col.pink);
-    txt('شخصية المستخدمة الخاصة بنا',R-38,y+38,25,col.pink,700);
-    txt(d.personaName||'لم يُدخَل اسم بعد',R-38,y+92,43,col.ink,800);
-    txt('العمر: '+(d.age||'لم يُذكَر'),M+255,y+78,25,col.muted,600);
-    y+=141;
+    const h=112;ensure(h+14);round(M,y,W-2*M,h,15,'#fff4fa','#e7d4e7');
+    round(R-8,y+8,8,h-16,4,col.pink);
+    txt(d.personaName||"لم يُذكر",R-32,y+72,43,col.ink,800);
+    txt("العمر"+': '+(d.age||"لم يُذكر"),M+260,y+72,25,col.muted,600);
+    y+=h+14;
   }
   function participantStrip(){
-    const members=lines(d.participants,W-2*M-70,24);
-    const h=57+members.length*28;
-    ensure(h+12);
-    round(M,y,W-2*M,h,15,'#f0f9f8','#b9e3e1');
-    round(R-8,y+8,8,h-16,4,col.teal);
-    txt('عضوات الفريق',R-32,y+29,23,col.teal,700);
-    members.forEach((line,i)=>txt(line,R-32,y+57+i*28,24,col.ink,600));
-    y+=h+12;
+    const members=lines(d.participants,W-2*M-60,22);
+    const h=45+members.length*29;ensure(h+12);round(M,y,W-2*M,h,13,'#f0f9f8','#c8e8e5');
+    txt("عضوات الفريق",R-26,y+28,20,col.teal,700);
+    members.forEach((line,i)=>txt(line,R-26,y+56+i*28,22,col.ink,500));y+=h+12;
   }
-  function card(title,value,kind='default'){
-    const sz=26,lineHeight=33;
-    const valueLines=lines(value,W-2*M-90,sz);
-    const h=Math.max(106,78+valueLines.length*lineHeight);
-    ensure(h+15);
-    const bg={default:'#ffffff',accent:'#fcf2f8',teal:'#effaf9',target:'#fbeaf3'}[kind];
-    const stripe={default:'#9469b2',accent:col.pink,teal:col.teal,target:'#b82277'}[kind];
-    round(M,y,W-2*M,h,16,bg,'#e4d8eb');
-    round(R-8,y+8,8,h-16,4,stripe);
-    txt(title,R-31,y+35,24,col.purple,700);
-    for(let j=0;j<valueLines.length;j++)txt(valueLines[j],R-31,y+74+j*lineHeight,sz,col.ink,kind==='target'?700:400);
-    y+=h+15;
+  function cellInfo(title,value,width,kind='default'){
+    const sz=24,lineHeight=30,ls=lines(value,width-54,sz),h=Math.max(92,66+ls.length*lineHeight);
+    return {title,ls,h,width,kind};
   }
-  function footer(){
-    const fy=H-89;ctx.strokeStyle='#decfe5';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(M,fy);ctx.lineTo(R,fy);ctx.stroke();
-    txt('شخصية مستخدمة أولية قائمة على افتراضات؛ سنتحقّق منها خلال البحث لاحقًا.',R,fy+33,18,col.muted);
-    ctx.textAlign='left';ctx.direction='ltr';ctx.font='18px Arial';ctx.fillStyle=col.purple;ctx.fillText('رائدات الطريق · تعسيدا',M,fy+33);
-    const num=`الصفحة ${pageIndex}`;txt(num,R,fy+62,15,col.muted);
+  function drawCell(cell,x,yy,h){
+    const colors={default:['#fff','#956ab3'],accent:['#fdf2f8',col.pink],teal:['#effaf9',col.teal],target:['#fce9f3','#b82277']};
+    const style=colors[cell.kind];round(x,yy,cell.width,h,13,style[0],'#e4d8eb');
+    round(x+cell.width-7,yy+8,6,h-16,3,style[1]);
+    txt(cell.title,x+cell.width-26,yy+29,21,col.purple,700);
+    cell.ls.forEach((line,i)=>txt(line,x+cell.width-26,yy+66+i*30,24,col.ink,cell.kind==='target'?700:400));
   }
+  function card(title,value,kind='default'){const cell=cellInfo(title,value,W-2*M,kind);ensure(cell.h+12);drawCell(cell,M,y,cell.h);y+=cell.h+12;}
+  function pair(a,b){
+    if(!b){card(...a);return;}
+    const gap=14,w=(W-2*M-gap)/2,c1=cellInfo(a[0],a[1],w,a[2]),c2=cellInfo(b[0],b[1],w,b[2]);
+    const h=Math.max(c1.h,c2.h);ensure(h+12);drawCell(c1,M+w+gap,y,h);drawCell(c2,M,y,h);y+=h+12;
+  }
+  function footer(){if(cv.length<2)return;txt("الصفحة"+' '+pageIndex,R,H-45,16,col.muted);}
   freshPage();header();identity();participantStrip();
-  card('المشكلة التي اخترناها',d.problem,'accent');
-  card('الفئة المستهدفة',d.audience);
-  card('حياتها اليومية',d.routine);
-  card('متى وأين تواجه المشكلة؟',d.moment,'teal');
-  card('ما الذي تحاول القيام به؟ وما الذي يصعّب الأمر عليها؟',d.barrier);
-  card('كيف تؤثّر المشكلة عليها؟',d.impact);
-  if(d.feeling)card('كيف تشعر؟',d.feeling);
-  card('ما الذي تتمنّى أن تتمكّن من فعله؟',d.wish);
-  card('هدف المشروع',d.objective,'target');
+  card("المشكلة المختارة",d.problem,'accent');
+  card("الفئة المستهدفة",d.audience);
+  pair(["حياتها اليومية",d.routine],["متى وأين؟",d.moment,'teal']);
+  card("الصعوبة الأساسية",d.barrier);
+  pair(["أثر المشكلة",d.impact],d.feeling?["مشاعرها",d.feeling]:null);
+  card("التغيير المنشود",d.wish,'teal');
+  card("هدف المشروع",d.objective,'target');
   // Stamp each footer after all cards have been placed; pages may have split.
   cv.forEach((c,i)=>{ctx=c.getContext('2d');pageIndex=i+1;footer()});
   const pages=cv.map(c=>({jpeg:Uint8Array.from(atob(c.toDataURL('image/jpeg',.94).split(',')[1]),x=>x.charCodeAt(0)),w:c.width,h:c.height}));
@@ -306,7 +295,8 @@ function pdfFromJpegPages(pages){
   document.getElementById('progress').textContent=`اكتملت ${count} من أصل ${required.length} حقول أساسية`;
   document.getElementById('fill').style.width=(count/required.length*100)+'%';
  }
- document.querySelectorAll('input,textarea').forEach(x=>x.addEventListener('input',()=>{x.removeAttribute('aria-invalid');document.getElementById('formStatus').textContent='';update();saveDraft()}));
+ document.querySelectorAll('.persona-choice-group').forEach(group=>{const field=vals[group.dataset.choicesFor];const boxes=[...group.querySelectorAll('input[type=checkbox]')];const sync=()=>{const parts=field.value.split('\\n').map(v=>v.trim());boxes.forEach(box=>box.checked=parts.includes(box.value));};boxes.forEach(box=>box.addEventListener('change',()=>{let parts=field.value.split('\\n').map(v=>v.trim()).filter(Boolean);parts=parts.filter(p=>p!==box.value);if(box.checked)parts.push(box.value);field.value=parts.join('\\n');field.dispatchEvent(new Event('input',{bubbles:true}));}));field.addEventListener('input',sync);sync();});
+ document.querySelectorAll('.field > input, .field > textarea, .field .double input, .field .double textarea').forEach(x=>x.addEventListener('input',()=>{x.removeAttribute('aria-invalid');document.getElementById('formStatus').textContent='';update();saveDraft()}));
  document.getElementById('clear').addEventListener('click',()=>{if(!confirm('هل تريدن مسح جميع الإجابات في صفحة شخصية المستخدمة؟'))return;ids.forEach(id=>{vals[id].value='';vals[id].removeAttribute('aria-invalid')});try{sessionStorage.removeItem(draftKey)}catch(_){}update();document.getElementById('formStatus').textContent='';vals.problem.focus();window.scrollTo({top:0,behavior:'smooth'});});
  document.getElementById('print').addEventListener('click',downloadColorPdf);
  update();
