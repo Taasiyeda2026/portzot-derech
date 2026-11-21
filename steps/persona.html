@@ -133,7 +133,7 @@ function downloadColorPdf(){
  if(!validatePersona())return;
  const button=document.getElementById('print');
  const oldText=button.textContent;
- button.disabled=true;button.textContent='מכינה PDF צבעוני…';
+ button.disabled=true;button.textContent='מכינה PDF…';
  try {
   const W=1240,H=1754,M=65,R=W-M;
   const fields=['problem','audience','team','participants','personaName','age','routine','moment','barrier','impact','feeling','wish','objective'];
@@ -273,7 +273,7 @@ function pdfFromJpegPages(pages){
 <script>
 (function(){
  const ids=['problem','audience','team','participants','personaName','age','routine','moment','barrier','impact','feeling','wish','objective'];
- const required=['participants','audience','personaName','routine','moment','barrier','impact','wish','objective'];
+ const required=['problem','participants','audience','personaName','routine','moment','barrier','impact','wish','objective'];
  const vals=Object.fromEntries(ids.map(id=>[id,document.getElementById(id)]));
 
  const draftKey='portzot-persona-2027-v1';
@@ -294,9 +294,9 @@ function pdfFromJpegPages(pages){
  function saveDraft(){
   try{
    sessionStorage.setItem(draftKey,JSON.stringify({version:1,fields:Object.fromEntries(ids.map(id=>[id,vals[id].value]))}));
-   saveState.textContent='הטיוטה נשמרה בלשונית זו. הורידו את ה־PDF לפני סגירת הדפדפן.';
+   
   }catch(_){
-   saveState.textContent='לא ניתן לשמור אוטומטית בדפדפן הזה. הורידו את ה־PDF לפני היציאה.';
+   
   }
  }
  function update(){for(const el of document.querySelectorAll('[data-out]')){const v=vals[el.dataset.out].value.trim();el.textContent=v;el.closest('.data').hidden=!v}
@@ -307,7 +307,7 @@ function pdfFromJpegPages(pages){
   document.getElementById('fill').style.width=(count/required.length*100)+'%';
  }
  document.querySelectorAll('input,textarea').forEach(x=>x.addEventListener('input',()=>{x.removeAttribute('aria-invalid');document.getElementById('formStatus').textContent='';update();saveDraft()}));
- document.getElementById('clear').addEventListener('click',()=>{if(!confirm('לנקות את כל התשובות בעמוד הפרסונה?'))return;ids.forEach(id=>{vals[id].value='';vals[id].removeAttribute('aria-invalid')});try{sessionStorage.removeItem(draftKey)}catch(_){}update();saveState.textContent='התשובות נוקו. הטיוטה החדשה תישמר עם תחילת ההקלדה.';document.getElementById('formStatus').textContent='';vals.problem.focus();window.scrollTo({top:0,behavior:'smooth'});});
+ document.getElementById('clear').addEventListener('click',()=>{if(!confirm('לנקות את כל התשובות בעמוד הפרסונה?'))return;ids.forEach(id=>{vals[id].value='';vals[id].removeAttribute('aria-invalid')});try{sessionStorage.removeItem(draftKey)}catch(_){}update();document.getElementById('formStatus').textContent='';vals.problem.focus();window.scrollTo({top:0,behavior:'smooth'});});
  document.getElementById('print').addEventListener('click',downloadColorPdf);
  update();
 })();
