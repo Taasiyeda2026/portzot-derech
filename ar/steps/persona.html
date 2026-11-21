@@ -217,6 +217,7 @@ async function downloadColorPdf(){
     const h=Math.max(c1.h,c2.h);ensure(h+12);drawCell(c1,M+w+gap,y,h);drawCell(c2,M,y,h);y+=h+12;
   }
   function footer(){if(cv.length<2)return;txt("الصفحة"+' '+pageIndex,R,H-45,16,col.muted);}
+  let brandLogo=null;try{brandLogo=new Image();brandLogo.src="../../icon/logo.png";await brandLogo.decode();}catch(_){brandLogo=null;}
   freshPage();header();identity();participantStrip();
   card("المشكلة المختارة",d.problem,'accent');
   card("الفئة المستهدفة",d.audience);
@@ -295,7 +296,7 @@ function pdfFromJpegPages(pages){
   document.getElementById('progress').textContent=`اكتملت ${count} من أصل ${required.length} حقول أساسية`;
   document.getElementById('fill').style.width=(count/required.length*100)+'%';
  }
- document.querySelectorAll('.persona-choice-group').forEach(group=>{const field=vals[group.dataset.choicesFor];const boxes=[...group.querySelectorAll('input[type=checkbox]')];const sync=()=>{const parts=field.value.split('\\n').map(v=>v.trim());boxes.forEach(box=>box.checked=parts.includes(box.value));};boxes.forEach(box=>box.addEventListener('change',()=>{let parts=field.value.split('\\n').map(v=>v.trim()).filter(Boolean);parts=parts.filter(p=>p!==box.value);if(box.checked)parts.push(box.value);field.value=parts.join('\\n');field.dispatchEvent(new Event('input',{bubbles:true}));}));field.addEventListener('input',sync);sync();});
+ document.querySelectorAll('.persona-choice-group').forEach(group=>{const field=vals[group.dataset.choicesFor];const boxes=[...group.querySelectorAll('input[type=checkbox]')];const sync=()=>{const parts=field.value.split('\n').map(v=>v.trim());boxes.forEach(box=>box.checked=parts.includes(box.value));};boxes.forEach(box=>box.addEventListener('change',()=>{let parts=field.value.split('\n').map(v=>v.trim()).filter(Boolean);parts=parts.filter(p=>p!==box.value);if(box.checked)parts.push(box.value);field.value=parts.join('\n');field.dispatchEvent(new Event('input',{bubbles:true}));}));field.addEventListener('input',sync);sync();});
  document.querySelectorAll('.field > input, .field > textarea, .field .double input, .field .double textarea').forEach(x=>x.addEventListener('input',()=>{x.removeAttribute('aria-invalid');document.getElementById('formStatus').textContent='';update();saveDraft()}));
  document.getElementById('clear').addEventListener('click',()=>{if(!confirm('هل تريدن مسح جميع الإجابات في صفحة شخصية المستخدمة؟'))return;ids.forEach(id=>{vals[id].value='';vals[id].removeAttribute('aria-invalid')});try{sessionStorage.removeItem(draftKey)}catch(_){}update();document.getElementById('formStatus').textContent='';vals.problem.focus();window.scrollTo({top:0,behavior:'smooth'});});
  document.getElementById('print').addEventListener('click',downloadColorPdf);
