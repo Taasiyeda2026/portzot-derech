@@ -33,6 +33,27 @@ header{background:linear-gradient(110deg,#fff 15%,#f3eaf7 80%);border-bottom:1px
   .print-footer{font-size:8.3pt;color:#625971;border-top:1px solid #e3d8e8;padding-top:2.5mm;margin-top:1mm;display:flex;justify-content:space-between;gap:4mm}
 }
 
+
+/* Compact student workspace; print export remains independently styled. */
+@media screen{
+  .intro{padding:16px 24px 19px}.intro h1{font-size:clamp(29px,3vw,38px);margin:4px 0 7px}.intro p{max-width:950px;font-size:14px;line-height:1.55}
+  .steps{margin-top:12px;gap:7px}.step{padding:6px 10px;font-size:12px}
+  .layout{max-width:1320px;margin:16px auto 34px;grid-template-columns:minmax(0,1fr) 270px;gap:16px}
+  .main{gap:13px}.panel,.summary{padding:20px;border-radius:15px}
+  .panelhead{margin-bottom:14px}.panelhead p{font-size:13px}.fields{gap:13px}
+  .field label{font-size:14px;margin-bottom:5px}.field input,.field textarea{font-size:15px;padding:10px 12px}
+  .field textarea{min-height:58px;resize:none}.helper{font-size:12px;color:#65586d}
+  .summary{top:14px;border-top:3px solid var(--pink)}
+  .summary .sub{display:none}.summary .data{padding:8px 0}.summary .data[hidden]{display:none}
+  .summary .data .key{font-size:12px}.summary .data .value{font-size:13px}
+  .summary .actions{grid-template-columns:1fr 1fr;gap:7px;margin-top:14px}
+  .summary .btn{font-size:13px;padding:9px 8px}.summary .btn.primary{background:#fff;color:var(--violet);border-color:#dacbe8}
+  .summary .btn.primary:hover{background:#f5eef9}.footnote{display:none}
+  .progress-label{margin-bottom:10px}.flowhint{font-size:13px;padding:10px 12px}
+}
+@media screen and (max-width:900px){.layout{grid-template-columns:1fr}.summary{grid-row:2;position:static}}
+@media screen and (max-width:520px){.intro{padding:14px 14px 18px}.layout{padding:0 12px}.panel,.summary{padding:16px}.double{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -41,9 +62,9 @@ header{background:linear-gradient(110deg,#fff 15%,#f3eaf7 80%);border-bottom:1px
 <div class="steps"><div class="step"><b>01</b> نقطة الانطلاق</div><div class="step"><b>02</b> نتعرّف إليها</div><div class="step"><b>03</b> نفهم الصعوبة</div><div class="step"><b>04</b> نحدّد هدفًا</div></div></div></header>
 <div class="layout"><main class="main" id="form">
 <section class="panel"><div class="panelhead"><div class="number">01</div><div><h2>نقطة انطلاقنا</h2><p>نربط شخصية المستخدمة بالمشكلة التي اخترناها، دون أن نبدأ من جديد.</p></div></div><div class="fields">
-<div class="field"><label for="problem">المشكلة التي اخترناها <span class="smallnote">(تُنقل من نشاط «نكتشف التحدّي» إذا أُنجز)</span></label><textarea id="problem" rows="2" placeholder="لمن تحدث المشكلة؟ ومتى؟ وما الصعوبة؟ دون اقتراح حلّ"></textarea><p class="helper">إذا أنهيتن نشاط «نكتشف التحدّي» في علامة التبويب نفسها، فستظهر المشكلة هنا. وإلا فاكتبنها بأنفسكن.</p></div>
+<div class="field"><label for="problem">المشكلة التي اخترناها <span class="smallnote">(تُنقل من نشاط «نكتشف التحدّي» إذا أُنجز)</span></label><textarea id="problem" rows="2" placeholder="لمن تحدث المشكلة؟ ومتى؟ وما الصعوبة؟ دون اقتراح حلّ"></textarea></div>
 <div class="field"><label class="required" for="audience">من هي الفئة المستهدفة في مشروعنا؟</label><input id="audience" placeholder="مجموعة الأشخاص الذين يواجهون المشكلة" ></div>
-<div class="field"><label class="required" for="participants">أسماء عضوات الفريق</label><input id="participants" placeholder="اكتبن أسماء جميع المشاركات وافصلن بينها بفواصل" ><p class="helper">ستظهر الأسماء في الملخّص وفي ملف PDF.</p></div>
+<div class="field"><label class="required" for="participants">أسماء عضوات الفريق</label><input id="participants" placeholder="اكتبن أسماء جميع المشاركات وافصلن بينها بفواصل" ></div>
 <div class="field"><label for="team">اسم الفريق <span class="smallnote">(اختياري)</span></label><input id="team" placeholder="اسم الفريق" ></div>
 </div></section>
 <section class="panel"><div class="panelhead"><div class="number">02</div><div><h2>نتعرّف إلى شخصية المستخدمة</h2><p>نُنشئ شخصية واحدة تمثّل مستخدمة من الفئة المستهدفة.</p></div></div><div class="fields">
@@ -73,9 +94,8 @@ header{background:linear-gradient(110deg,#fff 15%,#f3eaf7 80%);border-bottom:1px
 <div class="data"><span class="key">كيف تؤثّر المشكلة عليها</span><span class="value" data-out="impact"></span></div>
 <div class="data"><span class="key">ما الذي تتمنّى أن تتمكّن من فعله</span><span class="value" data-out="wish"></span></div>
 <div class="data"><span class="key">هدف المشروع</span><span class="value" data-out="objective"></span></div>
-<div class="actions"><button class="btn primary" type="button" id="print">تنزيل ملف PDF ملوّن</button><button class="btn" type="button" id="clear">مسح الإجابات</button></div><p id="formStatus" role="status" aria-live="polite" class="form-status"></p><p id="saveState" class="footnote">تُحفَظ المسوّدة في علامة التبويب هذه فقط.</p><p class="footnote">تُحفَظ المسوّدة تلقائيًا في علامة التبويب هذه فقط. احفظن ملف PDF في مجلّد المشروع. لا تُرسَل البيانات إلى الخادم.</p></aside></div>
-<p class="note">פורצות דרך · תעשיידע · شخصية مستخدمة أولية استعدادًا لبحث المشكلة</p>
-<!-- A separate print layout: not the interactive form and not the narrow side preview. -->
+<div class="actions"><button class="btn primary" type="button" id="print">PDF</button><button class="btn" type="button" id="clear">مسح الإجابات</button></div><p id="formStatus" role="status" aria-live="polite" class="form-status"></p><span id="saveState" hidden></span></aside></div>
+
 <section class="print-sheet" id="printSheet" aria-label="صفحة شخصية المستخدمة للطباعة">
   <div class="print-top"><div class="print-brand">פורצות דרך<small>شخصية المستخدمة – وثيقة مشروع جماعي</small></div><div class="print-meta">תעשיידע<br><strong>الفريق:</strong> <span data-print="team"></span><br><strong>عضوات الفريق:</strong> <span data-print="participants"></span></div></div>
   <div class="print-identity"><div><div class="print-title">شخصية المستخدمة الخاصة بنا</div><strong data-print="personaName"></strong></div><div class="print-age"><strong>العمر:</strong> <span data-print="age"></span></div></div>
@@ -279,7 +299,7 @@ function pdfFromJpegPages(pages){
    saveState.textContent='لا يمكن الحفظ التلقائي في هذا المتصفّح. نزّلن ملف PDF قبل المغادرة.';
   }
  }
- function update(){for(const el of document.querySelectorAll('[data-out]')){const v=vals[el.dataset.out].value.trim();el.textContent=v||'لم يُملأ بعد'}
+ function update(){for(const el of document.querySelectorAll('[data-out]')){const v=vals[el.dataset.out].value.trim();el.textContent=v;el.closest('.data').hidden=!v}
   for(const el of document.querySelectorAll('[data-print]')){const v=vals[el.dataset.print].value.trim();el.textContent=v||'لم يُذكَر'}
   const n=vals.personaName.value.trim(),age=vals.age.value.trim();document.getElementById('identity').textContent=(n||'بلا اسم')+(age?' · العمر '+age:'');
   const count=required.filter(id=>vals[id].value.trim()).length;
