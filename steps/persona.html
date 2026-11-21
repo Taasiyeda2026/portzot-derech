@@ -33,6 +33,27 @@ header{background:linear-gradient(110deg,#fff 15%,#f3eaf7 80%);border-bottom:1px
   .print-footer{font-size:8.3pt;color:#625971;border-top:1px solid #e3d8e8;padding-top:2.5mm;margin-top:1mm;display:flex;justify-content:space-between;gap:4mm}
 }
 
+
+/* Compact student workspace; print export remains independently styled. */
+@media screen{
+  .intro{padding:16px 24px 19px}.intro h1{font-size:clamp(29px,3vw,38px);margin:4px 0 7px}.intro p{max-width:950px;font-size:14px;line-height:1.55}
+  .steps{margin-top:12px;gap:7px}.step{padding:6px 10px;font-size:12px}
+  .layout{max-width:1320px;margin:16px auto 34px;grid-template-columns:minmax(0,1fr) 270px;gap:16px}
+  .main{gap:13px}.panel,.summary{padding:20px;border-radius:15px}
+  .panelhead{margin-bottom:14px}.panelhead p{font-size:13px}.fields{gap:13px}
+  .field label{font-size:14px;margin-bottom:5px}.field input,.field textarea{font-size:15px;padding:10px 12px}
+  .field textarea{min-height:58px;resize:none}.helper{font-size:12px;color:#65586d}
+  .summary{top:14px;border-top:3px solid var(--pink)}
+  .summary .sub{display:none}.summary .data{padding:8px 0}.summary .data[hidden]{display:none}
+  .summary .data .key{font-size:12px}.summary .data .value{font-size:13px}
+  .summary .actions{grid-template-columns:1fr 1fr;gap:7px;margin-top:14px}
+  .summary .btn{font-size:13px;padding:9px 8px}.summary .btn.primary{background:#fff;color:var(--violet);border-color:#dacbe8}
+  .summary .btn.primary:hover{background:#f5eef9}.footnote{display:none}
+  .progress-label{margin-bottom:10px}.flowhint{font-size:13px;padding:10px 12px}
+}
+@media screen and (max-width:900px){.layout{grid-template-columns:1fr}.summary{grid-row:2;position:static}}
+@media screen and (max-width:520px){.intro{padding:14px 14px 18px}.layout{padding:0 12px}.panel,.summary{padding:16px}.double{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -41,9 +62,9 @@ header{background:linear-gradient(110deg,#fff 15%,#f3eaf7 80%);border-bottom:1px
 <div class="steps"><div class="step"><b>01</b> נקודת המוצא</div><div class="step"><b>02</b> מכירות אותה</div><div class="step"><b>03</b> מבינות את הקושי</div><div class="step"><b>04</b> מגדירות מטרה</div></div></div></header>
 <div class="layout"><main class="main" id="form">
 <section class="panel"><div class="panelhead"><div class="number">01</div><div><h2>נקודת המוצא שלנו</h2><p>מחברות את הפרסונה לבעיה שכבר בחרנו, בלי להתחיל מחדש.</p></div></div><div class="fields">
-<div class="field"><label for="problem">הבעיה שבחרנו <span class="smallnote">(תועבר מפעילות מאתרות אתגר, אם הושלמה)</span></label><textarea id="problem" rows="2" placeholder="למי זה קורה, מתי ומה הקושי? ללא פתרון מוצע"></textarea><p class="helper">אם סיימתן את פעילות ״מאתרות אתגר״ באותה לשונית, הבעיה תופיע כאן. אחרת הזינו אותה בעצמכן.</p></div>
+<div class="field"><label for="problem">הבעיה שבחרנו <span class="smallnote">(תועבר מפעילות מאתרות אתגר, אם הושלמה)</span></label><textarea id="problem" rows="2" placeholder="למי זה קורה, מתי ומה הקושי? ללא פתרון מוצע"></textarea></div>
 <div class="field"><label class="required" for="audience">מי קהל היעד שלנו?</label><input id="audience" placeholder="קבוצת האנשים שמתמודדת עם הבעיה" ></div>
-<div class="field"><label class="required" for="participants">שמות חברות הצוות</label><input id="participants" placeholder="כתבו את שמות כל המשתתפות, מופרדים בפסיקים" ><p class="helper">השמות יופיעו בסיכום ובקובץ ה־PDF.</p></div>
+<div class="field"><label class="required" for="participants">שמות חברות הצוות</label><input id="participants" placeholder="כתבו את שמות כל המשתתפות, מופרדים בפסיקים" ></div>
 <div class="field"><label for="team">שם הצוות <span class="smallnote">(לא חובה)</span></label><input id="team" placeholder="שם הצוות" ></div>
 </div></section>
 <section class="panel"><div class="panelhead"><div class="number">02</div><div><h2>מכירות את הפרסונה</h2><p>יוצרות דמות אחת שמייצגת משתמשת מתוך קהל היעד.</p></div></div><div class="fields">
@@ -73,9 +94,8 @@ header{background:linear-gradient(110deg,#fff 15%,#f3eaf7 80%);border-bottom:1px
 <div class="data"><span class="key">איך הבעיה משפיעה עליה</span><span class="value" data-out="impact"></span></div>
 <div class="data"><span class="key">מה היא רוצה שיתאפשר לה</span><span class="value" data-out="wish"></span></div>
 <div class="data"><span class="key">מטרת המיזם</span><span class="value" data-out="objective"></span></div>
-<div class="actions"><button class="btn primary" type="button" id="print">הורדת PDF צבעוני</button><button class="btn" type="button" id="clear">ניקוי התשובות</button></div><p id="formStatus" role="status" aria-live="polite" class="form-status"></p><p id="saveState" class="footnote">הטיוטה נשמרת בלשונית זו בלבד.</p><p class="footnote">הטיוטה נשמרת אוטומטית בלשונית זו בלבד. שמרו את קובץ ה־PDF בתיקיית המיזם. הפרטים אינם נשלחים לשרת.</p></aside></div>
-<p class="note">פורצות דרך · תעשיידע · פרסונה ראשונית לקראת חקר הבעיה</p>
-<!-- A separate print layout: not the interactive form and not the narrow side preview. -->
+<div class="actions"><button class="btn primary" type="button" id="print">PDF</button><button class="btn" type="button" id="clear">ניקוי התשובות</button></div><p id="formStatus" role="status" aria-live="polite" class="form-status"></p><span id="saveState" hidden></span></aside></div>
+
 <section class="print-sheet" id="printSheet" aria-label="דף פרסונה להדפסה">
   <div class="print-top"><div class="print-brand">פורצות דרך<small>פרסונה – מסמך מיזם קבוצתי</small></div><div class="print-meta">תעשיידע<br><strong>צוות:</strong> <span data-print="team"></span><br><strong>חברות הצוות:</strong> <span data-print="participants"></span></div></div>
   <div class="print-identity"><div><div class="print-title">הפרסונה שלנו</div><strong data-print="personaName"></strong></div><div class="print-age"><strong>גיל:</strong> <span data-print="age"></span></div></div>
@@ -279,7 +299,7 @@ function pdfFromJpegPages(pages){
    saveState.textContent='לא ניתן לשמור אוטומטית בדפדפן הזה. הורידו את ה־PDF לפני היציאה.';
   }
  }
- function update(){for(const el of document.querySelectorAll('[data-out]')){const v=vals[el.dataset.out].value.trim();el.textContent=v||'טרם מולא'}
+ function update(){for(const el of document.querySelectorAll('[data-out]')){const v=vals[el.dataset.out].value.trim();el.textContent=v;el.closest('.data').hidden=!v}
   for(const el of document.querySelectorAll('[data-print]')){const v=vals[el.dataset.print].value.trim();el.textContent=v||'לא צוין'}
   const n=vals.personaName.value.trim(),age=vals.age.value.trim();document.getElementById('identity').textContent=(n||'ללא שם')+(age?' · גיל '+age:'');
   const count=required.filter(id=>vals[id].value.trim()).length;
