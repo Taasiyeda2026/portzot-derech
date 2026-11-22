@@ -69,7 +69,7 @@ def header(lang, page, prefix):
 def shell(lang, title, body, prefix, domain=None):
     c = COPY[lang]
     tag = f' data-domain="{domain}" style="{theme(domain)}"' if domain else ''
-    stylesheet = "domains-2027.css?v=2027-8" if domain else "domains-index-2027.css?v=1"
+    stylesheet = "domains-2027.css?v=2027-9" if domain else "domains-index-2027.css?v=1"
     return f'''<!doctype html>
 <html lang="{lang}" dir="rtl">
 <head>
