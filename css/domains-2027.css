@@ -136,3 +136,17 @@ body.reader-open{overflow:hidden}
   #closeup .card-teaser{font-size:13px;line-height:1.5}
   #closeup .read-more{font-size:12px;padding-top:9px}
 }
+
+/* A single editorial column for every domain section on desktop.
+   Keep the inner article typography and four-card gallery unchanged. */
+@media(min-width:761px){
+  :root{--domain-content-width:1020px}
+  main > .hero,
+  main > .main-article,
+  main > #closeup,
+  main > .reflection{
+    width:100%;
+    max-width:var(--domain-content-width);
+    margin-inline:auto;
+  }
+}
