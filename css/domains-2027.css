@@ -127,7 +127,7 @@ body.reader-open{overflow:hidden}
 /* Compact short-article gallery: retain 4 columns on desktop, reduce oversized cards.
    Shared by all 10 domain pages in Hebrew and Arabic. */
 @media(min-width:761px){
-  #closeup{width:100%;max-width:1020px;margin-inline:auto}
+  #closeup{width:100%;max-width:940px;margin-inline:auto}
   #closeup .sectionhead{margin-bottom:16px;padding-bottom:12px}
   #closeup .cards{grid-template-columns:repeat(4,minmax(0,1fr));grid-auto-rows:auto;gap:14px}
   #closeup .card img{width:100%;height:clamp(120px,10vw,145px);object-fit:cover}
@@ -140,7 +140,7 @@ body.reader-open{overflow:hidden}
 /* A single editorial column for every domain section on desktop.
    Keep the inner article typography and four-card gallery unchanged. */
 @media(min-width:761px){
-  :root{--domain-content-width:1020px}
+  :root{--domain-content-width:940px}
   main > .hero,
   main > .main-article,
   main > #closeup,
