@@ -187,8 +187,8 @@
       flex:1 1 auto;
       min-height:0;
       display:grid;
-      grid-template-rows:auto auto auto auto;
-      gap:12px;
+      grid-template-rows:auto auto auto auto auto;
+      gap:10px;
       padding:14px 18px 12px;
       overflow-y:auto;
     }
@@ -223,7 +223,7 @@
       gap:4px;
       max-width:100%;
       width:100%;
-      margin:-2px auto 0;
+      margin:9px auto 0;
       align-content:start;
       justify-items:center;
       padding:0 4px 10px;
@@ -347,8 +347,8 @@
       align-items:center;
       justify-content:center;
       gap:2px;
-      flex:0 0 160px;
-      padding:8px 5px;
+      flex:0 0 140px;
+      padding:6px 4px;
       border:2px solid var(--pink);
       border-radius:24px;
       color:var(--pink-dark);
@@ -360,8 +360,8 @@
     }
 
     .management-entry img{
-      width:132px;
-      height:110px;
+      width:112px;
+      height:90px;
       object-fit:contain;
     }
 
@@ -369,8 +369,8 @@
     .management-entry:focus-visible{outline:2px solid var(--pink);outline-offset:4px;border-radius:12px}
 
     .closing{
-      width:min(640px, 100%);
-      margin-left:110px;
+      width:min(690px, 100%);
+      margin-left:30px;
       margin-right:auto;
       padding:0 2px;
       text-align:right;
@@ -396,14 +396,17 @@
       padding-top:14px;
     }
 
-    /* ── process-arrows row ───────────────────────────────── */
+    /* Four centered transition markers beneath the five course stages. */
     .proc-row{
-      display:flex;
-      justify-content:space-between;
-      padding:0 calc(100% / 14);
-      width:100%;
-      max-width:100%;
-      margin:2px auto 0;
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0, 1fr));
+      justify-items:center;
+      align-items:center;
+      width:80%;
+      max-width:80%;
+      min-height:26px;
+      padding:0;
+      margin:3px auto 0;
       pointer-events:none;
       user-select:none;
     }
@@ -412,9 +415,14 @@
       display:flex;
       align-items:center;
       justify-content:center;
-      color:rgba(175,105,155,0.62);
+      direction:ltr;
+      height:26px;
       line-height:1;
     }
+    .proc-arr svg{width:17px;height:25px;margin:0 -3px;flex:none}
+    .proc-arr svg:nth-child(1){color:#f68ab8}
+    .proc-arr svg:nth-child(2){color:#db70cc}
+    .proc-arr svg:nth-child(3){color:#807af0}
 
     @media (max-width:980px){
       :root{
@@ -698,10 +706,10 @@
         </section>
 
         <div class="proc-row" aria-hidden="true">
-          <span class="proc-arr"><svg viewBox="0 0 14 22" width="13" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <span class="proc-arr"><svg viewBox="0 0 14 22" width="13" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <span class="proc-arr"><svg viewBox="0 0 14 22" width="13" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <span class="proc-arr"><svg viewBox="0 0 14 22" width="13" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="proc-arr"><svg viewBox="0 0 14 22" aria-hidden="true" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 14 22" aria-hidden="true" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 14 22" aria-hidden="true" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="proc-arr"><svg viewBox="0 0 14 22" aria-hidden="true" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 14 22" aria-hidden="true" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 14 22" aria-hidden="true" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="proc-arr"><svg viewBox="0 0 14 22" aria-hidden="true" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 14 22" aria-hidden="true" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 14 22" aria-hidden="true" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="proc-arr"><svg viewBox="0 0 14 22" aria-hidden="true" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 14 22" aria-hidden="true" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 14 22" aria-hidden="true" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </div>
 
         <div class="closing-wrap">
