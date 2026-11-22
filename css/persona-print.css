@@ -1,0 +1,28 @@
+/* Only the dedicated persona document uses this font and layout. */
+@font-face{font-family:PersonaAlef;src:url('../fonts/Alef-regular.woff') format('woff');font-weight:400;font-display:block}
+@font-face{font-family:PersonaAlef;src:url('../fonts/Alef-bold.woff') format('woff');font-weight:700;font-display:block}
+.print-sheet{display:none}
+@page{size:A4 portrait;margin:12mm}
+@media print{
+  html,body{margin:0!important;padding:0!important;background:#fff!important;color:#30283b!important;font:11pt/1.45 PersonaAlef,Tahoma,Arial,sans-serif!important}
+  html[lang=ar] body{font-family:Tahoma,'DejaVu Sans',Arial,'Noto Sans Arabic',sans-serif!important}
+  body> :not(.print-sheet){display:none!important}
+  .print-sheet{display:block!important;width:100%;margin:0;padding:0;direction:rtl;text-align:start;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+  .print-top{position:relative;padding:0 0 3mm 20mm;margin-bottom:3mm;border-bottom:1pt solid #bca8cf;min-height:25mm}
+  .print-logo{position:absolute;left:0;top:0;width:16mm;height:24mm;object-fit:contain}
+  .print-brand{font-size:17pt;font-weight:700;color:#694287;line-height:1.2}
+  .print-brand small{display:block;font-size:10pt;margin-top:1mm;color:#873463}
+  .print-meta{font-size:10pt;margin-top:2mm}
+  .print-identity{padding:2.5mm 4mm;margin-bottom:3mm;border:1pt solid #d9c8df;border-radius:2mm;background:#fcf5f9}
+  .print-identity strong[data-print]{font-size:16pt;color:#513565}
+  .print-age{margin-top:1mm}
+  .print-title{color:#7b356d;font-size:11pt;font-weight:700;margin:0 0 1mm;break-after:avoid-page;page-break-after:avoid}
+  /* Normal block flow can fragment even when one answer exceeds a whole page. */
+  .print-card{height:auto;overflow:visible;border:.6pt solid #d9d1df;border-radius:2mm;padding:2.5mm 4mm;margin:0 0 2.5mm;break-inside:auto;page-break-inside:auto;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+  .print-card.accent,.print-card.target{background:#fcf5f9}
+  .print-card.teal{background:#f3faf9;border-color:#b6d4d2}
+  .print-grid{display:block}
+  [data-print]{white-space:pre-wrap;white-space:break-spaces;overflow-wrap:anywhere;unicode-bidi:plaintext;direction:rtl}
+  .print-value{color:#30283b;font-size:11pt;orphans:2;widows:2}
+  .print-card.target .print-value{font-weight:700}
+}

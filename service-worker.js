@@ -1,4 +1,4 @@
-const SW_VERSION = "v192";
+const SW_VERSION = "v193";
 const CACHE_NAME = `portzot-derech-cache-${SW_VERSION}`;
 
 // ── נכסים שנשמרים ב-Cache בהתקנה ─────────────────────────────────────────
@@ -7,6 +7,9 @@ const CORE_ASSETS = [
   "./css/domains-index-2027.css?v=1",
   "./js/domains-2027.js?v=2027-2",
   "./js/course-language.js",
+  "./js/persona-print.js",
+  "./css/persona-print.css",
+  "./ar/steps/persona.html",
   "./css/course-language.css",
   "./ar/strongermenu-2026.html",
   "./ar/start/quiz.html",

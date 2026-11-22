@@ -1,0 +1,30 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "gaFWnOO4S0WRye-fxUTk6"
+uri = "file://generated-artifacts/persona-print/he-short.pdf"
+type = "pdf"
+title = "דוגמת פרסונה קצרה בעברית"
+description = "PDF מסוג A4 שהופק ממנוע ההדפסה של Chromium, עם טקסט אמיתי."
+logical_id = "653606a9-dbe5-4e5a-8c46-9086fb960458"
+content_hash = "sha256:758ffa0cefa723f1d8e8f6c3e8407ab889e1e5e85a29cd071313f8d58c8702e1"
+size = 373541
+mtime_ms = 1795305602539
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:ebee44ec-ca2c-4426-8748-b77bd4ee5c60/653606a9-dbe5-4e5a-8c46-9086fb960458/8d938e50-ba79-43ca-9669-93322aafe5ff"
+storage_version_token = "1795305856838522"
+content_type = "application/pdf"
+
+[[outputs]]
+id = "dsfJeYkGFBlt590cJubiD"
+uri = "file://generated-artifacts/persona-print/he-oversized.pdf"
+type = "pdf"
+title = "דוגמת תשובה החורגת מעמוד"
+description = "חמישה עמודי A4; תשובה בת 150 שורות המתפצלת ללא חיתוך."
+logical_id = "24ac4f40-df70-4a8e-bef0-ebff01941c39"
+content_hash = "sha256:ca94c49378e1ab6c99a659cf63699695f6debbbc57a09e2fb67deeab9c669f31"
+size = 384073
+mtime_ms = 1795305603379
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:ebee44ec-ca2c-4426-8748-b77bd4ee5c60/24ac4f40-df70-4a8e-bef0-ebff01941c39/e5026da0-2676-4a3a-9d91-c64cdb6f3002"
+storage_version_token = "1795305858153115"
+content_type = "application/pdf"

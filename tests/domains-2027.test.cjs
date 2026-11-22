@@ -10,6 +10,19 @@ const json=p=>JSON.parse(read(p));
 const he=Array.from({length:10},(_,i)=>json(`domains/content/he/d${i+1}.json`));
 const ar=Array.from({length:10},(_,i)=>json(`domains/content/ar/d${i+1}.json`));
 const esc=s=>s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#x27;');
+test('both persona documents use native text printing without raster PDF export',()=>{
+ for(const page of ['steps/persona.html','ar/steps/persona.html']){
+  const html=read(page);
+  assert.match(html,/persona-print\.css/);assert.match(html,/persona-print\.js/);
+  assert.match(html,/addEventListener\('click',printPersona\)/);
+  assert.doesNotMatch(html,/downloadColorPdf|pdfFromJpegPages|canvas|image\/jpeg|createObjectURL/);
+  assert.equal((html.match(/data-print="/g)||[]).length,13);
+ }
+ const js=read('js/persona-print.js');
+ assert.match(js,/window\.print\(\)/);assert.match(js,/beforeprint/);
+ assert.doesNotMatch(js,/\.trim\(|innerHTML/);
+ assert.match(read('css/persona-print.css'),/break-inside:auto/);
+});
 test('the editorial audit covers 90 bilingual articles with complete expanded bodies',()=>{
  const audit=json('audit/domains-expanded-editorial-2026-11-15.json');
  assert.equal(audit.articles.length,90);

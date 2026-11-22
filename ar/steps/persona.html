@@ -11,29 +11,6 @@
 header{background:linear-gradient(110deg,#fff 15%,#f3eaf7 80%);border-bottom:1px solid #e6dbea}.topbar{max-width:1200px;margin:auto;display:flex;align-items:center;justify-content:space-between;padding:14px 24px;gap:16px}.brand{font-weight:900;color:var(--pink);font-size:22px;letter-spacing:-.6px}.persona-languages{display:flex;align-items:center;gap:8px;font-size:13px;margin-inline-start:auto}.persona-languages a{color:var(--violet);text-decoration:none;border-radius:6px;padding:2px 5px}.persona-languages a[aria-current=true]{font-weight:800;background:#f1dce9}.mode{text-decoration:none;font-size:12px;color:#735f7d;background:#fff;padding:6px 11px;border:1px solid #e7d6e4;border-radius:50px}.intro{max-width:1200px;margin:auto;padding:29px 24px 34px}.eyebrow{font-size:13px;color:var(--pink);font-weight:700;letter-spacing:.2px}.intro h1{font-size:clamp(31px,4vw,45px);letter-spacing:-1.1px;line-height:1.15;margin:8px 0 12px}.intro p{max-width:760px;color:#62596b;font-size:15px;margin:0}.steps{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}.step{background:#fff;border:1px solid #e6deeb;border-radius:11px;padding:9px 13px;font-size:13px;color:#59496c}.step b{color:var(--pink);margin-left:5px}
 .layout{max-width:1200px;margin:24px auto 55px;padding:0 24px;display:grid;grid-template-columns:minmax(0,1.6fr) minmax(300px,.8fr);align-items:start;gap:20px}.main{display:grid;gap:18px}.panel,.summary{background:#fff;border-radius:18px;border:1px solid var(--line);box-shadow:var(--shadow);padding:25px}.panelhead{display:flex;align-items:start;gap:13px;margin-bottom:21px}.number{flex:none;width:37px;height:37px;border-radius:12px;background:#fae6f0;color:var(--pink);font-weight:800;display:grid;place-items:center}.panel h2,.summary h2{font-size:19px;margin:0 0 5px;letter-spacing:-.2px}.panelhead p{font-size:13px;color:var(--muted);margin:0}.fields{display:grid;gap:18px}.double{display:grid;grid-template-columns:1fr 1fr;gap:15px}.field label{display:block;font-weight:700;font-size:14px;margin-bottom:6px}.smallnote{font-weight:400;font-size:12px;color:#867b8d}.field input,.field textarea{display:block;width:100%;color:#342747;background:#fff;border:1px solid #dcd5e2;border-radius:10px;padding:12px 13px;font-size:15px;outline:0;transition:border .15s,box-shadow .15s}.field input:focus,.field textarea:focus{border-color:var(--violet);box-shadow:0 0 0 3px #e9e2f9}.field textarea{resize:vertical;min-height:76px}.field input[readonly],.field textarea[readonly]{background:#f8f5fa;border-style:dashed;color:#514759}.helper{color:var(--muted);font-size:12px;margin:5px 0 0}.flowhint{background:#edf9f8;border:1px solid #caeae7;border-radius:11px;padding:12px 14px;color:#34625d;font-size:13px}.summary{position:sticky;top:18px;border-top:5px solid var(--pink)}.summary h2{margin-bottom:8px}.summary .sub{color:var(--muted);font-size:12px;margin:0 0 15px}.progress-track{background:#eee8f1;height:7px;border-radius:9px;overflow:hidden}.progress-fill{background:var(--pink);height:100%;width:0;transition:width .2s}.progress-label{font-size:12px;color:var(--muted);margin:7px 0 17px}.data{padding:11px 0;border-bottom:1px solid #eee8f1}.data .key{display:block;color:var(--muted);font-size:12px;margin-bottom:3px}.data .value{font-weight:600;font-size:14px;overflow-wrap:anywhere;white-space:pre-wrap}.data:last-of-type{border-bottom:0}.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}.btn{border:1px solid #e0d4e7;color:var(--violet);font-weight:700;background:#fff;border-radius:10px;padding:10px 15px}.btn.primary{background:var(--pink);color:#fff;border-color:var(--pink)}.btn:hover{filter:brightness(.96)}.summary .actions{display:grid;grid-template-columns:1fr 1fr}.summary .btn{font-size:13px}.footnote{font-size:12px;line-height:1.5;color:var(--muted);margin:15px 0 0}.note {font-size:12px;color:#7a6d84;text-align:center;padding:10px 20px 32px}.required:after{content:' *';color:var(--pink)}[aria-invalid=true]{border-color:#b42355!important;box-shadow:0 0 0 2px #f9d5e1!important}.form-status{font-size:13px;color:#a72154;min-height:1em;margin:12px 0 0;font-weight:700}.print-only{display:none}
 @media(max-width:900px){.layout{grid-template-columns:1fr}.summary{position:static;grid-row:2}.intro{padding-bottom:27px}}@media(max-width:520px){.topbar{flex-wrap:wrap}.persona-languages{margin-inline-start:0}.layout{padding:0 12px}.topbar{padding:12px}.intro{padding:24px 14px}.panel,.summary{padding:18px}.double{grid-template-columns:1fr}.step{font-size:12px}.summary .actions{display:flex}.summary .btn{flex:1}}
-/* The form is for working; the dedicated print sheet is for the final persona document. */
-.print-sheet{display:none}
-@page{size:A4 portrait;margin:12mm}
-@media print{
-  html,body{margin:0!important;padding:0!important;background:#fff!important;color:#20243a!important;font-family:Arial,'Noto Sans Hebrew',sans-serif!important;font-size:10.5pt;line-height:1.4;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  header,.layout,.note{display:none!important}
-  .print-sheet{display:block!important;width:100%;max-width:100%;margin:0;padding:0;direction:rtl}
-  .print-top{display:flex;justify-content:space-between;align-items:center;gap:10mm;padding:5mm 6mm;border-radius:11px;background:linear-gradient(115deg,#f9dce9,#eee6fa 56%,#def6f7);border:1px solid #dbc6e5;margin-bottom:4mm}
-  .print-brand{font-weight:900;font-size:21pt;color:#912d74;line-height:1.15}.print-brand small{display:block;color:#614c79;font-size:9pt;font-weight:600;margin-top:2mm}
-  .print-meta{font-size:9pt;color:#4a4660;text-align:left;line-height:1.7}
-  .print-identity{display:flex;justify-content:space-between;align-items:center;gap:8mm;border:1px solid #e8d9ef;border-right:5px solid #bf357c;background:#fff7fc;border-radius:10px;padding:3.5mm 5mm;margin-bottom:3.5mm}
-  .print-identity strong{font-size:17pt;color:#45275b}.print-identity .print-age{font-size:10pt;color:#605771}
-  .print-title{font-size:11pt;color:#9c2e79;font-weight:800;line-height:1.35;margin:0 0 1.5mm}
-  .print-card{border:1px solid #e1d8e8;border-right:3px solid #a26bb8;border-radius:9px;padding:3.1mm 4.5mm;margin:0 0 3.3mm;background:#fff;break-inside:avoid;page-break-inside:avoid}
-  .print-card.accent{background:#fbf5fb;border-right-color:#d24b8b}.print-card.teal{background:#f1faf9;border-right-color:#299aa2}.print-card.target{background:#f9eaf4;border-right-color:#bc287b;border-width:1px 4px 1px 1px}
-  .print-value{white-space:pre-wrap;overflow-wrap:anywhere;color:#342e40;font-size:10pt}
-  .print-grid{display:grid;grid-template-columns:1fr 1fr;gap:3.5mm;align-items:stretch}
-  .print-grid .print-card{margin:0 0 3.3mm}
-  .print-card.target .print-value{font-size:11.1pt;font-weight:700;color:#3d2d51}
-  .print-footer{font-size:8.3pt;color:#625971;border-top:1px solid #e3d8e8;padding-top:2.5mm;margin-top:1mm;display:flex;justify-content:space-between;gap:4mm}
-}
-
-
 /* Compact student workspace; print export remains independently styled. */
 @media screen{
   .intro{padding:16px 24px 19px}.intro h1{font-size:clamp(29px,3vw,38px);margin:4px 0 7px}.intro p{max-width:950px;font-size:14px;line-height:1.55}
@@ -57,6 +34,8 @@ header{background:linear-gradient(110deg,#fff 15%,#f3eaf7 80%);border-bottom:1px
 
 .persona-choice-group{border:0;padding:0;margin:0 0 8px;min-width:0}.persona-choice-group legend{color:#62536c;font-size:12px;margin-bottom:7px}.persona-choice-options{display:flex;flex-wrap:wrap;gap:7px}.persona-choice{display:inline-flex;align-items:center;gap:6px;border:1px solid #e3d6e8;background:#faf7fc;border-radius:9px;padding:7px 10px;font-weight:500;font-size:13px;cursor:pointer}.persona-choice:has(input:checked){background:#fceaf3;border-color:#ba307b;color:#7f2056}.persona-choice input{width:15px;height:15px;accent-color:var(--pink);margin:0}.field:has(.persona-choice-group) textarea{min-height:58px}
 </style>
+<link rel="stylesheet" href="../../css/persona-print.css">
+<script src="../../js/persona-print.js"></script>
 </head>
 <body>
 <header><div class="topbar"><div class="brand" lang="ar">رائدات الطريق</div><nav class="persona-languages" aria-label="اختيار اللغة"><a href="../../steps/persona.html?lang=he" lang="he" data-course-language="he">עברית</a><span aria-hidden="true">|</span><a href="persona.html?lang=ar" lang="ar" data-course-language="ar" aria-current="true">العربية</a></nav><a class="mode" href="../strongermenu-2026.html">العودة إلى موقع البرنامج</a></div>
@@ -99,7 +78,7 @@ header{background:linear-gradient(110deg,#fff 15%,#f3eaf7 80%);border-bottom:1px
 <div class="actions"><button class="btn primary" type="button" id="print">PDF</button><button class="btn" type="button" id="clear">مسح الإجابات</button></div><p id="formStatus" role="status" aria-live="polite" class="form-status"></p><span id="saveState" hidden></span></aside></div>
 
 <section class="print-sheet" id="printSheet" aria-label="صفحة شخصية المستخدمة للطباعة">
-  <div class="print-top"><div class="print-brand">رائدات الطريق<small>شخصية المستخدمة – وثيقة مشروع جماعي</small></div><div class="print-meta">تعسيدا<br><strong>الفريق:</strong> <span data-print="team"></span><br><strong>عضوات الفريق:</strong> <span data-print="participants"></span></div></div>
+  <div class="print-top"><img class="print-logo" src="../../icon/logo.png" alt="" loading="eager"><div class="print-brand">رائدات الطريق<small>شخصية المستخدمة – وثيقة مشروع جماعي</small></div><div class="print-meta">تعسيدا<br><strong>الفريق:</strong> <span data-print="team"></span><br><strong>عضوات الفريق:</strong> <span data-print="participants"></span></div></div>
   <div class="print-identity"><div><div class="print-title">شخصية المستخدمة الخاصة بنا</div><strong data-print="personaName"></strong></div><div class="print-age"><strong>العمر:</strong> <span data-print="age"></span></div></div>
   <div class="print-card accent"><div class="print-title">المشكلة التي اخترناها</div><div class="print-value" data-print="problem"></div></div>
   <div class="print-card"><div class="print-title">الفئة المستهدفة</div><div class="print-value" data-print="audience"></div></div>
@@ -114,9 +93,6 @@ header{background:linear-gradient(110deg,#fff 15%,#f3eaf7 80%);border-bottom:1px
 
 
 <script>
-/* Self-contained colored PDF export. Each page is drawn on a high-resolution
-   canvas and included as a JPEG image in a standard A4 PDF. This does not use
-   window.print(), external APIs, or the browser's 'background graphics' option. */
 function validatePersona(){
  const required=['problem','audience','participants','personaName','routine','moment','barrier','impact','wish','objective'];
  const status=document.getElementById('formStatus');
@@ -130,133 +106,6 @@ function validatePersona(){
   el.removeAttribute('aria-invalid');
  }
  status.textContent='';return true;
-}
-async function downloadColorPdf(){
- if(!validatePersona())return;
- const button=document.getElementById('print');
- const oldText=button.textContent;
- button.disabled=true;button.textContent='جارٍ إعداد PDF…';
- try {
-  const W=1240,H=1754,M=65,R=W-M;
-  const fields=['problem','audience','team','participants','personaName','age','routine','moment','barrier','impact','feeling','wish','objective'];
-  const d=Object.fromEntries(fields.map(id=>[id,(document.getElementById(id).value||'').trim()]));
-  const cv=[];
-  let canvas,ctx,y,pageIndex=0;
-  const col={ink:'#352344',muted:'#685874',violet:'#654395',purple:'#9d2c7a',pink:'#c02a7c',teal:'#168e98',line:'#dfd4e8'};
-  function round(x,Y,w,h,r,fill,stroke){ctx.beginPath();ctx.roundRect(x,Y,w,h,r);if(fill){ctx.fillStyle=fill;ctx.fill()}if(stroke){ctx.lineWidth=2;ctx.strokeStyle=stroke;ctx.stroke()}}
-  function txt(str,x,Y,size,color=col.ink,weight=400){ctx.fillStyle=color;ctx.font=`${weight} ${size}px Arial, sans-serif`;ctx.textAlign='right';ctx.textBaseline='alphabetic';ctx.direction='rtl';ctx.fillText(str,x,Y)}
-  function lines(text,maxWidth,size,weight=400){
-    const t=(text||'لم يُذكَر').trim().replace(/\r/g,'');
-    ctx.font=`${weight} ${size}px Arial, sans-serif`;
-    const out=[];
-    for(const para of t.split('\n')){
-      let acc='';
-      for(const word of para.split(/\s+/).filter(Boolean)){
-        const next=acc?acc+' '+word:word;
-        if(acc&&ctx.measureText(next).width>maxWidth){out.push(acc);acc=word}
-        else acc=next;
-        if(ctx.measureText(acc).width>maxWidth){
-          let seg='';
-          for(const ch of acc){const n=seg+ch;if(seg&&ctx.measureText(n).width>maxWidth){out.push(seg);seg=ch}else seg=n}
-          acc=seg;
-        }
-      }
-      out.push(acc||' ');
-    }
-    return out;
-  }
-  function freshPage(){
-    canvas=document.createElement('canvas');canvas.width=W;canvas.height=H;
-    ctx=canvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);
-    cv.push(canvas);pageIndex++;y=65;
-    if(pageIndex>1){
-      const g=ctx.createLinearGradient(M,y,R,y);g.addColorStop(0,'#f9e2ee');g.addColorStop(1,'#e9f7f6');
-      round(M,y,W-2*M,92,18,g,'#e6cbdf');
-      txt('رائدات الطريق',R-28,y+47,38,col.purple,800);
-      txt('شخصية المستخدمة – تتمّة',R-28,y+74,20,col.violet,600);
-      y+=116;
-    }
-  }
-  function ensure(h){if(y+h>H-120)freshPage()}
-  function header(){
-    const h=140,g=ctx.createLinearGradient(M,y,R,y);g.addColorStop(0,'#f8e7f1');g.addColorStop(1,'#e5f7f7');
-    round(M,y,W-2*M,h,18,g,'#e7d8ed');
-    if(brandLogo){const boxH=102,boxW=330,scale=Math.min(boxW/brandLogo.naturalWidth,boxH/brandLogo.naturalHeight);const iw=brandLogo.naturalWidth*scale,ih=brandLogo.naturalHeight*scale;ctx.drawImage(brandLogo,R-30-iw,y+(h-ih)/2,iw,ih);}
-    txt("بطاقة شخصية المستخدمة",R-360,y+62,34,col.purple,800);
-    txt("الفريق"+': '+(d.team||"لم يُذكر"),R-360,y+107,22,col.muted,600);
-    y+=h+16;
-  }
-  function identity(){
-    const h=112;ensure(h+14);round(M,y,W-2*M,h,15,'#fff4fa','#e7d4e7');
-    round(R-8,y+8,8,h-16,4,col.pink);
-    txt(d.personaName||"لم يُذكر",R-32,y+72,43,col.ink,800);
-    txt("العمر"+': '+(d.age||"لم يُذكر"),M+260,y+72,25,col.muted,600);
-    y+=h+14;
-  }
-  function participantStrip(){
-    const members=lines(d.participants,W-2*M-60,22);
-    const h=45+members.length*29;ensure(h+12);round(M,y,W-2*M,h,13,'#f0f9f8','#c8e8e5');
-    txt("عضوات الفريق",R-26,y+28,20,col.teal,700);
-    members.forEach((line,i)=>txt(line,R-26,y+56+i*28,22,col.ink,500));y+=h+12;
-  }
-  function cellInfo(title,value,width,kind='default'){
-    const sz=24,lineHeight=30,ls=lines(value,width-54,sz),h=Math.max(92,66+ls.length*lineHeight);
-    return {title,ls,h,width,kind};
-  }
-  function drawCell(cell,x,yy,h){
-    const colors={default:['#fff','#956ab3'],accent:['#fdf2f8',col.pink],teal:['#effaf9',col.teal],target:['#fce9f3','#b82277']};
-    const style=colors[cell.kind];round(x,yy,cell.width,h,13,style[0],'#e4d8eb');
-    round(x+cell.width-7,yy+8,6,h-16,3,style[1]);
-    txt(cell.title,x+cell.width-26,yy+29,21,col.purple,700);
-    cell.ls.forEach((line,i)=>txt(line,x+cell.width-26,yy+66+i*30,24,col.ink,cell.kind==='target'?700:400));
-  }
-  function card(title,value,kind='default'){const cell=cellInfo(title,value,W-2*M,kind);ensure(cell.h+12);drawCell(cell,M,y,cell.h);y+=cell.h+12;}
-  function pair(a,b){
-    if(!b){card(...a);return;}
-    const gap=14,w=(W-2*M-gap)/2,c1=cellInfo(a[0],a[1],w,a[2]),c2=cellInfo(b[0],b[1],w,b[2]);
-    const h=Math.max(c1.h,c2.h);ensure(h+12);drawCell(c1,M+w+gap,y,h);drawCell(c2,M,y,h);y+=h+12;
-  }
-  function footer(){if(cv.length<2)return;txt("الصفحة"+' '+pageIndex,R,H-45,16,col.muted);}
-  let brandLogo=null;try{brandLogo=new Image();brandLogo.src="../../icon/logo.png";await brandLogo.decode();}catch(_){brandLogo=null;}
-  freshPage();header();identity();participantStrip();
-  card("المشكلة المختارة",d.problem,'accent');
-  card("الفئة المستهدفة",d.audience);
-  pair(["حياتها اليومية",d.routine],["متى وأين؟",d.moment,'teal']);
-  card("الصعوبة الأساسية",d.barrier);
-  pair(["أثر المشكلة",d.impact],d.feeling?["مشاعرها",d.feeling]:null);
-  card("التغيير المنشود",d.wish,'teal');
-  card("هدف المشروع",d.objective,'target');
-  // Stamp each footer after all cards have been placed; pages may have split.
-  cv.forEach((c,i)=>{ctx=c.getContext('2d');pageIndex=i+1;footer()});
-  const pages=cv.map(c=>({jpeg:Uint8Array.from(atob(c.toDataURL('image/jpeg',.94).split(',')[1]),x=>x.charCodeAt(0)),w:c.width,h:c.height}));
-  const bytes=pdfFromJpegPages(pages);
-  const blob=new Blob([bytes],{type:'application/pdf'});
-  const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;
-  const safe=(d.personaName||'شخصية المستخدمة').replace(/[\\/:*?"<>|]/g,'_').slice(0,40);
-  a.download=`رائدات_الطريق_شخصية_المستخدم_${safe}.pdf`;document.body.append(a);a.click();
-  setTimeout(()=>{URL.revokeObjectURL(url);a.remove()},10000);
- }catch(err){alert('تعذّر إنشاء ملف PDF: '+err.message)}
- finally{button.textContent=oldText;button.disabled=false}
-}
-function pdfFromJpegPages(pages){
- const enc=new TextEncoder();let parts=[],n=0,offsets=[0];
- function push(x){const bytes=typeof x==='string'?enc.encode(x):x;parts.push(bytes);n+=bytes.length}
- function obj(id,body){offsets[id]=n;push(`${id} 0 obj\n`);push(body);push('\nendobj\n')}
- push('%PDF-1.4\n');push(new Uint8Array([0x25,0xe2,0xe3,0xcf,0xd3,0x0a]));
- obj(1,'<< /Type /Catalog /Pages 2 0 R >>');
- obj(2,`<< /Type /Pages /Kids [${pages.map((_,i)=>`${3+i*3} 0 R`).join(' ')}] /Count ${pages.length} >>`);
- pages.forEach((p,i)=>{
-  const page=3+i*3,img=page+1,content=page+2;
-  obj(page,`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /XObject << /Im0 ${img} 0 R >> >> /Contents ${content} 0 R >>`);
-  offsets[img]=n;push(`${img} 0 obj\n<< /Type /XObject /Subtype /Image /Width ${p.w} /Height ${p.h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${p.jpeg.length} >>\nstream\n`);push(p.jpeg);push('\nendstream\nendobj\n');
-  const draw='q\n595.28 0 0 841.89 0 0 cm\n/Im0 Do\nQ\n';
-  obj(content,`<< /Length ${enc.encode(draw).length} >>\nstream\n${draw}endstream`);
- });
- const xref=n,total=3+pages.length*3;
- push(`xref\n0 ${total}\n0000000000 65535 f \n`);
- for(let i=1;i<total;i++)push(`${String(offsets[i]).padStart(10,'0')} 00000 n \n`);
- push(`trailer\n<< /Size ${total} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF`);
- const out=new Uint8Array(n);let pos=0;for(const part of parts){out.set(part,pos);pos+=part.length}return out;
 }
 </script>
 
@@ -290,7 +139,7 @@ function pdfFromJpegPages(pages){
   }
  }
  function update(){for(const el of document.querySelectorAll('[data-out]')){const v=vals[el.dataset.out].value.trim();el.textContent=v;el.closest('.data').hidden=!v}
-  for(const el of document.querySelectorAll('[data-print]')){const v=vals[el.dataset.print].value.trim();el.textContent=v||'لم يُذكَر'}
+  syncPersonaPrint();
   const n=vals.personaName.value.trim(),age=vals.age.value.trim();document.getElementById('identity').textContent=(n||'بلا اسم')+(age?' · العمر '+age:'');
   const count=required.filter(id=>vals[id].value.trim()).length;
   document.getElementById('progress').textContent=`اكتملت ${count} من أصل ${required.length} حقول أساسية`;
@@ -299,7 +148,7 @@ function pdfFromJpegPages(pages){
  document.querySelectorAll('.persona-choice-group').forEach(group=>{const field=vals[group.dataset.choicesFor];const boxes=[...group.querySelectorAll('input[type=checkbox]')];const sync=()=>{const parts=field.value.split('\n').map(v=>v.trim());boxes.forEach(box=>box.checked=parts.includes(box.value));};boxes.forEach(box=>box.addEventListener('change',()=>{let parts=field.value.split('\n').map(v=>v.trim()).filter(Boolean);parts=parts.filter(p=>p!==box.value);if(box.checked)parts.push(box.value);field.value=parts.join('\n');field.dispatchEvent(new Event('input',{bubbles:true}));}));field.addEventListener('input',sync);sync();});
  document.querySelectorAll('.field > input, .field > textarea, .field .double input, .field .double textarea').forEach(x=>x.addEventListener('input',()=>{x.removeAttribute('aria-invalid');document.getElementById('formStatus').textContent='';update();saveDraft()}));
  document.getElementById('clear').addEventListener('click',()=>{if(!confirm('هل تريدن مسح جميع الإجابات في صفحة شخصية المستخدمة؟'))return;ids.forEach(id=>{vals[id].value='';vals[id].removeAttribute('aria-invalid')});try{sessionStorage.removeItem(draftKey)}catch(_){}document.querySelectorAll('.persona-choice-group input[type=checkbox]').forEach(box=>box.checked=false);update();document.getElementById('formStatus').textContent='';vals.problem.focus();window.scrollTo({top:0,behavior:'smooth'});});
- document.getElementById('print').addEventListener('click',downloadColorPdf);
+ document.getElementById('print').addEventListener('click',printPersona);
  update();
 })();
 </script>

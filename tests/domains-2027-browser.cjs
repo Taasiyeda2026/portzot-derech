@@ -171,13 +171,10 @@ const server=http.createServer((req,res)=>{
    await field('impact','קשה לה להתכונן');
    await field('feeling','לחוצה');
    await field('wish','להתארגן בזמן');
-   await page.evaluate(()=>{
-     const old=URL.createObjectURL.bind(URL);
-     URL.createObjectURL=(blob)=>{window.__pdfInfo={type:blob.type,size:blob.size};return old(blob)};
-   });
+    await page.evaluate(()=>{window.print=()=>{window.__personaPrinted=true}});
    await action('#print');
-   await page.waitForFunction(()=>window.__pdfInfo&&window.__pdfInfo.size>30000);
-   assert.equal(await page.evaluate(()=>window.__pdfInfo.type),'application/pdf');
+    await page.waitForFunction(()=>window.__personaPrinted);
+    assert.equal(await page.$eval('[data-print="personaName"]',e=>e.textContent),'מאיה');
    assert.match(await page.$eval('[data-out="participants"]',e=>e.textContent),/מיה, נועה, שירה/);
    await page.screenshot({path:path.join(shots,'persona-'+width+'.png'),fullPage:true});
    await page.reload({waitUntil:'load'});
@@ -212,13 +209,10 @@ const server=http.createServer((req,res)=>{
    await field('impact','تتأخر في إنجاز الواجبات');
    await field('wish','تنظيم وقتها بوضوح');
    await field('objective','تمكين الطالبات من تنظيم الوقت');
-   await page.evaluate(()=>{
-     const original=URL.createObjectURL.bind(URL);
-     URL.createObjectURL=blob=>{window.__arabicPdf={type:blob.type,size:blob.size};return original(blob)};
-   });
+    await page.evaluate(()=>{window.print=()=>{window.__arabicPrinted=true}});
    await action('#print');
-   await page.waitForFunction(()=>window.__arabicPdf&&window.__arabicPdf.size>30000);
-   assert.equal(await page.evaluate(()=>window.__arabicPdf.type),'application/pdf');
+    await page.waitForFunction(()=>window.__arabicPrinted);
+    assert.equal(await page.$eval('[data-print="personaName"]',e=>e.textContent),'ليلى');
    assert.match(await page.$eval('[data-out="participants"]',e=>e.textContent),/مريم، نور، سلمى/);
    await page.screenshot({path:path.join(shots,'persona-arabic-'+width+'.png'),fullPage:true});
    // Switching back to Hebrew must preserve the existing draft, and vice versa.
@@ -233,7 +227,7 @@ const server=http.createServer((req,res)=>{
    await page.goto(base+'steps/persona.html?lang=he',{waitUntil:'load'});
   }
   console.log('PASS Arabic persona: RTL translation, responsive layout, PDF, and shared language draft.');
-  console.log('PASS persona: SDG handoff, participant names, no lesson number, desktop/mobile, draft, validation and colored PDF.');
+   console.log('PASS persona: SDG handoff, participant names, no lesson number, desktop/mobile, draft, validation and native print.');
   console.log('PASS SDG workshop: desktop 75%, mobile layout, all stages, validation focus, draft restore, print summary.');
 
   assert.deepEqual(errors,[]);assert.deepEqual(missing,[]);
