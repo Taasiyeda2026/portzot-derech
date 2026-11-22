@@ -9,7 +9,7 @@
   <meta name="theme-color" content="#ec4899">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <link rel="apple-touch-icon" href="../icon/favicon.png">
-  <title>פורצות דרך - ניווט</title>
+  <title>فُرصتكِ - القائمة</title>
 
   <script>
     const SESSION_KEY = "stronger_gate_2026";
@@ -219,7 +219,7 @@
     .menu-grid{
       min-height:0;
       display:grid;
-      grid-template-columns:repeat(7, 1fr);
+      grid-template-columns:repeat(5, 1fr);
       gap:4px;
       max-width:100%;
       width:100%;
@@ -334,11 +334,34 @@
 
     .closing-wrap{
       display:flex;
-      justify-content:center;
+      justify-content:space-between;
+      align-items:center;
       width:100%;
       flex:0 0 auto;
       margin-top:0;
     }
+
+    .management-entry{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:2px;
+      flex:0 0 160px;
+      padding:8px 5px;
+      border:2px solid var(--pink);
+      border-radius:24px;
+      color:var(--pink-dark);
+      text-decoration:none;
+      font-family:"Choco", "Alef", sans-serif;
+      font-size:24px;
+      line-height:1;
+      font-weight:700;
+    }
+
+    .management-entry img{width:132px;height:110px;object-fit:contain}
+    .management-entry:hover{transform:translateY(-2px)}
+    .management-entry:focus-visible{outline:2px solid var(--pink);outline-offset:4px;border-radius:12px}
 
     .closing{
       width:min(640px, 100%);
@@ -488,6 +511,8 @@
         max-width:none;
         border-radius:14px;
         padding:5px 6px 8px;
+        min-height:126px;
+        aspect-ratio:auto;
       }
 
       .menu-item h4{
@@ -497,22 +522,29 @@
 
       .menu-item p{
         font-size:9px;
-        min-height:13px;
+        min-height:0;
+        line-height:1.25;
+        padding:0 2px;
       }
 
       .icon-box{
-        width:66px;
-        height:66px;
+        width:58px;
+        height:58px;
       }
 
+      .closing-wrap{gap:8px;align-items:flex-end}
+      .management-entry{flex-basis:84px;font-size:14px;padding:5px 2px;border-radius:18px}
+      .management-entry img{width:74px;height:64px}
+
       .closing{
-        width:min(460px, 100%);
-        margin-left:20px;
+        width:auto;
+        flex:1 1 auto;
+        margin:0;
       }
 
       .closing p{
-        font-size:21px;
-        line-height:1.55;
+        font-size:18px;
+        line-height:1.38;
       }
 
       .footer{
@@ -576,27 +608,6 @@
       }
     }
 
-    /* Instructor game entry */
-    .menu-item:is(button){font:inherit;cursor:pointer}
-    #inspiration-dialog{
-      box-sizing:border-box;border:1px solid #ead8e5;border-radius:24px;padding:0;
-      width:min(500px,calc(100vw - 28px));max-height:min(92vh,780px);
-      background:#fffafd;color:#442c46;box-shadow:0 26px 80px #260f314e
-    }
-    #inspiration-dialog::backdrop{background:#1a1239b0;backdrop-filter:blur(3px)}
-    .inspiration-dialog-inner{padding:clamp(22px,4vw,34px);display:grid;gap:20px;font-family:"Alef",Arial,sans-serif;text-align:right}
-    .inspiration-dialog-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:14px;border-bottom:1px solid #f0e1eb}
-    .inspiration-dialog-heading{display:grid;gap:5px}
-    .inspiration-dialog-eyebrow{font-size:.78rem;color:#946d8c}
-    .inspiration-dialog-top h2{margin:0;font-size:1.7rem;line-height:1.25;color:#5c2852}
-    .inspiration-dialog-close{flex:0 0 38px;border:0;border-radius:50%;background:#f7e8f0;color:#5c2852;width:38px;height:38px;cursor:pointer;font-size:1.4rem}
-    .inspiration-dialog-inner p{margin:0;color:#775c73;font-size:.94rem;line-height:1.55}
-    .inspiration-dialog-submit{box-sizing:border-box;border:0;border-radius:12px;background:#682f63;color:#fff;font:inherit;font-weight:700;min-height:50px;cursor:pointer;padding:12px 16px;text-align:center}
-    .inspiration-dialog-submit:hover{background:#4f2550}
-    .inspiration-dialog-submit:disabled{opacity:.6;cursor:progress}
-    .inspiration-dialog-error{color:#9e3448!important;font-weight:700}
-    .inspiration-dialog-error[hidden],.inspiration-dialog-inner [hidden]{display:none!important}
-    #inspiration-teacher-auth{display:grid;gap:16px}
   </style>
 <link rel="stylesheet" href="../css/course-language.css">
 </head>
@@ -611,7 +622,7 @@
 
         <div class="topbar-actions">
           <nav class="course-lang-switch" aria-label="اختيار اللغة"><a href="../strongermenu-2026.html?lang=he" lang="he" data-course-language="he">עברית</a><span class="lang-separator" aria-hidden="true">|</span><a href="strongermenu-2026.html?lang=ar" lang="ar" data-course-language="ar" aria-current="true">العربية</a></nav>
-          <button class="logout-btn" id="logoutBtn" type="button">יציאה</button>
+          <button class="logout-btn" id="logoutBtn" type="button">خروج</button>
         </div>
       </header>
 
@@ -619,9 +630,9 @@
         <div class="intro-wrap">
           <section class="intro">
             <p>
-              המסע של פורצות דרך מתחיל כאן, באתר הקורס שילווה אותנו לאורך כל הדרך.
-              בכל שלב בתהליך נצמח, נתחזק, נאמין בעצמנו, נלמד, נחקור וניצור
-              ונגלה איך טכנולוגיה יכולה להפוך לכלי לביטוי עצמי, ליוזמה ולהשפעה חברתית.
+              تبدأ رحلتنا هنا، في موقع الدورة الذي سيرافقنا على طول الطريق.
+              في كل مرحلة سننمو ونتعزّز ونؤمن بأنفسنا، ونتعلّم ونستكشف ونبدع،
+              ونكتشف كيف يمكن للتكنولوجيا أن تصبح أداة للتعبير والمبادرة والتأثير الاجتماعي.
             </p>
           </section>
         </div>
@@ -634,15 +645,6 @@
               <img src="../icon/start.svg" alt="ننطلق" />
             </div>
           </a>
-          <button type="button" class="menu-item" id="inspiration-entry" aria-haspopup="dialog" aria-controls="inspiration-dialog">
-            <h4>נושמות השראה</h4>
-            <p>משחק הקלפים הקבוצתי</p>
-            <div class="icon-box">
-              <img src="../icon/inspiration-cards.svg" alt="קלפי השראה" />
-            </div>
-          </button>
-
-
           <a class="menu-item" href="domains/alldomains.html">
             <h4>نكتشف تحدّيًا</h4>
             <p>نكتشف ما يثير اهتمامكِ</p>
@@ -651,35 +653,27 @@
             </div>
           </a>
 
-          <a class="menu-item" href="pairing/pairing.html">
-            <h4>شريكة الطريق</h4>
-            <p>لا نسير وحدنا في المسار</p>
-            <div class="icon-box">
-              <img src="../icon/partner.svg" alt="شريكة الطريق" />
-            </div>
-          </a>
-
           <a class="menu-item" href="../idea/idea-to-product.html">
-            <h4>מרעיון למוצר</h4>
-            <p>מחשבה ראשונה לכיוון יצירתי</p>
+            <h4>من فكرة إلى منتج</h4>
+            <p>خطوة أولى نحو اتجاه إبداعي</p>
             <div class="icon-box">
-              <img src="../icon/idea.svg" alt="מרעיון למוצר" />
+              <img src="../icon/idea.svg" alt="من فكرة إلى منتج" />
             </div>
           </a>
 
           <a class="menu-item" href="../steps/entrepreneurship-steps.html">
-            <h4>בונות טכנולוגיה</h4>
-            <p>מבינות איך רעיון הופך לפתרון</p>
+            <h4>نبني التكنولوجيا</h4>
+            <p>نفهم كيف تتحول الفكرة إلى حلّ</p>
             <div class="icon-box">
-              <img src="../icon/stem.svg" alt="בונות טכנולוגיה" />
+              <img src="../icon/stem.svg" alt="نبني التكنولوجيا" />
             </div>
           </a>
 
           <a class="menu-item" href="../final/final.html">
-            <h4>מציגות ומשכנעות</h4>
-            <p>נותנות קול ברור לרעיון שלך</p>
+            <h4>نعرض ونقنع</h4>
+            <p>نمنح فكرتكِ صوتًا واضحًا</p>
             <div class="icon-box">
-              <img src="../icon/brand.svg" alt="מציגות ומשכנעות" />
+              <img src="../icon/brand.svg" alt="نعرض ونقنع" />
             </div>
           </a>
 
@@ -690,47 +684,32 @@
           <span class="proc-arr"><svg viewBox="0 0 14 22" width="13" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           <span class="proc-arr"><svg viewBox="0 0 14 22" width="13" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           <span class="proc-arr"><svg viewBox="0 0 14 22" width="13" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <span class="proc-arr"><svg viewBox="0 0 14 22" width="13" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <span class="proc-arr"><svg viewBox="0 0 14 22" width="13" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="11,2 3,11 11,20" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </div>
 
         <div class="closing-wrap">
+          <a class="management-entry" href="management.html" aria-label="الدخول إلى الإدارة">
+            <img src="../icon/manage.svg" alt="" />
+            <span>إدارة</span>
+          </a>
           <section class="closing">
             <p>
-              כל צעד בדרך הוא הזדמנות לפרוץ גבולות, להאמין בעצמך ולגלות כמה רחוק את יכולה להגיע.
-              הכוח שלך כבר נמצא בך — עכשיו זה הזמן לתת לו מקום, להשפיע ולהוביל.
+              كل خطوة في الطريق فرصة لتجاوز الحدود، والإيمان بنفسكِ واكتشاف المدى الذي يمكنكِ بلوغه.
+              القوة بداخلكِ — حان الوقت لتمنحيها مساحة، وتؤثري وتقودي.
             </p>
           </section>
         </div>
 
-        <footer class="footer">© 2026 פורצות דרך</footer>
+        <footer class="footer">© 2026 فُرصتكِ</footer>
       </main>
     </div>
   </div>
 
 
-    <dialog id="inspiration-dialog" aria-labelledby="inspiration-dialog-title">
-      <div class="inspiration-dialog-inner">
-        <div class="inspiration-dialog-top">
-          <div class="inspiration-dialog-heading">
-            <span class="inspiration-dialog-eyebrow">פורצות דרך · מרחב המדריכה</span>
-            <h2 id="inspiration-dialog-title">נושמות השראה</h2>
-          </div>
-          <button id="inspiration-dialog-close" class="inspiration-dialog-close" type="button" aria-label="סגירה">×</button>
-        </div>
-        <section id="inspiration-teacher-auth" aria-live="polite">
-          <p id="inspiration-auth-status" role="status">מתחברת לדשבורד תעשיידע…</p>
-          <button id="inspiration-teacher-entry" class="inspiration-dialog-submit" type="button" hidden>התחברות דרך דשבורד תעשיידע</button>
-        </section>
-        <p id="inspiration-entry-error" class="inspiration-dialog-error" role="alert" hidden></p>
-      </div>
-    </dialog>
-    <script type="module" src="../inspiration/teacher-entry.js"></script>
   <script>
     const logoutBtn = document.getElementById("logoutBtn");
 
     logoutBtn.addEventListener("click", function () {
-      const shouldLogout = confirm("האם לצאת מהאתר?");
+      const shouldLogout = confirm("هل تريدين تسجيل الخروج؟");
       if (!shouldLogout) return;
 
       sessionStorage.removeItem(SESSION_KEY);

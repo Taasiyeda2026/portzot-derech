@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <script src="js/course-language.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f4f8">
+  <link rel="icon" href="icon/favicon.png">
+  <title>ניהול | פורצות דרך</title>
+  <meta name="description" content="ממשק הניהול של פורצות דרך לפעילויות נושמות השראה ושותפה לדרך.">
+  <link rel="stylesheet" href="css/menu-management.css">
+  <link rel="stylesheet" href="css/course-language.css">
+</head>
+<body>
+  <main class="management-shell">
+    <nav class="management-nav" aria-label="ניווט">
+      <a href="strongermenu-2026.html">חזרה לקורס</a>
+      <span class="course-lang-switch" aria-label="בחירת שפה">
+        <a href="management.html?lang=he" lang="he" data-course-language="he" aria-current="true">עברית</a>
+        <span class="lang-separator" aria-hidden="true"> | </span>
+        <a href="ar/management.html?lang=ar" lang="ar" data-course-language="ar">العربية</a>
+      </span>
+    </nav>
+    <h1 class="management-title">ממשק ניהול</h1>
+    <section class="management-activities" aria-label="פעילויות ניהול">
+      <button class="menu-item management-activity" type="button" disabled data-activity="inspiration" data-activity-url="inspiration/teacher.html">
+        <h4>נושמות השראה</h4>
+        <p>משחק הקלפים הקבוצתי</p>
+        <div class="icon-box"><img src="icon/inspiration-cards.svg" alt="" /></div>
+        <span class="activity-status" data-activity-status>נדרשת התחברות</span>
+      </button>
+      <button class="menu-item management-activity" type="button" disabled data-activity="pairing" data-activity-url="pairing/admin.html">
+        <h4>שותפה לדרך</h4>
+        <p>לא צועדות לבד בתהליך</p>
+        <div class="icon-box"><img src="icon/partner.svg" alt="" /></div>
+        <span class="activity-status" data-activity-status>נדרשת התחברות</span>
+      </button>
+    </section>
+    <section class="management-access" aria-label="אימות חשבון דשבורד">
+      <p class="management-status" id="management-auth-status" role="status">יש להתחבר דרך דשבורד תעשיידע כדי להיכנס לממשק הניהול.</p>
+      <button class="management-login" id="management-login" type="button">התחברות דרך דשבורד תעשיידע</button>
+    </section>
+    <footer class="management-footer">© 2026 פורצות דרך</footer>
+  </main>
+  <script type="module" src="js/management-entry.js"></script>
+</body>
+</html>

@@ -3,13 +3,15 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 const read = path => readFile(new URL(path,import.meta.url),'utf8');
 
-test('instructor tile redirects to room management after dashboard authorization without creating a room',async()=>{
+test('shared management replaces the menu dialog without changing activity room creation',async()=>{
   const html=await read('../../strongermenu-2026.html');
+  const management=await read('../../management.html');
   const script=await read('../teacher-entry.js');
   const teacher=await read('../teacher.js');
-  assert.ok(html.includes('id="inspiration-entry"'));
-  assert.ok(html.includes('id="inspiration-teacher-auth"'));
-  assert.ok(html.includes('id="inspiration-teacher-entry"'));
+  assert.ok(html.includes('href="management.html"'));
+  assert.ok(!html.includes('id="inspiration-entry"'));
+  assert.ok(management.includes('data-activity-url="inspiration/teacher.html"'));
+  assert.match(management, /<button[^>]*disabled[^>]*data-activity-url="inspiration\/teacher\.html"/);
   assert.ok(!html.includes('id="inspiration-teacher-workspace"'));
   assert.ok(!html.includes('id="inspiration-participant-count"'));
   assert.ok(!html.includes('id="inspiration-room-created"'));

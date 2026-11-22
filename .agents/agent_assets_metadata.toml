@@ -42,3 +42,101 @@ mtime_ms = 1795314179622
 storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:ebee44ec-ca2c-4426-8748-b77bd4ee5c60/a005ae37-56da-4638-86d8-076695239559/3d1466c1-1d7b-41a2-b218-d45d526d2f35"
 storage_version_token = "1795314201836502"
 content_type = "text/html"
+
+[[outputs]]
+id = "HqzOQiQFSgpW6CsL1Gyzi"
+uri = "file://generated-artifacts/menu-management/validation-report-he.html"
+type = "html"
+title = "דוח מעודכן — הפרדת שער הקורס ואימות הדשבורד"
+description = "53 בדיקות עברו; קובץ בדיקות SQL לא נטען עקב תלות חסרה. התחברות אמיתית וארבעת שילובי ההרשאות ממתינים. כולל הצילומים הקודמים."
+logical_id = "73960b41-7b0d-421e-8246-0053935add1a"
+content_hash = "sha256:909574fa734c014fe7a346ec5f938aefdb8e5d7f1ccc57d9da247ecdc1161ded"
+size = 1520195
+mtime_ms = 1795321385242
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:ebee44ec-ca2c-4426-8748-b77bd4ee5c60/73960b41-7b0d-421e-8246-0053935add1a/54f33105-b3e7-4e11-b350-73aa4ca42455"
+storage_version_token = "1795321387316769"
+content_type = "text/html"
+
+[[outputs]]
+id = "8xuvTHuSN3cQCBX5s17QA"
+uri = "file://generated-artifacts/menu-management/menu-he-1440.png"
+type = "image"
+title = "התפריט החדש — עברית"
+description = "חמישה שלבים, ארבע קבוצות חצים וכפתור ניהול עם האייקון המקורי בצד ימין למטה."
+logical_id = "627901f2-b6a9-4298-9324-8ba0f98d5b2e"
+content_hash = "sha256:95ee2ab6c91825a4baf85858a28b272d69c36becb9294075ad2b31c659fd1000"
+size = 298940
+mtime_ms = 1795322787362
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:ebee44ec-ca2c-4426-8748-b77bd4ee5c60/627901f2-b6a9-4298-9324-8ba0f98d5b2e/77ed5b3b-c211-49f3-a9e6-02d3da10ab7e"
+storage_version_token = "1795322980895585"
+content_type = "image/png"
+
+[[outputs]]
+id = "zvHpWdnvm9UQVaEMXb3x4"
+uri = "file://generated-artifacts/menu-management/management-he-1440.png"
+type = "image"
+title = "מסך הניהול בעברית"
+description = "שני כפתורי הפעילויות המקוריים. נשארים נעולים עד לאימות עצמאי של חשבון דשבורד פעיל."
+logical_id = "ddd7cf31-85f7-45c1-922a-42af1514419a"
+content_hash = "sha256:b1e9606b8582b945c542badd73f03f00482ff114c231e7bdf05077c174fd3ede"
+size = 63545
+mtime_ms = 1795319281846
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:ebee44ec-ca2c-4426-8748-b77bd4ee5c60/ddd7cf31-85f7-45c1-922a-42af1514419a/299e576a-7c34-4bee-b6d7-1421a2c888a5"
+storage_version_token = "1795319364940745"
+content_type = "image/png"
+
+[[outputs]]
+id = "NmKlHovdFWFAJq9G8OjP7"
+uri = "file://generated-artifacts/menu-management/approved-domain-login-report-he.html"
+type = "html"
+title = "דוח בדיקת ההתחברות בדומיין המאושר"
+description = "פתיחת טופס הדשבורד אומתה. ההזדהות והחזרת הסשן לא הושלמו; חלון ההתחברות פג. לא שונו קוד יישום או נתונים."
+logical_id = "7f0a56ac-9348-4e89-8721-4655ddf071be"
+content_hash = "sha256:803bb7aac0853123fc1bf8ee7ff57d08e7f96d81ee489fd702615c0e842c3352"
+size = 5070
+mtime_ms = 1795322289594
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:ebee44ec-ca2c-4426-8748-b77bd4ee5c60/7f0a56ac-9348-4e89-8721-4655ddf071be/c078f5ec-d19b-46eb-a246-74ba68f487ac"
+storage_version_token = "1795322291723479"
+content_type = "text/html"
+
+[[outputs]]
+id = "roLXiEPxokR5k7rewQiXS"
+uri = "file://generated-artifacts/menu-management/final-result-he.html"
+type = "html"
+title = "התוצאה המקומית — מסכים וצילומי בדיקות"
+description = "התפריט וממשק הניהול בעברית ובערבית. כולל 8 צילומים ותוצאות 81 בדיקות קוד ו־24 בדיקות דפדפן מקומיות; SSO אמיתי לא נבדק."
+logical_id = "8bffd16b-b07a-464e-943d-d1c4c7f3fb38"
+content_hash = "sha256:908db7ea548f2750e3374a6a7639ead4b5eab76f9c0dfc6ff47e332d62d80fcd"
+size = 1500663
+mtime_ms = 1795322976842
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:ebee44ec-ca2c-4426-8748-b77bd4ee5c60/8bffd16b-b07a-464e-943d-d1c4c7f3fb38/17abc34e-7402-485f-b3a9-e6288e748e23"
+storage_version_token = "1795322978930410"
+content_type = "text/html"
+
+[[outputs]]
+id = "MM57JAMFqPJQ_1PROW6Ic"
+uri = "file://generated-artifacts/menu-management/management-active-he-1440.png"
+type = "image"
+title = "ממשק הניהול — הדמיה מקומית"
+description = "חשבון פעיל ללא תפקיד מדריך; שני כפתורי הפעילויות פתוחים לפי תגובות הרשאה מדומות."
+logical_id = "88fec1c6-6d07-4128-a43f-54e7525251cf"
+content_hash = "sha256:467a84bc25fe50ad9ae7ab90b694a7b112c624aaac74e0a9fb24f90b98168928"
+size = 62074
+mtime_ms = 1795322797622
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:ebee44ec-ca2c-4426-8748-b77bd4ee5c60/88fec1c6-6d07-4128-a43f-54e7525251cf/c9abbe48-a49f-40c0-815e-d6753513f2b7"
+storage_version_token = "1795322982235071"
+content_type = "image/png"
+
+[[outputs]]
+id = "-Pz5Otcqe7NH0M4vBYlk3"
+uri = "file://generated-artifacts/menu-management/management-active-ar-390.png"
+type = "image"
+title = "ממשק הניהול בערבית — מובייל"
+description = "צילום ברוחב 390px עם חשבון והרשאות מדומים. ללא ניסיון התחברות אמיתי."
+logical_id = "72330533-ae10-4bca-9bab-1d061de8ffec"
+content_hash = "sha256:f438417db5c177ca8838cea783bd2c909c2bc7fb05b5480e80465eca5dc7379f"
+size = 55931
+mtime_ms = 1795322807042
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:ebee44ec-ca2c-4426-8748-b77bd4ee5c60/72330533-ae10-4bca-9bab-1d061de8ffec/a947f92d-7b1b-408f-950c-8e4ae1f30fd1"
+storage_version_token = "1795322983539308"
+content_type = "image/png"

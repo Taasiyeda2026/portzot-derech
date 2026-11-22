@@ -4,7 +4,7 @@
   'use strict';
   var KEY = 'portzot-derech-course-language';
   var root = new URL('../', document.currentScript.src);
-  var pages = ['strongermenu-2026.html', 'start/quiz.html', 'domains/alldomains.html',
+  var pages = ['strongermenu-2026.html', 'management.html', 'start/quiz.html', 'domains/alldomains.html',
     'domains/d1.html', 'domains/d2.html', 'domains/d3.html', 'domains/d4.html',
     'domains/d5.html', 'domains/d6.html', 'domains/d7.html', 'domains/d8.html',
     'domains/d9.html', 'domains/d10.html', 'steps/persona.html', 'pairing/pairing.html',

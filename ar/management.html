@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <script src="../js/course-language.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f4f8">
+  <link rel="icon" href="../icon/favicon.png">
+  <title>الإدارة | فُرصتكِ</title>
+  <meta name="description" content="واجهة إدارة أنشطة نتنفّس الإلهام وشريكة الطريق.">
+  <link rel="stylesheet" href="../css/menu-management.css">
+  <link rel="stylesheet" href="../css/course-language.css">
+</head>
+<body>
+  <main class="management-shell">
+    <nav class="management-nav" aria-label="التنقّل">
+      <a href="strongermenu-2026.html">العودة إلى الدورة</a>
+      <span class="course-lang-switch" aria-label="اختيار اللغة">
+        <a href="../management.html?lang=he" lang="he" data-course-language="he">עברית</a>
+        <span class="lang-separator" aria-hidden="true"> | </span>
+        <a href="management.html?lang=ar" lang="ar" data-course-language="ar" aria-current="true">العربية</a>
+      </span>
+    </nav>
+    <h1 class="management-title">واجهة الإدارة</h1>
+    <section class="management-activities" aria-label="أنشطة الإدارة">
+      <button class="menu-item management-activity" type="button" disabled data-activity="inspiration" data-activity-url="../inspiration/teacher.html?lang=ar">
+        <h4>نتنفّس الإلهام</h4>
+        <p>لعبة البطاقات الجماعية</p>
+        <div class="icon-box"><img src="../icon/inspiration-cards.svg" alt="" /></div>
+        <span class="activity-status" data-activity-status>يلزم تسجيل الدخول</span>
+      </button>
+      <button class="menu-item management-activity" type="button" disabled data-activity="pairing" data-activity-url="pairing/admin.html">
+        <h4>شريكة الطريق</h4>
+        <p>لا نسير وحدنا في المسار</p>
+        <div class="icon-box"><img src="../icon/partner.svg" alt="" /></div>
+        <span class="activity-status" data-activity-status>يلزم تسجيل الدخول</span>
+      </button>
+    </section>
+    <section class="management-access" aria-label="التحقق من حساب لوحة التحكم">
+      <p class="management-status" id="management-auth-status" role="status">سجّلي الدخول عبر لوحة تحكم تعسيدع للدخول إلى واجهة الإدارة.</p>
+      <button class="management-login" id="management-login" type="button">تسجيل الدخول عبر لوحة تحكم تَعشايَدا</button>
+    </section>
+    <footer class="management-footer">© 2026 فُرصتكِ</footer>
+  </main>
+  <script type="module" src="../js/management-entry.js"></script>
+</body>
+</html>
