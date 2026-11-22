@@ -49,3 +49,18 @@ footer{text-align:center;color:var(--muted);font-size:12px;margin-top:20px}
   .masthead .home::before{position:absolute;inset:0;margin:auto;width:15px;height:15px}
 }
 @media(max-width:420px){.masthead .tools{width:auto;justify-content:flex-end}.masthead .brand{margin:0}}
+
+/* Hebrew index only: use spare vertical space, never constrain content height.
+   This stylesheet is not loaded by individual domain pages. Keep mobile and
+   Arabic spacing intact; preserve typography, icons and the existing RTL grid. */
+@media(min-width:761px){
+  html[lang=he] main{padding-block:clamp(8px,1.5vh,18px) 16px}
+  html[lang=he] .index-intro{margin-block:clamp(4px,1vh,10px) 12px}
+  html[lang=he] .index-intro p{margin-top:6px}
+  html[lang=he] .domain-list{row-gap:clamp(6px,1vh,10px)}
+  html[lang=he] .domain-link{min-height:0;padding-block:clamp(6px,calc(2vh - 8px),12px)}
+  html[lang=he] .domain-copy small{min-height:0}
+  /* Higher specificity than the generated inline stylesheet, not !important. */
+  html[lang=he] .challenge-entry{padding-block:8px;margin-block:10px 12px}
+  html[lang=he] footer{margin-top:8px}
+}

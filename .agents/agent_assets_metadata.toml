@@ -140,3 +140,17 @@ mtime_ms = 1795322807042
 storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:ebee44ec-ca2c-4426-8748-b77bd4ee5c60/72330533-ae10-4bca-9bab-1d061de8ffec/a947f92d-7b1b-408f-950c-8e4ae1f30fd1"
 storage_version_token = "1795322983539308"
 content_type = "image/png"
+
+[[outputs]]
+id = "MANx3KZui1IIxlGOk185a"
+uri = "file://generated-artifacts/domains-index-height/comparison.html"
+type = "html"
+title = "עמוד התחומים — לפני ואחרי"
+description = "השוואה חזותית בשני גדלי מחשב ובמובייל; כל הכרטיסים וכפתור ההמשך נראים במחשב ללא גלילה."
+logical_id = "9ce31adb-f385-426c-9510-99169a20e762"
+content_hash = "sha256:e526d2a850b3e44f3f9f7f8be9dd2ec5bee57fc6dbe84fe3a6a46711506c474d"
+size = 1746191
+mtime_ms = 1795328419086
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:ebee44ec-ca2c-4426-8748-b77bd4ee5c60/9ce31adb-f385-426c-9510-99169a20e762/61cc0610-4a22-4882-bd42-16bb5b5a37a4"
+storage_version_token = "1795328432670181"
+content_type = "text/html"
