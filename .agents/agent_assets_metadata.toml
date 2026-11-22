@@ -28,3 +28,17 @@ mtime_ms = 1795305603379
 storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:ebee44ec-ca2c-4426-8748-b77bd4ee5c60/24ac4f40-df70-4a8e-bef0-ebff01941c39/e5026da0-2676-4a3a-9d91-c64cdb6f3002"
 storage_version_token = "1795305858153115"
 content_type = "application/pdf"
+
+[[outputs]]
+id = "ZKrw9-UAo3DK1HpC19QnP"
+uri = "file://.local/verification-task6/verification-report-he.html"
+type = "html"
+title = "דוח אימות התפריט וממשק הניהול"
+description = "דוח בעברית עם טבלת אימות מלאה, שמונה צילומי מסך מוטמעים, מדידות ולוגים. מסקנה: לא מוכן לפרסום; SSO אמיתי לא אומת."
+logical_id = "a005ae37-56da-4638-86d8-076695239559"
+content_hash = "sha256:332d0de5260d4d115b664d5fd3f12eeda6899901d0c47064ed4da107fa9d69fb"
+size = 6039943
+mtime_ms = 1795314179622
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:ebee44ec-ca2c-4426-8748-b77bd4ee5c60/a005ae37-56da-4638-86d8-076695239559/3d1466c1-1d7b-41a2-b218-d45d526d2f35"
+storage_version_token = "1795314201836502"
+content_type = "text/html"
