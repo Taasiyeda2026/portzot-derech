@@ -339,7 +339,9 @@
       width:100%;
       flex:0 0 auto;
       margin-top:0;
-      padding-inline:28px;
+      /* Center management beneath the rightmost stage, not against the frame edge. */
+      padding-inline-start:max(12px, calc(10% - 52px));
+      padding-inline-end:22px;
       gap:20px;
     }
 
@@ -349,21 +351,21 @@
       align-items:center;
       justify-content:center;
       gap:2px;
-      flex:0 0 118px;
-      padding:6px 4px 8px;
-      border:2px solid var(--pink);
-      border-radius:20px;
+      flex:0 0 104px;
+      padding:5px 4px 7px;
+      border:1.5px solid var(--pink);
+      border-radius:18px;
       color:var(--pink-dark);
       text-decoration:none;
       font-family:"Choco", "Alef", sans-serif;
-      font-size:19px;
+      font-size:17px;
       line-height:1;
       font-weight:700;
     }
 
     .management-entry img{
-      width:88px;
-      height:72px;
+      width:76px;
+      height:60px;
       object-fit:contain;
     }
 
